@@ -117,7 +117,7 @@ extern "C" void lo_initialize(NSString *documentPath)
 
 
 // CLIENT COMMAND INTERFACE
-static bool client_canceltiles(char *input, char *args[])
+static bool client_canceltiles(const char *args[])
 {
     // command:   canceltiles
     // arguments: NONE
@@ -130,17 +130,19 @@ static bool client_canceltiles(char *input, char *args[])
     return true;
 }
 
-static bool client_clientvisiblearea(char *input, char *args[])
+static bool client_clientvisiblearea(const char *args[])
 {
     // command:   clientvisiblearea
     // arguments: x=<x>
     //            y=<y>
     //            width=<width>
     //            height=<height>
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_closedocument(char *input, char *args[])
+static bool client_closedocument(const char *args[])
 {
     // command:   closedocument
     // arguments: None
@@ -149,17 +151,21 @@ static bool client_closedocument(char *input, char *args[])
     //     currently having that document opened. This functionality is enabled
     //     only in case WOPI. host mentions 'EnableOwnerTermination' flag in
     //     its CheckFileInfo response
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_commandvalues(char *input, char *args[])
+static bool client_commandvalues(const char *args[])
 {
     // command:   commandvalues
     // arguments: None
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_downloadas(char *input, char *args[])
+static bool client_downloadas(const char *args[])
 {
     // command:   downloadas
     // arguments: name=<fileName>
@@ -173,10 +179,12 @@ static bool client_downloadas(char *input, char *args[])
     //         * 'print': When request for download is basically for print purposes
     //         * 'slideshow': When request for download is for showing slideshow
     //         * 'export': Just a simple download
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_getchildid(char *input, char *args[])
+static bool client_getchildid(const char *args[])
 {
     // command:   getchildid
     // arguments: None
@@ -186,16 +194,18 @@ static bool client_getchildid(char *input, char *args[])
     return true;
 }
 
-static bool client_gettextselection(char *input, char *args[])
+static bool client_gettextselection(const char *args[])
 {
     // command:   gettextselection
     // arguments: None
     // description:
     //     Request selection's content
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_insertfile(char *input, char *args[])
+static bool client_insertfile(const char *args[])
 {
     // command:   insertfile
     // arguments: name=<name>
@@ -203,10 +213,12 @@ static bool client_insertfile(char *input, char *args[])
     // description:
     //     Inserts the file with the name <name> into the document,
     //     we currently support type = 'graphic'
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_key(char *input, char *args[])
+static bool client_key(const char *args[])
 {
     // command:   key
     // arguments: type=<type>
@@ -214,10 +226,12 @@ static bool client_key(char *input, char *args[])
     //            key=<keycode>
     // description:
     //     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_load(char *input, char *args[])
+static bool client_load(const char *args[])
 {
     // command:   load
     // arguments: [part=<partNumber>]
@@ -230,10 +244,12 @@ static bool client_load(char *input, char *args[])
     //     microseconds since the Unix epoch - midnight, January 1, 1970.
     //     options are the whole rest of the line, not URL-encoded,
     //     and must be valid JSON.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_loolclient(char *input, char *args[])
+static bool client_loolclient(const char *args[])
 {
     // command:   loolclient
     // arguments: <major.minor[-patch]>
@@ -245,10 +261,12 @@ static bool client_loolclient(char *input, char *args[])
     //     Minor: an integer is more flexible and is at the discretion of either party.
     //     Security fixes that do not alter the API would bump the minor version number.
     //     Patch: an optional string that is informational.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_mouse(char *input, char *args[])
+static bool client_mouse(const char *args[])
 {
     // command:   mouse
     // arguments: type=<type>
@@ -257,29 +275,35 @@ static bool client_mouse(char *input, char *args[])
     //            count=<count>
     // description:
     //     <type> is 'buttondown', 'buttonup' or 'move', others are numbers.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_paste(char *input, char *args[])
+static bool client_paste(const char *args[])
 {
     // command:   paste
     // arguments: mimetype=<mimeType>
     //            <binaryPasteData>
     // description:
     //     Paste content at the current cursor position
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_ping(char *input, char *args[])
+static bool client_ping(const char *args[])
 {
     // command:  ping
     // argument: None
     // description:
     //     requests a 'pong' server message.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_renderfont(char *input, char *args[])
+static bool client_renderfont(const char *args[])
 {
     // command:   renderfont
     // arguments: font=<font>
@@ -288,27 +312,33 @@ static bool client_renderfont(char *input, char *args[])
     //     requests the rendering of the given font.
     //     The font parameter is URL encoded
     //     The char parameter is URL encoded
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_requestloksession(char *input, char *args[])
+static bool client_requestloksession(const char *args[])
 {
     // command:   requestloksession
     // arguments: None
     // description:
     //     requests the initialization of a LOK process in an attempt
     //     to predict the user's interaction with the document
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_resetselection(char *input, char *args[])
+static bool client_resetselection(const char *args[])
 {
     // command:   resetselection
     // arguments: None
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_saveas(char *input, char *args[])
+static bool client_saveas(const char *args[])
 {
     // command:   saveas
     // arguments: url=<url>
@@ -318,10 +348,12 @@ static bool client_saveas(char *input, char *args[])
     //     <url> is a URL, encoded. <format> is also URL-encoded,
     //     i.e. spaces as %20 and it can be empty
     //     options are the whole rest of the line, not URL-encoded, and can be empty
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_selectgraphic(char *input, char *args[])
+static bool client_selectgraphic(const char *args[])
 {
     // command:   selectgraphic
     // arguments: type=<type>
@@ -329,10 +361,12 @@ static bool client_selectgraphic(char *input, char *args[])
     //            y=<y>
     // description:
     //     <type> is 'start' or 'end'. <x> and <y> are numbers.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_selecttext(char *input, char *args[])
+static bool client_selecttext(const char *args[])
 {
     // command:   selecttext
     // arguments: type=<type>
@@ -340,33 +374,41 @@ static bool client_selecttext(char *input, char *args[])
     //            y=<y>
     // description:
     //     <type> is 'start', 'end' or 'reset', <x> and <y> are numbers.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_setclientpart(char *input, char *args[])
+static bool client_setclientpart(const char *args[])
 {
     // command:   setclientpart
     // arguments: part=<partNumber>
     // description:
     //     Informs the server that the client changed to part <partNumber>.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_status(char *input, char *args[])
+static bool client_status(const char *args[])
 {
     // command:   status
     // arguments: None
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_styles(char *input, char *args[])
+static bool client_styles(const char *args[])
 {
     // command:   styles
     // arguments: None
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_tile(char *input, char *args[])
+static bool client_tile(const char *args[])
 {
     // command:   tile
     // arguments: part=<partNumber>
@@ -389,10 +431,14 @@ static bool client_tile(char *input, char *args[])
     //     previews of presentation documents, and not for anything else. It
     //     is only useful to loleaflet and will break it if not returned in
     //     the response.
+
+    // JIX MISSING CODE
+
+    // renderTile
     return true;
 }
 
-static bool client_tilecombine(char *input, char *args[])
+static bool client_tilecombine(const char *args[])
 {
     // command:   tilecombine
     // arguments: <parameters>
@@ -401,19 +447,25 @@ static bool client_tilecombine(char *input, char *args[])
     //     parameters 'tileposx', 'tileposy' and 'oldhash' are
     //     comma-separated lists, and the number of elements in each
     //     must be same.
+
+    // JIX MISSING CODE
+
+    // renderCombinedTiles
     return true;
 }
 
-static bool client_uno(char *input, char *args[])
+static bool client_uno(const char *args[])
 {
     // command:   uno
     // arguments: <command>
     // description:
     //     <command> is a line of text.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_useractive(char *input, char *args[])
+static bool client_useractive(const char *args[])
 {
     // command:   useractive
     // arguments: None
@@ -422,10 +474,12 @@ static bool client_useractive(char *input, char *args[])
     //     area to disable the inactive state.
     //     Will send invalidation and update notifications to force refreshing the screen.
     //     See 'userinactive'.
+
+    // JIX MISSING CODE
     return true;
 }
 
-static bool client_userinactive(char *input, char *args[])
+static bool client_userinactive(const char *args[])
 {
     // command:   userinactive
     // arguments: None
@@ -433,67 +487,78 @@ static bool client_userinactive(char *input, char *args[])
     //     Sent when the user has switched tabs or away from the Browser
     //     altogether. It should throttle updates until the user is active again.
     //     See 'useractive'.
+
+    // JIX MISSING CODE
     return true;
 }
 
 
 
-typedef struct {const char *command; bool (*funcCmd)(char *, char *[]);} CLIENTCOMMAND;
-static CLIENTCOMMAND clientcommands[] = {{"canceltiles",       client_canceltiles},
-                                         {"clientvisiblearea", client_clientvisiblearea},
-                                         {"closedocument",     client_closedocument},
-                                         {"commandvalues",     client_commandvalues},
-                                         {"downloadas",        client_downloadas},
-                                         {"getchildid",        client_getchildid},
-                                         {"gettextselection",  client_gettextselection},
-                                         {"insertfile",        client_insertfile},
-                                         {"key",               client_key},
-                                         {"load",              client_load},
-                                         {"loolclient",        client_loolclient},
-                                         {"mouse",             client_mouse},
-                                         {"paste",             client_paste},
-                                         {"ping",              client_ping},
-                                         {"renderfont",        client_renderfont},
-                                         {"requestloksession", client_requestloksession},
-                                         {"resetselection",    client_resetselection},
-                                         {"saveas",            client_saveas},
-                                         {"selectgraphic",     client_selectgraphic},
-                                         {"selecttext",        client_selecttext},
-                                         {"setclientpart",     client_setclientpart},
-                                         {"status",            client_status},
-                                         {"styles",            client_styles},
-                                         {"tile",              client_tile},
-                                         {"tilecombine",       client_tilecombine},
-                                         {"uno",               client_uno},
-                                         {"useractive",        client_useractive},
-                                         {"userinactive",      client_userinactive},
-                                         {NULL,                NULL}
+typedef struct {const char *command; bool useArgs; bool (*funcCmd)(const char *[]);} CLIENTCOMMAND;
+static CLIENTCOMMAND clientcommands[] = {{"canceltiles",       false, client_canceltiles},
+                                         {"clientvisiblearea", true,  client_clientvisiblearea},
+                                         {"closedocument",     false, client_closedocument},
+                                         {"commandvalues",     false, client_commandvalues},
+                                         {"downloadas",        true,  client_downloadas},
+                                         {"getchildid",        false, client_getchildid},
+                                         {"gettextselection",  false, client_gettextselection},
+                                         {"insertfile",        true,  client_insertfile},
+                                         {"key",               true,  client_key},
+                                         {"load",              true,  client_load},
+                                         {"loolclient",        true,  client_loolclient},
+                                         {"mouse",             true,  client_mouse},
+                                         {"paste",             true,  client_paste},
+                                         {"ping",              false, client_ping},
+                                         {"renderfont",        true,  client_renderfont},
+                                         {"requestloksession", false, client_requestloksession},
+                                         {"resetselection",    false, client_resetselection},
+                                         {"saveas",            true,  client_saveas},
+                                         {"selectgraphic",     true,  client_selectgraphic},
+                                         {"selecttext",        true,  client_selecttext},
+                                         {"setclientpart",     true,  client_setclientpart},
+                                         {"status",            false, client_status},
+                                         {"styles",            false, client_styles},
+                                         {"tile",              true,  client_tile},
+                                         {"tilecombine",       true,  client_tilecombine},
+                                         {"uno",               false, client_uno},
+                                         {"useractive",        false, client_useractive},
+                                         {"userinactive",      false, client_userinactive},
+                                         {NULL,                false, NULL}
                                         };
 
 
 
 
-int LOkit_ClientCommand()
+int LOkit_ClientCommand(const char *input)
 {
-    char *args[10];
-    char *sep = " ";
-    char *cmd, *token;
-    char *input = "unknown command jan var her";
+    static char argStore[2048];
+    const char *args[10];
+    char *cmd, *arg;
+    const char *sep = " ";
     int   j = 0;
 
     // Split input into cmd + args
-    token = cmd = strtok(input, sep);
-    while (token && j < 10 && token - input < 2048)
-      args[j++] = token = strtok(token, sep);
+    strcpy(argStore, input);
+    arg = cmd = strtok(argStore, sep);
 
     // Locate correct command
     CLIENTCOMMAND *client_cmd = clientcommands;
-    for (; client_cmd->command; ++cmd)
-        if (!strcmp(client_cmd->command,"mycommand"))
-            return client_cmd->funcCmd(input, NULL);
+    for (; client_cmd->command; ++client_cmd)
+        if (!strcmp(client_cmd->command,cmd)) {
+            args[j++] = input;
+            args[j] = NULL;
+            if (client_cmd->useArgs)
+                while (arg && j < 10)
+                {
+                    arg = strtok(NULL, sep);
+                    args[j++] = arg;
+                }
+            return (int)client_cmd->funcCmd(args);
+        }
+
 
     // Call/Return from command
-    return 0;
+    return -999;
 }
 
 
