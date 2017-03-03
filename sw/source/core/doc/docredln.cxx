@@ -315,7 +315,7 @@ static void lcl_RedlineNotification(RedlineNotification nType, size_t nPos, SwRa
                              (nType == RedlineNotification::Modify ? "Modify" : "???"))));
     aRedline.put("index", nPos);
     aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
-    aRedline.put("type", SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
+    aRedline.put("type", nsRedlineType_t::SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
     aRedline.put("comment", pRedline->GetRedlineData().GetComment().toUtf8().getStr());
     aRedline.put("description", pRedline->GetDescr().toUtf8().getStr());
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
