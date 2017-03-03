@@ -226,6 +226,7 @@ else # $(OS) == WNT
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/backtrace \
 	sal/osl/w32/conditn \
+	sal/osl/w32/dllentry \
 	sal/osl/w32/file \
 	sal/osl/w32/file_dirvol \
 	sal/osl/w32/file_error \
@@ -248,9 +249,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/tempfile \
 	sal/osl/w32/thread \
 	sal/osl/w32/time \
-))
-$(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/w32/dllentry \
 ))
 
 endif # ifneq ($(OS),WNT)

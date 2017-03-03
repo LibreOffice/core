@@ -57,14 +57,15 @@ _pRawDllMain()
 
 */
 
+extern "C" {
+
 static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
 BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID) = RawDllMain;
 
-static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
-{
-    (void)hinstDLL; /* avoid warnings */
-    (void)lpvReserved; /* avoid warnings */
+}
 
+static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
+{
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
@@ -184,7 +185,7 @@ static DWORD GetParentProcessId()
 
 static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
 {
-    DWORD_PTR dwParentProcessId = (DWORD_PTR)lpParam;
+    DWORD_PTR dwParentProcessId = reinterpret_cast<DWORD_PTR>(lpParam);
 
     HANDLE  hParentProcess = OpenProcess( SYNCHRONIZE, FALSE, dwParentProcessId );
 
@@ -201,10 +202,9 @@ static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
     return 0;
 }
 
-BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+extern "C"
+BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
 {
-    (void)hinstDLL; /* avoid warning */
-    (void)lpvReserved; /* avoid warning */
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
@@ -228,7 +228,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
                 {
                     // No error check, it works or it does not
                     // Thread should only be started for headless mode, see desktop/win32/source/officeloader.cxx
-                    CreateThread( NULL, 0, ParentMonitorThreadProc, (LPVOID)dwParentProcessId, 0, &dwThreadId );
+                    CreateThread( nullptr, 0, ParentMonitorThreadProc, reinterpret_cast<LPVOID>(dwParentProcessId), 0, &dwThreadId );
                     // Note: calling CreateThread in DllMain is discouraged
                     // but this is only done in the headless mode and in
                     // that case no other threads should be running at startup
