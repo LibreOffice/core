@@ -36,7 +36,52 @@ fuzzer_externals = \
 
 fuzzer_libraries = \
     basctl \
-    merged \
+    avmedia \
+    basegfx \
+    canvastools \
+    comphelper \
+    configmgr \
+    cppcanvas \
+    dbtools \
+    deployment \
+    deploymentmisc \
+    drawinglayer \
+    editeng \
+    filterconfig \
+    fsstorage \
+    fwe \
+    fwi \
+    fwk \
+    i18npool \
+    i18nutil \
+    lng \
+    localebe1 \
+    mcnttype \
+    msfilter \
+    package2 \
+    sax \
+    sb \
+    sfx \
+    sofficeapp \
+    sot \
+    svl \
+    svt \
+    svx \
+    svxcore \
+    tk \
+    tl \
+    ucb1 \
+    ucbhelper \
+    ucpexpand1 \
+    ucpfile1 \
+    unoxml \
+    utl \
+    uui \
+    vcl \
+    opencl \
+    xmlscript \
+    xo \
+    xstor \
     cui \
     chartcontroller \
     chartcore \
