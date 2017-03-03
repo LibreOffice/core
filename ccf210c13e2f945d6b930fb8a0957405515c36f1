@@ -16,6 +16,24 @@
       "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8a95cc41",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-03T09:29:17Z",
+      "side": 1,
+      "message": "Just to check my understanding:\n\n* 1. LO doesn\u0027t need it. So we can still remove that define from all make files\n*. 2. We are not sure, if someone in the wild still need that feature, so that uwinapi should still be included in the install set\n\nIs that correct? So basically remove from every place, but build it and still include in the install set?",
+      "parentUuid": "9a57fde8_ca1a7417",
+      "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

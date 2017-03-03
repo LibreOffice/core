@@ -16,6 +16,24 @@
       "revId": "ba1b63e5c0c0b40c73a11d46a1747976d08e7017",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6ab0a8f5",
+        "filename": "external/libwpd/libwpd-vs2013.patch.1",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-03T09:29:17Z",
+      "side": 0,
+      "message": "Good catch.",
+      "parentUuid": "9a57fde8_4a268469",
+      "revId": "ba1b63e5c0c0b40c73a11d46a1747976d08e7017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
