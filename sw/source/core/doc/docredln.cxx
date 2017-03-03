@@ -28,6 +28,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/datetime.hxx>
 #include <sfx2/viewsh.hxx>
@@ -49,11 +50,13 @@
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
+#include <view.hxx>
 #include <viewsh.hxx>
+#include <viscrs.hxx>
 #include <rootfrm.hxx>
-
 #include <comcore.hrc>
 #include <unoport.hxx>
+#include <wrtsh.hxx>
 
 using namespace com::sun::star;
 
@@ -317,6 +320,29 @@ static void lcl_RedlineNotification(RedlineNotification nType, SwRedlineTable::s
     aRedline.put("description", pRedline->GetDescr().toUtf8().getStr());
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
     aRedline.put("dateTime", sDateTime.toUtf8().getStr());
+
+    SwPosition* pStartPos = pRedline->Start();
+    SwPosition* pEndPos = pRedline->End();
+    SwContentNode* pContentNd = pRedline->GetContentNode();
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    if (pView && pContentNd)
+    {
+        std::unique_ptr<SwShellCursor> pCursor(new SwShellCursor(pView->GetWrtShell(), *pStartPos));
+        pCursor->SetMark();
+        pCursor->GetMark()->nNode = *pContentNd;
+        pCursor->GetMark()->nContent.Assign(pContentNd, pEndPos->nContent.GetIndex());
+
+        pCursor->FillRects();
+
+        SwRects* pRects(pCursor.get());
+        std::vector<OString> aRects;
+        for(SwRect& rNextRect : *pRects)
+            aRects.push_back(rNextRect.SVRect().toString());
+
+        const OString sRects = comphelper::string::join("; ", aRects);
+        aRedline.put("textRange", sRects.getStr());
+    }
+
     boost::property_tree::ptree aTree;
     aTree.add_child("redline", aRedline);
     std::stringstream aStream;
@@ -1784,4 +1810,3 @@ SwTableCellRedline::~SwTableCellRedline()
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
