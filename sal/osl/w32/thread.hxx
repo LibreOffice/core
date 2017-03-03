@@ -7,26 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_THREAD_H
-#define INCLUDED_SAL_OSL_W32_THREAD_H
+#ifndef INCLUDED_SAL_OSL_W32_THREAD_HXX
+#define INCLUDED_SAL_OSL_W32_THREAD_HXX
 
 #include <sal/config.h>
 
 #include <sal/types.h>
-
-#if defined __cplusplus
-extern "C" {
-#endif
 
 void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void);
 
 extern DWORD g_dwTLSTextEncodingIndex;
 
 extern CRITICAL_SECTION g_ThreadKeyListCS;
-
-#if defined __cplusplus
-}
-#endif
 
 #endif
 

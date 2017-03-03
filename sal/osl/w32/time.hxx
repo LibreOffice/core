@@ -7,20 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_TIME_H
-#define INCLUDED_SAL_OSL_W32_TIME_H
+#ifndef INCLUDED_SAL_OSL_W32_TIME_HXX
+#define INCLUDED_SAL_OSL_W32_TIME_HXX
 
 #include <sal/config.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
 void sal_initGlobalTimer(void);
-
-#if defined __cplusplus
-}
-#endif
 
 #endif
 

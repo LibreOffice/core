@@ -27,7 +27,7 @@
 #endif
 #include <wchar.h>
 
-#include <nlsupport.h>
+#include <nlsupport.hxx>
 
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>

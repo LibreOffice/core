@@ -18,7 +18,7 @@
  */
 
 #include "system.h"
-#include <thread.h>
+#include <thread.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>

@@ -17,39 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_SOCKIMPL_H
-#define INCLUDED_SAL_OSL_W32_SOCKIMPL_H
+#ifndef INCLUDED_SAL_OSL_W32_SECIMPL_HXX
+#define INCLUDED_SAL_OSL_W32_SECIMPL_HXX
 
-#include <osl/socket.h>
-#include <osl/interlck.h>
+#include <winnetwk.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <osl/security.h>
 
-/*****************************************************************************/
-/* oslSocketImpl */
-/*****************************************************************************/
-#define OSL_SOCKET_FLAGS_NONBLOCKING    0x0001
+#define USER_BUFFER_SIZE 256
 
-struct oslSocketImpl {
-    oslInterlockedCount m_nRefCount;
-    SOCKET              m_Socket;
-    int                 m_Flags;
-};
-
-struct oslSocketAddrImpl
-{
-    struct sockaddr m_sockaddr;
-    oslInterlockedCount m_nRefCount;
-};
-
-oslSocket osl_createSocketImpl_(SOCKET Socket);
-void osl_destroySocketImpl_(oslSocket pImpl);
-
-#ifdef __cplusplus
-}
-#endif
+typedef struct {
+    HANDLE m_hProfile;
+    HANDLE m_hToken;
+    sal_Unicode   m_User[USER_BUFFER_SIZE];
+/* ts: Erweiterung um Fileserver-login */
+    NETRESOURCEW *m_pNetResource;
+} oslSecurityImpl;
 
 #endif
 

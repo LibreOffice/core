@@ -21,10 +21,10 @@
 #define _UNICODE
 #include "systools/win32/uwinapi.h"
 
-#include "file_error.h"
+#include "file_error.hxx"
 
 #include "osl/diagnose.h"
-#include "osl/thread.h"
+#include "osl/thread.hxx"
 #include <sal/macros.h>
 
 /* OS error to oslFileError values mapping table */

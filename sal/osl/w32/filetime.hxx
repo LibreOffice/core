@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_FILETIME_H
-#define INCLUDED_SAL_OSL_W32_FILETIME_H
+#ifndef INCLUDED_SAL_OSL_W32_FILETIME_HXX
+#define INCLUDED_SAL_OSL_W32_FILETIME_HXX
 
 #include <sal/config.h>
 
@@ -16,19 +16,9 @@
 
 #include <osl/time.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
 BOOL TimeValueToFileTime(TimeValue const * cpTimeVal, FILETIME * pFTime);
 
 BOOL FileTimeToTimeValue(FILETIME const * cpFTime, TimeValue * pTimeVal);
-
-#if defined __cplusplus
-}
-#endif
-
-#if defined __cplusplus
 
 namespace osl { namespace detail {
 
@@ -42,8 +32,6 @@ inline void setFiletime(FILETIME & ft, __int64 value) {
 }
 
 } }
-
-#endif
 
 #endif
 

@@ -20,10 +20,41 @@
 #ifndef INCLUDED_SAL_OSL_W32_PATH_HELPER_HXX
 #define INCLUDED_SAL_OSL_W32_PATH_HELPER_HXX
 
-#include "path_helper.h"
+#include <sal/config.h>
+
 #include <osl/diagnose.h>
+#include <osl/diagnose.h>
+#include <osl/file.h>
 #include <rtl/alloc.h>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+/*******************************************************************
+ osl_systemPathEnsureSeparator
+ Adds a trailing path separator to the given system path if not
+ already there and if the path is not the root path or a logical
+ drive alone
+ ******************************************************************/
+
+void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath);
+
+/*******************************************************************
+ osl_systemPathRemoveSeparator
+ Removes the last separator from the given system path if any and
+ if the path is not the root path '\'
+ ******************************************************************/
+
+void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath);
+
+/*******************************************************************
+ osl_is_logical_drive_pattern
+ Returns whether a given path is only a logical drive pattern or not.
+ A logical drive pattern is something like "a:\", "c:\".
+ No logical drive pattern is something like "c:\test"
+ ******************************************************************/
+
+bool osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath);
 
 namespace osl
 {
