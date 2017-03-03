@@ -660,7 +660,8 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         {
-            nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat, fVal );
+            sal_uInt16 nIdx = pFormat->GetSubformatIndex( fVal );
+            nPrecision = (short)pFormat->GetFormatPrecision( nIdx );
             switch ( nType )
             {
                 case css::util::NumberFormat::PERCENT:      // 0.41% == 0.0041
@@ -668,10 +669,23 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                     break;
                 case css::util::NumberFormat::SCIENTIFIC:   // 1.23e-3 == 0.00123
                 {
+                    short nExp = 0;
                     if ( fVal > 0.0 )
-                        nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( fVal ) ) );
+                        nExp = (short)floor( log10( fVal ) );
                     else if ( fVal < 0.0 )
-                        nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( -fVal ) ) );
+                        nExp = (short)floor( log10( -fVal ) );
+                    nPrecision -= nExp;
+                    short nInteger = (short)pFormat->GetFormatIntegerDigits( nIdx );
+                    if ( nInteger > 1 ) // Engineering notation
+                    {
+                        short nIncrement = nExp % nInteger;
+                        if ( nIncrement != 0 )
+                        {
+                            nPrecision += nIncrement;
+                            if (nExp < 0 )
+                                nPrecision += nInteger;
+                        }
+                    }
                     break;
                 }
                 case css::util::NumberFormat::FRACTION:     // get value of fraction representation
