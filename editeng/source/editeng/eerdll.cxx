@@ -88,6 +88,13 @@ GlobalEditData::GlobalEditData() :
     ppDefItems(nullptr),
     mpVirDev(VclPtr<VirtualDevice>::Create())
 {
+    // this assumes the GlobalEditData always lives past DeInitVCL()
+    // currently that is safely the case as theEditDLL is a rtl::Static,
+    // owns the GlobalEditData and never kills it.
+    // Should this change, EditDLL would need to take care of adding
+    // a DeInit call that is aware if GlobalEditData is still alive.
+    std::function<void()> fDeInit = std::bind(&GlobalEditData::dispose, this);
+    AddOnDeInitVCL(fDeInit);
     mpVirDev->SetMapMode(MapUnit::MapTwip);
 }
 
@@ -97,6 +104,11 @@ GlobalEditData::~GlobalEditData()
     // Or simply keep them, since at end of execution?!
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, true );
+}
+
+void GlobalEditData::dispose()
+{
+    mpVirDev.disposeAndClear();
 }
 
 std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()

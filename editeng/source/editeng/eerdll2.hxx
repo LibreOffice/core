@@ -35,6 +35,7 @@ private:
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     VclPtr<VirtualDevice> mpVirDev;
+    void dispose();
 
 public:
                     GlobalEditData();
