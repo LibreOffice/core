@@ -30,11 +30,13 @@ class VirtualDevice;
 class GlobalEditData
 {
 private:
+    bool m_bDisposed;
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
     std::vector<SfxPoolItem*>*   ppDefItems;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     VclPtr<VirtualDevice> mpVirDev;
+    void dispose();
 
 public:
                     GlobalEditData();
