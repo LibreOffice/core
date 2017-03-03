@@ -924,12 +924,9 @@ void SwSidebarWin::SetPosAndSize()
                 EditWin().EnableMapMode();
 
             SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
-            std::vector<OString> aRects;
             for(SwRect & rNextRect : *pRects)
             {
-                aRects.push_back(rNextRect.SVRect().toString());
                 const Rectangle aPntRect(rNextRect.SVRect());
-
                 maAnnotationTextRanges.push_back(basegfx::B2DRange(
                     aPntRect.Left(), aPntRect.Top(),
                     aPntRect.Right() + 1, aPntRect.Bottom() + 1));
