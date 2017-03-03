@@ -215,16 +215,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 mpDrawView->BegUndo();
 
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SdrFitToSizeType::NONE;
+                bool bSet = pObj->GetMergedItemSet().GetItem<SdrTextFitToSizeTypeItem>(SDRATTR_TEXT_FITTOSIZE)->GetValue() != SdrFitToSizeType::NONE;
 
                 mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
                 if (!bSet)
                 {
                     //If we are turning on AutoFit we have to turn these off if already on
-                    if (static_cast<const SdrOnOffItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT))->GetValue())
+                    if (pObj->GetMergedItemSet().GetItem<SdrOnOffItem>(SDRATTR_TEXT_AUTOGROWHEIGHT)->GetValue())
                         pObj->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
-                    if (static_cast<const SdrOnOffItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_AUTOGROWWIDTH))->GetValue())
+                    if (pObj->GetMergedItemSet().GetItem<SdrOnOffItem>(SDRATTR_TEXT_AUTOGROWWIDTH)->GetValue())
                         pObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
                 }
 

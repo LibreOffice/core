@@ -263,7 +263,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
 bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
         sal_uInt16 const nMID)
 {
-    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSet.GetItem(XATTR_FILLSTYLE, false)));
+    const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
 
     if(!pXFillStyleItem)
     {

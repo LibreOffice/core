@@ -678,9 +678,9 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
             if (!pItemSet) return;
 
             const SvxFontItem * const pFontItem =
-                static_cast<const SvxFontItem*>(pItemSet->GetItem(SID_ATTR_CHAR_FONT));
+                pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
             const SvxFontHeightItem * const pFontHeightItem =
-                static_cast<const SvxFontHeightItem*>(pItemSet->GetItem(SID_ATTR_CHAR_FONTHEIGHT));
+                pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
 
             if ( pFontItem && pFontHeightItem )
             {

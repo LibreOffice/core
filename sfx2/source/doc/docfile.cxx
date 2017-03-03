@@ -461,7 +461,7 @@ Reference < XContent > SfxMedium::GetContent() const
 OUString SfxMedium::GetBaseURL( bool bForSaving )
 {
     OUString aBaseURL;
-    const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>( GetItemSet()->GetItem(SID_DOC_BASEURL) );
+    const SfxStringItem* pBaseURLItem = GetItemSet()->GetItem<SfxStringItem>(SID_DOC_BASEURL);
     if ( pBaseURLItem )
         aBaseURL = pBaseURLItem->GetValue();
     else if (!utl::ConfigManager::IsAvoidConfig() && GetContent().is())
@@ -492,7 +492,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
 
 bool SfxMedium::IsSkipImages()
 {
-    const SfxStringItem* pSkipImagesItem = static_cast<const SfxStringItem*>( GetItemSet()->GetItem(SID_FILE_FILTEROPTIONS) );
+    const SfxStringItem* pSkipImagesItem = GetItemSet()->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
     return pSkipImagesItem && pSkipImagesItem->GetValue() == "SkipImages";
 }
 

@@ -48,7 +48,7 @@ uno::Reference<task::XStatusIndicator> getStatusIndicator(SfxMedium& rMedium)
     SfxItemSet* pSet = rMedium.GetItemSet();
     if (pSet)
     {
-        const SfxUnoAnyItem* pItem = static_cast<const SfxUsrAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+        const SfxUnoAnyItem* pItem = pSet->GetItem<SfxUsrAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
         if (pItem)
             xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
     }

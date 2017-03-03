@@ -2380,8 +2380,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
             if ( bHasMemo )
             {
-                const SfxStringItem* pNameItem =
-                    static_cast<const SfxStringItem*>( rMed.GetItemSet()->GetItem( SID_FILE_NAME ) );
+                const SfxStringItem* pNameItem = rMed.GetItemSet()->GetItem<SfxStringItem>( SID_FILE_NAME );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
                 aDbtFile.setExtension("dbt");
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )

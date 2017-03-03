@@ -1009,7 +1009,7 @@ void TableLayouter::UpdateBorderLayout()
             if( !xCell.is() )
                 continue;
 
-            const SvxBoxItem* pThisAttr = static_cast<const SvxBoxItem*>(xCell->GetItemSet().GetItem( SDRATTR_TABLE_BORDER ));
+            const SvxBoxItem* pThisAttr = xCell->GetItemSet().GetItem<SvxBoxItem>( SDRATTR_TABLE_BORDER );
             OSL_ENSURE(pThisAttr,"sdr::table::TableLayouter::UpdateBorderLayout(), no border attribute?");
 
             if( !pThisAttr )

@@ -194,7 +194,7 @@ SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchI
 //UUUU
 SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
 {
-    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSourceSet.GetItem(XATTR_FILLSTYLE, bSearchInParents)));
+    const XFillStyleItem* pXFillStyleItem(rSourceSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, bSearchInParents));
 
     if(!pXFillStyleItem || drawing::FillStyle_NONE == pXFillStyleItem->GetValue())
     {

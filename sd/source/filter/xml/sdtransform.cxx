@@ -276,7 +276,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
 {
     if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
     {
-        const SvXMLAttrContainerItem& rAttr = *static_cast< const SvXMLAttrContainerItem* >( rSet.GetItem( nWhich ) );
+        const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
 
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )
@@ -298,7 +298,7 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
     bool bRet = false;
     if( bNumbering )
     {
-        SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
+        SvxLRSpaceItem aItem( *rSet.GetItem<SvxLRSpaceItem>( EE_PARA_LRSPACE ) );
         if( (aItem.GetLeft() != 0) || (aItem.GetTextFirstLineOfst() != 0) )
         {
             aItem.SetLeftValue( 0 );
@@ -322,7 +322,7 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt
 {
     if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
     {
-        const SvXMLAttrContainerItem& rAttr = *static_cast< const SvXMLAttrContainerItem* >( rSet.GetItem( nWhich ) );
+        const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
 
         const sal_uInt16 nCount = rAttr.GetAttrCount();
         for( sal_uInt16 nItem = 0; nItem < nCount; nItem++ )

@@ -113,7 +113,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
                 SfxItemSet aOtherSet( *pOutputSet );
 
                 // and now the reverse process
-                const SvxBrushItem* pBrushItem= static_cast<const SvxBrushItem*>(aOtherSet.GetItem( SID_ATTR_BRUSH_CHAR ));
+                const SvxBrushItem* pBrushItem = aOtherSet.GetItem<SvxBrushItem>( SID_ATTR_BRUSH_CHAR );
 
                 if ( pBrushItem )
                 {

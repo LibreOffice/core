@@ -125,7 +125,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
 
     // document URL and path
     if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
-        if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
+        if( const SfxStringItem* pItem = pItemSet->GetItem<SfxStringItem>( SID_FILE_NAME ) )
             maDocUrl = pItem->GetValue();
     maBasePath = maDocUrl.copy( 0, maDocUrl.lastIndexOf( '/' ) + 1 );
 
