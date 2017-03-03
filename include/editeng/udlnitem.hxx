@@ -61,7 +61,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    inline SvxTextLineItem& operator=(const SvxTextLineItem& rTextLine)
+    SvxTextLineItem& operator=(const SvxTextLineItem& rTextLine)
         {
             SetValue( rTextLine.GetValue() );
             SetColor( rTextLine.GetColor() );

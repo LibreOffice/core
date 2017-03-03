@@ -220,11 +220,11 @@ protected:
     const css::uno::Reference< css::sdbc::XRowSet >& getCursor() const { return m_xCursor; }
 
     // control transparency
-    inline  bool    isTransparent( ) const { return m_bTransparent; }
-    inline  void        setTransparent( bool _bSet ) { m_bTransparent = _bSet; }
+    bool    isTransparent( ) const { return m_bTransparent; }
+    void        setTransparent( bool _bSet ) { m_bTransparent = _bSet; }
 
     // control alignment
-    inline  void        setAlignedController( bool _bAlign ) { m_bAlignedController = _bAlign; }
+    void        setAlignedController( bool _bAlign ) { m_bAlignedController = _bAlign; }
 
 
     /** determined whether or not the value property is locked
@@ -271,7 +271,7 @@ public:
     }
 
     // control alignment
-    inline  bool    isAlignedController() const { return m_bAlignedController; }
+    bool    isAlignedController() const { return m_bAlignedController; }
             void        AlignControl(sal_Int16 nAlignment);
 
     void SetTextLineColor();

@@ -218,7 +218,7 @@ private: // Private section
     short GetKeyWord( const OUString& sSymbol,  // Determine keyword at nPos
                       sal_Int32 nPos );         // Return 0 <=> not found
 
-    inline bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
+    bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
                 (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
@@ -242,7 +242,7 @@ private: // Private section
         reused instead of shifting all one up and nPos is decremented! */
     bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr );
 
-    static inline bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
+    static bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
         { return rStr.getLength() == 1 && rStr[0] == ch; }
 
     // remove "..." and \... quotes from rStr, return how many chars removed

@@ -104,11 +104,11 @@ namespace dbaccess
         public:
             explicit DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
 
-            inline void append(const ODatabaseModelImpl& _rModelImpl )
+            void append(const ODatabaseModelImpl& _rModelImpl )
             {
                 m_aDatabaseDocuments.push_back(&_rModelImpl);
             }
-            inline void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
+            void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
 
         private:
             // XTerminateListener

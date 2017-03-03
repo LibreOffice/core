@@ -41,7 +41,7 @@ of the tab page.
 class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const editeng::SvxBorderLine* >
 {
 public:
-    inline explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
+    explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
 
     virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const override
                             { return rItem.GetLine(); }
@@ -54,7 +54,7 @@ public:
 class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const editeng::SvxBorderLine* >
 {
 public:
-    inline explicit     FrameSelectorWrapper( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
+    explicit     FrameSelectorWrapper( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
                             SingleControlWrapperType( rFrameSel ), meBorder( eBorder ) {}
 
     virtual bool        IsControlDontKnow() const override;

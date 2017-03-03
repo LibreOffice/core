@@ -62,7 +62,7 @@ public:
 public:
     /** Construction.
      */
-    inline ReferenceObject() : m_nReferenceCount(0)
+    ReferenceObject() : m_nReferenceCount(0)
     {}
 
 

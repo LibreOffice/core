@@ -46,12 +46,12 @@ public:
 
     bool sprm(Sprm & sprm);
 
-    inline void SetTableManager( TableManager* pTableManager )
+    void SetTableManager( TableManager* pTableManager )
     {
         m_pTableManager = pTableManager;
     };
 
-    inline void SetProperties( PropertyMapPtr pProperties )
+    void SetProperties( PropertyMapPtr pProperties )
     {
         m_pCurrentProperties = pProperties;
     };
@@ -60,7 +60,7 @@ public:
 
 private:
 
-    inline void cellProps( TablePropertyMapPtr pProps )
+    void cellProps( TablePropertyMapPtr pProps )
     {
         if ( m_pTableManager )
             m_pTableManager->cellProps( pProps );
@@ -68,7 +68,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps);
     };
 
-    inline void insertRowProps( TablePropertyMapPtr pProps )
+    void insertRowProps( TablePropertyMapPtr pProps )
     {
         if ( m_pTableManager )
             m_pTableManager->insertRowProps( pProps );
@@ -76,7 +76,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps);
     };
 
-    inline void insertTableProps( TablePropertyMapPtr pProps )
+    void insertTableProps( TablePropertyMapPtr pProps )
     {
         if ( m_pTableManager )
             m_pTableManager->insertTableProps( pProps );

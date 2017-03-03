@@ -108,7 +108,7 @@ public:
     */
     void    deactivateOle(bool _bSelect = false);
 
-    inline bool isUiActive() const { return m_bUiActive; }
+    bool isUiActive() const { return m_bUiActive; }
 protected:
     void colorizeOverlappedObject(SdrObject* _pOverlappedObj);
     void unColorizeOverlappedObj();

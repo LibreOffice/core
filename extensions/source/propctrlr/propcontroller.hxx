@@ -268,7 +268,7 @@ namespace pcr
         /** determines whether the given property is an actuating property, that is, at least one
             handler expressed interest in changes to this property's value.
         */
-        inline bool impl_isActuatingProperty_nothrow( const OUString& _rPropertyName ) const
+        bool impl_isActuatingProperty_nothrow( const OUString& _rPropertyName ) const
         {
             return ( m_aDependencyHandlers.find( _rPropertyName ) != m_aDependencyHandlers.end() );
         }

@@ -63,7 +63,7 @@ protected:
     void                SavePos( const ListBox* pLst1);
     void                RestorePos( ListBox* pLst1 );
     void                EnableInsert(bool bEnable);
-    inline bool         IsFieldEdit() const   { return m_bFieldEdit; }
+    bool         IsFieldEdit() const   { return m_bFieldEdit; }
 
     // insert field
     void                InsertField(  sal_uInt16 nTypeId,
@@ -84,7 +84,7 @@ public:
 
     virtual void        ActivatePage() override;
 
-    inline SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
+    SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
     void                EditNewField( bool bOnlyActivate = false );
     virtual sal_uInt16      GetGroup() = 0;

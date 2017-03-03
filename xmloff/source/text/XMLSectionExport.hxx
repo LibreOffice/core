@@ -134,8 +134,8 @@ public:
 
 protected:
 
-    inline SvXMLExport& GetExport() { return rExport; }
-    inline XMLTextParagraphExport& GetParaExport() { return rParaExport; }
+    SvXMLExport& GetExport() { return rExport; }
+    XMLTextParagraphExport& GetParaExport() { return rParaExport; }
 
     // export methods for section and index start:
 

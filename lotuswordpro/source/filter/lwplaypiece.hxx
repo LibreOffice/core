@@ -116,7 +116,7 @@ public:
     sal_Int32 GetScaleWidth(){return m_nScaleWidth;}
     sal_Int32 GetScaleHeight(){return m_nScaleHeight;}
     sal_uInt16 GetPlacement(){return m_nPlacement;}
-    inline LwpPoint& GetOffset() {return m_Offset;}
+    LwpPoint& GetOffset() {return m_Offset;}
 protected:
     virtual void Read() override;
 protected:
@@ -209,8 +209,8 @@ public:
     LwpColumnInfo();
     ~LwpColumnInfo();
     void Read(LwpObjectStream *pStrm);
-    inline double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
-    inline double GetGap(){return LwpTools::ConvertFromUnitsToMetric(m_nGap);}
+    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
+    double GetGap(){return LwpTools::ConvertFromUnitsToMetric(m_nGap);}
 private:
     sal_Int32 m_nWidth;
     sal_Int32 m_nGap;
@@ -221,7 +221,7 @@ class LwpLayoutColumns : public LwpVirtualPiece
 public:
     LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    inline sal_uInt16 GetNumCols(){return m_nNumCols;}
+    sal_uInt16 GetNumCols(){return m_nNumCols;}
     double GetColWidth(sal_uInt16 nIndex);
     double GetColGap(sal_uInt16 nIndex);
 protected:
@@ -238,7 +238,7 @@ class LwpLayoutGutters : public LwpVirtualPiece
 public:
     LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
-    inline LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
+    LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
 protected:
     virtual void Read() override;
 protected:

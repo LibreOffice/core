@@ -64,7 +64,7 @@ public:
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
-    inline SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)
+    SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nHeight = rSize.nHeight;

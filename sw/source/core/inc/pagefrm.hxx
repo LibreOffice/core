@@ -188,8 +188,8 @@ public:
     void SetFootnotePage( bool b )                       { m_bFootnotePage = b; }
     void SetEndNotePage( bool b )                   { m_bEndNotePage = b; }
 
-    inline  sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
-    inline  void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}
+    sal_uInt16 GetPhyPageNum() const        { return m_nPhyPageNum;}
+    void SetPhyPageNum( sal_uInt16 nNum )   { m_nPhyPageNum = nNum;}
 
     /// Validate, invalidate and query the Page status
     /// Layout/Content and Fly/non-Fly respectively are inspected separately

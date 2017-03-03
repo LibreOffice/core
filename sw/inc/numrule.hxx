@@ -188,7 +188,7 @@ public:
     void AddParagraphStyle( SwTextFormatColl& rTextFormatColl );
     void RemoveParagraphStyle( SwTextFormatColl& rTextFormatColl );
 
-    inline void SetDefaultListId( const OUString& sDefaultListId )
+    void SetDefaultListId( const OUString& sDefaultListId )
     {
         msDefaultListId = sDefaultListId;
     }

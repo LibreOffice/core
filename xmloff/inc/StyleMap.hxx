@@ -29,7 +29,7 @@ struct StyleNameKey_Impl
     sal_uInt16 m_nFamily;
     OUString m_aName;
 
-    inline StyleNameKey_Impl( sal_uInt16 nFamily,
+    StyleNameKey_Impl( sal_uInt16 nFamily,
                                const OUString& rName ) :
         m_nFamily( nFamily ),
         m_aName( rName )

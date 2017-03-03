@@ -46,7 +46,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper * = nullptr ) const override;
 
-    inline SvxScriptSpaceItem& operator=(const SvxScriptSpaceItem& rItem )
+    SvxScriptSpaceItem& operator=(const SvxScriptSpaceItem& rItem )
     {
         SetValue( rItem.GetValue() );
         return *this;

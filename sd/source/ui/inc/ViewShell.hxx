@@ -140,11 +140,11 @@ public:
     /** Return the window that is the parent of all controls of this view
         shell.  This may or may not be the window of the frame.
     */
-    inline vcl::Window* GetParentWindow() const { return mpParentWindow; }
+    vcl::Window* GetParentWindow() const { return mpParentWindow; }
 
     sd::Window* GetContentWindow() const;
 
-    inline ::sd::View* GetView() const { return mpView; }
+    ::sd::View* GetView() const { return mpView; }
     inline SdrView* GetDrawView() const;
     SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
 

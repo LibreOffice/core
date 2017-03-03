@@ -171,7 +171,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     struct SAL_DLLPRIVATE InvalidSlotInfo {
         sal_uInt16 id;
         sal_uInt8   flags;
-        inline InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
+        InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
     };
     std::vector<InvalidSlotInfo> m_arrInvalidSlots;
         // we explicitly switch off the propbrw before leaving the design mode
@@ -251,14 +251,14 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
 
 public:
     // attribute access
-    SAL_DLLPRIVATE inline const css::uno::Reference< css::frame::XFrame >&
+    SAL_DLLPRIVATE const css::uno::Reference< css::frame::XFrame >&
                 getHostFrame() const { return m_xAttachedFrame; }
-    SAL_DLLPRIVATE inline const css::uno::Reference< css::sdbc::XResultSet >&
+    SAL_DLLPRIVATE const css::uno::Reference< css::sdbc::XResultSet >&
                 getExternallyDisplayedForm() const { return m_xExternalDisplayedForm; }
 
-    SAL_DLLPRIVATE inline bool
+    SAL_DLLPRIVATE bool
                 didPrepareClose() const { return m_bPreparedClose; }
-    SAL_DLLPRIVATE inline void
+    SAL_DLLPRIVATE void
                 didPrepareClose( bool _bDid ) { m_bPreparedClose = _bDid; }
 
 public:
@@ -354,9 +354,9 @@ public:
     SAL_DLLPRIVATE const css::uno::Reference< css::form::XForm>& getActiveForm() const {return m_xActiveForm;}
     SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getNavController() const {return m_xNavigationController;}
 
-    SAL_DLLPRIVATE inline const svx::ControllerFeatures& getActiveControllerFeatures() const
+    SAL_DLLPRIVATE const svx::ControllerFeatures& getActiveControllerFeatures() const
         { return m_aActiveControllerFeatures; }
-    SAL_DLLPRIVATE inline const svx::ControllerFeatures& getNavControllerFeatures() const
+    SAL_DLLPRIVATE const svx::ControllerFeatures& getNavControllerFeatures() const
         { return m_aNavControllerFeatures.isAssigned() ? m_aNavControllerFeatures : m_aActiveControllerFeatures; }
 
     /** announces a new "current selection"

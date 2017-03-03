@@ -46,7 +46,7 @@ struct Cell
             bIsEmpty(true)
     {}
 
-    inline bool empty() const { return bIsEmpty; }
+    bool empty() const { return bIsEmpty; }
 };
 
 struct CellRange

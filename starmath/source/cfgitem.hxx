@@ -127,9 +127,9 @@ protected:
     void    SaveFontFormatList();
 
     void        SetOtherModified( bool bVal );
-    inline bool IsOtherModified() const     { return bIsOtherModified; }
+    bool IsOtherModified() const     { return bIsOtherModified; }
     void        SetFormatModified( bool bVal );
-    inline bool IsFormatModified() const    { return bIsFormatModified; }
+    bool IsFormatModified() const    { return bIsFormatModified; }
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const

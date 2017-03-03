@@ -269,11 +269,11 @@ public:
     struct StrRevokingPackage : public ::dp_misc::StaticResourceString<
         StrRevokingPackage, RID_STR_REVOKING_PACKAGE> {};
 
-    inline css::uno::Reference<css::uno::XComponentContext> const &
+    css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
 
-    inline OUString const & getCachePath() const { return m_cachePath; }
-    inline bool transientMode() const { return m_cachePath.isEmpty(); }
+    OUString const & getCachePath() const { return m_cachePath; }
+    bool transientMode() const { return m_cachePath.isEmpty(); }
 
     const OUString& getContext() const {return m_context; }
 

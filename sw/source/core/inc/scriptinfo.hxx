@@ -46,7 +46,7 @@ private:
     {
         sal_Int32 position; //!< Character position at which we change script
         sal_uInt8       type;     //!< Script type (Latin/Asian/Complex) that we change to.
-        inline ScriptChangeInfo(sal_Int32 pos, sal_uInt8 typ) : position(pos), type(typ) {};
+        ScriptChangeInfo(sal_Int32 pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     //TODO - This is sorted, so should probably be a std::set rather than vector.
     //       But we also use random access (probably unnecessarily).
@@ -56,7 +56,7 @@ private:
     {
         sal_Int32 position; //!< Character position at which we change direction.
         sal_uInt8       type;     //!< Direction that we change to.
-        inline DirectionChangeInfo(sal_Int32 pos, sal_uInt8 typ) : position(pos), type(typ) {};
+        DirectionChangeInfo(sal_Int32 pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> aDirectionChanges;
     std::deque< sal_Int32 > aKashida;
@@ -70,7 +70,7 @@ private:
         sal_Int32 position; //!< Character position where the change occurs.
         sal_Int32 length;   //!< Length of the segment.
         CompType  type;     //!< Type of compression that we change to.
-        inline CompressionChangeInfo(sal_Int32 pos, sal_Int32 len, CompType typ) : position(pos), length(len), type(typ) {};
+        CompressionChangeInfo(sal_Int32 pos, sal_Int32 len, CompType typ) : position(pos), length(len), type(typ) {};
     };
     std::vector<CompressionChangeInfo> aCompressionChanges;
 #ifdef DBG_UTIL
@@ -112,7 +112,7 @@ public:
     }
 
     // get default direction for paragraph
-    inline sal_uInt8 GetDefaultDir() const { return nDefaultDir; };
+    sal_uInt8 GetDefaultDir() const { return nDefaultDir; };
 
     // array operations, nCnt refers to array position
     size_t CountScriptChg() const { return aScriptChanges.size(); }

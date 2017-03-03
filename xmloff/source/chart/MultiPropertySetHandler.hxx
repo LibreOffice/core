@@ -94,7 +94,7 @@ class   OUStringComparison
 {
 public:
     /// Compare two strings.  Returns true if the first is before the second.
-    inline  bool    operator()  (const OUString & a, const OUString & b) const
+    bool    operator()  (const OUString & a, const OUString & b) const
     {
         return (a.compareTo (b) < 0);
     }

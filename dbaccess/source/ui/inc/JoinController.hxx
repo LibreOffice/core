@@ -82,9 +82,9 @@ namespace dbaui
         OJoinController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         // attribute access
-        inline TTableWindowData&        getTableWindowData()     { return m_vTableData; }
-        inline TTableConnectionData&    getTableConnectionData() { return m_vTableConnectionData;}
-        inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
+        TTableWindowData&        getTableWindowData()     { return m_vTableData; }
+        TTableConnectionData&    getTableConnectionData() { return m_vTableConnectionData;}
+        OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // OSingleDocumentController overridables
         virtual void        reconnect( bool _bUI ) override;

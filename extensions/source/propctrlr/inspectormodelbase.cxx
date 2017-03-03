@@ -72,10 +72,10 @@ namespace pcr
         using ::comphelper::OPropertyContainerHelper::getFastPropertyValue;
 
     public:
-        inline  bool    hasHelpSection() const { return m_bHasHelpSection; }
-        inline  bool    isReadOnly() const { return m_bIsReadOnly; }
-        inline  sal_Int32   getMinHelpTextLines() const { return m_nMinHelpTextLines; }
-        inline  sal_Int32   getMaxHelpTextLines() const { return m_nMaxHelpTextLines; }
+        bool    hasHelpSection() const { return m_bHasHelpSection; }
+        bool    isReadOnly() const { return m_bIsReadOnly; }
+        sal_Int32   getMinHelpTextLines() const { return m_nMinHelpTextLines; }
+        sal_Int32   getMaxHelpTextLines() const { return m_nMaxHelpTextLines; }
 
         css::uno::Reference< css::beans::XPropertySetInfo >
                             getPropertySetInfo();

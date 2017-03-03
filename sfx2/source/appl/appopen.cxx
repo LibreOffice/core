@@ -125,7 +125,7 @@ void SetTemplate_Impl( const OUString &rFileName,
 class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
 {
 public:
-    inline explicit     SfxDocPasswordVerifier( const Reference< embed::XStorage >& rxStorage ) :
+    explicit     SfxDocPasswordVerifier( const Reference< embed::XStorage >& rxStorage ) :
                             mxStorage( rxStorage ) {}
 
     virtual ::comphelper::DocPasswordVerifierResult

@@ -84,8 +84,8 @@ namespace svx
                 );
 
         // simple access methods
-        inline SvxShowCharSetAcc*   getTable() const { return m_xTable.get(); }
-        inline SvxShowCharSet*      getCharSetControl() const { return mpParent; }
+        SvxShowCharSetAcc*   getTable() const { return m_xTable.get(); }
+        SvxShowCharSet*      getCharSetControl() const { return mpParent; }
     };
 
 
@@ -174,7 +174,7 @@ namespace svx
         virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) override;
 
 
-        inline void SAL_CALL fireEvent(
+        void SAL_CALL fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue
@@ -257,7 +257,7 @@ namespace svx
         virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
 
-        inline void SAL_CALL fireEvent(
+        void SAL_CALL fireEvent(
                     const sal_Int16 _nEventId,
                     const css::uno::Any& _rOldValue,
                     const css::uno::Any& _rNewValue

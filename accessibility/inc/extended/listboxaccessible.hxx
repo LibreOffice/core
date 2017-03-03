@@ -40,12 +40,12 @@ namespace accessibility
         VclPtr<SvTreeListBox> m_pWindow;
 
     protected:
-        inline SvTreeListBox*       getListBox() const
+        SvTreeListBox*       getListBox() const
         {
             return  const_cast< ListBoxAccessibleBase* >( this )->m_pWindow;
         }
 
-        inline  bool                    isAlive() const     { return nullptr != m_pWindow; }
+        bool                    isAlive() const     { return nullptr != m_pWindow; }
 
     public:
         ListBoxAccessibleBase( SvTreeListBox& _rWindow );

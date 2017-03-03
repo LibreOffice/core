@@ -84,7 +84,7 @@ public:
                         ~XclExpStream();
 
     /** Returns the filter root data. */
-    inline const XclExpRoot& GetRoot() const { return mrRoot; }
+    const XclExpRoot& GetRoot() const { return mrRoot; }
 
     /** Starts a new record: writes header data, stores calculated record size. */
     void                StartRecord( sal_uInt16 nRecId, std::size_t nRecSize );
@@ -92,7 +92,7 @@ public:
     void                EndRecord();
 
     /** Returns the position inside of current record (starts by 0 in every CONTINUE). */
-    inline sal_uInt16   GetRawRecPos() const { return mnCurrSize; }
+    sal_uInt16   GetRawRecPos() const { return mnCurrSize; }
 
     /** Sets data slice length. 0 = no slices. */
     void                SetSliceSize( sal_uInt16 nSize );
@@ -137,7 +137,7 @@ public:
     /** Sets position of system stream (only allowed outside of records). */
     void                SetSvStreamPos(sal_uInt64 nPos);
     /** Returns the absolute position of the system stream. */
-    inline sal_uInt64   GetSvStreamPos() const { return mrStrm.Tell(); }
+    sal_uInt64   GetSvStreamPos() const { return mrStrm.Tell(); }
 
     void                SetEncrypter( XclExpEncrypterRef const & xEncrypter );
 
@@ -295,7 +295,7 @@ public:
     virtual ~XclExpXmlStream() override;
 
     /** Returns the filter root data. */
-    inline const XclExpRoot& GetRoot() const { return *mpRoot; }
+    const XclExpRoot& GetRoot() const { return *mpRoot; }
 
     sax_fastparser::FSHelperPtr& GetCurrentStream();
     void PushStream( sax_fastparser::FSHelperPtr const & aStream );

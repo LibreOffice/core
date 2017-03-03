@@ -318,9 +318,9 @@ struct Component
     sal_Unicode const * pBegin;
     sal_Unicode const * pEnd;
 
-    inline Component(): pBegin(nullptr), pEnd(nullptr) {}
+    Component(): pBegin(nullptr), pEnd(nullptr) {}
 
-    inline bool isPresent() const { return pBegin != nullptr; }
+    bool isPresent() const { return pBegin != nullptr; }
 
     inline sal_Int32 getLength() const;
 };

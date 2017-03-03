@@ -80,7 +80,7 @@ private:
         rtl::Reference< Node > node;
         OUString name;
 
-        inline Element(
+        Element(
             rtl::Reference< Node > const & theNode,
             OUString const & theName):
             node(theNode), name(theName) {}

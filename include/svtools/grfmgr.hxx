@@ -564,7 +564,7 @@ private:
                             const GraphicObject* pCopyObj
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    inline bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
+    bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
 
                     // Only used in swap case by GraphicObject
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );

@@ -165,7 +165,7 @@ public:
     */
     void    disposing();
 
-    inline ::toolkit::AccessibilityClient& getAccessibleFactory()
+    ::toolkit::AccessibilityClient& getAccessibleFactory()
     {
         return maAccFactory;
     }
@@ -174,17 +174,17 @@ public:
 
     /** returns the container of registered XWindowListener2 listeners
     */
-    inline ::comphelper::OInterfaceContainerHelper2&   getWindow2Listeners()       { return maWindow2Listeners; }
-    inline ::comphelper::OInterfaceContainerHelper2&   getDockableWindowListeners(){ return maDockableWindowListeners; }
-    inline EventListenerMultiplexer&            getEventListeners()         { return maEventListeners; }
-    inline FocusListenerMultiplexer&            getFocusListeners()         { return maFocusListeners; }
-    inline WindowListenerMultiplexer&           getWindowListeners()        { return maWindowListeners; }
-    inline KeyListenerMultiplexer&              getKeyListeners()           { return maKeyListeners; }
-    inline MouseListenerMultiplexer&            getMouseListeners()         { return maMouseListeners; }
-    inline MouseMotionListenerMultiplexer&      getMouseMotionListeners()   { return maMouseMotionListeners; }
-    inline PaintListenerMultiplexer&            getPaintListeners()         { return maPaintListeners; }
-    inline VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
-    inline TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
+    ::comphelper::OInterfaceContainerHelper2&   getWindow2Listeners()       { return maWindow2Listeners; }
+    ::comphelper::OInterfaceContainerHelper2&   getDockableWindowListeners(){ return maDockableWindowListeners; }
+    EventListenerMultiplexer&            getEventListeners()         { return maEventListeners; }
+    FocusListenerMultiplexer&            getFocusListeners()         { return maFocusListeners; }
+    WindowListenerMultiplexer&           getWindowListeners()        { return maWindowListeners; }
+    KeyListenerMultiplexer&              getKeyListeners()           { return maKeyListeners; }
+    MouseListenerMultiplexer&            getMouseListeners()         { return maMouseListeners; }
+    MouseMotionListenerMultiplexer&      getMouseMotionListeners()   { return maMouseMotionListeners; }
+    PaintListenerMultiplexer&            getPaintListeners()         { return maPaintListeners; }
+    VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
+    TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
 
 private:
     DECL_LINK( OnProcessCallbacks, void*, void );

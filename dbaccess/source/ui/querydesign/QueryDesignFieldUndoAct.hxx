@@ -40,7 +40,7 @@ namespace dbaui
         OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID);
         virtual ~OQueryDesignFieldUndoAct() override;
 
-        inline void SetColumnPosition(sal_uInt16 _nColumnPosition)
+        void SetColumnPosition(sal_uInt16 _nColumnPosition)
         {
             m_nColumnPosition = _nColumnPosition;
             OSL_ENSURE(m_nColumnPosition != BROWSER_INVALIDID,"Column position was not set add the undo action!");
@@ -78,7 +78,7 @@ namespace dbaui
     public:
         explicit OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
 
-        inline void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
+        void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
 
         virtual void Undo() override;
         virtual void Redo() override { Undo(); }

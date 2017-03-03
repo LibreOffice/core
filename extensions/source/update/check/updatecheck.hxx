@@ -61,7 +61,7 @@ class UpdateCheck :
     virtual ~UpdateCheck() override;
 
 public:
-    inline SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()
+    SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()
         { return static_cast< UpdateCheckConfigListener * > (this); }
 
     void initialize(const css::uno::Sequence<css::beans::NamedValue>& rValues,

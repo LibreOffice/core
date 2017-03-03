@@ -52,7 +52,7 @@ public:
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
-    inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
+    SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
         {
             SetValue( rMap.GetValue() );
             return *this;

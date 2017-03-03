@@ -73,12 +73,12 @@ public:
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet);
 
     /// is value a string (rather than double)?
-    inline bool IsStringValue() { return bStringType; }
+    bool IsStringValue() { return bStringType; }
 
     /// has format been read?
-    inline bool IsFormatOK() { return bFormatOK; }
+    bool IsFormatOK() { return bFormatOK; }
 
-    inline void SetDefault(const OUString& sStr) { sDefault = sStr; }
+    void SetDefault(const OUString& sStr) { sDefault = sStr; }
 };
 
 
@@ -169,7 +169,7 @@ protected:
 
     // various accessor methods:
     const OUString& GetName()       { return sName; }
-    inline bool IsStringValue()     { return aValueHelper.IsStringValue();}
+    bool IsStringValue()     { return aValueHelper.IsStringValue();}
 };
 
 

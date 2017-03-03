@@ -80,7 +80,7 @@ class RscTypCont
     void        Init();         // initializes classes and tables
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
-    inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
+    void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     RscEnum *   InitFieldUnitsType();
     RscTupel *  InitStringLongTupel();
     static RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );

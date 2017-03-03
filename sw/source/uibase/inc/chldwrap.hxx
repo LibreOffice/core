@@ -38,8 +38,8 @@ protected:
 public:
     virtual bool    ReInitDlg(SwDocShell *pDocSh);
 
-    inline SwDocShell*  GetOldDocShell()                    { return m_pDocSh; }
-    inline void         SetOldDocShell(SwDocShell *pDcSh)   { m_pDocSh = pDcSh; }
+    SwDocShell*  GetOldDocShell()                    { return m_pDocSh; }
+    void         SetOldDocShell(SwDocShell *pDcSh)   { m_pDocSh = pDcSh; }
 };
 
 #endif

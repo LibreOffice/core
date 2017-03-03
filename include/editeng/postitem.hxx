@@ -59,7 +59,7 @@ public:
     virtual bool            GetBoolValue() const override;
     virtual void            SetBoolValue( bool bVal ) override;
 
-    inline SvxPostureItem& operator=(const SvxPostureItem& rPost) {
+    SvxPostureItem& operator=(const SvxPostureItem& rPost) {
         SetValue( rPost.GetValue() );
         return *this;
     }

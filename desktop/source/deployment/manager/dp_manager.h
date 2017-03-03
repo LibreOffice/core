@@ -120,7 +120,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     virtual ~PackageManagerImpl() override;
-    inline PackageManagerImpl(
+    PackageManagerImpl(
         css::uno::Reference<css::uno::XComponentContext>
         const & xComponentContext, OUString const & context )
         : t_pm_helper( getMutex() ),

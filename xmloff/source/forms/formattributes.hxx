@@ -211,7 +211,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static inline sal_uInt16 getDatabaseAttributeNamespace(DAFlags )
+        static sal_uInt16 getDatabaseAttributeNamespace(DAFlags )
         {
             // nothing special here
             return XML_NAMESPACE_FORM;
@@ -233,7 +233,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static inline sal_uInt16 getBindingAttributeNamespace(BAFlags )
+        static sal_uInt16 getBindingAttributeNamespace(BAFlags )
         {
             // nothing special here
             return XML_NAMESPACE_FORM;
@@ -255,7 +255,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute
         */
-        static inline sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes )
+        static sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes )
         { // nothing special here
           return XML_NAMESPACE_FORM;
         }

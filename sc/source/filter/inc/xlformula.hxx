@@ -324,15 +324,15 @@ struct XclFunctionInfo
                                                 EXC_FUNCFLAG_ADDINEQUIV is set. */
 
     /** Returns true, if the function is volatile. */
-    inline bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
+    bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
     /** Returns true, if optional parameters are expected to appear in pairs. */
-    inline bool         IsParamPairs() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_PARAMPAIRS ); }
+    bool         IsParamPairs() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_PARAMPAIRS ); }
     /** Returns true, if the function parameter count is fixed. */
-    inline bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
+    bool         IsFixedParamCount() const { return (mnXclFunc != EXC_FUNCID_EXTERNCALL) && (mnMinParamCount == mnMaxParamCount); }
     /** Returns true, if the function is simulated by a macro call. */
-    inline bool         IsMacroFunc() const { return mpcMacroName != nullptr && !(mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
+    bool         IsMacroFunc() const { return mpcMacroName != nullptr && !(mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
     /** Returns true, if the function is stored as an add-in call. */
-    inline bool         IsAddInEquivalent() const { return mpcMacroName != nullptr && (mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
+    bool         IsAddInEquivalent() const { return mpcMacroName != nullptr && (mnFlags & EXC_FUNCFLAG_ADDINEQUIV); }
     /** Returns the name of the external function as string. */
     OUString            GetMacroFuncName() const;
     /** Returns the programmatical name of the Add-In function as string. */
@@ -383,13 +383,13 @@ public:
     explicit            XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bool bVolatile = false );
 
     /** Returns true, if the token array is empty. */
-    inline bool         Empty() const { return maTokVec.empty(); }
+    bool         Empty() const { return maTokVec.empty(); }
     /** Returns the size of the token array in bytes. */
     sal_uInt16          GetSize() const;
     /** Returns read-only access to the byte vector storing token data. */
-    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? nullptr : maTokVec.data(); }
+    const sal_uInt8* GetData() const { return maTokVec.empty() ? nullptr : maTokVec.data(); }
     /** Returns true, if the formula contains a volatile function. */
-    inline bool         IsVolatile() const { return mbVolatile; }
+    bool         IsVolatile() const { return mbVolatile; }
 
     /** Reads the size field of the token array. */
     void                ReadSize( XclImpStream& rStrm );
@@ -446,11 +446,11 @@ public:
 
     void                Init( const ScTokenArray& rScTokArr, bool bSkipSpaces );
 
-    inline bool         Is() const { return mppScToken != nullptr; }
-    inline bool         operator!() const { return !Is(); }
-    inline const ::formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : nullptr; }
-    inline const ::formula::FormulaToken* operator->() const { return Get(); }
-    inline const ::formula::FormulaToken& operator*() const { return *Get(); }
+    bool         Is() const { return mppScToken != nullptr; }
+    bool         operator!() const { return !Is(); }
+    const ::formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : nullptr; }
+    const ::formula::FormulaToken* operator->() const { return Get(); }
+    const ::formula::FormulaToken& operator*() const { return *Get(); }
 
     XclTokenArrayIterator& operator++();
 
@@ -492,7 +492,7 @@ public:
     inline static sal_uInt8 GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass );
 
     /** Returns the token class of the passed token ID. */
-    inline static sal_uInt8 GetTokenClass( sal_uInt8 nTokenId ) { return nTokenId & EXC_TOKCLASS_MASK; }
+    static sal_uInt8 GetTokenClass( sal_uInt8 nTokenId ) { return nTokenId & EXC_TOKCLASS_MASK; }
     /** Changes the token class in the passed classified token ID. */
     inline static void  ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass );
 

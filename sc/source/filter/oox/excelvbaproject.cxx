@@ -56,7 +56,7 @@ struct SheetCodeNameInfo
     PropertySet         maSheetProps;       /// Property set of the sheet without codename.
     OUString            maPrefix;           /// Prefix for the codename to be generated.
 
-    inline explicit     SheetCodeNameInfo( PropertySet& rSheetProps, const OUString& rPrefix ) :
+    explicit     SheetCodeNameInfo( PropertySet& rSheetProps, const OUString& rPrefix ) :
                             maSheetProps( rSheetProps ), maPrefix( rPrefix ) {}
 };
 

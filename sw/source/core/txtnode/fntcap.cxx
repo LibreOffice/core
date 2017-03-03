@@ -99,10 +99,10 @@ protected:
 public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) = 0;
     virtual void Do() = 0;
-    inline OutputDevice& GetOut() { return rInf.GetOut(); }
-    inline SwDrawTextInfo& GetInf() { return rInf; }
-    inline SwCapitalInfo* GetCapInf() const { return pCapInf; }
-    inline void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
+    OutputDevice& GetOut() { return rInf.GetOut(); }
+    SwDrawTextInfo& GetInf() { return rInf; }
+    SwCapitalInfo* GetCapInf() const { return pCapInf; }
+    void SetCapInf( SwCapitalInfo& rNew ) { pCapInf = &rNew; }
 };
 
 class SwDoGetCapitalSize : public SwDoCapitals
@@ -327,7 +327,7 @@ public:
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) override;
     virtual void Do() override;
 
-    inline sal_Int32 GetCursor(){ return nCursor; }
+    sal_Int32 GetCursor(){ return nCursor; }
 };
 
 void SwDoCapitalCursorOfst::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )

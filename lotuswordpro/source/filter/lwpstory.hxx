@@ -114,7 +114,7 @@ public:
     const OUString& GetSectionName() { return m_CurrSectionName; }
     LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr.get(); }
 
-    inline bool IsPMModified() { return m_bPMModified; }
+    bool IsPMModified() { return m_bPMModified; }
     inline void SetPMModified(bool bPMModified);
     inline void SetDropcapFlag(bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);

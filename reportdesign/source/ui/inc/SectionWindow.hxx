@@ -98,10 +98,10 @@ namespace rptui
         virtual ~OSectionWindow() override;
         virtual void dispose() override;
 
-        inline OStartMarker&    getStartMarker()    { return *m_aStartMarker.get();     }
-        inline OReportSection&  getReportSection()  { return *m_aReportSection.get();   }
-        inline OEndMarker&      getEndMarker()      { return *m_aEndMarker.get();       }
-        inline OViewsWindow*    getViewsWindow()    { return m_pParent;          }
+        OStartMarker&    getStartMarker()    { return *m_aStartMarker.get();     }
+        OReportSection&  getReportSection()  { return *m_aReportSection.get();   }
+        OEndMarker&      getEndMarker()      { return *m_aEndMarker.get();       }
+        OViewsWindow*    getViewsWindow()    { return m_pParent;          }
 
         void    setCollapsed(bool _bCollapsed);
 

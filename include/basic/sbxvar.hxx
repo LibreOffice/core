@@ -272,7 +272,7 @@ public:
     bool IsBroadcaster() const { return pCst != nullptr; }
     virtual void Broadcast( SfxHintId nHintId ) override;
 
-    inline const SbxObject* GetParent() const { return pParent; }
+    const SbxObject* GetParent() const { return pParent; }
     SbxObject* GetParent() { return pParent;}
     virtual void SetParent( SbxObject* );
 

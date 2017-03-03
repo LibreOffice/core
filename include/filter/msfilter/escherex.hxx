@@ -963,9 +963,9 @@ public:
     sal_uInt32          GetLastShapeId( sal_uInt32 nDrawingId ) const;
 
     /** Sets the flag indicating that the DGGCONTAINER exists. */
-    inline void         SetDggContainer() { mbHasDggCont = true; }
+    void         SetDggContainer() { mbHasDggCont = true; }
     /** Sets the flag indicating that the DGGCONTAINER exists. */
-    inline bool         HasDggContainer() const { return mbHasDggCont; }
+    bool         HasDggContainer() const { return mbHasDggCont; }
     /** Returns the total size of the DGG atom (including header). */
     sal_uInt32          GetDggAtomSize() const;
     /** Writes the complete DGG atom to the passed stream (overwrites existing data!). */
@@ -981,7 +981,7 @@ public:
     SvStream*           QueryPictureStream();
 
     /** Returns the picture stream if existing (queried), otherwise null. */
-    inline SvStream*    GetPictureStream() { return mpPicStrm; }
+    SvStream*    GetPictureStream() { return mpPicStrm; }
 
 private:
     /** Derived classes may implement to create a new stream used to store the
@@ -999,7 +999,7 @@ private:
     {
         sal_uInt32          mnDrawingId;        /// Identifier of drawing this cluster belongs to (one-based index into maDrawingInfos).
         sal_uInt32          mnNextShapeId;      /// Next free shape identifier in this cluster.
-        inline explicit     ClusterEntry( sal_uInt32 nDrawingId ) : mnDrawingId( nDrawingId ), mnNextShapeId( 0 ) {}
+        explicit     ClusterEntry( sal_uInt32 nDrawingId ) : mnDrawingId( nDrawingId ), mnNextShapeId( 0 ) {}
     };
     typedef ::std::vector< ClusterEntry > ClusterTable;
 
@@ -1008,7 +1008,7 @@ private:
         sal_uInt32          mnClusterId;        /// Currently used cluster (one-based index into maClusterTable).
         sal_uInt32          mnShapeCount;       /// Current number of shapes in this drawing.
         sal_uInt32          mnLastShapeId;      /// Last shape identifier generated for this drawing.
-        inline explicit     DrawingInfo( sal_uInt32 nClusterId ) : mnClusterId( nClusterId ), mnShapeCount( 0 ), mnLastShapeId( 0 ) {}
+        explicit     DrawingInfo( sal_uInt32 nClusterId ) : mnClusterId( nClusterId ), mnShapeCount( 0 ), mnLastShapeId( 0 ) {}
     };
     typedef ::std::vector< DrawingInfo > DrawingInfoVector;
 
@@ -1054,7 +1054,7 @@ public:
 
     /** Creates and returns a new shape identifier, updates the internal shape
         counters and registers the identifier in the DGG cluster table. */
-    inline sal_uInt32   GenerateShapeId() { return mxGlobal->GenerateShapeId( mnCurrentDg, mbEscherSpgr ); }
+    sal_uInt32   GenerateShapeId() { return mxGlobal->GenerateShapeId( mnCurrentDg, mbEscherSpgr ); }
 
     /** Returns the graphic provider from the global object that has been
         passed to the constructor.
@@ -1064,7 +1064,7 @@ public:
     /** Called if a picture shall be written and no picture stream is set at
         class ImplEESdrWriter.
      */
-    inline SvStream*    QueryPictureStream() { return mxGlobal->QueryPictureStream(); }
+    SvStream*    QueryPictureStream() { return mxGlobal->QueryPictureStream(); }
 
                 /// Inserts internal data into the EscherStream, this process
                 /// may and has to be executed only once

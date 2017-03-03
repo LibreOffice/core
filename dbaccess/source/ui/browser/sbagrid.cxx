@@ -1224,7 +1224,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
 /// unary_function Functor object for class ZZ returntype is void
     struct SbaGridControlPrec : std::unary_function<DataFlavorExVector::value_type,bool>
     {
-        inline bool operator()(const DataFlavorExVector::value_type& _aType)
+        bool operator()(const DataFlavorExVector::value_type& _aType)
         {
             switch (_aType.mnSotId)
             {

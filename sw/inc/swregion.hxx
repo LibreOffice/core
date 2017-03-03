@@ -44,8 +44,8 @@ public:
     // Combine adjacent rectangles.
     void Compress();
 
-    inline const SwRect &GetOrigin() const { return m_aOrigin; }
-    inline void ChangeOrigin( const SwRect &rRect ) { m_aOrigin = rRect; }
+    const SwRect &GetOrigin() const { return m_aOrigin; }
+    void ChangeOrigin( const SwRect &rRect ) { m_aOrigin = rRect; }
 };
 
 #endif // INCLUDED_SW_INC_SWREGION_HXX

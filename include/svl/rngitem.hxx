@@ -41,7 +41,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper * = nullptr ) const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
-    inline sal_uInt16&          From() { return nFrom; }
+    sal_uInt16&          From() { return nFrom; }
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 };

@@ -198,7 +198,7 @@ public:
 
 protected:
     /// @throws css::lang::DisposedException
-    inline  void checkDisposed()
+    void checkDisposed()
     {
         if ( rBHelper.bDisposed || !m_xConnection.is() )
             throw css::lang::DisposedException();

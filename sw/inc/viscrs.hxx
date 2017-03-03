@@ -103,7 +103,7 @@ public:
     void Hide();
     void Invalidate( const SwRect& rRect );
 
-    inline void SetShowTextInputFieldOverlay( const bool bShow )
+    void SetShowTextInputFieldOverlay( const bool bShow )
     {
         m_bShowTextInputFieldOverlay = bShow;
     }

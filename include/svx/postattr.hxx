@@ -45,7 +45,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    inline SvxPostItAuthorItem& operator=( const SvxPostItAuthorItem& rAuthor )
+    SvxPostItAuthorItem& operator=( const SvxPostItAuthorItem& rAuthor )
     {
         SetValue( rAuthor.GetValue() );
         return *this;
@@ -75,7 +75,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    inline SvxPostItDateItem& operator=( const SvxPostItDateItem& rDate )
+    SvxPostItDateItem& operator=( const SvxPostItDateItem& rDate )
     {
         SetValue( rDate.GetValue() );
         return *this;
@@ -106,7 +106,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    inline SvxPostItTextItem& operator=( const SvxPostItTextItem& rText )
+    SvxPostItTextItem& operator=( const SvxPostItTextItem& rText )
     {
         SetValue( rText.GetValue() );
         return *this;
@@ -129,7 +129,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    inline SvxPostItIdItem& operator=( const SvxPostItIdItem& rId )
+    SvxPostItIdItem& operator=( const SvxPostItIdItem& rId )
     {
         SetValue( rId.GetValue() );
         return *this;

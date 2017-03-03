@@ -111,7 +111,7 @@ namespace svt
         TemplateFolderContent   m_aSubContents;     // sorted (by name) list of the children
 
     private:
-        inline  void    implResetDate( )
+        void    implResetDate( )
         {
             m_aLastModified.NanoSeconds = m_aLastModified.Seconds = m_aLastModified.Minutes = m_aLastModified.Hours = 0;
             m_aLastModified.Day = m_aLastModified.Month = m_aLastModified.Year = 0;
@@ -124,18 +124,18 @@ namespace svt
         explicit TemplateContent( const INetURLObject& _rURL );
 
         // attribute access
-        inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ); }
-        inline void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
-        inline const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
+        OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ); }
+        void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
+        const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
 
-        inline TemplateFolderContent&   getSubContents()            { return m_aSubContents; }
-        inline const TemplateFolderContent& getSubContents() const  { return m_aSubContents; }
+        TemplateFolderContent&   getSubContents()            { return m_aSubContents; }
+        const TemplateFolderContent& getSubContents() const  { return m_aSubContents; }
 
-                inline ConstFolderIterator              end() const             { return m_aSubContents.end(); }
-        inline TemplateFolderContent::size_type
+                ConstFolderIterator              end() const             { return m_aSubContents.end(); }
+        TemplateFolderContent::size_type
                                         size() const    { return m_aSubContents.size(); }
 
-        inline void                     push_back( const ::rtl::Reference< TemplateContent >& _rxNewElement )
+        void                     push_back( const ::rtl::Reference< TemplateContent >& _rxNewElement )
                                                         { m_aSubContents.push_back( _rxNewElement ); }
     };
 

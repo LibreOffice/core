@@ -131,7 +131,7 @@ public:
 
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
-    inline bool isEventElement(
+    bool isEventElement(
         sal_Int32 nUid, OUString const & rLocalName )
     {
         return ((XMLNS_SCRIPT_UID == nUid && (rLocalName == "event" || rLocalName == "listener-event" )) ||
@@ -144,12 +144,12 @@ public:
     css::uno::Reference< css::xml::input::XElement > getStyle(
         OUString const & rStyleId ) const;
 
-    inline css::uno::Reference< css::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
     const & getComponentContext()  { return _xContext; }
     css::uno::Reference< css::util::XNumberFormatsSupplier >
     const & getNumberFormatsSupplier();
 
-    inline DialogImport(
+    DialogImport(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
@@ -166,7 +166,7 @@ public:
         , XMLNS_SCRIPT_UID( 0 )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
-    inline DialogImport( const DialogImport& rOther ) :
+    DialogImport( const DialogImport& rOther ) :
         ::cppu::WeakImplHelper< css::xml::input::XRoot >()
         , _xContext( rOther._xContext )
         , _xSupplier( rOther._xSupplier )
@@ -243,7 +243,7 @@ public:
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
-    inline StylesElement(
+    StylesElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -329,7 +329,7 @@ public:
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
-    inline MenuPopupElement(
+    MenuPopupElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -373,7 +373,7 @@ protected:
     const OUString _aId;
 
 public:
-    inline ImportContext(
+    ImportContext(
         DialogImport * pImport,
         css::uno::Reference< css::beans::XPropertySet > const & xControlModel_,
         OUString const & id )
@@ -465,7 +465,7 @@ public:
 class ControlImportContext : public ImportContext
 {
 public:
-    inline ControlImportContext(
+    ControlImportContext(
         DialogImport * pImport,
         OUString const & rId, OUString const & rControlName )
         : ImportContext(
@@ -474,7 +474,7 @@ public:
                 pImport->_xDialogModelFactory->createInstance( rControlName ),
                 css::uno::UNO_QUERY_THROW ), rId )
         {}
-    inline ControlImportContext(
+    ControlImportContext(
         DialogImport * pImport,
         const css::uno::Reference< css::beans::XPropertySet >& xProps, OUString const & rControlName )
         : ImportContext(
@@ -485,7 +485,7 @@ public:
 
     /// @throws css::xml::sax::SAXException
     /// @throws css::uno::RuntimeException
-    inline void finish()
+    void finish()
     {
         try
         {
@@ -511,7 +511,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline WindowElement(
+    WindowElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         DialogImport * pImport )
@@ -525,7 +525,7 @@ class EventElement
 public:
     virtual void SAL_CALL endElement() override;
 
-    inline EventElement(
+    EventElement(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -558,7 +558,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline ButtonElement(
+    ButtonElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -576,7 +576,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline CheckBoxElement(
+    CheckBoxElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -595,7 +595,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline ComboBoxElement(
+    ComboBoxElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -614,7 +614,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline MenuListElement(
+    MenuListElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -631,7 +631,7 @@ public:
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
 
-    inline RadioElement(
+    RadioElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -650,7 +650,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     void SAL_CALL endElement() override;
 
-    inline RadioGroupElement(
+    RadioGroupElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -670,7 +670,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline TitledBoxElement(
+    TitledBoxElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -688,7 +688,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline TextElement(
+    TextElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -705,7 +705,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline FixedHyperLinkElement(
+    FixedHyperLinkElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -723,7 +723,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline TextFieldElement(
+    TextFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -741,7 +741,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline ImageControlElement(
+    ImageControlElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -759,7 +759,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline FileControlElement(
+    FileControlElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -777,7 +777,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline TreeControlElement(
+    TreeControlElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -795,7 +795,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline CurrencyFieldElement(
+    CurrencyFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -813,7 +813,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline DateFieldElement(
+    DateFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -831,7 +831,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline NumericFieldElement(
+    NumericFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -849,7 +849,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline TimeFieldElement(
+    TimeFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -867,7 +867,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline PatternFieldElement(
+    PatternFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -885,7 +885,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline FormattedFieldElement(
+    FormattedFieldElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -903,7 +903,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline FixedLineElement(
+    FixedLineElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -921,7 +921,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline ScrollBarElement(
+    ScrollBarElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -939,7 +939,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline SpinButtonElement(
+    SpinButtonElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -957,7 +957,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline MultiPage(
+    MultiPage(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -980,7 +980,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline Frame(
+    Frame(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -1000,7 +1000,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline Page(
+    Page(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -1022,7 +1022,7 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes ) override;
     virtual void SAL_CALL endElement() override;
 
-    inline ProgressBarElement(
+    ProgressBarElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )

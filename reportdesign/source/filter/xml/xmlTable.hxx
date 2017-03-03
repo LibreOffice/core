@@ -68,14 +68,14 @@ namespace rptxml
 
         virtual void EndElement() override;
 
-        inline void addHeight(sal_Int32 _nHeight)   { m_aHeight.push_back( _nHeight ); }
-        inline void addWidth(sal_Int32 _nWidth)     { m_aWidth.push_back( _nWidth ); }
+        void addHeight(sal_Int32 _nHeight)   { m_aHeight.push_back( _nHeight ); }
+        void addWidth(sal_Int32 _nWidth)     { m_aWidth.push_back( _nWidth ); }
 
-        inline void setColumnSpanned(sal_Int32 _nColSpan)     { m_nColSpan = _nColSpan; }
-        inline void setRowSpanned(   sal_Int32 _nRowSpan)     { m_nRowSpan = _nRowSpan; }
+        void setColumnSpanned(sal_Int32 _nColSpan)     { m_nColSpan = _nColSpan; }
+        void setRowSpanned(   sal_Int32 _nRowSpan)     { m_nRowSpan = _nRowSpan; }
 
         void incrementRowIndex();
-        inline void incrementColumnIndex()  { ++m_nColumnIndex; }
+        void incrementColumnIndex()  { ++m_nColumnIndex; }
 
         void addCell(const css::uno::Reference< css::report::XReportComponent>& _xElement);
 

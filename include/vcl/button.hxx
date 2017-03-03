@@ -316,8 +316,8 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
-    inline void     SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
-    inline void     SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
+    void     SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
+    void     SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
 
     // draws the radio button (the knob image), in its current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect

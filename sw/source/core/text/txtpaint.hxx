@@ -41,11 +41,11 @@ public:
     }
 
     ~SwSaveClip();
-    inline void ChgClip( const SwRect &rRect, const SwTextFrame* pFrame = nullptr,
+    void ChgClip( const SwRect &rRect, const SwTextFrame* pFrame = nullptr,
                          bool bEnlargeRect = false)
              { if( pOut ) ChgClip_( rRect, pFrame, bEnlargeRect ); }
-    inline bool IsOn()  const { return bOn; }
-    inline bool IsChg() const { return bChg; }
+    bool IsOn()  const { return bOn; }
+    bool IsChg() const { return bChg; }
 };
 
 

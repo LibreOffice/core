@@ -45,7 +45,7 @@ struct XclRange;
 struct XclDebugObjCounter
 {
     sal_Int32           mnObjCnt;
-    inline explicit     XclDebugObjCounter() : mnObjCnt( 0 ) {}
+    explicit     XclDebugObjCounter() : mnObjCnt( 0 ) {}
                         ~XclDebugObjCounter();
 };
 #endif
@@ -138,30 +138,30 @@ public:
     XclRoot&            operator=( const XclRoot& rRoot );
 
     /** Returns old RootData struct. Deprecated. */
-    inline RootData&    GetOldRoot() const { return *mrData.mxRD; }
+    RootData&    GetOldRoot() const { return *mrData.mxRD; }
 
     /** Returns the current BIFF version of the importer/exporter. */
-    inline XclBiff      GetBiff() const { return mrData.meBiff; }
+    XclBiff      GetBiff() const { return mrData.meBiff; }
     /** Returns the current output format of the importer/exporter. */
-    inline XclOutput    GetOutput() const { return mrData.meOutput; }
+    XclOutput    GetOutput() const { return mrData.meOutput; }
     /** Returns true, if currently a document is imported. */
-    inline bool         IsImport() const { return !mrData.mbExport; }
+    bool         IsImport() const { return !mrData.mbExport; }
     /** Returns the text encoding to import/export byte strings. */
-    inline rtl_TextEncoding GetTextEncoding() const { return mrData.meTextEnc; }
+    rtl_TextEncoding GetTextEncoding() const { return mrData.meTextEnc; }
     /** Returns the system language, i.e. for number formats. */
-    inline LanguageType GetSysLanguage() const { return mrData.meSysLang; }
+    LanguageType GetSysLanguage() const { return mrData.meSysLang; }
     /** Returns the document language. */
-    inline LanguageType GetDocLanguage() const { return mrData.meDocLang; }
+    LanguageType GetDocLanguage() const { return mrData.meDocLang; }
     /** Returns the UI language. */
-    inline LanguageType GetUILanguage() const { return mrData.meUILang; }
+    LanguageType GetUILanguage() const { return mrData.meUILang; }
     /** Returns the default script type, e.g. for blank cells. */
-    inline sal_Int16    GetDefApiScript() const { return mrData.mnDefApiScript; }
+    sal_Int16    GetDefApiScript() const { return mrData.mnDefApiScript; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
-    inline long         GetCharWidth() const { return mrData.mnCharWidth; }
+    long         GetCharWidth() const { return mrData.mnCharWidth; }
     /** Returns the current Calc sheet index. */
-    inline bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
+    bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */
-    inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
+    SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
 
     /** Calculates the width of the passed number of pixels in 1/100 mm. */
     sal_Int32           GetHmmFromPixelX( double fPixelX ) const;
@@ -169,16 +169,16 @@ public:
     sal_Int32           GetHmmFromPixelY( double fPixelY ) const;
 
     /** Returns the medium to import from. */
-    inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
+    SfxMedium&   GetMedium() const { return mrData.mrMedium; }
     /** Returns the document URL of the imported/exported file. */
-    inline const OUString& GetDocUrl() const { return mrData.maDocUrl; }
+    const OUString& GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
-    inline const OUString& GetBasePath() const { return mrData.maBasePath; }
+    const OUString& GetBasePath() const { return mrData.maBasePath; }
     /** Returns the current user name. */
-    inline const OUString& GetUserName() const { return mrData.maUserName; }
+    const OUString& GetUserName() const { return mrData.maUserName; }
 
     /** Returns the default password used for stream encryption. */
-    inline const OUString& GetDefaultPassword() const { return mrData.maDefPassword; }
+    const OUString& GetDefaultPassword() const { return mrData.maDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
     css::uno::Sequence< css::beans::NamedValue >
         RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
@@ -245,25 +245,25 @@ public:
     XclTracer&          GetTracer() const;
 
     /** Returns the highest possible cell address in a Calc document. */
-    inline const ScAddress& GetScMaxPos() const { return mrData.maScMaxPos; }
+    const ScAddress& GetScMaxPos() const { return mrData.maScMaxPos; }
     /** Returns the highest possible cell address in an Excel document (using current BIFF version). */
-    inline const ScAddress& GetXclMaxPos() const { return mrData.maXclMaxPos; }
+    const ScAddress& GetXclMaxPos() const { return mrData.maXclMaxPos; }
     /** Returns the highest possible cell address valid in Calc and Excel (using current BIFF version). */
-    inline const ScAddress& GetMaxPos() const { return mrData.maMaxPos; }
+    const ScAddress& GetMaxPos() const { return mrData.maMaxPos; }
 
     /** Sets the document language. */
-    inline void         SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
+    void         SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
     /** Sets the UI language, i.e. if it has been read from a file. */
-    inline void         SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
+    void         SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
     /** Sets the text encoding to import/export byte strings. */
     void                SetTextEncoding( rtl_TextEncoding eTextEnc );
     /** Sets the width of the '0' character (default font) for the current printer (twips).
         @param rFontData  The font used for the '0' character. */
     void                SetCharWidth( const XclFontData& rFontData );
     /** Sets the current Calc sheet index. */
-    inline void         SetCurrScTab( SCTAB nScTab ) { mrData.mnScTab = nScTab; }
+    void         SetCurrScTab( SCTAB nScTab ) { mrData.mnScTab = nScTab; }
     /** Increases the current Calc sheet index by 1. */
-    inline void         IncCurrScTab() { ++mrData.mnScTab; }
+    void         IncCurrScTab() { ++mrData.mnScTab; }
 
 private:
     XclRootData& mrData;        /// Reference to the global data struct.

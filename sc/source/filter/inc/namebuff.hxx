@@ -169,7 +169,7 @@ struct ExtName
     sal_uInt32        nStorageId;
     sal_uInt16        nFlags;
 
-    inline          ExtName( sal_uInt16 n ) : nStorageId( 0 ), nFlags( n ) {}
+    ExtName( sal_uInt16 n ) : nStorageId( 0 ), nFlags( n ) {}
 
     bool            IsOLE() const;
 };

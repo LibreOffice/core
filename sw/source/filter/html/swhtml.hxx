@@ -286,12 +286,12 @@ public:
 
     inline void SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight, short nIndent );
 
-    inline bool IsLRSpaceChanged() const { return bLRSpaceChanged; }
+    bool IsLRSpaceChanged() const { return bLRSpaceChanged; }
     inline void GetMargins( sal_uInt16& nLeft, sal_uInt16& nRight,
                             short &nIndent ) const;
 
     inline void SetULSpace( sal_uInt16 nUpper, sal_uInt16 nLower );
-    inline bool IsULSpaceChanged() const { return bULSpaceChanged; }
+    bool IsULSpaceChanged() const { return bULSpaceChanged; }
     inline void GetULSpace( sal_uInt16& rUpper, sal_uInt16& rLower ) const;
 
     bool HasAttrs() const { return !aAttrs.empty(); }
@@ -496,7 +496,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // Attribute am Dok setzen
     void SetAttr_( bool bChkEnd, bool bBeforeTable, HTMLAttrs *pPostIts );
-    inline void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
+    void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
                          HTMLAttrs *pPostIts = nullptr )
     {
         if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrames.empty() )

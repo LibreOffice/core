@@ -117,7 +117,7 @@ namespace frm
         inline void acquire();
         inline void release();
 
-        inline OControlModel& getModel() const { return m_rModel; };
+        OControlModel& getModel() const { return m_rModel; };
 
         /** adds a property change notification, which is to be fired when the last lock on the model
             (in the current thread) is released.
@@ -496,7 +496,7 @@ public:
                             LockAccess
                         );
 
-    inline ::osl::Mutex&
+    ::osl::Mutex&
                         getInstanceMutex() { return m_aMutex; }
 };
 
@@ -630,10 +630,10 @@ protected:
                                         m_xColumn;
 
 protected:
-    inline sal_Int32            getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
-    inline const OUString&      getControlSource( ) const           { return m_aControlSource; }
-    inline bool                 isRequired() const                  { return m_bRequired; }
-    inline bool                 isLoaded() const                    { return m_bLoaded; }
+    sal_Int32            getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
+    const OUString&      getControlSource( ) const           { return m_aControlSource; }
+    bool                 isRequired() const                  { return m_bRequired; }
+    bool                 isLoaded() const                    { return m_bLoaded; }
 
 protected:
 
@@ -939,11 +939,11 @@ protected:
     void    impl_setField_noNotify(
                 const css::uno::Reference< css::beans::XPropertySet>& _rxField
             );
-    inline bool hasField() const
+    bool hasField() const
     {
         return m_xField.is();
     }
-    inline sal_Int32 getFieldType() const
+    sal_Int32 getFieldType() const
     {
         return m_nFieldType;
     }
@@ -954,7 +954,7 @@ protected:
     ) const override;
 
 public:
-    inline const css::uno::Reference< css::beans::XPropertySet>& getField() const
+    const css::uno::Reference< css::beans::XPropertySet>& getField() const
     {
         return m_xField;
     }
@@ -1046,10 +1046,10 @@ protected:
                 _propertyChanged( const css::beans::PropertyChangeEvent& _rEvt ) override;
 
     /// checks whether we currently have an external value binding in place
-    inline  bool    hasExternalValueBinding() const { return m_xExternalBinding.is(); }
+    bool    hasExternalValueBinding() const { return m_xExternalBinding.is(); }
 
     // checks whether we currently have an external validator
-    inline  bool    hasValidator() const { return m_xValidator.is(); }
+    bool    hasValidator() const { return m_xValidator.is(); }
 
     /** transfers the very current value of the db column we're bound to the control
         @precond
@@ -1133,7 +1133,7 @@ private:
     */
     void        doFormListening( const bool _bStart );
 
-    inline bool isFormListening() const { return m_bFormListening; }
+    bool isFormListening() const { return m_bFormListening; }
 
     /** determines the new value of m_xAmbientForm
     */

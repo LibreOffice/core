@@ -161,13 +161,13 @@ namespace connectivity
             const OSQLParser& _rParser );
         ~OSQLParseTreeIterator();
 
-        inline static void * SAL_CALL operator new( size_t nSize )
+        static void * SAL_CALL operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t,void* _pHint )
+        static void * SAL_CALL operator new( size_t,void* _pHint )
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem )
+        static void SAL_CALL operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void *,void* )
+        static void SAL_CALL operator delete( void *,void* )
             {  }
 
         void dispose();
@@ -192,8 +192,8 @@ namespace connectivity
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
-        inline const css::sdbc::SQLException&   getErrors() const { return m_aErrors; }
-        inline bool hasErrors() const { return !m_aErrors.Message.isEmpty(); }
+        const css::sdbc::SQLException&   getErrors() const { return m_aErrors; }
+        bool hasErrors() const { return !m_aErrors.Message.isEmpty(); }
 
         // statement type (already set in setParseTree):
         OSQLStatementType getStatementType() const { return m_eStatementType; }

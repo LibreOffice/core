@@ -135,8 +135,8 @@ public:
     virtual ~SwModule() override;
 
     // Set view for internal use only. It is public only for technical reasons.
-    inline  void        SetView(SwView* pVw) { m_pView = pVw; }
-    inline  SwView*     GetView() { return m_pView; }
+    void        SetView(SwView* pVw) { m_pView = pVw; }
+    SwView*     GetView() { return m_pView; }
 
     // Handler for slots.
     void                StateOther(SfxItemSet &);

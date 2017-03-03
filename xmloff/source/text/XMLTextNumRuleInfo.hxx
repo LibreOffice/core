@@ -70,50 +70,50 @@ public:
               const bool bExportTextNumberElement );
     inline void Reset();
 
-    inline const OUString& GetNumRulesName() const
+    const OUString& GetNumRulesName() const
     {
         return msNumRulesName;
     }
-    inline sal_Int16 GetListLevelStartValue() const
+    sal_Int16 GetListLevelStartValue() const
     {
         return mnListLevelStartValue;
     }
 
-    inline const OUString& GetListId() const
+    const OUString& GetListId() const
     {
         return msListId;
     }
 
-    inline sal_Int16 GetLevel() const
+    sal_Int16 GetLevel() const
     {
         return mnListLevel;
     }
 
-    inline bool HasStartValue() const
+    bool HasStartValue() const
     {
         return mnListStartValue != -1;
     }
-    inline sal_uInt32 GetStartValue() const
+    sal_uInt32 GetStartValue() const
     {
         return mnListStartValue;
     }
 
-    inline bool IsNumbered() const
+    bool IsNumbered() const
     {
         return mbIsNumbered;
     }
-    inline bool IsRestart() const
+    bool IsRestart() const
     {
         return mbIsRestart;
     }
 
     bool BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const;
 
-    inline bool IsContinueingPreviousSubTree() const
+    bool IsContinueingPreviousSubTree() const
     {
         return mbContinueingPreviousSubTree;
     }
-    inline const OUString& ListLabelString() const
+    const OUString& ListLabelString() const
     {
         return msListLabelString;
     }

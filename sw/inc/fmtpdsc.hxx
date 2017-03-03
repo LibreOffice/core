@@ -70,7 +70,7 @@ public:
     void    SetNumOffset( const ::boost::optional<sal_uInt16>& oNum ) { oNumOffset = oNum; }
 
     /// Query / set where attribute is anchored.
-    inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
+    const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = const_cast<SwModify*>(pNew); }
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;

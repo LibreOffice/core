@@ -70,9 +70,9 @@ struct JNI_type_info
 
     virtual void destroy( JNIEnv * jni_env ) = 0;
 protected:
-    inline void destruct( JNIEnv * jni_env )
+    void destruct( JNIEnv * jni_env )
         { jni_env->DeleteGlobalRef( m_class ); }
-    virtual inline ~JNI_type_info() {}
+    virtual ~JNI_type_info() {}
     explicit JNI_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
 };
@@ -115,7 +115,7 @@ struct JNI_type_info_holder
     JNI_type_info_holder(const JNI_type_info_holder&) = delete;
     const JNI_type_info_holder& operator=(const JNI_type_info_holder&) = delete;
 
-    inline JNI_type_info_holder() : m_info( nullptr ) {}
+    JNI_type_info_holder() : m_info( nullptr ) {}
 };
 
 typedef std::unordered_map<
@@ -235,7 +235,7 @@ private:
 
     JNI_info( JNIEnv * jni_env, jobject class_loader,
               jclass classClass, jmethodID methodForName );
-    inline ~JNI_info() {}
+    ~JNI_info() {}
 };
 
 inline void JNI_info::destroy( JNIEnv * jni_env )

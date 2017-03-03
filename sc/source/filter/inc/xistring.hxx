@@ -41,23 +41,23 @@ public:
     void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Sets the passed string data. */
-    inline void         SetText( const OUString& rText ) { maString = rText; }
+    void         SetText( const OUString& rText ) { maString = rText; }
     /** Sets the passed formatting buffer. */
-    inline void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
+    void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
     /** Reads and appends the formatting information (run count and runs) from stream. */
-    inline void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
+    void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
     /** Reads and appends formatting runs from an OBJ or TXO record. */
-    inline void         ReadObjFormats( XclImpStream& rStrm, sal_uInt16 nFormatSize ) { ReadObjFormats( rStrm, maFormats, nFormatSize ); }
+    void         ReadObjFormats( XclImpStream& rStrm, sal_uInt16 nFormatSize ) { ReadObjFormats( rStrm, maFormats, nFormatSize ); }
 
     /** Returns true, if the string is empty. */
-    inline bool         IsEmpty() const { return maString.isEmpty(); }
+    bool         IsEmpty() const { return maString.isEmpty(); }
     /** Returns the pure text data of the string. */
-    inline const OUString& GetText() const { return maString; }
+    const OUString& GetText() const { return maString; }
 
     /** Returns true, if the string contains formatting information. */
-    inline bool         IsRich() const { return !maFormats.empty(); }
+    bool         IsRich() const { return !maFormats.empty(); }
     /** Returns the formatting run vector. */
-    inline const XclFormatRunVec& GetFormats() const { return maFormats; }
+    const XclFormatRunVec& GetFormats() const { return maFormats; }
 
     /** Insert a formatting run to the passed format buffer. */
     static void         AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sal_uInt16 nFontIdx );
@@ -82,9 +82,9 @@ public:
     explicit            XclImpStringIterator( const XclImpString& rString );
 
     /** Returns true, if the iterator references a valid text portion. */
-    inline bool         Is() const { return mnTextBeg < mrText.getLength(); }
+    bool         Is() const { return mnTextBeg < mrText.getLength(); }
     /** Returns the index of the current text portion. */
-    inline size_t       GetPortionIndex() const { return mnPortion; }
+    size_t       GetPortionIndex() const { return mnPortion; }
     /** Returns the string of the current text portion. */
     OUString            GetPortionText() const;
     /** Returns the font index of the current text portion. */

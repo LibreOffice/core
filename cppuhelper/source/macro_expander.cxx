@@ -126,7 +126,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    inline Bootstrap_MacroExpander()
+    Bootstrap_MacroExpander()
         : t_uno_impl( m_mutex )
         {}
 

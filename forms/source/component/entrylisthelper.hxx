@@ -65,15 +65,15 @@ namespace frm
         virtual ~OEntryListHelper( );
 
         /// returns the current string item list
-        inline const std::vector< OUString >&
+        const std::vector< OUString >&
                     getStringItemList() const { return m_aStringItems; }
 
         /// returns the current typed item list
-        inline const css::uno::Sequence< css::uno::Any >&
+        const css::uno::Sequence< css::uno::Any >&
                     getTypedItemList() const { return m_aTypedItems; }
 
         /// determines whether we actually have an external list source
-        inline bool hasExternalListSource( ) const { return m_xListSource.is(); }
+        bool hasExternalListSource( ) const { return m_xListSource.is(); }
 
         /** handling the XEventListener::disposing call for the case where
             our list source is being disposed

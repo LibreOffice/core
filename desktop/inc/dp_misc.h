@@ -44,7 +44,7 @@ class MutexHolder
 {
     mutable ::osl::Mutex m_mutex;
 protected:
-    inline ::osl::Mutex & getMutex() const { return m_mutex; }
+    ::osl::Mutex & getMutex() const { return m_mutex; }
 };
 
 

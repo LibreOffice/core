@@ -35,7 +35,7 @@ namespace connectivity
         public:
             explicit MacabCatalog(MacabConnection* _pCon);
 
-            inline MacabConnection* getConnection() const { return m_pConnection; }
+            MacabConnection* getConnection() const { return m_pConnection; }
 
             static const OUString& getDot();
 

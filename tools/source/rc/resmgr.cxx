@@ -406,7 +406,7 @@ struct ImpContent
 
 struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
 {
-    inline bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
+    bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
     {
         return lhs.nTypeAndId < rhs.nTypeAndId;
     }

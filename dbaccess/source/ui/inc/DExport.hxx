@@ -158,7 +158,7 @@ namespace dbaui
 
         void SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
-        inline void SetTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
+        void SetTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
 
         virtual void release() = 0;
 

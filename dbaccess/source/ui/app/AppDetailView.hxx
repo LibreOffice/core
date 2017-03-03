@@ -66,7 +66,7 @@ namespace dbaui
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
 
-        inline void resetLastActive() { m_pLastActiveEntry = nullptr;}
+        void resetLastActive() { m_pLastActiveEntry = nullptr;}
 
         void    updateHelpText();
 
@@ -134,7 +134,7 @@ namespace dbaui
         /// fills the Creation listbox with the necessary strings and images
         void fillTaskEntryList( const TaskEntryList& _rList );
 
-        inline bool HandleKeyInput( const KeyEvent& _rKEvt )
+        bool HandleKeyInput( const KeyEvent& _rKEvt )
         {
             return m_aCreation->HandleKeyInput( _rKEvt );
         }
@@ -188,8 +188,8 @@ namespace dbaui
         */
         bool    interceptKeyInput( const KeyEvent& _rEvent );
 
-        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
-        inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
+        OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
+        OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
 
         bool isCutAllowed() override ;
         bool isCopyAllowed() override    ;

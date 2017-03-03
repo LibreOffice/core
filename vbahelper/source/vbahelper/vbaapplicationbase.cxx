@@ -156,7 +156,7 @@ struct VbaApplicationBase_Impl final
     VbaTimerHashMap m_aTimerHash;
     bool mbVisible;
 
-    inline VbaApplicationBase_Impl() : mbVisible( true ) {}
+    VbaApplicationBase_Impl() : mbVisible( true ) {}
 
     ~VbaApplicationBase_Impl()
     {

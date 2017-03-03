@@ -51,12 +51,12 @@ public:
 
     explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx );
 
-    inline const OUString& GetXclName() const { return maXclName; }
-    inline const OUString& GetScName() const { return maScName; }
-    inline SCTAB        GetScTab() const { return mnScTab; }
-    inline const ScRangeData* GetScRangeData() const { return mpScData; }
-    inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
-    inline bool         IsVBName() const { return mbVBName; }
+    const OUString& GetXclName() const { return maXclName; }
+    const OUString& GetScName() const { return maScName; }
+    SCTAB        GetScTab() const { return mnScTab; }
+    const ScRangeData* GetScRangeData() const { return mpScData; }
+    bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
+    bool         IsVBName() const { return mbVBName; }
     bool IsMacro() const { return mbMacro; }
     void ConvertTokens();
 

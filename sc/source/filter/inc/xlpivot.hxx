@@ -388,7 +388,7 @@ public:
     void                SetBool( bool bValue );
 
     /** Returns the text representation of the item. */
-    inline const OUString& ConvertToText() const { return maText; }
+    const OUString& ConvertToText() const { return maText; }
 
     /** Returns true, if the passed term equals this item. */
     bool                IsEqual( const XclPCItem& rItem ) const;
@@ -475,7 +475,7 @@ public:
     virtual             ~XclPCField();
 
     /** Returns the index of this field in the containing pivot cache. */
-    inline sal_uInt16   GetFieldIndex() const { return mnFieldIdx; }
+    sal_uInt16   GetFieldIndex() const { return mnFieldIdx; }
 
     /** Returns true, if the type of the field is supported by Calc. */
     bool                IsSupportedField() const;
@@ -544,7 +544,7 @@ struct XclPTCachedName
     OUString       maName;         /// The visible name, if used.
     bool                mbUseCache;     /// true = Use name in cache instead of maName.
 
-    inline explicit     XclPTCachedName() : mbUseCache( true ) {}
+    explicit     XclPTCachedName() : mbUseCache( true ) {}
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName );
@@ -556,7 +556,7 @@ struct XclPTVisNameInfo
     XclPTCachedName     maVisName;      /// The displayed name of the item.
 
     /** Returns true, if the name is set explicitly (maVisName.mbUseCache is false). */
-    inline bool         HasVisName() const { return !maVisName.mbUseCache; }
+    bool         HasVisName() const { return !maVisName.mbUseCache; }
     /** Returns the name, if set explicitly (maVisName.mbUseCache is false). */
     const OUString* GetVisName() const;
     /** Sets the visible name and enables usage of cache if name is empty. */

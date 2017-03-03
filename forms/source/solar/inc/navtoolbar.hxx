@@ -95,7 +95,7 @@ namespace frm
 
         /** retrieves the current image size
         */
-        inline ImageSize    GetImageSize( ) const { return m_eImageSize; }
+        ImageSize    GetImageSize( ) const { return m_eImageSize; }
 
         /** sets the size of the images
         */

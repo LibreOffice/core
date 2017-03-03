@@ -25,7 +25,7 @@
 class SwExpandPortion : public SwTextPortion
 {
 public:
-    inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
+    SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
@@ -43,7 +43,7 @@ class SwBlankPortion : public SwExpandPortion
     sal_Unicode cChar;
     bool bMulti;        // For multiportion brackets
 public:
-    inline  SwBlankPortion( sal_Unicode cCh, bool bMult = false )
+    SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 

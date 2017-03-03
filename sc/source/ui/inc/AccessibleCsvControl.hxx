@@ -88,7 +88,7 @@ protected:
     virtual Rectangle GetBoundingBox() const override;
 
     /** Returns whether the object is alive. Must be called with locked mutex. */
-    inline bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
+    bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
     /** @throws css::lang::DisposedException if the object is disposed/disposing or any pointer
         is missing. Should be used with locked mutex! */
     void ensureAlive() const;
@@ -444,16 +444,16 @@ private:
     /** Returns the count of selected columns in the table. */
     sal_Int32 implGetSelColumnCount() const;
     /** Returns the total cell count in the table (including header). */
-    inline sal_Int32 implGetCellCount() const { return implGetRowCount() * implGetColumnCount(); }
+    sal_Int32 implGetCellCount() const { return implGetRowCount() * implGetColumnCount(); }
 
     /** Returns the row index from cell index (including header). */
-    inline sal_Int32 implGetRow( sal_Int32 nIndex ) const { return nIndex / implGetColumnCount(); }
+    sal_Int32 implGetRow( sal_Int32 nIndex ) const { return nIndex / implGetColumnCount(); }
     /** Returns the column index from cell index (including header). */
-    inline sal_Int32 implGetColumn( sal_Int32 nIndex ) const { return nIndex % implGetColumnCount(); }
+    sal_Int32 implGetColumn( sal_Int32 nIndex ) const { return nIndex % implGetColumnCount(); }
     /** Returns the absolute column index of the nSelColumn-th selected column. */
     sal_Int32 implGetSelColumn( sal_Int32 nSelColumn ) const;
     /** Returns the child index from cell position (including header). */
-    inline sal_Int32 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return nRow * implGetColumnCount() + nColumn; }
+    sal_Int32 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return nRow * implGetColumnCount() + nColumn; }
 
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;

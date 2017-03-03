@@ -78,9 +78,9 @@ class OfaACorrCheckListBox : public SvSimpleTable
         {
         }
 
-        inline void *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
-        inline void SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
-        inline sal_uLong GetSelectEntryPos() { return GetModel()->GetAbsPos(FirstSelected()); }
+        void *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
+        void SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
+        sal_uLong GetSelectEntryPos() { return GetModel()->GetAbsPos(FirstSelected()); }
 
         bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);

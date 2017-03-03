@@ -77,10 +77,10 @@ namespace svt
         OUString     m_aDisplayDirectory;
 
     protected:
-        inline  SvtFileDialog_Base*  getDialog() { return m_pDlg; }
+        SvtFileDialog_Base*  getDialog() { return m_pDlg; }
 
-        inline const    ::cppu::OBroadcastHelper&   GetBroadcastHelper() const  { return OCommonPicker_Base::rBHelper; }
-        inline          ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
+        const    ::cppu::OBroadcastHelper&   GetBroadcastHelper() const  { return OCommonPicker_Base::rBHelper; }
+        ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
 
     public:
         OCommonPicker();

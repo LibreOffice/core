@@ -51,7 +51,7 @@ struct SwRedlineDataParent
     SvTreeListEntry*            pTLBParent; // corresponding TreeListBox entry
     OUString                    sComment;   // redline comment
 
-    inline bool operator< ( const SwRedlineDataParent& rObj ) const
+    bool operator< ( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
@@ -123,8 +123,8 @@ public:
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
 
-    inline SvxAcceptChgCtr& GetChgCtrl()        { return *m_aTabPagesCTRL.get(); }
-    inline bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }
+    SvxAcceptChgCtr& GetChgCtrl()        { return *m_aTabPagesCTRL.get(); }
+    bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }
 
     void            Init(SwRedlineTable::size_type nStart = 0);
     void            CallAcceptReject( bool bSelect, bool bAccept );

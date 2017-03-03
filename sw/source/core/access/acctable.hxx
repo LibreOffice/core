@@ -64,7 +64,7 @@ protected:
     virtual ~SwAccessibleTable() override;
 
     // #i77106#
-    inline void SetDesc( const OUString& sNewDesc )
+    void SetDesc( const OUString& sNewDesc )
     {
         m_sDesc = sNewDesc;
     }

@@ -83,11 +83,11 @@ private:
     SAL_DLLPRIVATE bool        ImplMoveFocus( bool _bUpper );
     SAL_DLLPRIVATE void        ImplCalcFocusRect( bool _bUpper );
 
-    SAL_DLLPRIVATE inline bool ImplIsUpperEnabled( ) const
+    SAL_DLLPRIVATE bool ImplIsUpperEnabled( ) const
     {
         return mnValue + mnValueStep <= mnMaxRange;
     }
-    SAL_DLLPRIVATE inline bool ImplIsLowerEnabled( ) const
+    SAL_DLLPRIVATE bool ImplIsLowerEnabled( ) const
     {
         return mnValue >= mnMinRange + mnValueStep;
     }

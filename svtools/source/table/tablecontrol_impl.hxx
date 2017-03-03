@@ -136,18 +136,18 @@ namespace svt { namespace table
     public:
         void        setModel( const PTableModel& _pModel );
 
-        inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
+        const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 
-        inline  RowPos  getCurRow() const           { return m_nCurRow; }
+        RowPos  getCurRow() const           { return m_nCurRow; }
 
         RowPos  getAnchor() const { return m_nAnchor; }
         void    setAnchor( RowPos const i_anchor ) { m_nAnchor = i_anchor; }
 
-        inline  RowPos  getTopRow() const       { return m_nTopRow; }
-        inline  ColPos  getLeftColumn() const { return m_nLeftColumn; }
+        RowPos  getTopRow() const       { return m_nTopRow; }
+        ColPos  getLeftColumn() const { return m_nLeftColumn; }
 
-        inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
-        inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
+        const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
+        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
 
     public:
         explicit TableControl_Impl( TableControl& _rAntiImpl );
@@ -283,7 +283,7 @@ namespace svt { namespace table
                         getAccessible( vcl::Window& i_parentWindow );
         void            disposeAccessible();
 
-        inline bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
+        bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
 
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last ) override;

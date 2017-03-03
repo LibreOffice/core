@@ -152,8 +152,8 @@ public:
     static bool IsMoveBwdJump() { return m_bMoveBwdJump; }
     static void SetMoveBwdJump( bool bNew ){ m_bMoveBwdJump = bNew; }
 
-    inline void SetUndersized( const bool bNew ) { m_bUndersized = bNew; }
-    inline bool IsUndersized()  const { return m_bUndersized; }
+    void SetUndersized( const bool bNew ) { m_bUndersized = bNew; }
+    bool IsUndersized()  const { return m_bUndersized; }
 
     bool IsPrevObjMove() const;
 

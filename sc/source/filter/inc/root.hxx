@@ -75,8 +75,8 @@ class ExcRoot
 {
 protected:
     RootData*       pExcRoot;
-    inline          ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
-    inline          ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
+    ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
+    ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
 };
 
 // Lotus Imp~/Exp~ -

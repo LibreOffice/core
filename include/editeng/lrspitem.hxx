@@ -95,31 +95,31 @@ public:
     inline void   SetRight( const long nR, const sal_uInt16 nProp = 100 );
 
     // Query/direct setting of the absolute values
-    inline long GetLeft()  const { return nLeftMargin; }
-    inline long GetRight() const { return nRightMargin;}
-    inline void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
-    inline void SetRightValue( const long nR ) { nRightMargin = nR; }
-    inline bool IsAutoFirst()  const { return bAutoFirst; }
-    inline void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
+    long GetLeft()  const { return nLeftMargin; }
+    long GetRight() const { return nRightMargin;}
+    void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
+    void SetRightValue( const long nR ) { nRightMargin = nR; }
+    bool IsAutoFirst()  const { return bAutoFirst; }
+    void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
 
-    inline bool IsExplicitZeroMarginValRight()  const { return bExplicitZeroMarginValRight; }
-    inline bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
-    inline void SetExplicitZeroMarginValRight( const bool eR ) { bExplicitZeroMarginValRight = eR; }
-    inline void SetExplicitZeroMarginValLeft( const bool eL ) { bExplicitZeroMarginValLeft = eL; }
-    inline sal_uInt16 GetPropLeft()  const { return nPropLeftMargin; }
-    inline sal_uInt16 GetPropRight() const { return nPropRightMargin;}
+    bool IsExplicitZeroMarginValRight()  const { return bExplicitZeroMarginValRight; }
+    bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
+    void SetExplicitZeroMarginValRight( const bool eR ) { bExplicitZeroMarginValRight = eR; }
+    void SetExplicitZeroMarginValLeft( const bool eL ) { bExplicitZeroMarginValLeft = eL; }
+    sal_uInt16 GetPropLeft()  const { return nPropLeftMargin; }
+    sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
     // The UI/text interface:
     inline void SetTextLeft( const long nL, const sal_uInt16 nProp = 100 );
-    inline long GetTextLeft() const { return nTxtLeft; }
+    long GetTextLeft() const { return nTxtLeft; }
 
     inline void   SetTextFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
-    inline short  GetTextFirstLineOfst() const { return nFirstLineOfst; }
-    inline void SetPropTextFirstLineOfst( const sal_uInt16 nProp )
+    short  GetTextFirstLineOfst() const { return nFirstLineOfst; }
+    void SetPropTextFirstLineOfst( const sal_uInt16 nProp )
                     { nPropFirstLineOfst = nProp; }
-    inline sal_uInt16 GetPropTextFirstLineOfst() const
+    sal_uInt16 GetPropTextFirstLineOfst() const
                     { return nPropFirstLineOfst; }
-    inline void SetTextFirstLineOfstValue( const short nValue )
+    void SetTextFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

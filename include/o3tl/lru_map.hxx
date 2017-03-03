@@ -47,7 +47,7 @@ private:
     map_t mLruMap;
     const size_t mMaxSize;
 
-    inline void checkLRU()
+    void checkLRU()
     {
         if (mLruMap.size() > mMaxSize)
         {

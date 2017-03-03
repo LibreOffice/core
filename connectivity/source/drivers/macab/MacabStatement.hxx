@@ -150,7 +150,7 @@ namespace connectivity
                     ) override;
 
             // other methods
-            inline MacabConnection* getOwnConnection() const { return m_pConnection; }
+            MacabConnection* getOwnConnection() const { return m_pConnection; }
         };
 
 

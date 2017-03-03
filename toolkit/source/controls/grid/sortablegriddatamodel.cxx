@@ -143,7 +143,7 @@ private:
     */
     ::sal_Int32 impl_getPublicRowIndex_nothrow( ::sal_Int32 const i_privateRowIndex ) const;
 
-    inline bool impl_isSorted_nothrow() const
+    bool impl_isSorted_nothrow() const
     {
         return m_currentSortColumn >= 0;
     }

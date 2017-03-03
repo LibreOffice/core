@@ -164,9 +164,9 @@ public:
     SfxMedium*              CreateMedium();
     void                    InitRequest( const SfxRequest& rRequest );
 
-    inline SfxRequest*      GetRequest() const { return m_pRequest; }
-    inline sal_Int16        GetParam() const { return m_nParam; }
-    inline void             SetParam( sal_Int16 nParam ) { m_nParam = nParam; }
+    SfxRequest*      GetRequest() const { return m_pRequest; }
+    sal_Int16        GetParam() const { return m_nParam; }
+    void             SetParam( sal_Int16 nParam ) { m_nParam = nParam; }
 };
 #endif
 

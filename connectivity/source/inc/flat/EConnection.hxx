@@ -43,12 +43,12 @@ namespace connectivity
             virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
 
             // own methods
-            inline bool     isHeaderLine()          const { return m_bHeaderLine;       }
-            inline sal_Unicode  getFieldDelimiter()     const { return m_cFieldDelimiter;   }
-            inline sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
-            inline sal_Unicode  getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
-            inline sal_Unicode  getThousandDelimiter()  const { return m_cThousandDelimiter;}
-            inline sal_Int32    getMaxRowsToScan()      const { return m_nMaxRowsToScan;}
+            bool     isHeaderLine()          const { return m_bHeaderLine;       }
+            sal_Unicode  getFieldDelimiter()     const { return m_cFieldDelimiter;   }
+            sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
+            sal_Unicode  getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
+            sal_Unicode  getThousandDelimiter()  const { return m_cThousandDelimiter;}
+            sal_Int32    getMaxRowsToScan()      const { return m_nMaxRowsToScan;}
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 

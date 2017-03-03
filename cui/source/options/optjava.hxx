@@ -137,24 +137,24 @@ private:
 
     DECL_LINK(EditHdl_Impl, Button*, void);
 
-    inline void             EnableRemoveButton()
+    void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pAssignedList->GetSelectEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
 
-    inline void             EnableEditButton()
+    void             EnableEditButton()
                                 { m_pEditBtn->Enable(
                                     m_pAssignedList->GetSelectEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
-    inline void             DisableAssignButton()
+    void             DisableAssignButton()
                                 { m_pAssignBtn->Disable(); }
 
-    inline void             DisableRemoveButton()
+    void             DisableRemoveButton()
                                 { m_pRemoveBtn->Disable(); }
 
-    inline void             DisableEditButton()
+    void             DisableEditButton()
                                 { m_pEditBtn->Disable(); }
 
 
@@ -189,7 +189,7 @@ private:
     DECL_LINK(SelectHdl_Impl, ListBox&, void);
 
     bool                    IsPathDuplicate( const OUString& _rPath );
-    inline void             EnableRemoveButton()
+    void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
@@ -199,8 +199,8 @@ public:
     virtual ~SvxJavaClassPathDlg() override;
     virtual void            dispose() override;
 
-    inline const OUString&  GetOldPath() const { return m_sOldPath; }
-    inline void             SetFocus() { m_pPathList->GrabFocus(); }
+    const OUString&  GetOldPath() const { return m_sOldPath; }
+    void             SetFocus() { m_pPathList->GrabFocus(); }
 
     OUString                GetClassPath() const;
     void                    SetClassPath( const OUString& _rPath );

@@ -30,15 +30,15 @@ namespace xls {
 /** Absolute position in a spreadsheet (in EMUs) independent from cells. */
 struct AnchorPointModel : public ::oox::drawingml::EmuPoint
 {
-    inline explicit     AnchorPointModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
-    inline bool         isValid() const { return (X >= 0) && (Y >= 0); }
+    explicit     AnchorPointModel() : ::oox::drawingml::EmuPoint( -1, -1 ) {}
+    bool         isValid() const { return (X >= 0) && (Y >= 0); }
 };
 
 /** Absolute size in a spreadsheet (in EMUs). */
 struct AnchorSizeModel : public ::oox::drawingml::EmuSize
 {
-    inline explicit     AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
-    inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
+    explicit     AnchorSizeModel() : ::oox::drawingml::EmuSize( -1, -1 ) {}
+    bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
 /** Position in spreadsheet (cell position and offset inside cell). */
@@ -50,7 +50,7 @@ struct CellAnchorModel
     sal_Int64           mnRowOffset;        /// Y offset inside the row.
 
     explicit            CellAnchorModel();
-    inline bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
+    bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
 };
 
 /** Application-specific client data of a shape. */

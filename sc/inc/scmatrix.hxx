@@ -153,7 +153,7 @@ public:
     };
 
     /// The maximum number of elements a matrix may have at runtime.
-    inline static size_t GetElementsMax()
+    static size_t GetElementsMax()
     {
         // TODO: Fix me.
         return 0x08000000;
@@ -174,19 +174,19 @@ public:
     bool static IsSizeAllocatable( SCSIZE nC, SCSIZE nR );
 
     /// Value or boolean.
-    inline static bool IsValueType( ScMatValType nType )
+    static bool IsValueType( ScMatValType nType )
     {
         return nType <= ScMatValType::Boolean;
     }
 
     /// Boolean.
-    inline static bool IsBooleanType( ScMatValType nType )
+    static bool IsBooleanType( ScMatValType nType )
     {
         return nType == ScMatValType::Boolean;
     }
 
     /// String, empty or empty path, but not value nor boolean.
-    inline static bool IsNonValueType( ScMatValType nType )
+    static bool IsNonValueType( ScMatValType nType )
     {
         return bool(nType & ScMatValType::NonvalueMask);
     }
@@ -194,19 +194,19 @@ public:
     /** String, but not empty or empty path or any other type.
         Not named IsStringType to prevent confusion because previously
         IsNonValueType was named IsStringType. */
-    inline static bool IsRealStringType( ScMatValType nType )
+    static bool IsRealStringType( ScMatValType nType )
     {
         return (nType & ScMatValType::NonvalueMask) == ScMatValType::String;
     }
 
     /// Empty, but not empty path or any other type.
-    inline static bool IsEmptyType( ScMatValType nType )
+    static bool IsEmptyType( ScMatValType nType )
     {
         return (nType & ScMatValType::NonvalueMask) == ScMatValType::Empty;
     }
 
     /// Empty path, but not empty or any other type.
-    inline static bool IsEmptyPathType( ScMatValType nType )
+    static bool IsEmptyPathType( ScMatValType nType )
     {
         return (nType & ScMatValType::NonvalueMask) == ScMatValType::EmptyPath;
     }

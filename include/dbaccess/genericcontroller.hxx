@@ -180,7 +180,7 @@ namespace dbaui
     struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
     {
 
-        inline bool operator()( const SupportedFeatures::value_type& _aType, sal_Int32 _nId ) const
+        bool operator()( const SupportedFeatures::value_type& _aType, sal_Int32 _nId ) const
         {
             return !!( _nId == _aType.second.nFeatureId );
         }
@@ -202,7 +202,7 @@ namespace dbaui
     struct FindFeatureListener : ::std::binary_function< FeatureListener, css::uno::Reference< css::frame::XStatusListener >, bool >
     {
 
-        inline bool operator()( const FeatureListener& lhs, const css::uno::Reference< css::frame::XStatusListener >& rhs ) const
+        bool operator()( const FeatureListener& lhs, const css::uno::Reference< css::frame::XStatusListener >& rhs ) const
         {
             return !!( lhs.xListener == rhs );
         }

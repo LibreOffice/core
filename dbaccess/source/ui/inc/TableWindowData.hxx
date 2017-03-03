@@ -71,20 +71,20 @@ namespace dbaui
         const OUString& GetWinName()         const { return m_aWinName; }
         const Point& GetPosition()                  const { return m_aPosition; }
         const Size& GetSize()                       const { return m_aSize; }
-        inline bool IsShowAll()                     const { return m_bShowAll; }
-        inline bool isQuery()                       const { return m_bIsQuery; }
-        inline bool isValid()                       const { return m_bIsValid; } // it is either a table or query but it is known
+        bool IsShowAll()                     const { return m_bShowAll; }
+        bool isQuery()                       const { return m_bIsQuery; }
+        bool isValid()                       const { return m_bIsValid; } // it is either a table or query but it is known
         bool HasPosition()  const;
         bool HasSize()      const;
 
-        inline void SetWinName( const OUString& rWinName )       { m_aWinName = rWinName; }
-        inline void SetPosition( const Point& rPos )                    { m_aPosition=rPos; }
-        inline void SetSize( const Size& rSize )                        { m_aSize = rSize; }
-        inline void ShowAll( bool bAll )                                { m_bShowAll = bAll; }
+        void SetWinName( const OUString& rWinName )       { m_aWinName = rWinName; }
+        void SetPosition( const Point& rPos )                    { m_aPosition=rPos; }
+        void SetSize( const Size& rSize )                        { m_aSize = rSize; }
+        void ShowAll( bool bAll )                                { m_bShowAll = bAll; }
 
-        inline css::uno::Reference< css::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
-        inline css::uno::Reference< css::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }
-        inline css::uno::Reference< css::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
+        css::uno::Reference< css::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
+        css::uno::Reference< css::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }
+        css::uno::Reference< css::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
 
         // OEventListenerAdapter
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;

@@ -119,20 +119,20 @@ public:
     sal_uInt16 GetSectionLevel() const;
 
     inline sal_uLong StartOfSectionIndex() const;
-    inline const SwStartNode* StartOfSectionNode() const { return m_pStartOfSection; }
-    inline       SwStartNode* StartOfSectionNode() { return m_pStartOfSection; }
+    const SwStartNode* StartOfSectionNode() const { return m_pStartOfSection; }
+    SwStartNode* StartOfSectionNode() { return m_pStartOfSection; }
 
     inline sal_uLong EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
-    inline sal_uInt8 GetAutoFormatLvl() const     { return m_nAFormatNumLvl; }
-    inline void SetAutoFormatLvl( sal_uInt8 nVal )      { m_nAFormatNumLvl = nVal; }
+    sal_uInt8 GetAutoFormatLvl() const     { return m_nAFormatNumLvl; }
+    void SetAutoFormatLvl( sal_uInt8 nVal )      { m_nAFormatNumLvl = nVal; }
 
-    inline void SetNumLSpace( bool bFlag )        { m_bSetNumLSpace = bFlag; }
+    void SetNumLSpace( bool bFlag )        { m_bSetNumLSpace = bFlag; }
 
-    inline bool IsIgnoreDontExpand() const  { return m_bIgnoreDontExpand; }
-    inline void SetIgnoreDontExpand( bool bNew )  { m_bIgnoreDontExpand = bNew; }
+    bool IsIgnoreDontExpand() const  { return m_bIgnoreDontExpand; }
+    void SetIgnoreDontExpand( bool bNew )  { m_bIgnoreDontExpand = bNew; }
 
     SwNodeType   GetNodeType() const { return m_nNodeType; }
 
@@ -275,7 +275,7 @@ public:
     /// If node is in a table return the respective table box.
     SwTableBox* GetTableBox() const;
 
-    inline sal_uLong GetIndex() const { return GetPos(); }
+    sal_uLong GetIndex() const { return GetPos(); }
 
     const SwTextNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
 
@@ -448,8 +448,8 @@ public:
     /** Does node has already its own auto-attributes?
      Access to SwAttrSet. */
     inline const SwAttrSet &GetSwAttrSet() const;
-    inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
-    inline bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
+    const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
+    bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
 
     virtual SwFormatColl* ChgFormatColl( SwFormatColl* );
     SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
@@ -472,8 +472,8 @@ public:
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt ) const;
 
-    inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
-    inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
+    void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
+    bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
     static SwOLENodes* CreateOLENodesArray( const SwFormatColl& rColl, bool bOnlyWithInvalidSize );
 

@@ -493,7 +493,7 @@ public:
         descriptor may be based on a UNO shape or, already, on an accessible
         shape.
     */
-    inline bool operator == (const ChildDescriptor& aDescriptor) const
+    bool operator == (const ChildDescriptor& aDescriptor) const
     {
         return (
                 this == &aDescriptor ||

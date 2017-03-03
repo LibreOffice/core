@@ -54,7 +54,7 @@ namespace webdav_ucp
 class DAVSession
 {
 public:
-    inline void acquire()
+    void acquire()
     {
         osl_atomic_increment( &m_nRefCount );
     }

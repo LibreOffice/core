@@ -131,8 +131,8 @@ struct VbaControlNameInserter
 {
 public:
     VbaControlNamesSet& mrCtrlNames;
-    inline explicit     VbaControlNameInserter( VbaControlNamesSet& rCtrlNames ) : mrCtrlNames( rCtrlNames ) {}
-    inline void         operator()( const VbaFormControl& rControl ) { mrCtrlNames.insertName( rControl ); }
+    explicit     VbaControlNameInserter( VbaControlNamesSet& rCtrlNames ) : mrCtrlNames( rCtrlNames ) {}
+    void         operator()( const VbaFormControl& rControl ) { mrCtrlNames.insertName( rControl ); }
 };
 
 /** A dummy invisible form control (fixed label without text) that is used to

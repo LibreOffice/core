@@ -51,7 +51,7 @@ public:
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
-    inline SvxLanguageItem& operator=(const SvxLanguageItem& rLang)
+    SvxLanguageItem& operator=(const SvxLanguageItem& rLang)
         {
             SetValue( rLang.GetValue() );
             return *this;

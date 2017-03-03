@@ -69,8 +69,8 @@ namespace dbaui
         EJoinType       GetJoinType() const { return m_eJoinType; };
         void            SetJoinType(const EJoinType& eJT) { m_eJoinType = eJT; };
 
-        inline void setNatural(bool _bNatural) { m_bNatural = _bNatural; }
-        inline bool isNatural() const { return m_bNatural; }
+        void setNatural(bool _bNatural) { m_bNatural = _bNatural; }
+        bool isNatural() const { return m_bNatural; }
     };
 
 }

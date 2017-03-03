@@ -166,7 +166,7 @@ public:
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
     /** Returns the caption drawing object. */
-    inline ScCaptionPtr GetCaption() { return mxCaption; }
+    ScCaptionPtr GetCaption() { return mxCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */
     void                FitCaptionToRect( const Rectangle* pVisRect = nullptr );
@@ -188,7 +188,7 @@ private:
     /** Initializes all members. */
     void                Initialize();
     /** Returns the passed rectangle if existing, page rectangle otherwise. */
-    inline const Rectangle& GetVisRect( const Rectangle* pVisRect ) const { return pVisRect ? *pVisRect : maPageRect; }
+    const Rectangle& GetVisRect( const Rectangle* pVisRect ) const { return pVisRect ? *pVisRect : maPageRect; }
 
 private:
     ScDocument&         mrDoc;

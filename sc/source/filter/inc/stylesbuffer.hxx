@@ -103,7 +103,7 @@ public:
     void                importColorId( SequenceInputStream& rStrm );
 
     /** Returns true, if the color is set to automatic. */
-    inline bool         isAuto() const { return isPlaceHolder(); }
+    bool         isAuto() const { return isPlaceHolder(); }
 };
 
 SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor );
@@ -232,7 +232,7 @@ public:
 
     /** Returns the font model structure. This function can be called before
         finalizeImport() has been called. */
-    inline const FontModel& getModel() const { return maModel; }
+    const FontModel& getModel() const { return maModel; }
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -315,9 +315,9 @@ public:
     void                finalizeImport();
 
     /** Returns the alignment model structure. */
-    inline const AlignmentModel& getModel() const { return maModel; }
+    const AlignmentModel& getModel() const { return maModel; }
     /** Returns the converted API alignment data struct. */
-    inline const ApiAlignmentData& getApiData() const { return maApiData; }
+    const ApiAlignmentData& getApiData() const { return maApiData; }
 
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
@@ -365,7 +365,7 @@ public:
     void                finalizeImport();
 
     /** Returns the converted API protection data struct. */
-    inline const ApiProtectionData& getApiData() const { return maApiData; }
+    const ApiProtectionData& getApiData() const { return maApiData; }
 
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 private:
@@ -441,7 +441,7 @@ public:
     void                finalizeImport( bool bRTL );
 
     /** Returns the converted API border data struct. */
-    inline const ApiBorderData& getApiData() const { return maApiData; }
+    const ApiBorderData& getApiData() const { return maApiData; }
 
     void fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
@@ -613,12 +613,12 @@ public:
     void                finalizeImport();
 
     /** Returns true, if the XF is a cell XF, and false, if it is a style XF. */
-    inline bool         isCellXf() const { return maModel.mbCellXf; }
+    bool         isCellXf() const { return maModel.mbCellXf; }
 
     /** Returns the referred font object. */
     FontRef             getFont() const;
     /** Returns the alignment data of this style. */
-    inline const Alignment& getAlignment() const { return maAlignment; }
+    const Alignment& getAlignment() const { return maAlignment; }
 
     void applyPatternToAttrList(
         AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );
@@ -716,10 +716,10 @@ public:
     void                finalizeImport( const OUString& rFinalName );
 
     /** Returns the cell style model structure. */
-    inline const CellStyleModel& getModel() const { return maModel; }
+    const CellStyleModel& getModel() const { return maModel; }
     /** Returns the final style name used in the document. */
-    inline const OUString& getFinalStyleName() const { return maFinalName; }
-    inline ::ScStyleSheet* getStyleSheet() { return mpStyleSheet; }
+    const OUString& getFinalStyleName() const { return maFinalName; }
+    ::ScStyleSheet* getStyleSheet() { return mpStyleSheet; }
 private:
     CellStyleModel      maModel;
     OUString     maFinalName;        /// Final style name used in API.

@@ -40,12 +40,12 @@ public:
     explicit            ScSelectionState( ScViewData& rViewData );
 
     /** Returns the type of the selection this object contains. */
-    inline ScSelectionType GetSelectionType() const { return meType; }
+    ScSelectionType GetSelectionType() const { return meType; }
 
     /** Returns the position of the cell cursor. */
-    inline const ScAddress& GetCellCursor() const { return maCursor; }
+    const ScAddress& GetCellCursor() const { return maCursor; }
     /** Returns the edit engine selection. */
-    inline const ESelection& GetEditSelection() const { return maEditSel; }
+    const ESelection& GetEditSelection() const { return maEditSel; }
 
 private:
     ScSelectionType     meType;             /// Type of the selection.

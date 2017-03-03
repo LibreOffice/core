@@ -60,7 +60,7 @@ public:
      */
     explicit inline Impl(rtl::OUString const & m_aDescriptor);
 
-    inline Impl * clone() const { return new Impl(*this); }
+    Impl * clone() const { return new Impl(*this); }
 };
 
 inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
@@ -188,7 +188,7 @@ public:
     UnoUrlDescriptor m_aProtocol;
     rtl::OUString m_aObjectName;
 
-    inline Impl * clone() const { return new Impl(*this); }
+    Impl * clone() const { return new Impl(*this); }
 
     /** @exception rtl::MalformedUriException
      */

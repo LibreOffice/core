@@ -96,14 +96,14 @@ public:
     static bool isAsciiAlpha( const OUString& rStr );
 
     /// whether type is pure numeric or not, e.g. return of getStringType
-    static inline bool isNumericType( sal_Int32 nType )
+    static bool isNumericType( sal_Int32 nType )
     {
         return ((nType & nCharClassNumericType) != 0) &&
             ((nType & ~(nCharClassNumericTypeMask)) == 0);
     }
 
     /// whether type is pure alphanumeric or not, e.g. return of getStringType
-    static inline bool isAlphaNumericType( sal_Int32 nType )
+    static bool isAlphaNumericType( sal_Int32 nType )
     {
         return ((nType & (nCharClassAlphaType |
             nCharClassNumericType)) != 0) &&
@@ -112,14 +112,14 @@ public:
     }
 
     /// whether type is pure letter or not, e.g. return of getStringType
-    static inline bool isLetterType( sal_Int32 nType )
+    static bool isLetterType( sal_Int32 nType )
     {
         return ((nType & nCharClassLetterType) != 0) &&
             ((nType & ~(nCharClassLetterTypeMask)) == 0);
     }
 
     /// whether type is pure letternumeric or not, e.g. return of getStringType
-    static inline bool isLetterNumericType( sal_Int32 nType )
+    static bool isLetterNumericType( sal_Int32 nType )
     {
         return ((nType & (nCharClassLetterType |
             nCharClassNumericType)) != 0) &&

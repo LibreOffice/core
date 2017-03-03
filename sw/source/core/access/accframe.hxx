@@ -87,12 +87,12 @@ public:
     inline bool IsShowing( const SwAccessibleMap& rAccMap ) const;
 
 protected:
-    inline bool IsInPagePreview() const
+    bool IsInPagePreview() const
     {
         return mbIsInPagePreview;
     }
 
-    inline void ClearFrame()
+    void ClearFrame()
     {
         mpFrame = nullptr;
     }
@@ -134,12 +134,12 @@ protected:
     void GetChildren( SwAccessibleMap& rAccMap,
                       std::list< sw::access::SwAccessibleChild >& rChildren ) const;
 
-    inline void SetVisArea( const SwRect& rNewVisArea )
+    void SetVisArea( const SwRect& rNewVisArea )
     {
         maVisArea = rNewVisArea;
     }
 
-    inline const SwRect& GetVisArea() const
+    const SwRect& GetVisArea() const
     {
         return maVisArea;
     }

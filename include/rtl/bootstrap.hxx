@@ -120,21 +120,21 @@ namespace rtl
 
             @param macro    [inout]  The macro to be expanded
         */
-        inline void expandMacrosFrom( ::rtl::OUString & macro ) const
+        void expandMacrosFrom( ::rtl::OUString & macro ) const
             { rtl_bootstrap_expandMacros_from_handle( _handle, &macro.pData ); }
 
         /** Expands a macro using default bootstrap variables.
 
             @param macro    [inout]  The macro to be expanded
         */
-        static inline void expandMacros( ::rtl::OUString & macro )
+        static void expandMacros( ::rtl::OUString & macro )
             { rtl_bootstrap_expandMacros( &macro.pData ); }
 
         /** Provides the bootstrap internal handle.
 
             @return bootstrap handle
         */
-        inline rtlBootstrapHandle getHandle() const
+        rtlBootstrapHandle getHandle() const
             { return _handle; }
 
         /** Escapes special characters ("$" and "\").

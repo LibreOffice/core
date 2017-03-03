@@ -35,7 +35,7 @@ namespace svt
 
         struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
         {
-            inline void operator()(const THeaderCellMap::value_type& _aType)
+            void operator()(const THeaderCellMap::value_type& _aType)
             {
                 css::uno::Reference< css::lang::XComponent > xComp( _aType.second, css::uno::UNO_QUERY );
                 OSL_ENSURE( xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!" );

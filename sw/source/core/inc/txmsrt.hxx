@@ -88,7 +88,7 @@ public:
                        const TextAndReading& rTaR2,
                        const css::lang::Locale& rLocale2 ) const;
 
-    inline bool IsEqual( const TextAndReading& rTaR1,
+    bool IsEqual( const TextAndReading& rTaR1,
                          const css::lang::Locale& rLocale1,
                          const TextAndReading& rTaR2,
                          const css::lang::Locale& rLocale2 ) const
@@ -96,7 +96,7 @@ public:
         return 0 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
-    inline bool IsLess( const TextAndReading& rTaR1,
+    bool IsLess( const TextAndReading& rTaR1,
                         const css::lang::Locale& rLocale1,
                         const TextAndReading& rTaR2,
                         const css::lang::Locale& rLocale2 ) const

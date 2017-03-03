@@ -148,7 +148,7 @@ public:
 
        @return the parent
     */
-    inline SwNumberTreeNode* GetParent() const
+    SwNumberTreeNode* GetParent() const
     {
         return mpParent;
     }
@@ -309,7 +309,7 @@ public:
         Usage: on <IsCounted()> state change its needed to invalidate the
                complete numbering tree due to wide influence of this change.
     */
-    inline void InvalidateAndNotifyTree()
+    void InvalidateAndNotifyTree()
     {
         if ( GetRoot() )
         {
@@ -462,7 +462,7 @@ protected:
 
         Usage: on <IsCounted()> state change the children have to be invalidated
     */
-    inline void InvalidateChildren()
+    void InvalidateChildren()
     {
         SetLastValid( mChildren.end() );
     }

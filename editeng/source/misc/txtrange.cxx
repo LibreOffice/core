@@ -126,8 +126,8 @@ class SvxBoundArgs
         { if( nDiff ) NoteFarPoint_( nPx, nPyDiff, nDiff ); }
     long CalcMax( const Point& rPt1, const Point& rPt2, long nRange, long nFar );
     void CheckCut( const Point& rLst, const Point& rNxt );
-    inline long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
-    inline long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
+    long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
+    long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
     SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong, const Range& rRange );
     void NotePoint( const long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }

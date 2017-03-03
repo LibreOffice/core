@@ -1227,10 +1227,10 @@ struct XclChExtTypeInfo : public XclChTypeInfo
     void                Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool bSpline );
 
     /** Returns true, if this chart type supports area formatting for its series. */
-    inline bool         IsSeriesFrameFormat() const
+    bool         IsSeriesFrameFormat() const
                             { return mb3dChart ? mbSeriesIsFrame3d : mbSeriesIsFrame2d; }
     /** Returns the correct object type identifier for series and data points. */
-    inline XclChObjectType GetSeriesObjectType() const
+    XclChObjectType GetSeriesObjectType() const
                             { return IsSeriesFrameFormat() ? EXC_CHOBJTYPE_FILLEDSERIES : EXC_CHOBJTYPE_LINEARSERIES; }
 };
 
@@ -1268,7 +1268,7 @@ enum XclChTextType
 /** A map key for text and title objects. */
 struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16, sal_uInt16 > >
 {
-    inline explicit     XclChTextKey( XclChTextType eTextType, sal_uInt16 nMainIdx = 0, sal_uInt16 nSubIdx = 0 )
+    explicit     XclChTextKey( XclChTextType eTextType, sal_uInt16 nMainIdx = 0, sal_uInt16 nSubIdx = 0 )
                             { first = eTextType; second.first = nMainIdx; second.second = nSubIdx; }
 };
 

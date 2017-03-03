@@ -41,7 +41,6 @@ private:
     T&  m_aComboListBox;
 
 public:
-    inline
     VCLListBoxHelper( T& _pListBox ) :
         m_aComboListBox( _pListBox ){}
 

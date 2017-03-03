@@ -59,14 +59,14 @@ namespace connectivity
 
         OMetaConnection();
 
-        inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
+        rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
         const OUString&         getURL() const  { return m_sURL; }
-        inline void             setURL(const OUString& _rsUrl) { m_sURL = _rsUrl; }
+        void             setURL(const OUString& _rsUrl) { m_sURL = _rsUrl; }
         void                    throwGenericSQLException( sal_uInt16 _nErrorResourceId,const css::uno::Reference< css::uno::XInterface>& _xContext  );
         const SharedResources& getResources() const { return m_aResources;}
 
-        inline void setConnectionInfo(const css::uno::Sequence< css::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
-        inline const css::uno::Sequence< css::beans::PropertyValue >&
+        void setConnectionInfo(const css::uno::Sequence< css::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
+        const css::uno::Sequence< css::beans::PropertyValue >&
             getConnectionInfo() const { return m_aConnectionInfo; }
 
         // OComponentHelper

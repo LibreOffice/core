@@ -200,7 +200,7 @@ private:
     void                CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect );
 
     bool AreChildrenTransient() const { return bAreChildrenTransient; }
-    inline void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
+    void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
 
 protected:
     VclPtr<SvTreeListBox>   pView;
@@ -333,9 +333,9 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     bool IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
-    inline void         EnableCellFocus() { bIsCellFocusEnabled = true; }
+    void         EnableCellFocus() { bIsCellFocusEnabled = true; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
-    inline sal_uInt16       GetCurrentTabPos() const { return nCurTabPos; }
+    sal_uInt16       GetCurrentTabPos() const { return nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
 };

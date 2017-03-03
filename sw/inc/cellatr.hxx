@@ -39,7 +39,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    inline SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
+    SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
         SetValue( rAttr.GetValue() );
         bAuto = rAttr.bAuto;
@@ -59,8 +59,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
-    inline void ChgDefinedIn( const SwModify* pNew )
+    const SwModify* GetDefinedIn() const { return pDefinedIn; }
+    void ChgDefinedIn( const SwModify* pNew )
                                             { pDefinedIn = const_cast<SwModify*>(pNew); }
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const override;
@@ -84,7 +84,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    inline SwTableBoxValue& operator=( const SwTableBoxValue& rCmp )
+    SwTableBoxValue& operator=( const SwTableBoxValue& rCmp )
     {
         nValue = rCmp.nValue;
         return *this;

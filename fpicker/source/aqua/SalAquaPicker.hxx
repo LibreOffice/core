@@ -47,9 +47,9 @@ public:
     int run();
     int runandwaitforresult();
 
-    inline OUString const & getDisplayDirectory() { return m_sDisplayDirectory; }
+    OUString const & getDisplayDirectory() { return m_sDisplayDirectory; }
 
-    inline ControlHelper* getControlHelper() const {
+    ControlHelper* getControlHelper() const {
         return m_pControlHelper;
     }
 

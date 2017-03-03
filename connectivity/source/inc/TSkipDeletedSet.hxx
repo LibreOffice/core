@@ -41,13 +41,13 @@ namespace connectivity
         OSkipDeletedSet(IResultSetHelper* _pHelper);
         ~OSkipDeletedSet();
 
-        inline static void * SAL_CALL operator new( size_t nSize )
+        static void * SAL_CALL operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t,void* _pHint )
+        static void * SAL_CALL operator new( size_t,void* _pHint )
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem )
+        static void SAL_CALL operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void *,void* )
+        static void SAL_CALL operator delete( void *,void* )
             {  }
 
         /**
@@ -85,7 +85,7 @@ namespace connectivity
                 sal_Int32 _nPos the logical position
         */
         void        deletePosition(sal_Int32 _nPos);
-        inline void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
+        void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TSKIPDELETEDSET_HXX

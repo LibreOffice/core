@@ -140,7 +140,7 @@ public:
     // Add own implementation for TRSetBaseGeometry to handle TailPos over changes
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 
-    inline const Point& GetFixedTailPos() const  {return maFixedTailPos;}
+    const Point& GetFixedTailPos() const  {return maFixedTailPos;}
 
     // geometry access
     ::basegfx::B2DPolygon getTailPolygon() const;

@@ -48,15 +48,15 @@ namespace comphelper
         AccessibleEventNotifier::TClientId  m_nClientId;
 
     public:
-        inline  Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
+        Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
         inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
 
-        inline  IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
-        inline  void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
+        IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
+        void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
 
-        inline  AccessibleEventNotifier::TClientId
+        AccessibleEventNotifier::TClientId
                                             getClientId() const                 { return m_nClientId; }
-        inline  void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
+        void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
                                                                                 { m_nClientId = _nId; }
 
     public:

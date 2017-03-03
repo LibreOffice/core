@@ -95,8 +95,8 @@ namespace xmloff
             const OUString& _rReferringControls);
 
         // OFormLayerXMLImport_Impl
-        inline OAttribute2Property&         getAttributeMap()   { return m_aAttributeMetaData; }
-        inline SvXMLImport&                 getGlobalContext()  { return m_rImporter; }
+        OAttribute2Property&         getAttributeMap()   { return m_aAttributeMetaData; }
+        SvXMLImport&                 getGlobalContext()  { return m_rImporter; }
         const SvXMLStyleContext*            getStyleElement(const OUString& _rStyleName) const;
         void                                enterEventContext();
         void                                leaveEventContext();

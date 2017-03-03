@@ -48,7 +48,7 @@ namespace {
 
 struct MatrixAdd : public ::std::binary_function<double,double,double>
 {
-    inline double operator() (const double& lhs, const double& rhs) const
+    double operator() (const double& lhs, const double& rhs) const
     {
         return ::rtl::math::approxAdd( lhs,rhs);
     }
@@ -56,7 +56,7 @@ struct MatrixAdd : public ::std::binary_function<double,double,double>
 
 struct MatrixSub : public ::std::binary_function<double,double,double>
 {
-    inline double operator() (const double& lhs, const double& rhs) const
+    double operator() (const double& lhs, const double& rhs) const
     {
         return ::rtl::math::approxSub( lhs,rhs);
     }
@@ -64,7 +64,7 @@ struct MatrixSub : public ::std::binary_function<double,double,double>
 
 struct MatrixMul : public ::std::binary_function<double,double,double>
 {
-    inline double operator() (const double& lhs, const double& rhs) const
+    double operator() (const double& lhs, const double& rhs) const
     {
         return lhs * rhs;
     }
@@ -72,7 +72,7 @@ struct MatrixMul : public ::std::binary_function<double,double,double>
 
 struct MatrixDiv : public ::std::binary_function<double,double,double>
 {
-    inline double operator() (const double& lhs, const double& rhs) const
+    double operator() (const double& lhs, const double& rhs) const
     {
         return ScInterpreter::div( lhs,rhs);
     }
@@ -80,7 +80,7 @@ struct MatrixDiv : public ::std::binary_function<double,double,double>
 
 struct MatrixPow : public ::std::binary_function<double,double,double>
 {
-    inline double operator() (const double& lhs, const double& rhs) const
+    double operator() (const double& lhs, const double& rhs) const
     {
         return ::pow( lhs,rhs);
     }

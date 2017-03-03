@@ -204,8 +204,8 @@ public:
                    SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
                    sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode, SwPaM* pPam);
 
-    inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
-    inline void SetInFrontOfLabel_( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
+    bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
+    void SetInFrontOfLabel_( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
 
     /// Unless this is called, the getter method of Mark will return Point.
     virtual void SetMark();

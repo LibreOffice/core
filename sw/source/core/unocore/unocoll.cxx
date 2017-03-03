@@ -1002,13 +1002,13 @@ namespace
     {
         typedef SwXTextFrame core_frame_t;
         typedef XTextFrame uno_frame_t;
-        static inline uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
+        static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextFrame> const xRet(
                 SwXTextFrame::CreateXTextFrame(*rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::makeAny(xRet);
         }
-        static inline bool filter(const SwNode* const pNode) { return !pNode->IsNoTextNode(); };
+        static bool filter(const SwNode* const pNode) { return !pNode->IsNoTextNode(); };
     };
 
     template<>
@@ -1016,13 +1016,13 @@ namespace
     {
         typedef SwXTextGraphicObject core_frame_t;
         typedef XTextContent uno_frame_t;
-        static inline uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
+        static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextContent> const xRet(
                 SwXTextGraphicObject::CreateXTextGraphicObject(*rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::makeAny(xRet);
         }
-        static inline bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
+        static bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
     };
 
     template<>
@@ -1030,13 +1030,13 @@ namespace
     {
         typedef SwXTextEmbeddedObject core_frame_t;
         typedef XEmbeddedObjectSupplier uno_frame_t;
-        static inline uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
+        static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
             uno::Reference<text::XTextContent> const xRet(
                 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rFrameFormat.GetDoc(), &rFrameFormat));
             return uno::makeAny(xRet);
         }
-        static inline bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
+        static bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
     };
 
     template<FlyCntType T>

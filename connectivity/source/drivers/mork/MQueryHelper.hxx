@@ -184,7 +184,7 @@ namespace connectivity
             sal_Int32                  executeQuery(OConnection* xConnection, MQueryExpression & expr);
             const OColumnAlias&        getColumnAlias() const { return m_rColumnAlias; }
             bool                       hadError() const { return m_aError.is(); }
-            inline ErrorDescriptor&    getError() { return m_aError; }
+            ErrorDescriptor&    getError() { return m_aError; }
 
             void                       setAddressbook( OUString&);
         };

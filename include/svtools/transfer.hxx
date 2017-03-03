@@ -162,7 +162,7 @@ private:
     std::unique_ptr<TransferableObjectDescriptor>                             mxObjDesc;
 
 protected:
-    inline const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
+    const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
         getOwnClipboard() const { return mxClipboard; }
 
 private:
@@ -195,7 +195,7 @@ protected:
     // derivees need to access lostOwnership in case hey override it
     // on windows, changing the access rights to a method gives unresolved externals, so we introduce
     // this impl-method here 'til the next incompatible update
-    inline  void    implCallOwnLostOwnership(
+    void    implCallOwnLostOwnership(
                         const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard,
                         const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans
                     )

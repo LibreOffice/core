@@ -1783,8 +1783,8 @@ private:
 public:
     explicit            ScHTMLTableMap( ScHTMLTable& rParentTable );
 
-    inline const_iterator begin() const { return maTables.begin(); }
-    inline const_iterator end() const { return maTables.end(); }
+    const_iterator begin() const { return maTables.begin(); }
+    const_iterator end() const { return maTables.end(); }
 
     /** Returns the specified table.
         @param nTableId  Unique identifier of the table.
@@ -1797,7 +1797,7 @@ public:
 
 private:
     /** Sets a working table with its index for search optimization. */
-    inline void         SetCurrTable( ScHTMLTable* pTable ) const
+    void         SetCurrTable( ScHTMLTable* pTable ) const
                             { if( pTable ) mpCurrTable = pTable; }
 };
 
@@ -1849,9 +1849,9 @@ public:
         @param pTableMap  Pointer to the table map (is allowed to be NULL). */
     explicit            ScHTMLTableIterator( const ScHTMLTableMap* pTableMap );
 
-    inline bool         is() const { return mpTableMap && maIter != maEnd; }
-    inline ScHTMLTable* operator->() { return maIter->second.get(); }
-    inline ScHTMLTableIterator& operator++() { ++maIter; return *this; }
+    bool         is() const { return mpTableMap && maIter != maEnd; }
+    ScHTMLTable* operator->() { return maIter->second.get(); }
+    ScHTMLTableIterator& operator++() { ++maIter; return *this; }
 
 private:
     ScHTMLTableMap::const_iterator maIter;

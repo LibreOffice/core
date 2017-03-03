@@ -104,7 +104,7 @@ public:
 
     virtual void DeleteMarked() override;
 
-    inline void ValidateMarkList() { FlushComeBackTimer(); }
+    void ValidateMarkList() { FlushComeBackTimer(); }
 
     // #i99665#
     bool IsAntiAliasing() const;

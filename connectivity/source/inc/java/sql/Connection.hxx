@@ -94,10 +94,10 @@ namespace connectivity
         const css::uno::Sequence< css::beans::PropertyValue >&
             getConnectionInfo() const { return m_aConnectionInfo; }
 
-        inline  bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
-        inline  bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
-        inline const css::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
-        inline const css::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
+        bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
+        bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
+        const css::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
+        const css::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
 
         /** returns the instance used for logging events related to this connection
         */

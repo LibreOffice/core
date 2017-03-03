@@ -816,11 +816,11 @@ public:
     // remove all invalid cursors
     void ClearUpCursors();
 
-    inline void SetMacroExecAllowed( const bool _bMacroExecAllowed )
+    void SetMacroExecAllowed( const bool _bMacroExecAllowed )
     {
         m_bMacroExecAllowed = _bMacroExecAllowed;
     }
-    inline bool IsMacroExecAllowed()
+    bool IsMacroExecAllowed()
     {
         return m_bMacroExecAllowed;
     }

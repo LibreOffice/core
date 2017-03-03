@@ -81,13 +81,13 @@ protected:
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize )
+    static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem )
+    static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem )
+    static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * )
+    static void SAL_CALL operator delete( void *, void * )
         {}
     /// @endcond
 
@@ -99,7 +99,7 @@ public:
 #else
     /** Default Constructor.  Sets the reference count to zero.
     */
-    inline OWeakObject()
+    OWeakObject()
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( NULL )
         , m_pReserved(NULL)
@@ -109,7 +109,7 @@ public:
 
         @param rObj dummy param
     */
-    inline OWeakObject( const OWeakObject & rObj )
+    OWeakObject( const OWeakObject & rObj )
         : css::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( NULL )
@@ -121,7 +121,7 @@ public:
 
         @return this OWeakObject
     */
-    inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
+    OWeakObject & SAL_CALL operator = ( const OWeakObject &)
         { return *this; }
 
     /** Basic queryInterface() implementation supporting com::sun::star::uno::XWeak and
@@ -151,7 +151,7 @@ public:
 
         @return XInterface reference
     */
-    inline SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
+    SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
 };
 

@@ -47,7 +47,7 @@ namespace svt
     public:
         DialogClosedListener();
 
-        inline void SetDialogClosedLink( const Link<css::ui::dialogs::DialogClosedEvent*,void>& rLink ) { m_aDialogClosedLink = rLink; }
+        void SetDialogClosedLink( const Link<css::ui::dialogs::DialogClosedEvent*,void>& rLink ) { m_aDialogClosedLink = rLink; }
 
         // XDialogClosedListener methods
         virtual void SAL_CALL   dialogClosed( const css::ui::dialogs::DialogClosedEvent& aEvent ) override;

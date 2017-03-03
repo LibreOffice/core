@@ -243,7 +243,7 @@ protected:
 private:
 
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
-    static inline bool hasInternetConnection()
+    static bool hasInternetConnection()
     {
 #ifdef _WIN32
         return WNT_hasInternetConnection();
@@ -253,7 +253,7 @@ private:
     }
 
     /* Creates a new instance of UpdateInformationProvider and returns this instance */
-    inline uno::Reference<deployment::XUpdateInformationProvider> createProvider()
+    uno::Reference<deployment::XUpdateInformationProvider> createProvider()
     {
         osl::MutexGuard aGuard(m_aMutex);
         m_xProvider = deployment::UpdateInformationProvider::create(m_xContext);
@@ -261,11 +261,11 @@ private:
     };
 
     /* Returns the remembered instance of UpdateInformationProvider if any */
-    inline uno::Reference<deployment::XUpdateInformationProvider> getProvider()
+    uno::Reference<deployment::XUpdateInformationProvider> getProvider()
         { osl::MutexGuard aGuard(m_aMutex); return m_xProvider; };
 
     /* Releases the remembered instance of UpdateInformationProvider if any */
-    inline void clearProvider()
+    void clearProvider()
         { osl::MutexGuard aGuard(m_aMutex); m_xProvider.clear(); };
 
     osl::Mutex      m_aMutex;

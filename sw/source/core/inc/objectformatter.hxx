@@ -83,17 +83,17 @@ class SwObjectFormatter
 
         virtual SwFrame& GetAnchorFrame() = 0;
 
-        inline const SwPageFrame& GetPageFrame() const
+        const SwPageFrame& GetPageFrame() const
         {
             return mrPageFrame;
         }
 
-        inline bool ConsiderWrapOnObjPos() const
+        bool ConsiderWrapOnObjPos() const
         {
             return mbConsiderWrapOnObjPos;
         }
 
-        inline SwLayAction* GetLayAction()
+        SwLayAction* GetLayAction()
         {
             return mpLayAction;
         }

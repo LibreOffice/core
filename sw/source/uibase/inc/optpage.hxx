@@ -303,8 +303,8 @@ public:
     SwMarkPreview(vcl::Window* pParent, WinBits nWinBits);
     virtual ~SwMarkPreview() override;
 
-    inline void SetColor(const Color& rCol) { m_aMarkCol = rCol; }
-    inline void SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
+    void SetColor(const Color& rCol) { m_aMarkCol = rCol; }
+    void SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
     virtual Size GetOptimalSize() const override;
 };
 

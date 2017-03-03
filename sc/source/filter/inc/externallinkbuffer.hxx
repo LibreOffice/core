@@ -58,7 +58,7 @@ public:
 
     /** Appends the passed value to the result set. */
     template< typename Type >
-    inline void         appendResultValue( const Type& rValue )
+    void         appendResultValue( const Type& rValue )
                             { if( maCurrIt != maResults.end() ) (*maCurrIt++) <<= rValue; }
 
     /** Imports the definedName element. */
@@ -117,7 +117,7 @@ typedef std::shared_ptr< ExternalName > ExternalNameRef;
 class LinkSheetRange
 {
 public:
-    inline explicit     LinkSheetRange() { setDeleted(); }
+    explicit     LinkSheetRange() { setDeleted(); }
 
     /** Sets this struct to deleted state. */
     void                setDeleted();
@@ -129,17 +129,17 @@ public:
     void                setExternalRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal_Int32 nLast );
 
     /** Returns true, if the sheet indexes are valid and different. */
-    inline bool         isDeleted() const { return mnFirst < 0; }
+    bool         isDeleted() const { return mnFirst < 0; }
     /** Returns true, if the sheet range points to an external document. */
-    inline bool         isExternal() const { return !isDeleted() && (meType == LINKSHEETRANGE_EXTERNAL); }
+    bool         isExternal() const { return !isDeleted() && (meType == LINKSHEETRANGE_EXTERNAL); }
     /** Returns true, if the sheet indexes are valid and different. */
-    inline bool         isSameSheet() const { return meType == LINKSHEETRANGE_SAMESHEET; }
+    bool         isSameSheet() const { return meType == LINKSHEETRANGE_SAMESHEET; }
     /** Returns true, if the sheet indexes are valid and different. */
-    inline bool         is3dRange() const { return (0 <= mnFirst) && (mnFirst < mnLast); }
+    bool         is3dRange() const { return (0 <= mnFirst) && (mnFirst < mnLast); }
 
-    inline sal_Int32    getDocLinkIndex() const { return mnDocLink; }
-    inline sal_Int32    getFirstSheet() const { return mnFirst; }
-    inline sal_Int32    getLastSheet() const { return mnLast; }
+    sal_Int32    getDocLinkIndex() const { return mnDocLink; }
+    sal_Int32    getFirstSheet() const { return mnFirst; }
+    sal_Int32    getLastSheet() const { return mnLast; }
 
 private:
     enum LinkSheetRangeType
@@ -204,17 +204,17 @@ public:
     void                importExternalAddin( SequenceInputStream& rStrm );
 
     /** Sets the link type to 'self reference'. */
-    inline void         setSelfLinkType() { meLinkType = ExternalLinkType::Self; }
+    void         setSelfLinkType() { meLinkType = ExternalLinkType::Self; }
 
     /** Returns the type of this external link. */
-    inline ExternalLinkType getLinkType() const { return meLinkType; }
+    ExternalLinkType getLinkType() const { return meLinkType; }
 
     /** Returns the relation identifier for the external link fragment. */
-    inline const OUString& getRelId() const { return maRelId; }
+    const OUString& getRelId() const { return maRelId; }
     /** Returns the class name of this external link. */
-    inline const OUString& getClassName() const { return maClassName; }
+    const OUString& getClassName() const { return maClassName; }
     /** Returns the target URL of this external link. */
-    inline const OUString& getTargetUrl() const { return maTargetUrl; }
+    const OUString& getTargetUrl() const { return maTargetUrl; }
     /** Returns the link info needed by the XML formula parser. */
     css::sheet::ExternalLinkInfo getLinkInfo() const;
 

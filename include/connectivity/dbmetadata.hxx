@@ -86,7 +86,7 @@ namespace dbtools
 
         /** resets the instance so that it's based on a new connection
         */
-        inline  void    reset( const css::uno::Reference< css::sdbc::XConnection >& _connection )
+        void    reset( const css::uno::Reference< css::sdbc::XConnection >& _connection )
         {
             *this = DatabaseMetaData( _connection );
         }

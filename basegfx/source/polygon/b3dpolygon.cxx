@@ -881,7 +881,7 @@ public:
         }
     }
 
-    inline bool impBColorsAreEqual(const ImplB3DPolygon& rCandidate) const
+    bool impBColorsAreEqual(const ImplB3DPolygon& rCandidate) const
     {
         bool bBColorsAreEqual(true);
 
@@ -909,7 +909,7 @@ public:
         return bBColorsAreEqual;
     }
 
-    inline bool impNormalsAreEqual(const ImplB3DPolygon& rCandidate) const
+    bool impNormalsAreEqual(const ImplB3DPolygon& rCandidate) const
     {
         bool bNormalsAreEqual(true);
 
@@ -937,7 +937,7 @@ public:
         return bNormalsAreEqual;
     }
 
-    inline bool impTextureCoordinatesAreEqual(const ImplB3DPolygon& rCandidate) const
+    bool impTextureCoordinatesAreEqual(const ImplB3DPolygon& rCandidate) const
     {
         bool bTextureCoordinatesAreEqual(true);
 

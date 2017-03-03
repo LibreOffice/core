@@ -267,7 +267,7 @@ class cc_reset
 public:
     explicit cc_reset( void * cc )
         : m_cc( cc ) {}
-    inline ~cc_reset()
+    ~cc_reset()
         { ::uno_setCurrentContext( m_cc, s_envType.pData, nullptr ); }
 };
 

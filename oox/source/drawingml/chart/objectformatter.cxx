@@ -507,7 +507,7 @@ struct ObjectTypeFormatEntry
     const AutoFormatEntry* mpAutoFills;     /// Automatic fill formatting for all chart styles.
     const AutoTextEntry* mpAutoTexts;       /// Automatic text attributes for all chart styles.
     bool                mbIsFrame;          /// True = object is a frame, false = object is a line.
-    inline ObjectTypeFormatEntry(ObjectType eObjType, const ShapePropertyInfo& rPropInfo,
+    ObjectTypeFormatEntry(ObjectType eObjType, const ShapePropertyInfo& rPropInfo,
                                  const AutoFormatEntry* pAutoLines,
                                  const AutoFormatEntry* pAutoFills,
                                  const AutoTextEntry* pAutoTexts,

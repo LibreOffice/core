@@ -42,9 +42,9 @@ public:
     virtual void        ConvertAll( EditView& rEditView ) = 0;
 
     /** Returns true, if at least one cell has been modified. */
-    inline bool         IsAnyModified() const { return mbIsAnyModified; }
+    bool         IsAnyModified() const { return mbIsAnyModified; }
     /** Returns true, if the entire document/selection has been finished. */
-    inline bool         IsFinished() const { return mbFinished; }
+    bool         IsFinished() const { return mbFinished; }
 
 protected:
     /** Implementation of cell iteration. Finds a cell that needs conversion.

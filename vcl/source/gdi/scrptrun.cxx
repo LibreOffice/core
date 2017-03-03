@@ -102,7 +102,7 @@ struct PairIndices
         ma30[0x1b] = 33;
     }
 
-    inline int32_t getPairIndex(UChar32 ch) const
+    int32_t getPairIndex(UChar32 ch) const
     {
         if (ch < 0xff)
             return ma00[ch];

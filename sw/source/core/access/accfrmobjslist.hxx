@@ -35,7 +35,7 @@ private:
     sw::access::SwAccessibleChild m_aCurr;    // The current object
     size_t m_nNextObj;                        // The index of the current sdr object
 
-    inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst )
+    SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst )
         : m_rList( rLst )
         , m_nNextObj( 0 )
     {}
@@ -47,18 +47,18 @@ private:
     SwAccessibleChildSList_const_iterator& next_visible();
 
 public:
-    inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
+    SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
         : m_rList( rIter.m_rList )
         , m_aCurr( rIter.m_aCurr )
         , m_nNextObj( rIter.m_nNextObj )
     {}
 
-    inline bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
+    bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
     {
         return m_aCurr == r.m_aCurr;
     }
 
-    inline bool operator!=(
+    bool operator!=(
             const SwAccessibleChildSList_const_iterator& r ) const
     {
         return !(*this == r);
@@ -66,7 +66,7 @@ public:
 
     SwAccessibleChildSList_const_iterator& operator++();
 
-    inline const sw::access::SwAccessibleChild& operator*() const
+    const sw::access::SwAccessibleChild& operator*() const
     {
         return m_aCurr;
     }
@@ -83,7 +83,7 @@ class SwAccessibleChildSList
 public:
     typedef SwAccessibleChildSList_const_iterator const_iterator;
 
-    inline SwAccessibleChildSList( const SwFrame& rFrame,
+    SwAccessibleChildSList( const SwFrame& rFrame,
                                    SwAccessibleMap& rAccMap )
         : maVisArea()
         , mrFrame( rFrame )
@@ -91,7 +91,7 @@ public:
         , mrAccMap( rAccMap )
     {}
 
-    inline SwAccessibleChildSList( const SwRect& rVisArea,
+    SwAccessibleChildSList( const SwRect& rVisArea,
                                    const SwFrame& rFrame,
                                    SwAccessibleMap& rAccMap )
         : maVisArea( rVisArea )
@@ -101,32 +101,32 @@ public:
     {
     }
 
-    inline const_iterator begin() const
+    const_iterator begin() const
     {
         return SwAccessibleChildSList_const_iterator( *this, mrAccMap );
     }
 
-    inline const_iterator end() const
+    const_iterator end() const
     {
         return SwAccessibleChildSList_const_iterator( *this );
     }
 
-    inline const SwFrame& GetFrame() const
+    const SwFrame& GetFrame() const
     {
         return mrFrame;
     }
 
-    inline bool IsVisibleChildrenOnly() const
+    bool IsVisibleChildrenOnly() const
     {
         return mbVisibleChildrenOnly;
     }
 
-    inline const SwRect& GetVisArea() const
+    const SwRect& GetVisArea() const
     {
         return maVisArea;
     }
 
-    inline SwAccessibleMap& GetAccMap() const
+    SwAccessibleMap& GetAccMap() const
     {
         return mrAccMap;
     }

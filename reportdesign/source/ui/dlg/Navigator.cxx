@@ -124,7 +124,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
         virtual ~UserData() override;
 
         const uno::Reference< uno::XInterface >& getContent() const { return m_xContent; }
-        inline void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }
+        void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }
 
     protected:
         // OPropertyChangeListener

@@ -166,7 +166,7 @@ public:
 
     /** Creates and returns the specified filter settings object. */
     template< typename FilterSettingsType >
-    inline FilterSettingsBase& createFilterSettings()
+    FilterSettingsBase& createFilterSettings()
         { mxSettings.reset( new FilterSettingsType( *this ) ); return *mxSettings; }
 
     /** Returns converted UNO API filter settings representing all filter

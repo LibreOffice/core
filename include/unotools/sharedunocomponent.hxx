@@ -150,16 +150,16 @@ namespace utl
         };
 
     public:
-        inline  SharedUNOComponent()
+        SharedUNOComponent()
         {
         }
 
-        explicit inline  SharedUNOComponent( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
+        explicit SharedUNOComponent( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
         {
             reset( _rxComponent, eMode );
         }
 
-        inline SharedUNOComponent( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
+        SharedUNOComponent( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _rRef, _queryThrow );
         }

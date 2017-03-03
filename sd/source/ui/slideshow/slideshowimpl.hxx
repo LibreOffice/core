@@ -266,7 +266,7 @@ private:
     void displaySlideNumber( sal_Int32 nSlide );
     void displaySlideIndex( sal_Int32 nIndex );
     sal_Int32 getCurrentSlideNumber();
-    inline bool isInputFreezed() const { return mbInputFreeze; }
+    bool isInputFreezed() const { return mbInputFreeze; }
 
     void jumpToBookmark( const OUString& sBookmark );
 

@@ -55,13 +55,13 @@ namespace connectivity
             OCode& operator=(OCode&&) = default;
 #endif
 
-            inline static void * SAL_CALL operator new( size_t nSize )
+            static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
+            static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
                 { return _pHint; }
-            inline static void SAL_CALL operator delete( void * pMem )
+            static void SAL_CALL operator delete( void * pMem )
                 { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
+            static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
                 {  }
 
         };
@@ -269,7 +269,7 @@ namespace connectivity
             OOp_COMPARE(sal_Int32 aPType)
                          :aPredicateType(aPType) {}
 
-            inline sal_Int32 getPredicateType() const { return aPredicateType; }
+            sal_Int32 getPredicateType() const { return aPredicateType; }
             virtual bool operate(const OOperand*, const OOperand*) const override;
         };
 

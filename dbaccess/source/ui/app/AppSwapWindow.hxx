@@ -55,9 +55,9 @@ namespace dbaui
         void cut() override   { }
         void paste() override { }
 
-        inline sal_Int32                GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
-        inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }
-        inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl->GetBoundingBox(pEntry); }
+        sal_Int32                GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
+        SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }
+        Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl->GetBoundingBox(pEntry); }
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel
         */

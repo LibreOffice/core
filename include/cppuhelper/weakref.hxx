@@ -53,7 +53,7 @@ class CPPUHELPER_DLLPUBLIC WeakReferenceHelper
 public:
     /** Default ctor.  Creates an empty weak reference.
     */
-    inline WeakReferenceHelper()
+    WeakReferenceHelper()
         : m_pImpl( NULL )
         {}
 
@@ -103,7 +103,7 @@ public:
         @param rObj another weak ref
         @return true, if both weak refs reference to the same object.
     */
-    inline bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const
+    bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const
         { return (get() == rObj.get()); }
 
     /**  Gets a hard reference to the object.
@@ -116,7 +116,7 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    inline SAL_CALL operator Reference< XInterface > () const
+    SAL_CALL operator Reference< XInterface > () const
         { return get(); }
 
     /** Releases this reference.
@@ -148,7 +148,7 @@ class SAL_WARN_UNUSED WeakReference : public WeakReferenceHelper
 public:
     /** Default ctor.  Creates an empty weak reference.
     */
-    inline WeakReference()
+    WeakReference()
         : WeakReferenceHelper()
         {}
 
@@ -156,7 +156,7 @@ public:
 
         @param rRef another hard ref
     */
-    inline WeakReference( const Reference< interface_type > & rRef )
+    WeakReference( const Reference< interface_type > & rRef )
         : WeakReferenceHelper( rRef )
         {}
 
@@ -176,7 +176,7 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    inline SAL_CALL operator Reference< interface_type > () const
+    SAL_CALL operator Reference< interface_type > () const
         { return Reference< interface_type >::query( get() ); }
 };
 

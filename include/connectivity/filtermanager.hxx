@@ -84,7 +84,7 @@ namespace dbtools
         const OUString&  getFilterComponent( FilterComponent _eWhich ) const;
         void             setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent );
 
-        inline bool     isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
+        bool     isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
                void     setApplyPublicFilter( bool _bApply );
 
     private:

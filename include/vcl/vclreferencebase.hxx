@@ -33,13 +33,13 @@ class VCL_DLLPUBLIC VclReferenceBase
     template<typename T> friend class VclPtr;
 
 public:
-    inline void acquire() const
+    void acquire() const
     {
         assert(mnRefCnt>0);
         mnRefCnt++;
     }
 
-    inline void release() const
+    void release() const
     {
         assert(mnRefCnt>0);
         if (!--mnRefCnt)

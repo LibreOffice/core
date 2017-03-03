@@ -106,7 +106,7 @@ namespace svt
         // suspending the controller is not culmulative!
                 void        suspend( );
                 void        resume( );
-        inline  bool        isSuspended( ) const { return bSuspended; }
+        bool        isSuspended( ) const { return bSuspended; }
 
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const;

@@ -115,7 +115,7 @@ namespace rptui
 
         void resize(const OSectionWindow& _rSectionWindow);
 
-        inline OReportWindow*       getView()           const { return m_pParent; }
+        OReportWindow*       getView()           const { return m_pParent; }
 
         /** removes the section at the given position.
         *
@@ -151,7 +151,7 @@ namespace rptui
         */
         sal_Int32       getTotalHeight() const;
 
-        inline bool     empty() const { return m_aSections.empty(); }
+        bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType);
         const OUString& GetInsertObjString() const { return m_sShapeType;}

@@ -150,7 +150,7 @@ class LiblangtagDataRef
 public:
     LiblangtagDataRef();
     ~LiblangtagDataRef();
-    inline void init()
+    void init()
     {
         if (!mbInitialized)
             setup();

@@ -125,7 +125,7 @@ public:
 
     const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
 
-    inline const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
+    const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 
     const SvXMLTokenMap& GetDocElemTokenMap() const;
     const SvXMLTokenMap& GetDatabaseElemTokenMap() const;
@@ -145,15 +145,15 @@ public:
     /** add a Info to the sequence which will be appended to the data source
         @param  _rInfo The property to append.
     */
-    inline void addInfo(const css::beans::PropertyValue& _rInfo)
+    void addInfo(const css::beans::PropertyValue& _rInfo)
     {
         m_aInfoSequence.push_back(_rInfo);
     }
 
     void setPropertyInfo();
 
-    inline bool isNewFormat() const { return m_bNewFormat; }
-    inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }
+    bool isNewFormat() const { return m_bNewFormat; }
+    void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }
 };
 
 } // namespace dbaxml

@@ -49,26 +49,26 @@ public:
     SvxFont( const SvxFont &rFont );
 
     // Methods for Superscript/Subscript
-    inline short GetEscapement() const { return nEsc; }
-    inline void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
+    short GetEscapement() const { return nEsc; }
+    void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
 
-    inline sal_uInt8 GetPropr() const { return nPropr; }
-    inline void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
-    inline void SetProprRel( const sal_uInt8 nNewPropr )
+    sal_uInt8 GetPropr() const { return nPropr; }
+    void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
+    void SetProprRel( const sal_uInt8 nNewPropr )
         { SetPropr( (sal_uInt8)( (long)nNewPropr * (long)nPropr / 100L ) ); }
 
     // Kerning
-    inline short GetFixKerning() const { return nKern; }
-    inline void  SetFixKerning( const short nNewKern ) { nKern = nNewKern; }
+    short GetFixKerning() const { return nKern; }
+    void  SetFixKerning( const short nNewKern ) { nKern = nNewKern; }
 
-    inline SvxCaseMap GetCaseMap() const { return eCaseMap; }
-    inline void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
+    SvxCaseMap GetCaseMap() const { return eCaseMap; }
+    void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
 
     // Is-Methods:
-    inline bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
-    inline bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
-    inline bool IsKern() const { return 0 != nKern; }
-    inline bool IsEsc() const { return 0 != nEsc; }
+    bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
+    bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
+    bool IsKern() const { return 0 != nKern; }
+    bool IsEsc() const { return 0 != nEsc; }
 
     // Consider Upper case, Lower case letters etc.
     OUString CalcCaseMap(const OUString &rTxt) const;

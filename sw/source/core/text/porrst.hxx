@@ -86,8 +86,8 @@ public:
     explicit SwArrowPortion( const SwTextPaintInfo &rInf );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual SwLinePortion *Compress() override;
-    inline bool IsLeft() const { return bLeft; }
-    inline const Point& GetPos() const { return aPos; }
+    bool IsLeft() const { return bLeft; }
+    const Point& GetPos() const { return aPos; }
     OUTPUT_OPERATOR_OVERRIDE
 };
 

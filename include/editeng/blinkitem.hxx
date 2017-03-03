@@ -48,7 +48,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxBlinkItem& operator=(const SvxBlinkItem& rBlink) {
+    SvxBlinkItem& operator=(const SvxBlinkItem& rBlink) {
             SetValue(rBlink.GetValue());
             return *this;
         }

@@ -83,14 +83,14 @@ public:
 
         @return UNacquired interface pointer
     */
-    inline XInterface * SAL_CALL get() const
+    XInterface * SAL_CALL get() const
         { return _pInterface; }
 
     /** Checks if reference is null.
 
         @return true if reference acquires an interface, i.e. true if it is not null
     */
-    inline bool SAL_CALL is() const
+    bool SAL_CALL is() const
         { return (NULL != _pInterface); }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -98,7 +98,7 @@ public:
 
         @return true if reference acquires an interface, i.e. true if it is not null
     */
-    inline explicit operator bool() const
+    explicit operator bool() const
         { return is(); }
 #endif
 
@@ -256,7 +256,7 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         principle, this is not guaranteed to work.  In practice, it seems to
         work on all supported platforms.
     */
-    static inline interface_type * castFromXInterface(XInterface * p) {
+    static interface_type * castFromXInterface(XInterface * p) {
         return static_cast< interface_type * >(static_cast< void * >(p));
     }
 
@@ -271,20 +271,20 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         principle, this is not guaranteed to work.  In practice, it seems to
         work on all supported platforms.
     */
-    static inline XInterface * castToXInterface(interface_type * p) {
+    static XInterface * castToXInterface(interface_type * p) {
         return static_cast< XInterface * >(static_cast< void * >(p));
     }
 
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( ::size_t nSize )
+    static void * SAL_CALL operator new ( ::size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( ::size_t, void * pMem )
+    static void * SAL_CALL operator new ( ::size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -409,14 +409,14 @@ public:
         any interface must be derived from com.sun.star.uno.XInterface.
         This a useful direct cast possibility.
     */
-    inline SAL_CALL operator const Reference< XInterface > & () const
+    SAL_CALL operator const Reference< XInterface > & () const
         { return * reinterpret_cast< const Reference< XInterface > * >( this ); }
 
     /** Dereference operator: Used to call interface methods.
 
         @return UNacquired interface pointer
     */
-    inline interface_type * SAL_CALL operator -> () const {
+    interface_type * SAL_CALL operator -> () const {
         assert(_pInterface != NULL);
         return castFromXInterface(_pInterface);
     }
@@ -425,7 +425,7 @@ public:
 
         @return UNacquired interface pointer
     */
-    inline interface_type * SAL_CALL get() const
+    interface_type * SAL_CALL get() const
         { return castFromXInterface(_pInterface); }
 
     /** Clears reference, i.e. releases interface. Reference is null after clear() call.

@@ -61,16 +61,16 @@ namespace dbaccess
         OComponentDefinition_Impl();
         virtual ~OComponentDefinition_Impl() override;
 
-        inline size_t size() const { return m_aColumns.size(); }
+        size_t size() const { return m_aColumns.size(); }
 
-        inline const_iterator begin() const   { return m_aColumns.begin(); }
-        inline const_iterator end() const     { return m_aColumns.end(); }
+        const_iterator begin() const   { return m_aColumns.begin(); }
+        const_iterator end() const     { return m_aColumns.end(); }
 
-        inline const_iterator find( const OUString& _rName ) const { return m_aColumns.find( _rName ); }
+        const_iterator find( const OUString& _rName ) const { return m_aColumns.find( _rName ); }
 
-        inline void erase( const OUString& _rName ) { m_aColumns.erase( _rName ); }
+        void erase( const OUString& _rName ) { m_aColumns.erase( _rName ); }
 
-        inline void insert( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
+        void insert( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
         {
             OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
             m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );

@@ -80,7 +80,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_LAYOUT;}
     sal_uInt16 GetRowID() { return crowid;}
     virtual void RegisterStyle() override;
-    inline LwpTableLayout * GetParentTableLayout(){return dynamic_cast<LwpTableLayout *>(GetParent().obj().get());}
+    LwpTableLayout * GetParentTableLayout(){return dynamic_cast<LwpTableLayout *>(GetParent().obj().get());}
     void SetRowMap();
 protected:
     void Read() override;

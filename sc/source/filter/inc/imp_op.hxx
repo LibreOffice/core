@@ -61,9 +61,9 @@ public:
     explicit            XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB nScTab );
     virtual             ~XclImpOutlineDataBuffer() override;
 
-    inline XclImpColRowSettings* GetColRowBuff() const { return mxColRowBuff.get(); }
-    inline XclImpOutlineBuffer* GetColOutline()  const { return mxColOutlineBuff.get(); }
-    inline XclImpOutlineBuffer* GetRowOutline()  const { return mxRowOutlineBuff.get(); }
+    XclImpColRowSettings* GetColRowBuff() const { return mxColRowBuff.get(); }
+    XclImpOutlineBuffer* GetColOutline()  const { return mxColOutlineBuff.get(); }
+    XclImpOutlineBuffer* GetRowOutline()  const { return mxRowOutlineBuff.get(); }
     void                Convert();
 
 private:

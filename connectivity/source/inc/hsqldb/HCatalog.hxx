@@ -50,8 +50,8 @@ namespace connectivity
         public:
             OHCatalog(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
 
-            inline sdbcx::OCollection*      getPrivateTables()  const { return m_pTables;}
-            inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
+            sdbcx::OCollection*      getPrivateTables()  const { return m_pTables;}
+            sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
             const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

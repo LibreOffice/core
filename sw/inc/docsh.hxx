@@ -192,8 +192,8 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = nullptr );
 
     /// returns Doc. But be careful!
-    inline SwDoc*                   GetDoc() { return m_pDoc; }
-    inline const SwDoc*             GetDoc() const { return m_pDoc; }
+    SwDoc*                   GetDoc() { return m_pDoc; }
+    const SwDoc*             GetDoc() const { return m_pDoc; }
     IDocumentDeviceAccess&          getIDocumentDeviceAccess();
     IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 

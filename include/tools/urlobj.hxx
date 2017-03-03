@@ -253,12 +253,12 @@ public:
 
     // General Structure:
 
-    inline INetURLObject():
+    INetURLObject():
         m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http) {}
 
-    inline bool HasError() const { return m_eScheme == INetProtocol::NotValid; }
+    bool HasError() const { return m_eScheme == INetProtocol::NotValid; }
 
-    inline OUString GetMainURL(DecodeMechanism eMechanism,
+    OUString GetMainURL(DecodeMechanism eMechanism,
                                 rtl_TextEncoding eCharset
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAbsURIRef, eMechanism, eCharset); }
@@ -280,7 +280,7 @@ public:
 
     bool operator ==(INetURLObject const & rObject) const;
 
-    inline bool operator !=(INetURLObject const & rObject) const
+    bool operator !=(INetURLObject const & rObject) const
     { return !(*this == rObject); }
 
     // Strict Parsing:
@@ -307,7 +307,7 @@ public:
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                          FSysStyle eStyle = FSysStyle::Detect);
 
-    inline void SetSmartProtocol(INetProtocol eTheSmartScheme)
+    void SetSmartProtocol(INetProtocol eTheSmartScheme)
     { m_eSmartScheme = eTheSmartScheme; }
 
     inline bool
@@ -377,7 +377,7 @@ public:
 
     struct SchemeInfo;
 
-    inline INetProtocol GetProtocol() const { return m_eScheme; }
+    INetProtocol GetProtocol() const { return m_eScheme; }
 
     bool isSchemeEqualTo(INetProtocol scheme) const { return scheme == m_eScheme; }
 
@@ -411,19 +411,19 @@ public:
 
     // User Info:
 
-    inline bool HasUserData() const { return m_aUser.isPresent(); }
+    bool HasUserData() const { return m_aUser.isPresent(); }
 
-    inline OUString GetUser(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetUser(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aUser, eMechanism, eCharset); }
 
-    inline OUString GetPass(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetPass(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aAuth, eMechanism, eCharset); }
 
-    inline bool SetUser(OUString const & rTheUser)
+    bool SetUser(OUString const & rTheUser)
     { return setUser(rTheUser, RTL_TEXTENCODING_UTF8); }
 
     inline bool SetPass(OUString const & rThePassword);
@@ -433,9 +433,9 @@ public:
 
     // Host and Port:
 
-    inline bool HasPort() const { return m_aPort.isPresent(); }
+    bool HasPort() const { return m_aPort.isPresent(); }
 
-    inline OUString GetHost(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetHost(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aHost, eMechanism, eCharset); }
@@ -445,21 +445,21 @@ public:
 
     sal_uInt32 GetPort() const;
 
-    inline bool SetHost(OUString const & rTheHost)
+    bool SetHost(OUString const & rTheHost)
     { return setHost(rTheHost, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
 
     // Path:
 
-    inline bool HasURLPath() const { return !m_aPath.isEmpty(); }
+    bool HasURLPath() const { return !m_aPath.isEmpty(); }
 
-    inline OUString GetURLPath(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetURLPath(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                                 rtl_TextEncoding eCharset
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aPath, eMechanism, eCharset); }
 
-    inline bool SetURLPath(OUString const & rThePath,
+    bool SetURLPath(OUString const & rThePath,
                            EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setPath(rThePath, eMechanism, eCharset); }
@@ -724,9 +724,9 @@ public:
 
     // Query:
 
-    inline bool HasParam() const { return m_aQuery.isPresent(); }
+    bool HasParam() const { return m_aQuery.isPresent(); }
 
-    inline OUString GetParam(rtl_TextEncoding eCharset
+    OUString GetParam(rtl_TextEncoding eCharset
                                   = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aQuery, DecodeMechanism::NONE, eCharset); }
 
@@ -736,9 +736,9 @@ public:
 
     // Fragment:
 
-    inline bool HasMark() const { return m_aFragment.isPresent(); }
+    bool HasMark() const { return m_aFragment.isPresent(); }
 
-    inline OUString GetMark(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetMark(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aFragment, eMechanism, eCharset); }
@@ -930,14 +930,14 @@ public:
                  EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                  rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    inline OUString GetName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
+    OUString GetName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const
     { return GetLastName(eMechanism, eCharset); }
 
     void SetExtension(OUString const & rTheExtension);
 
-    inline OUString GetExtension() const
+    OUString GetExtension() const
     { return GetFileExtension(); }
 
     OUString CutExtension();
@@ -954,19 +954,19 @@ private:
         sal_Int32 m_nLength;
 
     public:
-        explicit inline SubString(sal_Int32 nTheBegin = -1,
+        explicit SubString(sal_Int32 nTheBegin = -1,
                                   sal_Int32 nTheLength = 0):
             m_nBegin(nTheBegin), m_nLength(nTheLength) {}
 
-        inline bool isPresent() const { return m_nBegin != -1; }
+        bool isPresent() const { return m_nBegin != -1; }
 
-        inline bool isEmpty() const { return m_nLength == 0; }
+        bool isEmpty() const { return m_nLength == 0; }
 
-        inline sal_Int32 getBegin() const { return m_nBegin; }
+        sal_Int32 getBegin() const { return m_nBegin; }
 
-        inline sal_Int32 getLength() const { return m_nLength; }
+        sal_Int32 getLength() const { return m_nLength; }
 
-        inline sal_Int32 getEnd() const { return m_nBegin + m_nLength; }
+        sal_Int32 getEnd() const { return m_nBegin + m_nLength; }
 
         inline sal_Int32 clear();
 

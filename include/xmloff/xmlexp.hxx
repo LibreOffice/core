@@ -411,7 +411,7 @@ public:
                GetModel() const { return mxModel; }
     // Get XNumberFormatsSupplier
     css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier() { return mxNumberFormatsSupplier; }
-    inline void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
         if ( mxNumberFormatsSupplier.is() && mxHandler.is() )
@@ -468,7 +468,7 @@ public:
                                      bool *pEncoded=nullptr ) const;
 
     // save linked sections?
-    inline bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
+    bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
 
     // get export flags
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }

@@ -80,10 +80,10 @@ public:
         FORMULA_MISSING_CONVENTION_OOXML
     };
     explicit            MissingConvention( Convention eConvention ) : meConvention(eConvention) {}
-    inline  bool        isPODF() const  { return meConvention == FORMULA_MISSING_CONVENTION_PODF; }
-    inline  bool        isODFF() const  { return meConvention == FORMULA_MISSING_CONVENTION_ODFF; }
-    inline  bool        isOOXML() const  { return meConvention == FORMULA_MISSING_CONVENTION_OOXML; }
-    inline  Convention  getConvention() const { return meConvention; }
+    bool        isPODF() const  { return meConvention == FORMULA_MISSING_CONVENTION_PODF; }
+    bool        isODFF() const  { return meConvention == FORMULA_MISSING_CONVENTION_ODFF; }
+    bool        isOOXML() const  { return meConvention == FORMULA_MISSING_CONVENTION_OOXML; }
+    Convention  getConvention() const { return meConvention; }
 private:
     Convention meConvention;
 };
@@ -172,14 +172,14 @@ protected:
      */
     sal_uInt16              RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
 
-    inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
+    void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~ScRecalcMode::EMask); }
-    inline  ScRecalcMode    GetCombinedBitsRecalcMode() const
+    ScRecalcMode    GetCombinedBitsRecalcMode() const
                                 { return nMode & ~ScRecalcMode::EMask; }
                             /** Exclusive bits already set in nMode are
                                 zero'ed, nBits may contain combined bits, but
                                 only one exclusive bit may be set! */
-    inline  void            SetMaskedRecalcMode( ScRecalcMode nBits )
+    void            SetMaskedRecalcMode( ScRecalcMode nBits )
                                 { nMode = GetCombinedBitsRecalcMode() | nBits; }
 
 public:
@@ -249,36 +249,36 @@ public:
     void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
     bool      IsHyperLink() const       { return bHyperLink; }
 
-    inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
+    ScRecalcMode    GetRecalcMode() const { return nMode; }
                             /** Bits aren't set directly but validated and
                                 maybe handled according to priority if more
                                 than one exclusive bit was set. */
             void            AddRecalcMode( ScRecalcMode nBits );
 
-    inline  void            ClearRecalcMode() { nMode = ScRecalcMode::NORMAL; }
-    inline  void            SetExclusiveRecalcModeNormal()
+    void            ClearRecalcMode() { nMode = ScRecalcMode::NORMAL; }
+    void            SetExclusiveRecalcModeNormal()
                                 { SetMaskedRecalcMode( ScRecalcMode::NORMAL ); }
-    inline  void            SetExclusiveRecalcModeAlways()
+    void            SetExclusiveRecalcModeAlways()
                                 { SetMaskedRecalcMode( ScRecalcMode::ALWAYS ); }
-    inline  void            SetExclusiveRecalcModeOnLoad()
+    void            SetExclusiveRecalcModeOnLoad()
                                 { SetMaskedRecalcMode( ScRecalcMode::ONLOAD ); }
-    inline  void            SetExclusiveRecalcModeOnLoadOnce()
+    void            SetExclusiveRecalcModeOnLoadOnce()
                                 { SetMaskedRecalcMode( ScRecalcMode::ONLOAD_ONCE ); }
-    inline  void            SetRecalcModeForced()
+    void            SetRecalcModeForced()
                                 { nMode |= ScRecalcMode::FORCED; }
-    inline  void            SetRecalcModeOnRefMove()
+    void            SetRecalcModeOnRefMove()
                                 { nMode |= ScRecalcMode::ONREFMOVE; }
-    inline  bool            IsRecalcModeNormal() const
+    bool            IsRecalcModeNormal() const
                                 { return bool(nMode & ScRecalcMode::NORMAL); }
-    inline  bool            IsRecalcModeAlways() const
+    bool            IsRecalcModeAlways() const
                                 { return bool(nMode & ScRecalcMode::ALWAYS); }
-    inline  bool            IsRecalcModeOnLoad() const
+    bool            IsRecalcModeOnLoad() const
                                 { return bool(nMode & ScRecalcMode::ONLOAD); }
-    inline  bool            IsRecalcModeOnLoadOnce() const
+    bool            IsRecalcModeOnLoadOnce() const
                                 { return bool(nMode & ScRecalcMode::ONLOAD_ONCE); }
-    inline  bool            IsRecalcModeForced() const
+    bool            IsRecalcModeForced() const
                                 { return bool(nMode & ScRecalcMode::FORCED); }
-    inline  bool            IsRecalcModeOnRefMove() const
+    bool            IsRecalcModeOnRefMove() const
                                 { return bool(nMode & ScRecalcMode::ONREFMOVE); }
 
                             /** Get OpCode of the most outer function */

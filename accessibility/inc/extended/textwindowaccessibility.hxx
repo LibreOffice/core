@@ -67,10 +67,10 @@ class Document;
 class SfxListenerGuard
 {
 public:
-    inline SfxListenerGuard(::SfxListener & rListener):
+    SfxListenerGuard(::SfxListener & rListener):
         m_rListener(rListener), m_pNotifier(nullptr) {}
 
-    inline ~SfxListenerGuard() { endListening(); }
+    ~SfxListenerGuard() { endListening(); }
 
     // Not thread safe:
     void startListening(::SfxBroadcaster & rNotifier);
@@ -86,10 +86,10 @@ private:
 class WindowListenerGuard
 {
 public:
-    inline WindowListenerGuard(::Link<VclWindowEvent&,void> const & rListener):
+    WindowListenerGuard(::Link<VclWindowEvent&,void> const & rListener):
         m_aListener(rListener), m_pNotifier(nullptr) {}
 
-    inline ~WindowListenerGuard() { endListening(); }
+    ~WindowListenerGuard() { endListening(); }
 
     // Not thread safe:
     void startListening(vcl::Window & rNotifier);
@@ -105,19 +105,18 @@ private:
 class ParagraphInfo
 {
 public:
-    inline ParagraphInfo(::sal_Int32 nHeight): m_nHeight(nHeight) {}
+    ParagraphInfo(::sal_Int32 nHeight): m_nHeight(nHeight) {}
 
-    inline
     css::uno::WeakReference< css::accessibility::XAccessible > const &
     getParagraph() const { return m_xParagraph; }
 
-    inline ::sal_Int32 getHeight() const { return m_nHeight; }
+    ::sal_Int32 getHeight() const { return m_nHeight; }
 
-    inline void setParagraph(
+    void setParagraph(
         css::uno::Reference< css::accessibility::XAccessible > const &
         rParagraph) { m_xParagraph = rParagraph; }
 
-    inline void changeHeight(::sal_Int32 nHeight) { m_nHeight = nHeight; }
+    void changeHeight(::sal_Int32 nHeight) { m_nHeight = nHeight; }
 
 private:
     css::uno::WeakReference< css::accessibility::XAccessible >
@@ -148,7 +147,7 @@ public:
                   Paragraphs::size_type nNumber);
 
     // Not thread-safe.
-    inline Paragraphs::size_type getNumber() const { return m_nNumber; }
+    Paragraphs::size_type getNumber() const { return m_nNumber; }
 
     // Not thread-safe.
     void numberChanged(bool bIncremented);

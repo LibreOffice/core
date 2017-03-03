@@ -33,7 +33,7 @@ class SwTextPortion : public SwLinePortion
     bool Format_( SwTextFormatInfo &rInf );
 
 public:
-    inline SwTextPortion(){ SetWhichPor( POR_TXT ); }
+    SwTextPortion(){ SetWhichPor( POR_TXT ); }
     static SwTextPortion * CopyLinePortion(const SwLinePortion &rPortion);
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
@@ -87,7 +87,7 @@ public:
 class SwFieldMarkPortion : public SwTextPortion
 {
     public:
-        inline SwFieldMarkPortion() : SwTextPortion()
+        SwFieldMarkPortion() : SwTextPortion()
             { }
         virtual void Paint( const SwTextPaintInfo &rInf ) const override;
         virtual bool Format( SwTextFormatInfo &rInf ) override;

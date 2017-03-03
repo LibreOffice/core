@@ -100,20 +100,20 @@ const sal_Int32 CLIPDATAFMT_DIB         = 8;
 class SfxOleTextEncoding
 {
 public:
-    inline explicit     SfxOleTextEncoding() :
+    explicit     SfxOleTextEncoding() :
                             mxTextEnc( new rtl_TextEncoding( osl_getThreadTextEncoding() ) ) {}
-    inline explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
+    explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
                             mxTextEnc( new rtl_TextEncoding( eTextEnc ) ) {}
 
     /** Returns the current text encoding identifier. */
-    inline rtl_TextEncoding GetTextEncoding() const { return *mxTextEnc; }
+    rtl_TextEncoding GetTextEncoding() const { return *mxTextEnc; }
     /** Sets the passed text encoding. */
-    inline void         SetTextEncoding( rtl_TextEncoding eTextEnc ) { *mxTextEnc = eTextEnc; }
+    void         SetTextEncoding( rtl_TextEncoding eTextEnc ) { *mxTextEnc = eTextEnc; }
 
     /** Returns true, if this object contains Unicode text encoding. */
-    inline bool         IsUnicode() const { return GetTextEncoding() == RTL_TEXTENCODING_UCS2; }
+    bool         IsUnicode() const { return GetTextEncoding() == RTL_TEXTENCODING_UCS2; }
     /** Sets Unicode text encoding to this object. */
-    inline void         SetUnicode() { SetTextEncoding( RTL_TEXTENCODING_UCS2 ); }
+    void         SetUnicode() { SetTextEncoding( RTL_TEXTENCODING_UCS2 ); }
 
     /** Converts the current settings to a Windows codepage identifier. */
     sal_uInt16          GetCodePage() const;
@@ -135,10 +135,10 @@ class SfxOleStringHelper : public SfxOleTextEncoding
 {
 public:
     /** Creates a string helper object depending on an external text encoding. */
-    inline explicit     SfxOleStringHelper( const SfxOleTextEncoding& rTextEnc ) :
+    explicit     SfxOleStringHelper( const SfxOleTextEncoding& rTextEnc ) :
                             SfxOleTextEncoding( rTextEnc ) {}
     /** Creates a string helper object with own text encoding. */
-    inline explicit     SfxOleStringHelper( rtl_TextEncoding eTextEnc ) :
+    explicit     SfxOleStringHelper( rtl_TextEncoding eTextEnc ) :
                             SfxOleTextEncoding( eTextEnc ) {}
 
     /** Loads a string from the passed stream with current encoding (maybe Unicode). */
@@ -167,11 +167,11 @@ private:
 class SfxOleObjectBase
 {
 public:
-    inline explicit     SfxOleObjectBase() : mnErrCode( ERRCODE_NONE ) {}
+    explicit     SfxOleObjectBase() : mnErrCode( ERRCODE_NONE ) {}
     virtual             ~SfxOleObjectBase();
 
     /** Returns the current error code. */
-    inline ErrCode      GetError() const { return mnErrCode; }
+    ErrCode      GetError() const { return mnErrCode; }
 
     /** Loads this object from the passed stream. Calls virtual ImplLoad(). */
     ErrCode             Load( SvStream& rStrm );
@@ -181,7 +181,7 @@ public:
 protected:
     /** Sets the passed error code. Will be returned by Load() and Save() functions.
         Always the first error code is stored. Multiple calls have no effect. */
-    inline void         SetError( ErrCode nErrCode ) { if( mnErrCode == ERRCODE_NONE ) mnErrCode = nErrCode; }
+    void         SetError( ErrCode nErrCode ) { if( mnErrCode == ERRCODE_NONE ) mnErrCode = nErrCode; }
     /** Loads the passed object from the stream. Sets returned error code as own error. */
     void                LoadObject( SvStream& rStrm, SfxOleObjectBase& rObj );
     /** Saves the passed object to the stream. Sets returned error code as own error. */
@@ -202,14 +202,14 @@ private:
 class SfxOlePropertyBase : public SfxOleObjectBase
 {
 public:
-    inline explicit     SfxOlePropertyBase( sal_Int32 nPropId, sal_Int32 nPropType ) :
+    explicit     SfxOlePropertyBase( sal_Int32 nPropId, sal_Int32 nPropType ) :
                             mnPropId( nPropId ), mnPropType( nPropType ) {}
 
-    inline sal_Int32    GetPropId() const { return mnPropId; }
-    inline sal_Int32    GetPropType() const { return mnPropType; }
+    sal_Int32    GetPropId() const { return mnPropId; }
+    sal_Int32    GetPropType() const { return mnPropType; }
 
 protected:
-    inline void         SetPropType( sal_Int32 nPropType ) { mnPropType = nPropType; }
+    void         SetPropType( sal_Int32 nPropType ) { mnPropType = nPropType; }
 
 private:
     sal_Int32           mnPropId;
@@ -238,9 +238,9 @@ public:
     explicit            SfxOleDictionaryProperty( const SfxOleTextEncoding& rTextEnc );
 
     /** Returns true, if the property contains at least one custom property name. */
-    inline bool         HasPropertyNames() const { return !maPropNameMap.empty(); }
+    bool         HasPropertyNames() const { return !maPropNameMap.empty(); }
     /** Prepares the property for loading. Does not affect contained names for its own. */
-    inline void         SetNameCount( sal_Int32 nNameCount ) { SetPropType( nNameCount ); }
+    void         SetNameCount( sal_Int32 nNameCount ) { SetPropType( nNameCount ); }
 
     /** Returns the custom name for the passed property ID, or an empty string, if name not found. */
     OUString            GetPropertyName( sal_Int32 nPropId ) const;
@@ -357,7 +357,7 @@ enum SfxOleSectionType
 class SfxOlePropertySet : public SfxOleObjectBase
 {
 public:
-    inline explicit     SfxOlePropertySet() {}
+    explicit     SfxOlePropertySet() {}
 
     /** Loads this object from the passed storage. */
     ErrCode             LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName );

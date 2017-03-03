@@ -74,16 +74,16 @@ public:
 
     SvxSwFrameExample(vcl::Window* pParent, WinBits nStyle);
 
-    inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
+    void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
 
-    inline void SetHAlign(short nH)          { nHAlign   = nH; }
-    inline void SetHoriRel(short nR)         { nHRel     = nR; }
+    void SetHAlign(short nH)          { nHAlign   = nH; }
+    void SetHoriRel(short nR)         { nHRel     = nR; }
 
-    inline void SetVAlign(short nV)          { nVAlign   = nV; }
-    inline void SetVertRel(short nR)         { nVRel     = nR; }
+    void SetVAlign(short nV)          { nVAlign   = nV; }
+    void SetVertRel(short nR)         { nVRel     = nR; }
 
-    inline void SetTransparent(bool bT)      { bTrans    = bT; }
-    inline void SetAnchor(short nA)          { nAnchor   = nA; }
+    void SetTransparent(bool bT)      { bTrans    = bT; }
+    void SetAnchor(short nA)          { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);
 };

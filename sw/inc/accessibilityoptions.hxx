@@ -32,14 +32,14 @@ struct SwAccessibilityOptions
         bIsStopAnimatedText(false),
         bIsStopAnimatedGraphics(false) {}
 
-    inline bool IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
-    inline void SetAlwaysAutoColor( bool b )    { bIsAlwaysAutoColor = b; }
+    bool IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
+    void SetAlwaysAutoColor( bool b )    { bIsAlwaysAutoColor = b; }
 
-    inline bool IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
-    inline void SetStopAnimatedGraphics( bool b )    { bIsStopAnimatedText = b; }
+    bool IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
+    void SetStopAnimatedGraphics( bool b )    { bIsStopAnimatedText = b; }
 
-    inline bool IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
-    inline void SetStopAnimatedText( bool b )    { bIsStopAnimatedGraphics = b;}
+    bool IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
+    void SetStopAnimatedText( bool b )    { bIsStopAnimatedGraphics = b;}
 };
 #endif
 

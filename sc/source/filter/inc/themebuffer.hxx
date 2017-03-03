@@ -40,7 +40,7 @@ public:
     sal_Int32           getColorByIndex(size_t nIndex) const;
 
     /** Returns the default font data for the current file type. */
-    inline const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }
+    const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }
 
 private:
     typedef ::std::unique_ptr< FontModel > FontModelPtr;

@@ -49,7 +49,7 @@ class UnoInterfaceReference
 public:
     uno_Interface * m_pUnoI;
 
-    inline bool is() const
+    bool is() const
         { return m_pUnoI != NULL; }
 
     inline ~UnoInterfaceReference();
@@ -64,7 +64,7 @@ public:
     { other.m_pUnoI = nullptr; }
 #endif
 
-    inline uno_Interface * get() const
+    uno_Interface * get() const
         { return m_pUnoI; }
 
     inline UnoInterfaceReference & set(
@@ -73,10 +73,10 @@ public:
         uno_Interface * pUnoI, __sal_NoAcquire );
     inline void clear();
 
-    inline UnoInterfaceReference & operator = (
+    UnoInterfaceReference & operator = (
         UnoInterfaceReference const & ref )
         { return set( ref.m_pUnoI ); }
-    inline UnoInterfaceReference & operator = (
+    UnoInterfaceReference & operator = (
         uno_Interface * pUnoI )
         { return set( pUnoI ); }
 

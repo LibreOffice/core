@@ -41,7 +41,7 @@ namespace connectivity
 
         public:
 
-            inline MacabConnection* getOwnConnection() const { return m_xConnection.get(); }
+            MacabConnection* getOwnConnection() const { return m_xConnection.get(); }
 
             explicit MacabDatabaseMetaData(MacabConnection* _pCon);
             virtual ~MacabDatabaseMetaData() override;

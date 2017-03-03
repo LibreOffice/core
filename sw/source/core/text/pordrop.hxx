@@ -45,12 +45,12 @@ public:
             : pFollow( nullptr ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
-    inline SwDropPortionPart* GetFollow() const { return pFollow; };
-    inline void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
-    inline SwFont& GetFont() const { return *pFnt; }
-    inline sal_Int32 GetLen() const { return nLen; }
-    inline sal_uInt16 GetWidth() const { return nWidth; }
-    inline void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
+    SwDropPortionPart* GetFollow() const { return pFollow; };
+    void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
+    SwFont& GetFont() const { return *pFnt; }
+    sal_Int32 GetLen() const { return nLen; }
+    sal_uInt16 GetWidth() const { return nWidth; }
+    void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
 
     bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
@@ -85,18 +85,18 @@ public:
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
 
-    inline sal_uInt16 GetLines() const { return nLines; }
-    inline sal_uInt16 GetDistance() const { return nDistance; }
-    inline sal_uInt16 GetDropHeight() const { return nDropHeight; }
-    inline sal_uInt16 GetDropDescent() const { return nDropDescent; }
-    inline sal_uInt16 GetDropLeft() const { return Width() + nFix; }
+    sal_uInt16 GetLines() const { return nLines; }
+    sal_uInt16 GetDistance() const { return nDistance; }
+    sal_uInt16 GetDropHeight() const { return nDropHeight; }
+    sal_uInt16 GetDropDescent() const { return nDropDescent; }
+    sal_uInt16 GetDropLeft() const { return Width() + nFix; }
 
-    inline SwDropPortionPart* GetPart() const { return pPart; }
-    inline void SetPart( SwDropPortionPart* pNew ) { pPart = pNew; }
+    SwDropPortionPart* GetPart() const { return pPart; }
+    void SetPart( SwDropPortionPart* pNew ) { pPart = pNew; }
 
-    inline void SetY( short nNew )  { nY = nNew; }
+    void SetY( short nNew )  { nY = nNew; }
 
-    inline SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : nullptr; }
+    SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : nullptr; }
 
     static void DeleteDropCapCache();
 

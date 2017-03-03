@@ -159,7 +159,7 @@ namespace dbaui
         // click a TB slot
         DECL_LINK(OnDropdownClickHdl, ToolBox*, void);
 
-        inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
+        OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         void ImplInitSettings();
 
     public:
@@ -187,7 +187,7 @@ namespace dbaui
 
         /** returns the current visible tree list box
         */
-        inline DBTreeListBox* getCurrentView() const
+        DBTreeListBox* getCurrentView() const
         {
             ElementType eType = getElementType();
             return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : nullptr;

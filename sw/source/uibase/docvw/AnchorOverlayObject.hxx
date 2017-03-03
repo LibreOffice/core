@@ -48,7 +48,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
                                                                const Color& aColorAnchor );
         static void DestroyAnchorOverlayObject( AnchorOverlayObject* pAnchor );
 
-        inline const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
+        const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
         const basegfx::B2DPoint& GetThirdPosition() const { return maThirdPosition; }
         const basegfx::B2DPoint& GetFourthPosition() const { return maFourthPosition; }
         const basegfx::B2DPoint& GetFifthPosition() const { return maFifthPosition; }
@@ -71,12 +71,12 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         void SetSeventhPosition( const basegfx::B2DPoint& rNew );
 
         void setLineSolid( const bool bNew );
-        inline bool getLineSolid() const { return mbLineSolid; }
+        bool getLineSolid() const { return mbLineSolid; }
 
-        inline void SetHeight( const unsigned long aHeight ) { mHeight = aHeight; };
+        void SetHeight( const unsigned long aHeight ) { mHeight = aHeight; };
 
         void SetAnchorState( const AnchorState aState );
-        inline AnchorState GetAnchorState() const { return mAnchorState; }
+        AnchorState GetAnchorState() const { return mAnchorState; }
 
     protected:
         /*                        6------------7

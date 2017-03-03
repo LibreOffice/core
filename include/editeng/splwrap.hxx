@@ -91,11 +91,11 @@ public:
     static void         ShowLanguageErrors();
 
     void            SpellDocument();        // Perform Spell Checking
-    inline bool     IsStartDone(){ return bStartDone; }
-    inline bool     IsEndDone(){ return bEndDone; }
-    inline bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
-    inline void     SetHyphen() { bHyphen = true; }
-    inline bool     IsAllRight()        { return bAllRight; }
+    bool     IsStartDone(){ return bStartDone; }
+    bool     IsEndDone(){ return bEndDone; }
+    bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
+    void     SetHyphen() { bHyphen = true; }
+    bool     IsAllRight()        { return bAllRight; }
 
 protected:
     const css::uno::Reference< css::uno::XInterface >&

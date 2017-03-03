@@ -45,13 +45,13 @@ namespace connectivity
         public:
             OSQLAnalyzer(OConnection* _pConnection);
             ~OSQLAnalyzer();
-            inline static void * SAL_CALL operator new( size_t nSize )
+            static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
+            static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
                 { return _pHint; }
-            inline static void SAL_CALL operator delete( void * pMem )
+            static void SAL_CALL operator delete( void * pMem )
                 { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
+            static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
@@ -72,7 +72,7 @@ namespace connectivity
             void start(OSQLParseNode* pSQLParseNode);
             bool hasRestriction() const;
             bool hasFunctions() const;
-            inline bool evaluateRestriction()   { return m_aInterpreter->start(); }
+            bool evaluateRestriction()   { return m_aInterpreter->start(); }
             void setSelectionEvaluationResult(OValueRefRow& _pRow,const std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,

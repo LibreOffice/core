@@ -88,10 +88,10 @@ private:
     SAL_DLLPRIVATE void                        InitVScrollBar();
 
     /** Calculates and sets valid position offset nearest to nPos. */
-    SAL_DLLPRIVATE inline void                 ImplSetPosOffset( sal_Int32 nPos )
+    SAL_DLLPRIVATE void                 ImplSetPosOffset( sal_Int32 nPos )
                                     { maData.mnPosOffset = std::max( std::min( nPos, GetMaxPosOffset() ), sal_Int32( 0 ) ); }
     /** Calculates and sets valid line offset nearest to nLine. */
-    SAL_DLLPRIVATE inline void                 ImplSetLineOffset( sal_Int32 nLine )
+    SAL_DLLPRIVATE void                 ImplSetLineOffset( sal_Int32 nLine )
                                     { maData.mnLineOffset = std::max( std::min( nLine, GetMaxLineOffset() ), sal_Int32( 0 ) ); }
     /** Moves controls (not cursors!) so that nPos becomes visible. */
     SAL_DLLPRIVATE void                        MakePosVisible( sal_Int32 nPos );
@@ -108,7 +108,7 @@ public:
     /** Reads UI strings for data types from the list box. */
     void                        InitTypes( const ListBox& rListBox );
     /** Returns the data type of the selected columns. */
-    inline sal_Int32            GetSelColumnType() const { return maGrid->GetSelColumnType(); }
+    sal_Int32            GetSelColumnType() const { return maGrid->GetSelColumnType(); }
 
     /** Fills the options object with current column data. */
     void                        FillColumnData( ScAsciiOptions& rOptions ) const;
@@ -116,9 +116,9 @@ public:
     // event handling ---------------------------------------------------------
 public:
     /** Sets a new handler for "update cell texts" requests. */
-    inline void                 SetUpdateTextHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maUpdateTextHdl = rHdl; }
+    void                 SetUpdateTextHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maUpdateTextHdl = rHdl; }
     /** Sets a new handler for "column selection changed" events. */
-    inline void                 SetColTypeHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maColTypeHdl = rHdl; }
+    void                 SetColTypeHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maColTypeHdl = rHdl; }
 
 protected:
     virtual void                Resize() override;

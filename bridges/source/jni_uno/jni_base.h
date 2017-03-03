@@ -63,19 +63,19 @@ class JNI_context
 
     void java_exc_occurred() const;
 public:
-    inline explicit JNI_context(
+    explicit JNI_context(
         JNI_info const * jni_info, JNIEnv * env, jobject class_loader )
         : m_jni_info( jni_info ),
           m_env( env ),
           m_class_loader( class_loader )
         {}
 
-    inline JNI_info const * get_info() const
+    JNI_info const * get_info() const
         { return m_jni_info; }
 
-    inline JNIEnv * operator -> () const
+    JNIEnv * operator -> () const
         { return m_env; }
-    inline JNIEnv * get_jni_env() const
+    JNIEnv * get_jni_env() const
         { return m_env; }
 
     // does not handle exceptions, *classClass will be null if exception
@@ -125,7 +125,7 @@ class JNI_guarded_context
     void operator = ( JNI_guarded_context ) = delete;
 
 public:
-    inline explicit JNI_guarded_context(
+    explicit JNI_guarded_context(
         JNI_info const * jni_info,
         rtl::Reference<jvmaccess::UnoVirtualMachine> const & vm_access)
         : AttachGuard( vm_access->getVirtualMachine() ),
@@ -204,13 +204,13 @@ inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 
 struct rtl_mem
 {
-    inline static void * operator new ( size_t nSize )
+    static void * operator new ( size_t nSize )
         { return rtl_allocateMemory( nSize ); }
-    inline static void operator delete ( void * mem )
+    static void operator delete ( void * mem )
         { if (mem) rtl_freeMemory( mem ); }
-    inline static void * operator new ( size_t, void * mem )
+    static void * operator new ( size_t, void * mem )
         { return mem; }
-    inline static void operator delete ( void *, void * )
+    static void operator delete ( void *, void * )
         {}
 
     static inline rtl_mem * allocate( std::size_t bytes );
@@ -234,10 +234,10 @@ class TypeDescr
 
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
-    inline ~TypeDescr()
+    ~TypeDescr()
         { TYPELIB_DANGER_RELEASE( m_td ); }
 
-    inline typelib_TypeDescription * get() const
+    typelib_TypeDescription * get() const
         { return m_td; }
 };
 

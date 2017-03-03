@@ -201,11 +201,11 @@ public:
     virtual SwWrongList* Clone();
     virtual void CopyFrom( const SwWrongList& rCopy );
 
-    inline WrongListType GetWrongListType() const { return meType; }
-    inline sal_Int32 GetBeginInv() const { return nBeginInvalid; }
-    inline sal_Int32 GetEndInv() const { return nEndInvalid; }
+    WrongListType GetWrongListType() const { return meType; }
+    sal_Int32 GetBeginInv() const { return nBeginInvalid; }
+    sal_Int32 GetEndInv() const { return nEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
-    inline void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
+    void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     bool InvalidateWrong();
     enum class FreshState { FRESH, CURSOR, NOTHING };
@@ -227,19 +227,19 @@ public:
     // the other wrong list has to be inserted.
     void JoinList( SwWrongList* pNext, sal_Int32 nInsertPos );
 
-    inline sal_Int32 Len( sal_uInt16 nIdx ) const
+    sal_Int32 Len( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnLen : 0;
     }
 
-    inline sal_Int32 Pos( sal_uInt16 nIdx ) const
+    sal_Int32 Pos( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnPos : 0;
     }
 
-    inline sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
+    sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
 
-    inline void Insert( const OUString& rType,
+    void Insert( const OUString& rType,
                         css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                         sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere )
     {
@@ -256,14 +256,14 @@ public:
                  css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nNewPos, sal_Int32 nNewLen );
 
-    inline SwWrongList* SubList( sal_uInt16 nIdx ) const
+    SwWrongList* SubList( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mpSubList : nullptr;
     }
 
     void InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
 
-    inline const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
+    const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? &maList[nIdx] : nullptr;
     }

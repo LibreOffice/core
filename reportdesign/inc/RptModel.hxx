@@ -66,8 +66,8 @@ public:
     OXUndoEnvironment&  GetUndoEnv() { return *m_xUndoEnv.get();}
     void                SetModified(bool _bModified);
 
-    inline dbaui::DBSubComponentController* getController() const { return m_pController; }
-    inline void attachController( dbaui::DBSubComponentController& _rController ) { m_pController = &_rController; }
+    dbaui::DBSubComponentController* getController() const { return m_pController; }
+    void attachController( dbaui::DBSubComponentController& _rController ) { m_pController = &_rController; }
     void detachController();
 
     OReportPage* createNewPage(const css::uno::Reference< css::report::XSection >& _xSection);

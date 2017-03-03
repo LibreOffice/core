@@ -66,7 +66,7 @@ namespace pcr
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
-        inline void SetFormatSupplier( const SvNumberFormatsSupplierObj* _pSupplier )
+        void SetFormatSupplier( const SvNumberFormatsSupplierObj* _pSupplier )
         {
             getTypedControlWindow()->SetFormatSupplier( _pSupplier );
         }

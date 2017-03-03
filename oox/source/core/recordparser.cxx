@@ -39,7 +39,7 @@ namespace prv {
 class Locator : public ::cppu::WeakImplHelper< XLocator >
 {
 public:
-    inline explicit         Locator( RecordParser* pParser ) : mpParser( pParser ) {}
+    explicit         Locator( RecordParser* pParser ) : mpParser( pParser ) {}
 
     void                    dispose();
     /// @throws css::uno::RuntimeException
@@ -94,7 +94,7 @@ class ContextStack
 public:
     explicit            ContextStack( FragmentHandlerRef const & xHandler );
 
-    inline bool         empty() const { return maStack.empty(); }
+    bool         empty() const { return maStack.empty(); }
 
     sal_Int32           getCurrentRecId() const;
     bool                hasCurrentEndRecId() const;

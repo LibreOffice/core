@@ -82,11 +82,11 @@ namespace pcr
         /** determines whether the SQL Command designer is currently active, i.e.
             if there currently exists a frame which allows the user entering the SQL command
         */
-        inline bool isActive() const { return m_xDesigner.is(); }
+        bool isActive() const { return m_xDesigner.is(); }
 
         /** returns the property adapter used by the instance
         */
-        inline const ::rtl::Reference< ISQLCommandAdapter >& getPropertyAdapter() const { return m_xObjectAdapter; }
+        const ::rtl::Reference< ISQLCommandAdapter >& getPropertyAdapter() const { return m_xObjectAdapter; }
 
         /** raises the designer window to top
             @precond

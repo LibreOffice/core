@@ -207,13 +207,13 @@ public:
         SCROW       nRow;
         SCCOL       nCol;
 
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP ) :
+        Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP ) :
             eConv(eConvP), nRow(nRowP), nCol(nColP)
         {}
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr ) :
+        Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr ) :
             eConv(eConvP), nRow(rAddr.Row()),  nCol(rAddr.Col())
         {}
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP) :
+        Details( formula::FormulaGrammar::AddressConvention eConvP) :
             eConv(eConvP), nRow(0), nCol(0)
         {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
@@ -227,82 +227,82 @@ public:
         sal_uInt16  mnFileId;
         bool        mbExternal;
 
-        inline ExternalInfo() :
+        ExternalInfo() :
             mnFileId(0), mbExternal(false)
         {}
     };
 
-    inline ScAddress() :
+    ScAddress() :
         nRow(0), nCol(0), nTab(0)
     {}
-    inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
+    ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
         nRow(nRowP), nCol(nColP), nTab(nTabP)
     {}
     /** Yes, it is what it seems to be: Uninitialized. May be used for
         performance reasons if it is initialized by other means. */
-    inline ScAddress( Uninitialized )
+    ScAddress( Uninitialized )
     {}
-    inline ScAddress( InitializeInvalid ) :
+    ScAddress( InitializeInvalid ) :
         nRow(-1), nCol(-1), nTab(-1)
     {}
-    inline ScAddress( const ScAddress& rAddress ) :
+    ScAddress( const ScAddress& rAddress ) :
         nRow(rAddress.nRow), nCol(rAddress.nCol), nTab(rAddress.nTab)
     {}
     inline ScAddress& operator=( const ScAddress& rAddress );
 
     inline void Set( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    inline SCROW Row() const
+    SCROW Row() const
     {
         return nRow;
     }
 
-    inline SCCOL Col() const
+    SCCOL Col() const
     {
         return nCol;
     }
-    inline SCTAB Tab() const
+    SCTAB Tab() const
     {
         return nTab;
     }
-    inline void SetRow( SCROW nRowP )
+    void SetRow( SCROW nRowP )
     {
         nRow = nRowP;
     }
-    inline void SetCol( SCCOL nColP )
+    void SetCol( SCCOL nColP )
     {
         nCol = nColP;
     }
-    inline void SetTab( SCTAB nTabP )
+    void SetTab( SCTAB nTabP )
     {
         nTab = nTabP;
     }
-    inline void SetInvalid()
+    void SetInvalid()
     {
         nRow = -1;
         nCol = -1;
         nTab = -1;
     }
-    inline bool IsValid() const
+    bool IsValid() const
     {
         return (nRow >= 0) && (nCol >= 0) && (nTab >= 0);
     }
 
     inline void PutInOrder( ScAddress& rAddress );
 
-    inline void IncRow( SCsROW nDelta = 1 )
+    void IncRow( SCsROW nDelta = 1 )
     {
         nRow = sal::static_int_cast<SCROW>(nRow + nDelta);
     }
-    inline void IncCol( SCsCOL nDelta = 1 )
+    void IncCol( SCsCOL nDelta = 1 )
     {
         nCol = sal::static_int_cast<SCCOL>(nCol + nDelta);
     }
-    inline void IncTab( SCsTAB nDelta = 1 )
+    void IncTab( SCsTAB nDelta = 1 )
     {
         nTab = sal::static_int_cast<SCTAB>(nTab + nDelta);
     }
-    inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
+    void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     {
         nColP = nCol;
         nRowP = nRow;
@@ -474,51 +474,51 @@ public:
     ScAddress aStart;
     ScAddress aEnd;
 
-    inline ScRange() :
+    ScRange() :
         aStart(), aEnd()
     {}
 
-    inline ScRange( ScAddress::Uninitialized eUninitialized ) :
+    ScRange( ScAddress::Uninitialized eUninitialized ) :
         aStart( eUninitialized ), aEnd( eUninitialized )
     {}
-    inline ScRange( ScAddress::InitializeInvalid eInvalid ) :
+    ScRange( ScAddress::InitializeInvalid eInvalid ) :
         aStart( eInvalid ), aEnd( eInvalid )
     {}
-    inline ScRange( const ScAddress& aInputStart, const ScAddress& aInputEnd ) :
+    ScRange( const ScAddress& aInputStart, const ScAddress& aInputEnd ) :
         aStart( aInputStart ), aEnd( aInputEnd )
     {
         aStart.PutInOrder( aEnd );
     }
-    inline ScRange( const ScRange& rRange ) :
+    ScRange( const ScRange& rRange ) :
         aStart( rRange.aStart ), aEnd( rRange.aEnd )
     {}
-    inline ScRange( const ScAddress& rRange ) :
+    ScRange( const ScAddress& rRange ) :
         aStart( rRange ), aEnd( rRange )
     {}
-    inline ScRange( SCCOL nCol, SCROW nRow, SCTAB nTab ) :
+    ScRange( SCCOL nCol, SCROW nRow, SCTAB nTab ) :
         aStart( nCol, nRow, nTab ), aEnd( aStart )
     {}
-    inline ScRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2 ) :
+    ScRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2 ) :
         aStart( nCol1, nRow1, nTab1 ), aEnd( nCol2, nRow2, nTab2 )
     {}
 
-    inline ScRange& operator=( const ScRange& rRange )
+    ScRange& operator=( const ScRange& rRange )
     {
         aStart = rRange.aStart;
         aEnd = rRange.aEnd;
         return *this;
     }
-    inline ScRange& operator=( const ScAddress& rPos )
+    ScRange& operator=( const ScAddress& rPos )
     {
         aStart = aEnd = rPos;
         return *this;
     }
-    inline void SetInvalid()
+    void SetInvalid()
     {
         aStart.SetInvalid();
         aEnd.SetInvalid();
     }
-    inline bool IsValid() const
+    bool IsValid() const
     {
         return aStart.IsValid() && aEnd.IsValid();
     }
@@ -773,43 +773,43 @@ private:
     bool                bRelRow;
     bool                bRelTab;
 public:
-    inline ScRefAddress() :
+    ScRefAddress() :
         bRelCol(false), bRelRow(false), bRelTab(false)
     {}
-    inline ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab,
                          bool bRelColP, bool bRelRowP, bool bRelTabP ) :
         aAdr(nCol, nRow, nTab),
         bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
     {}
-    inline ScRefAddress( const ScRefAddress& rRef ) :
+    ScRefAddress( const ScRefAddress& rRef ) :
         aAdr(rRef.aAdr), bRelCol(rRef.bRelCol), bRelRow(rRef.bRelRow),
         bRelTab(rRef.bRelTab)
     {}
 
     inline ScRefAddress& operator=( const ScRefAddress& );
 
-    inline bool IsRelCol() const
+    bool IsRelCol() const
     {
         return bRelCol;
     }
-    inline bool IsRelRow() const
+    bool IsRelRow() const
     {
         return bRelRow;
     }
-    inline bool IsRelTab() const
+    bool IsRelTab() const
     {
         return bRelTab;
     }
 
-    inline void SetRelCol(bool bNewRelCol)
+    void SetRelCol(bool bNewRelCol)
     {
         bRelCol = bNewRelCol;
     }
-    inline void SetRelRow(bool bNewRelRow)
+    void SetRelRow(bool bNewRelRow)
     {
         bRelRow = bNewRelRow;
     }
-    inline void SetRelTab(bool bNewRelTab)
+    void SetRelTab(bool bNewRelTab)
     {
         bRelTab = bNewRelTab;
     }
@@ -819,20 +819,20 @@ public:
     inline void Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                      bool bNewRelCol, bool bNewRelRow, bool bNewRelTab );
 
-    inline const ScAddress& GetAddress() const
+    const ScAddress& GetAddress() const
     {
         return aAdr;
     }
 
-    inline SCCOL Col() const
+    SCCOL Col() const
     {
         return aAdr.Col();
     }
-    inline SCROW Row() const
+    SCROW Row() const
     {
         return aAdr.Row();
     }
-    inline SCTAB Tab() const
+    SCTAB Tab() const
     {
         return aAdr.Tab();
     }

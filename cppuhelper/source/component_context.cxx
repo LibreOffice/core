@@ -133,7 +133,7 @@ protected:
         Any value;
         bool lateInit;
 
-        inline ContextEntry( Any const & value_, bool lateInit_ )
+        ContextEntry( Any const & value_, bool lateInit_ )
             : value( value_ )
             , lateInit( lateInit_ )
             {}

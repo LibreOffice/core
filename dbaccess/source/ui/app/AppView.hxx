@@ -117,7 +117,7 @@ namespace dbaui
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void GetFocus() override;
 
-        inline OApplicationController&                  getAppController() const { return m_rAppController; }
+        OApplicationController&                  getAppController() const { return m_rAppController; }
 
         // IClipboardTest
         virtual bool isCutAllowed() override;
@@ -128,9 +128,9 @@ namespace dbaui
         virtual void paste() override;
 
         /// get the left panel
-        inline OApplicationSwapWindow*  getPanel()      const { return m_pWin->getPanel(); }
+        OApplicationSwapWindow*  getPanel()      const { return m_pWin->getPanel(); }
         /// get the detail page
-        inline OApplicationDetailView*  getDetailView() const { return m_pWin->getDetailView(); }
+        OApplicationDetailView*  getDetailView() const { return m_pWin->getDetailView(); }
 
         /** return the qualified name.
             @param  _pEntry

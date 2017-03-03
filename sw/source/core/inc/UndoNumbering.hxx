@@ -62,7 +62,7 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
     {
         sal_uLong index;
         int level;
-        inline NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
+        NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
     };
     std::vector<NodeLevel>     aNodes;
     std::unique_ptr<SwHistory> pHistory;

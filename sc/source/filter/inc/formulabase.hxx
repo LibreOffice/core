@@ -282,7 +282,7 @@ public:
 
     /** Appends a new token with the passed op-code and data. */
     template< typename Type >
-    inline void         append( sal_Int32 nOpCode, const Type& rData ) { append( nOpCode ) <<= rData; }
+    void         append( sal_Int32 nOpCode, const Type& rData ) { append( nOpCode ) <<= rData; }
 
     /** Converts to a sequence. */
     ApiTokenSequence toSequence() const;
@@ -298,8 +298,8 @@ class ApiTokenIterator
 {
 public:
     explicit            ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 nSpacesOpCode, bool bSkipSpaces );
-    inline bool         is() const { return mpToken != mpTokenEnd; }
-    inline const ApiToken* operator->() const { return mpToken; }
+    bool         is() const { return mpToken != mpTokenEnd; }
+    const ApiToken* operator->() const { return mpToken; }
 
     ApiTokenIterator&   operator++();
 
@@ -601,7 +601,7 @@ public:
                             const OpCodeProvider& rOpCodeProv );
 
     /** Returns read/write access to the formula parser property set. */
-    inline PropertySet& getParserProperties() { return maParserProps; }
+    PropertySet& getParserProperties() { return maParserProps; }
 
     /** Calls the XFormulaParser::parseFormula() function of the API parser. */
     ApiTokenSequence    parseFormula(

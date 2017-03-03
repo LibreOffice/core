@@ -81,19 +81,19 @@ struct StringTraits
 
     typedef rtl_String String;
 
-    static inline void createString(rtl_String ** pString,
+    static void createString(rtl_String ** pString,
                                     sal_Char const * pChars, sal_Int32 nLen)
     {
         rtl_string_newFromStr_WithLength(pString, pChars, nLen);
     }
 
-    static inline void createBuffer(rtl_String ** pBuffer,
+    static void createBuffer(rtl_String ** pBuffer,
                                     sal_Int32 * pCapacity)
     {
         rtl_string_new_WithLength(pBuffer, *pCapacity);
     }
 
-    static inline void appendChars(rtl_String ** pBuffer, sal_Int32 * pCapacity,
+    static void appendChars(rtl_String ** pBuffer, sal_Int32 * pCapacity,
                                    sal_Int32 * pOffset, sal_Char const * pChars,
                                    sal_Int32 nLen)
     {
@@ -102,7 +102,7 @@ struct StringTraits
         *pOffset += nLen;
     }
 
-    static inline void appendAscii(rtl_String ** pBuffer, sal_Int32 * pCapacity,
+    static void appendAscii(rtl_String ** pBuffer, sal_Int32 * pCapacity,
                                    sal_Int32 * pOffset, sal_Char const * pStr,
                                    sal_Int32 nLen)
     {
@@ -118,19 +118,19 @@ struct UStringTraits
 
     typedef rtl_uString String;
 
-    static inline void createString(rtl_uString ** pString,
+    static void createString(rtl_uString ** pString,
                                     sal_Unicode const * pChars, sal_Int32 nLen)
     {
         rtl_uString_newFromStr_WithLength(pString, pChars, nLen);
     }
 
-    static inline void createBuffer(rtl_uString ** pBuffer,
+    static void createBuffer(rtl_uString ** pBuffer,
                                     sal_Int32 * pCapacity)
     {
         rtl_uString_new_WithLength(pBuffer, *pCapacity);
     }
 
-    static inline void appendChars(rtl_uString ** pBuffer,
+    static void appendChars(rtl_uString ** pBuffer,
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
                                    sal_Unicode const * pChars, sal_Int32 nLen)
     {
@@ -139,7 +139,7 @@ struct UStringTraits
         *pOffset += nLen;
     }
 
-    static inline void appendAscii(rtl_uString ** pBuffer,
+    static void appendAscii(rtl_uString ** pBuffer,
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
                                    sal_Char const * pStr, sal_Int32 nLen)
     {

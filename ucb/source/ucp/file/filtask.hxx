@@ -196,7 +196,7 @@ namespace fileaccess
 
             ~MyProperty();
             inline const bool& SAL_CALL IsNative() const;
-            inline const OUString& SAL_CALL getPropertyName() const { return PropertyName; }
+            const OUString& SAL_CALL getPropertyName() const { return PropertyName; }
             inline const sal_Int32& SAL_CALL getHandle() const;
             inline const css::uno::Type& SAL_CALL getType() const;
             inline const css::uno::Any& SAL_CALL getValue() const;

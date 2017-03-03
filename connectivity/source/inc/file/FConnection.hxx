@@ -125,12 +125,12 @@ namespace connectivity
 
             bool                matchesExtension( const OUString& _rExt ) const;
 
-            inline const OUString&    getExtension()            const { return m_aFilenameExtension; }
-            inline bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
-            inline OFileDriver*     getDriver()                 const { return m_pDriver; }
-            inline bool         showDeleted()               const { return m_bShowDeleted; }
-            inline bool         isCheckEnabled()            const { return m_bCheckSQL92; }
-            inline bool             isTextEncodingDefaulted()   const { return m_bDefaultTextEncoding; }
+            const OUString&    getExtension()            const { return m_aFilenameExtension; }
+            bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
+            OFileDriver*     getDriver()                 const { return m_pDriver; }
+            bool         showDeleted()               const { return m_bShowDeleted; }
+            bool         isCheckEnabled()            const { return m_bCheckSQL92; }
+            bool             isTextEncodingDefaulted()   const { return m_bDefaultTextEncoding; }
 
         public:
             struct GrantAccess

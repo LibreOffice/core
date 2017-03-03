@@ -35,32 +35,32 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
     char const * begin;
     sal_Int32 length;
 
-    inline Span(): begin(nullptr), length(0) {}
+    Span(): begin(nullptr), length(0) {}
         // init length to avoid compiler warnings
 
-    inline Span(char const * theBegin, sal_Int32 theLength):
+    Span(char const * theBegin, sal_Int32 theLength):
         begin(theBegin), length(theLength) {}
 
-    template< std::size_t N > explicit inline Span(char const (& literal)[N]):
+    template< std::size_t N > explicit Span(char const (& literal)[N]):
         begin(literal), length(N - 1)
     {}
 
-    inline void clear() throw() { begin = nullptr; }
+    void clear() throw() { begin = nullptr; }
 
-    inline bool is() const { return begin != nullptr; }
+    bool is() const { return begin != nullptr; }
 
-    inline bool equals(Span const & text) const {
+    bool equals(Span const & text) const {
         return length == text.length
             && (rtl_str_compare_WithLength(
                     begin, length, text.begin, text.length)
                 == 0);
     }
 
-    inline bool equals(char const * textBegin, sal_Int32 textLength) const {
+    bool equals(char const * textBegin, sal_Int32 textLength) const {
         return equals(Span(textBegin, textLength));
     }
 
-    template< std::size_t N > inline bool equals(char const (& literal)[N])
+    template< std::size_t N > bool equals(char const (& literal)[N])
         const
     {
         return equals(Span(literal, N - 1));

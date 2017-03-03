@@ -80,21 +80,21 @@ namespace pcr
         typedef css::uno::Sequence< ELEMENT >  UnoBase;
 
     public:
-        inline StlSyntaxSequence() : UnoBase() { }
-        explicit inline StlSyntaxSequence( const UnoBase& rSeq ) : UnoBase( rSeq ) { }
-        explicit inline StlSyntaxSequence( sal_Int32 len ) : UnoBase( len ) { }
+        StlSyntaxSequence() : UnoBase() { }
+        explicit StlSyntaxSequence( const UnoBase& rSeq ) : UnoBase( rSeq ) { }
+        explicit StlSyntaxSequence( sal_Int32 len ) : UnoBase( len ) { }
 
         typedef const ELEMENT* const_iterator;
         typedef       ELEMENT* iterator;
 
-        inline const_iterator begin() const { return UnoBase::getConstArray(); }
-        inline const_iterator end() const { return UnoBase::getConstArray() + UnoBase::getLength(); }
+        const_iterator begin() const { return UnoBase::getConstArray(); }
+        const_iterator end() const { return UnoBase::getConstArray() + UnoBase::getLength(); }
 
-        inline iterator begin() { return UnoBase::getArray(); }
-        inline iterator end() { return UnoBase::getArray() + UnoBase::getLength(); }
+        iterator begin() { return UnoBase::getArray(); }
+        iterator end() { return UnoBase::getArray() + UnoBase::getLength(); }
 
-        inline sal_Int32 size() const { return UnoBase::getLength(); }
-        inline bool empty() const { return UnoBase::getLength() == 0; }
+        sal_Int32 size() const { return UnoBase::getLength(); }
+        bool empty() const { return UnoBase::getLength() == 0; }
     };
 
 

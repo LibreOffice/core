@@ -164,7 +164,7 @@ namespace rptui
         */
         void    ApplyCommand(sal_uInt16 _nCommandId, const ::Color& _aColor );
 
-        inline ::rptui::OReportController& getController() const { return m_rController; }
+        ::rptui::OReportController& getController() const { return m_rController; }
 
         sal_uInt16 mapToolbarItemToSlotId(sal_uInt16 nItemId) const;
 

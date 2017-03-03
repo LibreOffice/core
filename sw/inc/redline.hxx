@@ -142,7 +142,7 @@ public:
     sal_uInt16 GetAuthor() const                { return nAuthor; }
     const OUString& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
-    inline const SwRedlineData* Next() const{ return pNext; }
+    const SwRedlineData* Next() const{ return pNext; }
 
     void SetComment( const OUString& rS )     { sComment = rS; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }

@@ -88,7 +88,7 @@ public:
     void                RefInputDone( bool bForced );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton );
 
-    inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
+    void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     void                DoClose( sal_uInt16 nId );
     static void         SetDispatcherLock( bool bLock );
     static void         EnableSpreadsheets( bool bFlag = true );

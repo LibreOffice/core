@@ -168,7 +168,7 @@ public:
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
 
-    inline SwViewShell* GetShell() const
+    SwViewShell* GetShell() const
     {
         return mpVSh;
     }

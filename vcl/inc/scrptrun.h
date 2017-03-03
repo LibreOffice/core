@@ -82,14 +82,14 @@ s     * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return static_cast<UClassID>(const_cast<char *>(&fgClassID)); }
+    static UClassID getStaticClassID() { return static_cast<UClassID>(const_cast<char *>(&fgClassID)); }
 
 private:
 

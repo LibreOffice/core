@@ -152,7 +152,7 @@ public:
                             const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc);
 
     /** Returns the name of the DataPilot field in the fields collection. */
-    inline const OUString& getDPFieldName() const { return maDPFieldName; }
+    const OUString& getDPFieldName() const { return maDPFieldName; }
 
     /** Converts dimension and other settings for a row field. */
     void                convertRowField();

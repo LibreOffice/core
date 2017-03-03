@@ -19,7 +19,7 @@
 
 struct LengthContentsCompare
 {
-    inline bool operator()( const OUString &a, const OUString &b ) const
+    bool operator()( const OUString &a, const OUString &b ) const
     {
         if (a.getLength() == b.getLength())
             return a < b;

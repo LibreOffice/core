@@ -157,9 +157,9 @@ public:
     virtual Value GetFormat(size_t idx) const override
         { return SwVectorModifyBase<Value>::operator[](idx); }
 
-    inline size_t GetPos(const SwFormat *p) const
+    size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
-    inline bool Contains(const SwFormat *p) const {
+    bool Contains(const SwFormat *p) const {
         Value p2 = dynamic_cast<Value>(const_cast<SwFormat*>(p));
         return p2 != nullptr && SwVectorModifyBase<Value>::Contains(p2);
     }
@@ -239,7 +239,7 @@ public:
         rangeFind( const value_type& x ) const;
     // So we can actually check for end()
     const_range_iterator rangeEnd() const { return m_TypeAndNameIndex.end(); }
-    inline const_iterator rangeProject( const_range_iterator const& position )
+    const_iterator rangeProject( const_range_iterator const& position )
         { return m_Array.project<0>( position ); }
 
     const value_type& operator[]( size_t index_ ) const

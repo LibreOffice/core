@@ -75,21 +75,21 @@ class SwLinguIter
 public:
     SwLinguIter();
 
-    inline SwEditShell *GetSh()             { return pSh; }
+    SwEditShell *GetSh()             { return pSh; }
 
-    inline const SwPosition *GetEnd() const { return pEnd; }
-    inline void SetEnd( SwPosition* pNew ){ delete pEnd; pEnd = pNew; }
+    const SwPosition *GetEnd() const { return pEnd; }
+    void SetEnd( SwPosition* pNew ){ delete pEnd; pEnd = pNew; }
 
-    inline const SwPosition *GetStart() const { return pStart; }
-    inline void SetStart( SwPosition* pNew ){ delete pStart; pStart = pNew; }
+    const SwPosition *GetStart() const { return pStart; }
+    void SetStart( SwPosition* pNew ){ delete pStart; pStart = pNew; }
 
-    inline const SwPosition *GetCurr() const { return pCurr; }
-    inline void SetCurr( SwPosition* pNew ){ delete pCurr; pCurr = pNew; }
+    const SwPosition *GetCurr() const { return pCurr; }
+    void SetCurr( SwPosition* pNew ){ delete pCurr; pCurr = pNew; }
 
-    inline const SwPosition *GetCurrX() const { return pCurrX; }
-    inline void SetCurrX( SwPosition* pNew ){ delete pCurrX; pCurrX = pNew; }
+    const SwPosition *GetCurrX() const { return pCurrX; }
+    void SetCurrX( SwPosition* pNew ){ delete pCurrX; pCurrX = pNew; }
 
-    inline sal_uInt16& GetCursorCnt(){ return nCursorCnt; }
+    sal_uInt16& GetCursorCnt(){ return nCursorCnt; }
 
     // for the UI:
     void Start_( SwEditShell *pSh, SwDocPositions eStart,

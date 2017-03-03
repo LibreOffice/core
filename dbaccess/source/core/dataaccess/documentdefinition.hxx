@@ -143,7 +143,7 @@ public:
     void saveAs();
     void closeObject();
     bool isModified();
-    inline bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
+    bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
                     const css::uno::Reference< css::uno::XComponentContext > & _rxContext,

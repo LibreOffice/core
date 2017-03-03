@@ -87,18 +87,18 @@ private:
     // split handling ---------------------------------------------------------
 public:
     /** Returns the split array. */
-    inline const ScCsvSplits&   GetSplits() const { return maSplits; }
+    const ScCsvSplits&   GetSplits() const { return maSplits; }
     /** Returns the number of splits. */
-    inline sal_uInt32           GetSplitCount() const
+    sal_uInt32           GetSplitCount() const
                                     { return maSplits.Count(); }
     /** Returns the position of the specified split. */
-    inline sal_Int32            GetSplitPos( sal_uInt32 nIndex ) const
+    sal_Int32            GetSplitPos( sal_uInt32 nIndex ) const
                                     { return maSplits[ nIndex ]; }
     /** Finds a position nearest to nPos which does not cause scrolling the visible area. */
     sal_Int32                   GetNoScrollPos( sal_Int32 nPos ) const;
 
     /** Returns true if at position nPos is a split. */
-    inline bool                 HasSplit( sal_Int32 nPos ) const { return maSplits.HasSplit( nPos ); }
+    bool                 HasSplit( sal_Int32 nPos ) const { return maSplits.HasSplit( nPos ); }
     /** Inserts a split. */
     void                        InsertSplit( sal_Int32 nPos );
     /** Removes a split. */
@@ -149,9 +149,9 @@ public:
 
 private:
     /** Returns the width of the control. */
-    inline sal_Int32            GetWidth() const { return maWinSize.Width(); }
+    sal_Int32            GetWidth() const { return maWinSize.Width(); }
     /** Returns the height of the control. */
-    inline sal_Int32            GetHeight() const { return maWinSize.Height(); }
+    sal_Int32            GetHeight() const { return maWinSize.Height(); }
 
     /** Draws the background and active area to maBackgrDev (only the given X range). */
     SAL_DLLPRIVATE void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );

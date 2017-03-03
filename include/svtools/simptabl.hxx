@@ -117,7 +117,7 @@ public:
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     const CommandEvent& GetCommandEvent() const { return aCEvt; }
-    inline bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
+    bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
     void            SetCommandHdl( const Link<SvSimpleTable*,void>& rLink ) { aCommandLink = rLink; }
 
     void            SetHeaderBarClickHdl( const Link<SvSimpleTable*,void>& rLink ) { aHeaderBarClickLink = rLink; }

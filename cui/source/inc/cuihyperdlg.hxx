@@ -86,9 +86,9 @@ public:
 
     void                    SetPage( SvxHyperlinkItem* pItem );
     void                    SetReadOnlyMode( bool bReadOnly );
-    inline bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
+    bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
 
-    inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
+    SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
 };
 
 

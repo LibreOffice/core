@@ -87,7 +87,7 @@ public:
     virtual             ~XclImpChRoot() override;
 
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclImpChRoot& GetChRoot() const { return *this; }
+    const XclImpChRoot& GetChRoot() const { return *this; }
     /** Returns a reference to the parent chart data object. */
     XclImpChChart&      GetChartData() const;
     /** Returns chart type info for a unique chart type identifier. */
@@ -204,7 +204,7 @@ public:
     void                ReadChFramePos( XclImpStream& rStrm );
 
     /** Returns read-only access to the imported frame position data. */
-    inline const XclChFramePos& GetFramePosData() const { return maData; }
+    const XclChFramePos& GetFramePosData() const { return maData; }
 
 private:
     XclChFramePos       maData;             /// Position of the frame.
@@ -217,21 +217,21 @@ class XclImpChLineFormat
 {
 public:
     /** Creates a new line format object with automatic formatting. */
-    inline explicit     XclImpChLineFormat() {}
+    explicit     XclImpChLineFormat() {}
     /** Creates a new line format object with the passed formatting. */
-    inline explicit     XclImpChLineFormat( const XclChLineFormat& rLineFmt ) : maData( rLineFmt ) {}
+    explicit     XclImpChLineFormat( const XclChLineFormat& rLineFmt ) : maData( rLineFmt ) {}
 
     /** Reads the CHLINEFORMAT record (basic line properties). */
     void                ReadChLineFormat( XclImpStream& rStrm );
 
     /** Returns true, if the line format is set to automatic. */
-    inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO ); }
+    bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO ); }
     /** Returns true, if the line style is set to something visible. */
-    inline bool         HasLine() const { return IsAuto() || (maData.mnPattern != EXC_CHLINEFORMAT_NONE); }
+    bool         HasLine() const { return IsAuto() || (maData.mnPattern != EXC_CHLINEFORMAT_NONE); }
     /** Returns the line width of this line format (returns 'single', if the line is invisible). */
-    inline sal_Int16    GetWeight() const { return (IsAuto() || !HasLine()) ? EXC_CHLINEFORMAT_SINGLE : maData.mnWeight; }
+    sal_Int16    GetWeight() const { return (IsAuto() || !HasLine()) ? EXC_CHLINEFORMAT_SINGLE : maData.mnWeight; }
     /** Returns true, if the "show axis" flag is set. */
-    inline bool         IsShowAxis() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS ); }
+    bool         IsShowAxis() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS ); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot,
@@ -249,17 +249,17 @@ class XclImpChAreaFormat
 {
 public:
     /** Creates a new area format object with automatic formatting. */
-    inline explicit     XclImpChAreaFormat() {}
+    explicit     XclImpChAreaFormat() {}
     /** Creates a new area format object with the passed formatting. */
-    inline explicit     XclImpChAreaFormat( const XclChAreaFormat& rAreaFmt ) : maData( rAreaFmt ) {}
+    explicit     XclImpChAreaFormat( const XclChAreaFormat& rAreaFmt ) : maData( rAreaFmt ) {}
 
     /** Reads the CHAREAFORMAT record (basic fill properties, e.g. transparent or colored). */
     void                ReadChAreaFormat( XclImpStream& rStrm );
 
     /** Returns true, if the area format is set to automatic. */
-    inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO ); }
+    bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO ); }
     /** Returns true, if the area style is set to something visible. */
-    inline bool         HasArea() const { return IsAuto() || (maData.mnPattern != EXC_PATT_NONE); }
+    bool         HasArea() const { return IsAuto() || (maData.mnPattern != EXC_PATT_NONE); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot,
@@ -305,7 +305,7 @@ class XclImpChFrameBase : public XclImpChGroupBase
 {
 public:
     /** Creates a new frame object without internal formatting objects. */
-    inline explicit     XclImpChFrameBase() {}
+    explicit     XclImpChFrameBase() {}
     /** Creates a new frame object with specific default formatting. */
     explicit            XclImpChFrameBase( const XclChFormatInfo& rFmtInfo );
 
@@ -313,14 +313,14 @@ public:
     virtual void        ReadSubRecord( XclImpStream& rStrm ) override;
 
     /** Returns true, if the line format is set to automatic. */
-    inline bool         IsAutoLine() const { return !mxLineFmt || mxLineFmt->IsAuto(); }
+    bool         IsAutoLine() const { return !mxLineFmt || mxLineFmt->IsAuto(); }
     /** Returns true, if the line style is set to something visible. */
-    inline bool         HasLine() const { return IsAutoLine() || mxLineFmt->HasLine(); }
+    bool         HasLine() const { return IsAutoLine() || mxLineFmt->HasLine(); }
     /** Returns the line weight used for this frame. */
-    inline sal_Int16    GetLineWeight() const { return mxLineFmt ? mxLineFmt->GetWeight() : EXC_CHLINEFORMAT_SINGLE; }
+    sal_Int16    GetLineWeight() const { return mxLineFmt ? mxLineFmt->GetWeight() : EXC_CHLINEFORMAT_SINGLE; }
 
     /** Returns true, if the area format is set to automatic. */
-    inline bool         IsAutoArea() const { return !mxEscherFmt && (!mxAreaFmt || mxAreaFmt->IsAuto()); }
+    bool         IsAutoArea() const { return !mxEscherFmt && (!mxAreaFmt || mxAreaFmt->IsAuto()); }
 
 protected:
     /** Converts and writes the contained line formatting to the passed property set. */
@@ -387,12 +387,12 @@ public:
     void                SetTextFormats( const XclFormatRunVec& rFormats );
 
     /** Returns the destination object (title, values, category, ...). */
-    inline sal_uInt8    GetDestType() const { return maData.mnDestType; }
+    sal_uInt8    GetDestType() const { return maData.mnDestType; }
     /** Returns the link type (to worksheet, directly, default, ...). */
-    inline sal_uInt8    GetLinkType() const { return maData.mnLinkType; }
+    sal_uInt8    GetLinkType() const { return maData.mnLinkType; }
 
     /** Returns true, if the source link contains explicit string data. */
-    inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
+    bool         HasString() const { return mxString && !mxString->IsEmpty(); }
     /** Returns explicit string data or an empty string. */
     OUString            GetString() const {
         if (mxString) return mxString->GetText();
@@ -452,7 +452,7 @@ public:
     void                ReadChFont( XclImpStream& rStrm );
 
     /** Returns the contained font index. */
-    inline sal_uInt16   GetFontIndex() const { return mnFontIdx; }
+    sal_uInt16   GetFontIndex() const { return mnFontIdx; }
 
 private:
     sal_uInt16          mnFontIdx;          /// Index into font buffer.
@@ -490,13 +490,13 @@ public:
     void                UpdateDataLabel( bool bCateg, bool bValue, bool bPercent );
 
     /** Returns the target object this text is linked to. */
-    inline sal_uInt16   GetLinkTarget() const { return maObjLink.mnTarget; }
+    sal_uInt16   GetLinkTarget() const { return maObjLink.mnTarget; }
     /** Returns the position of the data point label this text is linked to. */
-    inline const XclChDataPointPos& GetPointPos() const { return maObjLink.maPointPos; }
+    const XclChDataPointPos& GetPointPos() const { return maObjLink.maPointPos; }
     /** Returns true, if this text group contains string data. */
-    inline bool         HasString() const { return mxSrcLink && mxSrcLink->HasString(); }
+    bool         HasString() const { return mxSrcLink && mxSrcLink->HasString(); }
     /** Returns true, if the text object is marked as deleted. */
-    inline bool         IsDeleted() const { return ::get_flag( maData.mnFlags, EXC_CHTEXT_DELETED ); }
+    bool         IsDeleted() const { return ::get_flag( maData.mnFlags, EXC_CHTEXT_DELETED ); }
 
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFont( ScfPropertySet& rPropSet ) const;
@@ -545,7 +545,7 @@ public:
     void                ReadChMarkerFormat( XclImpStream& rStrm );
 
     /** Returns true, if the marker format is set to automatic. */
-    inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_AUTO ); }
+    bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_AUTO ); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
@@ -584,7 +584,7 @@ public:
     /** Reads the CHSERIESFORMAT record (additional settings for a series). */
     void                ReadChSeriesFormat( XclImpStream& rStrm );
     /** Returns true, if the series line is smoothed. */
-    inline bool         HasSpline() const { return ::get_flag( mnFlags, EXC_CHSERIESFORMAT_SMOOTHED ); }
+    bool         HasSpline() const { return ::get_flag( mnFlags, EXC_CHSERIESFORMAT_SMOOTHED ); }
 
 private:
     sal_uInt16          mnFlags;            /// Additional flags.
@@ -642,7 +642,7 @@ public:
     /** Sets this object to the specified data point position. */
     void                SetPointPos( const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx );
     /** Sets type and text formatting for a data point label (CHTEXT group). */
-    inline void         SetDataLabel( XclImpChTextRef xLabel ) { mxLabel = xLabel; }
+    void         SetDataLabel( XclImpChTextRef xLabel ) { mxLabel = xLabel; }
 
     /** Updates default data format for series group. */
     void                UpdateGroupFormat( const XclChExtTypeInfo& rTypeInfo );
@@ -654,15 +654,15 @@ public:
     void                UpdateTrendLineFormat();
 
     /** Returns the position of the data point described by this group. */
-    inline const XclChDataPointPos& GetPointPos() const { return maData.maPointPos; }
+    const XclChDataPointPos& GetPointPos() const { return maData.maPointPos; }
     /** Returns the format index of the data point described by this group. */
-    inline sal_uInt16   GetFormatIdx() const { return maData.mnFormatIdx; }
+    sal_uInt16   GetFormatIdx() const { return maData.mnFormatIdx; }
     /** Returns true, if markers are set to automatic format. */
-    inline bool         IsAutoMarker() const { return !mxMarkerFmt || mxMarkerFmt->IsAuto(); }
+    bool         IsAutoMarker() const { return !mxMarkerFmt || mxMarkerFmt->IsAuto(); }
     /** Returns true, if the series line is smoothed. */
-    inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
+    bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
     /** Returns the data label text object. */
-    inline const XclImpChText* GetDataLabel() const { return mxLabel.get(); }
+    const XclImpChText* GetDataLabel() const { return mxLabel.get(); }
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const;
@@ -698,9 +698,9 @@ public:
     /** Reads the CHSERTRENDLINE record. */
     void                ReadChSerTrendLine( XclImpStream& rStrm );
     /** Sets formatting information for the trend line. */
-    inline void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
+    void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
 
-    inline void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
+    void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
 
     /** Creates an API object representing this trend line. */
     css::uno::Reference< css::chart2::XRegressionCurve >
@@ -728,7 +728,7 @@ public:
                             XclImpChDataFormatRef const & xDataFmt );
 
     /** Returns the type of this error bar (X/Y, plus/minus). */
-    inline sal_uInt8    GetBarType() const { return maData.mnBarType; }
+    sal_uInt8    GetBarType() const { return maData.mnBarType; }
     /** Creates a labeled data sequence object from value data link. */
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateValueSequence() const;
@@ -772,18 +772,18 @@ public:
     void                FinalizeDataFormats();
 
     /** Returns the axes set identifier this series is assigned to (primary/secondary). */
-    inline sal_uInt16   GetGroupIdx() const { return mnGroupIdx; }
+    sal_uInt16   GetGroupIdx() const { return mnGroupIdx; }
     /** Returns the 0-based index of the parent series (e.g. of a trend line). */
-    inline sal_uInt16   GetParentIdx() const { return mnParentIdx; }
+    sal_uInt16   GetParentIdx() const { return mnParentIdx; }
     /** Returns true, if the series is child of another series (e.g. trend line). */
-    inline bool         HasParentSeries() const { return mnParentIdx != EXC_CHSERIES_INVALID; }
+    bool         HasParentSeries() const { return mnParentIdx != EXC_CHSERIES_INVALID; }
     /** Returns true, if the series contains child series (e.g. trend lines). */
-    inline bool         HasChildSeries() const { return !maTrendLines.empty() || !m_ErrorBars.empty(); }
+    bool         HasChildSeries() const { return !maTrendLines.empty() || !m_ErrorBars.empty(); }
     /** Returns series title or an empty string, if the series does not contain a title. */
     OUString            GetTitle() const { return mxTitleLink ? mxTitleLink->GetString() : OUString(); }
 
     /** Returns true, if the series line is smoothed. */
-    inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
+    bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
 
     /** Creates a labeled data sequence object from value data link. */
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
@@ -854,9 +854,9 @@ public:
     void                Finalize( bool bStockChart );
 
     /** Returns the record identifier of the chart type record. */
-    inline sal_uInt16   GetRecId() const { return mnRecId; }
+    sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the chart type info struct for the contained chart type. */
-    inline const XclChTypeInfo& GetTypeInfo() const { return maTypeInfo; }
+    const XclChTypeInfo& GetTypeInfo() const { return maTypeInfo; }
     /** Returns true, if the series in this chart type group are stacked on each other (no percentage). */
     bool                IsStacked() const;
     /** Returns true, if the series in this chart type group are stacked on each other as percentage. */
@@ -884,7 +884,7 @@ public:
     /** Reads the CHCHART3D record (properties for 3D charts). */
     void                ReadChChart3d( XclImpStream& rStrm );
     /** Returns true, if the data points are clustered on the X axis. */
-    inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
+    bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const;
 
@@ -974,21 +974,21 @@ public:
     sal_uInt16          PopUnusedFormatIndex();
 
     /** Returns the index of this chart type group. */
-    inline sal_uInt16   GetGroupIdx() const { return maData.mnGroupIdx; }
+    sal_uInt16   GetGroupIdx() const { return maData.mnGroupIdx; }
     /** Returns the chart type info struct for the contained chart type. */
-    inline const XclChExtTypeInfo& GetTypeInfo() const { return maTypeInfo; }
+    const XclChExtTypeInfo& GetTypeInfo() const { return maTypeInfo; }
     /** Returns true, if this chart type group contains at least one valid series. */
-    inline bool         IsValidGroup() const { return !maSeries.empty(); }
+    bool         IsValidGroup() const { return !maSeries.empty(); }
     /** Returns true, if the series in this chart type group are stacked on each other as percentage. */
-    inline bool         IsPercent() const { return maType.IsPercent(); }
+    bool         IsPercent() const { return maType.IsPercent(); }
     /** Returns true, if the chart is three-dimensional. */
-    inline bool         Is3dChart() const { return mxChart3d && maTypeInfo.mbSupports3d; }
+    bool         Is3dChart() const { return mxChart3d && maTypeInfo.mbSupports3d; }
     /** Returns true, if chart type supports wall and floor format in 3d mode. */
-    inline bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
+    bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */
-    inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d && !mxChart3d->IsClustered(); }
+    bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d && !mxChart3d->IsClustered(); }
     /** Returns true, if category (X axis) labels are enabled (may be disabled in radar charts). */
-    inline bool         HasCategoryLabels() const { return maType.HasCategoryLabels(); }
+    bool         HasCategoryLabels() const { return maType.HasCategoryLabels(); }
     /** Returns true, if points of a series show varying automatic area format. */
     bool                HasVarPointFormat() const;
     /** Returns true, if bars are connected with lines (stacked bar charts only). */
@@ -1022,7 +1022,7 @@ private:
     void                ReadChDataFormat( XclImpStream& rStrm );
 
     /** Returns true, if the chart type group contains drop bar formats. */
-    inline bool         HasDropBars() const { return !m_DropBars.empty(); }
+    bool         HasDropBars() const { return !m_DropBars.empty(); }
 
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
     void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
@@ -1103,7 +1103,7 @@ public:
     void                ReadChTick( XclImpStream& rStrm );
 
     /** Returns true, if the axis shows attached labels. */
-    inline bool         HasLabels() const { return maData.mnLabelPos != EXC_CHTICK_NOLABEL; }
+    bool         HasLabels() const { return maData.mnLabelPos != EXC_CHTICK_NOLABEL; }
     /** Returns the leading font color for the axis labels. */
     Color               GetFontColor() const;
     /** Returns the rotation value for the axis labels. */
@@ -1144,9 +1144,9 @@ public:
     virtual sal_uInt16  GetRotation() const override;
 
     /** Returns the type of this axis. */
-    inline sal_uInt16   GetAxisType() const { return maData.mnType; }
+    sal_uInt16   GetAxisType() const { return maData.mnType; }
     /** Returns the axis dimension index used by the chart API. */
-    inline sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
+    sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
 
     /** Creates an API axis object. */
     css::uno::Reference< css::chart2::XAxis >
@@ -1196,11 +1196,11 @@ public:
     void                Finalize();
 
     /** Returns true, if this axes set exists (returns false if this is a dummy object). */
-    inline bool         IsValidAxesSet() const { return !maTypeGroups.empty(); }
+    bool         IsValidAxesSet() const { return !maTypeGroups.empty(); }
     /** Returns the index of the axes set (primary/secondary). */
-    inline sal_uInt16   GetAxesSetId() const { return maData.mnAxesSetId; }
+    sal_uInt16   GetAxesSetId() const { return maData.mnAxesSetId; }
     /** Returns the axes set index used by the chart API. */
-    inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
+    sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
 
     /** Returns the outer plot area position, if existing. */
     const XclImpChFramePosRef& GetPlotAreaFramePos() const { return mxFramePos; }
@@ -1291,7 +1291,7 @@ public:
     /** Returns true, if the plot area has benn moved and/or resized manually. */
     bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
-    static inline std::size_t GetProgressSize() { return 2 * EXC_CHART_PROGRESS_SIZE; }
+    static std::size_t GetProgressSize() { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert(
@@ -1383,7 +1383,7 @@ public:
     /** Returns the number of units on the progress bar needed for the chart. */
     std::size_t         GetProgressSize() const;
     /** Returns true, if the chart is based on a pivot table. */
-    inline bool         IsPivotChart() const { return mbIsPivotChart; }
+    bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
     void                Convert( css::uno::Reference< css::frame::XModel > const & xModel,

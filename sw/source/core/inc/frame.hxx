@@ -411,14 +411,14 @@ public:
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;
-    inline bool IsCompletePaint() const { return mbCompletePaint; }
+    bool IsCompletePaint() const { return mbCompletePaint; }
 
     inline void SetRetouche() const;
     inline void ResetRetouche() const;
-    inline bool IsRetouche() const { return mbRetouche; }
+    bool IsRetouche() const { return mbRetouche; }
 
     void SetInfFlags();
-    inline void InvalidateInfFlags() { mbInfInvalid = true; }
+    void InvalidateInfFlags() { mbInfInvalid = true; }
     inline bool IsInDocBody() const;    // use InfoFlags, determine flags
     inline bool IsInFootnote() const;        // if necessary
     inline bool IsInTab() const;
@@ -435,15 +435,15 @@ public:
 
     bool IsInBalancedSection() const;
 
-    inline bool IsReverse() const { return mbReverse; }
+    bool IsReverse() const { return mbReverse; }
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
 
-    inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
-    inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
+    void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
+    void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
     inline bool IsRightToLeft() const;
-    inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew; }
+    void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew; }
 
     void CheckDirChange();
     // returns upper left frame position for LTR and
@@ -477,7 +477,7 @@ public:
 
     const SwAttrSet *GetAttrSet() const;
 
-    inline bool HasFixSize() const { return mbFixSize; }
+    bool HasFixSize() const { return mbFixSize; }
 
     // check all pages (starting from the given) and correct them if needed
     static void CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields = true, SwPageFrame** ppPrev = nullptr);
@@ -732,11 +732,11 @@ public:
     void MakeUpperPos( const SwFrame*, const SwFrame*, bool );
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
-    inline bool IsNeighbourFrame() const
+    bool IsNeighbourFrame() const
         { return bool(GetType() & FRM_NEIGHBOUR); }
 
     // #i65250#
-    inline sal_uInt32 GetFrameId() const { return mnFrameId; }
+    sal_uInt32 GetFrameId() const { return mnFrameId; }
 
     // NEW TABLES
     // Some functions for covered/covering table cells. This way unnecessary

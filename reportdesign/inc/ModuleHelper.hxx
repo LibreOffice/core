@@ -67,8 +67,8 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OModuleClient
     {
     public:
-        inline OModuleClient()      { OModule::registerClient(); }
-        inline ~OModuleClient() { OModule::revokeClient(); }
+        OModuleClient()      { OModule::registerClient(); }
+        ~OModuleClient() { OModule::revokeClient(); }
     };
 
 
@@ -79,7 +79,7 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        inline ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
+        ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
 }   // namespace rptui

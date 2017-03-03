@@ -548,7 +548,7 @@ namespace dbmm
         /** determines whether the instance is valid, i.e. refers to a valid root storage
             for reading/storing scripts
         */
-        inline bool isValid() const { return m_xScriptsStorage.is(); }
+        bool isValid() const { return m_xScriptsStorage.is(); }
 
         /** binds the instance to a new document. Only to be called when the instance is not yet
             bound (i.e. isValid returns <FALSE/>).
@@ -780,8 +780,8 @@ namespace dbmm
             MigrationLog& _rLogger
         );
 
-        inline  size_t      getFormCount() const    { return m_nFormCount; }
-        inline  size_t      getReportCount()const   { return m_nReportCount; }
+        size_t      getFormCount() const    { return m_nFormCount; }
+        size_t      getReportCount()const   { return m_nReportCount; }
         bool    migrateAll();
 
     private:

@@ -103,9 +103,9 @@ public:
 
     virtual                     ~FormulaToken();
 
-    inline  void                Delete()                { delete this; }
-    inline  void                DeleteIfZeroRef()       { if (mnRefCnt == 0) delete this; }
-    inline  StackVar            GetType() const         { return eType; }
+    void                Delete()                { delete this; }
+    void                DeleteIfZeroRef()       { if (mnRefCnt == 0) delete this; }
+    StackVar            GetType() const         { return eType; }
             bool                IsFunction() const; // pure functions, no operators
 
     bool IsExternalRef() const;
@@ -113,19 +113,19 @@ public:
 
             sal_uInt8           GetParamCount() const;
 
-    inline void IncRef() const
+    void IncRef() const
     {
         osl_atomic_increment(&mnRefCnt);
     }
 
-    inline void DecRef() const
+    void DecRef() const
     {
         if (!osl_atomic_decrement(&mnRefCnt))
             const_cast<FormulaToken*>(this)->Delete();
     }
 
-    inline oslInterlockedCount GetRef() const       { return mnRefCnt; }
-    inline OpCode              GetOpCode() const    { return eOp; }
+    oslInterlockedCount GetRef() const       { return mnRefCnt; }
+    OpCode              GetOpCode() const    { return eOp; }
 
     /**
         Dummy methods to avoid switches and casts where possible,
@@ -190,7 +190,7 @@ public:
 
     /** This is dirty and only the compiler should use it! */
     struct PrivateAccess { friend class FormulaCompiler; private: PrivateAccess() { }  };
-    inline  void                NewOpCode( OpCode e, const PrivateAccess&  ) { eOp = e; }
+    void                NewOpCode( OpCode e, const PrivateAccess&  ) { eOp = e; }
 };
 
 inline void intrusive_ptr_add_ref(const FormulaToken* p)

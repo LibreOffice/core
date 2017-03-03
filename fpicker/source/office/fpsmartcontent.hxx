@@ -113,25 +113,25 @@ namespace svt
 
             @seealso State
         */
-        inline  State       getState( ) const { return m_eState; }
+        State       getState( ) const { return m_eState; }
 
         /** checks if the content is valid
             <p>Note that "not (is valid)" is not the same as "is invalid"</p>
         */
-        inline  bool    isValid( ) const { return VALID == getState(); }
+        bool    isValid( ) const { return VALID == getState(); }
 
         /** checks if the content is valid
             <p>Note that "not (is invalid)" is not the same as "is valid"</p>
         */
-        inline  bool    isInvalid( ) const { return INVALID == getState(); }
+        bool    isInvalid( ) const { return INVALID == getState(); }
 
         /** checks if the content is bound
         */
-        inline  bool    isBound( ) const { return NOT_BOUND != getState(); }
+        bool    isBound( ) const { return NOT_BOUND != getState(); }
 
         /** returns the URL of the content
         */
-        inline OUString  getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
+        OUString  getURL() const { return m_pContent ? m_pContent->getURL() : m_sURL; }
 
         /** (re)creates the content for the given URL
 
@@ -175,19 +175,19 @@ namespace svt
             @postcond
                 the content is not in the state UNKNOWN
         */
-        inline  bool    isFolder( const OUString& _rURL )
+        bool    isFolder( const OUString& _rURL )
         {
             return implIs( _rURL, Folder );
         }
 
         /** checks if the content is existent (it is if and only if it is a document or a folder)
         */
-        inline  bool    is( const OUString& _rURL )
+        bool    is( const OUString& _rURL )
         {
             return  implIs( _rURL, Folder ) || implIs( _rURL, Document );
         }
 
-        inline  bool    isFolder( )     { return isFolder( getURL() ); }
+        bool    isFolder( )     { return isFolder( getURL() ); }
     };
 
 

@@ -52,15 +52,15 @@ public:
 
     void pop_back ();
 
-    inline bool empty () const { return maObjs.empty(); }
+    bool empty () const { return maObjs.empty(); }
 
-    inline size_t size () const { return maObjs.size(); }
+    size_t size () const { return maObjs.size(); }
 
-    inline iterator begin () { return maObjs.begin(); }
+    iterator begin () { return maObjs.begin(); }
 
-    inline iterator end () { return maObjs.end(); }
+    iterator end () { return maObjs.end(); }
 
-    inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+    XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
                                 /// close groups and DgContainer opened in ctor
     void                EndSheet();
@@ -115,25 +115,25 @@ protected:
 public:
     virtual                     ~XclObj() override;
 
-    inline sal_uInt16           GetObjType() const { return mnObjType; }
+    sal_uInt16           GetObjType() const { return mnObjType; }
 
-    inline  void                SetId( sal_uInt16 nId ) { nObjId = nId; }
+    void                SetId( sal_uInt16 nId ) { nObjId = nId; }
 
-    inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
-    inline  SCTAB               GetTab() const          { return mnScTab; }
+    void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
+    SCTAB               GetTab() const          { return mnScTab; }
 
-    inline  void                SetLocked( bool b )
+    void                SetLocked( bool b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
-    inline  void                SetPrintable( bool b )
+    void                SetPrintable( bool b )
                                     { b ? nGrbit |= 0x0010 : nGrbit &= ~0x0010; }
-    inline  void                SetAutoFill( bool b )
+    void                SetAutoFill( bool b )
                                     { b ? nGrbit |= 0x2000 : nGrbit &= ~0x2000; }
-    inline  void                SetAutoLine( bool b )
+    void                SetAutoLine( bool b )
                                     { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
 
                                 // set corresponding Excel object type in OBJ/ftCmo
             void                SetEscherShapeType( sal_uInt16 nType );
-    inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJTYPE_GROUP; }
+    void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJTYPE_GROUP; }
 
     /** If set to true, this object has created its own escher data.
         @descr  This causes the function EscherEx::EndShape() to not post process
@@ -144,7 +144,7 @@ public:
         EscherEx::EndShape(). */
     /** Returns true, if the object has created the escher data itself.
         @descr  See SetOwnEscher() for details. */
-    inline bool                 IsOwnEscher() const { return mbOwnEscher; }
+    bool                 IsOwnEscher() const { return mbOwnEscher; }
 
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
@@ -203,8 +203,8 @@ public:
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
                                 XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 
-    inline void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
-    inline void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
+    void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
+    void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
 
     virtual void                Save( XclExpStream& rStrm ) override;
 
@@ -358,7 +358,7 @@ protected:
 public:
                                 ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt );
 
-    inline std::size_t          GetStringBytes() const
+    std::size_t          GetStringBytes() const
                                     { return sText.GetSize(); }
 
     void                        WriteAddress( XclExpStream& rStrm ) const ;

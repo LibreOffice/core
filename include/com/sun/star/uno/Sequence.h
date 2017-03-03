@@ -62,13 +62,13 @@ public:
     /// @cond INTERNAL
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( ::size_t nSize )
+    static void * SAL_CALL operator new ( ::size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( ::size_t, void * pMem )
+    static void * SAL_CALL operator new ( ::size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
 
     /** Static pointer to typelib type of sequence.
@@ -140,7 +140,7 @@ public:
 
         @return length of sequence
     */
-    inline sal_Int32 SAL_CALL getLength() const
+    sal_Int32 SAL_CALL getLength() const
         { return _pSequence->nElements; }
 
     /** Tests whether the sequence has elements, i.e. elements count is
@@ -148,7 +148,7 @@ public:
 
         @return true, if elements count is greater than zero
     */
-    inline bool SAL_CALL hasElements() const
+    bool SAL_CALL hasElements() const
         { return (_pSequence->nElements > 0); }
 
     /** Gets a pointer to elements array for reading.
@@ -157,7 +157,7 @@ public:
 
         @return pointer to elements array
     */
-    inline const E * SAL_CALL getConstArray() const
+    const E * SAL_CALL getConstArray() const
         { return reinterpret_cast< const E * >( _pSequence->elements ); }
 
     /** Gets a pointer to elements array for reading and writing.
@@ -249,7 +249,7 @@ public:
 
         @return UNacquired sequence handle
     */
-    inline uno_Sequence * SAL_CALL get() const
+    uno_Sequence * SAL_CALL get() const
         { return _pSequence; }
 };
 

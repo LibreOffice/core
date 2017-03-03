@@ -49,7 +49,7 @@ public:
     virtual void MarkListHasChanged() override;
     virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) override;
 
-    inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
+    OReportSection*  getReportSection() const { return m_pSectionWindow; }
 
     // switch the marked objects to the given layer.
     void SetMarkedToLayer( SdrLayerID nLayerNo );

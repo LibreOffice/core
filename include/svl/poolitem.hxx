@@ -173,7 +173,7 @@ public:
     SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
-    inline SfxItemKind       GetKind() const { return m_nKind; }
+    SfxItemKind       GetKind() const { return m_nKind; }
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:

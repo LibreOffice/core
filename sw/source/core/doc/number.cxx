@@ -1049,17 +1049,17 @@ namespace numfunc
                 return msFontname;
             }
 
-            inline bool IsFontnameUserDefined() const
+            bool IsFontnameUserDefined() const
             {
                 return mbUserDefinedFontname;
             }
 
-            inline const vcl::Font& GetFont() const
+            const vcl::Font& GetFont() const
             {
                 return *mpFont;
             }
 
-            inline sal_Unicode GetChar( sal_uInt8 p_nListLevel ) const
+            sal_Unicode GetChar( sal_uInt8 p_nListLevel ) const
             {
                 if (p_nListLevel >= MAXLEVEL)
                 {
@@ -1275,7 +1275,7 @@ namespace numfunc
         public:
             static SwNumberingUIBehaviorConfig& getInstance();
 
-            inline bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
+            bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
             {
                 return mbChangeIndentOnTabAtFirstPosOfFirstListItem;
             }

@@ -163,7 +163,7 @@ struct PropInfo
     PropType            meType;
     sal_uInt16          mnId;
     sal_uInt32          mnSize;
-    inline explicit     PropInfo( const OUString& rName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
+    explicit     PropInfo( const OUString& rName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
                             maName( rName ), meType( eType ), mnId( nId ), mnSize( nSize ) {}
 };
 

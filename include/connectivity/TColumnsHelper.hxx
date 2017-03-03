@@ -55,7 +55,7 @@ namespace connectivity
             @param  _pTable
                 The parent.
         */
-        inline void setParent(OTableHelper* _pTable) { m_pTable = _pTable;}
+        void setParent(OTableHelper* _pTable) { m_pTable = _pTable;}
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TCOLUMNSHELPER_HXX

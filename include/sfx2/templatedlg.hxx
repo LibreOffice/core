@@ -167,15 +167,15 @@ public:
 
     void HideNewCategoryOption();
 
-    inline const OUString& GetSelectedCategory() const {
+    const OUString& GetSelectedCategory() const {
         return msSelectedCategory;
     };
 
-    inline void SetSelectLabelText(OUString const & sText) const {
+    void SetSelectLabelText(OUString const & sText) const {
         mpSelectLabel->SetText(sText);
     };
 
-    inline bool IsNewCategoryCreated() const {
+    bool IsNewCategoryCreated() const {
         return mbIsNewCategory;
     }
 
@@ -199,8 +199,8 @@ public:
     virtual void dispose() override;
     virtual short Execute() override;
 
-    inline OUString const & getTemplatePath() const { return msTemplatePath; };
-    inline bool IsStartWithTemplate() const { return mpCBXHideDlg->IsChecked(); };
+    OUString const & getTemplatePath() const { return msTemplatePath; };
+    bool IsStartWithTemplate() const { return mpCBXHideDlg->IsChecked(); };
 
 private:
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);

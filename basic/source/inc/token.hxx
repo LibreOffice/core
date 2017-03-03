@@ -146,8 +146,8 @@ public:
     SbiTokenizer( const OUString&, StarBASIC* = nullptr );
    ~SbiTokenizer();
 
-    inline bool IsEof()             { return bEof; }
-    inline bool IsEos()             { return bEos; }
+    bool IsEof()             { return bEof; }
+    bool IsEos()             { return bEos; }
 
     void  Push( SbiToken );
     const OUString& Symbol( SbiToken );   // reconversion

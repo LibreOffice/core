@@ -86,7 +86,7 @@ namespace dbaui
         virtual void cut() override;
         virtual void paste() override;
 
-        inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
+        OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
 
     };
 }

@@ -55,7 +55,7 @@ class SwXMLTableContext : public XMLTextTableContext
     struct ColumnWidthInfo {
         sal_uInt16 width;      //!< Column width (absolute or relative).
         bool   isRelative; //!< True for a relative width, false for absolute.
-        inline ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
+        ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
     };
     std::vector<ColumnWidthInfo> m_aColumnWidths;
     std::vector<OUString> *m_pColumnDefaultCellStyleNames;

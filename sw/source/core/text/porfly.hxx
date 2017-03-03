@@ -35,8 +35,8 @@ class SwFlyPortion : public SwFixPortion
 public:
     explicit SwFlyPortion( const SwRect &rFlyRect )
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
-    inline sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
-    inline void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
+    sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
+    void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     OUTPUT_OPERATOR_OVERRIDE
@@ -53,11 +53,11 @@ class SwFlyCntPortion : public SwLinePortion
 
 public:
     SwFlyCntPortion();
-    inline const Point& GetRefPoint() const { return m_aRef; }
-    inline bool IsMax() const { return m_bMax; }
-    inline sw::LineAlign GetAlign() const { return m_eAlign; }
-    inline void SetAlign(sw::LineAlign eAlign) { m_eAlign = eAlign; }
-    inline void SetMax(bool bMax) { m_bMax = bMax; }
+    const Point& GetRefPoint() const { return m_aRef; }
+    bool IsMax() const { return m_bMax; }
+    sw::LineAlign GetAlign() const { return m_eAlign; }
+    void SetAlign(sw::LineAlign eAlign) { m_eAlign = eAlign; }
+    void SetMax(bool bMax) { m_bMax = bMax; }
     void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;
     OUTPUT_OPERATOR_OVERRIDE
@@ -72,7 +72,7 @@ namespace sw
         public:
             FlyContentPortion(SwFlyInContentFrame* pFly);
             static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nAscent, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
-            inline SwFlyInContentFrame* GetFlyFrame() { return m_pFly; }
+            SwFlyInContentFrame* GetFlyFrame() { return m_pFly; }
             void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetCursorOfst(&rPos, rPoint, pCMS); };
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~FlyContentPortion() override;

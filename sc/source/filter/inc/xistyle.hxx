@@ -57,7 +57,7 @@ public:
     /** Returns the color for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
-    inline Color        GetColor( sal_uInt16 nXclIndex ) const
+    Color        GetColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetColorData( nXclIndex ) ); }
 
     /** Reads a PALETTE record. */
@@ -89,16 +89,16 @@ public:
     void                SetFontData( const XclFontData& rFontData, bool bHasCharSet );
 
     /** Returns read-only access to font data. */
-    inline const XclFontData& GetFontData() const { return maData; }
+    const XclFontData& GetFontData() const { return maData; }
     /** Returns true, if the font character set is valid. */
-    inline bool         HasCharSet() const { return mbHasCharSet; }
+    bool         HasCharSet() const { return mbHasCharSet; }
     /** Returns true, if the font contains superscript or subscript. */
-    inline bool         HasEscapement() const { return maData.mnEscapem != EXC_FONTESC_NONE; }
+    bool         HasEscapement() const { return maData.mnEscapem != EXC_FONTESC_NONE; }
     /** Returns the text encoding for strings used with this font. */
     rtl_TextEncoding    GetFontEncoding() const;
 
     /** Returns true, if this font contains characters for Asian scripts (CJK). */
-    inline bool         HasAsianChars() const { return mbHasAsian; }
+    bool         HasAsianChars() const { return mbHasAsian; }
 
     /** Reads a FONT record for all BIFF versions. */
     void                ReadFont( XclImpStream& rStrm );
@@ -171,7 +171,7 @@ public:
     /** Returns the object that stores all contents of a FONT record. */
     const XclImpFont*   GetFont( sal_uInt16 nFontIndex ) const;
     /** Returns the application font data of this file, needed i.e. for column width. */
-    inline const XclFontData& GetAppFontData() const { return maAppFont; }
+    const XclFontData& GetAppFontData() const { return maAppFont; }
 
     /** Reads a FONT record. */
     void                ReadFont( XclImpStream& rStrm );
@@ -362,11 +362,11 @@ struct XclImpCellArea : public XclCellArea
 class XclImpXFIndex
 {
 public:
-    inline explicit     XclImpXFIndex( sal_uInt16 nXFIndex, bool bBoolCell = false ) :
+    explicit     XclImpXFIndex( sal_uInt16 nXFIndex, bool bBoolCell = false ) :
                             mnXFIndex( nXFIndex ), mbBoolCell( bBoolCell ) {}
 
-    inline sal_uInt16   GetXFIndex() const { return mnXFIndex; }
-    inline bool         IsBoolCell() const { return mbBoolCell; }
+    sal_uInt16   GetXFIndex() const { return mnXFIndex; }
+    bool         IsBoolCell() const { return mbBoolCell; }
 
 private:
     sal_uInt16          mnXFIndex;      /// The XF record index.
@@ -393,8 +393,8 @@ public:
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );
 
-    inline sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
-    inline sal_uInt16   GetFontIndex() const { return mnXclFont; }
+    sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
+    sal_uInt16   GetFontIndex() const { return mnXclFont; }
 
     /** Creates a Calc item set containing an item set with all cell properties.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items.
@@ -453,11 +453,11 @@ public:
     /** Reads a STYLE record. */
     void                ReadStyle( XclImpStream& rStrm );
 
-    inline const OUString& GetName() const { return maName; }
-    inline sal_uInt16   GetXfId() const { return mnXfId; }
-    inline bool         IsBuiltin() const { return mbBuiltin && (mnBuiltinId != EXC_STYLE_USERDEF); }
-    inline sal_uInt8    GetBuiltinId() const { return mnBuiltinId; }
-    inline sal_uInt8    GetLevel() const { return mnLevel; }
+    const OUString& GetName() const { return maName; }
+    sal_uInt16   GetXfId() const { return mnXfId; }
+    bool         IsBuiltin() const { return mbBuiltin && (mnBuiltinId != EXC_STYLE_USERDEF); }
+    sal_uInt8    GetBuiltinId() const { return mnBuiltinId; }
+    sal_uInt8    GetLevel() const { return mnLevel; }
 
     /** Creates a cell style sheet and inserts it into the Calc document.
         @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
@@ -498,10 +498,10 @@ public:
     void                ReadStyle( XclImpStream& rStrm );
 
     /** Returns the object that stores all contents of an XF record. */
-    inline XclImpXF*    GetXF( sal_uInt16 nXFIndex )
+    XclImpXF*    GetXF( sal_uInt16 nXFIndex )
                             { return (nXFIndex >= maXFList.size()) ? nullptr : maXFList.at(nXFIndex).get(); }
 
-    inline const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
+    const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
                             { return (nXFIndex >= maXFList.size()) ? nullptr : maXFList.at(nXFIndex).get(); }
 
     /** Returns the index to the Excel font used in the specified XF record. */
@@ -578,7 +578,7 @@ public:
 
     typedef std::vector< std::unique_ptr<XclImpXFRange> > IndexList;
 
-    inline explicit     XclImpXFRangeColumn() {}
+    explicit     XclImpXFRangeColumn() {}
 
     IndexList::iterator begin() { return maIndexList.begin(); }
     IndexList::iterator end() { return maIndexList.end(); }

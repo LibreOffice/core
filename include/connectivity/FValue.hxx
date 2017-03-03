@@ -278,13 +278,13 @@ namespace connectivity
             free();
         }
 
-        inline static void * SAL_CALL operator new( size_t nSize )
+        static void * SAL_CALL operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t,void* _pHint )
+        static void * SAL_CALL operator new( size_t,void* _pHint )
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem )
+        static void SAL_CALL operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void *,void* )
+        static void SAL_CALL operator delete( void *,void* )
             {  }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);
@@ -456,16 +456,16 @@ namespace connectivity
         ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(true);}
         ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
 
-        inline operator const ORowSetValue&()   const               { return m_aValue; }
-        inline bool operator ==( const ORowSetValue & _rRH )        { return m_aValue == _rRH; }
-        inline const ORowSetValue& getValue()   const               { return m_aValue; }
-        inline ORowSetValue& get()                                  { return m_aValue; }
-        inline void setValue(const ORowSetValue& _aValue)           { m_aValue = _aValue; }
-        inline void setNull()                                       { m_aValue.setNull(); }
-        inline void setBound(bool _bBound )                         { m_aValue.setBound(_bBound);}
-        inline bool isBound( ) const                                { return m_aValue.isBound();}
-        inline void setTypeKind(sal_Int32 _nType)                   { m_aValue.setTypeKind(_nType); }
-        inline void setModified(bool _bModified)                    { m_aValue.setModified(_bModified); }
+        operator const ORowSetValue&()   const               { return m_aValue; }
+        bool operator ==( const ORowSetValue & _rRH )        { return m_aValue == _rRH; }
+        const ORowSetValue& getValue()   const               { return m_aValue; }
+        ORowSetValue& get()                                  { return m_aValue; }
+        void setValue(const ORowSetValue& _aValue)           { m_aValue = _aValue; }
+        void setNull()                                       { m_aValue.setNull(); }
+        void setBound(bool _bBound )                         { m_aValue.setBound(_bBound);}
+        bool isBound( ) const                                { return m_aValue.isBound();}
+        void setTypeKind(sal_Int32 _nType)                   { m_aValue.setTypeKind(_nType); }
+        void setModified(bool _bModified)                    { m_aValue.setModified(_bModified); }
 
     };
     typedef ::rtl::Reference<ORowSetValueDecorator> ORowSetValueDecoratorRef;

@@ -110,12 +110,12 @@ class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC AbortChannel :
     css::uno::Reference<css::task::XAbortChannel> m_xNext;
 
 public:
-    inline AbortChannel() : m_aborted( false ) {}
-    inline static AbortChannel * get(
+    AbortChannel() : m_aborted( false ) {}
+    static AbortChannel * get(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel )
         { return static_cast<AbortChannel *>(xAbortChannel.get()); }
 
-    inline bool isAborted() const { return m_aborted; }
+    bool isAborted() const { return m_aborted; }
 
     // XAbortChannel
     virtual void SAL_CALL sendAbort() override;
@@ -124,12 +124,12 @@ public:
     {
         const ::rtl::Reference<AbortChannel> m_abortChannel;
     public:
-        inline Chain(
+        Chain(
             ::rtl::Reference<AbortChannel> const & abortChannel,
             css::uno::Reference<css::task::XAbortChannel> const & xNext )
             : m_abortChannel( abortChannel )
             { if (m_abortChannel.is()) m_abortChannel->m_xNext = xNext; }
-        inline ~Chain()
+        ~Chain()
             { if (m_abortChannel.is()) m_abortChannel->m_xNext.clear(); }
     };
     friend class Chain;

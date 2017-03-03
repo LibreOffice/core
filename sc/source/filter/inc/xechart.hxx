@@ -84,7 +84,7 @@ public:
     virtual             ~XclExpChRoot() override;
 
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclExpChRoot& GetChRoot() const { return *this; }
+    const XclExpChRoot& GetChRoot() const { return *this; }
     /** Returns the API Chart document model. */
     css::uno::Reference< css::chart2::XChartDocument > const &
                         GetChartDocument() const;
@@ -204,7 +204,7 @@ public:
     explicit            XclExpChFramePos( sal_uInt16 nTLMode );
 
     /** Returns read/write access to the frame position data. */
-    inline XclChFramePos& GetFramePosData() { return maData; }
+    XclChFramePos& GetFramePosData() { return maData; }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
@@ -224,17 +224,17 @@ public:
     void                Convert( const XclExpChRoot& rRoot,
                             const ScfPropertySet& rPropSet, XclChObjectType eObjType );
     /** Sets or clears the automatic flag. */
-    inline void         SetAuto( bool bAuto ) { ::set_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO, bAuto ); }
+    void         SetAuto( bool bAuto ) { ::set_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO, bAuto ); }
     /** Sets flag to show or hide an axis. */
-    inline void         SetShowAxis( bool bShowAxis )
+    void         SetShowAxis( bool bShowAxis )
                             { ::set_flag( maData.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS, bShowAxis ); }
     /** Sets the line format to the specified default type. */
     void                SetDefault( XclChFrameType eDefFrameType );
 
     /** Returns true, if the line format is set to automatic. */
-    inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO ); }
+    bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_AUTO ); }
     /** Returns true, if the line style is set to something visible. */
-    inline bool         HasLine() const { return maData.mnPattern != EXC_CHLINEFORMAT_NONE; }
+    bool         HasLine() const { return maData.mnPattern != EXC_CHLINEFORMAT_NONE; }
     /** Returns true, if the line contains default formatting according to the passed frame type. */
     bool                IsDefault( XclChFrameType eDefFrameType ) const;
 
@@ -258,14 +258,14 @@ public:
     bool                Convert( const XclExpChRoot& rRoot,
                             const ScfPropertySet& rPropSet, XclChObjectType eObjType );
     /** Sets or clears the automatic flag. */
-    inline void         SetAuto( bool bAuto ) { ::set_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO, bAuto ); }
+    void         SetAuto( bool bAuto ) { ::set_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO, bAuto ); }
     /** Sets the area format to the specified default type. */
     void                SetDefault( XclChFrameType eDefFrameType );
 
     /** Returns true, if the area format is set to automatic. */
-    inline bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO ); }
+    bool         IsAuto() const { return ::get_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO ); }
     /** Returns true, if the area style is set to something visible. */
-    inline bool         HasArea() const { return maData.mnPattern != EXC_PATT_NONE; }
+    bool         HasArea() const { return maData.mnPattern != EXC_PATT_NONE; }
     /** Returns true, if the area contains default formatting according to the passed frame type. */
     bool                IsDefault( XclChFrameType eDefFrameType ) const;
 
@@ -399,7 +399,7 @@ public:
     void                AppendString( const OUString& rStr );
 
     /** Returns true, if this source link contains explicit string data. */
-    inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
+    bool         HasString() const { return mxString && !mxString->IsEmpty(); }
 
     /** Writes the CHSOURCELINK record and optionally a CHSTRING record with explicit string data. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -507,7 +507,7 @@ public:
     void                ConvertTrendLineEquation( const ScfPropertySet& rPropSet, const XclChDataPointPos& rPointPos );
 
     /** Returns true, if the string object does not contain any text data. */
-    inline bool         HasString() const { return mxSrcLink && mxSrcLink->HasString(); }
+    bool         HasString() const { return mxSrcLink && mxSrcLink->HasString(); }
     /** Returns the flags needed for the CHATTACHEDLABEL record. */
     sal_uInt16          GetAttLabelFlags() const;
 
@@ -546,11 +546,11 @@ public:
                             const ScfPropertySet& rPropSet, bool bCloseSymbol );
 
     /** Returns true, if markers are enabled. */
-    inline bool         HasMarker() const { return maData.mnMarkerType != EXC_CHMARKERFORMAT_NOSYMBOL; }
+    bool         HasMarker() const { return maData.mnMarkerType != EXC_CHMARKERFORMAT_NOSYMBOL; }
     /** Returns true, if border line of markers is visible. */
-    inline bool         HasLineColor() const { return !::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_NOLINE ); }
+    bool         HasLineColor() const { return !::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_NOLINE ); }
     /** Returns true, if fill area of markers is visible. */
-    inline bool         HasFillColor() const { return !::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_NOFILL ); }
+    bool         HasFillColor() const { return !::get_flag( maData.mnFlags, EXC_CHMARKERFORMAT_NOFILL ); }
 
 private:
     /** Registers marker colors in palette and stores color identifiers. */
@@ -625,7 +625,7 @@ public:
     void                ConvertLine( const ScfPropertySet& rPropSet, XclChObjectType eObjType );
 
     /** Returns true, if this objects describes the formatting of an entire series. */
-    inline bool         IsSeriesFormat() const { return maData.maPointPos.mnPointIdx == EXC_CHDATAFORMAT_ALLPOINTS; }
+    bool         IsSeriesFormat() const { return maData.maPointPos.mnPointIdx == EXC_CHDATAFORMAT_ALLPOINTS; }
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm ) override;
@@ -772,9 +772,9 @@ public:
     void                SetStacked( bool bPercent );
 
     /** Returns true, if this is object represents a valid chart type. */
-    inline bool         IsValidType() const { return maTypeInfo.meTypeId != EXC_CHTYPEID_UNKNOWN; }
+    bool         IsValidType() const { return maTypeInfo.meTypeId != EXC_CHTYPEID_UNKNOWN; }
     /** Returns the chart type info struct for the contained chart type. */
-    inline const XclChTypeInfo& GetTypeInfo() const { return maTypeInfo; }
+    const XclChTypeInfo& GetTypeInfo() const { return maTypeInfo; }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
@@ -793,10 +793,10 @@ public:
     /** Converts 3d settings for the passed chart type. */
     void                Convert( const ScfPropertySet& rPropSet, bool b3dWallChart );
     /** Sets flag that the data points are clustered on the X axis. */
-    inline void         SetClustered() { ::set_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
+    void         SetClustered() { ::set_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
 
     /** Returns true, if the data points are clustered on the X axis. */
-    inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
+    bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
@@ -887,19 +887,19 @@ public:
     void                ConvertLegend( const ScfPropertySet& rPropSet );
 
     /** Returns true, if this chart type group contains at least one valid series. */
-    inline bool         IsValidGroup() const { return !maSeries.IsEmpty() && maType.IsValidType(); }
+    bool         IsValidGroup() const { return !maSeries.IsEmpty() && maType.IsValidType(); }
     /** Returns the index of this chart type group format. */
-    inline sal_uInt16   GetGroupIdx() const { return maData.mnGroupIdx; }
+    sal_uInt16   GetGroupIdx() const { return maData.mnGroupIdx; }
     /** Returns the chart type info struct for the contained chart type. */
-    inline const XclChExtTypeInfo& GetTypeInfo() const { return maTypeInfo; }
+    const XclChExtTypeInfo& GetTypeInfo() const { return maTypeInfo; }
     /** Returns true, if the chart is three-dimensional. */
-    inline bool         Is3dChart() const { return maTypeInfo.mb3dChart; }
+    bool         Is3dChart() const { return maTypeInfo.mb3dChart; }
     /** Returns true, if chart type supports wall and floor format. */
-    inline bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
+    bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */
-    inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d && !mxChart3d->IsClustered(); }
+    bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d && !mxChart3d->IsClustered(); }
     /** Returns true, if this chart type can be combined with other types. */
-    inline bool         IsCombinable2d() const { return !Is3dChart() && maTypeInfo.mbCombinable2d; }
+    bool         IsCombinable2d() const { return !Is3dChart() && maTypeInfo.mbCombinable2d; }
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm ) override;
@@ -949,7 +949,7 @@ public:
     /** Converts position settings of a crossing axis at this axis. */
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
     /** Sets flag for tickmark position between categories or on categories. */
-    inline void         SetTicksBetweenCateg( bool bTicksBetween )
+    void         SetTicksBetweenCateg( bool bTicksBetween )
                             { ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
 
 private:
@@ -1029,9 +1029,9 @@ public:
     void                ConvertWall( css::uno::Reference< css::chart2::XDiagram > const & xDiagram );
 
     /** Returns the type of this axis. */
-    inline sal_uInt16   GetAxisType() const { return maData.mnType; }
+    sal_uInt16   GetAxisType() const { return maData.mnType; }
     /** Returns the axis dimension index used by the chart API. */
-    inline sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
+    sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm ) override;
@@ -1071,11 +1071,11 @@ public:
                                  sal_uInt16 nFirstGroupIdx );
 
     /** Returns true, if this axes set exists (returns false if this is a dummy object). */
-    inline bool         IsValidAxesSet() const { return !maTypeGroups.IsEmpty(); }
+    bool         IsValidAxesSet() const { return !maTypeGroups.IsEmpty(); }
     /** Returns the index of the axes set (primary/secondary). */
-    inline sal_uInt16   GetAxesSetId() const { return maData.mnAxesSetId; }
+    sal_uInt16   GetAxesSetId() const { return maData.mnAxesSetId; }
     /** Returns the axes set index used by the chart API. */
-    inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
+    sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
     /** Returns true, if the chart is three-dimensional. */
     bool                Is3dChart() const;
 

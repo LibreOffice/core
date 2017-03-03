@@ -329,10 +329,10 @@ public:
     SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
     virtual ~SwBorderAttrs() override;
 
-    inline const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
-    inline const SvxULSpaceItem &GetULSpace() const { return m_rUL;       }
-    inline const SvxBoxItem     &GetBox()     const { return m_rBox;      }
-    inline const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
+    const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
+    const SvxULSpaceItem &GetULSpace() const { return m_rUL;       }
+    const SvxBoxItem     &GetBox()     const { return m_rBox;      }
+    const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
 
     inline sal_uInt16 CalcTopLine() const;
     inline sal_uInt16 CalcBottomLine() const;
@@ -345,9 +345,9 @@ public:
 
     inline bool IsLine() const;
 
-    inline const Size &GetSize()     const { return m_aFrameSize; }
+    const Size &GetSize()     const { return m_aFrameSize; }
 
-    inline bool IsBorderDist() const { return m_bBorderDist; }
+    bool IsBorderDist() const { return m_bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if

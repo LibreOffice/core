@@ -39,7 +39,7 @@ struct Link
     OUString m_name;
     OUString m_target;
 
-    inline Link( OUString const & name, OUString const & target )
+    Link( OUString const & name, OUString const & target )
         : m_name( name )
         , m_target( target )
         {}

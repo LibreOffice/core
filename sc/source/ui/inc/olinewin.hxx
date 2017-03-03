@@ -78,9 +78,9 @@ private:
     void                        InitSettings();
 
     /** Returns the calc document. */
-    inline ScDocument&          GetDoc() const { return *mrViewData.GetDocument(); }
+    ScDocument&          GetDoc() const { return *mrViewData.GetDocument(); }
     /** Returns the current sheet index. */
-    inline SCTAB                GetTab() const { return mrViewData.GetTabNo(); }
+    SCTAB                GetTab() const { return mrViewData.GetTabNo(); }
     /** Returns the outline array of the corresponding document. */
     const ScOutlineArray*       GetOutlineArray() const;
     /** Returns the specified outline entry. */
@@ -178,7 +178,7 @@ private:
     /** Starts mouse tracking after click on a button. */
     void                        StartMouseTracking( size_t nLevel, size_t nEntry );
     /** Returns whether mouse tracking mode is active. */
-    inline bool                 IsMouseTracking() const { return mbMTActive; }
+    bool                 IsMouseTracking() const { return mbMTActive; }
     /** Ends mouse tracking. */
     void                        EndMouseTracking();
 

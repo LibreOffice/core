@@ -40,7 +40,7 @@ public:
     void CopyTOXMark( SwDoc* pDestDoc );
 
     // get and set TextNode pointer
-    inline const SwTextNode* GetpTextNd() const { return m_pTextNode; }
+    const SwTextNode* GetpTextNd() const { return m_pTextNode; }
     inline const SwTextNode& GetTextNode() const;
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 };

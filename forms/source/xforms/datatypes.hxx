@@ -207,7 +207,7 @@ namespace xforms
     {
     protected:
         typedef     VALUE_TYPE  ValueType;
-        inline const css::uno::Type&
+        const css::uno::Type&
             getCppuType() const { return cppu::UnoType<ValueType>::get(); }
 
     protected:

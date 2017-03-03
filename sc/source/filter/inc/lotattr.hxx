@@ -42,13 +42,13 @@ struct LotAttrWK3
     sal_uInt8 nFontCol;
     sal_uInt8 nBack;
 
-    inline bool HasStyles () const
+    bool HasStyles () const
     {
         return ( nFont || nLineStyle || nFontCol || ( nBack & 0x7F ) );
                     // !! ohne Center-Bit!!
     }
 
-    inline bool IsCentered () const
+    bool IsCentered () const
     {
         return ( nBack & 0x80 );
     }
@@ -78,7 +78,7 @@ private:
         ~ENTRY();
     };
 
-    inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
+    static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
     {
         reinterpret_cast<sal_uInt8*>(&rOut)[ 0 ] = rAttr.nFont & 0x7F;
         reinterpret_cast<sal_uInt8*>(&rOut)[ 1 ] = rAttr.nLineStyle;

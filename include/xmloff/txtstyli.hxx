@@ -99,7 +99,7 @@ public:
     virtual void FillPropertySet(
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 
-    inline bool HasCombinedCharactersLetter()
+    bool HasCombinedCharactersLetter()
         { return bHasCombinedCharactersLetter; }
 
     const ::std::vector< XMLPropertyState > & GetProperties_() { return GetProperties(); }

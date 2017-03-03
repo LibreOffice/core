@@ -2207,7 +2207,7 @@ struct SvxStyleToolBoxControl::Impl
     bool                     bSpecModeWriter;
     bool                     bSpecModeCalc;
 
-    inline Impl()
+    Impl()
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
         ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE_STYLES ) )
         ,bSpecModeWriter    ( false )

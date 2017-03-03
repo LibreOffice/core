@@ -142,8 +142,8 @@ private:
 public:
                                 XclEscherHostAppData() : bStackedGroup( false )
                                     {}
-    inline  void                SetStackedGroup( bool b )   { bStackedGroup = b; }
-    inline  bool                IsStackedGroup() const  { return bStackedGroup; }
+    void                SetStackedGroup( bool b )   { bStackedGroup = b; }
+    bool                IsStackedGroup() const  { return bStackedGroup; }
 };
 
 // --- class XclEscherClientData -------------------------------------
@@ -172,7 +172,7 @@ public:
                             XclObj* pObj );
 
                                 //! ONLY for the AdditionalText mimic
-    inline  void        SetXclObj( XclObj* p )  { pXclObj = p; }
+    void        SetXclObj( XclObj* p )  { pXclObj = p; }
 
     virtual void        WriteData( EscherEx& rEx ) const override;
 };

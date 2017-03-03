@@ -66,7 +66,7 @@ public:
 
     ~BlopObject();
 
-    inline sal_uInt8 readBYTE(sal_uInt32 index) const
+    sal_uInt8 readBYTE(sal_uInt32 index) const
     {
         if (index >= m_bufferLen) {
             throw BoundsError();
@@ -74,7 +74,7 @@ public:
         return m_pBuffer[index];
     }
 
-    inline sal_Int16 readINT16(sal_uInt32 index) const
+    sal_Int16 readINT16(sal_uInt32 index) const
     {
         if (m_bufferLen < 2 || index >= m_bufferLen - 1) {
             throw BoundsError();
@@ -82,7 +82,7 @@ public:
         return ((m_pBuffer[index] << 8) | (m_pBuffer[index+1] << 0));
     }
 
-    inline sal_uInt16 readUINT16(sal_uInt32 index) const
+    sal_uInt16 readUINT16(sal_uInt32 index) const
     {
         if (m_bufferLen < 2 || index >= m_bufferLen - 1) {
             throw BoundsError();
@@ -90,7 +90,7 @@ public:
         return ((m_pBuffer[index] << 8) | (m_pBuffer[index+1] << 0));
     }
 
-    inline sal_Int32 readINT32(sal_uInt32 index) const
+    sal_Int32 readINT32(sal_uInt32 index) const
     {
         if (m_bufferLen < 4 || index >= m_bufferLen - 3) {
             throw BoundsError();
@@ -103,7 +103,7 @@ public:
         );
     }
 
-    inline sal_uInt32 readUINT32(sal_uInt32 index) const
+    sal_uInt32 readUINT32(sal_uInt32 index) const
     {
         if (m_bufferLen < 4 || index >= m_bufferLen - 3) {
             throw BoundsError();
@@ -116,7 +116,7 @@ public:
         );
     }
 
-    inline sal_Int64 readINT64(sal_uInt32 index) const
+    sal_Int64 readINT64(sal_uInt32 index) const
     {
         if (m_bufferLen < 8 || index >= m_bufferLen - 7) {
             throw BoundsError();
@@ -133,7 +133,7 @@ public:
         );
     }
 
-    inline sal_uInt64 readUINT64(sal_uInt32 index) const
+    sal_uInt64 readUINT64(sal_uInt32 index) const
     {
         if (m_bufferLen < 8 || index >= m_bufferLen - 7) {
             throw BoundsError();

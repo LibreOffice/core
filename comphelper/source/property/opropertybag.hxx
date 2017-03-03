@@ -46,7 +46,7 @@ namespace comphelper
 
     struct UnoTypeLess : public std::unary_function< css::uno::Type, bool >
     {
-        inline bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
+        bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {
             return rtl_ustr_compare(
                 _rLHS.getTypeLibType()->pTypeName->buffer,

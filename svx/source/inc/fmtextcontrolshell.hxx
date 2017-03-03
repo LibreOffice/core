@@ -151,7 +151,7 @@ namespace svx
         void    executeClipboardSlot( SfxSlotId _nSlot );
 
     private:
-        inline  bool    isControllerListening() const { return !m_aControlObservers.empty(); }
+        bool    isControllerListening() const { return !m_aControlObservers.empty(); }
 
         FmTextControlFeature*
                         implGetFeatureDispatcher(

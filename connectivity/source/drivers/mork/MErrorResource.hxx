@@ -39,21 +39,21 @@ namespace connectivity
             {
             }
 
-            inline void setResId( const sal_uInt16 _nErrorResourceId )
+            void setResId( const sal_uInt16 _nErrorResourceId )
             {
                 m_nErrorResourceId = _nErrorResourceId;
             }
-            inline void reset()
+            void reset()
             {
                 m_nErrorResourceId = 0;
                 m_nErrorCondition = 0;
             }
 
-            inline sal_uInt16 getResId() const                  { return m_nErrorResourceId; }
-            inline sal_Int32  getErrorCondition() const         { return m_nErrorCondition; }
-            inline const OUString& getParameter() const  { return m_sParameter; }
+            sal_uInt16 getResId() const                  { return m_nErrorResourceId; }
+            sal_Int32  getErrorCondition() const         { return m_nErrorCondition; }
+            const OUString& getParameter() const  { return m_sParameter; }
 
-            inline bool is() const { return ( m_nErrorResourceId != 0 ) || ( m_nErrorCondition != 0 ); }
+            bool is() const { return ( m_nErrorResourceId != 0 ) || ( m_nErrorCondition != 0 ); }
         };
     }
 }

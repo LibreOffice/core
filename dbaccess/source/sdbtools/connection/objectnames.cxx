@@ -163,7 +163,7 @@ namespace sdbtools
         {
         }
 
-        static inline ::connectivity::ErrorCondition validateName_getErrorCondition( const OUString& _rName )
+        static ::connectivity::ErrorCondition validateName_getErrorCondition( const OUString& _rName )
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '

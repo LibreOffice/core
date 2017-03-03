@@ -47,9 +47,9 @@ public:
     virtual             ~XclImpDecrypter() override;
 
     /** Returns the current error code of the decrypter. */
-    inline ErrCode      GetError() const { return mnError; }
+    ErrCode      GetError() const { return mnError; }
     /** Returns true, if the decoder has been initialized correctly. */
-    inline bool         IsValid() const { return mnError == ERRCODE_NONE; }
+    bool         IsValid() const { return mnError == ERRCODE_NONE; }
 
     /** Creates a (ref-counted) copy of this decrypter object. */
     XclImpDecrypterRef  Clone() const;
@@ -214,7 +214,7 @@ public:
                             bool& rbValid ) const;
 
     /** Returns the stored stream position. */
-    inline std::size_t  GetPos() const { return mnPos; }
+    std::size_t  GetPos() const { return mnPos; }
 
 private:
     std::size_t         mnPos;          /// Absolute position of the stream.
@@ -289,7 +289,7 @@ public:
                         ~XclImpStream();
 
     /** Returns the filter root data. */
-    inline const XclImpRoot& GetRoot() const { return mrRoot; }
+    const XclImpRoot& GetRoot() const { return mrRoot; }
 
     /** Sets stream pointer to the start of the next record content.
         @descr  Ignores all CONTINUE records of the current record, if automatic
@@ -330,7 +330,7 @@ public:
     /** Switches usage of current decryption algorithm off.
         @descr  This is a record-local setting. The function StartNextRecord()
         always enables decryption. */
-    inline void         DisableDecryption() { EnableDecryption( false ); }
+    void         DisableDecryption() { EnableDecryption( false ); }
 
     /** Pushes current position on user position stack.
         @descr  This stack is emptied when starting a new record with
@@ -347,9 +347,9 @@ public:
     void                SeekGlobalPosition();
 
     /** Returns record reading state: false = record overread. */
-    inline bool         IsValid() const { return mbValid; }
+    bool         IsValid() const { return mbValid; }
     /** Returns the current record ID. */
-    inline sal_uInt16   GetRecId() const { return mnRecId; }
+    sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the position inside of the whole record content. */
     std::size_t         GetRecPos() const;
     /** Returns the data size of the whole record without record headers. */
@@ -426,7 +426,7 @@ public:
         @param cNulSubst  The character to use for NUL replacement. It is
         possible to specify NUL here. in this case strings are terminated when
         the first NUL occurs during string import. */
-    inline void         SetNulSubstChar( sal_Unicode cNulSubst = '?' ) { mcNulSubst = cNulSubst; }
+    void         SetNulSubstChar( sal_Unicode cNulSubst = '?' ) { mcNulSubst = cNulSubst; }
 
     /** Reads nChars characters and returns the string. */
     OUString            ReadRawUniString( sal_uInt16 nChars, bool b16Bit );
@@ -455,9 +455,9 @@ public:
     // *** SvStream functions *** ---------------------------------------------
 
     /** Returns the absolute stream position. */
-    inline std::size_t  GetSvStreamPos() const { return mrStrm.Tell(); }
+    std::size_t  GetSvStreamPos() const { return mrStrm.Tell(); }
     /** Returns the stream size. */
-    inline std::size_t  GetSvStreamSize() const { return mnStreamSize; }
+    std::size_t  GetSvStreamSize() const { return mnStreamSize; }
 
     /** Stores current stream position into rPos. */
     void                StorePosition( XclImpStreamPos& rPos );

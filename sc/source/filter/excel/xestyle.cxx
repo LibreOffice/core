@@ -139,16 +139,16 @@ public:
     explicit            XclListColor( const Color& rColor, sal_uInt32 nColorId );
 
     /** Returns the RGB color value of the color. */
-    inline const Color& GetColor() const { return maColor; }
+    const Color& GetColor() const { return maColor; }
     /** Returns the unique ID of the color. */
-    inline sal_uInt32   GetColorId() const { return mnColorId; }
+    sal_uInt32   GetColorId() const { return mnColorId; }
     /** Returns the current weighting of the color. */
-    inline sal_uInt32   GetWeighting() const { return mnWeight; }
+    sal_uInt32   GetWeighting() const { return mnWeight; }
     /** Returns true, if this color is a base color, i.e. it will not be removed or merged. */
-    inline bool         IsBaseColor() const { return mbBaseColor; }
+    bool         IsBaseColor() const { return mbBaseColor; }
 
     /** Adds the passed weighting to this color. */
-    inline void         AddWeighting( sal_uInt32 nWeight ) { mnWeight += nWeight; }
+    void         AddWeighting( sal_uInt32 nWeight ) { mnWeight += nWeight; }
     /** Merges this color with rColor, regarding weighting settings. */
     void                Merge( const XclListColor& rColor );
 };
@@ -185,7 +185,7 @@ struct XclColorIdData
     Color               maColor;        /// The original inserted color.
     sal_uInt32          mnIndex;        /// Maps current color ID to color list or export color vector.
     /** Sets the contents of this struct. */
-    inline void         Set( const Color& rColor, sal_uInt32 nIndex ) { maColor = rColor; mnIndex = nIndex; }
+    void         Set( const Color& rColor, sal_uInt32 nIndex ) { maColor = rColor; mnIndex = nIndex; }
 };
 
 /** A color that will be written to the Excel file. */
@@ -194,8 +194,8 @@ struct XclPaletteColor
     Color               maColor;        /// Resulting color to export.
     bool                mbUsed;         /// true = Entry is used in the document.
 
-    inline explicit     XclPaletteColor( const Color& rColor ) : maColor( rColor ), mbUsed( false ) {}
-    inline void         SetColor( const Color& rColor ) { maColor = rColor; mbUsed = true; }
+    explicit     XclPaletteColor( const Color& rColor ) : maColor( rColor ), mbUsed( false ) {}
+    void         SetColor( const Color& rColor ) { maColor = rColor; mbUsed = true; }
 };
 
 /** Maps a color list index to a palette index.
@@ -205,8 +205,8 @@ struct XclRemap
     sal_uInt32          mnPalIndex;     /// Index to palette.
     bool                mbProcessed;    /// true = List color already processed.
 
-    inline explicit     XclRemap() : mnPalIndex( 0 ), mbProcessed( false ) {}
-    inline void         SetIndex( sal_uInt32 nPalIndex )
+    explicit     XclRemap() : mnPalIndex( 0 ), mbProcessed( false ) {}
+    void         SetIndex( sal_uInt32 nPalIndex )
                             { mnPalIndex = nPalIndex; mbProcessed = true; }
 };
 
@@ -216,7 +216,7 @@ struct XclNearest
     sal_uInt32          mnPalIndex;     /// Index to nearest palette color.
     sal_Int32           mnDist;         /// Distance to palette color.
 
-    inline explicit     XclNearest() : mnPalIndex( 0 ), mnDist( 0 ) {}
+    explicit     XclNearest() : mnPalIndex( 0 ), mnDist( 0 ) {}
 };
 
 } // namespace
@@ -259,7 +259,7 @@ public:
 
 private:
     /** Returns the Excel index of a 0-based color index. */
-    static inline sal_uInt16 GetXclIndex( sal_uInt32 nIndex )
+    static sal_uInt16 GetXclIndex( sal_uInt32 nIndex )
                             { return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET ); }
 
     /** Returns the original inserted color represented by the color ID nColorId. */
@@ -1331,8 +1331,8 @@ size_t XclExpFontBuffer::Find( const XclFontData& rFontData )
 struct XclExpNumFmtPred
 {
     sal_uLong               mnScNumFmt;
-    inline explicit     XclExpNumFmtPred( sal_uLong nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
-    inline bool         operator()( const XclExpNumFmt& rFormat ) const
+    explicit     XclExpNumFmtPred( sal_uLong nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
+    bool         operator()( const XclExpNumFmt& rFormat ) const
                             { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
 
@@ -2379,7 +2379,7 @@ struct XclExpBorderPred
 {
     const XclExpCellBorder&
                         mrBorder;
-    inline explicit     XclExpBorderPred( const XclExpCellBorder& rBorder ) : mrBorder( rBorder ) {}
+    explicit     XclExpBorderPred( const XclExpCellBorder& rBorder ) : mrBorder( rBorder ) {}
     bool                operator()( const XclExpCellBorder& rBorder ) const;
 };
 
@@ -2409,7 +2409,7 @@ struct XclExpFillPred
 {
     const XclExpCellArea&
                         mrFill;
-    inline explicit     XclExpFillPred( const XclExpCellArea& rFill ) : mrFill( rFill ) {}
+    explicit     XclExpFillPred( const XclExpCellArea& rFill ) : mrFill( rFill ) {}
     bool                operator()( const XclExpCellArea& rFill ) const;
 };
 

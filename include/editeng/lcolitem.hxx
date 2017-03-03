@@ -41,7 +41,7 @@ public:
                                   const IntlWrapper * pIntlWrapper = nullptr )
         const override;
 
-    inline SvxLineColorItem& operator=(const SvxLineColorItem& rColor)
+    SvxLineColorItem& operator=(const SvxLineColorItem& rColor)
         { return static_cast<SvxLineColorItem&>(SvxColorItem::
                      operator=(static_cast<const SvxColorItem&>(rColor))); }
 

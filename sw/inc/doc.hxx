@@ -1032,7 +1032,7 @@ public:
         bool bMoveCursor = false );
 
     // Query / set rules for Outline.
-    inline SwNumRule* GetOutlineNumRule() const
+    SwNumRule* GetOutlineNumRule() const
     {
         return mpOutlineRule;
     }
@@ -1326,8 +1326,8 @@ public:
     ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-notification.
-    inline       void  SetOle2Link(const Link<bool,void>& rLink) {maOle2Link = rLink;}
-    inline const Link<bool,void>& GetOle2Link() const {return maOle2Link;}
+    void  SetOle2Link(const Link<bool,void>& rLink) {maOle2Link = rLink;}
+    const Link<bool,void>& GetOle2Link() const {return maOle2Link;}
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,

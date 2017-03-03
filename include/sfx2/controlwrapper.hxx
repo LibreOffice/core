@@ -79,7 +79,7 @@ public:
         is used (simply casting between list position and values). If the map
         exists, it *MUST* be terminated by an entry containing the special
         "not found" list position. */
-    inline explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap = nullptr ) :
+    explicit     PosValueMapper( PosT nNFPos, const MapEntryType* pMap = nullptr ) :
                             mpMap( pMap ), mnNFPos( nNFPos ) {}
 
     /** Returns the value at the specified list position.
@@ -90,7 +90,7 @@ public:
     PosT                GetPosFromValue( ValueT nValue ) const;
 
     /** Returns the special "not found" list position. */
-    inline PosT         GetNotFoundPos() const { return mnNFPos; }
+    PosT         GetNotFoundPos() const { return mnNFPos; }
 
 private:
     const MapEntryType* mpMap;      /// The list position/value map.
@@ -143,7 +143,7 @@ private:
 class SFX2_DLLPUBLIC ControlWrapperBase
 {
 public:
-    inline explicit     ControlWrapperBase() {}
+    explicit     ControlWrapperBase() {}
     virtual             ~ControlWrapperBase();
 
     /** Derived classes enable, disable, show, or hide control(s).
@@ -185,12 +185,12 @@ public:
     typedef ValueT                                   ControlValueType;
     typedef SingleControlWrapper< ControlT, ValueT > SingleControlWrapperType;
 
-    inline explicit     SingleControlWrapper( ControlT& rControl ) : mrControl( rControl ) {}
+    explicit     SingleControlWrapper( ControlT& rControl ) : mrControl( rControl ) {}
 
     /** Returns a reference to the control this connection works on. */
-    inline const ControlT& GetControl() const { return mrControl; }
+    const ControlT& GetControl() const { return mrControl; }
     /** Returns a reference to the control this connection works on. */
-    inline ControlT&    GetControl() { return mrControl; }
+    ControlT&    GetControl() { return mrControl; }
 
     /** Enables, disables, shows, or hides the control.
         @descr  Does nothing, if the corresponding parameter is TRISTATE_INDET. */
@@ -251,7 +251,7 @@ template< typename ValueT >
 class MetricFieldWrapper : public SingleControlWrapper< MetricField, ValueT >
 {
 public:
-    inline explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit = FUNIT_NONE ) :
+    explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit = FUNIT_NONE ) :
                             SingleControlWrapper< MetricField, ValueT >( rField ), meUnit( eUnit ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
@@ -285,7 +285,7 @@ public:
 
     /** @param pMap  Optional list position <-> value map.
         See PosValueMapper documentation for details. */
-    inline explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = nullptr ) :
+    explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap = nullptr ) :
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE
@@ -318,7 +318,7 @@ public:
 
     /** @param pMap  Optional position <-> value map.
         See PosValueMapper documentation for details. */
-    inline explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = nullptr ) :
+    explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap = nullptr ) :
                             SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE
@@ -388,9 +388,9 @@ public:
     MultiControlWrapper() : maDefValue( 0 ){}
 
     /** Returns the default value that can be used in GetControlValue(). */
-    inline const ValueT& GetDefaultValue() const { return maDefValue; }
+    const ValueT& GetDefaultValue() const { return maDefValue; }
     /** Sets a default value that can be used in GetControlValue(). */
-    inline void         SetDefaultValue( const ValueT& rDefValue ) { maDefValue = rDefValue; }
+    void         SetDefaultValue( const ValueT& rDefValue ) { maDefValue = rDefValue; }
 
     /** Derived classes return the value the control contains. */
     virtual ValueT      GetControlValue() const = 0;

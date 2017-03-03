@@ -59,8 +59,8 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >    m_xChild;
 
 public:
-    inline sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
-    inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
+    sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
+    void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
 protected:
     virtual ~VCLXAccessibleToolBoxItem() override;
@@ -81,10 +81,10 @@ public:
     VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );
 
     void                SetFocus( bool _bFocus );
-    inline bool         HasFocus() const { return m_bHasFocus; }
+    bool         HasFocus() const { return m_bHasFocus; }
     void                SetChecked( bool _bCheck );
     void                SetIndeterminate( bool _bIndeterminate );
-    inline void         ReleaseToolBox() { m_pToolBox = nullptr; }
+    void         ReleaseToolBox() { m_pToolBox = nullptr; }
     void                NameChanged();
     void                SetChild( const css::uno::Reference< css::accessibility::XAccessible >& _xChild );
     const css::uno::Reference< css::accessibility::XAccessible >&

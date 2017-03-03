@@ -145,14 +145,14 @@ class PolicyReader
     sal_Unicode m_back;
 
     sal_Unicode get();
-    inline void back( sal_Unicode c )
+    void back( sal_Unicode c )
         { m_back = c; }
 
-    static inline bool isWhiteSpace( sal_Unicode c )
+    static bool isWhiteSpace( sal_Unicode c )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace();
 
-    static inline bool isCharToken( sal_Unicode c )
+    static bool isCharToken( sal_Unicode c )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:

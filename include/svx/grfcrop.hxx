@@ -60,7 +60,7 @@ public:
     sal_Int32 GetTop() const            { return nTop; }
     sal_Int32 GetBottom() const         { return nBottom; }
 
-    inline SvxGrfCrop& operator=( const SvxGrfCrop& rCrop )
+    SvxGrfCrop& operator=( const SvxGrfCrop& rCrop )
         {
             nLeft = rCrop.GetLeft();        nTop = rCrop.GetTop();
             nRight = rCrop.GetRight();      nBottom = rCrop.GetBottom();

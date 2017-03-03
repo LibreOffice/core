@@ -172,7 +172,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             void reFill(const TStringVector &_rVector);
-            inline bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
+            bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
             void renameObject(const OUString& _sOldName, const OUString& _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper

@@ -77,8 +77,8 @@ public:
     void    SetToBusinessCard();
 
     void InitDatabaseBox();
-    inline void SetDBManager(SwDBManager* pDBManager_) { pDBManager = pDBManager_; }
-    inline SwDBManager* GetDBManager() const { return pDBManager; }
+    void SetDBManager(SwDBManager* pDBManager_) { pDBManager = pDBManager_; }
+    SwDBManager* GetDBManager() const { return pDBManager; }
 };
 
 class SwOneExampleFrame;

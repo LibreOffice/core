@@ -162,9 +162,9 @@ public:
                             const XclFontData& rFontData, XclExpColorType eColorType );
 
     /** Returns read-only access to font data. */
-    inline const XclFontData& GetFontData() const { return maData; }
+    const XclFontData& GetFontData() const { return maData; }
     /** Returns the font color identifier. */
-    inline sal_uInt32   GetFontColorId() const { return mnColorId; }
+    sal_uInt32   GetFontColorId() const { return mnColorId; }
     /** Compares this font with the passed font data.
         @param nHash  The hash value calculated from the font data. */
     virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const;
@@ -261,7 +261,7 @@ struct XclExpNumFmt
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
     OUString            maNumFmtString; /// format string
 
-    inline explicit     XclExpNumFmt( sal_uInt32 nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
+    explicit     XclExpNumFmt( sal_uInt32 nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
 
     void SaveXml( XclExpXmlStream& rStrm );
@@ -278,7 +278,7 @@ public:
     virtual             ~XclExpNumFmtBuffer() override;
 
     /** Returns the core index of the current standard number format. */
-    inline sal_uInt32   GetStandardFormat() const { return mnStdFmt; }
+    sal_uInt32   GetStandardFormat() const { return mnStdFmt; }
 
     /** Inserts a number format into the format buffer.
         @param nScNumFmt  The core index of the number format.
@@ -539,7 +539,7 @@ public:
     explicit            XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel );
 
     /** Returns true, if this record represents an Excel built-in style. */
-    inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
+    bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 

@@ -74,11 +74,11 @@ namespace dbaui
         OUString GetKeyName() const { return m_pEdKeyName->GetText(); }
 
         void setCreateStyleAction();
-        inline void disallowViews()
+        void disallowViews()
         {
             m_pRB_View->Disable();
         }
-        inline void disallowUseHeaderLine()
+        void disallowUseHeaderLine()
         {
             m_bUseHeaderAllowed = false;
             m_pCB_UseHeaderLine->Disable();

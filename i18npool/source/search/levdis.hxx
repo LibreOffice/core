@@ -181,7 +181,7 @@ public:
     void CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
                     bool bRelaxed );
 
-    inline int GetLimit() const     { return nLimit; }
+    int GetLimit() const     { return nLimit; }
 
     // Calculate current balance, keep this inline for performance reasons!
     // c == cpPattern[jj] == cString[ii]

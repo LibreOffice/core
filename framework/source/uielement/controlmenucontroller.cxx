@@ -175,7 +175,7 @@ private:
                                                         OUStringHash >
     {
         public:
-            inline void free()
+            void free()
             {
                 UrlToDispatchMap().swap( *this );// get rid of reserved capacity
             }

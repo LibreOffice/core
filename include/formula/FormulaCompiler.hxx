@@ -114,16 +114,16 @@ public:
         void copyFrom( const OpCodeMap& r );
 
         /// Get the symbol String -> OpCode hash map for finds.
-        inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
+        const OpCodeHashMap* getHashMap() const { return mpHashMap; }
 
         /// Get the symbol String -> AddIn String hash map for finds.
-        inline const ExternalHashMap* getExternalHashMap() const { return mpExternalHashMap; }
+        const ExternalHashMap* getExternalHashMap() const { return mpExternalHashMap; }
 
         /// Get the AddIn String -> symbol String hash map for finds.
-        inline const ExternalHashMap* getReverseExternalHashMap() const { return mpReverseExternalHashMap; }
+        const ExternalHashMap* getReverseExternalHashMap() const { return mpReverseExternalHashMap; }
 
         /// Get the symbol string matching an OpCode.
-        inline const OUString& getSymbol( const OpCode eOp ) const
+        const OUString& getSymbol( const OpCode eOp ) const
         {
             DBG_ASSERT( sal_uInt16(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
             if (sal_uInt16(eOp) < mnSymbols)
@@ -133,31 +133,31 @@ public:
         }
 
         /// Get the first character of the symbol string matching an OpCode.
-        inline sal_Unicode getSymbolChar( const OpCode eOp ) const {  return getSymbol(eOp)[0]; };
+        sal_Unicode getSymbolChar( const OpCode eOp ) const {  return getSymbol(eOp)[0]; };
 
         /// Get the grammar.
-        inline FormulaGrammar::Grammar getGrammar() const { return meGrammar; }
+        FormulaGrammar::Grammar getGrammar() const { return meGrammar; }
 
         /// Get the symbol count.
-        inline sal_uInt16 getSymbolCount() const { return mnSymbols; }
+        sal_uInt16 getSymbolCount() const { return mnSymbols; }
 
         /** Are these English symbols, as opposed to native language (which may
             be English as well)? */
-        inline bool isEnglish() const { return mbEnglish; }
+        bool isEnglish() const { return mbEnglish; }
 
         /// Is it an ODF 1.1 compatibility mapping?
-        inline bool isPODF() const { return FormulaGrammar::isPODF( meGrammar); }
+        bool isPODF() const { return FormulaGrammar::isPODF( meGrammar); }
 
         /* TODO: add isAPI() once a FormulaLanguage was added. */
 
         /// Is it an ODFF / ODF 1.2 mapping?
-        inline bool isODFF() const { return FormulaGrammar::isODFF( meGrammar); }
+        bool isODFF() const { return FormulaGrammar::isODFF( meGrammar); }
 
         /// Is it an OOXML mapping?
-        inline bool isOOXML() const { return FormulaGrammar::isOOXML( meGrammar); }
+        bool isOOXML() const { return FormulaGrammar::isOOXML( meGrammar); }
 
         /// Does it have external symbol/name mappings?
-        inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
+        bool hasExternals() const { return !mpExternalHashMap->empty(); }
 
         /// Put entry of symbol String and OpCode pair.
         void putOpCode( const OUString & rStr, const OpCode eOp, const CharClass* pCharClass );
@@ -250,7 +250,7 @@ public:
 
     /** Set symbol map corresponding to one of predefined formula::FormulaGrammar::Grammar,
         including an address reference convention. */
-    inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
+    FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
     /** Whether current symbol set and grammar need transformation of Table
         structured references to A1 style references when writing / exporting

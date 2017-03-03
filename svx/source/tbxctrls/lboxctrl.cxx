@@ -64,7 +64,7 @@ public:
     virtual void                PopupModeEnd() override;
     virtual void                statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
-    inline ListBox &            GetListBox()    { return *m_pListBox; }
+    ListBox &            GetListBox()    { return *m_pListBox; }
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }

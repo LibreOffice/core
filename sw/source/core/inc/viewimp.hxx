@@ -211,7 +211,7 @@ public:
 
     void InitPagePreviewLayout();
 
-    inline SwPagePreviewLayout* PagePreviewLayout()
+    SwPagePreviewLayout* PagePreviewLayout()
     {
         return m_pPagePreviewLayout;
     }

@@ -59,7 +59,7 @@ public:
     virtual bool            GetBoolValue() const override;
     virtual void            SetBoolValue( bool bVal ) override;
 
-    inline SvxCrossedOutItem& operator=(const SvxCrossedOutItem& rCross)
+    SvxCrossedOutItem& operator=(const SvxCrossedOutItem& rCross)
         {
             SetValue( rCross.GetValue() );
             return *this;

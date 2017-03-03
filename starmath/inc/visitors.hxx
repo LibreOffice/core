@@ -449,7 +449,7 @@ private:
         maCmdText.append( rText );
     }
     /** Append a blank for separation, if needed */
-    inline void Separate( ){
+    void Separate( ){
         if( maCmdText.isEmpty() || maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
             maCmdText.append(' ');
     }

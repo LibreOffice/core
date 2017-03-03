@@ -1421,7 +1421,7 @@ namespace xmloff
         const sal_Int32 m_nHandle;
         explicit EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
 
-        inline bool operator()( const PropertyValue& _rProp )
+        bool operator()( const PropertyValue& _rProp )
         {
             return _rProp.Handle == m_nHandle;
         }
@@ -1474,7 +1474,7 @@ namespace xmloff
         const OUString & m_sName;
         explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }
 
-        inline bool operator()( const PropertyValue& _rProp )
+        bool operator()( const PropertyValue& _rProp )
         {
             return _rProp.Name == m_sName;
         }

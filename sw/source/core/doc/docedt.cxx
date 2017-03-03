@@ -683,11 +683,11 @@ public:
     SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
                 sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
-    inline void SetNode( SwNode *pNew ) { pNode = pNew; }
+    void SetNode( SwNode *pNew ) { pNode = pNew; }
     inline void SetRange( const SwNode *pNew );
-    inline void NextNode() { ++nNode; }
-    inline sal_uInt16 *GetPageCnt() { return pPageCnt; }
-    inline sal_uInt16 *GetPageSt() { return pPageSt; }
+    void NextNode() { ++nNode; }
+    sal_uInt16 *GetPageCnt() { return pPageCnt; }
+    sal_uInt16 *GetPageSt() { return pPageSt; }
 };
 
 SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,

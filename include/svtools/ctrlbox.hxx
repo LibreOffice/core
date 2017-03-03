@@ -243,9 +243,9 @@ public:
     void            SelectEntry( sal_uInt16 nStyle, bool bSelect = true );
     sal_uInt16      GetSelectEntryStyle() const;
 
-    inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
+    void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
 
-    inline void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
+    void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const { return aColor; }

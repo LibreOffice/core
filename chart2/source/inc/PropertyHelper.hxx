@@ -140,7 +140,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & 
 
 struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
 {
-    inline bool operator() ( const css::beans::Property & first,
+    bool operator() ( const css::beans::Property & first,
                              const css::beans::Property & second )
     {
         return ( first.Name.compareTo( second.Name ) < 0 );

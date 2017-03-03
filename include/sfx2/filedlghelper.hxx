@@ -134,7 +134,7 @@ public:
 
     ErrCode                 Execute();
     void                    StartExecuteModal( const Link<FileDialogHelper*,void>& rEndDialogHdl );
-    inline ErrCode          GetError() const { return m_nError; }
+    ErrCode          GetError() const { return m_nError; }
     sal_Int16               GetDialogType() const;
     bool                    IsPasswordEnabled() const;
     OUString                GetRealFilter() const;

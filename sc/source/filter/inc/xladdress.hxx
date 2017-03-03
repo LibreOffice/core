@@ -32,11 +32,11 @@ struct XclAddress
     sal_uInt16          mnCol;
     sal_uInt32          mnRow;
 
-    inline explicit     XclAddress( ScAddress::Uninitialized ) {}
-    inline explicit     XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit     XclAddress( sal_uInt16 nCol, sal_uInt32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
+    explicit     XclAddress( ScAddress::Uninitialized ) {}
+    explicit     XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
+    explicit     XclAddress( sal_uInt16 nCol, sal_uInt32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
 
-    inline void         Set( sal_uInt16 nCol, sal_uInt32 nRow ) { mnCol = nCol; mnRow = nRow; }
+    void         Set( sal_uInt16 nCol, sal_uInt32 nRow ) { mnCol = nCol; mnRow = nRow; }
 
     void                Read( XclImpStream& rStrm );
     void                Write( XclExpStream& rStrm ) const;
@@ -60,17 +60,17 @@ struct XclRange
     XclAddress          maFirst;
     XclAddress          maLast;
 
-    inline explicit     XclRange( ScAddress::Uninitialized e ) : maFirst( e ), maLast( e ) {}
-    inline explicit     XclRange() {}
-    inline explicit     XclRange( const XclAddress& rPos ) : maFirst( rPos ), maLast( rPos ) {}
-    inline explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
+    explicit     XclRange( ScAddress::Uninitialized e ) : maFirst( e ), maLast( e ) {}
+    explicit     XclRange() {}
+    explicit     XclRange( const XclAddress& rPos ) : maFirst( rPos ), maLast( rPos ) {}
+    explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
 
-    inline void         Set( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 )
+    void         Set( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 )
                             { maFirst.Set( nCol1, nRow1 ); maLast.Set( nCol2, nRow2 ); }
 
-    inline sal_uInt16   GetColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
-    inline sal_uInt32   GetRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
+    sal_uInt16   GetColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
+    sal_uInt32   GetRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
     bool                Contains( const XclAddress& rPos ) const;
 
     void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
@@ -98,7 +98,7 @@ private:
     XclRangeVector mRanges;
 
 public:
-    inline explicit     XclRangeList() : mRanges() {}
+    explicit     XclRangeList() : mRanges() {}
 
     size_t size() const { return mRanges.size(); }
     bool empty() const { return mRanges.empty(); }
@@ -137,11 +137,11 @@ public:
     virtual             ~XclAddressConverterBase();
 
     /** Returns whether the "some columns have been cut" warning box should be shown. */
-    inline bool         IsColTruncated() const { return mbColTrunc; }
+    bool         IsColTruncated() const { return mbColTrunc; }
     /** Returns whether the "some rows have been cut" warning box should be shown. */
-    inline bool         IsRowTruncated() const { return mbRowTrunc; }
+    bool         IsRowTruncated() const { return mbRowTrunc; }
     /** Returns whether the "some sheets have been cut" warning box should be shown. */
-    inline bool         IsTabTruncated() const { return mbTabTrunc; }
+    bool         IsTabTruncated() const { return mbTabTrunc; }
 
     /** Checks if the passed sheet index is valid.
         @param nScTab  The sheet index to check.

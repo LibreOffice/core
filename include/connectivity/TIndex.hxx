@@ -41,7 +41,7 @@ namespace connectivity
                 bool _isPrimaryKeyIndex,
                 bool _isClustered
             );
-        inline OTableHelper* getTable() const { return m_pTable; }
+        OTableHelper* getTable() const { return m_pTable; }
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TINDEX_HXX

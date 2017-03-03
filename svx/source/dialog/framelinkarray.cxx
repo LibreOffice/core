@@ -45,7 +45,7 @@ struct Cell
 
     explicit            Cell();
 
-    inline bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
+    bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
 
     void                MirrorSelfX();
 };
@@ -122,9 +122,9 @@ struct ArrayImpl
 
     explicit            ArrayImpl( size_t nWidth, size_t nHeight, bool bDiagDblClip );
 
-    inline bool         IsValidPos( size_t nCol, size_t nRow ) const
+    bool         IsValidPos( size_t nCol, size_t nRow ) const
                             { return (nCol < mnWidth) && (nRow < mnHeight); }
-    inline size_t       GetIndex( size_t nCol, size_t nRow ) const
+    size_t       GetIndex( size_t nCol, size_t nRow ) const
                             { return nRow * mnWidth + nCol; }
 
     const Cell&         GetCell( size_t nCol, size_t nRow ) const;
@@ -146,7 +146,7 @@ struct ArrayImpl
     bool                IsColInClipRange( size_t nCol ) const;
     bool                IsRowInClipRange( size_t nRow ) const;
 
-    inline size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
+    size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
 
     long                GetColPosition( size_t nCol ) const;
     long                GetRowPosition( size_t nRow ) const;
@@ -323,9 +323,9 @@ class MergedCellIterator
 public:
     explicit            MergedCellIterator( const Array& rArray, size_t nCol, size_t nRow );
 
-    inline bool         Is() const { return (mnCol <= mnLastCol) && (mnRow <= mnLastRow); }
-    inline size_t       Col() const { return mnCol; }
-    inline size_t       Row() const { return mnRow; }
+    bool         Is() const { return (mnCol <= mnLastCol) && (mnRow <= mnLastRow); }
+    size_t       Col() const { return mnCol; }
+    size_t       Row() const { return mnRow; }
 
     MergedCellIterator& operator++();
 

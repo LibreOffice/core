@@ -132,8 +132,8 @@ private:
     LwpObjectID m_OleHead;
     LwpObjectID m_OleTail;
 public:
-    inline LwpObjectID& GetContentList() { return m_ContentList; }
-    inline LwpObjectID& GetGraphicListHead() { return m_GrapHead; }
+    LwpObjectID& GetContentList() { return m_ContentList; }
+    LwpObjectID& GetGraphicListHead() { return m_GrapHead; }
     LwpContent* EnumContents(LwpContent* pContent);
 
 public:
@@ -249,14 +249,14 @@ private: //file members
 private:
     void ReadStyles(LwpObjectStream *pStrm);
 public:
-    inline LwpContentManager& GetContentManager() { return m_ContentMgr; }
-    inline LwpObjectID& GetGraphicListHead() { return m_ContentMgr.GetGraphicListHead(); }
-    inline LwpFontManager& GetFontManger() { return m_FontMgr;}
-    inline LwpObjectID& GetTextStyleHead()  { return m_TextStyle;}
-    inline LwpObjectID& GetLayout() {return m_Layout;}
-    inline LwpObjectID& GetBulletManagerID() { return m_BulMgr.GetHeadID();}
-    inline LwpDocument* GetDocument(){ return m_pDoc;}
-    inline LwpNumberManager& GetNumberManager() { return m_NumMgr;}
+    LwpContentManager& GetContentManager() { return m_ContentMgr; }
+    LwpObjectID& GetGraphicListHead() { return m_ContentMgr.GetGraphicListHead(); }
+    LwpFontManager& GetFontManger() { return m_FontMgr;}
+    LwpObjectID& GetTextStyleHead()  { return m_TextStyle;}
+    LwpObjectID& GetLayout() {return m_Layout;}
+    LwpObjectID& GetBulletManagerID() { return m_BulMgr.GetHeadID();}
+    LwpDocument* GetDocument(){ return m_pDoc;}
+    LwpNumberManager& GetNumberManager() { return m_NumMgr;}
     LwpObjectID * GetDefaultTextStyle() ;
 private:
     std::unique_ptr<LwpStyleManager> m_xStyleMgr;

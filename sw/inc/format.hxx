@@ -105,15 +105,15 @@ public:
         @return count of deleted hints. */
     virtual sal_uInt16 ResetAllFormatAttr();
 
-    inline SwFormat* DerivedFrom() const { return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
-    inline bool IsDefault() const { return DerivedFrom() == nullptr; }
+    SwFormat* DerivedFrom() const { return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
+    bool IsDefault() const { return DerivedFrom() == nullptr; }
 
     const OUString& GetName() const                  { return m_aFormatName; }
-    inline bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
+    bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
     virtual void SetName( const OUString& rNewName, bool bBroadcast=false );
 
     /// For querying the attribute array.
-    inline const SwAttrSet& GetAttrSet() const { return m_aSet; }
+    const SwAttrSet& GetAttrSet() const { return m_aSet; }
 
     /** Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
        im Zugriff. */

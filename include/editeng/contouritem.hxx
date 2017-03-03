@@ -46,7 +46,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxContourItem& operator=(const SvxContourItem& rCont)
+    SvxContourItem& operator=(const SvxContourItem& rCont)
     {
         SetValue(rCont.GetValue());
         return *this;

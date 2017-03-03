@@ -64,7 +64,7 @@ namespace dbaui
         );
         ~OLinkedDocumentsAccess();
 
-        inline bool isConnected() const { return m_xConnection.is(); }
+        bool isConnected() const { return m_xConnection.is(); }
 
         css::uno::Reference< css::lang::XComponent>
                 open(

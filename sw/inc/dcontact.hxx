@@ -363,11 +363,11 @@ class SwDrawContact final : public SwContact
         const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
         SwFrame* GetAnchorFrame( SdrObject* _pDrawObj = nullptr );
 
-        inline const SwPageFrame* GetPageFrame() const
+        const SwPageFrame* GetPageFrame() const
         {
             return maAnchoredDrawObj.GetPageFrame();
         }
-        inline SwPageFrame* GetPageFrame()
+        SwPageFrame* GetPageFrame()
         {
             return maAnchoredDrawObj.GetPageFrame();
         }

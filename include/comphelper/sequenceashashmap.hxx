@@ -247,7 +247,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAs
             @return The value of the specified property or
                     an empty css::uno::Any.
          */
-        inline css::uno::Any getValue(const OUString& sKey) const
+        css::uno::Any getValue(const OUString& sKey) const
         {
             const_iterator pIt = find(sKey);
             if (pIt == end())

@@ -96,7 +96,7 @@ namespace
 {
 struct lcl_LessXOfPoint
 {
-    inline bool operator() ( const std::vector< double >& first,
+    bool operator() ( const std::vector< double >& first,
                              const std::vector< double >& second )
     {
         if( !first.empty() && !second.empty() )

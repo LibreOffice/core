@@ -162,7 +162,7 @@ namespace pcr
             @param  _out_rEvents
                 Takes, the events currently associated with the introspectee
         */
-        inline void impl_getComponentScriptEvents_nothrow(
+        void impl_getComponentScriptEvents_nothrow(
                     std::vector< css::script::ScriptEventDescriptor >& _out_rEvents
                 ) const
         {

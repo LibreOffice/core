@@ -358,9 +358,9 @@ public:
 
     virtual void    Resize() override;
 
-    inline void     CheckYes() { m_aYesButton->Check(); }
-    inline void     CheckNo() { m_aNoButton->Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton->IsChecked(); }
+    void     CheckYes() { m_aYesButton->Check(); }
+    void     CheckNo() { m_aNoButton->Check(); }
+    bool     IsYesChecked() const { return m_aYesButton->IsChecked(); }
 };
 
 // struct CustomPropertyLine ---------------------------------------------
@@ -436,7 +436,7 @@ public:
 
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetVisibleLineCount() const;
-    inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
+    sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sName, css::uno::Any& rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
@@ -472,9 +472,9 @@ public:
 
     void            AddLine( const OUString& sName, css::uno::Any& rAny, bool bInteractive );
 
-    inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
-    inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
-    inline css::uno::Sequence< css::beans::PropertyValue >
+    bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
+    void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
+    css::uno::Sequence< css::beans::PropertyValue >
                     GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
     void    Init(VclBuilderContainer& rParent);
@@ -562,8 +562,8 @@ public:
     CmisPropertiesWindow(SfxTabPage* pParent);
     ~CmisPropertiesWindow();
 
-    inline sal_Int32 GetItemHeight() const { return m_nItemHeight; }
-    inline long getBoxHeight() const { return VclContainer::getLayoutRequisition(*m_pBox).Height(); };
+    sal_Int32 GetItemHeight() const { return m_nItemHeight; }
+    long getBoxHeight() const { return VclContainer::getLayoutRequisition(*m_pBox).Height(); };
     void AddLine( const OUString& sId, const OUString& sName,
                   const OUString& sType, const bool bUpdatable,
                   const bool bRequired, const bool bMultiValued,
@@ -601,7 +601,7 @@ public:
                   css::uno::Any& rAny );
 
     void ClearAllLines();
-    inline css::uno::Sequence< css::document::CmisProperty >
+    css::uno::Sequence< css::document::CmisProperty >
                     GetCmisProperties() const
                         { return m_pPropertiesWin.GetCmisProperties(); }
 };

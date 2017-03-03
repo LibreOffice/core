@@ -103,9 +103,9 @@ public:
     virtual void    Reset(const SfxItemSet *rSet) override;
 
     static const sal_uInt16* GetRanges() { return m_aWrapPageRg; }
-    inline void     SetNewFrame(bool bNewFrame) { m_bNew = bNewFrame; }
-    inline void     SetFormatUsed(bool bFormat, bool bDrawMode) { m_bFormat = bFormat; m_bDrawMode = bDrawMode; }
-    inline void     SetShell(SwWrtShell* pSh) { m_pWrtSh = pSh; }
+    void     SetNewFrame(bool bNewFrame) { m_bNew = bNewFrame; }
+    void     SetFormatUsed(bool bFormat, bool bDrawMode) { m_bFormat = bFormat; m_bDrawMode = bDrawMode; }
+    void     SetShell(SwWrtShell* pSh) { m_pWrtSh = pSh; }
 };
 
 #endif

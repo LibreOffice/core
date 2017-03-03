@@ -44,9 +44,9 @@ struct TokenId
                         TokenId() : nId( 0 ) {}
                         TokenId( sal_uInt16 n ) : nId( n ) {}
                         TokenId( const TokenId& r ) : nId( r.nId ) {}
-    inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
-    inline  TokenId&    operator =( sal_uInt16 n ) { nId = n; return *this; }
-    inline              operator const sal_uInt16&() const { return nId; }
+    TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
+    TokenId&    operator =( sal_uInt16 n ) { nId = n; return *this; }
+    operator const sal_uInt16&() const { return nId; }
 };
 
 struct ScComplexRefData;
@@ -232,7 +232,7 @@ class TokenStack
 
         inline void                 Reset();
 
-        inline bool                 HasMoreTokens() const { return nPos > 0; }
+        bool                 HasMoreTokens() const { return nPos > 0; }
         inline const TokenId        Get();
 };
 

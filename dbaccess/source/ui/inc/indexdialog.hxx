@@ -61,7 +61,7 @@ namespace dbaui
 
         void SelectNoHandlerCall( SvTreeListEntry* pEntry );
 
-        inline void setConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection)
+        void setConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection)
         {
              m_xConnection = _rxConnection;
         }

@@ -555,7 +555,7 @@ namespace {
 class ScStringTokenIterator
 {
 public:
-    inline explicit             ScStringTokenIterator( ScTokenArray& rTokArr ) :
+    explicit             ScStringTokenIterator( ScTokenArray& rTokArr ) :
                                     mrTokArr( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
@@ -564,7 +564,7 @@ public:
     rtl_uString* Next();
 
     /** Returns false, if a wrong token has been found. Does NOT return false on end of token array. */
-    inline bool                 Ok() const { return mbOk; }
+    bool                 Ok() const { return mbOk; }
 
 private:
     svl::SharedString maCurString; /// Current string.

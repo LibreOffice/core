@@ -97,7 +97,7 @@ class SwAccessibleTableData_Impl
                        bool bColumns ) const;
 
     // #i77106#
-    inline bool IncludeRow( const SwFrame& rFrame ) const
+    bool IncludeRow( const SwFrame& rFrame ) const
     {
         return !mbOnlyTableColumnHeader ||
                mpTabFrame->IsInHeadline( rFrame );
@@ -579,7 +579,7 @@ public:
 
     virtual ~SwAccSingleTableSelHander_Impl() {}
 
-    inline bool IsSelected() const { return bSelected; }
+    bool IsSelected() const { return bSelected; }
 
     virtual void Unselect( sal_Int32, sal_Int32 ) override;
 };

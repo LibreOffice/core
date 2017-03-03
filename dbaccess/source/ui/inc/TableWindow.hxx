@@ -161,8 +161,8 @@ namespace dbaui
         */
         virtual OUString     GetName() const = 0;
 
-        inline css::uno::Reference< css::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
-        inline css::uno::Reference< css::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
+        css::uno::Reference< css::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
+        css::uno::Reference< css::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
 
         /** set the sizing flag to the direction
             @param  _rPos

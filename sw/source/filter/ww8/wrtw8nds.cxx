@@ -1889,7 +1889,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt
 class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
 {
 public:
-    inline bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
+    bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
     {
         const sal_Int32 nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
         const sal_Int32 nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();

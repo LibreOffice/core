@@ -412,8 +412,8 @@ namespace rptui
         *
         * \return
         */
-        inline sal_Int32    getSplitPos() const { return m_nSplitPos;}
-        inline void         setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
+        sal_Int32    getSplitPos() const { return m_nSplitPos;}
+        void         setSplitPos(sal_Int32 _nSplitPos)       { m_nSplitPos = _nSplitPos;}
 
         /** creates a new report from the report definition.
          *
@@ -439,8 +439,8 @@ namespace rptui
         const std::shared_ptr<rptui::OReportModel>& getSdrModel() const { return m_aReportModel;}
 
         const css::uno::Reference< css::uno::XComponentContext >&  getContext() const { return m_xContext; }
-        inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
-        inline void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
+        sal_Int16   getZoomValue() const     { return m_nZoomValue; }
+        void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
 
         // css::beans::XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override

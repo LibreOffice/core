@@ -47,7 +47,7 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 
     virtual ~ExceptionThrower() {}
 
-    static inline Type const & getCppuType()
+    static Type const & getCppuType()
     {
         return cppu::UnoType<XExceptionThrower>::get();
     }

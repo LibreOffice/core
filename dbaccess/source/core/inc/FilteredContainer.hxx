@@ -53,8 +53,8 @@ namespace dbaccess
         */
         virtual OUString getTableTypeRestriction() const = 0;
 
-        inline virtual void addMasterContainerListener(){}
-        inline virtual void removeMasterContainerListener(){}
+        virtual void addMasterContainerListener(){}
+        virtual void removeMasterContainerListener(){}
 
         // ::connectivity::sdbcx::OCollection
         virtual void impl_refresh() override;
@@ -108,7 +108,7 @@ namespace dbaccess
                             oslInterlockedCount& _nInAppend
                         );
 
-        inline void dispose() { disposing(); }
+        void dispose() { disposing(); }
 
         /** late ctor. The container will fill itself with the data got by the connection meta data, considering the
             filters given (the connection is the parent object you passed in the ctor).
@@ -127,7 +127,7 @@ namespace dbaccess
             const css::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
-        inline bool isInitialized() const { return m_bConstructed; }
+        bool isInitialized() const { return m_bConstructed; }
     };
 } // namespace
 

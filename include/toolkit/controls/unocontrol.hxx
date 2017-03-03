@@ -127,7 +127,7 @@ protected:
     void DisposeAccessibleContext(css::uno::Reference<
             css::lang::XComponent> const& xContext);
 
-    inline void setPeer( const css::uno::Reference< css::awt::XWindowPeer >& _xPeer)
+    void setPeer( const css::uno::Reference< css::awt::XWindowPeer >& _xPeer)
     {
         mxPeer = _xPeer;
         mxVclWindowPeer = css::uno::Reference< css::awt::XVclWindowPeer >(mxPeer,css::uno::UNO_QUERY); // just to avoid the query_interface thing

@@ -250,10 +250,10 @@ struct CountryEntryPred_Country
 {
     CountryId                   meCountry;
 
-    inline explicit             CountryEntryPred_Country( CountryId eCountry ) :
+    explicit             CountryEntryPred_Country( CountryId eCountry ) :
                                     meCountry( eCountry ) {}
 
-    inline bool                 operator()( const CountryEntry& rCmp ) const
+    bool                 operator()( const CountryEntry& rCmp ) const
                                     { return rCmp.meCountry == meCountry; }
 };
 
@@ -265,7 +265,7 @@ struct CountryEntryPred_Language
 {
     LanguageType                meLanguage;
 
-    inline explicit             CountryEntryPred_Language( LanguageType eLanguage ) :
+    explicit             CountryEntryPred_Language( LanguageType eLanguage ) :
                                     meLanguage( eLanguage ) {}
 
     inline bool                 operator()( const CountryEntry& rCmp ) const;

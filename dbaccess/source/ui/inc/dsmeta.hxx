@@ -77,16 +77,16 @@ namespace dbaui
         typedef std::set< ItemID >::const_iterator    const_iterator;
 
     public:
-        inline FeatureSet() { }
+        FeatureSet() { }
 
-        inline void put( const ItemID _id )         { m_aContent.insert( _id ); }
-        inline bool has( const ItemID _id ) const   { return m_aContent.find( _id ) != m_aContent.end(); }
+        void put( const ItemID _id )         { m_aContent.insert( _id ); }
+        bool has( const ItemID _id ) const   { return m_aContent.find( _id ) != m_aContent.end(); }
 
         inline  bool    supportsAnySpecialSetting() const;
         inline  bool    supportsGeneratedValues() const;
 
-        inline  const_iterator begin() const    { return m_aContent.begin(); }
-        inline  const_iterator end() const      { return m_aContent.end(); }
+        const_iterator begin() const    { return m_aContent.begin(); }
+        const_iterator end() const      { return m_aContent.end(); }
 
     private:
         std::set< ItemID >    m_aContent;

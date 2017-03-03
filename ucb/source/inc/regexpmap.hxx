@@ -39,7 +39,7 @@ template< typename Val >
 class RegexpMapEntry
 {
 public:
-    inline RegexpMapEntry(OUString const & rTheRegexp,
+    RegexpMapEntry(OUString const & rTheRegexp,
                           Val * pTheValue):
         m_aRegexp(rTheRegexp), m_pValue(pTheValue) {}
 
@@ -61,7 +61,7 @@ struct Entry
     Regexp m_aRegexp;
     Val m_aValue;
 
-    inline Entry(Regexp const & rTheRegexp, Val const & rTheValue):
+    Entry(Regexp const & rTheRegexp, Val const & rTheValue):
         m_aRegexp(rTheRegexp), m_aValue(rTheValue) {}
 };
 

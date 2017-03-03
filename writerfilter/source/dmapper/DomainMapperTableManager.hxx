@@ -84,7 +84,7 @@ public:
 
     // use this method to avoid adding the properties for the table
     // but in the provided properties map.
-    inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
+    void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
 
     virtual bool sprm(Sprm & rSprm) override;
     bool attribute(Id nName, Value & val);

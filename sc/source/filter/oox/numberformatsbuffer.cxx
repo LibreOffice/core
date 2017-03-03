@@ -1850,7 +1850,7 @@ class NumberFormatFinalizer
 public:
     explicit            NumberFormatFinalizer( const WorkbookHelper& rHelper );
 
-    inline void         operator()( NumberFormat& rNumFmt ) const
+    void         operator()( NumberFormat& rNumFmt ) const
                             { rNumFmt.finalizeImport( mxNumFmts, maEnUsLocale ); }
 
 private:

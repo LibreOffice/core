@@ -66,20 +66,20 @@ public:
 
     ScBroadcastArea( const ScRange& rRange );
 
-    inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
-    inline const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
-    inline void         UpdateRange( const ScRange& rNewRange )
+    SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
+    const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
+    void         UpdateRange( const ScRange& rNewRange )
                             { aRange = rNewRange; }
-    inline const ScRange&   GetRange() const { return aRange; }
-    inline void         IncRef() { ++nRefCount; }
-    inline sal_uLong        DecRef() { return nRefCount ? --nRefCount : 0; }
-    inline sal_uLong        GetRef() { return nRefCount; }
-    inline ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
-    inline void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
-    inline bool         IsInUpdateChain() const { return mbInUpdateChain; }
-    inline void         SetInUpdateChain( bool b ) { mbInUpdateChain = b; }
+    const ScRange&   GetRange() const { return aRange; }
+    void         IncRef() { ++nRefCount; }
+    sal_uLong        DecRef() { return nRefCount ? --nRefCount : 0; }
+    sal_uLong        GetRef() { return nRefCount; }
+    ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
+    void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
+    bool         IsInUpdateChain() const { return mbInUpdateChain; }
+    void         SetInUpdateChain( bool b ) { mbInUpdateChain = b; }
 
-    inline bool IsGroupListening() const { return mbGroupListening; }
+    bool IsGroupListening() const { return mbGroupListening; }
     void SetGroupListening( bool b ) { mbGroupListening = b; }
 
     /** Equalness of this or range. */
@@ -265,14 +265,14 @@ private:
     public:
                                         TableSlots();
                                         ~TableSlots();
-        inline ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
+        ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
 
         /**
             Obtain slot pointer, no check on validity! It is assumed that
             all calls are made with the results of ComputeSlotOffset(),
             ComputeAreaPoints() and ComputeNextSlot()
           */
-        inline ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
+        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
 
     private:
         ScBroadcastAreaSlot**   ppSlots;
@@ -327,10 +327,10 @@ public:
 
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );
-    inline void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
-    inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
-    inline void SetEOUpdateChain( ScBroadcastArea* p ) { pEOUpdateChain = p; }
-    inline bool IsInBulkBroadcast() const { return nInBulkBroadcast > 0; }
+    void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
+    ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
+    void SetEOUpdateChain( ScBroadcastArea* p ) { pEOUpdateChain = p; }
+    bool IsInBulkBroadcast() const { return nInBulkBroadcast > 0; }
 
     // only for ScBroadcastAreaSlot
     void                PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,

@@ -117,20 +117,20 @@ public:
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0 );
 
-    inline RefMode      GetRefMode() const { return meRefMode; }
-    inline const Color& GetColorPrim() const { return maColorPrim; }
-    inline const Color& GetColorSecn() const { return maColorSecn; }
-    inline const Color& GetColorGap() const { return maColorGap; }
-    inline bool         UseGapColor() const { return mbUseGapColor; }
-    inline double       Prim() const { return mfPrim; }
-    inline double       Dist() const { return mfDist; }
-    inline double       Secn() const { return mfSecn; }
+    RefMode      GetRefMode() const { return meRefMode; }
+    const Color& GetColorPrim() const { return maColorPrim; }
+    const Color& GetColorSecn() const { return maColorSecn; }
+    const Color& GetColorGap() const { return maColorGap; }
+    bool         UseGapColor() const { return mbUseGapColor; }
+    double       Prim() const { return mfPrim; }
+    double       Dist() const { return mfDist; }
+    double       Secn() const { return mfSecn; }
     double PatternScale() const { return mfPatternScale;}
     void SetPatternScale( double fScale );
-    inline editeng::SvxBorderStyle Type() const { return mnType; }
+    editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
-    inline double       GetWidth() const { return mfPrim + mfDist + mfSecn; }
+    double       GetWidth() const { return mfPrim + mfDist + mfSecn; }
 
     /** Sets the frame style to invisible state. */
     void                Clear();
@@ -145,12 +145,12 @@ public:
     void                Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
-    inline void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
+    void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
     /** Sets a new color, does not modify other settings. */
-    inline void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
-    inline void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
+    void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
+    void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
     /** Sets whether to use dotted style for single hair lines. */
-    inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
+    void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style&              MirrorSelf();
@@ -187,15 +187,15 @@ class SAL_WARN_UNUSED DiagStyle : public Style
 {
 public:
     /** Constructs an invisible diagonal frame style. */
-    inline explicit     DiagStyle() : mfAngle( 0.0 ) {}
+    explicit     DiagStyle() : mfAngle( 0.0 ) {}
     /** Constructs a diagonal frame style passed style and angle. */
-    inline explicit     DiagStyle( const Style& rStyle, double fAngle ) :
+    explicit     DiagStyle( const Style& rStyle, double fAngle ) :
                             Style( rStyle ), mfAngle( fAngle ) {}
 
-    inline double       GetAngle() const { return mfAngle; }
+    double       GetAngle() const { return mfAngle; }
 
     /** Returns this style mirrored, if it is a double frame style, otherwise a simple copy. */
-    inline DiagStyle    Mirror() const { return DiagStyle( Style::Mirror(), mfAngle ); }
+    DiagStyle    Mirror() const { return DiagStyle( Style::Mirror(), mfAngle ); }
 
 private:
     double              mfAngle;    /// Angle between this and hor. or vert. border.

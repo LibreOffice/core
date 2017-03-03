@@ -218,7 +218,7 @@ namespace pcr
                 the attributes of the property which should be reflected by a to-be-created
                 <type scope="css::inspection">XPropertyControl</type>
         */
-        inline static bool requiresReadOnlyControl( sal_Int16 _nPropertyAttributes )
+        static bool requiresReadOnlyControl( sal_Int16 _nPropertyAttributes )
         {
             return ( _nPropertyAttributes & css::beans::PropertyAttribute::READONLY ) != 0;
         }

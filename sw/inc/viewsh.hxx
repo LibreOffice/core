@@ -219,7 +219,7 @@ public:
     void    SetRestoreActions(sal_uInt16 nSet);
     sal_uInt16  GetRestoreActions() const;
 
-    inline bool HasInvalidRect() const { return maInvalidRect.HasArea(); }
+    bool HasInvalidRect() const { return maInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
     void ChgNumberDigits();
 
@@ -286,7 +286,7 @@ public:
 
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
-    inline SwDoc *GetDoc()  const { return mpDoc; }  //Never 0.
+    SwDoc *GetDoc()  const { return mpDoc; }  //Never 0.
 
     /** Provides access to the document setting interface
      */
@@ -342,12 +342,12 @@ public:
     // 2. GetWin:      Available if we not printing
     // 3. GetOut:      Printer, Window or Virtual device
     vcl::RenderContext& GetRefDev() const;
-    inline vcl::Window* GetWin()    const { return mpWin; }
-    inline vcl::RenderContext* GetOut()     const { return mpOut; }
+    vcl::Window* GetWin()    const { return mpWin; }
+    vcl::RenderContext* GetOut()     const { return mpOut; }
 
     void SetWin(vcl::Window* win) { mpWin = win; }
     void SetOut(vcl::RenderContext* pOut) { mpOut = pOut; }
-    static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }
+    static bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( Orientation eOri );
@@ -423,7 +423,7 @@ public:
     // Calls Idle-formatter of Layout.
     void LayoutIdle();
 
-    inline const SwViewOption *GetViewOptions() const { return mpOpt; }
+    const SwViewOption *GetViewOptions() const { return mpOpt; }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
     virtual void  SetReadonlyOption(bool bSet);          // Set readonly-bit of ViewOptions.
@@ -441,8 +441,8 @@ public:
                           { return (*mpCareWindow.get()) ? mpCareWindow.get()->get() : CareChildWin(rVSh); }
     static vcl::Window*   CareChildWin(SwViewShell& rVSh);
 
-    inline SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
-    inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
+    SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
+    void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
 
     // Selection of  Draw Engine has been changed.
     virtual void DrawSelChanged();
@@ -554,7 +554,7 @@ public:
 
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
 
-    inline bool IsInConstructor() const { return mbInConstructor; }
+    bool IsInConstructor() const { return mbInConstructor; }
 
     const BitmapEx& GetReplacementBitmap(bool bIsErrorState);
     void DeleteReplacementBitmaps();

@@ -212,7 +212,7 @@ public:
     FileHandleGuard(const FileHandleGuard&) = delete;
     FileHandleGuard& operator=(const FileHandleGuard&) = delete;
 
-    inline oslFileHandle & getHandle() { return m_rHandle; }
+    oslFileHandle & getHandle() { return m_rHandle; }
 
 private:
     oslFileHandle & m_rHandle;

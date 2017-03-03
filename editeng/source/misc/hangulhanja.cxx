@@ -131,13 +131,13 @@ namespace editeng
     public:
                 void        DoDocumentConversion( );
 
-        inline  bool        IsValid() const { return m_xConverter.is(); }
+        bool        IsValid() const { return m_xConverter.is(); }
 
-        inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
-        inline LanguageType GetTargetLang() const   { return m_nTargetLang; }
-        inline const vcl::Font * GetTargetFont() const   { return m_pTargetFont; }
-        inline sal_Int32    GetConvOptions() const  { return m_nConvOptions; }
-        inline bool         IsInteractive() const   { return m_bIsInteractive; }
+        LanguageType GetSourceLang() const   { return m_nSourceLang; }
+        LanguageType GetTargetLang() const   { return m_nTargetLang; }
+        const vcl::Font * GetTargetFont() const   { return m_pTargetFont; }
+        sal_Int32    GetConvOptions() const  { return m_nConvOptions; }
+        bool         IsInteractive() const   { return m_bIsInteractive; }
 
     protected:
         void    createDialog();

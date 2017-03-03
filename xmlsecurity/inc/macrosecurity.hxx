@@ -68,7 +68,7 @@ public:
     virtual ~MacroSecurity() override;
     virtual void dispose() override;
 
-    inline void EnableReset(bool _bEnable = true)
+    void EnableReset(bool _bEnable = true)
     {
         m_pResetBtn->Enable ( _bEnable );
     }

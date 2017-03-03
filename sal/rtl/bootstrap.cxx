@@ -119,9 +119,9 @@ struct rtl_bootstrap_NameValue
     OUString sName;
     OUString sValue;
 
-    inline rtl_bootstrap_NameValue()
+    rtl_bootstrap_NameValue()
         {}
-    inline rtl_bootstrap_NameValue(
+    rtl_bootstrap_NameValue(
         OUString const & name, OUString const & value )
         : sName( name ),
           sValue( value )

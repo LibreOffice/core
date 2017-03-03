@@ -80,7 +80,7 @@ protected:
     virtual void SAL_CALL setSourceDocument(
         const css::uno::Reference< css::lang::XComponent >& Document ) override;
 
-    inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
+    void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
     virtual OUString getMediaType(bool _bOasis);
 

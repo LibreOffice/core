@@ -295,7 +295,7 @@ public:
     void                Clear();
 
     void                SetOffset( long nNewOffset );
-    inline void         SetDragSize( long nNewSize ) { mnDragSize = nNewSize; }
+    void         SetDragSize( long nNewSize ) { mnDragSize = nNewSize; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
@@ -321,13 +321,13 @@ public:
 
     using Window::SetHelpId;
 
-    inline void         SetStartDragHdl( const Link<HeaderBar*,void>& rLink )      { maStartDragHdl = rLink; }
-    inline void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }
-    inline void         SetEndDragHdl( const Link<HeaderBar*,void>& rLink )        { maEndDragHdl = rLink; }
-    inline void         SetSelectHdl( const Link<HeaderBar*,void>& rLink )         { maSelectHdl = rLink; }
-    inline void         SetCreateAccessibleHdl( const Link<HeaderBar*,void>& rLink ) { maCreateAccessibleHdl = rLink; }
+    void         SetStartDragHdl( const Link<HeaderBar*,void>& rLink )      { maStartDragHdl = rLink; }
+    void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }
+    void         SetEndDragHdl( const Link<HeaderBar*,void>& rLink )        { maEndDragHdl = rLink; }
+    void         SetSelectHdl( const Link<HeaderBar*,void>& rLink )         { maSelectHdl = rLink; }
+    void         SetCreateAccessibleHdl( const Link<HeaderBar*,void>& rLink ) { maCreateAccessibleHdl = rLink; }
 
-    inline bool         IsDragable() const                          { return mbDragable; }
+    bool         IsDragable() const                          { return mbDragable; }
 
     /** Creates and returns the accessible object of the header bar. */
     virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;

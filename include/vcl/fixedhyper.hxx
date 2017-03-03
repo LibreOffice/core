@@ -93,7 +93,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
 
             m_aClickHdl is called if the text is clicked.
         */
-        inline void         SetClickHdl( const Link<FixedHyperlink&,void>& rLink ) { m_aClickHdl = rLink; }
+        void         SetClickHdl( const Link<FixedHyperlink&,void>& rLink ) { m_aClickHdl = rLink; }
 
         // ::FixedHyperbaseLink
 

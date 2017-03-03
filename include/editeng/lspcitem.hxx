@@ -65,16 +65,16 @@ public:
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
     // Methods to query and edit. InterlineSpace is added to the height.
-    inline short GetInterLineSpace() const { return nInterLineSpace; }
-    inline void SetInterLineSpace( const short nSpace )
+    short GetInterLineSpace() const { return nInterLineSpace; }
+    void SetInterLineSpace( const short nSpace )
     {
         nInterLineSpace = nSpace;
         eInterLineSpaceRule = SvxInterLineSpaceRule::Fix;
     }
 
     // Determines the absolute or minimum row height.
-    inline sal_uInt16 GetLineHeight() const { return nLineHeight; }
-    inline void SetLineHeight( const sal_uInt16 nHeight )
+    sal_uInt16 GetLineHeight() const { return nLineHeight; }
+    void SetLineHeight( const sal_uInt16 nHeight )
     {
         nLineHeight = nHeight;
         eLineSpaceRule = SvxLineSpaceRule::Min;
@@ -82,17 +82,17 @@ public:
 
     // To increase or decrease the row height.
     sal_uInt16 GetPropLineSpace() const { return nPropLineSpace; }
-    inline void SetPropLineSpace( const sal_uInt8 nProp )
+    void SetPropLineSpace( const sal_uInt8 nProp )
     {
         nPropLineSpace = nProp;
         eInterLineSpaceRule = SvxInterLineSpaceRule::Prop;
     }
 
-    inline void SetLineSpaceRule(SvxLineSpaceRule e) { eLineSpaceRule = e; }
-    inline SvxLineSpaceRule GetLineSpaceRule() const { return eLineSpaceRule; }
+    void SetLineSpaceRule(SvxLineSpaceRule e) { eLineSpaceRule = e; }
+    SvxLineSpaceRule GetLineSpaceRule() const { return eLineSpaceRule; }
 
-    inline void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { eInterLineSpaceRule = e; }
-    inline SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
+    void SetInterLineSpaceRule(SvxInterLineSpaceRule e) { eInterLineSpaceRule = e; }
+    SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
 
     virtual sal_uInt16      GetValueCount() const override;
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;

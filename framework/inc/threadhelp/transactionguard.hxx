@@ -27,13 +27,13 @@ namespace framework{
 class TransactionGuard
 {
     public:
-        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode )
+        TransactionGuard( TransactionManager& rManager, EExceptionMode eMode )
             : m_pManager( &rManager )
         {
             m_pManager->registerTransaction( eMode );
         }
 
-        inline ~TransactionGuard()
+        ~TransactionGuard()
         {
             m_pManager->unregisterTransaction();
         }

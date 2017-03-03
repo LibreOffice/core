@@ -68,9 +68,9 @@ public:
     explicit            DefinedNameBase( const WorkbookHelper& rHelper );
 
     /** Returns the original name as imported from or exported to the file. */
-    inline const OUString& getModelName() const { return maModel.maName; }
+    const OUString& getModelName() const { return maModel.maName; }
     /** Returns the name as used in the Calc document. */
-    inline const OUString& getCalcName() const { return maCalcName; }
+    const OUString& getCalcName() const { return maCalcName; }
 
     /** Returns the original name as imported from or exported to the file. */
     const OUString& getUpcaseModelName() const;
@@ -102,20 +102,20 @@ public:
     void                convertFormula( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
     std::unique_ptr<ScTokenArray> getScTokens( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
     /** Returns true, if this defined name is global in the document. */
-    inline bool         isGlobalName() const { return mnCalcSheet < 0; }
+    bool         isGlobalName() const { return mnCalcSheet < 0; }
     /** Returns true, if this defined name is a special builtin name. */
-    inline bool         isBuiltinName() const { return mcBuiltinId != BIFF_DEFNAME_UNKNOWN; }
+    bool         isBuiltinName() const { return mcBuiltinId != BIFF_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
-    inline bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
+    bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
     /** Returns true, if this defined name is a reference to a VBA macro. */
-    inline bool         isVBName() const { return maModel.mbMacro && maModel.mbVBName; }
+    bool         isVBName() const { return maModel.mbMacro && maModel.mbVBName; }
 
     /** Returns the 0-based sheet index for local names, or -1 for global names. */
-    inline sal_Int16    getLocalCalcSheet() const { return mnCalcSheet; }
+    sal_Int16    getLocalCalcSheet() const { return mnCalcSheet; }
     /** Returns the built-in identifier of the defined name. */
-    inline sal_Unicode  getBuiltinId() const { return mcBuiltinId; }
+    sal_Unicode  getBuiltinId() const { return mcBuiltinId; }
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
-    inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
+    sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Tries to resolve the defined name to an absolute cell range. */
     bool                getAbsoluteRange( ScRange& orRange ) const;
 

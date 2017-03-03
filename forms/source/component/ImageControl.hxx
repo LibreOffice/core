@@ -59,7 +59,7 @@ protected:
     // UNO Anbindung
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
-    inline ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
+    ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OImageControlModel );

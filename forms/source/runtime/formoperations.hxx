@@ -80,7 +80,7 @@ namespace frm
 
         struct MethodAccess { friend class MethodGuard; private: MethodAccess() { } };
 
-        inline void enterMethod( MethodAccess ) const
+        void enterMethod( MethodAccess ) const
         {
             m_aMutex.acquire();
             impl_checkDisposed_throw();
@@ -89,7 +89,7 @@ namespace frm
         #endif
         }
 
-        inline void leaveMethod( MethodAccess ) const
+        void leaveMethod( MethodAccess ) const
         {
             m_aMutex.release();
         #ifdef DBG_UTIL
@@ -228,7 +228,7 @@ namespace frm
                     impl_getCurrentControlModel_throw() const;
 
         /// determines if we have a valid cursor
-        inline  bool    impl_hasCursor_nothrow() const { return m_xCursorProperties.is(); }
+        bool    impl_hasCursor_nothrow() const { return m_xCursorProperties.is(); }
 
         /** determines the model position from a grid control column's view position
 
@@ -349,12 +349,12 @@ namespace frm
                 m_rOwner.enterMethod( FormOperations::MethodAccess() );
             }
 
-            inline ~MethodGuard()
+            ~MethodGuard()
             {
                 clear();
             }
 
-            inline void clear()
+            void clear()
             {
                 if ( !m_bCleared )
                     m_rOwner.leaveMethod( FormOperations::MethodAccess() );

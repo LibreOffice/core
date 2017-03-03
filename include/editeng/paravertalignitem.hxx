@@ -57,7 +57,7 @@ public:
     Align                   GetValue() const { return (Align) SfxUInt16Item::GetValue(); }
     void                    SetValue(Align n) { SfxUInt16Item::SetValue((sal_uInt16)n); }
 
-    inline SvxParaVertAlignItem& operator=( const SvxParaVertAlignItem& rItem )
+    SvxParaVertAlignItem& operator=( const SvxParaVertAlignItem& rItem )
     {
         SetValue( rItem.GetValue() );
         return *this;

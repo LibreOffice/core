@@ -61,8 +61,8 @@ struct XclFormatRun
     sal_uInt16          mnChar;         /// First character this format applies to.
     sal_uInt16          mnFontIdx;      /// Excel font index for the next characters.
 
-    explicit inline     XclFormatRun() : mnChar( 0 ), mnFontIdx( 0 ) {}
-    explicit inline     XclFormatRun( sal_uInt16 nChar, sal_uInt16 nFontIdx ) :
+    explicit XclFormatRun() : mnChar( 0 ), mnFontIdx( 0 ) {}
+    explicit XclFormatRun( sal_uInt16 nChar, sal_uInt16 nFontIdx ) :
                             mnChar( nChar ), mnFontIdx( nFontIdx ) {}
 };
 

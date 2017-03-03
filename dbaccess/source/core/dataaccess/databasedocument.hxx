@@ -437,7 +437,7 @@ public:
 
     /** checks whether the component is already initialized, throws a NotInitializedException if not
     */
-    inline void checkInitialized() const
+    void checkInitialized() const
     {
         if ( !impl_isInitialized() )
             throw css::lang::NotInitializedException( OUString(), getThis() );
@@ -446,7 +446,7 @@ public:
     /** checks the document is currently in the initialization phase, or already initialized.
         Throws NotInitializedException if not so.
     */
-    inline void checkNotUninitilized() const
+    void checkNotUninitilized() const
     {
         if ( impl_isInitialized() || impl_isInitializing() )
             // fine
@@ -458,7 +458,7 @@ public:
     /** checks whether the document is currently being initialized, or already initialized,
         throws a DoubleInitializationException if so
     */
-    inline void checkNotInitialized() const
+    void checkNotInitialized() const
     {
         if ( impl_isInitializing() || impl_isInitialized() )
             throw css::frame::DoubleInitializationException( OUString(), getThis() );

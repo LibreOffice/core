@@ -75,7 +75,7 @@ public:
     /** Shows or hides the dial control and all dependent windows. */
     void                Show( bool bShow );
     /** Hides the dial control and all dependent windows. */
-    inline void         Hide() { Show( false ); }
+    void         Hide() { Show( false ); }
 
     /** Sets the "stacked" check box to the passed state and updates dependent controls. */
     void                SetStackedState( TriState eState );

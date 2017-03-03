@@ -243,7 +243,7 @@ namespace dbaccess
         virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) override
         {
         }
-        inline void resetClient() { m_pClient = nullptr; }
+        void resetClient() { m_pClient = nullptr; }
     };
 
     // LockModifiable
@@ -298,13 +298,13 @@ namespace dbaccess
         Reference< XInterface > m_xClient;
 
     public:
-        inline static void couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
+        static void couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
         {
             Reference< css::lang::XEventListener > xEnsureDelete( new LifetimeCoupler( _rxClient, _rxActor ) );
         }
 
     private:
-        inline LifetimeCoupler( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
+        LifetimeCoupler( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
             :m_xClient( _rxClient )
         {
             OSL_ENSURE( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
@@ -646,7 +646,7 @@ namespace
             }
         }
 
-        inline ~PreserveVisualAreaSize()
+        ~PreserveVisualAreaSize()
         {
             if ( m_xVisObject.is() && m_aOriginalSize.Width && m_aOriginalSize.Height )
             {
@@ -690,7 +690,7 @@ namespace
             }
         }
 
-        inline ~LayoutManagerLock()
+        ~LayoutManagerLock()
         {
             try
             {

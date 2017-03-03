@@ -665,7 +665,7 @@ private:
     bool                IsForceAutoColor() const { return bForceAutoColor; }
 
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode );
-    inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
+    void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
     DECL_LINK( StatusTimerHdl, Timer *, void);
     DECL_LINK( IdleFormatHdl, Timer *, void);
@@ -987,7 +987,7 @@ public:
 
     sal_Int32           GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
 
-    inline EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
+    EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
 
     void                StartOnlineSpellTimer()     { aOnlineSpellTimer.Start(); }
     void                StopOnlineSpellTimer()      { aOnlineSpellTimer.Stop(); }

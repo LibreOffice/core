@@ -266,8 +266,8 @@ public:
     void SetInitChild( bool b ) { mbInitChild = b; }
     void SetInitAllChildren( bool b ) { mbAllChildren = b; }
 
-    inline ScDPDimension* GetDim( size_t nPos ) const { return mppDim[nPos];}
-    inline ScDPLevel*         GetLevel( size_t nPos ) const { return mppLev[nPos];}
+    ScDPDimension* GetDim( size_t nPos ) const { return mppDim[nPos];}
+    ScDPLevel*         GetLevel( size_t nPos ) const { return mppLev[nPos];}
 
     bool GetInitChild() const {return mbInitChild; }
     bool GetInitAllChild() const { return mbAllChildren; }

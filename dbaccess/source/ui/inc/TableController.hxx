@@ -94,19 +94,19 @@ namespace dbaui
         bool     isAlterAllowed()   const;
         bool     isAutoIncrementPrimaryKey() const;
 
-        inline bool             isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
-        inline const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
+        bool             isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
+        const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
         virtual void impl_onModifyChanged() override;
 
-        inline std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
+        std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
 
         /// returns the position of the first empty row
         sal_Int32                           getFirstEmptyRowPosition();
 
-        inline const OTypeInfoMap&          getTypeInfo() const { return m_aTypeInfo; }
+        const OTypeInfoMap&          getTypeInfo() const { return m_aTypeInfo; }
 
-        inline TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
+        TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
         TOTypeInfoSP                        getTypeInfoByType(sal_Int32 _nDataType) const;
 
         const TOTypeInfoSP&                 getTypeInfoFallBack() const { return m_pTypeInfo; }

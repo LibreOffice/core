@@ -143,7 +143,7 @@ public:
     /** Selects or deselects all frame borders. */
     void                SelectAllBorders( bool bSelect );
     /** Deselects all frame borders. */
-    inline void         DeselectAllBorders() { SelectAllBorders( false ); }
+    void         DeselectAllBorders() { SelectAllBorders( false ); }
 
     /** Selects or deselects all visible frame borders (ignores hidden and "don't care" borders). */
     void                SelectAllVisibleBorders();

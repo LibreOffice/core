@@ -189,9 +189,9 @@ public:
     XclExpHyperlinkRef  GetLinkRecord();
 
     /** Returns true, if multiple URLs have been processed. */
-    inline bool         HasMultipleUrls() const { return mbMultipleUrls; }
+    bool         HasMultipleUrls() const { return mbMultipleUrls; }
     /** Returns a string containing all processed URLs. */
-    inline const OUString& GetUrlList() { return maUrlList; }
+    const OUString& GetUrlList() { return maUrlList; }
 
 private:
     XclExpHyperlinkRef  mxLinkRec;          /// Created HLINK record.
@@ -374,9 +374,9 @@ public:
                             const EditTextObject* pRightObj );
 
     /** Returns the last generated header/footer string. */
-    inline const OUString& GetHFString() const { return maHFString; }
+    const OUString& GetHFString() const { return maHFString; }
     /** Returns the total height of the last generated header/footer in twips. */
-    inline sal_Int32    GetTotalHeight() const { return mnTotalHeight; }
+    sal_Int32    GetTotalHeight() const { return mnTotalHeight; }
 
 private:
     /** Converts the text object contents and stores it in the passed string. */

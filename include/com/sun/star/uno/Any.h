@@ -54,13 +54,13 @@ class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Any : public uno_Any
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize )
+    static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem )
+    static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -144,13 +144,13 @@ public:
 
         @return a Type object of the set value
      */
-    inline const Type & SAL_CALL getValueType() const
+    const Type & SAL_CALL getValueType() const
         { return * reinterpret_cast< const Type * >( &pType ); }
     /** Gets the type of the set value.
 
         @return the unacquired type description reference of the set value
      */
-    inline typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const
+    typelib_TypeDescriptionReference * SAL_CALL getValueTypeRef() const
         { return pType; }
 
     /** Gets the type description of the set value. Provides ownership of the type description!
@@ -158,14 +158,14 @@ public:
 
         @param ppTypeDescr a pointer to type description pointer
     */
-    inline void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const
+    void SAL_CALL getValueTypeDescription( typelib_TypeDescription ** ppTypeDescr ) const
         { ::typelib_typedescriptionreference_getDescription( ppTypeDescr, pType ); }
 
     /** Gets the type class of the set value.
 
         @return the type class of the set value
      */
-    inline TypeClass SAL_CALL getValueTypeClass() const
+    TypeClass SAL_CALL getValueTypeClass() const
         { return (TypeClass)pType->eTypeClass; }
 
     /** Gets the type name of the set value.
@@ -178,14 +178,14 @@ public:
 
         @return true if any has a value, false otherwise
     */
-    inline bool SAL_CALL hasValue() const
+    bool SAL_CALL hasValue() const
         { return (typelib_TypeClass_VOID != pType->eTypeClass); }
 
     /** Gets a pointer to the set value.
 
         @return a pointer to the set value
     */
-    inline const void * SAL_CALL getValue() const
+    const void * SAL_CALL getValue() const
         { return pData; }
 
     /** Provides a value of specified type, so you can easily write e.g.

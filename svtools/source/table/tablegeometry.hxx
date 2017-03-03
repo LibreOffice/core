@@ -146,11 +146,11 @@ namespace svt { namespace table
         {
         }
 
-        inline  Rectangle   getRect() const     { return m_aRow.getRect().GetIntersection( m_aCol.getRect() ); }
-        inline  ColPos      getColumn() const   { return m_aCol.getCol(); }
-        inline  bool        isValid() const     { return !getRect().IsEmpty(); }
+        Rectangle   getRect() const     { return m_aRow.getRect().GetIntersection( m_aCol.getRect() ); }
+        ColPos      getColumn() const   { return m_aCol.getCol(); }
+        bool        isValid() const     { return !getRect().IsEmpty(); }
 
-        inline  bool        moveRight()     {return m_aCol.moveRight(); }
+        bool        moveRight()     {return m_aCol.moveRight(); }
     };
 
 

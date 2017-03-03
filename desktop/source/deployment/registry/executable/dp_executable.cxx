@@ -63,7 +63,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         bool isUrlTargetInExtension();
 
     public:
-        inline ExecutablePackageImpl(
+        ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,

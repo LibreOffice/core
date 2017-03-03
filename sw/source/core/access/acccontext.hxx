@@ -91,7 +91,7 @@ private:
 
 protected:
     void SetName( const OUString& rName ) { m_sName = rName; }
-    inline sal_Int16 GetRole() const
+    sal_Int16 GetRole() const
     {
         return m_nRole;
     }
@@ -107,11 +107,11 @@ protected:
     const SwAccessibleMap *GetMap() const { return m_pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
-    inline SwViewShell* GetShell()
+    SwViewShell* GetShell()
     {
         return GetMap()->GetShell();
     }
-    inline const SwViewShell* GetShell() const
+    const SwViewShell* GetShell() const
     {
         return GetMap()->GetShell();
     }
@@ -183,7 +183,7 @@ protected:
         getBoundsImpl(bool bRelative);
 
     // #i85634#
-    inline void NotRegisteredAtAccessibleMap()
+    void NotRegisteredAtAccessibleMap()
     {
         m_isRegisteredAtAccessibleMap = false;
     }
@@ -334,11 +334,11 @@ public:
     virtual bool HasCursor();   // required by map to remember that object
 
     bool Select( SwPaM *pPaM, SdrObject *pObj, bool bAdd );
-    inline bool Select( SwPaM& rPaM )
+    bool Select( SwPaM& rPaM )
     {
         return Select( &rPaM, nullptr, false );
     }
-    inline bool Select( SdrObject *pObj, bool bAdd )
+    bool Select( SdrObject *pObj, bool bAdd )
     {
         return Select( nullptr, pObj, bAdd );
     }

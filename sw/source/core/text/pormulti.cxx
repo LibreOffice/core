@@ -1179,7 +1179,7 @@ public:
     SwSpaceManipulator( SwTextPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
     void SecondLine();
-    inline long GetSpaceAdd() const { return nSpaceAdd; }
+    long GetSpaceAdd() const { return nSpaceAdd; }
 };
 
 SwSpaceManipulator::SwSpaceManipulator( SwTextPaintInfo& rInf,

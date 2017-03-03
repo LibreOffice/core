@@ -394,17 +394,17 @@ protected:
     SwValueFieldType( const SwValueFieldType& rTyp );
 
 public:
-    inline SwDoc*   GetDoc() const                      {
+    SwDoc*   GetDoc() const                      {
         return m_pDoc;
     }
-    inline void     SetDoc(SwDoc* pNewDoc)              {
+    void     SetDoc(SwDoc* pNewDoc)              {
         m_pDoc = pNewDoc;
     }
 
-    inline bool     UseFormat() const                   {
+    bool     UseFormat() const                   {
         return m_bUseFormat;
     }
-    inline void     EnableFormat(bool bFormat = true)   {
+    void     EnableFormat(bool bFormat = true)   {
         m_bUseFormat = bFormat;
     }
 
@@ -428,14 +428,14 @@ public:
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
     virtual void            SetLanguage(sal_uInt16 nLng) override;
 
-    inline SwDoc*           GetDoc() const          {
+    SwDoc*           GetDoc() const          {
         return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc();
     }
 
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const {
+    OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const {
         return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng);
     }
 

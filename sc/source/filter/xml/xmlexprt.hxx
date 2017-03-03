@@ -235,8 +235,8 @@ public:
     virtual ~ScXMLExport() override;
 
     static sal_Int16 GetMeasureUnit();
-    inline ScDocument*          GetDocument()           { return pDoc; }
-    inline const ScDocument*    GetDocument() const     { return pDoc; }
+    ScDocument*          GetDocument()           { return pDoc; }
+    const ScDocument*    GetDocument() const     { return pDoc; }
     bool IsMatrix (const ScAddress& aCell,
         ScRange& aCellAddress, bool& bIsFirst) const;
 

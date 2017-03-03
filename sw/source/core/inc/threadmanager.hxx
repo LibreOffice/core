@@ -76,7 +76,7 @@ class ThreadManager final
             Suspending the starting of further threads is sensible during the
             destruction of a Writer document.
         */
-        inline void SuspendStartingOfThreads()
+        void SuspendStartingOfThreads()
         {
             osl::MutexGuard aGuard(maMutex);
 
@@ -87,7 +87,7 @@ class ThreadManager final
         */
         void ResumeStartingOfThreads();
 
-        inline bool StartingOfThreadsSuspended()
+        bool StartingOfThreadsSuspended()
         {
             osl::MutexGuard aGuard(maMutex);
 

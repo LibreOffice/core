@@ -42,21 +42,21 @@ class Reference
 public:
     /** Constructor...
      */
-    inline Reference()
+    Reference()
         : m_pBody (NULL)
     {}
 
 
     /** Constructor...
      */
-    inline Reference (reference_type * pBody, __sal_NoAcquire)
+    Reference (reference_type * pBody, __sal_NoAcquire)
         : m_pBody (pBody)
     {
     }
 
     /** Constructor...
      */
-    inline Reference (reference_type * pBody)
+    Reference (reference_type * pBody)
         : m_pBody (pBody)
     {
         if (m_pBody)
@@ -65,7 +65,7 @@ public:
 
     /** Copy constructor...
      */
-    inline Reference (const Reference<reference_type> & handle)
+    Reference (const Reference<reference_type> & handle)
         : m_pBody (handle.m_pBody)
     {
         if (m_pBody)
@@ -75,7 +75,7 @@ public:
 #ifdef LIBO_INTERNAL_ONLY
     /** Move constructor...
      */
-    inline Reference (Reference<reference_type> && handle)
+    Reference (Reference<reference_type> && handle)
         : m_pBody (handle.m_pBody)
     {
         handle.m_pBody = nullptr;
@@ -84,7 +84,7 @@ public:
 
     /** Destructor...
      */
-    inline ~Reference()
+    ~Reference()
     {
         if (m_pBody)
             m_pBody->release();
@@ -93,7 +93,7 @@ public:
     /** Set...
          Similar to assignment.
      */
-    inline Reference<reference_type> &
+    Reference<reference_type> &
     SAL_CALL set (reference_type * pBody)
     {
         if (pBody)
@@ -109,7 +109,7 @@ public:
          Unbinds this instance from its body (if bound) and
          bind it to the body represented by the handle.
      */
-    inline Reference<reference_type> &
+    Reference<reference_type> &
     SAL_CALL operator= (const Reference<reference_type> & handle)
     {
         return set( handle.m_pBody );
@@ -121,7 +121,7 @@ public:
      *   bind it to the body represented by the handle, and
      *   set the body represented by the handle to nullptr.
      */
-    inline Reference<reference_type> &
+    Reference<reference_type> &
     operator= (Reference<reference_type> && handle)
     {
         // self-movement guts ourself
@@ -135,7 +135,7 @@ public:
 
     /** Assignment...
      */
-    inline Reference<reference_type> &
+    Reference<reference_type> &
     SAL_CALL operator= (reference_type * pBody)
     {
         return set( pBody );
@@ -148,7 +148,7 @@ public:
          since in the second case two large objects exist in memory
          (the old body and the new body).
      */
-    inline Reference<reference_type> & SAL_CALL clear()
+    Reference<reference_type> & SAL_CALL clear()
     {
         if (m_pBody)
         {
@@ -164,7 +164,7 @@ public:
          I.e. handle->someBodyOp() and handle.get()->someBodyOp()
          are the same.
      */
-    inline reference_type * SAL_CALL get() const
+    reference_type * SAL_CALL get() const
     {
         return m_pBody;
     }
@@ -172,7 +172,7 @@ public:
 
     /** Probably most common used: handle->someBodyOp().
      */
-    inline reference_type * SAL_CALL operator->() const
+    reference_type * SAL_CALL operator->() const
     {
         assert(m_pBody != NULL);
         return m_pBody;
@@ -181,7 +181,7 @@ public:
 
     /** Allows (*handle).someBodyOp().
     */
-    inline reference_type & SAL_CALL operator*() const
+    reference_type & SAL_CALL operator*() const
     {
         assert(m_pBody != NULL);
         return *m_pBody;
@@ -190,7 +190,7 @@ public:
 
     /** Returns True if the handle does point to a valid body.
      */
-    inline bool SAL_CALL is() const
+    bool SAL_CALL is() const
     {
         return (m_pBody != NULL);
     }
@@ -198,7 +198,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     /** Returns True if the handle does point to a valid body.
      */
-    inline explicit operator bool() const
+    explicit operator bool() const
     {
         return is();
     }
@@ -206,7 +206,7 @@ public:
 
     /** Returns True if this points to pBody.
      */
-    inline bool SAL_CALL operator== (const reference_type * pBody) const
+    bool SAL_CALL operator== (const reference_type * pBody) const
     {
         return (m_pBody == pBody);
     }
@@ -214,7 +214,7 @@ public:
 
     /** Returns True if handle points to the same body.
      */
-    inline bool
+    bool
     SAL_CALL operator== (const Reference<reference_type> & handle) const
     {
         return (m_pBody == handle.m_pBody);
@@ -223,7 +223,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline bool
+    bool
     SAL_CALL operator!= (const Reference<reference_type> & handle) const
     {
         return (m_pBody != handle.m_pBody);
@@ -232,7 +232,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline bool
+    bool
     SAL_CALL operator< (const Reference<reference_type> & handle) const
     {
         return (m_pBody < handle.m_pBody);
@@ -241,7 +241,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline bool
+    bool
     SAL_CALL operator> (const Reference<reference_type> & handle) const
     {
         return (m_pBody > handle.m_pBody);

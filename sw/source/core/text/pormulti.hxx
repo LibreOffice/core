@@ -113,17 +113,17 @@ public:
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
 
-    inline bool HasTabulator() const { return bTab1 || bTab2; }
-    inline bool IsFormatted() const { return bFormatted; }
-    inline void SetFormatted() { bFormatted = true; }
-    inline bool IsFollowField() const { return bFollowField; }
-    inline void SetFollowField() { bFollowField = true; }
-    inline bool HasFlyInContent() const { return bFlyInContent; }
-    inline void SetFlyInContent( bool bNew ) { bFlyInContent = bNew; }
-    inline bool IsDouble() const { return bDouble; }
-    inline bool IsRuby() const { return bRuby; }
-    inline bool IsBidi() const { return bBidi; }
-    inline bool OnTop() const { return bTop; }
+    bool HasTabulator() const { return bTab1 || bTab2; }
+    bool IsFormatted() const { return bFormatted; }
+    void SetFormatted() { bFormatted = true; }
+    bool IsFollowField() const { return bFollowField; }
+    void SetFollowField() { bFollowField = true; }
+    bool HasFlyInContent() const { return bFlyInContent; }
+    void SetFlyInContent( bool bNew ) { bFlyInContent = bNew; }
+    bool IsDouble() const { return bDouble; }
+    bool IsRuby() const { return bRuby; }
+    bool IsBidi() const { return bBidi; }
+    bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -134,9 +134,9 @@ public:
     void CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf );
 
     inline bool HasBrackets() const;
-    inline bool HasRotation() const { return 0 != (1 & nDirection); }
-    inline bool IsRevers() const { return 0 != (2 & nDirection); }
-    inline sal_uInt8 GetDirection() const { return nDirection; }
+    bool HasRotation() const { return 0 != (1 & nDirection); }
+    bool IsRevers() const { return 0 != (2 & nDirection); }
+    sal_uInt8 GetDirection() const { return nDirection; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
@@ -155,22 +155,22 @@ public:
     SwDoubleLinePortion( const SwMultiCreator& rCreate, sal_Int32 nEnd );
     virtual ~SwDoubleLinePortion() override;
 
-    inline SwBracket* GetBrackets() const { return pBracket.get(); }
+    SwBracket* GetBrackets() const { return pBracket.get(); }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
     void PaintBracket( SwTextPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth );
-    inline sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
-    inline sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
-    inline void ClearBrackets()
+    sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
+    sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
+    void ClearBrackets()
         { pBracket->nPreWidth = pBracket->nPostWidth=0; Width( 0 ); }
-    inline sal_uInt16 BracketWidth(){ return PreWidth() + PostWidth(); }
+    sal_uInt16 BracketWidth(){ return PreWidth() + PostWidth(); }
 
     void CalcBlanks( SwTextFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
-    inline SwTwips GetLineDiff() const { return nLineDiff; }
-    inline sal_Int32 GetSpaceCnt() const
+    SwTwips GetLineDiff() const { return nLineDiff; }
+    sal_Int32 GetSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
-    inline sal_Int32 GetSmallerSpaceCnt() const
+    sal_Int32 GetSmallerSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
 
     virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
@@ -191,10 +191,10 @@ public:
                    const bool* pForceRubyPos );
 
     void CalcRubyOffset();
-    inline void Adjust( SwTextFormatInfo &rInf )
+    void Adjust( SwTextFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) Adjust_(rInf); }
-    inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
-    inline sal_Int32 GetRubyOffset() const { return nRubyOffset; }
+    sal_uInt16 GetAdjustment() const { return nAdjustment; }
+    sal_Int32 GetRubyOffset() const { return nRubyOffset; }
 };
 
 class SwRotatedPortion : public SwMultiPortion
@@ -213,7 +213,7 @@ class SwBidiPortion : public SwMultiPortion
 public:
     SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv );
 
-    inline sal_uInt8 GetLevel() const { return nLevel; }
+    sal_uInt8 GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
     sal_Int32 GetSpaceCnt( const SwTextSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks

@@ -336,8 +336,8 @@ public:
     DrawTextFlags   ImplGetTextStyle() const;
 
     /// pb: #106948# explicit mirroring for calc
-    inline void     EnableMirroring()       { mbMirroring = true; }
-    inline bool     IsMirroring() const { return mbMirroring; }
+    void     EnableMirroring()       { mbMirroring = true; }
+    bool     IsMirroring() const { return mbMirroring; }
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
@@ -463,8 +463,8 @@ public:
     void SetEdgeBlending(bool bNew);
 
     /// pb: #106948# explicit mirroring for calc
-    inline void     EnableMirroring()   { maLBWindow->EnableMirroring(); }
-    inline void     SetDropTraget(const css::uno::Reference< css::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
+    void     EnableMirroring()   { maLBWindow->EnableMirroring(); }
+    void     SetDropTraget(const css::uno::Reference< css::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
 
 class ImplListBoxFloatingWindow : public FloatingWindow

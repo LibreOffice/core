@@ -128,7 +128,7 @@ public:
                                     const ScAddress & rQueryAddress,
                                     const bool bAvailable );
 
-    inline  const ScRange&  getRange() const { return maRange; }
+    const ScRange&  getRange() const { return maRange; }
 
     struct Hash
     {

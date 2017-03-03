@@ -51,7 +51,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
-    inline  SvxOrientationItem& operator=(const SvxOrientationItem& rOrientation)
+    SvxOrientationItem& operator=(const SvxOrientationItem& rOrientation)
             {
                 SetValue( rOrientation.GetValue() );
                 return *this;
@@ -99,7 +99,7 @@ public:
             sal_Int16       GetBottomMargin() const {return nBottomMargin; }
             void            SetBottomMargin(sal_Int16 nBottom);
 
-    inline  SvxMarginItem& operator=(const SvxMarginItem& rMargin)
+    SvxMarginItem& operator=(const SvxMarginItem& rMargin)
             {
                 nLeftMargin = rMargin.nLeftMargin;
                 nTopMargin = rMargin.nTopMargin;

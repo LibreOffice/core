@@ -42,7 +42,7 @@ public:
     virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
 
     /** Returns true, if the decoder has been initialized correctly. */
-    inline bool         isValid() const { return mbValid; }
+    bool         isValid() const { return mbValid; }
 
 private:
     /** Derived classes implement password verification and initialization of

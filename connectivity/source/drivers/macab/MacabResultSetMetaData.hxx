@@ -50,13 +50,13 @@ namespace connectivity
             MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
 
             // avoid ambigous cast error from the compiler
-            inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
+            operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
                 { return this; }
 
             /// @throws css::sdbc::SQLException
             void setMacabFields(
                 const ::rtl::Reference<connectivity::OSQLColumns> &xColumns);
-            inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
+            sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                 { return m_aMacabFields[columnIndex - 1]; }
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) override;

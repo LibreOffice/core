@@ -59,7 +59,7 @@ private:
     sal_Int32 implGetSelRowCount() const;
 
     /** Returns the row index from cell index. */
-    inline sal_Int32 implGetRow( sal_Int32 _nIndex ) const { return _nIndex / implGetColumnCount(); }
+    sal_Int32 implGetRow( sal_Int32 _nIndex ) const { return _nIndex / implGetColumnCount(); }
     /** Returns the absolute row index of the nSelRow-th selected row. */
     sal_Int32 implGetSelRow( sal_Int32 _nSelRow ) const;
 
