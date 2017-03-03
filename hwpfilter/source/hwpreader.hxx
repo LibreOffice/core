@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <rtl/ref.hxx>
 #include <sal/alloca.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -90,8 +91,7 @@ public:
     }
 private:
     Reference< XDocumentHandler > m_rxDocumentHandler;
-    Reference< XAttributeList > rList;
-    AttributeListImpl *pList;
+    rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
     HwpReaderPrivate *d;
 private:
