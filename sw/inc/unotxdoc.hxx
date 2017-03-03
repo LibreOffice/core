@@ -417,6 +417,8 @@ public:
     virtual void setClientVisibleArea(const Rectangle& rRectangle) override;
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;
+    /// @see vcl::ITiledRenderable::getTrackedChanges().
+    OUString getTrackedChanges() override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
     OUString getTrackedChangeAuthors() override;
     /// @see vcl::ITiledRenderable::getPostIts().
