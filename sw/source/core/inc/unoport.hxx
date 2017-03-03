@@ -303,8 +303,6 @@ public:
             const OUString& rPropertyName) override;
 };
 
-OUString SwRedlineTypeToOUString(RedlineType_t eType);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
