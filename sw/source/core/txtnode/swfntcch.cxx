@@ -22,11 +22,10 @@
 #include "fmtcol.hxx"
 #include "swfont.hxx"
 
-// aus atrstck.cxx
+// from atrstck.cxx
 extern const sal_uInt8 StackPos[];
 
-// globale Variablen, werden in SwFntCch.Hxx bekanntgegeben
-// Der FontCache wird in TextInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
+// FontCache is created in txtinit.cxx TextInit_ and deleted in TextFinit
 SwFontCache *pSwFontCache = nullptr;
 
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :

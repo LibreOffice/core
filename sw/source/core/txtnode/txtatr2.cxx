@@ -183,7 +183,6 @@ void SwTextINetFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     }
 }
 
-    // erfrage vom Modify Informationen
 bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||

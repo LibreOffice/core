@@ -66,7 +66,7 @@ SvStatistics g_SvStat;
 
 using namespace ::com::sun::star;
 
-// Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
+// set background brush, depending on character formatting
 void SwFont::SetBackColor( Color* pNewColor )
 {
     m_pBackColor.reset( pNewColor );
@@ -438,32 +438,32 @@ void SwFont::SetVertical( sal_uInt16 nDir, const bool bVertFormat )
 
 /*
  Escapement:
-    frEsc:  Fraction, Grad des Escapements
-    Esc = resultierendes Escapement
-    A1 = Original-Ascent            (nOrgAscent)
-    A2 = verkleinerter Ascent       (nEscAscent)
-    Ax = resultierender Ascent      (GetAscent())
-    H1 = Original-Hoehe             (nOrgHeight)
-    H2 = verkleinerter Hoehe        (nEscHeight)
-    Hx = resultierender Hoehe       (GetHeight())
-    Bx = resultierende Baseline fuer die Textausgabe (CalcPos())
-         (Vorsicht: Y - A1!)
+    frEsc:  Fraction, ratio of Escapements
+    Esc = resulting Escapement
+    A1 = original Ascent            (nOrgAscent)
+    A2 = shrunk Ascent              (nEscAscent)
+    Ax = resulting Ascent           (GetAscent())
+    H1 = original Height            (nOrgHeight)
+    H2 = shrunk Height              (nEscHeight)
+    Hx = resulting Height           (GetHeight())
+    Bx = resulting Baseline for Text (CalcPos())
+         (Attention: Y - A1!)
 
     Escapement:
         Esc = H1 * frEsc;
 
-    Hochstellung:
+    Superscript:
         Ax = A2 + Esc;
         Hx = H2 + Esc;
         Bx = A1 - Esc;
 
-    Tiefstellung:
+    Subscript:
         Ax = A1;
         Hx = A1 + Esc + (H2 - A2);
         Bx = A1 + Esc;
 */
 
-// nEsc ist der Prozentwert
+// nEsc ist the percentage
 sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 {
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
@@ -756,7 +756,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::Latin].SetStyleName( rFont.GetStyleName() );
         m_aSub[SwFontScript::Latin].SetPitch( rFont.GetPitch() );
         m_aSub[SwFontScript::Latin].SetCharSet( rFont.GetCharSet() );
-        m_aSub[SwFontScript::Latin].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        m_aSub[SwFontScript::Latin].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::Latin].m_aSize;
         aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
         m_aSub[SwFontScript::Latin].SetSize( aTmpSize );
@@ -772,7 +772,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::CJK].SetStyleName( rFont.GetStyleName() );
         m_aSub[SwFontScript::CJK].SetPitch( rFont.GetPitch() );
         m_aSub[SwFontScript::CJK].SetCharSet( rFont.GetCharSet() );
-        m_aSub[SwFontScript::CJK].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        m_aSub[SwFontScript::CJK].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::CJK].m_aSize;
         aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
         m_aSub[SwFontScript::CJK].SetSize( aTmpSize );
@@ -792,7 +792,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SwFontScript::CTL].SetStyleName( rFont.GetStyleName() );
         m_aSub[SwFontScript::CTL].SetPitch( rFont.GetPitch() );
         m_aSub[SwFontScript::CTL].SetCharSet( rFont.GetCharSet() );
-        m_aSub[SwFontScript::CTL].SvxFont::SetPropr( 100 );   // 100% der FontSize
+        m_aSub[SwFontScript::CTL].SvxFont::SetPropr( 100 ); // 100% of FontSize
         Size aTmpSize = m_aSub[SwFontScript::CTL].m_aSize;
         aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
         m_aSub[SwFontScript::CTL].SetSize( aTmpSize );
@@ -1053,8 +1053,8 @@ sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
 
 Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
 {
-    // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
-    // sicher ist sicher ...
+    // Robust: the font is supposed to be set already, but better safe than
+    // sorry...
     if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic ||
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
@@ -1110,8 +1110,8 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
         }
         rInf.SetKern( nOldKern );
         rInf.SetText(oldText);
-        // 15142: Ein Wort laenger als eine Zeile, beim Zeilenumbruch
-        //        hochgestellt, muss seine effektive Hoehe melden.
+        // A word that's longer than one line, with escapement at the line
+        // break, must report its effective height.
         if( GetEscapement() )
         {
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
