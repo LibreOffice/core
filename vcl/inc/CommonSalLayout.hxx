@@ -70,6 +70,7 @@ public:
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
     HFONT                   getHFONT() const { return mhFont; }
     WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }
+    bool                    hasHScale() const;
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };

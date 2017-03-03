@@ -213,6 +213,13 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
     }
 }
 
+bool CommonSalLayout::hasHScale() const
+{
+    int nHeight(mrFontSelData.mnHeight);
+    int nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
+    return nWidth != nHeight;
+}
+
 #elif defined(MACOSX) || defined(IOS)
 CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 :   mrFontSelData(rCoreTextStyle.maFontSelData)
