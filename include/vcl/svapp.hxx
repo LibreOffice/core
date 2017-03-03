@@ -26,6 +26,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <vector>
+#include <functional>
 
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ustring.hxx>
@@ -1575,6 +1576,7 @@ VCL_DLLPUBLIC Application* GetpApp();
 
 VCL_DLLPUBLIC bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
+VCL_DLLPUBLIC void AddOnDeInitVCL(std::function<void()>);
 
 VCL_DLLPUBLIC bool InitAccessBridge();
 
