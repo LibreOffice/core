@@ -271,7 +271,7 @@ javaFrameworkError jfw_startVM(
                     return JFW_E_NEED_RESTART;
 
                 //Check if the selected Java was set in this process. If so it
-                //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
+                //must not have the requirements flag JFW_REQUIRE_NEEDRESTART
                 if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
                     && jfw::wasJavaSelectedInSameProcess())
                     return JFW_E_NEED_RESTART;
