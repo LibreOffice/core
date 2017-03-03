@@ -194,7 +194,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
     std::vector<LwpKey*> vObjIndexs;
 
-    if(KeyCount)
+    if (KeyCount)
     {
         LwpKey* akey = new LwpKey();
         akey->id.Read(pObjStrm);
@@ -218,7 +218,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
     for( sal_uInt16 j=0; j<LeafCount; j++ )
     {
-        sal_Int64 nPos = m_TempVec[j]+LwpSvStream::LWP_STREAM_BASE;
+        sal_Int64 nPos = m_TempVec.at(j) + LwpSvStream::LWP_STREAM_BASE;
         sal_Int64 nActualPos = pObjStrm->GetStream()->Seek(nPos);
 
         if (nPos != nActualPos)
