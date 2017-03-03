@@ -209,7 +209,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;
 D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
-D2DWriteTextOutRenderer::pD2D1MakeRotateMatrix_t D2DWriteTextOutRenderer::D2D1MakeRotateMatrix = nullptr;
 D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteCreateFactory = nullptr;
 
 bool D2DWriteTextOutRenderer::InitModules()
@@ -219,11 +218,10 @@ bool D2DWriteTextOutRenderer::InitModules()
     if (mmD2d1 && mmDWrite)
     {
         D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
-        D2D1MakeRotateMatrix = pD2D1MakeRotateMatrix_t(GetProcAddress(mmD2d1, "D2D1MakeRotateMatrix"));
         DWriteCreateFactory = pDWriteCreateFactory_t(GetProcAddress(mmDWrite, "DWriteCreateFactory"));
     }
 
-    if (!D2D1CreateFactory || !DWriteCreateFactory || !D2D1MakeRotateMatrix)
+    if (!D2D1CreateFactory || !DWriteCreateFactory)
     {
         CleanupModules();
         return false;
@@ -242,7 +240,6 @@ void D2DWriteTextOutRenderer::CleanupModules()
     mmD2d1 = nullptr;
     mmDWrite = nullptr;
     D2D1CreateFactory = nullptr;
-    D2D1MakeRotateMatrix = nullptr;
     DWriteCreateFactory = nullptr;
 }
 
@@ -367,20 +364,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hD
     bool bGlyphs = false;
     if (succeeded)
     {
-        float nYDiff = 0.0f;
-        bool bVertical = rLayout.getFontSelData().mbVertical;
-
-        if (bVertical)
-        {
-            DWRITE_FONT_METRICS aFM;
-            mpFontFace->GetMetrics(&aFM);
-            nYDiff = (aFM.ascent - aFM.descent) * mlfEmHeight / aFM.designUnitsPerEm;
-        }
-
         mpRT->BeginDraw();
-
-        D2D1_MATRIX_3X2_F aOrigTrans, aRotTrans;
-        mpRT->GetTransform(&aOrigTrans);
 
         const GlyphItem* pGlyph;
         while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
@@ -401,17 +385,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hD
                 0
             };
 
-            if (bVertical && !pGlyph->IsVertical())
-            {
-                D2D1MakeRotateMatrix(90.0f, baseline, &aRotTrans);
-                mpRT->SetTransform(aOrigTrans * aRotTrans);
-                mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
-                mpRT->SetTransform(aOrigTrans);
-            }
-            else
-            {
-                mpRT->DrawGlyphRun({ baseline.x, baseline.y + nYDiff }, &glyphs, pBrush);
-            }
+            mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
         }
 
         hr = mpRT->EndDraw();
@@ -533,45 +507,23 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(CommonSalLayout const &rLayout, Re
     Point aPos;
     const GlyphItem* pGlyph;
     std::vector<uint16_t> indices;
-    std::vector<bool> vertical;
     std::vector<Point>  positions;
     int nStart = 0;
     while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
     {
         positions.push_back(aPos);
         indices.push_back(pGlyph->maGlyphId);
-        vertical.push_back(pGlyph->IsVertical());
     }
 
     auto aBoxes = GetGlyphInkBoxes(indices.data(), indices.data() + indices.size());
     if (aBoxes.empty())
         return false;
 
-    double nYDiff = 0.0f;
-    bool bVertical = rLayout.getFontSelData().mbVertical;
-
-    if (bVertical)
-    {
-        DWRITE_FONT_METRICS aFM;
-        mpFontFace->GetMetrics(&aFM);
-        nYDiff = (aFM.ascent - aFM.descent) * mlfEmHeight / aFM.designUnitsPerEm;
-    }
-
     auto p = positions.begin();
-    auto v = vertical.begin();
     for (auto &b:aBoxes)
     {
-        if (bVertical)
-        {
-            if (!*v)
-                // FIXME: Hack, should rotate the box here instead.
-                b.expand(std::max(b.getHeight(), b.getWidth()));
-            else
-                b += Point(0, nYDiff);
-        }
         b += *p;
         p++;
-        v++;
         rOut.Union(b);
     }
 

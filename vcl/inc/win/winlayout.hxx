@@ -200,15 +200,11 @@ class D2DWriteTextOutRenderer : public TextOutRenderer
     typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
         REFIID, const D2D1_FACTORY_OPTIONS *, void **);
 
-    typedef HRESULT(WINAPI *pD2D1MakeRotateMatrix_t)(float, D2D1_POINT_2F,
-        D2D1_MATRIX_3X2_F*);
-
     typedef HRESULT(WINAPI *pDWriteCreateFactory_t)(DWRITE_FACTORY_TYPE,
         REFIID, IUnknown **);
 
     static HINSTANCE mmD2d1, mmDWrite;
     static pD2D1CreateFactory_t     D2D1CreateFactory;
-    static pD2D1MakeRotateMatrix_t  D2D1MakeRotateMatrix;
     static pDWriteCreateFactory_t   DWriteCreateFactory;
 
 public:
