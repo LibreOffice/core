@@ -27,7 +27,6 @@
 class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem<RectPoint>
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpPosItem( RectPoint eRP = RectPoint::MM );
                             SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 

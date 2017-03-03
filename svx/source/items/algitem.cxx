@@ -41,7 +41,6 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxOrientationItem::CreateDefault() { return new  SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) ;}
 SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(0) ;}
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,

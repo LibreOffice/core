@@ -119,8 +119,6 @@ This item describes a Macro table.
 class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 
     // "pure virtual methods" of SfxPoolItem

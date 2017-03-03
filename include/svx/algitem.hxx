@@ -30,8 +30,6 @@ class SvStream;
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem<SvxCellOrientation>
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxOrientationItem(
         const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
         const sal_uInt16 nId );

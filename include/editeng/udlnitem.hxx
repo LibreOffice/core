@@ -85,8 +85,6 @@ public:
 class EDITENG_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxUnderlineItem( const FontLineStyle eSt,
                       const sal_uInt16 nId );
 
@@ -102,8 +100,6 @@ public:
 class EDITENG_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxOverlineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 

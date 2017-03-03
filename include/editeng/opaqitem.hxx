@@ -35,8 +35,6 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxOpaqueItem( const sal_uInt16 nId , const bool bOpa = true );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 

@@ -61,11 +61,7 @@ SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(
 SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
 SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
 SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0);}
-SfxPoolItem* SvxScriptSpaceItem::CreateDefault() { return new  SvxScriptSpaceItem(false, 0);}
-SfxPoolItem* SvxHangingPunctuationItem::CreateDefault() { return new  SvxHangingPunctuationItem(false, 0);}
-SfxPoolItem* SvxForbiddenRuleItem::CreateDefault() { return new  SvxForbiddenRuleItem(false, 0);}
 SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
-SfxPoolItem* SvxParaGridItem::CreateDefault() { return new  SvxParaGridItem(true, 0);}
 
 
 enum class SvxSpecialLineSpace

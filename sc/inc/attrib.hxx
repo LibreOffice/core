@@ -155,8 +155,6 @@ public:
 class ScRangeItem : public SfxPoolItem
 {
 public:
-            static SfxPoolItem* CreateDefault();
-
             inline  ScRangeItem( const sal_uInt16 nWhich );
             inline  ScRangeItem( const ScRangeItem& rCpy );
 
@@ -195,8 +193,6 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 class ScTableListItem : public SfxPoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     inline  ScTableListItem( const sal_uInt16 nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
             virtual ~ScTableListItem() override;
@@ -263,8 +259,6 @@ public:
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem<ScVObjMode>
 {
 public:
-                static SfxPoolItem* CreateDefault();
-
                 ScViewObjectModeItem( sal_uInt16 nWhich );
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
                 virtual ~ScViewObjectModeItem() override;
@@ -306,8 +300,6 @@ const sal_uInt8 SC_MID_PAGE_SCALETO_HEIGHT   = 2;
 class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
 {
 public:
-                                static SfxPoolItem* CreateDefault();
-
     /** Default c'tor sets the width and height to 0. */
     explicit                    ScPageScaleToItem();
     explicit                    ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight );
@@ -343,8 +335,6 @@ private:
 class ScCondFormatItem : public SfxPoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit ScCondFormatItem();
     explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);
 

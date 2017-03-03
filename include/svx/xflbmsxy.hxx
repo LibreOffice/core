@@ -26,7 +26,6 @@
 class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpSizeXItem( long nSizeX = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeXItem( SvStream& rIn );
 
@@ -45,7 +44,6 @@ public:
 class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpSizeYItem( long nSizeY = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeYItem( SvStream& rIn );
 

@@ -1905,8 +1905,6 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-SfxPoolItem* XLineStartWidthItem::CreateDefault() {return new XLineStartWidthItem;}
-
 XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
     SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth)
 {
@@ -1955,8 +1953,6 @@ bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-SfxPoolItem* XLineEndWidthItem::CreateDefault() {return new XLineEndWidthItem;}
-
 XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
    SfxMetricItem(XATTR_LINEENDWIDTH, nWidth)
 {
@@ -2004,8 +2000,6 @@ bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMember
     SetValue( nValue );
     return true;
 }
-
-SfxPoolItem* XLineStartCenterItem::CreateDefault() {return new XLineStartCenterItem;}
 
 XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
     SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
@@ -2056,8 +2050,6 @@ bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMem
     SetValue( *b );
     return true;
 }
-
-SfxPoolItem* XLineEndCenterItem::CreateDefault() {return new XLineEndCenterItem;}
 
 XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
     SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
@@ -2278,7 +2270,6 @@ void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
-SfxPoolItem* XSecondaryFillColorItem::CreateDefault() {return new XSecondaryFillColorItem;}
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)

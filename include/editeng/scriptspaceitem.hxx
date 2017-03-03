@@ -33,8 +33,6 @@
 class EDITENG_DLLPUBLIC SvxScriptSpaceItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxScriptSpaceItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 

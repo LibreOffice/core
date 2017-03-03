@@ -197,7 +197,7 @@ for d in definitionSet:
         continue
     if isOtherConstness(d, callSet):
         continue
-    # include assignment operators, if we remove them, the compiler creates a default one, which can have odd consequences
+    # exclude assignment operators, if we remove them, the compiler creates a default one, which can have odd consequences
     if "::operator=(" in d[1]:
         continue
     # these are only invoked implicitly, so the plugin does not see the calls
@@ -245,9 +245,6 @@ for d in definitionSet:
        continue
     if d[0] == "basic_ostream<type-parameter-?-?, type-parameter-?-?> &" and d[1].startswith("operator<<(basic_ostream<type-parameter-?-?"):
        continue
-    # ignore the SfxPoolItem CreateDefault methods for now
-    if d[1].endswith("::CreateDefault()"):
-        continue
     if "::operator" in d[1]:
         continue
 
@@ -302,9 +299,6 @@ for d in definitionSet:
     # ignore external code
     if definitionToSourceLocationMap[d].startswith("external/"):
        continue
-    # ignore the SfxPoolItem CreateDefault methods for now
-    if d[1].endswith("::CreateDefault()"):
-        continue
     # ignore UNO constructor functions
     if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
         d[1].endswith("_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):

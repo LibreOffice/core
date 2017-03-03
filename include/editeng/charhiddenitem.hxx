@@ -32,8 +32,6 @@
 class EDITENG_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxCharHiddenItem( const bool bHidden /*= false*/, const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

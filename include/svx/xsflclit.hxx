@@ -28,7 +28,6 @@
 class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 {
 public:
-            static SfxPoolItem* CreateDefault();
             SVX_DLLPRIVATE XSecondaryFillColorItem() {}
             XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
             SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);

@@ -34,8 +34,6 @@ class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
 {
     rtl_TextEncoding eFrom;
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxCharSetColorItem( const sal_uInt16 nId  );
     SvxCharSetColorItem( const Color& aColor, const rtl_TextEncoding eFrom,
                      const sal_uInt16 nId  );

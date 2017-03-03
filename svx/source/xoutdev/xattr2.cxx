@@ -34,8 +34,6 @@
 
 #include <libxml/xmlwriter.h>
 
-SfxPoolItem* XLineTransparenceItem::CreateDefault() {return new XLineTransparenceItem;}
-
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
 {
@@ -394,8 +392,6 @@ css::drawing::LineCap XLineCapItem::GetValue() const
     return eRetval;
 }
 
-SfxPoolItem* XFillTransparenceItem::CreateDefault() {return new XFillTransparenceItem;}
-
 XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
 {
@@ -449,8 +445,6 @@ void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
-SfxPoolItem* XFormTextShadowTranspItem::CreateDefault() { return new XFormTextShadowTranspItem; }
-
 XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
 {
@@ -472,8 +466,6 @@ SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*
 }
 
 // class XFillGradientStepCountItem
-
-SfxPoolItem* XGradientStepCountItem::CreateDefault() {return new XGradientStepCountItem;}
 
 XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
@@ -509,8 +501,6 @@ bool XGradientStepCountItem::GetPresentation
     return true;
 }
 
-
-SfxPoolItem* XFillBmpTileItem::CreateDefault() {return new XFillBmpTileItem;}
 
 XFillBmpTileItem::XFillBmpTileItem( bool bTile ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, bTile )
@@ -554,8 +544,6 @@ void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTilePosItem
 
-
-SfxPoolItem* XFillBmpPosItem::CreateDefault() {return new XFillBmpPosItem;}
 
 XFillBmpPosItem::XFillBmpPosItem( RectPoint eRP ) :
     SfxEnumItem( XATTR_FILLBMP_POS, eRP )
@@ -604,8 +592,6 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTileSizeXItem
 
-SfxPoolItem* XFillBmpSizeXItem::CreateDefault() {return new XFillBmpSizeXItem;}
-
 XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, nSizeX )
 {
@@ -646,8 +632,6 @@ bool XFillBmpSizeXItem::HasMetrics() const
 // class XFillBmpTileSizeYItem
 
 
-SfxPoolItem* XFillBmpSizeYItem::CreateDefault() {return new XFillBmpSizeYItem;}
-
 XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEY, nSizeY )
 {
@@ -687,8 +671,6 @@ bool XFillBmpSizeYItem::HasMetrics() const
 
 // class XFillBmpTileLogItem
 
-SfxPoolItem* XFillBmpSizeLogItem::CreateDefault() {return new XFillBmpSizeLogItem;}
-
 XFillBmpSizeLogItem::XFillBmpSizeLogItem( bool bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
 {
@@ -724,8 +706,6 @@ bool XFillBmpSizeLogItem::GetPresentation
 // class XFillBmpTileOffXItem
 
 
-SfxPoolItem* XFillBmpTileOffsetXItem::CreateDefault() {return new XFillBmpTileOffsetXItem;}
-
 XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, nOffX )
 {
@@ -760,8 +740,6 @@ bool XFillBmpTileOffsetXItem::GetPresentation
 
 // class XFillBmpTileOffYItem
 
-SfxPoolItem* XFillBmpTileOffsetYItem::CreateDefault() {return new XFillBmpTileOffsetYItem;}
-
 XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, nOffY )
 {
@@ -793,8 +771,6 @@ bool XFillBmpTileOffsetYItem::GetPresentation
     rText.clear();
     return true;
 }
-
-SfxPoolItem* XFillBmpStretchItem::CreateDefault() {return new XFillBmpStretchItem;}
 
 XFillBmpStretchItem::XFillBmpStretchItem( bool bStretch ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, bStretch )
@@ -838,8 +814,6 @@ void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTileOffPosXItem
 
-SfxPoolItem* XFillBmpPosOffsetXItem::CreateDefault() {return new XFillBmpPosOffsetXItem;}
-
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
 {
@@ -874,8 +848,6 @@ bool XFillBmpPosOffsetXItem::GetPresentation
 
 // class XFillBmpTileOffPosYItem
 
-SfxPoolItem* XFillBmpPosOffsetYItem::CreateDefault() {return new XFillBmpPosOffsetYItem;}
-
 XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )
 {
@@ -907,8 +879,6 @@ bool XFillBmpPosOffsetYItem::GetPresentation
     rText.clear();
     return true;
 }
-
-SfxPoolItem* XFillBackgroundItem::CreateDefault() {return new XFillBackgroundItem;}
 
 XFillBackgroundItem::XFillBackgroundItem( bool bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )
