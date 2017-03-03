@@ -26,6 +26,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <vector>
+#include <functional>
 
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ustring.hxx>
@@ -1575,6 +1576,19 @@ VCL_DLLPUBLIC Application* GetpApp();
 
 VCL_DLLPUBLIC bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
+/**
+ Adds a callback will be called during DeInitVCL().
+ If the library/location of the callback goes away, the callback MUST be deregistered before.
+ (Windows is unhappy to dtor (not even call) a std::function to a gone location.)
+ The void pointer is the unique id used for deregistering later. It should be
+ owned by the code registering the callback (e.g. an living object, a function
+ address in the library).
+*/
+VCL_DLLPUBLIC void AddOnDeInitVCL(void* pId, std::function<void()>);
+/**
+ Remove a callback for DeInitVCL(). Used e.g. when the library the callback is in goes away.
+*/
+VCL_DLLPUBLIC void RemoveOnDeInitVCL(void* pId);
 
 VCL_DLLPUBLIC bool InitAccessBridge();
 
