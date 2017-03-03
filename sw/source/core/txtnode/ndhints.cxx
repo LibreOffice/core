@@ -27,9 +27,8 @@
 #include <set>
 #endif
 
-// Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
-//                     als letztes die Adresse selbst
-
+/// sort order: Start, End (reverse), Which (reverse),
+/// (char style: sort number), at last the pointer
 static bool lcl_IsLessStart( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
 {
     if ( rHt1.GetStart() == rHt2.GetStart() )
@@ -62,7 +61,8 @@ static bool lcl_IsLessStart( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
     return ( rHt1.GetStart() < rHt2.GetStart() );
 }
 
-// Zuerst nach Ende danach nach Ptr
+/// sort order: End (reverse), Start, Which (reverse),
+/// (char style: sort number), at last the pointer
 static bool lcl_IsLessEnd( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
 {
     const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
@@ -144,7 +144,7 @@ bool SwpHints::Contains( const SwTextAttr *pHt ) const
 
 bool SwpHints::Check(bool bPortionsMerged) const
 {
-    // 1) gleiche Anzahl in beiden Arrays
+    // 1) both arrays have same size
     CHECK_ERR( m_HintsByStart.size() == m_HintsByEnd.size(),
         "HintsCheck: wrong sizes" );
     sal_Int32 nLastStart = 0;
@@ -172,49 +172,49 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
     for( size_t i = 0; i < Count(); ++i )
     {
-        // --- Start-Kontrolle ---
+        // --- check Starts ---
 
-        // 2a) gueltiger Pointer? vgl. DELETEFF
+        // 2a) valid pointer? depends on overwriting freed mem with 0xFF
         const SwTextAttr *pHt = m_HintsByStart[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHt), "HintsCheck: start ptr was deleted" );
 
-        // 3a) Stimmt die Start-Sortierung?
+        // 3a) start sort order?
         sal_Int32 nIdx = pHt->GetStart();
         CHECK_ERR( nIdx >= nLastStart, "HintsCheck: starts are unsorted" );
 
-        // 4a) IsLessStart-Konsistenz
+        // 4a) IsLessStart consistency
         if( pLastStart )
             CHECK_ERR( lcl_IsLessStart( *pLastStart, *pHt ), "HintsCheck: IsLastStart" );
 
         nLastStart = nIdx;
         pLastStart = pHt;
 
-        // --- End-Kontrolle ---
+        // --- check Ends ---
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
         const SwTextAttr *pHtEnd = m_HintsByEnd[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
-        // 3b) Stimmt die End-Sortierung?
+        // 3b) end sort order?
         nIdx = *pHtEnd->GetAnyEnd();
         CHECK_ERR( nIdx >= nLastEnd, "HintsCheck: ends are unsorted" );
 
-        // 4b) IsLessEnd-Konsistenz
+        // 4b) IsLessEnd consistency
         if( pLastEnd )
             CHECK_ERR( lcl_IsLessEnd( *pLastEnd, *pHtEnd ), "HintsCheck: IsLastEnd" );
 
         nLastEnd = nIdx;
         pLastEnd = pHtEnd;
 
-        // --- Ueberkreuzungen ---
+        // --- cross checks ---
 
-        // 5) gleiche Pointer in beiden Arrays
+        // 5) same pointers in both arrays
         if (m_HintsByStart.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByStart.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
-        // 6) gleiche Pointer in beiden Arrays
+        // 6) same pointers in both arrays
         if (m_HintsByEnd.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByEnd.end())
             nIdx = COMPLETE_STRING;
 
