@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0ababce1",
+        "filename": "chart2/source/controller/main/ChartController.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-03T09:16:11Z",
+      "side": 1,
+      "message": "I assume the reason why this didnt dispose properly was line 791:\n\n if(!m_aLifeTimeManager.dispose())\n     return;\n\nSo this \"LifeTimeManager\" makes the Controller forget half the stuff to do on disposing which seems nonsense anyhow. However it seems to have been there from the \"initial import\" of chart2, so the original intent is a bit muddy.",
+      "revId": "7895220f6202681b998b5482f888d3e576260dda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
