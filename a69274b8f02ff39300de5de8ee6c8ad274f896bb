@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_cd6c4e9f",
+        "filename": "svl/source/numbers/zforscan.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-03T20:34:12Z",
+      "side": 1,
+      "message": "why does that need to be a member when it\u0027s only used inside one 10000 line function?",
+      "revId": "a69274b8f02ff39300de5de8ee6c8ad274f896bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
