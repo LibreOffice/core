@@ -237,7 +237,7 @@ struct JavaInfo
         assistive technology tools are supported.</p>
      */
     sal_uInt64 nFeatures;
-    /** indicates requirments for running the java runtime.
+    /** indicates requirements for running the java runtime.
 
         <p>For example, it may be necessary to prepare the environment before
         the runtime is created. That could mean, setting the
