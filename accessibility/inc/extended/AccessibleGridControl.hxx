@@ -168,7 +168,7 @@ public:
     );
 
     /// returns the AccessibleContext belonging to this Accessible
-    inline AccessibleGridControl*            getContext()  { return m_xContext.get(); }
+    AccessibleGridControl*            getContext()  { return m_xContext.get(); }
 
 protected:
     virtual ~AccessibleGridControlAccess() override;

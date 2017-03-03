@@ -97,7 +97,7 @@ private:
 protected:
     bool                    bVal;
 
-    inline                  ExcBoolRecord() : bVal( false ) {}
+    ExcBoolRecord() : bVal( false ) {}
 
 public:
     virtual std::size_t     GetLen() const override;
@@ -256,7 +256,7 @@ protected:
 public:
                             ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
-    inline void             SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
+    void             SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual sal_uInt16          GetNum() const override;
@@ -338,8 +338,8 @@ class XclExpAutofilterinfo : public XclExpUInt16Record
 public:
     explicit            XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol );
 
-    inline const ScAddress& GetStartPos() const { return maStartPos; }
-    inline SCCOL        GetColCount() const { return static_cast< SCCOL >( GetValue() ); }
+    const ScAddress& GetStartPos() const { return maStartPos; }
+    SCCOL        GetColCount() const { return static_cast< SCCOL >( GetValue() ); }
 
 private:
     ScAddress           maStartPos;
@@ -359,7 +359,7 @@ public:
                             ExcFilterCondition();
                             ~ExcFilterCondition();
 
-    inline bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
+    bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
     std::size_t             GetTextBytes() const;
 
     void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );
@@ -388,8 +388,8 @@ private:
 public:
                             XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
 
-    inline sal_uInt16       GetCol() const          { return nCol; }
-    inline bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
+    sal_uInt16       GetCol() const          { return nCol; }
+    bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
     bool                    HasCondition() const;
     bool                    AddEntry( const ScQueryEntry& rEntry );

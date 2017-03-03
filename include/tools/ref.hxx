@@ -214,17 +214,17 @@ class SAL_WARN_UNUSED SvCompatWeakRef
 {
     tools::SvRef< SvCompatWeakHdl<T> > _xHdl;
 public:
-    inline               SvCompatWeakRef( ) {}
-    inline               SvCompatWeakRef( T* pObj )
+    SvCompatWeakRef( ) {}
+    SvCompatWeakRef( T* pObj )
                          {  if( pObj ) _xHdl = pObj->GetHdl(); }
-    inline SvCompatWeakRef& operator = ( T * pObj )
+    SvCompatWeakRef& operator = ( T * pObj )
                          {  _xHdl = pObj ? pObj->GetHdl() : nullptr; return *this; }
-    inline bool          is() const
+    bool          is() const
                          { return _xHdl.is() && _xHdl->GetObj(); }
     explicit operator bool() const { return is(); }
-    inline T*            operator -> () const
+    T*            operator -> () const
                          { return _xHdl.is() ? _xHdl->GetObj() : nullptr; }
-    inline operator T* () const
+    operator T* () const
                          { return _xHdl.is() ? _xHdl->GetObj() : nullptr; }
 };
 

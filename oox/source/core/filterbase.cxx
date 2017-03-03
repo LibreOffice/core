@@ -82,7 +82,7 @@ public:
                         DocumentOpenedGuard(const DocumentOpenedGuard&) = delete;
     DocumentOpenedGuard& operator=(const DocumentOpenedGuard&) = delete;
 
-    inline bool         isValid() const { return mbValid; }
+    bool         isValid() const { return mbValid; }
 
 private:
     OUString            maUrl;

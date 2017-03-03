@@ -60,9 +60,9 @@ class FormatLevel
 {
     static sal_uInt16 nLevel;
 public:
-    inline FormatLevel()  { ++nLevel; }
-    inline ~FormatLevel() { --nLevel; }
-    static inline sal_uInt16 GetLevel() { return nLevel; }
+    FormatLevel()  { ++nLevel; }
+    ~FormatLevel() { --nLevel; }
+    static sal_uInt16 GetLevel() { return nLevel; }
     static bool LastLevel() { return 10 < nLevel; }
 };
 sal_uInt16 FormatLevel::nLevel = 0;

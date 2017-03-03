@@ -247,7 +247,7 @@ public:
 
     /** determines whether the database document has an embedded data storage
     */
-    inline bool isEmbeddedDatabase() const { return ( m_sConnectURL.startsWith("sdbc:embedded:") ); }
+    bool isEmbeddedDatabase() const { return ( m_sConnectURL.startsWith("sdbc:embedded:") ); }
 
     /** stores the embedded storage ("database")
 
@@ -330,8 +330,8 @@ public:
     void clearConnections();
 
             css::uno::Reference< css::embed::XStorage > getOrCreateRootStorage();
-    inline  css::uno::Reference< css::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
-    inline  void resetRootStorage() { impl_switchToStorage_throw( nullptr ); }
+    css::uno::Reference< css::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
+    void resetRootStorage() { impl_switchToStorage_throw( nullptr ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */
@@ -367,7 +367,7 @@ public:
     css::uno::Reference< css::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
-    inline const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
+    const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
 
     void SAL_CALL acquire();
 
@@ -506,7 +506,7 @@ protected:
     */
     virtual css::uno::Reference< css::uno::XInterface > getThis() const = 0;
 
-    inline ::osl::Mutex& getMutex() const
+    ::osl::Mutex& getMutex() const
     {
         return m_aMutex;
     }
@@ -520,24 +520,24 @@ public:
             if m_pImpl is <NULL/>. Usually, you will set this member in your derived
             component's <code>dispose</code> method to <NULL/>.
     */
-    inline ::osl::Mutex& getMutex( GuardAccess ) const
+    ::osl::Mutex& getMutex( GuardAccess ) const
     {
         return getMutex();
     }
 
     /// checks whether the component is already disposed, throws a DisposedException if so
-    inline void checkDisposed() const
+    void checkDisposed() const
     {
         if ( !m_pImpl.is() )
             throw css::lang::DisposedException( "Component is already disposed.", getThis() );
     }
 
-    inline void lockModify()
+    void lockModify()
     {
         m_pImpl->lockModify();
     }
 
-    inline void unlockModify()
+    void unlockModify()
     {
         m_pImpl->unlockModify();
     }

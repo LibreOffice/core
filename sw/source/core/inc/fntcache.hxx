@@ -38,7 +38,7 @@ class Point;
 class SwFntCache : public SwCache
 {
 public:
-    inline SwFntCache() : SwCache(50
+    SwFntCache() : SwCache(50
 #ifdef DBG_UTIL
     , OString(RTL_CONSTASCII_STRINGPARAM("Global Font-Cache pFntCache"))
 #endif
@@ -87,12 +87,12 @@ public:
 
     virtual ~SwFntObj() override;
 
-    inline       vcl::Font *GetScrFont()     { return m_pScrFont; }
-    inline       vcl::Font& GetFont()        { return m_aFont; }
-    inline const vcl::Font& GetFont() const  { return m_aFont; }
+    vcl::Font *GetScrFont()     { return m_pScrFont; }
+    vcl::Font& GetFont()        { return m_aFont; }
+    const vcl::Font& GetFont() const  { return m_aFont; }
 
-    inline sal_uInt16 GetGuessedLeading() const  { return m_nGuessedLeading; }
-    inline sal_uInt16 GetExternalLeading() const  { return m_nExtLeading; }
+    sal_uInt16 GetGuessedLeading() const  { return m_nGuessedLeading; }
+    sal_uInt16 GetExternalLeading() const  { return m_nExtLeading; }
 
     sal_uInt16 GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
@@ -101,10 +101,10 @@ public:
     void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );
 
     void SetDevFont( const SwViewShell *pSh, OutputDevice& rOut );
-    inline OutputDevice* GetPrt() const { return m_pPrinter; }
-    inline sal_uInt16   GetZoom() const { return m_nZoom; }
-    inline sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
-    inline bool     IsSymbol() const { return m_bSymbol; }
+    OutputDevice* GetPrt() const { return m_pPrinter; }
+    sal_uInt16   GetZoom() const { return m_nZoom; }
+    sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
+    bool     IsSymbol() const { return m_bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
@@ -135,7 +135,7 @@ public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
                  SwViewShell const *pShell,
                  bool bCheck = false  );
-    inline SwFntObj* Get() { return static_cast<SwFntObj*>( SwCacheAccess::Get() ); }
+    SwFntObj* Get() { return static_cast<SwFntObj*>( SwCacheAccess::Get() ); }
 };
 
 #endif

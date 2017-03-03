@@ -131,7 +131,7 @@ public:
 
     bool    IsValid( const ScDocument* pDoc ) const
                 { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }
-    inline ScRange  MakeRange() const
+    ScRange  MakeRange() const
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 

@@ -138,7 +138,7 @@ public:
      * @param   type of the object.
      * @descr   set the type to the draw object.
      */
-    inline void SetObjectType(DrawObjectType eType) { m_eType = eType; }
+    void SetObjectType(DrawObjectType eType) { m_eType = eType; }
 };
 
 /**

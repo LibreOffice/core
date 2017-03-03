@@ -210,8 +210,8 @@ namespace sfx2
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 
-        inline bool             isSystemFilePicker() const { return mbSystemPicker; }
-        inline bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
+        bool             isSystemFilePicker() const { return mbSystemPicker; }
+        bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
     };
 
 }   // end of namespace sfx2

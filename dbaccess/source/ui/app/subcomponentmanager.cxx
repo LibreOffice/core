@@ -117,7 +117,7 @@ namespace dbaui
                 }
             }
 
-            inline bool is() const { return xFrame.is(); }
+            bool is() const { return xFrame.is(); }
 
         private:
             bool impl_constructFrom( const Reference< XComponent >& _rxComponent )

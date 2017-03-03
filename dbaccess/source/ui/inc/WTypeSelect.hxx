@@ -122,8 +122,8 @@ namespace dbaui
         virtual ~OWizTypeSelect() override;
         virtual void dispose() override;
 
-        inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
-        inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
+        void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
+        void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
     typedef VclPtr<OWizTypeSelect> (*TypeSelectionPageFactory)( vcl::Window*, SvStream& );

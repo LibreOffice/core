@@ -87,7 +87,7 @@ namespace connectivity
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column);
 
-            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
+            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }

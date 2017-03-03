@@ -201,8 +201,8 @@ public:
                     ImplVectMap( long nWidth, long nHeight );
                     ~ImplVectMap();
 
-    inline long     Width() const { return mnWidth; }
-    inline long     Height() const { return mnHeight; }
+    long     Width() const { return mnWidth; }
+    long     Height() const { return mnHeight; }
 
     inline void     Set( long nY, long nX, sal_uInt8 cVal );
     inline sal_uInt8        Get( long nY, long nX ) const;

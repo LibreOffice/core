@@ -42,7 +42,7 @@ class XMLSCRIPT_DLLPUBLIC XMLElement
     : public cppu::WeakImplHelper< css::xml::sax::XAttributeList >
 {
 public:
-    inline XMLElement( OUString const & name )
+    XMLElement( OUString const & name )
         : _name( name )
         {}
 

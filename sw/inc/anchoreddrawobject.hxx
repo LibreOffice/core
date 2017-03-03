@@ -128,7 +128,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         // declaration of pure virtual methods of base class <SwAnchoredObject>
         virtual void MakeObjPos() override;
         virtual void InvalidateObjPos() override;
-        inline bool IsValidPos() const
+        bool IsValidPos() const
         {
             return mbValidPos;
         }
@@ -172,7 +172,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
                                        const SwRect& _rRect,
                                        PrepareHint _eHint ) override;
 
-        inline bool NotYetPositioned() const
+        bool NotYetPositioned() const
         {
             return mbNotYetPositioned;
         }

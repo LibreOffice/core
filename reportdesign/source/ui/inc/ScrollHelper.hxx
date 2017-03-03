@@ -79,11 +79,11 @@ namespace rptui
         */
         void                    initialize();
 
-        inline Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
+        Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         const Size&             getTotalSize() const { return m_aTotalPixelSize; }
-        inline ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }
-        inline ScrollBar&       GetVScroll() { return *m_aVScroll.get(); }
+        ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }
+        ScrollBar&       GetVScroll() { return *m_aVScroll.get(); }
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );

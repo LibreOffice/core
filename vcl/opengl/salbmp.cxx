@@ -421,7 +421,7 @@ public:
         , mnX(0)
     {}
 
-    inline void writeRGB(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB)
+    void writeRGB(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB)
     {
         // calculate to which index we will write
         long nScanlineIndex = mnX / mnColorsPerByte;
@@ -435,7 +435,7 @@ public:
         mnX++;
     }
 
-    inline void nextLine(sal_uInt8* pScanline)
+    void nextLine(sal_uInt8* pScanline)
     {
         mnX = 0;
         mpCurrentScanline = pScanline;

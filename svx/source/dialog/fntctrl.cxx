@@ -162,7 +162,7 @@ class FontPrevWin_Impl
 
 
 public:
-    inline FontPrevWin_Impl() :
+    FontPrevWin_Impl() :
         mpPrinter(nullptr),
         mbDelPrinter(false),
         mpColor(nullptr),
@@ -185,7 +185,7 @@ public:
         Invalidate100PercentFontWidth();
     }
 
-    inline ~FontPrevWin_Impl()
+    ~FontPrevWin_Impl()
     {
         delete mpColor;
         delete mpBackColor;

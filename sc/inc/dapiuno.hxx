@@ -303,10 +303,10 @@ struct ScFieldIdentifier
     sal_Int32           mnFieldIdx;     /// Field index (if several fields with same name exist).
     bool                mbDataLayout;   /// True = data layout field collecting all data fields as items.
 
-    inline explicit     ScFieldIdentifier() :
+    explicit     ScFieldIdentifier() :
                             mnFieldIdx( 0 ), mbDataLayout( false ) {}
 
-    inline explicit     ScFieldIdentifier( const OUString& rFieldName, bool bDataLayout ) :
+    explicit     ScFieldIdentifier( const OUString& rFieldName, bool bDataLayout ) :
                             maFieldName( rFieldName ), mnFieldIdx( 0 ), mbDataLayout( bDataLayout ) {}
 };
 

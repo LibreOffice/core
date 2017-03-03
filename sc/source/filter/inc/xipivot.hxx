@@ -149,7 +149,7 @@ public:
     // data access ------------------------------------------------------------
 
     /** Returns the data source range read from the DCONREF record. */
-    inline const ScRange& GetSourceRange() const { return maSrcRange; }
+    const ScRange& GetSourceRange() const { return maSrcRange; }
 
     const OUString& GetSourceRangeName() const { return maSrcRangeName; }
 
@@ -236,9 +236,9 @@ public:
     const OUString* GetItemName( sal_uInt16 nItemIdx ) const;
 
     /** Returns the flags of the axes this field is part of. */
-    inline sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }
+    sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }
     /** Sets the flags of the axes this field is part of. */
-    inline void         SetAxes( sal_uInt16 nAxes ) { maFieldInfo.mnAxes = nAxes; }
+    void         SetAxes( sal_uInt16 nAxes ) { maFieldInfo.mnAxes = nAxes; }
 
     // records ----------------------------------------------------------------
 
@@ -298,7 +298,7 @@ public:
     // cache/field access, misc. ----------------------------------------------
 
     const XclImpPivotCacheRef& GetPivotCache() const { return mxPCache; }
-    inline const ScfStringVec& GetVisFieldNames() const { return maVisFieldNames; }
+    const ScfStringVec& GetVisFieldNames() const { return maVisFieldNames; }
 
     sal_uInt16          GetFieldCount() const;
     const XclImpPTField* GetField( sal_uInt16 nFieldIdx ) const;

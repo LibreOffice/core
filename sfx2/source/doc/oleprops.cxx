@@ -46,7 +46,7 @@ class SfxOleInt32Property : public SfxOlePropertyBase
 public:
     explicit            SfxOleInt32Property( sal_Int32 nPropId, sal_Int32 nValue = 0 );
 
-    inline sal_Int32    GetValue() const { return mnValue; }
+    sal_Int32    GetValue() const { return mnValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -63,7 +63,7 @@ class SfxOleDoubleProperty : public SfxOlePropertyBase
 public:
     explicit            SfxOleDoubleProperty( sal_Int32 nPropId, double fValue = 0.0 );
 
-    inline double       GetValue() const { return mfValue; }
+    double       GetValue() const { return mfValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -80,7 +80,7 @@ class SfxOleBoolProperty : public SfxOlePropertyBase
 public:
     explicit            SfxOleBoolProperty( sal_Int32 nPropId, bool bValue = false );
 
-    inline bool         GetValue() const { return mbValue; }
+    bool         GetValue() const { return mbValue; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -105,8 +105,8 @@ public:
                             sal_Int32 nPropId, sal_Int32 nPropType,
                             rtl_TextEncoding eTextEnc );
 
-    inline const OUString& GetValue() const { return maValue; }
-    inline void            SetValue( const OUString& rValue ) { maValue = rValue; }
+    const OUString& GetValue() const { return maValue; }
+    void            SetValue( const OUString& rValue ) { maValue = rValue; }
 
 private:
     OUString            maValue;
@@ -150,7 +150,7 @@ public:
     explicit            SfxOleFileTimeProperty( sal_Int32 nPropId, const util::DateTime& rDateTime );
 
     /** Returns the time value as LOCAL time. */
-    inline const util::DateTime& GetValue() const { return maDateTime; }
+    const util::DateTime& GetValue() const { return maDateTime; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -167,7 +167,7 @@ public:
     explicit            SfxOleDateProperty( sal_Int32 nPropId );
 
     /** Returns the date value as LOCAL time. */
-    inline const util::Date& GetValue() const { return maDate; }
+    const util::Date& GetValue() const { return maDate; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -188,7 +188,7 @@ public:
     explicit            SfxOleThumbnailProperty( sal_Int32 nPropId,
                             const uno::Sequence<sal_Int8> & i_rData);
 
-    inline bool         IsValid() const { return mData.getLength() > 0; }
+    bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;
@@ -209,7 +209,7 @@ class SfxOleBlobProperty : public SfxOlePropertyBase
 public:
     explicit            SfxOleBlobProperty( sal_Int32 nPropId,
                             const uno::Sequence<sal_Int8> & i_rData);
-    inline bool         IsValid() const { return mData.getLength() > 0; }
+    bool         IsValid() const { return mData.getLength() > 0; }
 
 private:
     virtual void        ImplLoad( SvStream& rStrm ) override;

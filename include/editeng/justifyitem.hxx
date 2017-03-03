@@ -49,7 +49,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
-    inline  SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
+    SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
             {
                 SetValue( rHorJustify.GetValue() );
                 return *this;
@@ -81,7 +81,7 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
-    inline  SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
+    SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
             {
                 SetValue( rVerJustify.GetValue() );
                 return *this;

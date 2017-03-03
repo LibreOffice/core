@@ -92,7 +92,7 @@ public:
     virtual TextAttrib*     Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
-    inline FontWeight getFontWeight() const { return meWeight; }
+    FontWeight getFontWeight() const { return meWeight; }
 };
 
 

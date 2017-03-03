@@ -164,7 +164,7 @@ public:
     void                finalizeImport();
 
     /** Returns the priority of this rule. */
-    inline sal_Int32    getPriority() const { return maModel.mnPriority; }
+    sal_Int32    getPriority() const { return maModel.mnPriority; }
 
     ColorScaleRule*     getColorScale();
     DataBarRule*        getDataBar();
@@ -210,7 +210,7 @@ public:
     void                finalizeImport();
 
     /** Returns the cell ranges this conditional formatting belongs to. */
-    inline const ScRangeList& getRanges() const { return maModel.maRanges; }
+    const ScRangeList& getRanges() const { return maModel.maRanges; }
 
     void                setReadyForFinalize() { mbReadyForFinalize = true; }
 private:

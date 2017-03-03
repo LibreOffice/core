@@ -60,8 +60,8 @@ public:
         virtual void            SetPar2(const OUString& rStr) override;
         virtual OUString        GetPar2() const override;
 
-        inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
-        inline long             GetOffset() const           { return nOffset; }
+        void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
+        long             GetOffset() const           { return nOffset; }
 
         Date                    GetDate() const;
         tools::Time             GetTime() const;

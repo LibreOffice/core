@@ -32,10 +32,10 @@ namespace connectivity
         OAutoRetrievingBase() : m_bAutoRetrievingEnabled(false) {}
         virtual ~OAutoRetrievingBase(){}
 
-        inline void enableAutoRetrievingEnabled(bool _bAutoEnable)          { m_bAutoRetrievingEnabled = _bAutoEnable; }
-        inline void setAutoRetrievingStatement(const OUString& _sStmt)   { m_sGeneratedValueStatement = _sStmt; }
+        void enableAutoRetrievingEnabled(bool _bAutoEnable)          { m_bAutoRetrievingEnabled = _bAutoEnable; }
+        void setAutoRetrievingStatement(const OUString& _sStmt)   { m_sGeneratedValueStatement = _sStmt; }
     public:
-        inline bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
+        bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
 
         /** transform the statement to query for auto generated values
             @param  _sInsertStatement

@@ -135,7 +135,7 @@ namespace connectivity
             bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] >= 0;}
 
             // return true when the select statement is "select count(*) from table"
-            inline bool isCount() const { return m_bIsCount; }
+            bool isCount() const { return m_bIsCount; }
             /// @throws css::sdbc::SQLException
             void checkIndex(sal_Int32 columnIndex );
 
@@ -263,23 +263,23 @@ namespace connectivity
             bool OpenImpl();
             void doTableSpecials(const OSQLTable& _xTable);
 
-            inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
-            inline void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
-            inline void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
-            inline void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
-            inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
-            inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
-            inline void setSelectRow(const OValueRefRow& _rRow)
+            sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
+            void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
+            void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
+            void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
+            void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
+            void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
+            void setSelectRow(const OValueRefRow& _rRow)
             {
                 m_aSelectRow = _rRow;
                 m_nColumnCount = m_aSelectRow->get().size();
             }
-            inline void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
-            inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
+            void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
+            void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
-            inline void setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
-            inline void setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
-            inline void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+            void setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
+            void setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
+            void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             static void setBoundedColumns(const OValueRefRow& _rRow,
                                     const OValueRefRow& _rSelectRow,

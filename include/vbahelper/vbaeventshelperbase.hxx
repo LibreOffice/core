@@ -86,12 +86,12 @@ public:
     void processVbaEventNoThrow( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs );
 
     /** @throws css::lang::IllegalArgumentException if the passed sequence does not contain a value at the specified index. */
-    static inline void checkArgument( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex )
+    static void checkArgument( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex )
         { if( (nIndex < 0) || (nIndex >= rArgs.getLength()) ) throw css::lang::IllegalArgumentException(); }
 
     /** @throws css::lang::IllegalArgumentException if the passed sequence does not contain a value of a specific at the specified index. */
     template< typename Type >
-    static inline void checkArgumentType( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex )
+    static void checkArgumentType( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex )
         { checkArgument( rArgs, nIndex ); if( !rArgs[ nIndex ].has< Type >() ) throw css::lang::IllegalArgumentException(); }
 
 protected:
@@ -125,8 +125,8 @@ protected:
     {
         sal_Int32 mnEventId;
         css::uno::Sequence< css::uno::Any > maArgs;
-        inline /*implicit*/ EventQueueEntry( sal_Int32 nEventId ) : mnEventId( nEventId ) {}
-        inline EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
+        /*implicit*/ EventQueueEntry( sal_Int32 nEventId ) : mnEventId( nEventId ) {}
+        EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
     };
     typedef ::std::deque< EventQueueEntry > EventQueue;
 

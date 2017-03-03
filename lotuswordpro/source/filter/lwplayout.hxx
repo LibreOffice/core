@@ -97,7 +97,7 @@ class LwpVirtualLayout : public LwpDLNFPVList
 {
 public:
     LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    inline virtual sal_uInt16 GetNumCols(){return 1;}
+    virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
     virtual bool IsAutoGrow(){ return false;}

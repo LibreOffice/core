@@ -43,7 +43,7 @@ public:
     virtual OUString GetName() const override;
     virtual SwFieldType*  Copy() const override;
 
-    inline void     AddRef() { nRefCnt++; }
+    void     AddRef() { nRefCnt++; }
     void            ReleaseRef();
 
     const OUString&     GetColumnName() const {return sColumn;}
@@ -93,9 +93,9 @@ public:
 
     inline void         ChgBodyTextFlag( bool bIsInBody );
 
-    inline bool         IsInitialized() const   { return bInitialized; }
-    inline void         ClearInitialized()      { bInitialized = false; }
-    inline void         SetInitialized()        { bInitialized = true; }
+    bool         IsInitialized() const   { return bInitialized; }
+    void         ClearInitialized()      { bInitialized = false; }
+    void         SetInitialized()        { bInitialized = true; }
 
     /// Get name.
     virtual OUString    GetPar1() const override;
@@ -104,7 +104,7 @@ public:
     void                SetFieldCode(const OUString& rStr) { sFieldCode = rStr; }
 
     /// DBName
-    inline const SwDBData&  GetDBData() const { return static_cast<SwDBFieldType*>(GetTyp())->GetDBData(); }
+    const SwDBData&  GetDBData() const { return static_cast<SwDBFieldType*>(GetTyp())->GetDBData(); }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
@@ -133,8 +133,8 @@ protected:
 
 public:
     /// DBName
-    inline const SwDBData&  GetRealDBData() const { return aDBData; }
-    inline SwDBData&        GetRealDBData() { return aDBData; }
+    const SwDBData&  GetRealDBData() const { return aDBData; }
+    SwDBData&        GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);

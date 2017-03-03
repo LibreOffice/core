@@ -88,7 +88,7 @@ class VCL_DLLPUBLIC Task
 protected:
     static void StartTimer( sal_uInt64 nMS );
 
-    inline const ImplSchedulerData* GetSchedulerData() const { return mpSchedulerData; }
+    const ImplSchedulerData* GetSchedulerData() const { return mpSchedulerData; }
 
     virtual void SetDeletionFlags();
     /// Is this item ready to be dispatched at nTimeNow

@@ -99,7 +99,7 @@ protected:
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 
-    inline void     DisableClose( bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
+    void     DisableClose( bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
 
 public:
     SvxHyperlinkTabPageBase (

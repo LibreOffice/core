@@ -69,17 +69,17 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
 
         static OUString getName( const Index rIdx );
 
-        static inline OUString getUserEntryName()
+        static OUString getUserEntryName()
         {
             return OUString( "_user" );
         }
 
-        static inline OUString getDefaultEntryName()
+        static OUString getDefaultEntryName()
         {
             return OUString( "_default" );
         }
 
-        static inline Index getIndex( const OUString& rName )
+        static Index getIndex( const OUString& rName )
         {
             for ( int i = static_cast<int>(Index::Name); i < static_cast<int>(Index::INVALID); ++i )
                 if ( getName( Index(i) ) == rName )
@@ -91,12 +91,12 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             return Index::INVALID;
         }
 
-        static inline size_t getElementCount()
+        static size_t getElementCount()
         {
             return static_cast<size_t>(Index::INVALID);
         }
 
-        inline css::uno::Any getValue( const Index rIdx ) const
+        css::uno::Any getValue( const Index rIdx ) const
         {
             if ( static_cast<size_t>(rIdx) < getElementCount() )
             {
@@ -110,7 +110,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
         }
 
         template<typename T>
-        inline T getValue( const Index rIdx ) const
+        T getValue( const Index rIdx ) const
         {
             T aValue = T();
 
@@ -126,7 +126,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             return aValue;
         }
 
-        inline void setValue( const Index rIdx, css::uno::Any& rValue )
+        void setValue( const Index rIdx, css::uno::Any& rValue )
         {
             if ( static_cast<size_t>(rIdx) < getElementCount() )
             {
@@ -139,7 +139,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
         }
 
         template<typename T>
-        inline void setValue( const Index rIdx, T rValue )
+        void setValue( const Index rIdx, T rValue )
         {
             if ( static_cast<size_t>(rIdx) < getElementCount() )
             {
@@ -151,12 +151,12 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             }
         }
 
-        inline bool isDefaultEntry() const
+        bool isDefaultEntry() const
         {
             return m_bDefaultEntry;
         }
 
-        inline void setDefaultEntry( bool rValue )
+        void setDefaultEntry( bool rValue )
         {
             m_bDefaultEntry = rValue;
         }

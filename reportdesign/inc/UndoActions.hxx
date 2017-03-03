@@ -68,12 +68,12 @@ namespace rptui
             :m_xGroup(_xGroup)
         {
         }
-        inline css::uno::Reference< css::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
-        inline css::uno::Reference< css::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
+        css::uno::Reference< css::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
+        css::uno::Reference< css::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
         const css::uno::Reference< css::report::XGroup >&     getGroup() { return m_xGroup; }
 
-        inline bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
-        inline bool getFooterOn() { return m_xGroup->getFooterOn(); }
+        bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
+        bool getFooterOn() { return m_xGroup->getFooterOn(); }
 
         static ::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OGroupHelper> getMemberFunction(const css::uno::Reference< css::report::XSection >& _xSection);
 
@@ -89,16 +89,16 @@ namespace rptui
             :m_xReport(_xReport)
         {
         }
-        inline css::uno::Reference< css::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
-        inline css::uno::Reference< css::report::XSection > getReportFooter() { return m_xReport->getReportFooter(); }
-        inline css::uno::Reference< css::report::XSection > getPageHeader()   { return m_xReport->getPageHeader(); }
-        inline css::uno::Reference< css::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
-        inline css::uno::Reference< css::report::XSection > getDetail()       { return m_xReport->getDetail(); }
+        css::uno::Reference< css::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
+        css::uno::Reference< css::report::XSection > getReportFooter() { return m_xReport->getReportFooter(); }
+        css::uno::Reference< css::report::XSection > getPageHeader()   { return m_xReport->getPageHeader(); }
+        css::uno::Reference< css::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
+        css::uno::Reference< css::report::XSection > getDetail()       { return m_xReport->getDetail(); }
 
-        inline bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
-        inline bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
-        inline bool getPageHeaderOn() { return m_xReport->getPageHeaderOn(); }
-        inline bool getPageFooterOn() { return m_xReport->getPageFooterOn(); }
+        bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
+        bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
+        bool getPageHeaderOn() { return m_xReport->getPageHeaderOn(); }
+        bool getPageFooterOn() { return m_xReport->getPageFooterOn(); }
 
         static ::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> getMemberFunction(const css::uno::Reference< css::report::XSection >& _xSection);
     };

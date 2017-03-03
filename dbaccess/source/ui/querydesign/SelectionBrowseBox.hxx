@@ -139,10 +139,10 @@ namespace dbaui
 
         /** Disables the generation of undo actions
         */
-        inline void                 EnterUndoMode() { m_bInUndoMode = true; }
+        void                 EnterUndoMode() { m_bInUndoMode = true; }
         /** Enables the generation of undo actions
         */
-        inline void                 LeaveUndoMode() { m_bInUndoMode = false; }
+        void                 LeaveUndoMode() { m_bInUndoMode = false; }
 
         /** GetCellText returns the text at the given position
             @param  _nRow

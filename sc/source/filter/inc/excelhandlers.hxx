@@ -35,7 +35,7 @@ class WorkbookContextBase : public ::oox::core::ContextHandler2, public Workbook
 {
 public:
     template< typename ParentType >
-    inline explicit     WorkbookContextBase( ParentType& rParent ) :
+    explicit     WorkbookContextBase( ParentType& rParent ) :
                             ::oox::core::ContextHandler2( rParent ), WorkbookHelper( rParent ) {}
 };
 
@@ -47,7 +47,7 @@ class WorksheetContextBase : public ::oox::core::ContextHandler2, public Workshe
 {
 public:
     template< typename ParentType >
-    inline explicit     WorksheetContextBase( ParentType& rParent ) :
+    explicit     WorksheetContextBase( ParentType& rParent ) :
                             ::oox::core::ContextHandler2( rParent ), WorksheetHelper( rParent ) {}
 };
 

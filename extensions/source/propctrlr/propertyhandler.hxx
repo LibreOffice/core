@@ -254,7 +254,7 @@ namespace pcr
             @see getSupportedProperties
             @see doDescribeSupportedProperties
         */
-        inline bool impl_isSupportedProperty_nothrow( PropertyId _nPropId ) const
+        bool impl_isSupportedProperty_nothrow( PropertyId _nPropId ) const
         {
             return impl_getPropertyFromId_nothrow( _nPropId ) != nullptr;
         }
@@ -277,7 +277,7 @@ namespace pcr
         /** returns the value of the ContextDocument property in the ComponentContext which was used to create
             this handler.
         */
-        inline css::uno::Reference< css::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                     impl_getContextDocument_nothrow() const
         {
             return css::uno::Reference< css::frame::XModel >(

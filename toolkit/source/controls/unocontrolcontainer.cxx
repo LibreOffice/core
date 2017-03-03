@@ -57,8 +57,8 @@ public:
     {
     }
 
-    inline const OUString&                   getName() const { return msName; }
-    inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
+    const OUString&                   getName() const { return msName; }
+    const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
 
 class UnoControlHolderList
@@ -87,7 +87,7 @@ public:
 
     /** determines whether or not the list is empty
     */
-    inline bool         empty() const { return maControls.empty(); }
+    bool         empty() const { return maControls.empty(); }
 
     /** retrieves all controls currently in the list
     */

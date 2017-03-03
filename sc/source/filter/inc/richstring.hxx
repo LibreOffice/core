@@ -51,9 +51,9 @@ public:
     void                finalizeImport();
 
     /** Returns the text data of this portion. */
-    inline const OUString& getText() const { return maText; }
+    const OUString& getText() const { return maText; }
     /** Returns true, if the portion contains font formatting. */
-    inline bool         hasFont() const { return mxFont.get() != nullptr; }
+    bool         hasFont() const { return mxFont.get() != nullptr; }
 
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
@@ -84,8 +84,8 @@ struct FontPortionModel
     sal_Int32           mnPos;          /// First character in the string.
     sal_Int32           mnFontId;       /// Font identifier for the next characters.
 
-    explicit inline     FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
-    explicit inline     FontPortionModel( sal_Int32 nPos, sal_Int32 nFontId ) :
+    explicit FontPortionModel() : mnPos( 0 ), mnFontId( -1 ) {}
+    explicit FontPortionModel( sal_Int32 nPos, sal_Int32 nFontId ) :
                             mnPos( nPos ), mnFontId( nFontId ) {}
 
     void                read( SequenceInputStream& rStrm );
@@ -96,7 +96,7 @@ class FontPortionModelList {
     ::std::vector< FontPortionModel > mvModels;
 
 public:
-    inline explicit     FontPortionModelList() : mvModels() {}
+    explicit     FontPortionModelList() : mvModels() {}
 
     bool empty() const { return mvModels.empty(); }
 
@@ -175,8 +175,8 @@ struct PhoneticPortionModel
     sal_Int32           mnBasePos;      /// First character in base text.
     sal_Int32           mnBaseLen;      /// Number of characters in base text.
 
-    explicit inline     PhoneticPortionModel() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
-    explicit inline     PhoneticPortionModel( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
+    explicit PhoneticPortionModel() : mnPos( -1 ), mnBasePos( -1 ), mnBaseLen( 0 ) {}
+    explicit PhoneticPortionModel( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
                             mnPos( nPos ), mnBasePos( nBasePos ), mnBaseLen( nBaseLen ) {}
 
     void                read( SequenceInputStream& rStrm );
@@ -186,7 +186,7 @@ struct PhoneticPortionModel
 class PhoneticPortionModelList
 {
 public:
-    inline explicit     PhoneticPortionModelList() : mvModels() {}
+    explicit     PhoneticPortionModelList() : mvModels() {}
 
     bool empty() const { return mvModels.empty(); }
 

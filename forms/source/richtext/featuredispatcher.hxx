@@ -48,10 +48,10 @@ namespace frm
         const EditView*   getEditView() const { return m_pEditView; }
 
     protected:
-        inline const css::util::URL&       getFeatureURL() const { return m_aFeatureURL; }
-        inline       ::comphelper::OInterfaceContainerHelper2& getStatusListeners() { return m_aStatusListeners; }
-        inline       bool                               isDisposed() const { return m_bDisposed; }
-        inline       void                               checkDisposed() const { if ( isDisposed() ) throw css::lang::DisposedException(); }
+        const css::util::URL&       getFeatureURL() const { return m_aFeatureURL; }
+        ::comphelper::OInterfaceContainerHelper2& getStatusListeners() { return m_aStatusListeners; }
+        bool                               isDisposed() const { return m_bDisposed; }
+        void                               checkDisposed() const { if ( isDisposed() ) throw css::lang::DisposedException(); }
 
     protected:
         ORichTextFeatureDispatcher( EditView& _rView, const css::util::URL&  _rURL );

@@ -82,7 +82,7 @@ namespace svt
         css::uno::Reference<css::uno::XComponentContext> m_aContext;
 
     public:
-        inline bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
+        bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
 
     protected:
         OGenericUnoDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

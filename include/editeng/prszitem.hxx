@@ -45,7 +45,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxPropSizeItem& operator=(const SvxPropSizeItem& rPropSize)
+    SvxPropSizeItem& operator=(const SvxPropSizeItem& rPropSize)
     {
         SetValue( rPropSize.GetValue() );
         return *this;

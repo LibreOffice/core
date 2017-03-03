@@ -53,7 +53,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxKerningItem& operator=(const SvxKerningItem& rKern) {
+    SvxKerningItem& operator=(const SvxKerningItem& rKern) {
             SetValue( rKern.GetValue() );
             return *this;
         }

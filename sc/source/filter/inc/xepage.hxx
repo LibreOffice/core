@@ -96,7 +96,7 @@ public:
     explicit            XclExpPageSettings( const XclExpRoot& rRoot );
 
     /** Returns read-only access to the page data. */
-    inline const XclPageData& GetPageData() const { return maData; }
+    const XclPageData& GetPageData() const { return maData; }
 
     /** Writes all page settings records to the stream. */
     virtual void        Save( XclExpStream& rStrm ) override;

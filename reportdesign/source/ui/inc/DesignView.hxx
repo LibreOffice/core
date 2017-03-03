@@ -103,7 +103,7 @@ namespace rptui
 
         virtual void initialize() override;
 
-        inline OReportController&   getController() const { return m_rReportController; }
+        OReportController&   getController() const { return m_rReportController; }
 
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());

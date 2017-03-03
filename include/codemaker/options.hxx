@@ -57,7 +57,7 @@ public:
 
     const StringVector& getInputFiles() { return m_inputFiles;}
 
-    inline const StringVector& getExtraInputFiles() const
+    const StringVector& getExtraInputFiles() const
         { return m_extra_input_files; }
 protected:
     ::rtl::OString  m_program;

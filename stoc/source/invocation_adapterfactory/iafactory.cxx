@@ -72,7 +72,7 @@ static OUString invadp_getImplementationName()
 
 struct hash_ptr
 {
-    inline size_t operator() ( void * p ) const
+    size_t operator() ( void * p ) const
         { return reinterpret_cast<size_t>(p); }
 };
 typedef std::unordered_set< void *, hash_ptr > t_ptr_set;

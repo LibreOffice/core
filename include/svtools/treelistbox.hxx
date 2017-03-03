@@ -613,7 +613,7 @@ public:
 
     /** Sets default bitmaps for collapsed and expanded nodes.
     */
-    inline  void    SetNodeDefaultImages( )
+    void    SetNodeDefaultImages( )
     {
         SetNodeBitmaps(
             GetDefaultCollapsedNodeImage( ),

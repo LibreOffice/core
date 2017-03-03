@@ -63,7 +63,7 @@ struct PrefixEntry
 {
     ::std::vector< sal_Int32 > m_Uids;
 
-    inline PrefixEntry()
+    PrefixEntry()
         { m_Uids.reserve( 4 ); }
 };
 
@@ -75,7 +75,7 @@ struct ElementEntry
     Reference< xml::input::XElement > m_xElement;
     ::std::vector< OUString > m_prefixes;
 
-    inline ElementEntry()
+    ElementEntry()
         { m_prefixes.reserve( 2 ); }
 };
 

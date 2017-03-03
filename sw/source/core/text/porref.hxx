@@ -24,7 +24,7 @@
 class SwRefPortion : public SwTextPortion
 {
 public:
-    inline  SwRefPortion(){ SetWhichPor( POR_REF ); }
+    SwRefPortion(){ SetWhichPor( POR_REF ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     OUTPUT_OPERATOR_OVERRIDE
 };

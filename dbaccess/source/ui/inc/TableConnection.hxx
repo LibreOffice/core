@@ -90,7 +90,7 @@ namespace dbaui
 
         const TTableConnectionData::value_type& GetData() const { return m_pData; }
         const std::vector<OConnectionLine*>&  GetConnLineList() const { return m_vConnLine; }
-        inline OJoinTableView*                  GetParent() const { return m_pParent; }
+        OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         using Window::Draw;
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;

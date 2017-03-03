@@ -207,12 +207,12 @@ namespace comphelper
         EventObjectType m_aEvent;
 
     public:
-        inline EventHolder( const EventObjectType& _rEvent )
+        EventHolder( const EventObjectType& _rEvent )
             :m_aEvent( _rEvent )
         {
         }
 
-        inline const EventObjectType& getEventObject() const { return m_aEvent; }
+        const EventObjectType& getEventObject() const { return m_aEvent; }
     };
 
     COMPHELPER_DLLPUBLIC void JoinAsyncEventNotifiers();

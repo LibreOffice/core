@@ -40,8 +40,8 @@ namespace accessibility
 
     protected:
         // attribute access
-        inline sal_Int32    getRowPos( ) const { return m_nRowPos; }
-        inline sal_Int32    getColumnPos( ) const { return m_nColPos; }
+        sal_Int32    getRowPos( ) const { return m_nRowPos; }
+        sal_Int32    getColumnPos( ) const { return m_nColPos; }
 
     protected:
         // AccessibleBrowseBoxBase overridables

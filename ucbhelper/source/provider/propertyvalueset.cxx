@@ -104,7 +104,7 @@ struct PropertyValue
     Reference< XArray >         xArray;             // getArray
     Any                         aObject;            // getObject
 
-    inline PropertyValue()
+    PropertyValue()
         : nPropsSet( PropsSet::NONE ), nOrigValue( PropsSet::NONE ),
           bBoolean(false),
           nByte(0),

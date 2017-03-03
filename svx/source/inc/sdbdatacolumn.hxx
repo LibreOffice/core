@@ -47,7 +47,7 @@ namespace svxform
         // void !, even if the object has some of the needed interfaces.
 
         // 'conversions'
-        inline const css::uno::Reference< css::sdb::XColumn>& getColumn() const
+        const css::uno::Reference< css::sdb::XColumn>& getColumn() const
         {
             return m_xColumn;
         }

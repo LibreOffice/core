@@ -63,7 +63,7 @@ tDoubleVectorPair
 class isValid : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||
@@ -74,7 +74,7 @@ public:
 class isValidAndXPositive : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||
@@ -86,7 +86,7 @@ public:
 class isValidAndYPositive : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||
@@ -98,7 +98,7 @@ public:
 class isValidAndYNegative : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||
@@ -110,7 +110,7 @@ public:
 class isValidAndBothPositive : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||
@@ -123,7 +123,7 @@ public:
 class isValidAndXPositiveAndYNegative : public std::binary_function< double, double, bool >
 {
 public:
-    inline bool operator()( double x, double y )
+    bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
                  ::rtl::math::isInf( x ) ||

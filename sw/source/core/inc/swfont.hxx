@@ -108,12 +108,12 @@ class SwSubFont : public SvxFont
     inline void SetSize( const Size& rSize );
     inline void SetWeight( const FontWeight eWeight );
     inline void SetLanguage( LanguageType eNewLang );
-    inline short CheckKerning()
+    short CheckKerning()
     {   return GetFixKerning() >= 0 ? GetFixKerning() : CheckKerning_( ); }
-    inline void SetPropWidth( const sal_uInt16 nNew )
+    void SetPropWidth( const sal_uInt16 nNew )
         { m_pMagic = nullptr; m_nProportionalWidth = nNew; }
 public:
-    inline SwSubFont() : m_aSize(0,0)
+    SwSubFont() : m_aSize(0,0)
     { m_pMagic = nullptr; m_nFontIndex = m_nOrgHeight = m_nOrgAscent = 0; m_nProportionalWidth =100; m_bSmallCapsPercentage66 = false; }
     sal_uInt16 GetPropWidth() const { return m_nProportionalWidth; }
 };
@@ -175,48 +175,48 @@ public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
     SwFont( const SwFont& rFont );
 
-    inline void ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
+    void ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
         { m_bPaintBlank = m_aSub[m_nActual].ChgFnt( pSh, rOut ); }
 
     ~SwFont();
 
     SwFont& operator=( const SwFont &rFont );
 
-    inline SwFontScript GetActual() const {    return m_nActual; }
+    SwFontScript GetActual() const {    return m_nActual; }
     inline void SetActual( SwFontScript nNew );
-    inline const SvxFont& GetActualFont() const { return m_aSub[m_nActual]; }
+    const SvxFont& GetActualFont() const { return m_aSub[m_nActual]; }
 
     // gets a MagicNumber via SwFntAccess
     void GoMagic( SwViewShell *pSh, SwFontScript nWhich );
     // set background color
     void SetBackColor( Color* pNewColor );
-    inline const Color* GetBackColor() const{ return m_pBackColor.get(); }
+    const Color* GetBackColor() const{ return m_pBackColor.get(); }
     void SetHighlightColor( const Color& aNewColor );
     const Color& GetHighlightColor() const { return m_aHighlightColor; }
 
-    inline void ChkMagic( SwViewShell *pSh, SwFontScript nWhich )
+    void ChkMagic( SwViewShell *pSh, SwFontScript nWhich )
         { if( !m_aSub[ nWhich ].m_pMagic ) GoMagic( pSh, nWhich ); }
-    inline void GetMagic( const void* &rMagic, sal_uInt16 &rIdx, SwFontScript nWhich )
+    void GetMagic( const void* &rMagic, sal_uInt16 &rIdx, SwFontScript nWhich )
         { rMagic = m_aSub[nWhich].m_pMagic; rIdx = m_aSub[nWhich].m_nFontIndex; }
-    inline void SetMagic( const void* pNew, const sal_uInt16 nIdx, SwFontScript nWhich )
+    void SetMagic( const void* pNew, const sal_uInt16 nIdx, SwFontScript nWhich )
         { m_aSub[nWhich].m_pMagic = pNew; m_aSub[nWhich].m_nFontIndex = nIdx; }
-    inline bool DifferentMagic( const SwFont* pFnt, SwFontScript nWhich )
+    bool DifferentMagic( const SwFont* pFnt, SwFontScript nWhich )
         { return m_aSub[nWhich].m_pMagic != pFnt->m_aSub[nWhich].m_pMagic ||
           !m_aSub[nWhich].m_pMagic || !pFnt->m_aSub[nWhich].m_pMagic; }
 
-    inline const Size &GetSize( SwFontScript nWhich ) const
+    const Size &GetSize( SwFontScript nWhich ) const
         { return m_aSub[nWhich].m_aSize; }
-    inline bool IsFntChg() const { return m_bFontChg; }
-    inline void SetFntChg( const bool bNew ) { m_bFontChg = bNew; }
+    bool IsFntChg() const { return m_bFontChg; }
+    void SetFntChg( const bool bNew ) { m_bFontChg = bNew; }
 
     // the encapsulated SV-Font-methods (set bFntChg to true)
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontLineStyle eUnderline );
-    inline void SetUnderColor( const Color &rColor ) { m_aUnderColor = rColor; }
+    void SetUnderColor( const Color &rColor ) { m_aUnderColor = rColor; }
     inline void SetOverline( const FontLineStyle eOverline );
-    inline void SetOverColor( const Color &rColor ) { m_aOverColor = rColor; }
+    void SetOverColor( const Color &rColor ) { m_aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const bool bOutline );
            void SetVertical( sal_uInt16 nDir, const bool bVertLayout = false );
@@ -248,26 +248,26 @@ public:
     // Get/Set-methods for the current setting
     inline void SetNoHyph( const bool bNew );
     inline void SetBlink( const bool bBlink );
-    inline bool IsBlink() const { return m_bBlink; }
-    inline sal_uInt8 &GetTox() { return m_nToxCount; }
-    inline bool IsTox() const { return ( 0 != m_nToxCount ); }
-    inline sal_uInt8 &GetRef() { return m_nRefCount; }
-    inline bool IsRef() const { return ( 0 != m_nRefCount ); }
-    inline sal_uInt8 &GetMeta() { return m_nMetaCount; }
-    inline bool IsMeta() const { return (0 != m_nMetaCount); }
-    inline sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
-    inline bool IsInputField() const { return (0 != m_nInputFieldCount); }
-    inline bool IsURL() const { return m_bURL; }
+    bool IsBlink() const { return m_bBlink; }
+    sal_uInt8 &GetTox() { return m_nToxCount; }
+    bool IsTox() const { return ( 0 != m_nToxCount ); }
+    sal_uInt8 &GetRef() { return m_nRefCount; }
+    bool IsRef() const { return ( 0 != m_nRefCount ); }
+    sal_uInt8 &GetMeta() { return m_nMetaCount; }
+    bool IsMeta() const { return (0 != m_nMetaCount); }
+    sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
+    bool IsInputField() const { return (0 != m_nInputFieldCount); }
+    bool IsURL() const { return m_bURL; }
     inline void SetGreyWave( const bool bNew );
-    inline bool IsGreyWave() const { return m_bGreyWave; }
+    bool IsGreyWave() const { return m_bGreyWave; }
     inline void SetNoCol( const bool bNew );
-    inline bool IsPaintBlank() const { return m_bPaintBlank; }
+    bool IsPaintBlank() const { return m_bPaintBlank; }
 
     // setting of the base class font for SwTextCharFormat
     void SetDiffFnt( const SfxItemSet* pSet,
                      const IDocumentSettingAccess* pIDocumentSettingAccess );
 
-    inline const SvxFont &GetFnt( const SwFontScript nWhich ) const
+    const SvxFont &GetFnt( const SwFontScript nWhich ) const
         { return m_aSub[nWhich]; };
 
     bool IsSymbol( SwViewShell *pSh )
@@ -290,13 +290,13 @@ public:
         { return m_aSub[m_nActual].GetEmphasisMark(); }
     sal_uInt16 GetOrientation( const bool bVertLayout = false ) const;
 
-    inline const OUString& GetName( const SwFontScript nWhich ) const
+    const OUString& GetName( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetFamilyName(); }
-    inline LanguageType GetLanguage( const SwFontScript nWhich ) const
+    LanguageType GetLanguage( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetLanguage(); }
-    inline rtl_TextEncoding GetCharSet( const SwFontScript nWhich ) const
+    rtl_TextEncoding GetCharSet( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetCharSet(); }
-    inline long GetHeight( const SwFontScript nWhich ) const
+    long GetHeight( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetFontSize().Height(); }
 
     // makes the logical font be effective in the OutputDevice
@@ -318,21 +318,21 @@ public:
     sal_Int32 GetCursorOfst_( SwDrawTextInfo& rInf )
         { return m_aSub[m_nActual].GetCursorOfst_( rInf ); }
 
-    inline void DrawText_( SwDrawTextInfo &rInf )
+    void DrawText_( SwDrawTextInfo &rInf )
         { m_aSub[m_nActual].DrawText_( rInf, IsGreyWave() ); }
 
-    inline void DrawStretchText_( SwDrawTextInfo &rInf )
+    void DrawStretchText_( SwDrawTextInfo &rInf )
         { m_aSub[m_nActual].DrawStretchText_( rInf ); }
 
-    inline short CheckKerning()
+    short CheckKerning()
         { return m_aSub[m_nActual].CheckKerning(); }
 
-    inline sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
+    sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
         { return m_aSub[m_nActual].GetAscent( pSh, rOut ); }
-    inline sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
+    sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
         { return m_aSub[m_nActual].GetHeight( pSh, rOut ); }
 
-    inline void Invalidate()
+    void Invalidate()
         { m_bFontChg = m_bOrgChg = true; }
 
     void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );

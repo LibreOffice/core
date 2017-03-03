@@ -92,7 +92,7 @@ public:
 
     void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 
-    inline bool         IsSelected() const { return m_bSelected; }
+    bool         IsSelected() const { return m_bSelected; }
     void                    SetSelected( bool _bSelected );
     void                    SetVisible( bool _bVisible );
 

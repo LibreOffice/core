@@ -58,7 +58,7 @@ namespace {
 
 struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_Int32 > >
 {
-    inline explicit     TitleKey( ObjectType eObjType, sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 )
+    explicit     TitleKey( ObjectType eObjType, sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 )
                             { first = eObjType; second.first = nMainIdx; second.second = nSubIdx; }
 };
 
@@ -73,7 +73,7 @@ struct TitleLayoutInfo
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
 
-    inline explicit     TitleLayoutInfo() : mpGetShape( nullptr ) {}
+    explicit     TitleLayoutInfo() : mpGetShape( nullptr ) {}
 
     void                convertTitlePos(
                             ConverterRoot& rRoot,

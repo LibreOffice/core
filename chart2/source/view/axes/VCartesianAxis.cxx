@@ -1095,7 +1095,7 @@ VCartesianAxis::ScreenPosAndLogicPos VCartesianAxis::getScreenPosAndLogicPos( do
 typedef std::vector< VCartesianAxis::ScreenPosAndLogicPos > tScreenPosAndLogicPosList;
 struct lcl_LessXPos : std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
 {
-    inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
+    bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
     {
         return ( rPos1.aScreenPos.getX() < rPos2.aScreenPos.getX() );
     }
@@ -1103,7 +1103,7 @@ struct lcl_LessXPos : std::binary_function< VCartesianAxis::ScreenPosAndLogicPos
 
 struct lcl_GreaterYPos : std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
 {
-    inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
+    bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
     {
         return ( rPos1.aScreenPos.getY() > rPos2.aScreenPos.getY() );
     }

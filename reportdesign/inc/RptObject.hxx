@@ -55,7 +55,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint() override;
 
-        inline DlgEdHintKind    GetKind() const { return eHintKind; }
+        DlgEdHintKind    GetKind() const { return eHintKind; }
     };
 
 
@@ -80,7 +80,7 @@ protected:
 
     virtual ~OObjectBase();
 
-    inline bool isListening() const { return m_bIsListening; }
+    bool isListening() const { return m_bIsListening; }
 
     void SetPropsFromRect(const Rectangle& _rRect);
 

@@ -71,7 +71,7 @@ public:
 
             bool            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
 
-    inline  ScMergeAttr& operator=(const ScMergeAttr& rMerge)
+    ScMergeAttr& operator=(const ScMergeAttr& rMerge)
             {
                 nColMerge = rMerge.nColMerge;
                 nRowMerge = rMerge.nRowMerge;
@@ -141,7 +141,7 @@ public:
             void            SetHideCell( bool bHCell);
             bool            GetHidePrint() const { return bHidePrint; }
             void            SetHidePrint( bool bHPrint);
-    inline  ScProtectionAttr& operator=(const ScProtectionAttr& rProtection)
+    ScProtectionAttr& operator=(const ScProtectionAttr& rProtection)
             {
                 bProtection = rProtection.bProtection;
                 bHideFormula = rProtection.bHideFormula;
@@ -310,13 +310,13 @@ public:
 
     virtual bool                operator==( const SfxPoolItem& rCmp ) const override;
 
-    inline sal_uInt16           GetWidth() const { return mnWidth; }
-    inline sal_uInt16           GetHeight() const { return mnHeight; }
-    inline bool                 IsValid() const { return mnWidth || mnHeight; }
+    sal_uInt16           GetWidth() const { return mnWidth; }
+    sal_uInt16           GetHeight() const { return mnHeight; }
+    bool                 IsValid() const { return mnWidth || mnHeight; }
 
-    inline void                 SetWidth( sal_uInt16 nWidth ) { mnWidth = nWidth; }
-    inline void                 SetHeight( sal_uInt16 nHeight ) { mnHeight = nHeight; }
-    inline void                 Set( sal_uInt16 nWidth, sal_uInt16 nHeight )
+    void                 SetWidth( sal_uInt16 nWidth ) { mnWidth = nWidth; }
+    void                 SetHeight( sal_uInt16 nHeight ) { mnHeight = nHeight; }
+    void                 Set( sal_uInt16 nWidth, sal_uInt16 nHeight )
                                     { mnWidth = nWidth; mnHeight = nHeight; }
 
     virtual bool GetPresentation( SfxItemPresentation ePresentation,

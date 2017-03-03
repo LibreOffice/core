@@ -286,14 +286,14 @@ public:
                             bool bUseThousandSep = true ) const;
 
     // dummy returns, to be implemented
-    inline  sal_Unicode         getCurrZeroChar() const
+    sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    static inline  bool         isNumLeadingZero()
+    static bool         isNumLeadingZero()
                                     { return true; }
                                 /// standard decimal places
-    static inline sal_uInt16    getNumDigits()
+    static sal_uInt16    getNumDigits()
                                     { return 2; }
-    static inline  bool         isNumTrailingZeros()
+    static bool         isNumTrailingZeros()
                                     { return true; }
 
     // reserved words
@@ -315,7 +315,7 @@ public:
         OOO_ENABLE_LOCALE_DATA_CHECKS is set to 'Y' or 'Yes' (or any other
         string starting with 'Y') or '1'.
         Also used in conjunction with the number formatter. */
-    static  inline  bool        areChecksEnabled()
+    static  bool        areChecksEnabled()
                                     {
                                         if (nLocaleDataChecking == 0)
                                             evaluateLocaleDataChecking();

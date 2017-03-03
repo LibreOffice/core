@@ -71,13 +71,13 @@ public:
     void                readIndex( SequenceInputStream& rStrm );
 
     /** Returns the type of the item. */
-    inline sal_Int32    getType() const { return mnType; }
+    sal_Int32    getType() const { return mnType; }
     /** Returns the value of the item. */
-    inline const css::uno::Any& getValue() const { return maValue; }
+    const css::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
     OUString     getName() const;
     /** Returns true if the item is unused. */
-    inline bool         isUnused() const { return mbUnused; }
+    bool         isUnused() const { return mbUnused; }
 
 private:
 friend class PivotCacheItemList;
@@ -99,9 +99,9 @@ public:
     void                importItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Returns true, if this item list is empty. */
-    inline bool         empty() const { return maItems.empty(); }
+    bool         empty() const { return maItems.empty(); }
     /** Returns the size of the item list. */
-    inline size_t       size() const { return maItems.size(); }
+    size_t       size() const { return maItems.size(); }
 
     /** Returns the specified item. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
@@ -183,7 +183,7 @@ struct PivotCacheGroupItem
     OUString     maOrigName;
     OUString     maGroupName;
 
-    inline explicit     PivotCacheGroupItem( const OUString& rItemName ) :
+    explicit     PivotCacheGroupItem( const OUString& rItemName ) :
                             maOrigName( rItemName ), maGroupName( rItemName ) {}
 };
 
@@ -228,29 +228,29 @@ public:
     void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
     /** Returns true, if the field is based on source data, or false if it is grouped or calculated. */
-    inline bool         isDatabaseField() const { return maFieldModel.mbDatabaseField; }
+    bool         isDatabaseField() const { return maFieldModel.mbDatabaseField; }
 
     /** Returns true, if the field contains a list of shared items. */
-    inline bool         hasSharedItems() const { return !maSharedItems.empty(); }
+    bool         hasSharedItems() const { return !maSharedItems.empty(); }
     /** Returns true, if the field contains a list of grouping items. */
-    inline bool         hasGroupItems() const { return !maGroupItems.empty(); }
+    bool         hasGroupItems() const { return !maGroupItems.empty(); }
     /** Returns true, if the field has inplace numeric grouping settings. */
-    inline bool         hasNumericGrouping() const { return maFieldGroupModel.mbRangeGroup && !maFieldGroupModel.mbDateGroup; }
+    bool         hasNumericGrouping() const { return maFieldGroupModel.mbRangeGroup && !maFieldGroupModel.mbDateGroup; }
     /** Returns true, if the field has inplace date grouping settings. */
-    inline bool         hasDateGrouping() const { return maFieldGroupModel.mbRangeGroup && maFieldGroupModel.mbDateGroup; }
+    bool         hasDateGrouping() const { return maFieldGroupModel.mbRangeGroup && maFieldGroupModel.mbDateGroup; }
     /** Returns true, if the field has a parent group field that groups the items of this field. */
-    inline bool         hasParentGrouping() const { return maFieldGroupModel.mnParentField >= 0; }
+    bool         hasParentGrouping() const { return maFieldGroupModel.mnParentField >= 0; }
 
     /** Returns the name of the cache field. */
-    inline const OUString& getName() const { return maFieldModel.maName; }
+    const OUString& getName() const { return maFieldModel.maName; }
     /** Returns the index of the parent group field that groups the items of this field. */
-    inline sal_Int32    getParentGroupField() const { return maFieldGroupModel.mnParentField; }
+    sal_Int32    getParentGroupField() const { return maFieldGroupModel.mnParentField; }
     /** Returns the index of the base field grouping is based on. */
-    inline sal_Int32    getGroupBaseField() const { return maFieldGroupModel.mnBaseField; }
+    sal_Int32    getGroupBaseField() const { return maFieldGroupModel.mnBaseField; }
     /** Returns the finalized group name of this field.  */
-    inline const OUString& getFinalGroupName() const { return maFieldGroupModel.msFinalGroupName; }
+    const OUString& getFinalGroupName() const { return maFieldGroupModel.msFinalGroupName; }
     /** Set the finalized group name of this field.  */
-    inline void            setFinalGroupName(const OUString& rFinalGroupName) { maFieldGroupModel.msFinalGroupName = rFinalGroupName; }
+    void            setFinalGroupName(const OUString& rFinalGroupName) { maFieldGroupModel.msFinalGroupName = rFinalGroupName; }
 
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
@@ -367,14 +367,14 @@ public:
 
     /** Returns true, if the pivot cache is based on a valid data source, so
         that pivot tables can be created based on this pivot cache. */
-    inline bool         isValidDataSource() const { return mbValidSource; }
+    bool         isValidDataSource() const { return mbValidSource; }
     /** Returns true, if the pivot cache is based on a dummy sheet created in finalizeImport. */
-    inline bool         isBasedOnDummySheet() const { return mbDummySheet; }
+    bool         isBasedOnDummySheet() const { return mbDummySheet; }
     /** Returns the internal cell range the cache is based on. */
-    inline const ScRange&
+    const ScRange&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
     /** Returns the relation identifier of the pivot cache records fragment. */
-    inline const OUString& getRecordsRelId() const { return maDefModel.maRelId; }
+    const OUString& getRecordsRelId() const { return maDefModel.maRelId; }
 
     /** Returns the cache field with the specified index. */
     PivotCacheField* getCacheField( sal_Int32 nFieldIdx );

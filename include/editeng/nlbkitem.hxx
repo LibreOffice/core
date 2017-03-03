@@ -39,7 +39,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxNoLinebreakItem& operator=(const SvxNoLinebreakItem& rLB)
+    SvxNoLinebreakItem& operator=(const SvxNoLinebreakItem& rLB)
         {
             SetValue( rLB.GetValue() );
             return *this;

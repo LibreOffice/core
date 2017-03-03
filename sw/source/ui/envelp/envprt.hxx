@@ -68,7 +68,7 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
-    inline void SetPrt(Printer* pPrinter) { pPrt = pPrinter; }
+    void SetPrt(Printer* pPrinter) { pPrt = pPrinter; }
 };
 
 #endif

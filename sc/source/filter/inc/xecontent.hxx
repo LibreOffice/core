@@ -104,7 +104,7 @@ public:
     virtual             ~XclExpHyperlink() override;
 
     /** Returns the cell representation text or 0, if not available. */
-    inline const OUString* GetRepr() const { return m_Repr.isEmpty() ? nullptr : &m_Repr; }
+    const OUString* GetRepr() const { return m_Repr.isEmpty() ? nullptr : &m_Repr; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
@@ -322,7 +322,7 @@ public:
     virtual             ~XclExpDV() override;
 
     /** Returns the core handle of the validation data. */
-    inline sal_uLong        GetScHandle() const { return mnScHandle; }
+    sal_uLong        GetScHandle() const { return mnScHandle; }
 
     /** Inserts a new cell range into the cell range list. */
     void                InsertCellRange( const ScRange& rPos );

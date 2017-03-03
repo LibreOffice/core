@@ -78,7 +78,7 @@ private:
 
     inline bool GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
 
-    inline bool IsValid() const
+    bool IsValid() const
     {
         return (mpImpl && mpImpl->mnTexture != 0);
     }

@@ -111,7 +111,7 @@ namespace connectivity
             css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
 
             // accessors
-            inline MacabDriver*         getDriver()         const { return m_pDriver;}
+            MacabDriver*         getDriver()         const { return m_pDriver;}
                    MacabAddressBook* getAddressBook()   const;
         };
     }

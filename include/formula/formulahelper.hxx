@@ -48,7 +48,7 @@ namespace formula
     public:
         FormulaHelper(const IFunctionManager* _pFunctionManager);
 
-        inline const CharClass* GetCharClass() const { return m_pCharClass; }
+        const CharClass* GetCharClass() const { return m_pCharClass; }
 
         bool                GetNextFunc( const OUString&     rFormula,
                                                bool          bBack,

@@ -39,7 +39,7 @@ namespace {
 
 struct ValueRangeComp
 {
-    inline bool operator()( const ValueRange& rLHS, const ValueRange& rRHS ) const
+    bool operator()( const ValueRange& rLHS, const ValueRange& rRHS ) const
     {
         return rLHS.mnLast < rRHS.mnFirst;
     }

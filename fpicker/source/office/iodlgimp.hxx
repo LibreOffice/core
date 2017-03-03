@@ -87,7 +87,7 @@ private:
     VclPtr<PopupMenu>          m_pMenu;
 
 protected:
-    inline        SvtFileDialog*  GetDialogParent()       { return m_pDlg; }
+    SvtFileDialog*  GetDialogParent()       { return m_pDlg; }
 
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
@@ -179,11 +179,11 @@ public:
                             ~SvtExpFileDlg_Impl();
 
 
-    inline void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
-    inline const css::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
+    void             SetBlackList( const css::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
+    const css::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
     void                    SetStandardDir( const OUString& _rDir );
-    inline const OUString&  GetStandardDir() const          { return _aStdDir; }
-    inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( false ); }
+    const OUString&  GetStandardDir() const          { return _aStdDir; }
+    void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( false ); }
 
 
     // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself

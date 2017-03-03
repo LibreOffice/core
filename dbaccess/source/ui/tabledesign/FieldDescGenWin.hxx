@@ -66,7 +66,7 @@ namespace dbaui
         virtual void cut() override;
         virtual void paste() override;
 
-        inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
+        OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX

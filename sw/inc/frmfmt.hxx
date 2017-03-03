@@ -402,8 +402,8 @@ public:
     virtual sal_Int16 GetPositionLayoutDir() const override;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir ) override;
 
-    inline bool IsPosAttrSet() const { return mbPosAttrSet; }
-    inline void PosAttrSet() { mbPosAttrSet = true; }
+    bool IsPosAttrSet() const { return mbPosAttrSet; }
+    void PosAttrSet() { mbPosAttrSet = true; }
 
     virtual OUString GetDescription() const override;
 

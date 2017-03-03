@@ -65,7 +65,7 @@ public:
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
-    inline void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
+    void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
 };
 
@@ -154,16 +154,16 @@ public:
     void                SetFactory( const OUString& rFactory );
     const OUString&     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
-    inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
-    inline bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
+    void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
+    bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
-    inline void         SetKeywordHdl( const Link<IndexTabPage_Impl&,void>& rLink ) { aKeywordLink = rLink; }
+    void         SetKeywordHdl( const Link<IndexTabPage_Impl&,void>& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
     bool                HasKeyword() const;
     bool                HasKeywordIgnoreCase();
     void                OpenKeyword();
 
-    inline void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
+    void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
 };
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -183,7 +183,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        Select() override;
 
-    inline void         SetSearchLink( const Link<LinkParamNone*,void>& rLink ) { aSearchLink = rLink; }
+    void         SetSearchLink( const Link<LinkParamNone*,void>& rLink ) { aSearchLink = rLink; }
 };
 
 class SearchResultsBox_Impl : public ListBox
@@ -229,13 +229,13 @@ public:
     virtual Control*    GetLastFocusControl() override;
 
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
-    inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
+    void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
     OUString            GetSelectEntry() const;
     void                ClearPage();
-    inline void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
-    inline bool         HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
-    inline OUString     GetSearchText() const { return m_pSearchED->GetText(); }
-    inline bool         IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
+    void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
+    bool         HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
+    OUString     GetSearchText() const { return m_pSearchED->GetText(); }
+    bool         IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
     bool                OpenKeyword( const OUString& rKeyword );
 };
 
@@ -333,13 +333,13 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void                SetDoubleClickHdl( const Link<Control*,bool>& rLink );
-    inline void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
+    void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
-    inline OUString     GetFactory() const { return pIPage->GetFactory(); }
+    OUString     GetFactory() const { return pIPage->GetFactory(); }
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
-    inline OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectEntry(); }
+    OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectEntry(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     bool                HasFocusOnEdit() const;
@@ -474,11 +474,11 @@ public:
     const css::uno::Reference < css::frame::XFrame2 >&
                             getFrame() const { return xFrame; }
 
-    inline void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
+    void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
-    inline ToolBox&         GetToolBox() { return *aToolBox.get(); }
+    ToolBox&         GetToolBox() { return *aToolBox.get(); }
     void                    CloseFrame();
     void                    DoSearch();
 };
@@ -536,7 +536,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     void                setContainerWindow( const css::uno::Reference < css::awt::XWindow >& xWin );
-    inline css::uno::Reference < css::frame::XFrame2 >
+    css::uno::Reference < css::frame::XFrame2 >
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const OUString& rFactory );
@@ -545,7 +545,7 @@ public:
     void                CloseWindow();
 
     void                UpdateToolbox();
-    inline void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
+    void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
 
     bool                HasHistoryPredecessor() const;      // forward to interceptor
     bool                HasHistorySuccessor() const;        // forward to interceptor

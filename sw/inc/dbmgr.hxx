@@ -129,7 +129,7 @@ struct SwDSParam : public SwDBData
         nSelectionIndex(0)
         {}
 
-    inline bool HasValidRecord() const
+    bool HasValidRecord() const
         { return( !bEndOfDB && xResultSet.is() ); }
 };
 
@@ -299,21 +299,21 @@ public:
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
     void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
 
-    inline bool     IsMergeSilent() const           { return bMergeSilent; }
-    inline void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
+    bool     IsMergeSilent() const           { return bMergeSilent; }
+    void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
     bool            Merge( const SwMergeDescriptor& rMergeDesc );
     void            MergeCancel();
 
-    inline bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
-    inline bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
+    bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
+    bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
 
     static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView* pView);
 
     /// Initialize data fields that lack name of database.
-    inline bool     IsInitDBFields() const  { return bInitDBFields; }
-    inline void     SetInitDBFields(bool b) { bInitDBFields = b;    }
+    bool     IsInitDBFields() const  { return bInitDBFields; }
+    void     SetInitDBFields(bool b) { bInitDBFields = b;    }
 
     /// Fill listbox with all table names of a database.
     bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
@@ -340,7 +340,7 @@ public:
                           const OUString& rTableName,
                           const OUString& rColNm );
 
-    inline bool     IsInMerge() const   { return bInMerge; }
+    bool     IsInMerge() const   { return bInMerge; }
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const css::uno::Sequence< css::beans::PropertyValue>& rProperties);

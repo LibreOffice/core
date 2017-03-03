@@ -44,7 +44,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS Cell
             bIsEmpty(true)
     {}
 
-    inline bool empty() const { return bIsEmpty; }
+    bool empty() const { return bIsEmpty; }
 };
 
 struct OOO_DLLPUBLIC_CHARTTOOLS CellRange

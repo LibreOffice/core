@@ -139,9 +139,9 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     /// Optimization: Asking for information about hidden characters at SwScriptInfo
     /// updates these flags.
-    inline bool IsCalcHiddenCharFlags() const
+    bool IsCalcHiddenCharFlags() const
         { return m_bRecalcHiddenCharFlags; }
-    inline void SetHiddenCharAttribute( bool bNewHiddenCharsHidePara, bool bNewContainsHiddenChars ) const
+    void SetHiddenCharAttribute( bool bNewHiddenCharsHidePara, bool bNewContainsHiddenChars ) const
     {
         m_bHiddenCharsHidePara = bNewHiddenCharsHidePara;
         m_bContainsHiddenChars = bNewContainsHiddenChars;
@@ -215,9 +215,9 @@ public:
     /// getters for SwpHints
     inline       SwpHints &GetSwpHints();
     inline const SwpHints &GetSwpHints() const;
-    inline       SwpHints *GetpSwpHints()       { return m_pSwpHints; }
-    inline const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
-    inline       bool   HasHints() const { return m_pSwpHints != nullptr; }
+    SwpHints *GetpSwpHints()       { return m_pSwpHints; }
+    const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
+    bool   HasHints() const { return m_pSwpHints != nullptr; }
     inline       SwpHints &GetOrCreateSwpHints();
 
     virtual ~SwTextNode() override;
@@ -421,7 +421,7 @@ public:
      */
     SwNumRule *GetNumRule(bool bInParent = true) const;
 
-    inline const SwNodeNum* GetNum() const
+    const SwNodeNum* GetNum() const
     {
         return mpNodeNum;
     }
@@ -695,26 +695,26 @@ public:
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
     /// Hidden Paragraph Field:
-    inline bool CalcHiddenParaField()
+    bool CalcHiddenParaField()
         { return m_pSwpHints && m_pSwpHints->CalcHiddenParaField(); }
     /// set CalcVisible flags
-    inline void SetCalcHiddenParaField()
+    void SetCalcHiddenParaField()
         { if (m_pSwpHints) m_pSwpHints->SetCalcHiddenParaField(); }
 
     /// is the paragraph visible?
-    inline bool HasHiddenParaField() const
+    bool HasHiddenParaField() const
         { return m_pSwpHints && m_pSwpHints->HasHiddenParaField(); }
 
     /// Hidden Paragraph Field:
 
-    inline bool HasHiddenCharAttribute( bool bWholePara ) const
+    bool HasHiddenCharAttribute( bool bWholePara ) const
     {
         if ( m_bRecalcHiddenCharFlags )
             CalcHiddenCharFlags();
         return bWholePara ? m_bHiddenCharsHidePara : m_bContainsHiddenChars;
     }
 
-    inline void SetCalcHiddenCharFlags() const
+    void SetCalcHiddenCharFlags() const
         { m_bRecalcHiddenCharFlags = true; }
 
     /** @return if the node is hidden due to

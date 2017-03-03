@@ -296,11 +296,11 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 
 struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,OUString,bool>
 {
-    inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
+    bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
     {
         return lhs.aName.compareTo(rhs.aName) < 0;
     }
-    inline bool operator()(const ImplPropertyInfo& lhs,const OUString& rhs)  const
+    bool operator()(const ImplPropertyInfo& lhs,const OUString& rhs)  const
     {
         return lhs.aName.compareTo(rhs) < 0;
     }

@@ -94,9 +94,9 @@ namespace dbaui
         css::uno::Reference< css::container::XNameAccess >
             getObjectContainer() const;
 
-        inline  bool    editingView() const    { return m_nCommandType == css::sdb::CommandType::TABLE; }
-        inline  bool    editingQuery() const   { return m_nCommandType == css::sdb::CommandType::QUERY; }
-        inline  bool    editingCommand() const { return m_nCommandType == css::sdb::CommandType::COMMAND; }
+        bool    editingView() const    { return m_nCommandType == css::sdb::CommandType::TABLE; }
+        bool    editingQuery() const   { return m_nCommandType == css::sdb::CommandType::QUERY; }
+        bool    editingCommand() const { return m_nCommandType == css::sdb::CommandType::COMMAND; }
 
         bool askForNewName( const css::uno::Reference< css::container::XNameAccess>& _xElements,
                             bool _bSaveAs);

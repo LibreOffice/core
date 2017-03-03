@@ -225,8 +225,8 @@ public:
     void            SetObjectSelect( bool bVal )    { m_bObjectSelect = bVal; }
     bool            IsObjectSelect() const          { return m_bObjectSelect; }
 
-    inline SdrObjKind   GetSdrDrawMode() const { return m_eDrawMode; }
-    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( false ); }
+    SdrObjKind   GetSdrDrawMode() const { return m_eDrawMode; }
+    void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( false ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, bool bObjSelect );
 
     bool            IsFrameAction() const             { return m_bInsFrame; }
@@ -262,8 +262,8 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    static inline long GetDDStartPosX() { return m_nDDStartPosX; }
-    static inline long GetDDStartPosY() { return m_nDDStartPosY; }
+    static long GetDDStartPosX() { return m_nDDStartPosX; }
+    static long GetDDStartPosY() { return m_nDDStartPosY; }
 
     static void InitStaticData();
     static void FinitStaticData();

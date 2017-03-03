@@ -115,9 +115,9 @@ public:
     explicit            XclExpRoot( XclExpRootData& rExpRootData );
 
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclExpRoot& GetRoot() const { return *this; }
+    const XclExpRoot& GetRoot() const { return *this; }
     /** Returns true, if URLs should be stored relative to the document location. */
-    inline bool         IsRelUrl() const { return mrExpData.mbRelUrl; }
+    bool         IsRelUrl() const { return mrExpData.mbRelUrl; }
     sc::CompileFormulaContext& GetCompileFormulaContext() const { return *mrExpData.mpCompileFormulaCxt; }
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
@@ -155,7 +155,7 @@ public:
     XclExpDxfs&          GetDxfs() const;
 
     /** Clean and return the OStringBuffer */
-    inline OStringBuffer&   GetStringBuf() const { mrExpData.maStringBuf.setLength(0); return mrExpData.maStringBuf; }
+    OStringBuffer&   GetStringBuf() const { mrExpData.maStringBuf.setLength(0); return mrExpData.maStringBuf; }
 
     XclExpXmlPivotTableManager& GetXmlPivotTableManager();
 

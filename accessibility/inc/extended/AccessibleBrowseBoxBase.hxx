@@ -285,7 +285,7 @@ protected:
 
 public:
     /** @return  The osl::Mutex member provided by the class BaseMutex. */
-    inline ::osl::Mutex&    getMutex( ) { return m_aMutex; }
+    ::osl::Mutex&    getMutex( ) { return m_aMutex; }
 
     /** @throws <type>DisposedException</type>  If the object is not alive. */
     void ensureIsAlive() const;
@@ -386,7 +386,7 @@ protected:
 class SolarMethodGuard : public SolarMutexGuard, public osl::MutexGuard
 {
 public:
-    inline SolarMethodGuard( osl::Mutex& rMutex )
+    SolarMethodGuard( osl::Mutex& rMutex )
         :SolarMutexGuard( )
         ,osl::MutexGuard( rMutex )
     {

@@ -37,7 +37,7 @@ private:
         SvxFontHeightItem*  pHeight;
         SvxColorItem*       pColor;
         sal_Int32               nType;      // < 0 -> undefiniert
-        inline              ENTRY()
+        ENTRY()
                             {
                                 pTmpName = nullptr;
                                 pFont = nullptr;
@@ -45,7 +45,7 @@ private:
                                 pColor = nullptr;
                                 nType = -1;
                             }
-        inline              ~ENTRY()
+        ~ENTRY()
                             {
                                 if( pTmpName )
                                     delete pTmpName;
@@ -56,20 +56,20 @@ private:
                                 if( pColor )
                                     delete pColor;
                             }
-        inline void         TmpName( const OUString &rNew )
+        void         TmpName( const OUString &rNew )
                             {
                                 if( pTmpName )
                                     *pTmpName = rNew;
                                 else
                                     pTmpName = new OUString( rNew );
                             }
-        inline void         Height( SvxFontHeightItem& rNew )
+        void         Height( SvxFontHeightItem& rNew )
                             {
                                 if( pHeight )
                                     delete pHeight;
                                 pHeight = &rNew;
                             }
-        inline void         Type( const sal_uInt16 nNew )       { nType = nNew; }
+        void         Type( const sal_uInt16 nNew )       { nType = nNew; }
     };
 
     static void             MakeFont( ENTRY* pEntry );

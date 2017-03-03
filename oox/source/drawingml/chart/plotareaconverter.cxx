@@ -56,7 +56,7 @@ struct AxesSetModel
     TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
     AxisMap             maAxes;             /// All axes mapped by API axis type.
 
-    inline explicit     AxesSetModel() {}
+    explicit     AxesSetModel() {}
 };
 
 /** Axes set converter. This is a helper class for the plot area converter. */
@@ -74,13 +74,13 @@ public:
                             bool bSupportsVaryColorsByPoint );
 
     /** Returns the automatic chart title if the axes set contains only one series. */
-    inline const OUString& getAutomaticTitle() const { return maAutoTitle; }
+    const OUString& getAutomaticTitle() const { return maAutoTitle; }
     /** Returns true, if the chart is three-dimensional. */
-    inline bool         is3dChart() const { return mb3dChart; }
+    bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
-    inline bool         isWall3dChart() const { return mbWall3dChart; }
+    bool         isWall3dChart() const { return mbWall3dChart; }
     /** Returns true, if chart is a pie chart or doughnut chart. */
-    inline bool         isPieChart() const { return mbPieChart; }
+    bool         isPieChart() const { return mbPieChart; }
 
 private:
     OUString     maAutoTitle;

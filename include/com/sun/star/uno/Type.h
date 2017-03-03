@@ -60,13 +60,13 @@ class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Type
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize )
+    static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem )
+    static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -117,7 +117,7 @@ public:
 
     /** Destructor: Releases acquired C type description reference.
     */
-    inline ~Type()
+    ~Type()
         { ::typelib_typedescriptionreference_release( _pType ); }
 
     /** Assignment operator: Acquires right side type and releases previously set type.
@@ -131,7 +131,7 @@ public:
 
         @return type class of set type
     */
-    inline TypeClass SAL_CALL getTypeClass() const
+    TypeClass SAL_CALL getTypeClass() const
         { return (TypeClass)_pType->eTypeClass; }
 
     /** Gets the name of the set type.
@@ -144,14 +144,14 @@ public:
 
         @param ppDescr [inout] type description
     */
-    inline void SAL_CALL getDescription( typelib_TypeDescription ** ppDescr ) const
+    void SAL_CALL getDescription( typelib_TypeDescription ** ppDescr ) const
         { ::typelib_typedescriptionreference_getDescription( ppDescr, _pType ); }
 
     /** Gets the C typelib type description reference pointer. Does not acquire the reference!
 
         @return UNacquired type description reference
     */
-    inline typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const
+    typelib_TypeDescriptionReference * SAL_CALL getTypeLibType() const
         { return _pType; }
 
     /** Tests if values of this reflected type can be assigned by values of given type.
@@ -162,7 +162,7 @@ public:
         @return true if values of this type can be assigned from values of given type,
                 false otherwise
     */
-    inline bool SAL_CALL isAssignableFrom( const Type & rType ) const
+    bool SAL_CALL isAssignableFrom( const Type & rType ) const
         { return ::typelib_typedescriptionreference_isAssignableFrom( _pType, rType._pType ); }
 
     /** Compares two types.
@@ -170,21 +170,21 @@ public:
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline bool SAL_CALL equals( const Type & rType ) const
+    bool SAL_CALL equals( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Equality operator: Compares two types.
 
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline bool SAL_CALL operator == ( const Type & rType ) const
+    bool SAL_CALL operator == ( const Type & rType ) const
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Unequality operator: Compares two types.
 
         @param rType another type
         @return false if both types refer the same type, true otherwise
     */
-    inline bool SAL_CALL operator != ( const Type & rType ) const
+    bool SAL_CALL operator != ( const Type & rType ) const
         { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
 };
 

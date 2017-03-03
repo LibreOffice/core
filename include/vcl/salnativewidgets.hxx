@@ -300,7 +300,7 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         ControlState    mnPage1State;
         ControlState    mnPage2State;
 
-        inline ScrollbarValue()
+        ScrollbarValue()
         : ImplControlValue( ControlType::Scrollbar, 0 )
         {
             mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;

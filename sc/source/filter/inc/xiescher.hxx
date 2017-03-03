@@ -73,9 +73,9 @@ public:
     static XclImpDrawObjRef ReadObj8( const XclImpRoot& rRoot, XclImpStream& rStrm );
 
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
-    inline void         SetAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
+    void         SetAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
     /** If set to true, a new SdrObject will be created while in DFF import. */
-    inline void         SetSimpleMacro( bool bMacro ) { mbSimpleMacro = bMacro; }
+    void         SetSimpleMacro( bool bMacro ) { mbSimpleMacro = bMacro; }
 
     /** Sets the object anchor explicitly. */
     void                SetAnchor( const XclObjAnchor& rAnchor );
@@ -85,32 +85,32 @@ public:
         bool bVisible, bool bAutoMargin );
 
     /** If set to false, the SdrObject will not be created, processed, or inserted into the draw page. */
-    inline void         SetProcessSdrObj( bool bProcess ) { mbProcessSdr = bProcess; }
+    void         SetProcessSdrObj( bool bProcess ) { mbProcessSdr = bProcess; }
     /** If set to false, the SdrObject will be created or processed, but not be inserted into the draw page. */
-    inline void         SetInsertSdrObj( bool bInsert ) { mbInsertSdr = bInsert; }
+    void         SetInsertSdrObj( bool bInsert ) { mbInsertSdr = bInsert; }
     /** If set to true, a new SdrObject will be created while in DFF import. */
-    inline void         SetCustomDffObj( bool bCustom ) { mbCustomDff = bCustom; }
+    void         SetCustomDffObj( bool bCustom ) { mbCustomDff = bCustom; }
 
     /** Returns the sheet index and Excel object identifier from OBJ record. */
-    inline sal_uInt16   GetObjId() const { return mnObjId; }
+    sal_uInt16   GetObjId() const { return mnObjId; }
     /** Returns the Excel object type from OBJ record. */
-    inline sal_uInt16   GetObjType() const { return mnObjType; }
+    sal_uInt16   GetObjType() const { return mnObjType; }
     /** Returns the name of this object, may generate a default name. */
     virtual OUString GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
-    inline const OUString& GetMacroName() const { return maMacroName; }
+    const OUString& GetMacroName() const { return maMacroName; }
 
     /** Returns the shape identifier used in the DFF stream. */
-    inline sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
+    sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
     /** Returns the shape flags from the DFF stream. */
-    inline sal_uInt32   GetDffFlags() const { return mnDffFlags; }
+    sal_uInt32   GetDffFlags() const { return mnDffFlags; }
 
     /** Returns true, if the object is hidden. */
-    inline bool         IsHidden() const { return mbHidden; }
+    bool         IsHidden() const { return mbHidden; }
     /** Returns true, if the object is visible. */
-    inline bool         IsVisible() const { return mbVisible; }
+    bool         IsVisible() const { return mbVisible; }
     /** Returns true, if the object is printable. */
-    inline bool         IsPrintable() const { return mbPrintable; }
+    bool         IsPrintable() const { return mbPrintable; }
 
     /** Returns the object anchor if existing, null otherwise. */
     const XclObjAnchor* GetAnchor() const;
@@ -120,9 +120,9 @@ public:
     ScRange             GetUsedArea( SCTAB nScTab ) const;
 
     /** Returns true, if the object is valid and will be processed. */
-    inline bool         IsProcessSdrObj() const { return mbProcessSdr && !mbHidden; }
+    bool         IsProcessSdrObj() const { return mbProcessSdr && !mbHidden; }
     /** Returns true, if the SdrObject will be created or processed, but not be inserted into the draw page. */
-    inline bool         IsInsertSdrObj() const { return mbInsertSdr; }
+    bool         IsInsertSdrObj() const { return mbInsertSdr; }
 
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
     std::size_t         GetProgressSize() const;
@@ -215,7 +215,7 @@ private:
     std::vector< XclImpDrawObjRef > mObjs;
 
 public:
-    inline explicit     XclImpDrawObjVector() : mObjs() {}
+    explicit     XclImpDrawObjVector() : mObjs() {}
 
     std::vector< XclImpDrawObjRef >::const_iterator begin() const { return mObjs.begin(); }
     std::vector< XclImpDrawObjRef >::const_iterator end() const { return mObjs.end(); }
@@ -386,7 +386,7 @@ public:
     explicit            XclImpTextObj( const XclImpRoot& rRoot );
 
     /** Stores the passed textbox data. */
-    inline void         SetTextData( const XclImpObjTextData& rTextData ) { maTextData = rTextData; }
+    void         SetTextData( const XclImpObjTextData& rTextData ) { maTextData = rTextData; }
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
@@ -467,7 +467,7 @@ public:
     virtual             ~XclImpControlHelper();
 
     /** Returns true, if a linked cell address is present. */
-    inline bool         HasCellLink() const { return mxCellLink != nullptr; }
+    bool         HasCellLink() const { return mxCellLink != nullptr; }
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObjectPtr        CreateSdrObjectFromShape(
@@ -512,7 +512,7 @@ public:
     void                SetDffProperties( const DffPropSet& rDffPropSet );
 
     /** Returns the service name of the control component to be created. */
-    inline OUString GetServiceName() const { return DoGetServiceName(); }
+    OUString GetServiceName() const { return DoGetServiceName(); }
     /** Fills the passed macro event descriptor. */
     bool                FillMacroDescriptor(
                             css::script::ScriptEventDescriptor& rDescriptor ) const;
@@ -820,22 +820,22 @@ public:
     /** Returns the ObjectName - can use non-obvious lookup for override in the associated vba document module stream**/
     virtual OUString GetObjName() const override;
     /** Returns the graphic imported from the IMGDATA record. */
-    inline const Graphic& GetGraphic() const { return maGraphic; }
+    const Graphic& GetGraphic() const { return maGraphic; }
 
     /** Returns the visible area of the imported graphic. */
-    inline const Rectangle& GetVisArea() const { return maVisArea; }
+    const Rectangle& GetVisArea() const { return maVisArea; }
 
     /** Returns true, if the OLE object will be shown as symbol. */
-    inline bool         IsSymbol() const { return mbSymbol; }
+    bool         IsSymbol() const { return mbSymbol; }
     /** Returns the storage name for the OLE object. */
     OUString            GetOleStorageName() const;
 
     /** Returns true, if this object is an OCX form control. */
-    inline bool         IsOcxControl() const { return mbEmbedded && mbControl && mbUseCtlsStrm; }
+    bool         IsOcxControl() const { return mbEmbedded && mbControl && mbUseCtlsStrm; }
     /** Returns the position in the 'Ctls' stream for additional form control data. */
-    inline std::size_t  GetCtlsStreamPos() const { return mnCtlsStrmPos; }
+    std::size_t  GetCtlsStreamPos() const { return mnCtlsStrmPos; }
     /** Returns the size in the 'Ctls' stream for additional form control data. */
-    inline std::size_t  GetCtlsStreamSize() const { return mnCtlsStrmSize; }
+    std::size_t  GetCtlsStreamSize() const { return mnCtlsStrmSize; }
 
 protected:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
@@ -900,8 +900,8 @@ private:
     {
         SdrObject*          mpSdrObj;       /// Pointer to an SdrObject.
         sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
-        inline explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( 0 ) {}
-        inline void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
+        explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( 0 ) {}
+        void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
                                 { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };
     typedef std::map< sal_uInt32, XclImpSdrInfo > XclImpSdrInfoMap;
@@ -962,7 +962,7 @@ public:
     /** Returns true, if the conversion of OLE objects is supported. */
     bool                SupportsOleObjects() const;
     /** Returns the default text margin in drawing layer units. */
-    inline sal_Int32    GetDefaultTextMargin() const { return mnDefTextMargin; }
+    sal_Int32    GetDefaultTextMargin() const { return mnDefTextMargin; }
 
 private:
     // virtual functions of SvxMSDffManager
@@ -1068,7 +1068,7 @@ public:
     void                ReadMsoDrawing( XclImpStream& rStrm );
 
     /** Returns true, if the conversion of OLE objects is supported. */
-    inline bool         SupportsOleObjects() const { return mbOleObjs; }
+    bool         SupportsOleObjects() const { return mbOleObjs; }
     /** Finds the OBJ record data related to the DFF shape at the passed position. */
     XclImpDrawObjRef    FindDrawObj( const DffRecordHeader& rHeader ) const;
     /** Finds the OBJ record data specified by the passed object identifier. */
@@ -1133,7 +1133,7 @@ public:
     void                ReadTabChart( XclImpStream& rStrm );
 
     /** Returns the total cell range covered by any shapes in the sheet. */
-    inline const ScRange& GetUsedArea() const { return maScUsedArea; }
+    const ScRange& GetUsedArea() const { return maScUsedArea; }
     /** Converts all objects and inserts them into the sheet drawing page. */
     void                ConvertObjects( XclImpDffConverter& rDffConv );
 

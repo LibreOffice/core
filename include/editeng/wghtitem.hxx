@@ -59,7 +59,7 @@ public:
     virtual bool            GetBoolValue() const override;
     virtual void            SetBoolValue( bool bVal ) override;
 
-    inline SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
+    SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
             SetValue( rWeight.GetValue() );
             return *this;
         }

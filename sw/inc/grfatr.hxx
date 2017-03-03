@@ -68,15 +68,15 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) override;
 
-    inline SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
+    SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
         {
             SfxEnumItem::SetValue( rMirrorGrf.GetValue() );
             bGrfToggle = rMirrorGrf.IsGrfToggle();
             return *this;
         }
 
-    inline bool IsGrfToggle() const         { return bGrfToggle; }
-    inline void SetGrfToggle( bool bNew )   { bGrfToggle = bNew; }
+    bool IsGrfToggle() const         { return bGrfToggle; }
+    void SetGrfToggle( bool bNew )   { bGrfToggle = bNew; }
 };
 
 class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
@@ -201,7 +201,7 @@ public:
         : SfxPoolItem( RES_GRFATR_GAMMA ), nValue( rVal )
     {}
 
-    inline SwGammaGrf& operator=( const SwGammaGrf& rCopy )
+    SwGammaGrf& operator=( const SwGammaGrf& rCopy )
     {
         nValue = rCopy.nValue;
         return *this;

@@ -52,14 +52,14 @@ public:
 
     void            Clear();
 
-    inline void     SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
+    void     SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
 
     void            SetFormatType(const short nFormatType);
-    inline short    GetFormatType() const { return nCurrFormatType; }
+    short    GetFormatType() const { return nCurrFormatType; }
     void            SetDefFormat(const sal_uLong nDefFormat);
     sal_uLong           GetFormat() const;
 
-    inline LanguageType GetCurLanguage() const { return eCurLanguage;}
+    LanguageType GetCurLanguage() const { return eCurLanguage;}
     void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
 
     void            SetAutomaticLanguage(bool bSet){bUseAutomaticLanguage = bSet;}

@@ -123,18 +123,18 @@ namespace xmloff
         */
         void        enableTrackAttributes() { m_bTrackAttributes = true; }
 
-        inline void implPushBackPropertyValue(const css::beans::PropertyValue& _rProp)
+        void implPushBackPropertyValue(const css::beans::PropertyValue& _rProp)
         {
             m_aValues.push_back(_rProp);
         }
 
-        inline void implPushBackPropertyValue( const OUString& _rName, const css::uno::Any& _rValue )
+        void implPushBackPropertyValue( const OUString& _rName, const css::uno::Any& _rValue )
         {
             m_aValues.push_back( css::beans::PropertyValue(
                 _rName, -1, _rValue, css::beans::PropertyState_DIRECT_VALUE ) );
         }
 
-        inline void implPushBackGenericPropertyValue(const css::beans::PropertyValue& _rProp)
+        void implPushBackGenericPropertyValue(const css::beans::PropertyValue& _rProp)
         {
             m_aGenericValues.push_back(_rProp);
         }

@@ -66,7 +66,7 @@ public:
     virtual ~OTaskWindow() override { disposeOnce(); }
     virtual void dispose() override { m_pPropWin.clear(); vcl::Window::dispose(); }
 
-    inline void setPropertyBrowser(PropBrw* _pPropWin)
+    void setPropertyBrowser(PropBrw* _pPropWin)
     {
         m_pPropWin = _pPropWin;
     }

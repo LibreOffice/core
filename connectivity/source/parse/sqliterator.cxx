@@ -98,7 +98,7 @@ namespace connectivity
         }
 
     public:
-        inline  bool    isQueryAllowed( const OUString& _rQueryName )
+        bool    isQueryAllowed( const OUString& _rQueryName )
         {
             if ( !m_pForbiddenQueryNames.get() )
                 return true;

@@ -47,7 +47,7 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData5 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, WeakComponentImplHelper5<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5> > > {};
     public:
-        inline WeakComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
+        WeakComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
             : WeakComponentImplHelperBase( rMutex )
             {}
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
@@ -85,7 +85,7 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData5 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, PartialWeakComponentImplHelper5<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5> > > {};
     public:
-        inline PartialWeakComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
+        PartialWeakComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
             : WeakComponentImplHelperBase( rMutex )
             {}
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
@@ -125,7 +125,7 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData5 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, WeakAggComponentImplHelper5<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5> > > {};
     public:
-        inline WeakAggComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
+        WeakAggComponentImplHelper5( ::osl::Mutex & rMutex ) throw ()
             : WeakAggComponentImplHelperBase( rMutex )
             {}
         virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE

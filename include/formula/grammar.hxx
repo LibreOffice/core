@@ -161,7 +161,7 @@ public:
     };
 
     /// If English parsing/formatting is associated with a grammar.
-    static inline bool isEnglish( const Grammar eGrammar )
+    static bool isEnglish( const Grammar eGrammar )
     {
         return (eGrammar & kEnglishBit) != 0;
     }
@@ -172,12 +172,12 @@ public:
 
     static bool isSupported( const Grammar eGrammar );
 
-    static inline sal_Int32 extractFormulaLanguage( const Grammar eGrammar )
+    static sal_Int32 extractFormulaLanguage( const Grammar eGrammar )
     {
         return eGrammar & kFlagMask;
     }
 
-    static inline AddressConvention extractRefConvention( const Grammar eGrammar )
+    static AddressConvention extractRefConvention( const Grammar eGrammar )
     {
         return static_cast<AddressConvention>(
                 ((eGrammar & ~kEnglishBit) >> kConventionShift) -
@@ -189,28 +189,28 @@ public:
     static Grammar mergeToGrammar( const Grammar eGrammar, const AddressConvention eConv );
 
     /// If grammar is of ODF 1.1
-    static inline bool isPODF( const Grammar eGrammar )
+    static bool isPODF( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
             css::sheet::FormulaLanguage::ODF_11;
     }
 
     /// If grammar is of ODFF
-    static inline bool isODFF( const Grammar eGrammar )
+    static bool isODFF( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
             css::sheet::FormulaLanguage::ODFF;
     }
 
     /// If grammar is of OOXML
-    static inline bool isOOXML( const Grammar eGrammar )
+    static bool isOOXML( const Grammar eGrammar )
     {
         return extractFormulaLanguage( eGrammar) ==
             css::sheet::FormulaLanguage::OOXML;
     }
 
     /// If grammar has an Excel syntax, determined by address convention.
-    static inline bool isExcelSyntax( const Grammar eGrammar )
+    static bool isExcelSyntax( const Grammar eGrammar )
     {
         AddressConvention eConv = extractRefConvention( eGrammar );
         switch (eConv)

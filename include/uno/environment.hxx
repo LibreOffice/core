@@ -63,13 +63,13 @@ public:
 
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize )
+    static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem )
+    static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -114,7 +114,7 @@ public:
         @param rEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( const Environment & rEnv )
+    Environment & SAL_CALL operator = ( const Environment & rEnv )
         { return operator = ( rEnv._pEnv ); }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -132,28 +132,28 @@ public:
 
         @return UNacquired pointer to the C environment struct
     */
-    inline uno_Environment * SAL_CALL get() const
+    uno_Environment * SAL_CALL get() const
         { return _pEnv; }
 
     /** Gets type name of set environment.
 
         @return type name of set environment
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const
+    ::rtl::OUString SAL_CALL getTypeName() const
         { return _pEnv->pTypeName; }
 
     /** Gets free context pointer of set environment.
 
         @return free context pointer of set environment
     */
-    inline void * SAL_CALL getContext() const
+    void * SAL_CALL getContext() const
         { return _pEnv->pContext; }
 
     /** Tests if a environment is set.
 
         @return true, if a environment is set, false otherwise
     */
-    inline bool SAL_CALL is() const
+    bool SAL_CALL is() const
         { return (_pEnv != NULL); }
 
     /** Releases a set environment.

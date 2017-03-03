@@ -75,7 +75,7 @@ namespace pcr
         virtual ~FieldLinkRow() override;
         virtual void dispose() override;
 
-        inline void         SetLinkChangeHandler( const Link<FieldLinkRow&,void>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
+        void         SetLinkChangeHandler( const Link<FieldLinkRow&,void>& _rHdl ) { m_aLinkChangeHandler = _rHdl; }
 
         enum LinkParticipant
         {

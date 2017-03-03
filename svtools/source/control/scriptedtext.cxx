@@ -52,7 +52,7 @@ private:
                                 /** Gets the font of the given script type. */
     const vcl::Font&            GetFont( sal_uInt16 _nScript ) const;
                                 /** Sets a font on the output device depending on the script type. */
-    inline void                 SetOutDevFont( sal_uInt16 _nScript )
+    void                 SetOutDevFont( sal_uInt16 _nScript )
                                     { mrOutDevice.SetFont( GetFont( _nScript ) ); }
                                 /** Fills maPosVec with positions of all changes of script type.
                                     This method expects correctly initialized maPosVec and maScriptVec. */

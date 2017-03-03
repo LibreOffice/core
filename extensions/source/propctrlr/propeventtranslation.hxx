@@ -50,7 +50,7 @@ namespace pcr
             const css::uno::Reference< css::uno::XInterface >& _rxTranslatedEventSource
         );
 
-        inline const css::uno::Reference< css::beans::XPropertyChangeListener >&
+        const css::uno::Reference< css::beans::XPropertyChangeListener >&
             getDelegator() const { return m_xDelegator; }
 
     protected:

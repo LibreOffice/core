@@ -138,12 +138,12 @@ namespace dbaui
         void                InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
-        inline  void    setRightAligned()       { m_bRightAligned = true; }
-        inline  bool    isRightAligned() const  { return m_bRightAligned; }
+        void    setRightAligned()       { m_bRightAligned = true; }
+        bool    isRightAligned() const  { return m_bRightAligned; }
 
-        inline  void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
-        inline  OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
-        inline  void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
+        void                saveCurrentFieldDescData() { SaveData( pActFieldDescr ); }
+        OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
+        void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
 
         sal_uInt16          CountActiveAggregates() const;
         sal_Int32           GetMaxControlHeight() const;
@@ -204,7 +204,7 @@ namespace dbaui
 
         OUString            getControlDefault( const OFieldDescription* _pFieldDescr, bool _bCheck = true) const;
 
-        inline void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
+        void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
     };
 }
 #endif

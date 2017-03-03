@@ -224,7 +224,7 @@ private:
     // optimized substring versions
 
     // Whether rString contains rWhat at nPos
-    static inline bool StringContains( const OUString& rWhat,
+    static bool StringContains( const OUString& rWhat,
                                        const OUString& rString,
                                        sal_Int32 nPos )
         {
@@ -241,7 +241,7 @@ private:
         }
 
     // Whether pString contains rWhat at nPos
-    static inline bool StringPtrContains( const OUString& rWhat,
+    static bool StringPtrContains( const OUString& rWhat,
                                           const sal_Unicode* pString,
                                           sal_Int32 nPos ) // nPos MUST be a valid offset from pString
         {

@@ -159,7 +159,7 @@ namespace basctl
 
         // comparison
                 bool operator==( const ScriptDocument& _rhs ) const;
-        inline  bool operator!=( const ScriptDocument& _rhs ) const { return !( *this == _rhs ); }
+        bool operator!=( const ScriptDocument& _rhs ) const { return !( *this == _rhs ); }
 
         /// retrieves a (pretty simple) hash code for the document
         sal_Int32   hashCode() const;

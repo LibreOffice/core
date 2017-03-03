@@ -62,14 +62,14 @@ struct XclExpHashEntry
 {
     const XclExpString* mpString;       /// Pointer to the string (no ownership).
     sal_uInt32          mnSstIndex;     /// The SST index of this string.
-    inline explicit     XclExpHashEntry( const XclExpString* pString, sal_uInt32 nSstIndex ) :
+    explicit     XclExpHashEntry( const XclExpString* pString, sal_uInt32 nSstIndex ) :
                             mpString( pString ), mnSstIndex( nSstIndex ) {}
 };
 
 /** Function object for strict weak ordering. */
 struct XclExpHashEntrySWO
 {
-    inline bool         operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
+    bool         operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
                             { return *rLeft.mpString < *rRight.mpString; }
 };
 

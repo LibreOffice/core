@@ -40,7 +40,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxCharHiddenItem& operator=(const SvxCharHiddenItem& rHidden) {
+    SvxCharHiddenItem& operator=(const SvxCharHiddenItem& rHidden) {
             SetValue(rHidden.GetValue());
             return *this;
         }

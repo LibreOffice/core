@@ -990,8 +990,8 @@ public:
 
     ScDocumentImport& GetDoc();
 
-    inline ScDocument*          GetDocument()           { return pDoc; }
-    inline const ScDocument*    GetDocument() const     { return pDoc; }
+    ScDocument*          GetDocument()           { return pDoc; }
+    const ScDocument*    GetDocument() const     { return pDoc; }
 
     ScMyTables& GetTables() { return aTables; }
 

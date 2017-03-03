@@ -53,7 +53,7 @@ public:
     SvxFrameDirection   GetSelectEntryValue() const;
 
     /** Saves the currently selected frame direction. */
-    inline void         SaveValue() { meSaveValue = GetSelectEntryValue(); }
+    void         SaveValue() { meSaveValue = GetSelectEntryValue(); }
 
 private:
     SvxFrameDirection   meSaveValue;    /// Saved value for later comparison.

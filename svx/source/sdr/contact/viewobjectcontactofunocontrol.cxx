@@ -178,21 +178,21 @@ namespace sdr { namespace contact {
         }
 
     public:
-        inline  bool    is() const { return m_xControl.is() && m_xControlWindow.is() && m_xControlView.is(); }
-        inline  void    clear() { m_xControl.clear(); m_xControlWindow.clear(); m_xControlView.clear(); }
+        bool    is() const { return m_xControl.is() && m_xControlWindow.is() && m_xControlView.is(); }
+        void    clear() { m_xControl.clear(); m_xControlWindow.clear(); m_xControlView.clear(); }
 
         // delegators for the methods of the UNO interfaces
         // Note all those will crash if called for a NULL object.
-        inline bool     isDesignMode() const                        { return m_xControl->isDesignMode();         }
-        inline void     setDesignMode( const bool _bDesign ) const  { m_xControl->setDesignMode( _bDesign );     }
-        inline bool     isVisible() const                           { return m_xControlWindow->isVisible();      }
-        inline void     setVisible( const bool _bVisible ) const    { m_xControlWindow->setVisible( _bVisible ); }
-        inline Reference< XControlModel >
+        bool     isDesignMode() const                        { return m_xControl->isDesignMode();         }
+        void     setDesignMode( const bool _bDesign ) const  { m_xControl->setDesignMode( _bDesign );     }
+        bool     isVisible() const                           { return m_xControlWindow->isVisible();      }
+        void     setVisible( const bool _bVisible ) const    { m_xControlWindow->setVisible( _bVisible ); }
+        Reference< XControlModel >
                         getModel() const { return m_xControl->getModel(); }
-        inline void     setModel( const Reference< XControlModel >& _m ) const { m_xControl->setModel( _m ); }
+        void     setModel( const Reference< XControlModel >& _m ) const { m_xControl->setModel( _m ); }
 
-        inline void     addWindowListener( const Reference< XWindowListener >& _l ) const    { m_xControlWindow->addWindowListener( _l );    }
-        inline void     removeWindowListener( const Reference< XWindowListener >& _l ) const { m_xControlWindow->removeWindowListener( _l ); }
+        void     addWindowListener( const Reference< XWindowListener >& _l ) const    { m_xControlWindow->addWindowListener( _l );    }
+        void     removeWindowListener( const Reference< XWindowListener >& _l ) const { m_xControlWindow->removeWindowListener( _l ); }
                void     setPosSize( const Rectangle& _rPosSize ) const;
                Rectangle
                         getPosSize() const;
@@ -203,7 +203,7 @@ namespace sdr { namespace contact {
                void     invalidate() const;
 
     public:
-        inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
+        const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
 
 
@@ -568,10 +568,10 @@ namespace sdr { namespace contact {
 
             If you want to ensure that the control exists before accessing it, use ->ensureControl
         */
-        inline const ControlHolder&
+        const ControlHolder&
                 getExistentControl() const { return m_aControl; }
 
-        inline bool
+        bool
                 hasControl() const { return m_aControl.is(); }
 
         /** positions our XControl according to the geometry settings in the SdrUnoObj, modified by the given
@@ -756,7 +756,7 @@ namespace sdr { namespace contact {
                 an SdrPageView (which carries this flag), or somebody explicitly set it from
                 outside.
         */
-        inline bool impl_isControlDesignMode_nothrow() const
+        bool impl_isControlDesignMode_nothrow() const
         {
             DBG_ASSERT( m_eControlDesignMode != eUnknown, "ViewObjectContactOfUnoControl_Impl::impl_isControlDesignMode_nothrow: mode is still unknown!" );
             return m_eControlDesignMode == eDesign;

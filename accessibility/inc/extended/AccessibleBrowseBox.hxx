@@ -120,7 +120,7 @@ public:
 
     /** returns the accessible object for the row or the column header bar
     */
-    inline css::uno::Reference<
+    css::uno::Reference<
         css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType )
         {
@@ -129,7 +129,7 @@ public:
 
     /** returns the accessible object for the table representation
     */
-    inline css::uno::Reference<
+    css::uno::Reference<
         css::accessibility::XAccessible >
         getTable( )
         {
@@ -203,7 +203,7 @@ public:
     );
 
     /// returns the AccessibleContext belonging to this Accessible
-    inline AccessibleBrowseBox*            getContext() { return m_xContext.get(); }
+    AccessibleBrowseBox*            getContext() { return m_xContext.get(); }
 
 protected:
     virtual ~AccessibleBrowseBoxAccess() override;

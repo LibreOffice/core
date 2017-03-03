@@ -34,9 +34,9 @@ struct BinAddress
     sal_Int32           mnCol;
     sal_Int32           mnRow;
 
-    inline explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
-    inline explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
+    explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
+    explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
+    explicit     BinAddress( const ScAddress& rAddr ) : mnCol( rAddr.Col() ), mnRow( rAddr.Row() ) {}
 
     void                read( SequenceInputStream& rStrm );
 };
@@ -71,7 +71,7 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& or
 class BinRangeList
 {
 public:
-    inline explicit     BinRangeList() : mvRanges() {}
+    explicit     BinRangeList() : mvRanges() {}
 
     ::std::vector< BinRange >::const_iterator begin() const { return mvRanges.begin(); }
     ::std::vector< BinRange >::const_iterator end() const { return mvRanges.end(); }
@@ -147,17 +147,17 @@ public:
                             sal_Int32 nStart = 0 );
 
     /** Returns the biggest valid cell address in the own Calc document. */
-    inline const ScAddress&
+    const ScAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
 
     /** Returns the biggest valid cell address in the imported/exported
         Excel document. */
-    inline const ScAddress&
+    const ScAddress&
                         getMaxXlsAddress() const { return maMaxXlsPos; }
 
     /** Returns the biggest valid cell address in both Calc and the
         imported/exported Excel document. */
-    inline const ScAddress&
+    const ScAddress&
                         getMaxAddress() const { return maMaxPos; }
 
     /** Checks if the passed column index is valid.

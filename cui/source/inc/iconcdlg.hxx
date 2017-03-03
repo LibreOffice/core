@@ -138,7 +138,7 @@ protected:
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
     static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
-    inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
+    IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
 
     void                    ActivatePageImpl ();

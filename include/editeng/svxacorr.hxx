@@ -323,7 +323,7 @@ public:
 
     // Query/Set the current settings of AutoCorrect
     long GetFlags() const                       { return nFlags; }
-    inline SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
+    SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
     bool IsAutoCorrFlag( long nFlag ) const
                                 { return (nFlags & nFlag) != 0; }
     void SetAutoCorrFlag( long nFlag, bool bOn = true );

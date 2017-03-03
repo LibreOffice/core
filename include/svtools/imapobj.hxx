@@ -114,8 +114,8 @@ public:
     bool                IsEqual( const IMapObject& rEqObj );
 
     // IMap-Events
-    inline const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}
-    inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
+    const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}
+    void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
 };
 
 #endif

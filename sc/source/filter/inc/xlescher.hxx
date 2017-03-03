@@ -360,8 +360,8 @@ struct XclObjLineData
 
     explicit            XclObjLineData();
 
-    inline bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_LINE_AUTO ); }
-    inline bool         IsVisible() const { return IsAuto() || (mnStyle != EXC_OBJ_LINE_NONE); }
+    bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_LINE_AUTO ); }
+    bool         IsVisible() const { return IsAuto() || (mnStyle != EXC_OBJ_LINE_NONE); }
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjLineData& rLineData );
@@ -375,8 +375,8 @@ struct XclObjFillData
 
     explicit            XclObjFillData();
 
-    inline bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_FILL_AUTO ); }
-    inline bool         IsFilled() const { return IsAuto() || (mnPattern != EXC_PATT_NONE); }
+    bool         IsAuto() const { return ::get_flag( mnAuto, EXC_OBJ_FILL_AUTO ); }
+    bool         IsFilled() const { return IsAuto() || (mnPattern != EXC_PATT_NONE); }
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjFillData& rFillData );
@@ -402,8 +402,8 @@ struct XclObjTextData
     /** Reads text data from a BIFF8 TXO record. */
     void                ReadTxo8( XclImpStream& rStrm );
 
-    inline sal_uInt8    GetHorAlign() const { return ::extract_value< sal_uInt8 >( mnFlags, 1, 3 ); }
-    inline sal_uInt8    GetVerAlign() const { return ::extract_value< sal_uInt8 >( mnFlags, 4, 3 ); }
+    sal_uInt8    GetHorAlign() const { return ::extract_value< sal_uInt8 >( mnFlags, 1, 3 ); }
+    sal_uInt8    GetVerAlign() const { return ::extract_value< sal_uInt8 >( mnFlags, 4, 3 ); }
 };
 
 enum XclTbxEventType

@@ -88,7 +88,7 @@ namespace
     public:
         explicit StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
 
-        inline bool operator()( const OUString& _rCompare )
+        bool operator()( const OUString& _rCompare )
         {
             return ( _rCompare == m_sReference );
         }

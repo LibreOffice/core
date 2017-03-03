@@ -49,13 +49,13 @@ namespace connectivity
 
             virtual ~OPredicateCompiler() override;
 
-            inline static void * SAL_CALL operator new( size_t nSize )
+            static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
+            static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
                 { return _pHint; }
-            inline static void SAL_CALL operator delete( void * pMem )
+            static void SAL_CALL operator delete( void * pMem )
                 { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
+            static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
                 {  }
             void dispose();
 
@@ -105,12 +105,12 @@ namespace connectivity
             bool        evaluate(OCodeList& rCodeList);
             void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
 
-            inline bool start()
+            bool start()
             {
                 return evaluate(m_rCompiler->m_aCodeList);
             }
 
-            inline void startSelection(ORowSetValueDecoratorRef& _rVal)
+            void startSelection(ORowSetValueDecoratorRef& _rVal)
             {
                 evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
             }

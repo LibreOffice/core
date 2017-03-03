@@ -69,7 +69,7 @@ namespace connectivity
         /// unary_function Functor object for class ZZ returntype is void
         struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : std::binary_function< css::uno::Sequence<sal_Int8>, css::uno::Sequence<sal_Int8>, bool >
         {
-            inline bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
+            bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
                                     const css::uno::Sequence<sal_Int8>& _rRH) const
             {
                 if(_rLH.getLength() == _rRH.getLength())
@@ -234,7 +234,7 @@ namespace connectivity
 
             void construct();
 
-            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
+            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
             {
                 return m_pStatement->getOdbcFunction(_nIndex);
             }
@@ -244,7 +244,7 @@ namespace connectivity
                 return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
             }
 
-            inline void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+            void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;

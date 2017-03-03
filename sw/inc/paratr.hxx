@@ -85,27 +85,27 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    inline sal_uInt8 GetLines() const { return nLines; }
-    inline sal_uInt8 &GetLines() { return nLines; }
+    sal_uInt8 GetLines() const { return nLines; }
+    sal_uInt8 &GetLines() { return nLines; }
 
-    inline sal_uInt8 GetChars() const { return nChars; }
-    inline sal_uInt8 &GetChars() { return nChars; }
+    sal_uInt8 GetChars() const { return nChars; }
+    sal_uInt8 &GetChars() { return nChars; }
 
-    inline bool GetWholeWord() const { return bWholeWord; }
-    inline bool &GetWholeWord() { return bWholeWord; }
+    bool GetWholeWord() const { return bWholeWord; }
+    bool &GetWholeWord() { return bWholeWord; }
 
-    inline sal_uInt16 GetDistance() const { return nDistance; }
-    inline sal_uInt16 &GetDistance() { return nDistance; }
+    sal_uInt16 GetDistance() const { return nDistance; }
+    sal_uInt16 &GetDistance() { return nDistance; }
 
-    inline const SwCharFormat *GetCharFormat() const { return static_cast<const SwCharFormat*>(GetRegisteredIn()); }
-    inline SwCharFormat *GetCharFormat()       { return static_cast<SwCharFormat*>(GetRegisteredIn()); }
+    const SwCharFormat *GetCharFormat() const { return static_cast<const SwCharFormat*>(GetRegisteredIn()); }
+    SwCharFormat *GetCharFormat()       { return static_cast<SwCharFormat*>(GetRegisteredIn()); }
     void SetCharFormat( SwCharFormat *pNew );
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Get and set Modify pointer.
-    inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
-    inline void ChgDefinedIn( const SwModify* pNew )
+    const SwModify* GetDefinedIn() const { return pDefinedIn; }
+    void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = const_cast<SwModify*>(pNew); }
 };
 

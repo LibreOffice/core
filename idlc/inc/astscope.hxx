@@ -57,7 +57,7 @@ public:
     AstDeclaration* lookupForAdd(AstDeclaration* pDecl);
 
 protected:
-    inline AstDeclaration const * getLast() const
+    AstDeclaration const * getLast() const
     { return m_declarations.back(); }
 
 private:

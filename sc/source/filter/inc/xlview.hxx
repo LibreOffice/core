@@ -109,7 +109,7 @@ struct XclSelectionData
     XclRangeList        maXclSelection;     /// Selected cell ranges.
     sal_uInt16          mnCursorIdx;        /// Index of cursor in selection list.
 
-    inline explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
+    explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
 typedef std::shared_ptr< XclSelectionData > XclSelectionDataRef;

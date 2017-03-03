@@ -68,7 +68,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-    inline void SetExpand( const bool bNew ) { bExpand = bNew; }
+    void SetExpand( const bool bNew ) { bExpand = bNew; }
     bool IsExpand() const { return bExpand; }
 
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;

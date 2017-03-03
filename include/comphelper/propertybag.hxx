@@ -130,7 +130,7 @@ namespace comphelper
             @param _out_rProps
                 takes, upon return, the descriptions of all properties in the bag
         */
-        inline void describeProperties(
+        void describeProperties(
                     css::uno::Sequence< css::beans::Property >& _out_rProps
                 ) const
         {
@@ -202,14 +202,14 @@ namespace comphelper
 
         /** determines whether a property with a given name is part of the bag
         */
-        inline  bool    hasPropertyByName( const OUString& _rName ) const
+        bool    hasPropertyByName( const OUString& _rName ) const
         {
             return isRegisteredProperty( _rName );
         }
 
         /** determines whether a property with a given handle is part of the bag
         */
-        inline  bool    hasPropertyByHandle( sal_Int32 _nHandle ) const
+        bool    hasPropertyByHandle( sal_Int32 _nHandle ) const
         {
             return isRegisteredProperty( _nHandle );
         }

@@ -70,8 +70,8 @@ public:
     explicit DocBasicItem( StarBASIC& rDocBasic );
     virtual ~DocBasicItem() override;
 
-    inline const SbxObjectRef& getClassModules() const { return mxClassModules; }
-    inline bool isDocClosed() const { return mbDocClosed; }
+    const SbxObjectRef& getClassModules() const { return mxClassModules; }
+    bool isDocClosed() const { return mbDocClosed; }
 
     void clearDependingVarsOnDelete( StarBASIC& rDeletedBasic );
 

@@ -50,26 +50,26 @@ namespace comphelper
                 m_xBroadcaster;
 
     protected:
-        inline css::uno::Reference< css::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                 getListener( ) const
         {
             return m_aListener.get();
         }
 
-        inline const css::uno::Reference< css::uno::XInterface >&
+        const css::uno::Reference< css::uno::XInterface >&
                 getBroadcaster( ) const
         {
             return m_xBroadcaster;
         }
 
-        inline void resetListener( )
+        void resetListener( )
         {
             m_aListener.clear();
         }
 
 
     protected:
-        inline OWeakListenerAdapterBase(
+        OWeakListenerAdapterBase(
             const css::uno::Reference< css::uno::XWeak >& _rxListener,
             const css::uno::Reference< css::uno::XInterface >& _rxBroadcaster
         )
@@ -109,7 +109,7 @@ namespace comphelper
         );
 
     protected:
-        inline  css::uno::Reference< LISTENER > getListener( ) const
+        css::uno::Reference< LISTENER > getListener( ) const
         {
             return  css::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), css::uno::UNO_QUERY );
         }

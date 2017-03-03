@@ -442,7 +442,7 @@ public:
                         if ( pS )
                             *pS = (*pD).Ref1;
                     }
-    inline  ScComplexRefData& Ref() { return *pD; }
+    ScComplexRefData& Ref() { return *pD; }
 };
 
 class SingleDoubleRefProvider

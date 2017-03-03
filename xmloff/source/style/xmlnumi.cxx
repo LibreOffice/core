@@ -222,23 +222,23 @@ public:
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties();
 
-    inline void SetPosAndSpaceMode( sal_Int16 eValue )
+    void SetPosAndSpaceMode( sal_Int16 eValue )
     {
         ePosAndSpaceMode = eValue;
     }
-    inline void SetLabelFollowedBy( sal_Int16 eValue )
+    void SetLabelFollowedBy( sal_Int16 eValue )
     {
         eLabelFollowedBy = eValue;
     }
-    inline void SetListtabStopPosition( sal_Int32 nValue )
+    void SetListtabStopPosition( sal_Int32 nValue )
     {
         nListtabStopPosition = nValue;
     }
-    inline void SetFirstLineIndent( sal_Int32 nValue )
+    void SetFirstLineIndent( sal_Int32 nValue )
     {
         nFirstLineIndent = nValue;
     }
-    inline void SetIndentAt( sal_Int32 nValue )
+    void SetIndentAt( sal_Int32 nValue )
     {
         nIndentAt = nValue;
     }

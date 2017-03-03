@@ -129,11 +129,11 @@ public:
    void SAL_CALL controlStateChanged( css::ui::dialogs::FilePickerEvent aEvent );
    void SAL_CALL dialogSizeChanged( );
 
-   inline AquaFilePickerDelegate * getDelegate() {
+   AquaFilePickerDelegate * getDelegate() {
        return m_pDelegate;
    }
 
-   inline OUString const & getSaveFileName() {
+   OUString const & getSaveFileName() {
        return m_sSaveFileName;
    }
 

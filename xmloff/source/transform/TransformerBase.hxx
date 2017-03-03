@@ -182,8 +182,8 @@ public:
     const XMLTransformerContext *GetAncestorContext( sal_uInt32 i ) const;
 
     // C++
-    inline void SetClass( const OUString& r ) { m_aClass = r; }
-    inline const OUString& GetClass() const { return m_aClass; }
+    void SetClass( const OUString& r ) { m_aClass = r; }
+    const OUString& GetClass() const { return m_aClass; }
 
     bool isWriter() const;
 

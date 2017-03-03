@@ -56,9 +56,9 @@ protected:
     SwWrtShell&         GetShell();
     SwWrtShell*         GetShellPtr();
 
-    inline SwView&      GetView()                       { return rView; }
-    inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
+    SwView&      GetView()                       { return rView; }
+    void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
+    bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_LINK(    InsertDBTextHdl, void*, void );
 

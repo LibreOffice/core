@@ -744,9 +744,9 @@ class SwSetToRightMargin
 {
     bool bRight;
 public:
-    inline SwSetToRightMargin() : bRight( false ) { }
-    inline ~SwSetToRightMargin() { SwTextCursor::SetRightMargin( bRight ); }
-    inline void SetRight( const bool bNew ) { bRight = bNew; }
+    SwSetToRightMargin() : bRight( false ) { }
+    ~SwSetToRightMargin() { SwTextCursor::SetRightMargin( bRight ); }
+    void SetRight( const bool bNew ) { bRight = bNew; }
 };
 
 bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,

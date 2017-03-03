@@ -241,8 +241,8 @@ public:
     inline bool                 IsSequenceField() const;
 
     /// Logical number, sequence fields.
-    inline void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
-    inline sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
+    void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
+    sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
 
     /// Query name only.
     virtual OUString       GetPar1()   const override;

@@ -94,7 +94,7 @@ public:
     }
 
 private:
-    inline double executeSSE2(size_t& i, const double* pCurrent) const
+    double executeSSE2(size_t& i, const double* pCurrent) const
     {
 #if defined(LO_SSE2_AVAILABLE)
         double fSum = 0.0;
@@ -144,7 +144,7 @@ private:
 #endif
     }
 
-    inline double executeUnrolled(size_t& i, const double* pCurrent) const
+    double executeUnrolled(size_t& i, const double* pCurrent) const
     {
         size_t nRealSize = mnSize - i;
         size_t nUnrolledSize = nRealSize - (nRealSize % 4);

@@ -792,7 +792,7 @@ class SfxObjectShellLock
 protected:
     SfxObjectShell * pObj;
 public:
-    inline               SfxObjectShellLock() { pObj = nullptr; }
+    SfxObjectShellLock() { pObj = nullptr; }
     inline               SfxObjectShellLock( const SfxObjectShellLock & rObj );
     inline               SfxObjectShellLock( SfxObjectShellLock && rObj );
     inline               SfxObjectShellLock( SfxObjectShell * pObjP );
@@ -801,11 +801,11 @@ public:
     inline SfxObjectShellLock & operator = ( const SfxObjectShellLock & rObj );
     inline SfxObjectShellLock & operator = ( SfxObjectShellLock && rObj );
     inline SfxObjectShellLock & operator = ( SfxObjectShell * pObj );
-    inline bool                 Is() const { return pObj != nullptr; }
-    inline SfxObjectShell *     operator &  () const { return pObj; }
-    inline SfxObjectShell *     operator -> () const { return pObj; }
-    inline SfxObjectShell &     operator *  () const { return *pObj; }
-    inline operator SfxObjectShell * () const { return pObj; }
+    bool                 Is() const { return pObj != nullptr; }
+    SfxObjectShell *     operator &  () const { return pObj; }
+    SfxObjectShell *     operator -> () const { return pObj; }
+    SfxObjectShell &     operator *  () const { return *pObj; }
+    operator SfxObjectShell * () const { return pObj; }
 };
 inline SfxObjectShellLock::SfxObjectShellLock( const SfxObjectShellLock & rObj )
 {

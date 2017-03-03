@@ -118,8 +118,8 @@ public:
     void                DelAttr(sal_uInt16 nId);
 
     // reach out the set
-    inline const SfxItemSet &GetAttrSet() const { return m_aSet; }
-    inline       SfxItemSet &GetAttrSet()       { return m_aSet; }
+    const SfxItemSet &GetAttrSet() const { return m_aSet; }
+    SfxItemSet &GetAttrSet()       { return m_aSet; }
     void                     SetAttrSet(const SfxItemSet& rSet);
 
     inline const SwFormatVertOrient &GetVertOrient() const;

@@ -70,7 +70,7 @@ class SwExtraPainter
     sal_uInt16 nDivider;
     bool bGoLeft;
     bool bLineNum;
-    inline bool IsClipChg() { return aClip.IsChg(); }
+    bool IsClipChg() { return aClip.IsChg(); }
 
     SwExtraPainter(const SwExtraPainter&) = delete;
     SwExtraPainter& operator=(const SwExtraPainter&) = delete;
@@ -79,10 +79,10 @@ public:
     SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
-    inline SwFont* GetFont() const { return pFnt.get(); }
-    inline void IncLineNr() { ++nLineNr; }
-    inline bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
-    inline bool HasDivider() { if( !nDivider ) return false;
+    SwFont* GetFont() const { return pFnt.get(); }
+    void IncLineNr() { ++nLineNr; }
+    bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
+    bool HasDivider() { if( !nDivider ) return false;
         return !(nLineNr % rLineInf.GetDividerCountBy()); }
 
     void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );

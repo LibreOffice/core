@@ -289,11 +289,11 @@ public:
                                 SortedIndividualInt32List();
                                 ~SortedIndividualInt32List();
 
-    inline sal_uInt32           Count() const
+    sal_uInt32           Count() const
                                     { return maVector.size(); }
 
                                 /// @return  element on position nIndex or 0 on invalid index
-    inline sal_Int32            Get( sal_uInt32 n ) const
+    sal_Int32            Get( sal_uInt32 n ) const
                                     { return maVector[n]; }
 
                                 /// @return  true if nVal (internal date representation) is contained
@@ -317,11 +317,11 @@ class ScaDoubleList
 private:
     std::vector<double>         maVector;
 protected:
-    inline void                 ListAppend( double fValue ) { maVector.push_back(fValue); }
+    void                 ListAppend( double fValue ) { maVector.push_back(fValue); }
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    inline void                 Append( double fValue )
+    void                 Append( double fValue )
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
@@ -357,9 +357,9 @@ protected:
 public:
     virtual                     ~ScaDoubleList() {}
 
-    inline sal_uInt32           Count() const
+    sal_uInt32           Count() const
                                     { return maVector.size(); }
-    inline double               Get( sal_uInt32 n ) const
+    double               Get( sal_uInt32 n ) const
                                         { return maVector[n]; }
 
     /// @throws css::uno::RuntimeException
@@ -501,9 +501,9 @@ public:
 
     inline const Complex*   Get( sal_uInt32 nIndex ) const;
 
-    inline bool             empty() const
+    bool             empty() const
                                 { return maVector.empty(); }
-    inline sal_uInt32       Count() const
+    sal_uInt32       Count() const
                                 { return maVector.size(); }
 
     inline void             Append( Complex* pNew );
@@ -803,9 +803,9 @@ public:
     ScaDate&                    operator=( const ScaDate& rCopy );
 
                                 /// @return  the current month.
-    inline sal_uInt16           getMonth() const    { return nMonth; };
+    sal_uInt16           getMonth() const    { return nMonth; };
                                 /// @return  the current year.
-    inline sal_uInt16           getYear() const     { return nYear; };
+    sal_uInt16           getYear() const     { return nYear; };
 
                                 /// adds/subtracts the given count of months, adjusts day
                                 ///
@@ -827,9 +827,9 @@ public:
     static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo );
 
     bool                        operator<( const ScaDate& rCmp ) const;
-    inline bool                 operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
-    inline bool                 operator>( const ScaDate& rCmp ) const  { return rCmp < *this; }
-    inline bool                 operator>=( const ScaDate& rCmp ) const { return !(*this < rCmp); }
+    bool                 operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
+    bool                 operator>( const ScaDate& rCmp ) const  { return rCmp < *this; }
+    bool                 operator>=( const ScaDate& rCmp ) const { return !(*this < rCmp); }
 };
 
 inline sal_uInt16 ScaDate::getDaysInMonth() const

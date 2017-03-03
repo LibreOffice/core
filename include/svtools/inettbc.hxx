@@ -81,7 +81,7 @@ public:
 
     void                            SetFilter(const OUString& _sFilter);
 
-    inline void                     EnableAutocompletion( bool _bEnable )
+    void                     EnableAutocompletion( bool _bEnable )
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }

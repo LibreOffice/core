@@ -160,8 +160,8 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    inline void     DisableTransientChildren()          { SetChildrenNotTransient(); }
-    inline bool     IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
+    void     DisableTransientChildren()          { SetChildrenNotTransient(); }
+    bool     IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
 
     bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
 

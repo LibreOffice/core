@@ -65,9 +65,9 @@ namespace frm
 
     public:
         struct GrantAccess { friend class RichTextControl; private: GrantAccess() { } };
-        inline EditView*        getView( const GrantAccess& ) const     { return m_pView; }
-        inline RichTextEngine*  getEngine( const GrantAccess& ) const   { return m_pEngine; }
-        inline vcl::Window*          getViewport( const GrantAccess& ) const { return m_pViewport; }
+        EditView*        getView( const GrantAccess& ) const     { return m_pView; }
+        RichTextEngine*  getEngine( const GrantAccess& ) const   { return m_pEngine; }
+        vcl::Window*          getViewport( const GrantAccess& ) const { return m_pViewport; }
 
     public:
         RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine,
@@ -166,8 +166,8 @@ namespace frm
         /// ensures that our "automatic line break" setting matches the current WinBits of the window
         void    ensureLineBreakSetting();
 
-        inline  bool    hasVScrollBar( ) const { return m_pVScroll != nullptr; }
-        inline  bool    hasHScrollBar( ) const { return m_pHScroll != nullptr; }
+        bool    hasVScrollBar( ) const { return m_pVScroll != nullptr; }
+        bool    hasHScrollBar( ) const { return m_pHScroll != nullptr; }
 
         // IEngineStatusListener overridables
         virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) override;

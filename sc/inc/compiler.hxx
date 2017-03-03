@@ -463,7 +463,7 @@ private:
     virtual bool IsForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const override;
 
     /// Access the CharTable flags
-    inline ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
+    ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCharFlags::NONE; }
 };
 

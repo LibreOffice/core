@@ -293,7 +293,7 @@ public:
                                                     sal_uInt16 nCurrFormat, bool bBank );
 
     /// General Unicode Euro symbol
-    static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
+    static sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
 
 typedef std::vector< OUString > NfWSStringsDtor;

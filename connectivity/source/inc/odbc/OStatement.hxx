@@ -161,7 +161,7 @@ namespace connectivity
             OStatement_Base(OConnection* _pConnection );
             using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
-            inline oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
+            oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
             {
                 return m_pConnection->getOdbcFunction(_nIndex);
             }

@@ -147,7 +147,7 @@ namespace dbtools
                 void    clearAllParameterInformation();
 
         /// checks whether the parameter information are up-to-date
-        inline  bool    isUpToDate() const { return m_bUpToDate; }
+        bool    isUpToDate() const { return m_bUpToDate; }
 
         /** updates all parameter information represented by the instance
         */
@@ -232,7 +232,7 @@ namespace dbtools
 
     private:
         /// checkes whether the object is already initialized, and not yet disposed
-        inline  bool    isAlive() const { return m_xComponent.get().is() && m_xInnerParamUpdate.is(); }
+        bool    isAlive() const { return m_xComponent.get().is() && m_xInnerParamUpdate.is(); }
 
         /** creates a filter expression from a master-detail link where the detail denotes a column name
         */

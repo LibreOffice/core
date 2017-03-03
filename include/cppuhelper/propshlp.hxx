@@ -47,13 +47,13 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize )
+    static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem )
+    static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem )
+    static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * )
+    static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -223,13 +223,13 @@ class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize )
+    static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem )
+    static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem )
+    static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * )
+    static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**

@@ -242,7 +242,7 @@ public:
 
         @author
     */
-    inline ~SwPagePreviewLayout()
+    ~SwPagePreviewLayout()
     {
         ClearPreviewPageData();
     }
@@ -333,7 +333,7 @@ public:
 
         @author OD
     */
-    inline sal_uInt16 SelectedPage()
+    sal_uInt16 SelectedPage()
     {
         return mnSelectedPageNum;
     }
@@ -342,7 +342,7 @@ public:
 
         @author OD
     */
-    inline void SetSelectedPage( sal_uInt16 _nSelectedPageNum )
+    void SetSelectedPage( sal_uInt16 _nSelectedPageNum )
     {
         mnSelectedPageNum = _nSelectedPageNum;
     }
@@ -465,17 +465,17 @@ public:
                                    bool&        _obPosInEmptyPage,
                                    sal_uInt16&  _onPageNum ) const;
 
-    inline bool DoesPreviewLayoutRowsFitIntoWindow() const
+    bool DoesPreviewLayoutRowsFitIntoWindow() const
     {
         return mbDoesLayoutRowsFitIntoWindow;
     }
 
-    inline bool DoesPreviewLayoutColsFitIntoWindow() const
+    bool DoesPreviewLayoutColsFitIntoWindow() const
     {
         return mbDoesLayoutColsFitIntoWindow;
     }
 
-    inline bool PreviewLayoutValid() const
+    bool PreviewLayoutValid() const
     {
         return mbLayoutInfoValid && mbLayoutSizesValid && mbPaintInfoValid;
     }

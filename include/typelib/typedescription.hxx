@@ -52,13 +52,13 @@ class TypeDescription
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize )
+    static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem )
+    static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem )
+    static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * )
+    static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -111,7 +111,7 @@ public:
         @param rTypeDescr another type description
         @return this TypeDescription
     */
-    inline TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr )
+    TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr )
         { return this->operator =( rTypeDescr.get() ); }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -136,7 +136,7 @@ public:
         @param rTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const
+    bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const
         { return equals( rTypeDescr._pTypeDescr ); }
 
     /** Makes stored type description complete.
@@ -147,13 +147,13 @@ public:
 
         @return stored pointer of type description
     */
-    inline typelib_TypeDescription * SAL_CALL get() const
+    typelib_TypeDescription * SAL_CALL get() const
         { return _pTypeDescr; }
     /** Tests if a type description is set.
 
         @return true, if a type description is set, false otherwise
     */
-    inline bool SAL_CALL is() const
+    bool SAL_CALL is() const
         { return (_pTypeDescr != NULL); }
 };
 

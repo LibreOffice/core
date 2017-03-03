@@ -347,7 +347,7 @@ public:
         @param  _nIndex
             The new index in parent.
     */
-    inline void setIndexInParent(sal_Int32 _nIndex) { m_nIndexInParent = _nIndex; }
+    void setIndexInParent(sal_Int32 _nIndex) { m_nIndexInParent = _nIndex; }
 
 protected:
     /// Children manager. May be empty if there are no children.

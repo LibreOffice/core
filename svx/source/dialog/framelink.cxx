@@ -100,10 +100,10 @@ struct LineEndResult
     long                mnOffs1;    /// Offset for top or left edge, dependent of context.
     long                mnOffs2;    /// Offset for bottom or right edge, dependent of context
 
-    inline explicit     LineEndResult() : mnOffs1( 0 ), mnOffs2( 0 ) {}
+    explicit     LineEndResult() : mnOffs1( 0 ), mnOffs2( 0 ) {}
 
-    inline void         Swap() { std::swap( mnOffs1, mnOffs2 ); }
-    inline void         Negate() { mnOffs1 = -mnOffs1; mnOffs2 = -mnOffs2; }
+    void         Swap() { std::swap( mnOffs1, mnOffs2 ); }
+    void         Negate() { mnOffs1 = -mnOffs1; mnOffs2 = -mnOffs2; }
 };
 
 /** Result struct used by the horizontal/vertical frame link functions.
@@ -117,7 +117,7 @@ struct BorderEndResult
     LineEndResult       maSecn;     /// Result for secondary line.
     LineEndResult       maGap;      /// Result for gap line.
 
-    inline void         Negate() { maPrim.Negate(); maSecn.Negate(); maGap.Negate(); }
+    void         Negate() { maPrim.Negate(); maSecn.Negate(); maGap.Negate(); }
 };
 
 /** Result struct used by the horizontal/vertical frame link functions.
@@ -146,7 +146,7 @@ struct DiagLineResult
     long                mnTClip;    /// Offset for top border of clipping rectangle.
     long                mnBClip;    /// Offset for bottom border of clipping rectangle.
 
-    inline explicit     DiagLineResult() : mnLClip( 0 ), mnRClip( 0 ), mnTClip( 0 ), mnBClip( 0 ) {}
+    explicit     DiagLineResult() : mnLClip( 0 ), mnRClip( 0 ), mnTClip( 0 ), mnBClip( 0 ) {}
 };
 
 /** Result struct used by the diagonal frame link functions.

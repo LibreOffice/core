@@ -88,33 +88,33 @@ public:
 
     // inline functions
 
-    inline NSView* getUserPane() {
+    NSView* getUserPane() {
         if (!m_bIsUserPaneLaidOut) {
             createUserPane();
         }
         return m_pUserPane;
     }
 
-    inline bool    getVisibility(ToggleType tToggle) {
+    bool    getVisibility(ToggleType tToggle) {
         return m_bToggleVisibility[tToggle];
     }
 
-    inline void    setFilterControlNeeded(bool bNeeded) {
+    void    setFilterControlNeeded(bool bNeeded) {
         m_bIsFilterControlNeeded = bNeeded;
         if (bNeeded) {
             m_bUserPaneNeeded = true;
         }
     }
 
-    inline void    setFilterHelper(FilterHelper* pFilterHelper) {
+    void    setFilterHelper(FilterHelper* pFilterHelper) {
         m_pFilterHelper = pFilterHelper;
     }
 
-    inline void    setFilePickerDelegate(AquaFilePickerDelegate* pDelegate) {
+    void    setFilePickerDelegate(AquaFilePickerDelegate* pDelegate) {
         m_pDelegate = pDelegate;
     }
 
-    inline bool    isAutoExtensionEnabled() {
+    bool    isAutoExtensionEnabled() {
         return ([((NSButton*) m_pToggles[AUTOEXTENSION]) state] == NSOnState);
     }
 

@@ -64,13 +64,13 @@ namespace svx
             OutputDevice& m_rDev;
 
         public:
-            inline FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
+            FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
                 :m_rDev( _rDev )
             {
                 m_rDev.Push( PushFlags::FONT );
                 m_rDev.SetFont( _rTemporaryFont );
             }
-            inline ~FontSwitch( )
+            ~FontSwitch( )
             {
                 m_rDev.Pop( );
             }
@@ -1250,7 +1250,7 @@ namespace svx
         const OUString*     First();
         const OUString*     Next();
 
-        inline sal_uInt16   GetCount() const { return m_nNumOfEntries; }
+        sal_uInt16   GetCount() const { return m_nNumOfEntries; }
     };
 
     SuggestionList::SuggestionList() :

@@ -279,7 +279,7 @@ namespace svxform
 
         virtual void                Resize() override;
 
-        inline bool                 HasModel() const { return m_bHasModel; }
+        bool                 HasModel() const { return m_bHasModel; }
         OUString                    SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
         void                        ClearModel();
         OUString                    LoadInstance(const PropertyValue_seq& _xPropSeq);
@@ -287,16 +287,16 @@ namespace svxform
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
-        inline const OUString&      GetInstanceName() const { return m_sInstanceName; }
-        inline const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
-        inline bool                 GetLinkOnce() const { return m_bLinkOnce; }
-        inline void                 SetInstanceName( const OUString &name ) { m_sInstanceName=name; }
-        inline void                 SetInstanceURL( const OUString &url ) { m_sInstanceURL=url; }
-        inline void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
+        const OUString&      GetInstanceName() const { return m_sInstanceName; }
+        const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
+        bool                 GetLinkOnce() const { return m_bLinkOnce; }
+        void                 SetInstanceName( const OUString &name ) { m_sInstanceName=name; }
+        void                 SetInstanceURL( const OUString &url ) { m_sInstanceURL=url; }
+        void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
 
-        inline css::uno::Reference<css::beans::XPropertySet>
+        css::uno::Reference<css::beans::XPropertySet>
                                     GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
-        inline OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
+        OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
         const XFormsUIHelper1_ref&  GetXFormsHelper() const { return m_xUIHelper; }
     };
 
@@ -579,7 +579,7 @@ namespace svxform
         virtual ~AddSubmissionDialog() override;
         virtual void dispose() override;
 
-        inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
+        const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
 

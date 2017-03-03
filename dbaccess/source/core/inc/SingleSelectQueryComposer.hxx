@@ -66,7 +66,7 @@ namespace dbaccess
 
             SQLPartCount
         };
-        static inline void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + (size_t)e); }
+        static void incSQLPart( SQLPart& e ) { e = (SQLPart)(1 + (size_t)e); }
         enum EColumnType
         {
             SelectColumns       = 0,
@@ -149,8 +149,8 @@ namespace dbaccess
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
-        inline bool implSetFilter(const OUString& _sFilter) { setFilter(_sFilter); return true;}
-        inline bool implSetHavingClause(const OUString& _sFilter) { setHavingClause(_sFilter); return true;}
+        bool implSetFilter(const OUString& _sFilter) { setFilter(_sFilter); return true;}
+        bool implSetHavingClause(const OUString& _sFilter) { setHavingClause(_sFilter); return true;}
 
         /** returns the part of the select statement
             @param  _ePart

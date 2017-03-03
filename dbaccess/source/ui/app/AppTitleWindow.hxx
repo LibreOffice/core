@@ -55,7 +55,7 @@ namespace dbaui
             @return
                 The child window.
         */
-        inline vcl::Window* getChildWindow() const { return m_pChild; }
+        vcl::Window* getChildWindow() const { return m_pChild; }
 
         /** sets the title text out of the resource
             @param  _nTitleId

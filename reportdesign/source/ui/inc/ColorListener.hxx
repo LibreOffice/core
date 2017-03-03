@@ -60,10 +60,10 @@ namespace rptui
 
         /** returns if the section is marked
         */
-        inline bool isMarked() const { return m_bMarked; }
+        bool isMarked() const { return m_bMarked; }
 
-        inline void     setCollapsedHdl(const Link<OColorListener&,void>& _aLink ){ m_aCollapsedLink = _aLink; }
-        inline bool isCollapsed() const { return m_bCollapsed; }
+        void     setCollapsedHdl(const Link<OColorListener&,void>& _aLink ){ m_aCollapsedLink = _aLink; }
+        bool isCollapsed() const { return m_bCollapsed; }
 
         /** collapse or expand
          *

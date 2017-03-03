@@ -84,7 +84,7 @@ public:
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
                             sal_Int32 nEnd = -1 ) const override;
 
-    inline SwSectionNode* GetSectNode()
+    SwSectionNode* GetSectNode()
     {
         const SwNode* pSectNd( GetAnchor() );
         return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );

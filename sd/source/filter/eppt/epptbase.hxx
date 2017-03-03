@@ -180,7 +180,7 @@ public:
 
     sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
 
-    inline sal_uInt32  GetCount() const { return maFonts.size(); };
+    sal_uInt32  GetCount() const { return maFonts.size(); };
 
     const FontCollectionEntry* GetById( sal_uInt32 nId );
 

@@ -62,8 +62,8 @@ public:
 
     const SwTextRefMark *GetTextRefMark() const   { return pTextAttr; }
 
-    inline       OUString &GetRefName()       { return aRefName; }
-    inline const OUString &GetRefName() const { return aRefName; }
+    OUString &GetRefName()       { return aRefName; }
+    const OUString &GetRefName() const { return aRefName; }
 
     css::uno::WeakReference<css::text::XTextContent> const& GetXRefMark() const
         { return m_wXReferenceMark; }

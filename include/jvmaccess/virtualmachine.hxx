@@ -79,7 +79,7 @@ public:
             @return
             A valid JNI environment pointer.  Will never be null.
          */
-        inline JNIEnv * getEnvironment() const { return m_pEnvironment; }
+        JNIEnv * getEnvironment() const { return m_pEnvironment; }
 
     private:
         AttachGuard(AttachGuard &) = delete;

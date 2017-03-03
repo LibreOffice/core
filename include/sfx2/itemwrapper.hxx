@@ -90,12 +90,12 @@ public:
     typedef ValueT                              ItemValueType;
     typedef SingleItemWrapper< ItemT, ValueT >  SingleItemWrapperType;
 
-    inline explicit     SingleItemWrapper( sal_uInt16 nSlot ) : mnSlot( nSlot ) {}
+    explicit     SingleItemWrapper( sal_uInt16 nSlot ) : mnSlot( nSlot ) {}
 
     virtual             ~SingleItemWrapper() {}
 
     /** Returns the SID this wrapper works on. */
-    inline sal_uInt16       GetSlotId() const { return mnSlot; }
+    sal_uInt16       GetSlotId() const { return mnSlot; }
 
     /** Returns the item from an item set, if it is not in "don't know" state.
         @descr  Similar to ItemWrapperHelper::GetUniqueItem(), but works always
@@ -131,7 +131,7 @@ template< typename ItemT, typename ValueT, typename InternalValueT = ValueT >
 class ValueItemWrapper : public SingleItemWrapper< ItemT, ValueT >
 {
 public:
-    inline explicit     ValueItemWrapper( sal_uInt16 nSlot ) :
+    explicit     ValueItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, ValueT >( nSlot ) {}
 
     virtual ValueT      GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE
@@ -151,7 +151,7 @@ template< typename ItemT >
 class IdentItemWrapper : public SingleItemWrapper< ItemT, const ItemT& >
 {
 public:
-    inline explicit     IdentItemWrapper( sal_uInt16 nSlot ) :
+    explicit     IdentItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, const ItemT& >( nSlot ) {}
 
     virtual const ItemT& GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE

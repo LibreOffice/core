@@ -149,10 +149,10 @@ public:
 
 protected:
     /// get helper
-    inline XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
+    XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
 
     const OUString& GetServiceName() { return sServiceName; }
-    inline void SetServiceName(const OUString& sStr) { sServiceName = sStr; }
+    void SetServiceName(const OUString& sStr) { sServiceName = sStr; }
 
     OUString const & GetContent();
 

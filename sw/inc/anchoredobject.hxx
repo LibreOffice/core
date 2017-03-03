@@ -120,7 +120,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             @author OD
         */
         friend class SwObjPositioningInProgress;
-        inline void SetPositioningInProgress( const bool _bPosInProgress )
+        void SetPositioningInProgress( const bool _bPosInProgress )
         {
             mbPositioningInProgress = _bPosInProgress;
         }
@@ -316,7 +316,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
             @author OD
         */
-        inline bool IsPositioningInProgress() const
+        bool IsPositioningInProgress() const
         {
             return mbPositioningInProgress;
         }
@@ -380,7 +380,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         const SwRect& GetObjRectWithSpaces() const;
 
-        inline void InvalidateObjRectWithSpaces() const
+        void InvalidateObjRectWithSpaces() const
         {
             mbObjRectWithSpacesValid = false;
         }
@@ -399,11 +399,11 @@ class SW_DLLPUBLIC SwAnchoredObject
         bool ConsiderForTextWrap() const;
         void SetConsiderForTextWrap( const bool _bConsiderForTextWrap );
         bool PositionLocked() const;
-        inline void LockPosition()
+        void LockPosition()
         {
             mbPositionLocked = true;
         }
-        inline void UnlockPosition()
+        void UnlockPosition()
         {
             if ( !mbKeepPositionLockedForSection )
             {
@@ -411,7 +411,7 @@ class SW_DLLPUBLIC SwAnchoredObject
             }
         }
 
-        inline void SetKeepPosLocked( const bool _bKeepPosLocked )
+        void SetKeepPosLocked( const bool _bKeepPosLocked )
         {
             mbKeepPositionLockedForSection = _bKeepPosLocked;
         }
@@ -423,7 +423,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         void SetClearedEnvironment( const bool _bClearedEnvironment );
 
         // reset booleans for layout process
-        inline void ResetLayoutProcessBools()
+        void ResetLayoutProcessBools()
         {
             mbPositioningInProgress = false;
             mbConsiderForTextWrap = false;

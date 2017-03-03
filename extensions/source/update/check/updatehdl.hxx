@@ -179,7 +179,7 @@ public:
     bool                    showOverwriteWarning() const;
 
     // Allows runtime exceptions to be thrown by const methods
-    inline SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
+    SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
         { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
 
     // XActionListener

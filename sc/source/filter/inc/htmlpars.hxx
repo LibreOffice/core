@@ -236,18 +236,18 @@ struct ScHTMLPos
     SCCOL               mnCol;
     SCROW               mnRow;
 
-    inline explicit     ScHTMLPos() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit     ScHTMLPos( SCCOL nCol, SCROW nRow ) :
+    explicit     ScHTMLPos() : mnCol( 0 ), mnRow( 0 ) {}
+    explicit     ScHTMLPos( SCCOL nCol, SCROW nRow ) :
                             mnCol( nCol ), mnRow( nRow ) {}
-    inline explicit     ScHTMLPos( const ScAddress& rAddr ) { Set( rAddr ); }
+    explicit     ScHTMLPos( const ScAddress& rAddr ) { Set( rAddr ); }
 
-    inline SCCOLROW     Get( ScHTMLOrient eOrient ) const
+    SCCOLROW     Get( ScHTMLOrient eOrient ) const
                             { return (eOrient == tdCol) ? mnCol : mnRow; }
-    inline void         Set( SCCOL nCol, SCROW nRow )
+    void         Set( SCCOL nCol, SCROW nRow )
                             { mnCol = nCol; mnRow = nRow; }
-    inline void         Set( const ScAddress& rAddr )
+    void         Set( const ScAddress& rAddr )
                             { Set( rAddr.Col(), rAddr.Row() ); }
-    inline ScAddress    MakeAddr() const
+    ScAddress    MakeAddr() const
                             { return ScAddress( mnCol, mnRow, 0 ); }
 };
 
@@ -262,9 +262,9 @@ struct ScHTMLSize
     SCCOL               mnCols;
     SCROW               mnRows;
 
-    inline explicit     ScHTMLSize( SCCOL nCols, SCROW nRows ) :
+    explicit     ScHTMLSize( SCCOL nCols, SCROW nRows ) :
                             mnCols( nCols ), mnRows( nRows ) {}
-    inline void         Set( SCCOL nCols, SCROW nRows )
+    void         Set( SCCOL nCols, SCROW nRows )
                             { mnCols = nCols; mnRows = nRows; }
 };
 
@@ -277,16 +277,16 @@ public:
                             ScHTMLTableId nTableId = SC_HTML_NO_TABLE );
 
     /** Returns true, if the selection of the entry is empty. */
-    inline bool         IsEmpty() const { return !aSel.HasRange(); }
+    bool         IsEmpty() const { return !aSel.HasRange(); }
     /** Returns true, if the entry has any content to be imported. */
     bool                HasContents() const;
     /** Returns true, if the entry represents a table. */
-    inline bool         IsTable() const { return nTab != SC_HTML_NO_TABLE; }
+    bool         IsTable() const { return nTab != SC_HTML_NO_TABLE; }
     /** Returns true, if the entry represents a table. */
-    inline ScHTMLTableId GetTableId() const { return nTab; }
+    ScHTMLTableId GetTableId() const { return nTab; }
 
     /** Sets or cleares the import always state. */
-    inline void         SetImportAlways() { mbImportAlways = true; }
+    void         SetImportAlways() { mbImportAlways = true; }
     /** Sets start point of the entry selection to the start of the import info object. */
     void                AdjustStart( const ImportInfo& rInfo );
     /** Sets end point of the entry selection to the end of the import info object. */
@@ -295,9 +295,9 @@ public:
     void                Strip( const EditEngine& rEditEngine );
 
     /** Returns read/write access to the item set of this entry. */
-    inline SfxItemSet&  GetItemSet() { return aItemSet; }
+    SfxItemSet&  GetItemSet() { return aItemSet; }
     /** Returns read-only access to the item set of this entry. */
-    inline const SfxItemSet& GetItemSet() const { return aItemSet; }
+    const SfxItemSet& GetItemSet() const { return aItemSet; }
 
 private:
     bool                mbImportAlways;     /// true = Always import this entry.
@@ -338,9 +338,9 @@ public:
     virtual             ~ScHTMLTable();
 
     /** Returns the name of the table, specified in the TABLE tag. */
-    inline const OUString& GetTableName() const { return maTableName; }
+    const OUString& GetTableName() const { return maTableName; }
     /** Returns the unique identifier of the table. */
-    inline ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
+    ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
     /** Returns the cell spanning of the specified cell. */
     ScHTMLSize          GetSpan( const ScHTMLPos& rCellPos ) const;
 
@@ -408,7 +408,7 @@ public:
     ScHTMLSize          GetDocSize( const ScHTMLPos& rCellPos ) const;
 
     /** Returns the resulting Calc position of the top left edge of the table. */
-    inline const ScHTMLPos& GetDocPos() const { return maDocBasePos; }
+    const ScHTMLPos& GetDocPos() const { return maDocBasePos; }
     /** Calculates the resulting Calc position of the specified HTML column/row. */
     SCCOLROW            GetDocPos( ScHTMLOrient eOrient, SCCOLROW nCellPos ) const;
     /** Calculates the resulting Calc position of the specified HTML cell. */

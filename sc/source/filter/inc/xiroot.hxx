@@ -129,8 +129,8 @@ public:
     explicit            XclImpRoot( XclImpRootData& rImpRootData );
 
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclImpRoot& GetRoot() const { return *this; }
-    inline XclImpRoot& GetRoot() { return *this; }
+    const XclImpRoot& GetRoot() const { return *this; }
+    XclImpRoot& GetRoot() { return *this; }
 
     /** Sets a code page read from a CODEPAGE record for byte string import. */
     void                SetCodePage( sal_uInt16 nCodePage );
@@ -204,9 +204,9 @@ public:
     static OUString      GetScAddInName( const OUString& rXclName );
 
     /** Returns true, if the document contains a VB project. */
-    inline bool         HasBasic() const { return mrImpData.mbHasBasic; }
+    bool         HasBasic() const { return mrImpData.mbHasBasic; }
     /** Called to indicate that the document contains a VB project. */
-    inline void         SetHasBasic() { mrImpData.mbHasBasic = true; }
+    void         SetHasBasic() { mrImpData.mbHasBasic = true; }
     /** Reads the CODENAME record and inserts the codename into the document. */
     void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
 

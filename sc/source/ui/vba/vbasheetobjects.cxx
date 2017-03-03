@@ -83,11 +83,11 @@ public:
         const uno::Type& rVbaType );
 
     /** Returns the VBA helper interface of the VBA collection object. */
-    inline const uno::Reference< XHelperInterface >& getParent() const { return mxParent; }
+    const uno::Reference< XHelperInterface >& getParent() const { return mxParent; }
     /** Returns the component context of the VBA collection object. */
-    inline const uno::Reference< uno::XComponentContext >& getContext() const { return mxContext; }
+    const uno::Reference< uno::XComponentContext >& getContext() const { return mxContext; }
     /** Returns the VBA type information of the objects in this container. */
-    inline const uno::Type& getVbaType() const { return maVbaType; }
+    const uno::Type& getVbaType() const { return maVbaType; }
 
     /** Collects all shapes supported by this instance and inserts them into
         the internal shape vector.

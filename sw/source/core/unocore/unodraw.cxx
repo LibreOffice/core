@@ -226,7 +226,7 @@ public:
     }
 
     // #i28701#
-    inline SwFormatWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(
+    SwFormatWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(
                                         const bool _bCreate = false )
     {
         if ( _bCreate && !pWrapInfluenceOnObjPos )
@@ -237,7 +237,7 @@ public:
         }
         return pWrapInfluenceOnObjPos;
     }
-    inline void RemoveWrapInfluenceOnObjPos()
+    void RemoveWrapInfluenceOnObjPos()
     {
         DELETEZ(pWrapInfluenceOnObjPos);
     }

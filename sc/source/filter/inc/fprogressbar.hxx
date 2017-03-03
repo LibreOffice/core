@@ -125,7 +125,7 @@ public:
     /** Starts the progress bar or activates another segment. */
     void                ActivateSegment( sal_Int32 nSegment );
     /** Starts the progress bar (with first segment). */
-    inline void         Activate() { ActivateSegment( 0 ); }
+    void         Activate() { ActivateSegment( 0 ); }
     /** Set current segment to the specified absolute position. */
     void                ProgressAbs( std::size_t nPos );
     /** Increase current segment by the passed value. */
@@ -191,7 +191,7 @@ public:
     explicit            ScfSimpleProgressBar( std::size_t nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId );
 
     /** Set progress bar to the specified position. */
-    inline void         ProgressAbs( std::size_t nPos ) { maProgress.ProgressAbs( nPos ); }
+    void         ProgressAbs( std::size_t nPos ) { maProgress.ProgressAbs( nPos ); }
 
 private:
     /** Initializes and starts the progress bar. */

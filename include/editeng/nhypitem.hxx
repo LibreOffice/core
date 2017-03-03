@@ -39,7 +39,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxNoHyphenItem& operator=(const SvxNoHyphenItem& rNHH)
+    SvxNoHyphenItem& operator=(const SvxNoHyphenItem& rNHH)
         {
             SetValue( rNHH.GetValue() );
             return *this;

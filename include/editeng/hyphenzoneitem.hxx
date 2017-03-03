@@ -60,22 +60,22 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
-    inline void SetHyphen( const bool bNew ) { bHyphen = bNew; }
-    inline bool IsHyphen() const { return bHyphen; }
+    void SetHyphen( const bool bNew ) { bHyphen = bNew; }
+    bool IsHyphen() const { return bHyphen; }
 
-    inline void SetPageEnd( const bool bNew ) { bPageEnd = bNew; }
-    inline bool IsPageEnd() const { return bPageEnd; }
+    void SetPageEnd( const bool bNew ) { bPageEnd = bNew; }
+    bool IsPageEnd() const { return bPageEnd; }
 
-    inline sal_uInt8 &GetMinLead() { return nMinLead; }
-    inline sal_uInt8 GetMinLead() const { return nMinLead; }
+    sal_uInt8 &GetMinLead() { return nMinLead; }
+    sal_uInt8 GetMinLead() const { return nMinLead; }
 
-    inline sal_uInt8 &GetMinTrail() { return nMinTrail; }
-    inline sal_uInt8 GetMinTrail() const { return nMinTrail; }
+    sal_uInt8 &GetMinTrail() { return nMinTrail; }
+    sal_uInt8 GetMinTrail() const { return nMinTrail; }
 
-    inline sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
-    inline sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
+    sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
+    sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
 
-    inline SvxHyphenZoneItem &operator=( const SvxHyphenZoneItem &rNew )
+    SvxHyphenZoneItem &operator=( const SvxHyphenZoneItem &rNew )
     {
         bHyphen = rNew.IsHyphen();
         bPageEnd = rNew.IsPageEnd();

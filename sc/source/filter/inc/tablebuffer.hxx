@@ -50,9 +50,9 @@ public:
     /** Imports a table definition from a TABLE record. */
     void                importTable( SequenceInputStream& rStrm, sal_Int16 nSheet );
     /** Creates a new auto filter and stores it internally. */
-    inline AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
+    AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
     /** Creates a new tableColumns handler and stores it internally. */
-    inline TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
+    TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
@@ -60,24 +60,24 @@ public:
     void                applyTableColumns();
 
     /** Returns the unique table identifier. */
-    inline sal_Int32    getTableId() const { return maModel.mnId; }
+    sal_Int32    getTableId() const { return maModel.mnId; }
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
-    inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
+    sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Returns the original display name of the table. */
-    inline const OUString& getDisplayName() const { return maModel.maDisplayName; }
+    const OUString& getDisplayName() const { return maModel.maDisplayName; }
 
     /** Returns the original (unchecked) total range of the table. */
-    inline const ScRange& getOriginalRange() const { return maModel.maRange; }
+    const ScRange& getOriginalRange() const { return maModel.maRange; }
     /** Returns the cell range of this table. */
-    inline const ScRange& getRange() const { return maDestRange; }
+    const ScRange& getRange() const { return maDestRange; }
     /** Returns the number of columns of this table. */
-    inline SCCOL        getWidth() const { return maDestRange.aEnd.Col() - maDestRange.aStart.Col() + 1; }
+    SCCOL        getWidth() const { return maDestRange.aEnd.Col() - maDestRange.aStart.Col() + 1; }
     /** Returns the number of rows of this table. */
-    inline SCROW        getHeight() const { return maDestRange.aEnd.Row() - maDestRange.aStart.Row() + 1; }
+    SCROW        getHeight() const { return maDestRange.aEnd.Row() - maDestRange.aStart.Row() + 1; }
     /** Returns the number of header rows in the table range. */
-    inline sal_Int32    getHeaderRows() const { return maModel.mnHeaderRows; }
+    sal_Int32    getHeaderRows() const { return maModel.mnHeaderRows; }
     /** Returns the number of totals rows in the table range. */
-    inline sal_Int32    getTotalsRows() const { return maModel.mnTotalsRows; }
+    sal_Int32    getTotalsRows() const { return maModel.mnTotalsRows; }
 
 private:
     TableModel          maModel;

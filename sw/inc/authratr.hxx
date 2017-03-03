@@ -33,7 +33,7 @@ public:
 
     AuthorCharAttr();
 
-    inline bool operator == ( const AuthorCharAttr& rAttr ) const
+    bool operator == ( const AuthorCharAttr& rAttr ) const
     {
         return  nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
                 nColor == rAttr.nColor;

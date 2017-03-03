@@ -164,7 +164,7 @@ public:
     // #i88291#
     void            clearStreamToLoadFrom();
 
-    inline bool     WasLastEditOK() const       { return bWasLastEditOK; }
+    bool     WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper & GetInsertFileDialog(const OUString& rFactory) const;
 };
 

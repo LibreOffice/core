@@ -57,15 +57,15 @@ public:
     void ResetVars();
     bool TakeGluePoint(SdrGluePoint& rGP) const;
 
-    inline void SetBestConnection( bool rB ) { bBestConn = rB; };
-    inline void SetBestVertex( bool rB ) { bBestVertex = rB; };
-    inline void SetAutoVertex( bool rB ) { bAutoVertex = rB; };
-    inline void SetConnectorId( sal_uInt16 nId ) { nConId = nId; };
+    void SetBestConnection( bool rB ) { bBestConn = rB; };
+    void SetBestVertex( bool rB ) { bBestVertex = rB; };
+    void SetAutoVertex( bool rB ) { bAutoVertex = rB; };
+    void SetConnectorId( sal_uInt16 nId ) { nConId = nId; };
 
-    inline bool IsBestConnection() const { return bBestConn; };
-    inline bool IsAutoVertex() const { return bAutoVertex; };
-    inline sal_uInt16 GetConnectorId() const { return nConId; };
-    inline SdrObject* GetObject() const { return pObj; }
+    bool IsBestConnection() const { return bBestConn; };
+    bool IsAutoVertex() const { return bAutoVertex; };
+    sal_uInt16 GetConnectorId() const { return nConId; };
+    SdrObject* GetObject() const { return pObj; }
 };
 
 

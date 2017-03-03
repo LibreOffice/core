@@ -86,7 +86,7 @@ public:
 
                                 /** Whether OpCode has a parameter of type
                                     ForceArray or ReferenceOrForceArray. */
-    static  inline  bool        HasForceArray( OpCode eOp)
+    static  bool        HasForceArray( OpCode eOp)
                                     {
                                         return 0 <= (short)eOp &&
                                             eOp <= SC_OPCODE_LAST_OPCODE_ID &&

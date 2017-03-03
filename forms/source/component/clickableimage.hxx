@@ -78,7 +78,7 @@ namespace frm
 
         DECL_LINK( DownloadDoneLink, void*, void );
 
-        inline ImageProducer* GetImageProducer() { return m_xProducer.get(); }
+        ImageProducer* GetImageProducer() { return m_xProducer.get(); }
 
         void StartProduction();
         void SetURL(const OUString& rURL);
@@ -86,8 +86,8 @@ namespace frm
         void DownloadDone();
 
         css::uno::Sequence< css::uno::Type> _getTypes() override;
-        inline bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
-        inline void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
+        bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
+        void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:
         OClickableImageBaseModel(

@@ -55,7 +55,7 @@ public:
                                 ~XclTracer();
 
     /** Returns true, if tracing is enabled. */
-    inline bool                 IsEnabled() const { return mbEnabled; }
+    bool                 IsEnabled() const { return mbEnabled; }
 
     /** Ensure that particular traces are logged once per document. */
     void                        ProcessTraceOnce(XclTracerId eProblem);

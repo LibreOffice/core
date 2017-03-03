@@ -48,10 +48,10 @@ public:
     ~ScCaptionPtr();
 
     ScCaptionPtr& operator=( const ScCaptionPtr& r );
-    inline explicit operator bool() const    { return mpCaption != nullptr; }
-    inline SdrCaptionObj* get() const        { return mpCaption; }
-    inline SdrCaptionObj* operator->() const { return mpCaption; }
-    inline SdrCaptionObj& operator*() const  { return *mpCaption; }
+    explicit operator bool() const    { return mpCaption != nullptr; }
+    SdrCaptionObj* get() const        { return mpCaption; }
+    SdrCaptionObj* operator->() const { return mpCaption; }
+    SdrCaptionObj& operator*() const  { return *mpCaption; }
 
     // Does not default to nullptr to make it visually obvious where such is used.
     void reset( SdrCaptionObj* p );

@@ -146,15 +146,15 @@ public:
     {
     }
 
-    inline  bool    isModified() const  { return mbModified; }
+    bool    isModified() const  { return mbModified; }
             void    setModified( bool _bModified );
 
-    inline  void    addModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
+    void    addModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
     {
         m_aModifyListeners.addInterface( _rxListener );
     }
 
-    inline  void    removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
+    void    removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
     {
         m_aModifyListeners.removeInterface( _rxListener );
     }
@@ -510,7 +510,7 @@ private:
     virtual void storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) = 0;
 
 protected:
-    inline  bool    implIsModified() const  { return mbIsModified; }
+    bool    implIsModified() const  { return mbIsModified; }
             void    implSetModified( bool _bIsModified );
 
 private:

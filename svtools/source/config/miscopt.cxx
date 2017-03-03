@@ -125,40 +125,40 @@ public:
         //  public interface
 
 
-        inline bool UseSystemFileDialog() const
+        bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
 
-        inline void SetUseSystemFileDialog( bool bSet )
+        void SetUseSystemFileDialog( bool bSet )
         {  m_bUseSystemFileDialog = bSet; SetModified(); }
 
-        inline bool IsUseSystemFileDialogReadOnly() const
+        bool IsUseSystemFileDialogReadOnly() const
         { return m_bIsUseSystemFileDialogRO; }
 
-        inline bool DisableUICustomization() const
+        bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
 
-        inline void SetExperimentalMode( bool bSet )
+        void SetExperimentalMode( bool bSet )
         { m_bExperimentalMode = bSet; SetModified(); }
 
-        inline bool IsExperimentalMode() const
+        bool IsExperimentalMode() const
         { return m_bExperimentalMode; }
 
-        inline void SetMacroRecorderMode( bool bSet )
+        void SetMacroRecorderMode( bool bSet )
         { m_bMacroRecorderMode = bSet; SetModified(); }
 
-        inline bool IsMacroRecorderMode() const
+        bool IsMacroRecorderMode() const
         { return m_bMacroRecorderMode; }
 
-        inline bool IsPluginsEnabled() const
+        bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
-        inline sal_Int16 GetSymbolsSize()
+        sal_Int16 GetSymbolsSize()
         { return m_nSymbolsSize; }
 
-        inline ToolBoxButtonSize GetSidebarIconSize()
+        ToolBoxButtonSize GetSidebarIconSize()
         { return m_nSidebarIconSize; }
 
-        inline ToolBoxButtonSize GetNotebookbarIconSize()
+        ToolBoxButtonSize GetNotebookbarIconSize()
         { return m_nNotebookbarIconSize; }
 
         void SetSymbolsSize( sal_Int16 nSet );
@@ -190,19 +190,19 @@ public:
         {return m_bIconThemeWasSetAutomatically;}
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
-        inline sal_Int16 GetToolboxStyle()
+        sal_Int16 GetToolboxStyle()
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
 
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle );
 
-        inline bool UseSystemPrintDialog() const
+        bool UseSystemPrintDialog() const
         { return m_bUseSystemPrintDialog; }
 
-        inline void SetUseSystemPrintDialog( bool bSet )
+        void SetUseSystemPrintDialog( bool bSet )
         {  m_bUseSystemPrintDialog = bSet; SetModified(); }
 
-        inline bool ShowLinkWarningDialog() const
+        bool ShowLinkWarningDialog() const
         { return m_bShowLinkWarningDialog; }
 
         void SetShowLinkWarningDialog( bool bSet )

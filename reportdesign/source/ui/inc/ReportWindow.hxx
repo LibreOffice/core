@@ -71,8 +71,8 @@ namespace rptui
         // Window overrides
         virtual void Resize() override;
 
-        inline ODesignView*         getReportView() const { return m_pView; }
-        inline OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
+        ODesignView*         getReportView() const { return m_pView; }
+        OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
 
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj, const OUString& _sShapeType);
@@ -136,7 +136,7 @@ namespace rptui
         */
         void            showRuler(bool _bShow);
 
-        inline sal_Int32 getRulerHeight() const { return m_aHRuler->GetSizePixel().Height(); }
+        sal_Int32 getRulerHeight() const { return m_aHRuler->GetSizePixel().Height(); }
 
         /** returns the total width of the first section
         */

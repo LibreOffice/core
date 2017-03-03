@@ -295,17 +295,17 @@ public:
 
     inline HTMLTableCell *GetCell( sal_uInt16 nCell ) const;
 
-    inline void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
-    inline SvxAdjust GetAdjust() const { return eAdjust; }
+    void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
+    SvxAdjust GetAdjust() const { return eAdjust; }
 
-    inline void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
-    inline sal_Int16 GetVertOri() const { return eVertOri; }
+    void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
+    sal_Int16 GetVertOri() const { return eVertOri; }
 
     void SetBGBrush( SvxBrushItem *pBrush ) { pBGBrush = pBrush; }
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
 
-    inline void SetEndOfGroup() { bIsEndOfGroup = true; }
-    inline bool IsEndOfGroup() const { return bIsEndOfGroup; }
+    void SetEndOfGroup() { bIsEndOfGroup = true; }
+    bool IsEndOfGroup() const { return bIsEndOfGroup; }
 
     void IncEmptyRows() { nEmptyRows++; }
     sal_uInt16 GetEmptyRows() const { return nEmptyRows; }
@@ -341,14 +341,14 @@ public:
 
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth);
 
-    inline void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
-    inline SvxAdjust GetAdjust() const { return eAdjust; }
+    void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
+    SvxAdjust GetAdjust() const { return eAdjust; }
 
-    inline void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
-    inline sal_Int16 GetVertOri() const { return eVertOri; }
+    void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
+    sal_Int16 GetVertOri() const { return eVertOri; }
 
-    inline void SetEndOfGroup() { bIsEndOfGroup = true; }
-    inline bool IsEndOfGroup() const { return bIsEndOfGroup; }
+    void SetEndOfGroup() { bIsEndOfGroup = true; }
+    bool IsEndOfGroup() const { return bIsEndOfGroup; }
 
     inline void SetFrameFormat( SwFrameFormat *pFormat, bool bBorderLine,
                            sal_Int16 eVertOri );
@@ -576,7 +576,7 @@ public:
                     sal_uInt16 nRelAvail=0, sal_uInt16 nAbsLeftSpace=0,
                     sal_uInt16 nAbsRightSpace=0, sal_uInt16 nInhAbsSpace=0 );
 
-    inline bool IsNewDoc() const { return m_pParser->IsNewDoc(); }
+    bool IsNewDoc() const { return m_pParser->IsNewDoc(); }
 
     void SetHasParentSection( bool bSet ) { m_bHasParentSection = bSet; }
     bool HasParentSection() const { return m_bHasParentSection; }

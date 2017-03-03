@@ -101,7 +101,7 @@ typedef std::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
 class WorkbookHelper
 {
 public:
-    inline /*implicit*/ WorkbookHelper( WorkbookGlobals& rBookGlob ) : mrBookGlob( rBookGlob ) {}
+    /*implicit*/ WorkbookHelper( WorkbookGlobals& rBookGlob ) : mrBookGlob( rBookGlob ) {}
     virtual             ~WorkbookHelper();
 
     static WorkbookGlobalsRef constructGlobals( ExcelFilter& rFilter );

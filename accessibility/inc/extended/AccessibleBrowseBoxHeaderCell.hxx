@@ -45,7 +45,7 @@ namespace accessibility
         /** Grabs the focus to the BrowseBox. */
         virtual void SAL_CALL grabFocus() override;
 
-        inline bool isRowBarCell() const
+        bool isRowBarCell() const
         {
             return getType() == ::svt::BBTYPE_ROWHEADERCELL;
         }

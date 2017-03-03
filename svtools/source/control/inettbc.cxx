@@ -81,7 +81,7 @@ public:
 
     static bool TildeParsing( OUString& aText, OUString& aBaseUrl );
 
-    inline SvtURLBox_Impl( )
+    SvtURLBox_Impl( )
     {
         FilterMatch::createWildCardFilterList(OUString(),m_aFilters);
     }

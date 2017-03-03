@@ -63,7 +63,7 @@ private:
     enum { nmBase, nmFound, nmNested }
                                 eNestedMode;    // action with nested content actions
 
-    inline bool                 FoundNestedMode() { return eNestedMode == nmFound; }
+    bool                 FoundNestedMode() { return eNestedMode == nmFound; }
 
     void                        DoAcceptRejectAction( ScChangeAction* pAction );
     void                        DoAcceptRejectAction( sal_uInt32 nFirst, sal_uInt32 nLast );

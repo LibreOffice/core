@@ -58,18 +58,18 @@ private:
     NamedDefinitions    m_aDefinitions;
 
 public:
-    inline size_t size() const { return m_aDefinitions.size(); }
+    size_t size() const { return m_aDefinitions.size(); }
 
-    inline const_iterator begin() const   { return m_aDefinitions.begin(); }
-    inline const_iterator end() const     { return m_aDefinitions.end(); }
+    const_iterator begin() const   { return m_aDefinitions.begin(); }
+    const_iterator end() const     { return m_aDefinitions.end(); }
 
-    inline const_iterator find( const OUString& _rName ) const { return m_aDefinitions.find( _rName ); }
+    const_iterator find( const OUString& _rName ) const { return m_aDefinitions.find( _rName ); }
            const_iterator find( const TContentPtr& _pDefinition ) const;
 
-    inline void erase( const OUString& _rName ) { m_aDefinitions.erase( _rName ); }
+    void erase( const OUString& _rName ) { m_aDefinitions.erase( _rName ); }
     void erase( const TContentPtr& _pDefinition );
 
-    inline void insert( const OUString& _rName, TContentPtr _pDefinition )
+    void insert( const OUString& _rName, TContentPtr _pDefinition )
     {
         m_aDefinitions.insert( NamedDefinitions::value_type( _rName, _pDefinition ) );
     }
@@ -142,12 +142,12 @@ protected:
 protected:
     virtual ~ODefinitionContainer() override;
 
-    inline const ODefinitionContainer_Impl& getDefinitions() const
+    const ODefinitionContainer_Impl& getDefinitions() const
     {
         return dynamic_cast< const ODefinitionContainer_Impl& >( *m_pImpl.get() );
     }
 
-    inline       ODefinitionContainer_Impl&  getDefinitions()
+    ODefinitionContainer_Impl&  getDefinitions()
     {
         return dynamic_cast<       ODefinitionContainer_Impl& >( *m_pImpl.get() );
     }
@@ -292,7 +292,7 @@ protected:
             ListenerType _eType
         );
 
-    inline SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
+    SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
     {
         return const_cast< XContainer* >( static_cast< const XContainer* >( this ) );
     }
@@ -318,7 +318,7 @@ private:
             const css::uno::Reference< css::ucb::XContent >& _rxObject
         ) const;
 
-    inline bool impl_haveAnyListeners_nothrow() const
+    bool impl_haveAnyListeners_nothrow() const
     {
         return ( m_aContainerListeners.getLength() > 0 ) || ( m_aApproveListeners.getLength() > 0 );
     }

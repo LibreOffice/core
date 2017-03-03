@@ -101,7 +101,7 @@ namespace svx
         ~ControllerFeatures();
 
         /// checks whether the instance is properly assigned to a form and/or controller
-        inline bool isAssigned( ) const { return m_pImpl != nullptr; }
+        bool isAssigned( ) const { return m_pImpl != nullptr; }
 
         /** assign to a controller
         */
@@ -113,8 +113,8 @@ namespace svx
         void dispose();
 
         // access to the instance which implements the functionality. Not to be used when not assigned
-        inline const FormControllerHelper* operator->() const { return m_pImpl.get(); }
-        inline       FormControllerHelper* operator->()       { return m_pImpl.get(); }
+        const FormControllerHelper* operator->() const { return m_pImpl.get(); }
+        FormControllerHelper* operator->()       { return m_pImpl.get(); }
     };
 
 

@@ -1277,7 +1277,7 @@ public:
         This output parameter receives a pointer to the internal capacity.
         pInternalCapacity itself must not be null.
      */
-    inline void accessInternals(rtl_uString *** pInternalData,
+    void accessInternals(rtl_uString *** pInternalData,
                                 sal_Int32 ** pInternalCapacity)
     {
         *pInternalData = &pData;

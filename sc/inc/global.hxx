@@ -603,7 +603,7 @@ public:
     /// strchr() functionality on unicode, as long as we need it for FormulaToken etc.
     static const sal_Unicode* UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c );
 
-    static inline sal_Unicode ToUpperAlpha( sal_Unicode c )
+    static sal_Unicode ToUpperAlpha( sal_Unicode c )
         { return ( c >= 'a' && c <= 'z' ) ? ( c-'a'+'A' ) : c; }
 
     /** Adds the string rToken to rTokenList, using a list separator character.

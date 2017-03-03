@@ -88,7 +88,7 @@ namespace dbaui
             @param  _pItemSetHelper
                 the itemset helper
         */
-        inline void SetAdminDialog(IDatabaseSettingsDialog* _pDialog,IItemSetHelper* _pItemSetHelper)
+        void SetAdminDialog(IDatabaseSettingsDialog* _pDialog,IItemSetHelper* _pItemSetHelper)
         {
             OSL_ENSURE(_pDialog && _pItemSetHelper,"Values are NULL!");
             m_pAdminDialog = _pDialog;

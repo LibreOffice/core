@@ -111,22 +111,22 @@ public:
     // get data ---------------------------------------------------------------
 
     /** Returns the character count of the string. */
-    inline sal_uInt16   Len() const { return mnLen; }
+    sal_uInt16   Len() const { return mnLen; }
     /** Returns true, if the string is empty. */
-    inline bool         IsEmpty() const { return mnLen == 0; }
+    bool         IsEmpty() const { return mnLen == 0; }
     /** Returns true, if the string contains line breaks. */
-    inline bool         IsWrapped() const { return mbWrapped; }
+    bool         IsWrapped() const { return mbWrapped; }
     /** Returns true, if this string is equal to the passed string. */
     bool                IsEqual( const XclExpString& rCmp ) const;
     /** Returns true, if this string is less than the passed string. */
     bool                IsLessThan( const XclExpString& rCmp ) const;
 
     /** Returns true, if the string contains formatting information. */
-    inline bool         IsRich() const { return !maFormats.empty(); }
+    bool         IsRich() const { return !maFormats.empty(); }
     /** Returns the current count of formatting runs for rich strings. */
     sal_uInt16          GetFormatsCount() const;
     /** Returns the vector with all formatting runs. */
-    inline const XclFormatRunVec& GetFormats() const { return maFormats; }
+    const XclFormatRunVec& GetFormats() const { return maFormats; }
 
     /** Returns the current string flags field to export. */
     sal_uInt8           GetFlagField() const;

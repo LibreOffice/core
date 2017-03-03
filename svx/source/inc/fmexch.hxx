@@ -105,10 +105,10 @@ namespace svxform
         void        startDrag( sal_Int8 nDragSourceActions );
         void        copyToClipboard( ) const;
 
-        inline  bool    isDragSource() const { return m_xTransferable.is() && m_xTransferable->isDragging(); }
-        inline  bool    isClipboardOwner() const { return m_xTransferable.is() && m_xTransferable->isClipboardOwner(); }
-        inline  bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
-        inline  void        clear() { if ( isDataExchangeActive() ) m_xTransferable->clear(); }
+        bool    isDragSource() const { return m_xTransferable.is() && m_xTransferable->isDragging(); }
+        bool    isClipboardOwner() const { return m_xTransferable.is() && m_xTransferable->isClipboardOwner(); }
+        bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
+        void        clear() { if ( isDataExchangeActive() ) m_xTransferable->clear(); }
 
         SVX_DLLPRIVATE void     setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { if ( m_xTransferable.is() ) m_xTransferable->setClipboardListener( _rListener ); }
 

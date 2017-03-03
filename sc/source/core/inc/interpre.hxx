@@ -289,7 +289,7 @@ void PushTempTokenWithoutError( const formula::FormulaToken* );
     If nGlobalError is not set do nothing.
     Used in PushTempToken() and alike to simplify handling.
     @return: <TRUE/> if nGlobalError. */
-inline bool IfErrorPushError()
+bool IfErrorPushError()
 {
     if (nGlobalError != FormulaError::NONE)
     {
@@ -441,7 +441,7 @@ void ScTableOp();                                       // repeated operations
 
 // common helper functions
 
-inline void CurFmtToFuncFmt()
+void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 
 /** Check if a double is suitable as string position or length argument.

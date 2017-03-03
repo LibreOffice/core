@@ -102,13 +102,13 @@ namespace connectivity
                 m_ColumnLabel = _aColumnName;
         }
 
-        inline static void * SAL_CALL operator new( size_t nSize )
+        static void * SAL_CALL operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t ,void* _pHint )
+        static void * SAL_CALL operator new( size_t ,void* _pHint )
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem )
+        static void SAL_CALL operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void *,void* )
+        static void SAL_CALL operator delete( void *,void* )
             {  }
 
         bool isAutoIncrement()              const { return m_AutoIncrement; }

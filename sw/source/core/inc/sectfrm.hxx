@@ -82,10 +82,10 @@ public:
 
                  SwContentFrame *FindLastContent( SwFindMode nMode = SwFindMode::None );
     inline const SwContentFrame *FindLastContent() const;
-    inline SwSection* GetSection() { return m_pSection; }
-    inline const SwSection* GetSection() const { return m_pSection; }
-    inline void ColLock()       { mbColLocked = true; }
-    inline void ColUnlock()     { mbColLocked = false; }
+    SwSection* GetSection() { return m_pSection; }
+    const SwSection* GetSection() const { return m_pSection; }
+    void ColLock()       { mbColLocked = true; }
+    void ColUnlock()     { mbColLocked = false; }
 
     void CalcFootnoteContent();
     void SimpleFormat();
@@ -110,7 +110,7 @@ public:
      * if bCheckFollow is set.
      */
     bool ToMaximize( bool bCheckFollow ) const;
-    inline bool ToMaximize_() const {
+    bool ToMaximize_() const {
         if( !m_pSection ) return false;
         return ToMaximize( false );
     }

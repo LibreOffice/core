@@ -111,15 +111,15 @@ public:
     void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
         { singleElementInternal( FSNS( namespaceTokenId, elementTokenId), attribute, value.getStr(), FSEND_internal ); }
     void endElement(sal_Int32 elementTokenId);
-    inline void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
+    void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
 
     void singleElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    inline void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
         { singleElement(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
     void startElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
         { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);

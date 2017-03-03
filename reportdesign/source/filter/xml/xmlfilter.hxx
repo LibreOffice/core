@@ -161,7 +161,7 @@ public:
     */
     void insertFunction(const css::uno::Reference< css::report::XFunction > & _xFunction);
     void removeFunction(const OUString& _sFunctionName);
-    inline const TGroupFunctionMap& getFunctions() const {
+    const TGroupFunctionMap& getFunctions() const {
         return m_aFunctions;
     }
 

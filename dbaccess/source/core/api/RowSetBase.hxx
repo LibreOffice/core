@@ -332,16 +332,16 @@ namespace dbaccess
         struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
 
         // cancel the insertion, if necessary (means if we're on the insert row)
-        inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
-        inline  bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
-        inline  bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
-        inline  bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
-        inline  bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
-        inline  void        fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld, const GrantNotifierAccess& )
+        void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
+        bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
+        bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
+        bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
+        bool    isInsertRow() { return m_bIsInsertRow; } // isNew() || isModified(); }
+        void        fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld, const GrantNotifierAccess& )
         {
             fireProperty( _nProperty, _bNew, _bOld );
         }
-        inline  void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue, const GrantNotifierAccess& )
+        void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue, const GrantNotifierAccess& )
         {
             firePropertyChange(_nPos,_rNewValue);
         }

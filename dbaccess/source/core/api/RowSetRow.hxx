@@ -43,8 +43,8 @@ namespace dbaccess
         {}
 
         const ORowSetRow& getRow() const { return m_aRow; }
-        inline void clearRow() { m_aRow = nullptr; }
-        inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
+        void clearRow() { m_aRow = nullptr; }
+        void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
     };
 
     typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;

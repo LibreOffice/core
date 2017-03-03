@@ -65,7 +65,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
-    inline void SetEscapement( const SvxEscapement eNew )
+    void SetEscapement( const SvxEscapement eNew )
     {
         if( SvxEscapement::Off == eNew )
         {
@@ -84,15 +84,15 @@ public:
                 nProp = DFLT_ESC_PROP;
             }
     }
-    inline SvxEscapement GetEscapement() const { return static_cast< SvxEscapement >( GetEnumValue() ); }
+    SvxEscapement GetEscapement() const { return static_cast< SvxEscapement >( GetEnumValue() ); }
 
-    inline short &GetEsc() { return nEsc; }
-    inline short GetEsc() const { return nEsc; }
+    short &GetEsc() { return nEsc; }
+    short GetEsc() const { return nEsc; }
 
-    inline sal_uInt8 &GetProportionalHeight() { return nProp; }
-    inline sal_uInt8  GetProportionalHeight() const { return nProp; }
+    sal_uInt8 &GetProportionalHeight() { return nProp; }
+    sal_uInt8  GetProportionalHeight() const { return nProp; }
 
-    inline SvxEscapementItem& operator=(const SvxEscapementItem& rEsc)
+    SvxEscapementItem& operator=(const SvxEscapementItem& rEsc)
         {
             nEsc  = rEsc.GetEsc();
             nProp = rEsc.GetProportionalHeight();

@@ -68,12 +68,12 @@ namespace dbaui
         virtual bool Update() override;
 
         void        SetCardinality();
-        inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
-        inline void SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
+        void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
+        void SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
 
-        inline sal_Int32    GetUpdateRules() const { return m_nUpdateRules; }
-        inline sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
-        inline Cardinality  GetCardinality() const { return m_nCardinality; }
+        sal_Int32    GetUpdateRules() const { return m_nUpdateRules; }
+        sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
+        Cardinality  GetCardinality() const { return m_nCardinality; }
 
         bool        IsConnectionPossible();
         void        ChangeOrientation();

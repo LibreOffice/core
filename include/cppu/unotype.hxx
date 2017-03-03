@@ -285,7 +285,7 @@ namespace cppu {
 */
 template< typename T > class UnoType {
 public:
-    static inline css::uno::Type const & get() {
+    static css::uno::Type const & get() {
         using namespace ::cppu::detail;
 #if defined LIBO_INTERNAL_ONLY
         typedef typename std::remove_reference<T>::type T1;

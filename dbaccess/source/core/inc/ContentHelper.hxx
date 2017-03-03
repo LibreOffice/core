@@ -174,7 +174,7 @@ namespace dbaccess
         // XRename
         virtual void SAL_CALL rename( const OUString& newName ) override;
 
-        inline const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
+        const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
         css::uno::Reference< css::sdbc::XRow >
             getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
 

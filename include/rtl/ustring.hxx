@@ -180,7 +180,7 @@ public:
         @param str
                OUString data
     */
-    inline OUString( rtl_uString * str, __sal_NoAcquire )
+    OUString( rtl_uString * str, __sal_NoAcquire )
         { pData = str; }
 
     /**
@@ -375,7 +375,7 @@ public:
 
         @since UDK 3.2.7
     */
-    inline explicit OUString(
+    explicit OUString(
         sal_uInt32 const * codePoints, sal_Int32 codePointCount):
         pData(NULL)
     {
@@ -424,7 +424,7 @@ public:
         @return
                OUString const & based on given storage
     */
-    static inline OUString const & unacquired( rtl_uString * const * ppHandle )
+    static OUString const & unacquired( rtl_uString * const * ppHandle )
         { return * reinterpret_cast< OUString const * >( ppHandle ); }
 
     /**
@@ -1570,7 +1570,7 @@ public:
 
       @since UDK 3.2.7
      */
-    inline bool endsWithAsciiL(char const * asciiStr, sal_Int32 asciiStrLength)
+    bool endsWithAsciiL(char const * asciiStr, sal_Int32 asciiStrLength)
         const
     {
         return asciiStrLength <= pData->length
@@ -1691,7 +1691,7 @@ public:
       @return true if this string ends with asciiStr, ignoring the case of ASCII
       letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
      */
-    inline bool endsWithIgnoreAsciiCaseAsciiL(
+    bool endsWithIgnoreAsciiCaseAsciiL(
         char const * asciiStr, sal_Int32 asciiStrLength) const
     {
         return asciiStrLength <= pData->length
@@ -1732,7 +1732,7 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& rString, T& literal )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& rString, T& literal )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
@@ -1748,7 +1748,7 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& rString )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& rString )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
@@ -1764,7 +1764,7 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& rString, T& literal )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& rString, T& literal )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
@@ -1780,7 +1780,7 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& rString )
+    friend typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& rString )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
@@ -1791,8 +1791,7 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> friend inline
-    typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
+    template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
     operator ==(OUString & string, T & literal) {
         return
             rtl_ustr_reverseCompare_WithLength(
@@ -1803,8 +1802,7 @@ public:
             == 0;
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> friend inline
-    typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
+    template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
     operator ==(T & literal, OUString & string) {
         return
             rtl_ustr_reverseCompare_WithLength(
@@ -1815,8 +1813,7 @@ public:
             == 0;
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> friend inline
-    typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
+    template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
     operator !=(OUString & string, T & literal) {
         return
             rtl_ustr_reverseCompare_WithLength(
@@ -1827,8 +1824,7 @@ public:
             != 0;
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> friend inline
-    typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
+    template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
     operator !=(T & literal, OUString & string) {
         return
             rtl_ustr_reverseCompare_WithLength(
@@ -3226,7 +3222,7 @@ public:
       @return
       True if the conversion succeeded, false otherwise.
      */
-    inline bool convertToString(OString * pTarget, rtl_TextEncoding nEncoding,
+    bool convertToString(OString * pTarget, rtl_TextEncoding nEncoding,
                                 sal_uInt32 nFlags) const
     {
         return rtl_convertUStringToString(&pTarget->pData, pData->buffer,
@@ -3284,7 +3280,7 @@ public:
 
         @since UDK 3.2.7
     */
-    inline sal_uInt32 iterateCodePoints(
+    sal_uInt32 iterateCodePoints(
         sal_Int32 * indexUtf16, sal_Int32 incrementCodePoints = 1) const
     {
         return rtl_uString_iterateCodePoints(
@@ -3300,7 +3296,7 @@ public:
      *
      * @since LibreOffice 4.4
      */
-    static inline OUString fromUtf8(const OString& rSource)
+    static OUString fromUtf8(const OString& rSource)
     {
         OUString aTarget;
         bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
@@ -3323,7 +3319,7 @@ public:
      *
      * @since LibreOffice 4.4
      */
-    inline OString toUtf8() const
+    OString toUtf8() const
     {
         OString aTarget;
         bool bSuccess = rtl_convertUStringToString(&aTarget.pData,

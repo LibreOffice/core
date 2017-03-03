@@ -191,8 +191,8 @@ public:
     inline  bool            IsMatchFullHalfWidthForms() const;
     void                    SetMatchFullHalfWidthForms( bool bVal );
 
-    inline  bool            IsUseAsianOptions() const           { return m_bAsianOptions; }
-    inline  void            SetUseAsianOptions( bool bVal ) { m_bAsianOptions = bVal; }
+    bool            IsUseAsianOptions() const           { return m_bAsianOptions; }
+    void            SetUseAsianOptions( bool bVal ) { m_bAsianOptions = bVal; }
 
     sal_Int32 GetStartPointX() const;
     sal_Int32 GetStartPointY() const;

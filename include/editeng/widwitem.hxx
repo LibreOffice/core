@@ -48,7 +48,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxWidowsItem& operator=( const SvxWidowsItem& rWidows )
+    SvxWidowsItem& operator=( const SvxWidowsItem& rWidows )
     {
         SetValue( rWidows.GetValue() );
         return *this;

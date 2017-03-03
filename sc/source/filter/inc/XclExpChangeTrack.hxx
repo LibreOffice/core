@@ -50,7 +50,7 @@ private:
 public:
                                 XclExpUserBView( const OUString& rUsername, const sal_uInt8* pGUID );
 
-    inline const sal_uInt8*     GetGUID() const { return aGUID; }
+    const sal_uInt8*     GetGUID() const { return aGUID; }
 
     virtual sal_uInt16              GetNum() const override;
     virtual std::size_t         GetLen() const override;
@@ -70,8 +70,8 @@ public:
                                 XclExpUserBViewList( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpUserBViewList() override;
 
-    inline const_iterator cbegin () { return aViews.cbegin(); }
-    inline const_iterator cend () { return aViews.cend(); }
+    const_iterator cbegin () { return aViews.cbegin(); }
+    const_iterator cend () { return aViews.cend(); }
 
     virtual void                Save( XclExpStream& rStrm ) override;
 };
@@ -160,7 +160,7 @@ private:
     sal_uInt16                      nRecNum;
 
 public:
-    inline                      XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
+    XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
     virtual                     ~XclExpChTrEmpty() override;
 
     virtual sal_uInt16              GetNum() const override;
@@ -216,11 +216,11 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
-    inline                      XclExpChTrHeader() : nCount( 0 ) {}
+    XclExpChTrHeader() : nCount( 0 ) {}
     virtual                     ~XclExpChTrHeader() override;
 
-    inline void                 SetGUID( const sal_uInt8* pGUID )   { memcpy( aGUID, pGUID, 16 ); }
-    inline void                 SetCount( sal_uInt32 nNew )         { nCount = nNew; }
+    void                 SetGUID( const sal_uInt8* pGUID )   { memcpy( aGUID, pGUID, 16 ); }
+    void                 SetCount( sal_uInt32 nNew )         { nCount = nNew; }
 
     virtual sal_uInt16              GetNum() const override;
     virtual std::size_t         GetLen() const override;
@@ -305,9 +305,9 @@ public:
     sal_uInt16                  GetId( sal_uInt16 nIndex ) const;
     void                        Remove();
 
-    inline sal_uInt16           GetBufferCount() const
+    sal_uInt16           GetBufferCount() const
                                     { return static_cast< sal_uInt16 >( (pLast - pBuffer.get()) + 1 ); }
-    inline void                 GetBufferCopy( sal_uInt16* pDest ) const
+    void                 GetBufferCopy( sal_uInt16* pDest ) const
                                     { memcpy( pDest, pBuffer.get(), sizeof(sal_uInt16) * GetBufferCount() ); }
 };
 
@@ -319,12 +319,12 @@ private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
 
-    inline void                 Clear() { delete[] pBuffer; pBuffer = nullptr; }
+    void                 Clear() { delete[] pBuffer; pBuffer = nullptr; }
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
-    inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
+    XclExpChTrTabId( sal_uInt16 nCount ) :
                                     pBuffer( nullptr ), nTabCount( nCount ) {}
                                 XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
     virtual                     ~XclExpChTrTabId() override;
@@ -369,7 +369,7 @@ protected:
 
                                 // save header data, call SaveActionData()
     virtual void                SaveCont( XclExpStream& rStrm ) override;
-    static inline std::size_t   GetHeaderByteCount() { return 12; }
+    static std::size_t   GetHeaderByteCount() { return 12; }
 
                                 // override to save action data without header, called by SaveCont()
     virtual void                SaveActionData( XclExpStream& rStrm ) const = 0;
@@ -381,7 +381,7 @@ protected:
                                 // do something after writing the record
     virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
-    inline bool                 GetAccepted() const { return bAccepted; }
+    bool                 GetAccepted() const { return bAccepted; }
 
 public:
                                 XclExpChTrAction(
@@ -391,10 +391,10 @@ public:
                                     sal_uInt16 nNewOpCode = EXC_CHTR_OP_UNKNOWN );
     virtual                     ~XclExpChTrAction() override;
 
-    inline const OUString&      GetUsername() const             { return sUsername; }
-    inline const DateTime&      GetDateTime() const             { return aDateTime; }
-    inline const XclExpChTrTabIdBuffer& GetTabIdBuffer() const  { return rIdBuffer; }
-    inline bool                 ForceInfoRecord() const         { return bForceInfo; }
+    const OUString&      GetUsername() const             { return sUsername; }
+    const DateTime&      GetDateTime() const             { return aDateTime; }
+    const XclExpChTrTabIdBuffer& GetTabIdBuffer() const  { return rIdBuffer; }
+    bool                 ForceInfoRecord() const         { return bForceInfo; }
 
                                 // set own index & return new index
                                 // could override to use more indexes per action
@@ -403,8 +403,8 @@ public:
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual std::size_t         GetLen() const override;
 
-    inline XclExpChTrAction*    GetAddAction() { return pAddAction.get(); }
-    inline sal_uInt32           GetActionNumber() const { return nIndex; }
+    XclExpChTrAction*    GetAddAction() { return pAddAction.get(); }
+    sal_uInt32           GetActionNumber() const { return nIndex; }
 };
 
 inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress )

@@ -71,23 +71,23 @@ public:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     // #i37068# - accessors for member <mbNoMoveOnCheckClip>
-    inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
+    void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
     {
         mbNoMoveOnCheckClip = _bNewNoMoveOnCheckClip;
     }
-    inline bool IsNoMoveOnCheckClip() const
+    bool IsNoMoveOnCheckClip() const
     {
         return mbNoMoveOnCheckClip;
     }
     // #i34753# - accessors for member <mbNoMakePos>
-    inline void SetNoMakePos( const bool _bNoMakePos )
+    void SetNoMakePos( const bool _bNoMakePos )
     {
         if ( IsFlyLayFrame() )
         {
             mbNoMakePos = _bNoMakePos;
         }
     }
-    inline bool IsNoMakePos() const
+    bool IsNoMakePos() const
     {
         if ( IsFlyLayFrame() )
         {
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    inline const SwRect& GetUnclippedFrame( ) const
+    const SwRect& GetUnclippedFrame( ) const
     {
         if ( maUnclippedFrame.HasArea( ) )
             return maUnclippedFrame;

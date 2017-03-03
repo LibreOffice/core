@@ -126,7 +126,7 @@ public:
     virtual ~SwMailMergeDlg() override;
     virtual void dispose() override;
 
-    inline DBManagerOptions GetMergeType() { return nMergeType; }
+    DBManagerOptions GetMergeType() { return nMergeType; }
 
     bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }

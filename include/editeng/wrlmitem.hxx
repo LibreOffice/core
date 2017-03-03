@@ -50,7 +50,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxWordLineModeItem& operator=( const SvxWordLineModeItem& rWLM )
+    SvxWordLineModeItem& operator=( const SvxWordLineModeItem& rWLM )
         {
             SetValue( rWLM.GetValue() );
             return *this;

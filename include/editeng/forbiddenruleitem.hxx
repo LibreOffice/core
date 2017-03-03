@@ -45,7 +45,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper * = nullptr ) const override;
 
-    inline SvxForbiddenRuleItem& operator=(
+    SvxForbiddenRuleItem& operator=(
                                     const SvxForbiddenRuleItem& rItem )
     {
         SetValue( rItem.GetValue() );

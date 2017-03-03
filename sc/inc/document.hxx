@@ -2232,7 +2232,7 @@ public:
     void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SC_DLLPUBLIC SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
-    inline void     SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
+    void     SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
     const css::uno::Reference< css::script::vba::XVBAEventProcessor >&
                     GetVbaEventProcessor() const { return mxVbaEvents; }

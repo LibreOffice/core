@@ -110,10 +110,10 @@ public:
     inline void IncreaseMax( const sal_uInt16 nAdd );
     inline void DecreaseMax( const sal_uInt16 nSub );
     sal_uInt16 GetCurMax() const { return m_nCurMax; }
-    inline SwCacheObj *First() { return m_pRealFirst; }
+    SwCacheObj *First() { return m_pRealFirst; }
     static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
-    inline SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
-    inline sal_uInt16 size() { return m_aCacheObjects.size(); }
+    SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
+    sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
 /// Safely manipulate the cache
@@ -143,12 +143,12 @@ class SwCacheObj
 
     sal_uInt8       m_nLock;
 
-    inline SwCacheObj *GetNext() { return m_pNext; }
-    inline SwCacheObj *GetPrev() { return m_pPrev; }
-    inline void SetNext( SwCacheObj *pNew )  { m_pNext = pNew; }
-    inline void SetPrev( SwCacheObj *pNew )  { m_pPrev = pNew; }
+    SwCacheObj *GetNext() { return m_pNext; }
+    SwCacheObj *GetPrev() { return m_pPrev; }
+    void SetNext( SwCacheObj *pNew )  { m_pNext = pNew; }
+    void SetPrev( SwCacheObj *pNew )  { m_pPrev = pNew; }
 
-    inline void   SetCachePos( const sal_uInt16 nNew ) { m_nCachePos = nNew; }
+    void   SetCachePos( const sal_uInt16 nNew ) { m_nCachePos = nNew; }
 
 protected:
     const void *m_pOwner;
@@ -158,12 +158,12 @@ public:
     SwCacheObj( const void *pOwner );
     virtual ~SwCacheObj();
 
-    inline const void *GetOwner() const { return m_pOwner; }
+    const void *GetOwner() const { return m_pOwner; }
     inline bool IsOwner( const void *pNew ) const;
 
-    inline sal_uInt16 GetCachePos() const { return m_nCachePos; }
+    sal_uInt16 GetCachePos() const { return m_nCachePos; }
 
-    inline bool IsLocked() const { return 0 != m_nLock; }
+    bool IsLocked() const { return 0 != m_nLock; }
 
 #ifdef DBG_UTIL
     void Lock();

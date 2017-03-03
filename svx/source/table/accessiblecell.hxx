@@ -107,7 +107,7 @@ public:
 
     /** set the index _nIndex at the accessible cell param  _nIndex The new index in parent.
     */
-    inline void setIndexInParent(sal_Int32 _nIndex) { mnIndexInParent = _nIndex; }
+    void setIndexInParent(sal_Int32 _nIndex) { mnIndexInParent = _nIndex; }
 
     //Get the parent table
     AccessibleTableShape* GetParentTable() { return pAccTable; }

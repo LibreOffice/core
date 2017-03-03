@@ -80,21 +80,21 @@ class SwSidebarWin : public vcl::Window
         void TranslateTopPosition(const long aAmount);
         void CheckMetaText();
 
-        inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
-        inline const SwRect& GetAnchorRect() { return mAnchorRect; }
-        inline bool IsAnchorRectChanged() { return mbAnchorRectChanged; }
-        inline void ResetAnchorRectChanged() { mbAnchorRectChanged = false; }
-        inline const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
+        Point GetAnchorPos() { return mAnchorRect.Pos(); }
+        const SwRect& GetAnchorRect() { return mAnchorRect; }
+        bool IsAnchorRectChanged() { return mbAnchorRectChanged; }
+        void ResetAnchorRectChanged() { mbAnchorRectChanged = false; }
+        const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
-        inline SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
+        SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
 
-        inline OutlinerView* GetOutlinerView() { return mpOutlinerView;}
+        OutlinerView* GetOutlinerView() { return mpOutlinerView;}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
-        inline ScrollBar* Scrollbar() { return mpVScrollbar; }
-        inline ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor;}
-        inline ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow;}
-        inline ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay;}
+        ScrollBar* Scrollbar() { return mpVScrollbar; }
+        ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor;}
+        ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow;}
+        ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay;}
 
         long            GetPostItTextHeight();
 
@@ -176,7 +176,7 @@ class SwSidebarWin : public vcl::Window
         }
 
         DECL_LINK( WindowEventListener, VclWindowEvent&, void );
-        inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
+        bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem& rNewItem);
 
@@ -207,9 +207,9 @@ class SwSidebarWin : public vcl::Window
         DECL_LINK(ScrollHdl, ScrollBar*, void);
         DECL_LINK(DeleteHdl, void*, void);
 
-        inline SwView& DocView() { return mrView;}
-        inline SwPostItMgr& Mgr() { return mrMgr; }
-        inline Outliner* Engine() { return mpOutliner;}
+        SwView& DocView() { return mrView;}
+        SwPostItMgr& Mgr() { return mrMgr; }
+        Outliner* Engine() { return mpOutliner;}
 
     private:
         SwSidebarWin*   GetTopReplyNote();

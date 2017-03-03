@@ -220,10 +220,10 @@ protected:
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
-    inline void ClearTextImport() { mxTextImport = nullptr; }
+    void ClearTextImport() { mxTextImport = nullptr; }
     virtual XMLShapeImportHelper* CreateShapeImport();
-    inline bool HasShapeImport() const { return mxShapeImport.is(); }
-    inline void ClearShapeImport() { mxShapeImport = nullptr; }
+    bool HasShapeImport() const { return mxShapeImport.is(); }
+    void ClearShapeImport() { mxShapeImport = nullptr; }
 
     static SchXMLImportHelper* CreateChartImport();
     ::xmloff::OFormLayerXMLImport* CreateFormImport();
@@ -359,7 +359,7 @@ public:
     const css::uno::Reference< css::container::XNameContainer > & GetMarkerHelper();
     const css::uno::Reference< css::container::XNameContainer > & GetDashHelper();
     inline css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier();
-    inline void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }

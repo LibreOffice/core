@@ -190,7 +190,7 @@ public:
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -216,7 +216,7 @@ public:
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
 
-    inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -254,7 +254,7 @@ public:
     OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
     virtual SwFieldType*    Copy() const override;
 
-    inline void             SetNumFormat( SvxNumType eFormat )  { nNumberingType = eFormat; }
+    void             SetNumFormat( SvxNumType eFormat )  { nNumberingType = eFormat; }
 };
 
 class SW_DLLPUBLIC SwDocStatField : public SwField
@@ -285,7 +285,7 @@ public:
     virtual SwFieldType*    Copy() const override;
 
     void                    SetHiddenFlag( bool bSetHidden );
-    inline bool             GetHiddenFlag() const { return bHidden; }
+    bool             GetHiddenFlag() const { return bHidden; }
 };
 
 class SwHiddenTextField : public SwField
@@ -322,7 +322,7 @@ public:
 
     void                Evaluate(SwDoc*);
 
-    inline void         SetValue(bool bHidden)  { bIsHidden = bHidden; }
+    void         SetValue(bool bHidden)  { bIsHidden = bHidden; }
     static OUString     GetColumnName(const OUString& rName);
     static OUString     GetDBName(const OUString& rName, SwDoc *pDoc);
 
@@ -464,9 +464,9 @@ public:
     virtual SwField*        Copy() const override;
 
     const DateTime&         GetDateTime() const             { return aDateTime; }
-    inline const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
-    inline const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
-    inline sal_uInt32 GetPostItId() const             { return m_nPostItId; }
+    const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
+    const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
+    sal_uInt32 GetPostItId() const             { return m_nPostItId; }
 
     /// Author
     virtual OUString        GetPar1() const override;
@@ -519,7 +519,7 @@ public:
     virtual OUString        GetFieldName() const override;
     const OUString&         GetName() const { return aName; }
     void                    SetName( const OUString& rName ) { aName = rName; }
-    inline void             SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void             SetExpansion(const OUString& rStr) { aContent = rStr; }
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
@@ -548,7 +548,7 @@ public:
     virtual sal_uInt16      GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nSub) override;
 
-    inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
+    void         SetExpansion(const OUString& rStr) { aContent = rStr; }
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;

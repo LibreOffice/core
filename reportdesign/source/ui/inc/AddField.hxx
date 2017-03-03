@@ -86,10 +86,10 @@ public:
     virtual void GetFocus() override;
     virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
 
-    inline const OUString&       GetCommand()            const { return m_aCommandName; }
-    inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
-    inline bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
-    inline void SetCreateHdl(const Link<OAddFieldWindow&,void>& _aCreateLink) { m_aCreateLink = _aCreateLink; }
+    const OUString&       GetCommand()            const { return m_aCommandName; }
+    sal_Int32                    GetCommandType()        const { return m_nCommandType; }
+    bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
+    void SetCreateHdl(const Link<OAddFieldWindow&,void>& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
     css::uno::Reference< css::sdbc::XConnection>              getConnection() const;
 

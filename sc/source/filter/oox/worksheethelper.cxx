@@ -208,14 +208,14 @@ public:
                             SCTAB nSheet );
 
     /** Returns true, if this helper refers to an existing Calc sheet. */
-    inline bool         isValidSheet() const { return mxSheet.is(); }
+    bool         isValidSheet() const { return mxSheet.is(); }
 
     /** Returns the type of this sheet. */
-    inline WorksheetType getSheetType() const { return meSheetType; }
+    WorksheetType getSheetType() const { return meSheetType; }
     /** Returns the index of the current sheet. */
-    inline SCTAB        getSheetIndex() const { return maUsedArea.aStart.Tab(); }
+    SCTAB        getSheetIndex() const { return maUsedArea.aStart.Tab(); }
     /** Returns the XSpreadsheet interface of the current sheet. */
-    inline const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
+    const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
 
     /** Returns the XCell interface for the passed cell address. */
     Reference< XCell >  getCell( const ScAddress& rAddress ) const;
@@ -243,25 +243,25 @@ public:
     ScRange                  getCellRangeFromRectangle( const awt::Rectangle& rRect ) const;
 
     /** Returns the buffer for cell contents and cell formatting. */
-    inline SheetDataBuffer& getSheetData() { return maSheetData; }
+    SheetDataBuffer& getSheetData() { return maSheetData; }
     /** Returns the conditional formatting in this sheet. */
-    inline CondFormatBuffer& getCondFormats() { return maCondFormats; }
+    CondFormatBuffer& getCondFormats() { return maCondFormats; }
     /** Returns the buffer for all cell comments in this sheet. */
-    inline CommentsBuffer& getComments() { return maComments; }
+    CommentsBuffer& getComments() { return maComments; }
     /** Returns the auto filters for the sheet. */
-    inline AutoFilterBuffer& getAutoFilters() { return maAutoFilters; }
+    AutoFilterBuffer& getAutoFilters() { return maAutoFilters; }
     /** Returns the buffer for all web query tables in this sheet. */
-    inline QueryTableBuffer& getQueryTables() { return maQueryTables; }
+    QueryTableBuffer& getQueryTables() { return maQueryTables; }
     /** Returns the worksheet settings object. */
-    inline WorksheetSettings& getWorksheetSettings() { return maSheetSett; }
+    WorksheetSettings& getWorksheetSettings() { return maSheetSett; }
     /** Returns the page/print settings for this sheet. */
-    inline PageSettings& getPageSettings() { return maPageSett; }
+    PageSettings& getPageSettings() { return maPageSett; }
     /** Returns the view settings for this sheet. */
-    inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
+    SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
     /** Returns the VML drawing page for this sheet (OOXML/BIFF12 only). */
-    inline VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
+    VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
     /** returns the ExtLst entries that need to be filled */
-    inline ExtLst&      getExtLst() { return maExtLst; }
+    ExtLst&      getExtLst() { return maExtLst; }
 
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );

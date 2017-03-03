@@ -203,7 +203,7 @@ public:
     bool IsHeightClipped()  const   { return m_bHeightClipped; }
 
     bool IsLowerOf( const SwLayoutFrame* pUpper ) const;
-    inline bool IsUpperOf( const SwFlyFrame& _rLower ) const
+    bool IsUpperOf( const SwFlyFrame& _rLower ) const
     {
         return _rLower.IsLowerOf( this );
     }

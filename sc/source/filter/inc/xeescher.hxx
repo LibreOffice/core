@@ -172,11 +172,11 @@ protected:
                             css::uno::Reference< css::drawing::XShape > const & xShape );
 
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
-    inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
+    const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
     /** Returns the Excel token array of the source range, or 0, if no link present. */
-    inline const XclTokenArray* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
+    const XclTokenArray* GetSourceRangeTokArr() const { return mxSrcRange.get(); }
     /** Returns the number of entries in the source range, or 0, if no source set. */
-    inline sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
+    sal_uInt16   GetSourceEntryCount() const { return mnEntryCount; }
 
     /** Writes a formula with special style only valid in OBJ records. */
     static void         WriteFormula( XclExpStream& rStrm, const XclTokenArray& rTokArr );
@@ -405,7 +405,7 @@ public:
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();
 
-    inline XclEscherEx& GetEscherEx() { return *mxEscherEx; }
+    XclEscherEx& GetEscherEx() { return *mxEscherEx; }
     XclExpMsoDrawing*   GetMsodrawingPerSheet();
     bool                HasObj() const;
     sal_uInt16          AddObj( XclObj* pObjRec );

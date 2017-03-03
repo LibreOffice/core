@@ -62,7 +62,7 @@ class ODbDataSourceAdministrationHelper;
         void        clearPassword();
         OUString    getConnectionURL() const;
         css::uno::Reference< css::beans::XPropertySet >   getCurrentDataSource();
-        inline void endExecution() { m_bStopExecution = true; }
+        void endExecution() { m_bStopExecution = true; }
 
         virtual const SfxItemSet* getOutputSet() const override;
         virtual SfxItemSet* getWriteOutputSet() override;

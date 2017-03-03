@@ -37,7 +37,7 @@ public:
     bool IsBreakNow( SwTextMargin &rLine );
     bool IsKeepAlways() const { return m_bKeep; }
 
-    inline void SetKeep( const bool bNew ) { m_bKeep = bNew; }
+    void SetKeep( const bool bNew ) { m_bKeep = bNew; }
 
     bool IsInside( SwTextMargin &rLine ) const;
 

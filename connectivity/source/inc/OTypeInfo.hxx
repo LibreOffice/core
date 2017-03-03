@@ -63,13 +63,13 @@ namespace connectivity
                 ,bUnsigned(false)
         {}
 
-        inline static void * SAL_CALL operator new( size_t nSize )
+        static void * SAL_CALL operator new( size_t nSize )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
+        static void * SAL_CALL operator new( size_t /*nSize*/,void* _pHint )
             { return _pHint; }
-        inline static void SAL_CALL operator delete( void * pMem )
+        static void SAL_CALL operator delete( void * pMem )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
+        static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ )
             {  }
 
         bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }

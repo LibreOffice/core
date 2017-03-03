@@ -45,7 +45,7 @@ class CPPUHELPER_DLLPUBLIC OWeakAggObject
 public:
     /** Constructor.  No delegator set.
     */
-    inline OWeakAggObject()
+    OWeakAggObject()
         {}
 
     /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to

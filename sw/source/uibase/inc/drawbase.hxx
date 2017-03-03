@@ -46,8 +46,8 @@ public:
 
     void         SetDrawPointer();
     void         EnterSelectMode(const MouseEvent& rMEvt);
-    inline bool  IsInsertForm() const { return m_bInsForm; }
-    inline bool  IsCreateObj() const { return m_bCreateObj; }
+    bool  IsInsertForm() const { return m_bInsForm; }
+    bool  IsCreateObj() const { return m_bCreateObj; }
 
     // mouse- & key events; return value=true: event was edited
     virtual bool KeyInput(const KeyEvent& rKEvt);

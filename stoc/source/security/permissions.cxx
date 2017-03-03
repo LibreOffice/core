@@ -420,7 +420,7 @@ class RuntimePermission : public Permission
     OUString m_name;
 
 public:
-    inline RuntimePermission(
+    RuntimePermission(
         security::RuntimePermission const & perm,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
         : Permission( RUNTIME, next )

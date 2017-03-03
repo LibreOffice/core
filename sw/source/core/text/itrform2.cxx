@@ -813,7 +813,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
 class SwMetaPortion : public SwTextPortion
 {
 public:
-    inline  SwMetaPortion() { SetWhichPor( POR_META ); }
+    SwMetaPortion() { SetWhichPor( POR_META ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 //    OUTPUT_OPERATOR
 };

@@ -385,11 +385,11 @@ public:
 
 private:
     /** Returns the current edit engine text object. */
-    inline HFPortionInfo& getPortion() { return maPortions[ meCurrPortion ]; }
+    HFPortionInfo& getPortion() { return maPortions[ meCurrPortion ]; }
     /** Returns the start cursor of the current text range. */
-    inline const Reference<text::XTextCursor>& getStartPos() { return getPortion().mxStart; }
+    const Reference<text::XTextCursor>& getStartPos() { return getPortion().mxStart; }
     /** Returns the end cursor of the current text range. */
-    inline const Reference<text::XTextCursor>& getEndPos() { return getPortion().mxEnd; }
+    const Reference<text::XTextCursor>& getEndPos() { return getPortion().mxEnd; }
 
     /** Returns the current line height of the specified portion. */
     double              getCurrHeight( HFPortionId ePortion ) const;

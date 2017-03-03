@@ -125,16 +125,16 @@ public:
     virtual             ~XclExpRecord() override;
 
     /** Returns the current record ID. */
-    inline sal_uInt16   GetRecId() const { return mnRecId; }
+    sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the current record size prediction. */
-    inline std::size_t  GetRecSize() const { return mnRecSize; }
+    std::size_t  GetRecSize() const { return mnRecSize; }
 
     /** Sets a new record ID. */
-    inline void         SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
+    void         SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
     /** Sets a new record size prediction. */
-    inline void         SetRecSize( std::size_t nRecSize ) { mnRecSize = nRecSize; }
+    void         SetRecSize( std::size_t nRecSize ) { mnRecSize = nRecSize; }
     /** Adds a size value to the record size prediction. */
-    inline void         AddRecSize( std::size_t nRecSize ) { mnRecSize += nRecSize; }
+    void         AddRecSize( std::size_t nRecSize ) { mnRecSize += nRecSize; }
     /** Sets record ID and size with one call. */
     void                SetRecHeader( sal_uInt16 nRecId, std::size_t nRecSize );
 
@@ -173,13 +173,13 @@ public:
     /** @param nRecId  The record ID of this record.
         @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
-    inline explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, std::size_t nSize = sizeof( Type ) ) :
+    explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, std::size_t nSize = sizeof( Type ) ) :
                             XclExpRecord( nRecId, nSize ), maValue( rValue ), mnAttribute( -1 ) {}
 
     /** Returns the value of the record. */
-    inline const Type&  GetValue() const { return maValue; }
+    const Type&  GetValue() const { return maValue; }
     /** Sets a new record value. */
-    inline void         SetValue( const Type& rValue ) { maValue = rValue; }
+    void         SetValue( const Type& rValue ) { maValue = rValue; }
 
     /** Sets the OOXML attribute this record corresponds to */
     XclExpValueRecord*  SetAttribute( sal_Int32 nId );
@@ -230,11 +230,11 @@ class XclExpBoolRecord : public XclExpRecord
 public:
     /** @param nRecId  The record ID of this record.
         @param nValue  The value for the record body. */
-    inline explicit     XclExpBoolRecord( sal_uInt16 nRecId, bool bValue, sal_Int32 nAttribute = -1 ) :
+    explicit     XclExpBoolRecord( sal_uInt16 nRecId, bool bValue, sal_Int32 nAttribute = -1 ) :
                             XclExpRecord( nRecId, 2 ), mbValue( bValue ), mnAttribute( nAttribute ) {}
 
     /** Returns the Boolean value of the record. */
-    inline bool         GetBool() const { return mbValue; }
+    bool         GetBool() const { return mbValue; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
@@ -297,41 +297,41 @@ class XclExpRecordList : public XclExpRecordBase
 public:
     typedef std::shared_ptr< RecType > RecordRefType;
 
-    inline bool         IsEmpty() const { return maRecs.empty(); }
-    inline size_t       GetSize() const { return maRecs.size(); }
+    bool         IsEmpty() const { return maRecs.empty(); }
+    size_t       GetSize() const { return maRecs.size(); }
 
     /** Returns true, if the passed index points to an exiting record. */
-    inline bool         HasRecord( size_t nPos ) const
+    bool         HasRecord( size_t nPos ) const
                             { return nPos < maRecs.size(); }
     /** Returns reference to an existing record or empty reference on error. */
-    inline RecordRefType GetRecord( size_t nPos ) const
+    RecordRefType GetRecord( size_t nPos ) const
                             { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
     /** Returns reference to the first existing record or empty reference, if list is empty. */
-    inline RecordRefType GetFirstRecord() const
+    RecordRefType GetFirstRecord() const
                             { return maRecs.empty() ? RecordRefType() : maRecs.front(); }
     /** Returns reference to the last existing record or empty reference, if list is empty. */
-    inline RecordRefType GetLastRecord() const
+    RecordRefType GetLastRecord() const
                             { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
 
     /** Inserts a record at the specified position into the list. */
-    inline void         InsertRecord( RecordRefType xRec, size_t nPos )
+    void         InsertRecord( RecordRefType xRec, size_t nPos )
                             { if( xRec.get() ) maRecs.insert( maRecs.begin() + ::std::min( nPos, maRecs.size() ), xRec ); }
     /** Appends a record to the list. */
-    inline void         AppendRecord( RecordRefType xRec )
+    void         AppendRecord( RecordRefType xRec )
                             { if( xRec.get() ) maRecs.push_back( xRec ); }
     /** Replaces the record at the specified position from the list with the passed record. */
-    inline void         ReplaceRecord( RecordRefType xRec, size_t nPos )
+    void         ReplaceRecord( RecordRefType xRec, size_t nPos )
                             { RemoveRecord( nPos ); InsertRecord( xRec, nPos ); }
 
     /** Appends a newly created record to the list. */
-    inline void         AppendNewRecord( RecType* pRec )
+    void         AppendNewRecord( RecType* pRec )
                             { if( pRec ) AppendRecord( RecordRefType( pRec ) ); }
 
     /** Removes the record at the specified position from the list. */
-    inline void         RemoveRecord( size_t nPos )
+    void         RemoveRecord( size_t nPos )
                             { if( nPos < maRecs.size() ) maRecs.erase( maRecs.begin() + nPos ); }
     /** Removes all records from the list. */
-    inline void         RemoveAllRecords() { maRecs.clear(); }
+    void         RemoveAllRecords() { maRecs.clear(); }
 
     /** Writes the complete record list. */
     virtual void Save( XclExpStream& rStrm ) override

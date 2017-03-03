@@ -44,7 +44,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual void    SetPostItText() override;
         virtual void    Delete() override;
         virtual void    GotoPos() override;
-        inline const SwPostItField* GetPostItField() { return mpField; }
+        const SwPostItField* GetPostItField() { return mpField; }
         void UpdateText(const OUString& aText);
 
         virtual OUString GetAuthor() override;

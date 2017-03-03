@@ -42,7 +42,7 @@ struct lcl_getPropertyStateByHandle :
             : m_rMap( rMap )
     {}
 
-    inline beans::PropertyState operator() ( sal_Int32 nHandle )
+    beans::PropertyState operator() ( sal_Int32 nHandle )
     {
         if( m_rMap.end() == m_rMap.find( nHandle ))
             return beans::PropertyState_DEFAULT_VALUE;
@@ -61,7 +61,7 @@ struct lcl_eraseMapEntry :
             : m_rMap( rMap )
     {}
 
-    inline void operator() ( const K & aKey )
+    void operator() ( const K & aKey )
     {
         m_rMap.erase( aKey );
     }
@@ -73,7 +73,7 @@ private:
 struct lcl_replaceInterfacePropertiesByClones :
     public std::unary_function< ::property::impl::ImplOPropertySet::tPropertyMap::value_type, void >
 {
-    inline void operator() ( ::property::impl::ImplOPropertySet::tPropertyMap::value_type & rProp )
+    void operator() ( ::property::impl::ImplOPropertySet::tPropertyMap::value_type & rProp )
     {
         if( rProp.second.hasValue() &&
             rProp.second.getValueType().getTypeClass() == uno::TypeClass_INTERFACE )

@@ -197,184 +197,184 @@ public:
 
     static void Init( vcl::Window *pWin );        // Initializing of static data.
 
-    inline ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
+    ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 
     // Options from nCoreOptions
-    inline bool IsIdle() const
+    bool IsIdle() const
         { return m_bIdle; }
 
     // Logically this is a const function since it does not modify the viewoptions
     // but only effects idle formatting. Of course that member is already implement
     // in the wrong place here... Also currently there are many const modifying casts in the code
     // just to call this function on otherwise const objects. Thus declaring it as const now.
-    inline void SetIdle( bool b ) const
+    void SetIdle( bool b ) const
         { m_bIdle = b; }
 
-    inline bool IsTab(bool bHard = false) const
+    bool IsTab(bool bHard = false) const
                     {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Tab) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
-    inline void SetTab( bool b )        {
+    void SetTab( bool b )        {
         b ? (m_nCoreOptions |= ViewOptFlags1::Tab ) : ( m_nCoreOptions &= ~ViewOptFlags1::Tab); }
 
-    inline bool IsBlank(bool bHard = false) const
+    bool IsBlank(bool bHard = false) const
                     { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Blank) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
-    inline void SetBlank( bool b )
+    void SetBlank( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Blank ) : ( m_nCoreOptions &= ~ViewOptFlags1::Blank); }
 
-    inline bool IsHardBlank() const
+    bool IsHardBlank() const
                     { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::HardBlank); }
-    inline void SetHardBlank( bool b )
+    void SetHardBlank( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::HardBlank ) : ( m_nCoreOptions &= ~ViewOptFlags1::HardBlank); }
 
-    inline bool IsParagraph(bool bHard = false) const
+    bool IsParagraph(bool bHard = false) const
                     {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Paragraph) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
-    inline void SetParagraph( bool b )
+    void SetParagraph( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Paragraph ) : ( m_nCoreOptions &= ~ViewOptFlags1::Paragraph); }
 
-    inline bool IsLineBreak(bool bHard = false) const
+    bool IsLineBreak(bool bHard = false) const
                     {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Linebreak) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
-    inline void SetLineBreak( bool b )
+    void SetLineBreak( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Linebreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Linebreak); }
 
-    inline void SetPageBreak( bool b )
+    void SetPageBreak( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Pagebreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Pagebreak); }
 
-    inline void SetColumnBreak( bool b)
+    void SetColumnBreak( bool b)
         { b ? (m_nCoreOptions |= ViewOptFlags1::Columnbreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Columnbreak); }
 
-    inline bool IsSoftHyph() const
+    bool IsSoftHyph() const
                     { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::SoftHyph); }
-    inline void SetSoftHyph( bool b )
+    void SetSoftHyph( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::SoftHyph ) : ( m_nCoreOptions &= ~ViewOptFlags1::SoftHyph); }
 
-    inline bool IsFieldName() const       { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::FieldName); }
-    inline void SetFieldName( bool b )
+    bool IsFieldName() const       { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::FieldName); }
+    void SetFieldName( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::FieldName ) : ( m_nCoreOptions &= ~ViewOptFlags1::FieldName); }
 
-    inline bool IsPostIts() const
+    bool IsPostIts() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Postits); }
-    inline void SetPostIts( bool b )
+    void SetPostIts( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Postits ) : ( m_nCoreOptions &= ~ViewOptFlags1::Postits); }
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
     static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
 
-    inline bool IsShowHiddenChar(bool bHard = false) const
+    bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
 
-    inline void SetShowHiddenChar( bool b )
+    void SetShowHiddenChar( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::CharHidden ) : ( m_nCoreOptions &= ~ViewOptFlags1::CharHidden); }
 
-    inline bool IsShowHiddenField() const
+    bool IsShowHiddenField() const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::FieldHidden); }
-    inline void SetShowHiddenField( bool b )
+    void SetShowHiddenField( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::FieldHidden ) : ( m_nCoreOptions &= ~ViewOptFlags1::FieldHidden); }
 
-    inline bool IsGraphic() const
+    bool IsGraphic() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Graphic); }
-    inline void SetGraphic( bool b )
+    void SetGraphic( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Graphic ) : ( m_nCoreOptions &= ~ViewOptFlags1::Graphic); }
 
-    inline bool IsPageBack() const
+    bool IsPageBack() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Pageback); }
-    inline void SetPageBack( bool b )
+    void SetPageBack( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Pageback) : ( m_nCoreOptions &= ~ViewOptFlags1::Pageback); }
 
-    inline bool IsTable() const
+    bool IsTable() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Table); }
-    inline void SetTable( bool b )
+    void SetTable( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Table ) : ( m_nCoreOptions &= ~ViewOptFlags1::Table); }
 
-    inline bool IsDraw() const
+    bool IsDraw() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Draw); }
-    inline void SetDraw( bool b )
+    void SetDraw( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Draw ) : ( m_nCoreOptions &= ~ViewOptFlags1::Draw); }
 
-    inline bool IsControl() const
+    bool IsControl() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Control); }
-    inline void SetControl( bool b )
+    void SetControl( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Control ) : ( m_nCoreOptions &= ~ViewOptFlags1::Control); }
 
-    inline bool IsSnap() const
+    bool IsSnap() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Snap); }
-    inline void SetSnap( bool b )
+    void SetSnap( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Snap ) : ( m_nCoreOptions &= ~ViewOptFlags1::Snap); }
 
-    inline void SetSnapSize( Size &rSz ){ m_aSnapSize = rSz; }
-    inline const Size &GetSnapSize() const { return m_aSnapSize; }
+    void SetSnapSize( Size &rSz ){ m_aSnapSize = rSz; }
+    const Size &GetSnapSize() const { return m_aSnapSize; }
 
-    inline bool IsGridVisible() const
+    bool IsGridVisible() const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::GridVisible); }
-    inline void SetGridVisible( bool b )
+    void SetGridVisible( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::GridVisible ) : ( m_nCoreOptions &= ~ViewOptFlags1::GridVisible); }
 
-    inline bool IsOnlineSpell() const
+    bool IsOnlineSpell() const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::OnlineSpell); }
     void SetOnlineSpell( bool b );
 
-    inline bool IsViewMetaChars() const
+    bool IsViewMetaChars() const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::ViewMetachars); }
-    inline void SetViewMetaChars( bool b)
+    void SetViewMetaChars( bool b)
         { b ? (m_nCoreOptions |= ViewOptFlags1::ViewMetachars ) : ( m_nCoreOptions &= ~ViewOptFlags1::ViewMetachars); }
 
-    inline bool IsSynchronize() const
+    bool IsSynchronize() const
         {  return bool(m_nCoreOptions & ViewOptFlags1::Synchronize); }
-    inline void SetSynchronize( bool b )
+    void SetSynchronize( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Synchronize ) : ( m_nCoreOptions &= ~ViewOptFlags1::Synchronize); }
 
-    inline bool IsCrossHair() const
+    bool IsCrossHair() const
         { return bool(m_nCoreOptions & ViewOptFlags1::Crosshair); }
-    inline void SetCrossHair( bool b )
+    void SetCrossHair( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Crosshair ) : ( m_nCoreOptions &= ~ViewOptFlags1::Crosshair); }
 
     // Options from nCore2Options
-    inline bool IsBlackFont() const
+    bool IsBlackFont() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::BlackFont); }
 
-    inline void SetBlackFont(bool b)
+    void SetBlackFont(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::BlackFont) : (m_nCore2Options &= ~ViewOptCoreFlags2::BlackFont);}
 
-    inline bool IsShowHiddenPara() const
+    bool IsShowHiddenPara() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::HiddenPara); }
 
-    inline void SetShowHiddenPara(bool b)
+    void SetShowHiddenPara(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::HiddenPara) : (m_nCore2Options &= ~ViewOptCoreFlags2::HiddenPara);}
 
-    inline bool IsSmoothScroll() const
+    bool IsSmoothScroll() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::SmoothScroll); }
 
-    inline void SetSmoothScroll(bool b)
+    void SetSmoothScroll(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::SmoothScroll) : (m_nCore2Options &= ~ViewOptCoreFlags2::SmoothScroll);}
 
-    inline bool IsCursorInProtectedArea() const
+    bool IsCursorInProtectedArea() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::CursorInProt); }
 
-    inline void SetCursorInProtectedArea(bool b)
+    void SetCursorInProtectedArea(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::CursorInProt) : (m_nCore2Options &= ~ViewOptCoreFlags2::CursorInProt);}
 
     static bool IsIgnoreProtectedArea();
 
-    inline bool IsPDFExport() const
+    bool IsPDFExport() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
 
-    inline void SetPDFExport(bool b)
+    void SetPDFExport(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::PdfExport) : (m_nCore2Options &= ~ViewOptCoreFlags2::PdfExport);}
 
-    inline bool IsPrinting() const
+    bool IsPrinting() const
         {return bool(m_nCore2Options & ViewOptCoreFlags2::Printing); }
 
-    inline void SetPrinting(bool b)
+    void SetPrinting(bool b)
         { b ? (m_nCore2Options |= ViewOptCoreFlags2::Printing) : (m_nCore2Options &= ~ViewOptCoreFlags2::Printing);}
 
-    inline short GetDivisionX() const   { return m_nDivisionX; }
-    inline void  SetDivisionX( short n ){ m_nDivisionX = n; }
-    inline short GetDivisionY() const   { return m_nDivisionY; }
-    inline void  SetDivisionY( short n ){ m_nDivisionY = n; }
+    short GetDivisionX() const   { return m_nDivisionX; }
+    void  SetDivisionX( short n ){ m_nDivisionX = n; }
+    short GetDivisionY() const   { return m_nDivisionY; }
+    void  SetDivisionY( short n ){ m_nDivisionY = n; }
 
     // Default margin left and above document: 284 twips == 5.0 mm.
     static constexpr sal_uInt16 GetDefDocumentBorder() { return 284; }
@@ -383,13 +383,13 @@ public:
     // Minimum edge-to-text distance: 22 twips == 0.4 mm.
     static constexpr sal_uInt16 GetMinGapBetweenPages() { return 22; }
 
-    inline sal_uInt16 GetDocumentBorder() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
-    inline sal_uInt16 GetGapBetweenPages() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
+    sal_uInt16 GetDocumentBorder() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
+    sal_uInt16 GetGapBetweenPages() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
 
-    inline sal_uInt8  GetPagePrevRow() const      { return m_nPagePreviewRow; }
-    inline void  SetPagePrevRow( sal_uInt8 n ) { m_nPagePreviewRow = n; }
-    inline sal_uInt8  GetPagePrevCol() const      { return m_nPagePreviewCol; }
-    inline void  SetPagePrevCol( sal_uInt8 n ) { m_nPagePreviewCol = n; }
+    sal_uInt8  GetPagePrevRow() const      { return m_nPagePreviewRow; }
+    void  SetPagePrevRow( sal_uInt8 n ) { m_nPagePreviewRow = n; }
+    sal_uInt8  GetPagePrevCol() const      { return m_nPagePreviewCol; }
+    void  SetPagePrevCol( sal_uInt8 n ) { m_nPagePreviewCol = n; }
     bool         IsReadonly() const { return m_bReadonly; }
     void         SetReadonly(bool bSet) { m_bReadonly = bSet; }
 
@@ -399,10 +399,10 @@ public:
     bool         IsFormView() const { return mbFormView; }
     void         SetFormView( bool bSet ) { mbFormView = bSet; }
 
-    inline bool  getBrowseMode() const { return mbBrowseMode; }
-    inline void  setBrowseMode(bool bSet) { mbBrowseMode = bSet; }
-    inline bool  IsPagePrevBookview() const { return mbBookView; }
-    inline void  SetPagePrevBookview(bool bSet) { mbBookView = bSet; }
+    bool  getBrowseMode() const { return mbBrowseMode; }
+    void  setBrowseMode(bool bSet) { mbBrowseMode = bSet; }
+    bool  IsPagePrevBookview() const { return mbBookView; }
+    void  SetPagePrevBookview(bool bSet) { mbBookView = bSet; }
 
     static bool IsAutoCompleteWords();
 
@@ -421,19 +421,19 @@ public:
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.
-    inline bool IsTest1() const     { return m_bTest1; }
-    inline bool IsTest2() const     { return m_bTest2; }
-    inline bool IsTest3() const     { return m_bTest3; }
-    inline bool IsTest4() const     { return m_bTest4; }
-    inline bool IsTest5() const     { return m_bTest5; }
-    inline bool IsTest6() const     { return m_bTest6; }
-    inline bool IsTest7() const     { return m_bTest7; }
-    inline bool IsTest8() const     { return m_bTest8; }
-    inline bool IsTest10() const    { return m_bTest10; }
+    bool IsTest1() const     { return m_bTest1; }
+    bool IsTest2() const     { return m_bTest2; }
+    bool IsTest3() const     { return m_bTest3; }
+    bool IsTest4() const     { return m_bTest4; }
+    bool IsTest5() const     { return m_bTest5; }
+    bool IsTest6() const     { return m_bTest6; }
+    bool IsTest7() const     { return m_bTest7; }
+    bool IsTest8() const     { return m_bTest8; }
+    bool IsTest10() const    { return m_bTest10; }
 #endif
 
-    inline sal_uInt16 GetZoom() const    { return m_nZoom; }
-    inline void   SetZoom( sal_uInt16 n ){ m_nZoom = n; }
+    sal_uInt16 GetZoom() const    { return m_nZoom; }
+    void   SetZoom( sal_uInt16 n ){ m_nZoom = n; }
 
     static void DrawRect( OutputDevice* pOut, const SwRect &rRect, long nCol );
     static void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect );
@@ -443,7 +443,7 @@ public:
     // Compare methods.
     bool IsEqualFlags ( const SwViewOption &rOpt ) const;
     inline bool operator == ( const SwViewOption &rOpt ) const;
-    inline bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
+    bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
     // Options from nUIOptions
     bool    IsViewVScrollBar() const

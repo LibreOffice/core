@@ -216,8 +216,8 @@ public:
             getFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // activation handling
-    inline  bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
+    bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
             void        onFirstViewActivation( const FmFormModel* _pDocModel );
 

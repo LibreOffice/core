@@ -103,8 +103,8 @@ public:
 
     bool operator==( const OGroupComp& rComp ) const;
 
-    inline const css::uno::Reference< css::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
-    inline const css::uno::Reference< css::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
+    const css::uno::Reference< css::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    const css::uno::Reference< css::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
 
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }

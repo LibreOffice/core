@@ -91,16 +91,16 @@ public:
                                 ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
                                 ~ScaFuncData();
 
-    inline sal_uInt16           GetUINameID() const     { return nUINameID; }
-    inline sal_uInt16           GetDescrID() const      { return nDescrID; }
-    inline ScaCategory          GetCategory() const     { return eCat; }
-    inline bool                 IsDouble() const        { return bDouble; }
+    sal_uInt16           GetUINameID() const     { return nUINameID; }
+    sal_uInt16           GetDescrID() const      { return nDescrID; }
+    ScaCategory          GetCategory() const     { return eCat; }
+    bool                 IsDouble() const        { return bDouble; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline bool                 Is( const OUString& rCompare ) const
+    bool                 Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
-    inline const std::vector<OUString>& GetCompNameList() const { return aCompList; }
+    const std::vector<OUString>& GetCompNameList() const { return aCompList; }
 };
 
 

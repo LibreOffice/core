@@ -83,7 +83,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
-    inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
+    void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
     void                RemoveField(sal_IntPtr nHandle);
     sal_IntPtr          AddField(const OUString& rFieldContents);

@@ -36,14 +36,14 @@ class AbortContinuation:
     public cppu::WeakImplHelper<css::task::XInteractionAbort>
 {
 public:
-    inline AbortContinuation() {}
+    AbortContinuation() {}
     AbortContinuation(const AbortContinuation&) = delete;
     AbortContinuation& operator=(const AbortContinuation&)= delete;
 
     virtual void SAL_CALL select() override {}
 
 private:
-    virtual inline ~AbortContinuation() override {}
+    virtual ~AbortContinuation() override {}
 };
 
 }
@@ -52,7 +52,7 @@ class InteractionRequest::RetryContinuation:
     public cppu::WeakImplHelper<css::task::XInteractionRetry>
 {
 public:
-    inline RetryContinuation(): m_bSelected(false) {}
+    RetryContinuation(): m_bSelected(false) {}
     RetryContinuation(const RetryContinuation&) = delete;
     RetryContinuation& operator=(const RetryContinuation&) = delete;
 
@@ -61,7 +61,7 @@ public:
     bool isSelected() const;
 
 private:
-    virtual inline ~RetryContinuation() override {}
+    virtual ~RetryContinuation() override {}
 
     mutable osl::Mutex m_aMutex;
     bool m_bSelected;

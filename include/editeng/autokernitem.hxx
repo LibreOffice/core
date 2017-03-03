@@ -49,7 +49,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxAutoKernItem& operator=(const SvxAutoKernItem& rAutoKern)
+    SvxAutoKernItem& operator=(const SvxAutoKernItem& rAutoKern)
         {
             SetValue( rAutoKern.GetValue() );
             return *this;

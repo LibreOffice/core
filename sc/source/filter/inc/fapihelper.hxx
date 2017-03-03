@@ -48,10 +48,10 @@ class ScfApiHelper
 {
 public:
     /** Converts a tools color to a UNO color value. */
-    inline static sal_Int32 ConvertToApiColor( const Color& rColor )
+    static sal_Int32 ConvertToApiColor( const Color& rColor )
                             { return static_cast< sal_Int32 >( rColor.GetColor() ); }
     /** Converts a UNO color value to a tools color. */
-    inline static Color ConvertFromApiColor( sal_Int32 nApiColor )
+    static Color ConvertFromApiColor( sal_Int32 nApiColor )
                             { return Color( static_cast< ColorData >( nApiColor ) ); }
 
     /** Converts a non-empty vector into a UNO sequence containing elements of the same type. */
@@ -112,12 +112,12 @@ css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< 
 class ScfPropertySet
 {
 public:
-    inline explicit     ScfPropertySet() {}
+    explicit     ScfPropertySet() {}
     /** Constructs a property set wrapper with the passed UNO property set. */
-    inline explicit     ScfPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
+    explicit     ScfPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
     template< typename InterfaceType >
-    inline explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
+    explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
 
                         ~ScfPropertySet();
 
@@ -125,11 +125,11 @@ public:
     void                Set( css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
     template< typename InterfaceType >
-    inline void         Set( css::uno::Reference< InterfaceType > xInterface )
+    void         Set( css::uno::Reference< InterfaceType > xInterface )
                             { Set( css::uno::Reference< css::beans::XPropertySet >( xInterface, css::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
-    inline bool         Is() const { return mxPropSet.is(); }
+    bool         Is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
     const css::uno::Reference< css::beans::XPropertySet >& GetApiPropertySet() const { return mxPropSet; }
@@ -149,7 +149,7 @@ public:
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
-    inline bool         GetProperty( Type& rValue, const OUString& rPropName ) const
+    bool         GetProperty( Type& rValue, const OUString& rPropName ) const
                             { css::uno::Any aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
@@ -175,19 +175,19 @@ public:
 
     /** Puts the passed value into the property set. */
     template< typename Type >
-    inline void         SetProperty( const OUString& rPropName, const Type& rValue )
+    void         SetProperty( const OUString& rPropName, const Type& rValue )
                             { SetAnyProperty( rPropName, css::uno::makeAny( rValue ) ); }
 
     /** Puts the passed Boolean value into the property set. */
-    inline void         SetBoolProperty( const OUString& rPropName, bool bValue )
+    void         SetBoolProperty( const OUString& rPropName, bool bValue )
                             { SetAnyProperty( rPropName, css::uno::Any( bValue ) ); }
 
     /** Puts the passed string into the property set. */
-    inline void         SetStringProperty( const OUString& rPropName, const OUString& rValue )
+    void         SetStringProperty( const OUString& rPropName, const OUString& rValue )
                             { SetProperty( rPropName, rValue ); }
 
     /** Puts the passed color into the property set. */
-    inline void         SetColorProperty( const OUString& rPropName, const Color& rColor )
+    void         SetColorProperty( const OUString& rPropName, const Color& rColor )
                             { SetProperty( rPropName, ScfApiHelper::ConvertToApiColor( rColor ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
@@ -246,7 +246,7 @@ public:
     /** Writes an Any to the value sequence. */
     void                WriteValue( const css::uno::Any& rAny );
     /** Writes a color value to the value sequence. */
-    inline void         WriteValue( const Color& rColor )
+    void         WriteValue( const Color& rColor )
                             { WriteValue( ScfApiHelper::ConvertToApiColor( rColor ) ); }
     /** Writes a C++ boolean value to the value sequence. */
     void                WriteValue( bool rbValue );

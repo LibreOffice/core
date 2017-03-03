@@ -44,7 +44,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper * = nullptr ) const override;
 
-    inline SvxHangingPunctuationItem& operator=(
+    SvxHangingPunctuationItem& operator=(
                                     const SvxHangingPunctuationItem& rItem )
     {
         SetValue( rItem.GetValue() );

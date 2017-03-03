@@ -104,19 +104,19 @@ class VclPtr
 public:
     /** Constructor...
      */
-    inline VclPtr()
+    VclPtr()
         : m_rInnerRef()
     {}
 
     /** Constructor...
      */
-    inline VclPtr (reference_type * pBody)
+    VclPtr (reference_type * pBody)
         : m_rInnerRef(pBody)
     {}
 
     /** Constructor... that doesn't take a ref.
      */
-    inline VclPtr (reference_type * pBody, __sal_NoAcquire)
+    VclPtr (reference_type * pBody, __sal_NoAcquire)
         : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
     {}
 
@@ -129,7 +129,7 @@ public:
         @param rRef another reference
     */
     template< class derived_type >
-    inline VclPtr(
+    VclPtr(
         const VclPtr< derived_type > & rRef,
         typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
         : m_rInnerRef( static_cast<reference_type*>(rRef) )
@@ -152,7 +152,7 @@ public:
 
     /** Probably most common used: handle->someBodyOp().
      */
-    inline reference_type * operator->() const
+    reference_type * operator->() const
     {
         return m_rInnerRef.get();
     }
@@ -161,17 +161,17 @@ public:
          I.e. handle->someBodyOp() and handle.get()->someBodyOp()
          are the same.
       */
-    inline reference_type * get() const
+    reference_type * get() const
     {
         return m_rInnerRef.get();
     }
 
-    inline void set(reference_type *pBody)
+    void set(reference_type *pBody)
     {
         m_rInnerRef.set(pBody);
     }
 
-    inline void reset(reference_type *pBody)
+    void reset(reference_type *pBody)
     {
         m_rInnerRef.set(pBody);
     }
@@ -198,27 +198,27 @@ public:
         return *this;
     }
 
-    inline operator reference_type * () const
+    operator reference_type * () const
     {
         return m_rInnerRef.get();
     }
 
-    inline explicit operator bool () const
+    explicit operator bool () const
     {
         return m_rInnerRef.get() != nullptr;
     }
 
-    inline void clear()
+    void clear()
     {
         m_rInnerRef.clear();
     }
 
-    inline void reset()
+    void reset()
     {
         m_rInnerRef.clear();
     }
 
-    inline void disposeAndClear()
+    void disposeAndClear()
     {
         // hold it alive for the lifetime of this method
         ::rtl::Reference<reference_type> aTmp(m_rInnerRef);
@@ -230,7 +230,7 @@ public:
 
     /** Needed to place VclPtr's into STL collection.
      */
-    inline bool operator< (const VclPtr<reference_type> & handle) const
+    bool operator< (const VclPtr<reference_type> & handle) const
     {
         return (m_rInnerRef < handle.m_rInnerRef);
     }
@@ -314,26 +314,26 @@ class ScopedVclPtr : public VclPtr<reference_type>
 public:
     /** Constructor...
      */
-    inline ScopedVclPtr()
+    ScopedVclPtr()
         : VclPtr<reference_type>()
     {}
 
     /** Constructor
      */
-    inline ScopedVclPtr (reference_type * pBody)
+    ScopedVclPtr (reference_type * pBody)
         : VclPtr<reference_type>(pBody)
     {}
 
     /** Copy constructor...
      */
-    inline ScopedVclPtr (const VclPtr<reference_type> & handle)
+    ScopedVclPtr (const VclPtr<reference_type> & handle)
         : VclPtr<reference_type>(handle)
     {}
 
     /**
        Assignment that releases the last reference.
      */
-    inline void disposeAndReset(reference_type *pBody)
+    void disposeAndReset(reference_type *pBody)
     {
         VclPtr<reference_type>::disposeAndClear();
         VclPtr<reference_type>::set(pBody);
@@ -342,7 +342,7 @@ public:
     /**
        Assignment that releases the last reference.
      */
-    inline ScopedVclPtr<reference_type>& operator = (reference_type * pBody)
+    ScopedVclPtr<reference_type>& operator = (reference_type * pBody)
     {
         disposeAndReset(pBody);
         return *this;
@@ -357,7 +357,7 @@ public:
         @param rRef another reference
     */
     template< class derived_type >
-    inline ScopedVclPtr(
+    ScopedVclPtr(
         const VclPtr< derived_type > & rRef,
         typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
         : VclPtr<reference_type>( rRef )
@@ -386,7 +386,7 @@ private:
     void reset(reference_type *pBody) = delete;
 
 protected:
-    inline ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)
+    ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)
         : VclPtr<reference_type>(pBody, SAL_NO_ACQUIRE)
     {}
 };

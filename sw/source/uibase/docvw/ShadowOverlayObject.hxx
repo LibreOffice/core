@@ -50,7 +50,7 @@ private:
 
 public:
         void SetShadowState(ShadowState aState);
-        inline ShadowState GetShadowState() {return mShadowState;}
+        ShadowState GetShadowState() {return mShadowState;}
 
         void SetPosition( const basegfx::B2DPoint& rPoint1,
                           const basegfx::B2DPoint& rPoint2 );

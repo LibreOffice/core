@@ -154,7 +154,7 @@ public:
 
       @param    str         a OString data.
     */
-    inline OString( rtl_String * str, __sal_NoAcquire )
+    OString( rtl_String * str, __sal_NoAcquire )
     {
         pData = str;
     }

@@ -40,8 +40,8 @@ union DecodedDouble
     double              mfValue;
     sal_math_Double     maStruct;
 
-    inline explicit     DecodedDouble() {}
-    inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
+    explicit     DecodedDouble() {}
+    explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 
 } // namespace

@@ -126,13 +126,13 @@ public:
 
     /** Locks/unlocks the background layer that contains background objects.
         Unlocked layer is required to be able to edit the objects. */
-    inline void     LockBackgroundLayer( bool bLock ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
+    void     LockBackgroundLayer( bool bLock ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
 
     /** Locks/unlocks the internal layer that contains caption objects of cell notes.
         Unlocked layer is required to be able to edit the contained objects. */
-    inline void     LockInternalLayer( bool bLock = true ) { LockCalcLayer( SC_LAYER_INTERN, bLock ); }
+    void     LockInternalLayer( bool bLock = true ) { LockCalcLayer( SC_LAYER_INTERN, bLock ); }
     /** Unlocks the internal layer that contains caption objects of cell notes. */
-    inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
+    void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     css::uno::Reference< css::datatransfer::XTransferable > CopyToTransferable();

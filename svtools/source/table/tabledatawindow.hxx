@@ -44,7 +44,7 @@ namespace svt { namespace table
         virtual ~TableDataWindow() override;
         virtual void dispose() override;
 
-        inline void SetSelectHdl(const Link<LinkParamNone*,void>& rLink)
+        void SetSelectHdl(const Link<LinkParamNone*,void>& rLink)
         {
             m_aSelectHdl = rLink;
         }

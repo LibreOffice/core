@@ -57,14 +57,14 @@ namespace comphelper
     {
         IMutex* m_pMutex;
     public:
-        inline OMutexGuard( IMutex* _pMutex )
+        OMutexGuard( IMutex* _pMutex )
             :m_pMutex( _pMutex )
         {
             if ( m_pMutex )
                 m_pMutex->acquire();
         }
 
-        inline ~OMutexGuard( )
+        ~OMutexGuard( )
         {
             if ( m_pMutex )
                 m_pMutex->release();

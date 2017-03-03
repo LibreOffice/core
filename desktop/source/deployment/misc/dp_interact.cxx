@@ -43,7 +43,7 @@ class InteractionContinuationImpl : public ::cppu::OWeakObject,
     bool * m_pselect;
 
 public:
-    inline InteractionContinuationImpl( Type const & type, bool * pselect )
+    InteractionContinuationImpl( Type const & type, bool * pselect )
         : m_type( type ),
           m_pselect( pselect )
         { OSL_ASSERT(

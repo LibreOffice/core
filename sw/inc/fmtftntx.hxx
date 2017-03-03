@@ -65,7 +65,7 @@ public:
                                   OUString &rText,
                                   const IntlWrapper* pIntl = nullptr ) const override;
 
-    inline bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
+    bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
 
     SwFormatFootnoteEndAtTextEnd & operator=( const SwFormatFootnoteEndAtTextEnd & rAttr );
 

@@ -33,7 +33,7 @@ namespace wrapper
 
         virtual ~Media();
 
-        inline operator libvlc_media_t*()
+        operator libvlc_media_t*()
         {
             return mMedia;
         }

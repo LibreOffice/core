@@ -105,7 +105,7 @@ public:
     // to which the Paragraph Style is assigned.
     int  GetAssignedOutlineStyleLevel() const;
 
-    inline bool IsAssignedToListLevelOfOutlineStyle() const
+    bool IsAssignedToListLevelOfOutlineStyle() const
     {
         return mbAssignedToOutlineStyle;
     }
@@ -124,7 +124,7 @@ public:
     /// Override <ResetAllFormatAttr()> to stay assigned to list level of outline style.
     virtual sal_uInt16 ResetAllFormatAttr() override;
 
-    inline bool StayAssignedToListLevelOfOutlineStyle() const
+    bool StayAssignedToListLevelOfOutlineStyle() const
     {
         return mbStayAssignedToListLevelOfOutlineStyle;
     }

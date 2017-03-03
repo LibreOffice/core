@@ -166,7 +166,7 @@ public:
     void ShowViewTabBar (bool bShow);
 
     void SetUserWantsTabBar(bool inValue);
-    inline bool GetUserWantsTabBar() { return mbUserWantsTabBar; }
+    bool GetUserWantsTabBar() { return mbUserWantsTabBar; }
 
     /** Common code of ViewShellBase::OuterResizePixel() and
         ViewShellBase::InnerResizePixel().

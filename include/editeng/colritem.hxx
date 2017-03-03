@@ -57,7 +57,7 @@ public:
     virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16 nVersion) const override;
     virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const override;
 
-    inline SvxColorItem& operator=(const SvxColorItem& rColor)
+    SvxColorItem& operator=(const SvxColorItem& rColor)
     {
         SetValue(rColor.GetValue());
         return *this;

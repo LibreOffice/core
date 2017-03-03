@@ -47,10 +47,10 @@ class SwPageNumAndTypeOfAnchors
         std::vector< tEntry* > maObjList;
 
     public:
-        inline SwPageNumAndTypeOfAnchors()
+        SwPageNumAndTypeOfAnchors()
         {
         }
-        inline ~SwPageNumAndTypeOfAnchors()
+        ~SwPageNumAndTypeOfAnchors()
         {
             for ( std::vector< tEntry* >::iterator aIter = maObjList.begin();
                   aIter != maObjList.end(); ++aIter )
@@ -60,7 +60,7 @@ class SwPageNumAndTypeOfAnchors
             maObjList.clear();
         }
 
-        inline void Collect( SwAnchoredObject& _rAnchoredObj )
+        void Collect( SwAnchoredObject& _rAnchoredObj )
         {
             tEntry* pNewEntry = new tEntry;
             pNewEntry->mpAnchoredObj = &_rAnchoredObj;
@@ -89,7 +89,7 @@ class SwPageNumAndTypeOfAnchors
             maObjList.push_back( pNewEntry );
         }
 
-        inline SwAnchoredObject* operator[]( sal_uInt32 _nIndex )
+        SwAnchoredObject* operator[]( sal_uInt32 _nIndex )
         {
             SwAnchoredObject* bRetObj = nullptr;
 
@@ -101,7 +101,7 @@ class SwPageNumAndTypeOfAnchors
             return bRetObj;
         }
 
-        inline sal_uInt32 GetPageNum( sal_uInt32 _nIndex ) const
+        sal_uInt32 GetPageNum( sal_uInt32 _nIndex ) const
         {
             sal_uInt32 nRetPgNum = 0L;
 
@@ -114,7 +114,7 @@ class SwPageNumAndTypeOfAnchors
         }
 
         // --> #i26945#
-        inline bool AnchoredAtMaster( sal_uInt32 _nIndex )
+        bool AnchoredAtMaster( sal_uInt32 _nIndex )
         {
             bool bAnchoredAtMaster( true );
 
@@ -126,7 +126,7 @@ class SwPageNumAndTypeOfAnchors
             return bAnchoredAtMaster;
         }
 
-        inline sal_uInt32 Count() const
+        sal_uInt32 Count() const
         {
             return maObjList.size();
         }

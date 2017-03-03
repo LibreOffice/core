@@ -212,10 +212,10 @@ public:
     bool                    IsTable() const             { return mbEnableHor && mbEnableVer; }
     void                    SetTable( bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
 
-    inline bool             IsHorEnabled() const { return mbEnableHor; }
-    inline void             EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
-    inline bool             IsVerEnabled() const { return mbEnableVer; }
-    inline void             EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
+    bool             IsHorEnabled() const { return mbEnableHor; }
+    void             EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
+    bool             IsVerEnabled() const { return mbEnableVer; }
+    void             EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
 
     bool                    IsDist() const              { return bDist; }
     void                    SetDist( bool bNew )        { bDist = bNew; }

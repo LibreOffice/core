@@ -52,12 +52,12 @@ public:
                             sal_Int32 nOptions,
                             bool bIsInteractive );
 
-    inline ScConversionType GetType() const     { return meConvType; }
-    inline LanguageType GetSourceLang() const   { return meSourceLang; }
-    inline LanguageType GetTargetLang() const   { return meTargetLang; }
-    inline const vcl::Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : nullptr; }
-    inline sal_Int32    GetOptions() const      { return mnOptions; }
-    inline bool         IsInteractive() const   { return mbIsInteractive; }
+    ScConversionType GetType() const     { return meConvType; }
+    LanguageType GetSourceLang() const   { return meSourceLang; }
+    LanguageType GetTargetLang() const   { return meTargetLang; }
+    const vcl::Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : nullptr; }
+    sal_Int32    GetOptions() const      { return mnOptions; }
+    bool         IsInteractive() const   { return mbIsInteractive; }
 
 private:
     ScConversionType    meConvType;         /// Type of the conversion.

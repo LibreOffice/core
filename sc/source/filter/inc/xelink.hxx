@@ -89,19 +89,19 @@ public:
     SCTAB               GetRealScTab( SCTAB nSortedScTab ) const;
 
     /** Returns the number of Calc sheets. */
-    inline SCTAB        GetScTabCount() const { return mnScCnt; }
+    SCTAB        GetScTabCount() const { return mnScCnt; }
 
     /** Returns the number of Excel sheets to be exported. */
-    inline sal_uInt16   GetXclTabCount() const { return mnXclCnt; }
+    sal_uInt16   GetXclTabCount() const { return mnXclCnt; }
     /** Returns the number of external linked sheets. */
-    inline sal_uInt16   GetXclExtTabCount() const { return mnXclExtCnt; }
+    sal_uInt16   GetXclExtTabCount() const { return mnXclExtCnt; }
     /** Returns the number of exported selected sheets. */
-    inline sal_uInt16   GetXclSelectedCount() const { return mnXclSelCnt; }
+    sal_uInt16   GetXclSelectedCount() const { return mnXclSelCnt; }
 
     /** Returns the Excel index of the active, displayed sheet. */
-    inline sal_uInt16   GetDisplayedXclTab() const { return mnDisplXclTab; }
+    sal_uInt16   GetDisplayedXclTab() const { return mnDisplXclTab; }
     /** Returns the Excel index of the first visible sheet. */
-    inline sal_uInt16   GetFirstVisXclTab() const { return mnFirstVisXclTab; }
+    sal_uInt16   GetFirstVisXclTab() const { return mnFirstVisXclTab; }
 
 private:
     /** Returns true, if any of the passed flags is set for the specified Calc sheet. */
@@ -121,7 +121,7 @@ private:
         OUString            maScName;
         sal_uInt16          mnXclTab;
         ExcTabBufFlags      mnFlags;
-        inline explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( ExcTabBufFlags::NONE ) {}
+        explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( ExcTabBufFlags::NONE ) {}
     };
 
     typedef ::std::vector< XclExpTabInfoEntry > XclExpTabInfoVec;

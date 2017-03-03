@@ -62,10 +62,10 @@ private:
     ScMyImpDetectiveOpList      aDetectiveOpList;
 
 public:
-    inline                      ScMyImpDetectiveOpArray() :
+    ScMyImpDetectiveOpArray() :
                                     aDetectiveOpList()  {}
 
-    inline void                 AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
+    void                 AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
                                     { aDetectiveOpList.push_back( rDetOp ); }
 
     void                        Sort();

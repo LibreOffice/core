@@ -61,20 +61,20 @@ namespace logging
         bool    getEncoding(        OUString& _out_rEncoding ) const;
         bool    setEncoding( const  OUString& _rEncoding     );
 
-        inline  rtl_TextEncoding
+        rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }
 
         const css::uno::Reference< css::logging::XLogFormatter >&
                 getFormatter() const { return m_xFormatter; }
-        inline  void
+        void
                 setFormatter( const css::uno::Reference< css::logging::XLogFormatter >& _rxFormatter )
                 {
                     m_xFormatter = _rxFormatter;
                 }
 
-        inline  sal_Int32
+        sal_Int32
                 getLevel() const { return m_nLevel; }
-        inline  void
+        void
                 setLevel( const sal_Int32 _nLevel )
                 {
                     m_nLevel = _nLevel;

@@ -238,7 +238,7 @@ struct XclExpChRootData : public XclChRootData
     XclChFrBlockVector  maWrittenFrBlocks;      /// Stack of future record levels already written out.
     XclChFrBlockVector  maUnwrittenFrBlocks;    /// Stack of future record levels not yet written out.
 
-    inline explicit     XclExpChRootData( XclExpChChart& rChartData ) : mrChartData( rChartData ) {}
+    explicit     XclExpChRootData( XclExpChChart& rChartData ) : mrChartData( rChartData ) {}
 
     /** Registers a new future record level. */
     void                RegisterFutureRecBlock( const XclChFrBlock& rFrBlock );

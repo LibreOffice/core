@@ -69,7 +69,7 @@ public:
     virtual ~TblStylePrHandler( ) override;
 
     const PropertyMapPtr&       getProperties() { return m_pProperties; };
-    inline TblStyleType         getType() { return m_nType; };
+    TblStyleType         getType() { return m_nType; };
     OUString getTypeString();
     void appendInteropGrabBag(const OUString& aKey, const OUString& aValue);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName);

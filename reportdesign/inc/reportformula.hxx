@@ -60,7 +60,7 @@ namespace rptui
         bool        isValid() const;
 
         /// returns the type of the binding represented by the formula
-        inline BindType    getType() const { return m_eType; }
+        BindType    getType() const { return m_eType; }
 
         /// returns the complete formula represented by the object
         const OUString&

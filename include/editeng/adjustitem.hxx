@@ -71,18 +71,18 @@ public:
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const override;
 
-    inline void SetOneWord( const SvxAdjust eType )
+    void SetOneWord( const SvxAdjust eType )
     {
         bOneBlock  = eType == SVX_ADJUST_BLOCK;
     }
 
-    inline void SetLastBlock( const SvxAdjust eType )
+    void SetLastBlock( const SvxAdjust eType )
     {
         bLastBlock = eType == SVX_ADJUST_BLOCK;
         bLastCenter = eType == SVX_ADJUST_CENTER;
     }
 
-    inline void SetAdjust( const SvxAdjust eType )
+    void SetAdjust( const SvxAdjust eType )
     {
         bLeft = eType == SVX_ADJUST_LEFT;
         bRight = eType == SVX_ADJUST_RIGHT;
@@ -90,7 +90,7 @@ public:
         bBlock = eType == SVX_ADJUST_BLOCK;
     }
 
-    inline SvxAdjust GetLastBlock() const
+    SvxAdjust GetLastBlock() const
     {
         SvxAdjust eRet = SVX_ADJUST_LEFT;
 
@@ -101,7 +101,7 @@ public:
         return eRet;
     }
 
-    inline SvxAdjust GetOneWord() const
+    SvxAdjust GetOneWord() const
     {
         SvxAdjust eRet = SVX_ADJUST_LEFT;
 
@@ -110,7 +110,7 @@ public:
         return eRet;
     }
 
-    inline SvxAdjust GetAdjust() const
+    SvxAdjust GetAdjust() const
     {
         SvxAdjust eRet = SVX_ADJUST_LEFT;
 

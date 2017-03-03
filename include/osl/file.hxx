@@ -127,7 +127,7 @@ public:
         @see DirectoryItem::getFileStatus()
     */
 
-    static inline RC getCanonicalName( const ::rtl::OUString& ustrRequestedURL, ::rtl::OUString& ustrValidURL )
+    static RC getCanonicalName( const ::rtl::OUString& ustrRequestedURL, ::rtl::OUString& ustrValidURL )
     {
         return static_cast< RC >( osl_getCanonicalName( ustrRequestedURL.pData, &ustrValidURL.pData ) );
     }
@@ -167,7 +167,7 @@ public:
         @see DirectoryItem::getFileStatus()
     */
 
-    static inline RC getAbsoluteFileURL( const ::rtl::OUString& ustrBaseDirectoryURL, const ::rtl::OUString& ustrRelativeFileURL, ::rtl::OUString& ustrAbsoluteFileURL )
+    static RC getAbsoluteFileURL( const ::rtl::OUString& ustrBaseDirectoryURL, const ::rtl::OUString& ustrRelativeFileURL, ::rtl::OUString& ustrAbsoluteFileURL )
     {
         return static_cast< RC >( osl_getAbsoluteFileURL( ustrBaseDirectoryURL.pData, ustrRelativeFileURL.pData, &ustrAbsoluteFileURL.pData ) );
     }
@@ -187,7 +187,7 @@ public:
         @see getFileURLFromSystemPath()
     */
 
-    static inline RC getSystemPathFromFileURL( const ::rtl::OUString& ustrFileURL, ::rtl::OUString& ustrSystemPath )
+    static RC getSystemPathFromFileURL( const ::rtl::OUString& ustrFileURL, ::rtl::OUString& ustrSystemPath )
     {
         return static_cast< RC >( osl_getSystemPathFromFileURL( ustrFileURL.pData, &ustrSystemPath.pData ) );
     }
@@ -207,7 +207,7 @@ public:
         @see getSystemPathFromFileURL()
     */
 
-    static inline RC getFileURLFromSystemPath( const ::rtl::OUString& ustrSystemPath, ::rtl::OUString& ustrFileURL )
+    static RC getFileURLFromSystemPath( const ::rtl::OUString& ustrSystemPath, ::rtl::OUString& ustrFileURL )
     {
         return static_cast< RC >( osl_getFileURLFromSystemPath( ustrSystemPath.pData, &ustrFileURL.pData ) );
     }
@@ -240,7 +240,7 @@ public:
         @see getSystemPathFromFileURL()
     */
 
-    static inline RC searchFileURL( const ::rtl::OUString& ustrFileName, const ::rtl::OUString& ustrSearchPath, ::rtl::OUString& ustrFileURL )
+    static RC searchFileURL( const ::rtl::OUString& ustrFileName, const ::rtl::OUString& ustrSearchPath, ::rtl::OUString& ustrFileURL )
     {
         return static_cast< RC >( osl_searchFileURL( ustrFileName.pData, ustrSearchPath.pData, &ustrFileURL.pData ) );
     }
@@ -255,7 +255,7 @@ public:
         E_NOENT no such file or directory not found
     */
 
-    static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
+    static RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
     {
         return static_cast< RC >( osl_getTempDirURL( &ustrTempDirURL.pData ) );
     }
@@ -308,7 +308,7 @@ public:
         @see getTempDirURL()
     */
 
-    static inline RC createTempFile(
+    static RC createTempFile(
         ::rtl::OUString* pustrDirectoryURL,
         oslFileHandle*   pHandle,
         ::rtl::OUString* pustrTempFileURL)
@@ -367,7 +367,7 @@ public:
         The other volume device.
     */
 
-    inline VolumeDevice & operator =( const VolumeDevice & rDevice )
+    VolumeDevice & operator =( const VolumeDevice & rDevice )
     {
         oslVolumeDeviceHandle   newHandle = rDevice._aHandle;
 
@@ -387,7 +387,7 @@ public:
            @return
         The full qualified URL where the device is mounted to.
     */
-    inline rtl::OUString getMountPath()
+    rtl::OUString getMountPath()
     {
         rtl::OUString   aPath;
         osl_getVolumeDeviceMountPath( _aHandle, &aPath.pData );
@@ -457,7 +457,7 @@ public:
         @return true if all fields are valid else false.
     */
 
-    inline bool isValid( sal_uInt32 nMask ) const
+    bool isValid( sal_uInt32 nMask ) const
     {
         return ( nMask & _aInfo.uValidFields ) == nMask;
     }
@@ -468,7 +468,7 @@ public:
         true if Attributes are valid and the volume is remote else false.
     */
 
-    inline bool getRemoteFlag() const
+    bool getRemoteFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
     }
@@ -479,7 +479,7 @@ public:
         true if attributes are valid and the volume is removable else false.
     */
 
-    inline bool getRemoveableFlag() const
+    bool getRemoveableFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
     }
@@ -490,7 +490,7 @@ public:
         true if attributes are valid and the volume is a CDROM else false.
     */
 
-    inline bool getCompactDiscFlag() const
+    bool getCompactDiscFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
     }
@@ -501,7 +501,7 @@ public:
         true if attributes are valid and the volume is a floppy disk else false.
     */
 
-    inline bool getFloppyDiskFlag() const
+    bool getFloppyDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
     }
@@ -512,7 +512,7 @@ public:
         true if attributes are valid and the volume is a fixed disk else false.
     */
 
-    inline bool getFixedDiskFlag() const
+    bool getFixedDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
     }
@@ -523,7 +523,7 @@ public:
         true if attributes are valid and the volume is a RAM disk else false.
     */
 
-    inline bool getRAMDiskFlag() const
+    bool getRAMDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
     }
@@ -535,7 +535,7 @@ public:
         0 otherwise.
     */
 
-    inline sal_uInt64 getTotalSpace() const
+    sal_uInt64 getTotalSpace() const
     {
         return _aInfo.uTotalSpace;
     }
@@ -547,7 +547,7 @@ public:
         0 otherwise.
     */
 
-    inline sal_uInt64 getFreeSpace() const
+    sal_uInt64 getFreeSpace() const
     {
         return _aInfo.uFreeSpace;
     }
@@ -559,7 +559,7 @@ public:
         0 otherwise.
     */
 
-    inline sal_uInt64 getUsedSpace() const
+    sal_uInt64 getUsedSpace() const
     {
         return _aInfo.uUsedSpace;
     }
@@ -571,7 +571,7 @@ public:
         0 otherwise.
     */
 
-    inline sal_uInt32 getMaxNameLength() const
+    sal_uInt32 getMaxNameLength() const
     {
         return _aInfo.uMaxNameLength;
     }
@@ -583,7 +583,7 @@ public:
         0 otherwise.
     */
 
-    inline sal_uInt32 getMaxPathLength() const
+    sal_uInt32 getMaxPathLength() const
     {
         return _aInfo.uMaxPathLength;
     }
@@ -595,7 +595,7 @@ public:
         otherwise an empty string.
     */
 
-    inline ::rtl::OUString getFileSystemName() const
+    ::rtl::OUString getFileSystemName() const
     {
         return _aInfo.ustrFileSystemName ? ::rtl::OUString( _aInfo.ustrFileSystemName ) : ::rtl::OUString();
     }
@@ -608,7 +608,7 @@ public:
         otherwise returns NULL;
     */
 
-    inline VolumeDevice getDeviceHandle() const
+    VolumeDevice getDeviceHandle() const
     {
         return _aDevice;
     }
@@ -708,7 +708,7 @@ public:
         true if all fields are valid else false.
     */
 
-    inline bool isValid( sal_uInt32 nMask ) const
+    bool isValid( sal_uInt32 nMask ) const
     {
         return ( nMask & _aStatus.uValidFields ) == nMask;
     }
@@ -718,7 +718,7 @@ public:
         @return
         The file type.
     */
-    inline Type getFileType() const
+    Type getFileType() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_Type), "sal.osl",
@@ -736,7 +736,7 @@ public:
         @see getFileType
         @since LibreOffice 3.6
     */
-    inline bool isDirectory() const
+    bool isDirectory() const
     {
         return ( getFileType() == Directory || getFileType() == Volume );
     }
@@ -751,7 +751,7 @@ public:
         @see isLink
         @since LibreOffice 3.6
     */
-    inline bool isRegular() const
+    bool isRegular() const
     {
         return ( getFileType() == Regular );
     }
@@ -764,7 +764,7 @@ public:
         @see getFileType
         @since LibreOffice 3.6
     */
-    inline bool isLink() const
+    bool isLink() const
     {
         return ( getFileType() == Link );
     }
@@ -775,7 +775,7 @@ public:
         The set of attribute flags of this file.
     */
 
-    inline sal_uInt64 getAttributes() const
+    sal_uInt64 getAttributes() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_Attributes), "sal.osl",
@@ -790,7 +790,7 @@ public:
         TimeValue otherwise.
     */
 
-    inline TimeValue getCreationTime() const
+    TimeValue getCreationTime() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_CreationTime), "sal.osl",
@@ -805,7 +805,7 @@ public:
         TimeValue otherwise.
     */
 
-    inline TimeValue getAccessTime() const
+    TimeValue getAccessTime() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_AccessTime), "sal.osl",
@@ -820,7 +820,7 @@ public:
         TimeValue otherwise.
     */
 
-    inline TimeValue getModifyTime() const
+    TimeValue getModifyTime() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_ModifyTime), "sal.osl",
@@ -834,7 +834,7 @@ public:
         The actual file size if this information is valid, 0 otherwise.
     */
 
-    inline sal_uInt64 getFileSize() const
+    sal_uInt64 getFileSize() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_FileSize), "sal.osl",
@@ -848,7 +848,7 @@ public:
         The file name if this information is valid, an empty string otherwise.
     */
 
-    inline ::rtl::OUString getFileName() const
+    ::rtl::OUString getFileName() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_FileName), "sal.osl",
@@ -865,7 +865,7 @@ public:
         empty string otherwise.
     */
 
-    inline ::rtl::OUString getFileURL() const
+    ::rtl::OUString getFileURL() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_FileURL), "sal.osl",
@@ -881,7 +881,7 @@ public:
         otherwise.
     */
 
-    inline ::rtl::OUString getLinkTargetURL() const
+    ::rtl::OUString getLinkTargetURL() const
     {
         SAL_INFO_IF(
             !isValid(osl_FileStatus_Mask_LinkTargetURL), "sal.osl",
@@ -928,7 +928,7 @@ public:
     /** Destructor
     */
 
-    inline ~File()
+    ~File()
     {
         close();
     }
@@ -940,7 +940,7 @@ public:
 
         @since LibreOffice 4.1
     */
-    inline rtl::OUString getURL() const { return _aPath; }
+    rtl::OUString getURL() const { return _aPath; }
 
     /** Open a regular file.
 
@@ -985,7 +985,7 @@ public:
         @see setSize()
     */
 
-    inline RC open( sal_uInt32 uFlags )
+    RC open( sal_uInt32 uFlags )
     {
         return static_cast< RC >( osl_openFile( _aPath.pData, &_pData, uFlags ) );
     }
@@ -1004,7 +1004,7 @@ public:
         @see open()
     */
 
-    inline RC close()
+    RC close()
     {
         oslFileError Error = osl_File_E_BADF;
 
@@ -1034,7 +1034,7 @@ public:
         @see getPos()
     */
 
-    inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT
+    RC setPos( sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT
     {
         return static_cast< RC >( osl_setFilePos( _pData, uHow, uPos ) );
     }
@@ -1055,7 +1055,7 @@ public:
         @see write()
     */
 
-    inline RC getPos( sal_uInt64& uPos )
+    RC getPos( sal_uInt64& uPos )
     {
         return static_cast< RC >( osl_getFilePos( _pData, &uPos ) );
     }
@@ -1082,7 +1082,7 @@ public:
         @see setPos()
     */
 
-    inline RC isEndOfFile( sal_Bool *pIsEOF )
+    RC isEndOfFile( sal_Bool *pIsEOF )
     {
         return static_cast< RC >( osl_isEndOfFile( _pData, pIsEOF ) );
     }
@@ -1105,7 +1105,7 @@ public:
         @see getStatus()
     */
 
-    inline RC setSize( sal_uInt64 uSize )
+    RC setSize( sal_uInt64 uSize )
     {
         return static_cast< RC >( osl_setFileSize( _pData, uSize ) );
     }
@@ -1130,7 +1130,7 @@ public:
         @see getStatus()
     */
 
-    inline RC getSize( sal_uInt64 &rSize )
+    RC getSize( sal_uInt64 &rSize )
     {
         return static_cast< RC >( osl_getFileSize( _pData, &rSize ) );
     }
@@ -1167,7 +1167,7 @@ public:
         @see setPos()
     */
 
-    inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
+    RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
     {
         return static_cast< RC >( osl_readFile( _pData, pBuffer, uBytesRequested, &rBytesRead ) );
     }
@@ -1206,7 +1206,7 @@ public:
         @see setPos()
     */
 
-    inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
+    RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
     {
         return static_cast< RC >( osl_writeFile( _pData, pBuffer, uBytesToWrite, &rBytesWritten ) );
     }
@@ -1236,7 +1236,7 @@ public:
         @see setPos()
     */
 
-    inline RC readLine( ::rtl::ByteSequence& aSeq )
+    RC readLine( ::rtl::ByteSequence& aSeq )
     {
         return static_cast< RC >( osl_readLine( _pData, reinterpret_cast<sal_Sequence**>(&aSeq) ) );
     }
@@ -1271,7 +1271,7 @@ public:
     @see open()
     @see write()
     */
-    inline RC sync() const
+    RC sync() const
     {
         OSL_PRECOND(_pData, "File::sync(): File not open");
         return static_cast< RC >(osl_syncFile(_pData));
@@ -1303,7 +1303,7 @@ public:
         @see remove()
     */
 
-    inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
+    static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     {
         return static_cast< RC >( osl_copyFile( ustrSourceFileURL.pData, ustrDestFileURL.pData ) );
     }
@@ -1332,7 +1332,7 @@ public:
         @see copy()
     */
 
-    inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
+    static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     {
         return static_cast< RC >( osl_moveFile( ustrSourceFileURL.pData, ustrDestFileURL.pData ) );
     }
@@ -1365,7 +1365,7 @@ public:
         @see open()
     */
 
-    inline static RC remove( const ::rtl::OUString& ustrFileURL )
+    static RC remove( const ::rtl::OUString& ustrFileURL )
     {
         return static_cast< RC >( osl_removeFile( ustrFileURL.pData ) );
     }
@@ -1385,7 +1385,7 @@ public:
         @see FileStatus
     */
 
-    inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
+    static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
     {
         return static_cast< RC >( osl_setFileAttributes( ustrFileURL.pData, uAttributes ) );
     }
@@ -1412,7 +1412,7 @@ public:
         @see FileStatus
     */
 
-    inline static RC setTime(
+    static RC setTime(
         const ::rtl::OUString& ustrFileURL,
         const TimeValue& rCreationTime,
         const TimeValue& rLastAccessTime,
@@ -1489,7 +1489,7 @@ public:
         true if object is valid directory item else false.
      */
 
-    inline bool is()
+    bool is()
     {
         return _pData != NULL;
     }
@@ -1528,7 +1528,7 @@ public:
         @see Directory::getNextItem()
     */
 
-    static inline RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
+    static RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
     {
         if( rItem._pData)
         {
@@ -1571,7 +1571,7 @@ public:
         @see FileStatus
     */
 
-    inline RC getFileStatus( FileStatus& rStatus )
+    RC getFileStatus( FileStatus& rStatus )
     {
         return static_cast< RC >( osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask ) );
     }
@@ -1592,7 +1592,7 @@ public:
 
     @since LibreOffice 3.6
 */
-    inline bool isIdenticalTo( const DirectoryItem &pOther )
+    bool isIdenticalTo( const DirectoryItem &pOther )
     {
         return osl_identicalDirectoryItem( _pData, pOther._pData );
     }
@@ -1685,7 +1685,7 @@ public:
 
         @since LibreOffice 4.1
     */
-    inline rtl::OUString getURL() const { return _aPath; }
+    rtl::OUString getURL() const { return _aPath; }
 
     /** Open a directory for enumerating its contents.
 
@@ -1705,7 +1705,7 @@ public:
         @see close()
     */
 
-    inline RC open()
+    RC open()
     {
         return static_cast< RC >( osl_openDirectory( _aPath.pData, &_pData ) );
     }
@@ -1721,7 +1721,7 @@ public:
         @see close()
     */
 
-    inline bool isOpen() { return _pData != NULL; }
+    bool isOpen() { return _pData != NULL; }
 
     /** Close a directory.
 
@@ -1735,7 +1735,7 @@ public:
         @see open()
     */
 
-    inline RC close()
+    RC close()
     {
         oslFileError Error = osl_File_E_BADF;
 
@@ -1766,7 +1766,7 @@ public:
         @see open()
     */
 
-    inline RC reset()
+    RC reset()
     {
         close();
         return open();
@@ -1795,7 +1795,7 @@ public:
         @see DirectoryItem
     */
 
-    inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
+    RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
     {
         if( rItem._pData )
         {
@@ -1837,7 +1837,7 @@ public:
         @see VolumeInfo
     */
 
-    inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
+    static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
     {
         return static_cast< RC >( osl_getVolumeInformation( ustrDirectoryURL.pData, &rInfo._aInfo, rInfo._nMask ) );
     }
@@ -1873,7 +1873,7 @@ public:
         @see remove()
     */
 
-    inline static RC create(
+    static RC create(
         const ::rtl::OUString& ustrDirectoryURL,
         sal_uInt32 flags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write )
     {
@@ -1909,7 +1909,7 @@ public:
         @see create()
     */
 
-    inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
+    static RC remove( const ::rtl::OUString& ustrDirectoryURL )
     {
         return static_cast< RC >( osl_removeDirectory( ustrDirectoryURL.pData ) );
     }

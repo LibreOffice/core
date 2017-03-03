@@ -38,7 +38,7 @@ namespace connectivity
                 ,const OUString& Name
                 ,const std::shared_ptr<sdbcx::KeyProperties>& _rProps
             );
-        inline OTableHelper* getTable() const { return m_pTable; }
+        OTableHelper* getTable() const { return m_pTable; }
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TKEY_HXX

@@ -153,10 +153,10 @@ struct ScMyAreaLink
     ScRange                     aDestRange;
     sal_Int32                   nRefresh;
 
-    inline                      ScMyAreaLink() : nRefresh( 0 ) {}
+    ScMyAreaLink() : nRefresh( 0 ) {}
 
-    inline sal_Int32            GetColCount() const { return aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1; }
-    inline sal_Int32            GetRowCount() const { return aDestRange.aEnd.Row() - aDestRange.aStart.Col() + 1; }
+    sal_Int32            GetColCount() const { return aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1; }
+    sal_Int32            GetRowCount() const { return aDestRange.aEnd.Row() - aDestRange.aStart.Col() + 1; }
 
     bool                        Compare( const ScMyAreaLink& rAreaLink ) const;
     bool                        operator<(const ScMyAreaLink& rAreaLink ) const;
@@ -174,7 +174,7 @@ public:
                                 ScMyAreaLinksContainer();
     virtual                     ~ScMyAreaLinksContainer() override;
 
-    inline void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
+    void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
                                     { aAreaLinkList.push_back( rAreaLink ); }
 
                                 using ScMyIteratorBase::UpdateAddress;
@@ -341,19 +341,19 @@ public:
 
     void                        Clear();
 
-    inline void                 SetShapes(ScMyShapesContainer* pNewShapes)
+    void                 SetShapes(ScMyShapesContainer* pNewShapes)
                                     { pShapes = pNewShapes; }
-    inline void                 SetNoteShapes(ScMyNoteShapesContainer* pNewNoteShapes)
+    void                 SetNoteShapes(ScMyNoteShapesContainer* pNewNoteShapes)
                                     { pNoteShapes = pNewNoteShapes; }
-    inline void                 SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pNewEmptyDatabaseRanges)
+    void                 SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pNewEmptyDatabaseRanges)
                                     { pEmptyDatabaseRanges = pNewEmptyDatabaseRanges; }
-    inline void                 SetMergedRanges(ScMyMergedRangesContainer* pNewMergedRanges)
+    void                 SetMergedRanges(ScMyMergedRangesContainer* pNewMergedRanges)
                                     { pMergedRanges = pNewMergedRanges; }
-    inline void                 SetAreaLinks(ScMyAreaLinksContainer* pNewAreaLinks)
+    void                 SetAreaLinks(ScMyAreaLinksContainer* pNewAreaLinks)
                                     { pAreaLinks = pNewAreaLinks; }
-    inline void                 SetDetectiveObj(ScMyDetectiveObjContainer* pNewDetectiveObj)
+    void                 SetDetectiveObj(ScMyDetectiveObjContainer* pNewDetectiveObj)
                                     { pDetectiveObj = pNewDetectiveObj; }
-    inline void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
+    void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
                                     { pDetectiveOp = pNewDetectiveOp; }
 
     void                        SetCurrentTable(const SCTAB nTable,

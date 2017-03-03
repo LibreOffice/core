@@ -75,7 +75,7 @@ struct SC_DLLPUBLIC ScSortParam
     void            Clear       ();
     void            MoveToDest();
 
-    inline sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
+    sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
 };
 
 namespace sc {

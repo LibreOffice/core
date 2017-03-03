@@ -172,9 +172,9 @@ namespace dbaccess
         }
         /** flag which determines whether the container is filled or not
         */
-        inline bool isInitialized() const { return m_bInitialized; }
-        inline void     setInitialized() {m_bInitialized = true;}
-        inline void     setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
+        bool isInitialized() const { return m_bInitialized; }
+        void     setInitialized() {m_bInitialized = true;}
+        void     setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
 
     public:
         /** constructs an empty container without configuration location.

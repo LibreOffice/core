@@ -106,7 +106,7 @@ public:
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();
-    inline sal_uInt16 Which() const { return GetAttr().Which(); }
+    sal_uInt16 Which() const { return GetAttr().Which(); }
 
     bool operator==( const SwTextAttr& ) const;
 

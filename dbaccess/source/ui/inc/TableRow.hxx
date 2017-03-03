@@ -42,8 +42,8 @@ namespace dbaui
         OTableRow( const OTableRow& rRow, long nPosition = -1 );
         ~OTableRow();
 
-        inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
-        inline bool isValid() const { return GetActFieldDescr() != nullptr; }
+        OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
+        bool isValid() const { return GetActFieldDescr() != nullptr; }
 
         void SetFieldType( const TOTypeInfoSP& _pType, bool _bForce = false );
 
@@ -54,20 +54,20 @@ namespace dbaui
             @return
                 the current position in the table
         */
-        inline sal_Int32 GetPos() const { return m_nPos; }
-        inline void SetPos(sal_Int32 _nPos) { m_nPos = _nPos; }
+        sal_Int32 GetPos() const { return m_nPos; }
+        void SetPos(sal_Int32 _nPos) { m_nPos = _nPos; }
 
         /** set the row readonly
             @param  _bRead
                 if <TRUE/> then the row is readonly, otherwise not
         */
-        inline void SetReadOnly( bool _bRead=true ){ m_bReadOnly = _bRead; }
+        void SetReadOnly( bool _bRead=true ){ m_bReadOnly = _bRead; }
 
         /** returns if the row is readonly
             @return
                 <TRUE/> if readonly, otherwise <FALSE/>
         */
-        inline bool IsReadOnly() const { return m_bReadOnly; }
+        bool IsReadOnly() const { return m_bReadOnly; }
 
         friend SvStream& WriteOTableRow( SvStream& rStr,const OTableRow& _rRow );
         friend SvStream& ReadOTableRow( SvStream& rStr, OTableRow& _rRow );

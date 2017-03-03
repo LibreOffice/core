@@ -400,11 +400,11 @@ public:
     // immediately switch shell -> for GetSelectionObject
     void                    StopShellTimer();
 
-    inline SwWrtShell&      GetWrtShell   () const { return *m_pWrtShell; }
-    inline SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell; }
+    SwWrtShell&      GetWrtShell   () const { return *m_pWrtShell; }
+    SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell; }
 
-    inline       SwEditWin &GetEditWin()        { return *m_pEditWin; }
-    inline const SwEditWin &GetEditWin () const { return *m_pEditWin; }
+    SwEditWin &GetEditWin()        { return *m_pEditWin; }
+    const SwEditWin &GetEditWin () const { return *m_pEditWin; }
 
 #if defined(_WIN32) || defined UNX
     void ScannerEventHdl( const css::lang::EventObject& rEventObject );
@@ -413,7 +413,7 @@ public:
     // hand the handler for text blocks to the shell; create if applicable
     SwGlossaryHdl*          GetGlosHdl();
 
-    inline const Rectangle& GetVisArea() const { return m_aVisArea; }
+    const Rectangle& GetVisArea() const { return m_aVisArea; }
 
     bool            IsScroll(const Rectangle& rRect) const;
     void            Scroll( const Rectangle& rRect,
@@ -512,14 +512,14 @@ public:
 
     // functions for drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);
-    inline SwDrawBase* GetDrawFuncPtr() const  { return m_pDrawActual; }
+    SwDrawBase* GetDrawFuncPtr() const  { return m_pDrawActual; }
     void            GetDrawState(SfxItemSet &rSet);
     void            ExitDraw();
-    inline bool     IsDrawRotate()      { return m_bDrawRotate; }
-    inline void     FlipDrawRotate()    { m_bDrawRotate = !m_bDrawRotate; }
-    inline bool     IsDrawSelMode()     { return m_bDrawSelMode; }
+    bool     IsDrawRotate()      { return m_bDrawRotate; }
+    void     FlipDrawRotate()    { m_bDrawRotate = !m_bDrawRotate; }
+    bool     IsDrawSelMode()     { return m_bDrawSelMode; }
     void            SetSelDrawSlot();
-    inline void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
+    void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
     void            NoRotate();     // turn off rotate mode
     bool            EnterDrawTextMode(const Point& aDocPos);
     /// Same as EnterDrawTextMode(), but takes an SdrObject instead of guessing it by document position.
@@ -562,8 +562,8 @@ public:
                  SfxShell       *GetCurShell()  { return m_pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
-    inline virtual       FmFormShell    *GetFormShell()       override { return m_pFormShell; }
-    inline virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
+    virtual       FmFormShell    *GetFormShell()       override { return m_pFormShell; }
+    virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = nullptr; }

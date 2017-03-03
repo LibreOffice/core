@@ -69,8 +69,8 @@ struct ScCsvExpData
     sal_Int32                   mnIndex;        /// Index of a column.
     sal_uInt8                   mnType;         /// External type of the column.
 
-    inline                      ScCsvExpData() : mnIndex( 0 ), mnType( SC_COL_STANDARD ) {}
-    inline                      ScCsvExpData( sal_Int32 nIndex, sal_uInt8 nType ) :
+    ScCsvExpData() : mnIndex( 0 ), mnType( SC_COL_STANDARD ) {}
+    ScCsvExpData( sal_Int32 nIndex, sal_uInt8 nType ) :
                                     mnIndex( nIndex ), mnType( nType ) {}
 };
 
@@ -207,14 +207,14 @@ private:
     sal_Int32                   mnParam2;       /// Second parameter.
 
 public:
-    inline explicit             ScCsvCmd() : meType( CSVCMD_NONE ),
+    explicit             ScCsvCmd() : meType( CSVCMD_NONE ),
                                     mnParam1( CSV_POS_INVALID ), mnParam2( CSV_POS_INVALID ) {}
 
     inline void                 Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 );
 
-    inline ScCsvCmdType         GetType() const     { return meType; }
-    inline sal_Int32            GetParam1() const   { return mnParam1; }
-    inline sal_Int32            GetParam2() const   { return mnParam2; }
+    ScCsvCmdType         GetType() const     { return meType; }
+    sal_Int32            GetParam1() const   { return mnParam1; }
+    sal_Int32            GetParam2() const   { return mnParam2; }
 };
 
 inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
@@ -262,11 +262,11 @@ public:
     // repaint helpers --------------------------------------------------------
 
     /** Sets the graphic invalid (next Redraw() will not use cached graphic). */
-    inline void                 InvalidateGfx() { mbValidGfx = false; }
+    void                 InvalidateGfx() { mbValidGfx = false; }
     /** Sets the graphic valid (next Redraw() will use cached graphic). */
-    inline void                 ValidateGfx() { mbValidGfx = true; }
+    void                 ValidateGfx() { mbValidGfx = true; }
     /** Returns true, if cached graphic is valid. */
-    inline bool                 IsValidGfx() const { return mbValidGfx; }
+    bool                 IsValidGfx() const { return mbValidGfx; }
 
     /** Repaints all controls.
         @param bInvalidate  true = invalidates graphics of this control (not all). */
@@ -276,14 +276,14 @@ public:
     /** Decreases no-repaint counter and repaints if counter reaches 0. */
     void                        EnableRepaint();
     /** Returns true, if controls will not repaint. */
-    inline bool                 IsNoRepaint() const { return mrData.mnNoRepaint > 0; }
+    bool                 IsNoRepaint() const { return mrData.mnNoRepaint > 0; }
 
     // command handling -------------------------------------------------------
 
     /** Sets a new command handler. */
-    inline void                 SetCmdHdl( const Link<ScCsvControl&,void>& rHdl ) { maCmdHdl = rHdl; }
+    void                 SetCmdHdl( const Link<ScCsvControl&,void>& rHdl ) { maCmdHdl = rHdl; }
     /** Returns data of the last command. */
-    inline const ScCsvCmd&      GetCmd() const { return maCmd; }
+    const ScCsvCmd&      GetCmd() const { return maCmd; }
 
     /** Executes a command by calling command handler. */
     void                        Execute(
@@ -294,18 +294,18 @@ public:
     // layout helpers ---------------------------------------------------------
 
     /** Returns a reference to the current layout data. */
-    inline const ScCsvLayoutData& GetLayoutData() const { return mrData; }
+    const ScCsvLayoutData& GetLayoutData() const { return mrData; }
     /** Returns true, if the Right-to-Left layout mode is active. */
-    inline bool                 IsRTL() const { return mrData.mbAppRTL; }
+    bool                 IsRTL() const { return mrData.mbAppRTL; }
 
     /** Returns the number of available positions. */
-    inline sal_Int32            GetPosCount() const { return mrData.mnPosCount; }
+    sal_Int32            GetPosCount() const { return mrData.mnPosCount; }
     /** Returns the number of visible positions. */
     sal_Int32                   GetVisPosCount() const;
     /** Returns the first visible position. */
-    inline sal_Int32            GetFirstVisPos() const { return mrData.mnPosOffset; }
+    sal_Int32            GetFirstVisPos() const { return mrData.mnPosOffset; }
     /** Returns the last visible position. */
-    inline sal_Int32            GetLastVisPos() const { return GetFirstVisPos() + GetVisPosCount(); }
+    sal_Int32            GetLastVisPos() const { return GetFirstVisPos() + GetVisPosCount(); }
     /** Returns highest possible position for first visible character. */
     sal_Int32                   GetMaxPosOffset() const;
 
@@ -315,9 +315,9 @@ public:
     bool                        IsVisibleSplitPos( sal_Int32 nPos ) const;
 
     /** Returns the width of the header column. */
-    inline sal_Int32            GetHdrWidth() const { return mrData.mnHdrWidth; }
+    sal_Int32            GetHdrWidth() const { return mrData.mnHdrWidth; }
     /** Returns the width of one character column. */
-    inline sal_Int32            GetCharWidth() const { return mrData.mnCharWidth; }
+    sal_Int32            GetCharWidth() const { return mrData.mnCharWidth; }
     /** Returns the start position of the header column. */
     sal_Int32                   GetHdrX() const;
     /** Returns the X position of the first pixel of the data area. */
@@ -330,11 +330,11 @@ public:
     sal_Int32                   GetPosFromX( sal_Int32 nX ) const;
 
     /** Returns the number of data lines. */
-    inline sal_Int32            GetLineCount() const { return mrData.mnLineCount; }
+    sal_Int32            GetLineCount() const { return mrData.mnLineCount; }
     /** Returns the number of visible lines (including partly visible bottom line). */
     sal_Int32                   GetVisLineCount() const;
     /** Returns index of first visible line. */
-    inline sal_Int32            GetFirstVisLine() const { return mrData.mnLineOffset; }
+    sal_Int32            GetFirstVisLine() const { return mrData.mnLineOffset; }
     /** Returns index of last visible line. */
     sal_Int32                   GetLastVisLine() const;
     /** Returns highest possible index for first line. */
@@ -346,18 +346,18 @@ public:
     bool                        IsVisibleLine( sal_Int32 nLine ) const;
 
     /** Returns the height of the header line. */
-    inline sal_Int32            GetHdrHeight() const { return mrData.mnHdrHeight; }
+    sal_Int32            GetHdrHeight() const { return mrData.mnHdrHeight; }
     /** Returns the height of one line. */
-    inline sal_Int32            GetLineHeight() const { return mrData.mnLineHeight; }
+    sal_Int32            GetLineHeight() const { return mrData.mnLineHeight; }
     /** Returns output Y coordinate of the specified line. */
     sal_Int32                   GetY( sal_Int32 nLine ) const;
     /** Returns line index from output coordinate. */
     sal_Int32                   GetLineFromY( sal_Int32 nY ) const;
 
     /** Returns the ruler cursor position. */
-    inline sal_Int32            GetRulerCursorPos() const { return mrData.mnPosCursor; }
+    sal_Int32            GetRulerCursorPos() const { return mrData.mnPosCursor; }
     /** Returns the data grid cursor position (not column index!). */
-    inline sal_Int32            GetGridCursorPos() const { return mrData.mnColCursor; }
+    sal_Int32            GetGridCursorPos() const { return mrData.mnColCursor; }
 
     // static helpers ---------------------------------------------------------
 

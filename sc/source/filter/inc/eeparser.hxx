@@ -124,7 +124,7 @@ public:
     void                    GetDimensions( SCCOL& nCols, SCROW& nRows ) const
                                 { nCols = nColMax; nRows = nRowMax; }
 
-    inline size_t           ListSize() const{ return maList.size(); }
+    size_t           ListSize() const{ return maList.size(); }
     ScEEParseEntry*         ListEntry( size_t index ) { return maList[ index ]; }
     const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[ index ]; }
 };

@@ -27,7 +27,7 @@ namespace wrapper
         Instance& operator=( const Instance& other );
         virtual ~Instance();
 
-        inline operator libvlc_instance_t*()
+        operator libvlc_instance_t*()
         {
             return mInstance;
         }

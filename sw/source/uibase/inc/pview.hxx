@@ -232,9 +232,9 @@ private:
     static void InitInterface_Impl();
 
 public:
-    inline SwViewShell* GetViewShell() const
+    SwViewShell* GetViewShell() const
     { return m_pViewWin->GetViewShell(); }
-    inline void RepaintCoreRect( const SwRect& rRect )
+    void RepaintCoreRect( const SwRect& rRect )
     { m_pViewWin->RepaintCoreRect( rRect ); }
 
     void DocSzChgd(const Size& rNewSize);
@@ -271,12 +271,12 @@ public:
 
     // Inline method to request values of new members
     // <mbResetFormDesignMode> and <mbFormDesignModeToReset>
-    inline bool ResetFormDesignMode() const
+    bool ResetFormDesignMode() const
     {
         return mbResetFormDesignMode;
     }
 
-    inline bool FormDesignModeToReset() const
+    bool FormDesignModeToReset() const
     {
         return mbFormDesignModeToReset;
     }

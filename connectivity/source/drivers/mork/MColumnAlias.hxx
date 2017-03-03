@@ -60,8 +60,8 @@ namespace connectivity
 
             OString getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const;
 
-            inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
-            inline AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
+            AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
+            AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
 
 
         private:

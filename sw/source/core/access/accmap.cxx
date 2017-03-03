@@ -426,16 +426,16 @@ public:
     }
 
     // <SetType(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
-    inline void SetType( EventType eT )
+    void SetType( EventType eT )
     {
         meType = eT;
     }
-    inline EventType GetType() const
+    EventType GetType() const
     {
         return meType;
     }
 
-    inline ::rtl::Reference < SwAccessibleContext > GetContext() const
+    ::rtl::Reference < SwAccessibleContext > GetContext() const
     {
         uno::Reference < XAccessible > xTmp( mxAcc );
         ::rtl::Reference < SwAccessibleContext > xAccImpl(
@@ -444,55 +444,55 @@ public:
         return xAccImpl;
     }
 
-    inline const SwRect& GetOldBox() const
+    const SwRect& GetOldBox() const
     {
         return maOldBox;
     }
     // <SetOldBox(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
-    inline void SetOldBox( const SwRect& rOldBox )
+    void SetOldBox( const SwRect& rOldBox )
     {
         maOldBox = rOldBox;
     }
 
-    inline const SwAccessibleChild& GetFrameOrObj() const
+    const SwAccessibleChild& GetFrameOrObj() const
     {
         return maFrameOrObj;
     }
 
     // <SetStates(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
-    inline void SetStates( AccessibleStates _nStates )
+    void SetStates( AccessibleStates _nStates )
     {
         mnStates |= _nStates;
     }
 
-    inline bool IsUpdateCursorPos() const
+    bool IsUpdateCursorPos() const
     {
         return bool(mnStates & AccessibleStates::CARET);
     }
-    inline bool IsInvalidateStates() const
+    bool IsInvalidateStates() const
     {
         return bool(mnStates & (AccessibleStates::EDITABLE | AccessibleStates::OPAQUE));
     }
-    inline bool IsInvalidateRelation() const
+    bool IsInvalidateRelation() const
     {
         return bool(mnStates & (AccessibleStates::RELATION_FROM | AccessibleStates::RELATION_TO));
     }
-    inline bool IsInvalidateTextSelection() const
+    bool IsInvalidateTextSelection() const
     {
         return bool( mnStates & AccessibleStates::TEXT_SELECTION_CHANGED );
     }
 
-    inline bool IsInvalidateTextAttrs() const
+    bool IsInvalidateTextAttrs() const
     {
         return bool( mnStates & AccessibleStates::TEXT_ATTRIBUTE_CHANGED );
     }
 
-    inline AccessibleStates GetStates() const
+    AccessibleStates GetStates() const
     {
         return mnStates;
     }
 
-    inline AccessibleStates GetAllStates() const
+    AccessibleStates GetAllStates() const
     {
         return mnStates;
     }
@@ -508,11 +508,11 @@ public:
         : mbFiring( false )
     {}
 
-    inline void SetFiring()
+    void SetFiring()
     {
         mbFiring = true;
     }
-    inline bool IsFiring() const
+    bool IsFiring() const
     {
         return mbFiring;
     }
@@ -685,7 +685,7 @@ public:
     void AdjustMapMode( MapMode& rMapMode,
                         const Point& rPoint ) const;
 
-    inline const SwPageFrame *GetSelPage() const { return mpSelPage; }
+    const SwPageFrame *GetSelPage() const { return mpSelPage; }
 
     void DisposePage(const SwPageFrame *pPageFrame );
 };

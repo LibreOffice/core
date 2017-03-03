@@ -55,7 +55,7 @@ namespace frm
         void registerEngineStatusListener( IEngineStatusListener* _pListener );
         void revokeEngineStatusListener( IEngineStatusListener* _pListener );
 
-        inline SfxItemPool* getPool() { return m_pEnginePool; }
+        SfxItemPool* getPool() { return m_pEnginePool; }
 
     protected:
         /** constructs a new RichTextEngine. The instances takes the ownership of the given SfxItemPool

@@ -81,8 +81,8 @@ class SVL_DLLPUBLIC SvxMacroTableDtor
 private:
     SvxMacroTable aSvxMacroTable;
 public:
-    inline SvxMacroTableDtor() {}
-    inline SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : aSvxMacroTable(rCpy.aSvxMacroTable) { }
+    SvxMacroTableDtor() {}
+    SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : aSvxMacroTable(rCpy.aSvxMacroTable) { }
 
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
     bool operator==( const SvxMacroTableDtor& rOther ) const;
@@ -133,8 +133,8 @@ public:
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
-    inline const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
-    inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }
+    const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
+    void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }
 
     inline const SvxMacro& GetMacro( sal_uInt16 nEvent ) const;
     inline bool HasMacro( sal_uInt16 nEvent ) const;

@@ -130,9 +130,9 @@ public:
     void        copy();
     void        paste();
 
-    inline sal_Int32   getGroupPosition(sal_Int32 _nRow) const { return _nRow != BROWSER_ENDOFSELECTION ? m_aGroupPositions[_nRow] : sal_Int32(NO_GROUP); }
+    sal_Int32   getGroupPosition(sal_Int32 _nRow) const { return _nRow != BROWSER_ENDOFSELECTION ? m_aGroupPositions[_nRow] : sal_Int32(NO_GROUP); }
 
-    inline ::svt::ComboBoxControl*  getExpressionControl() const { return m_pComboCell; }
+    ::svt::ComboBoxControl*  getExpressionControl() const { return m_pComboCell; }
 
     /** returns the sequence with the selected groups
     */

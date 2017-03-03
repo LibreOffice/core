@@ -87,20 +87,20 @@ public:
                                     RootData* pRoot,
                                     const ScRange& rRange);
 
-    inline bool                 IsActive() const    { return bActive; }
-    inline bool                 IsFiltered() const  { return bAutoOrAdvanced; }
-    inline SCTAB                Tab() const         { return aParam.nTab; }
-    inline SCCOL                StartCol() const    { return aParam.nCol1; }
-    inline SCROW                StartRow() const    { return aParam.nRow1; }
-    inline SCCOL                EndCol() const      { return aParam.nCol2; }
-    inline SCROW                EndRow() const      { return aParam.nRow2; }
+    bool                 IsActive() const    { return bActive; }
+    bool                 IsFiltered() const  { return bAutoOrAdvanced; }
+    SCTAB                Tab() const         { return aParam.nTab; }
+    SCCOL                StartCol() const    { return aParam.nCol1; }
+    SCROW                StartRow() const    { return aParam.nRow1; }
+    SCCOL                EndCol() const      { return aParam.nCol2; }
+    SCROW                EndRow() const      { return aParam.nRow2; }
 
     void ReadAutoFilter( XclImpStream& rStrm, svl::SharedStringPool& rPool );
 
-    inline void                 Activate()          { bActive = true; }
+    void                 Activate()          { bActive = true; }
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
-    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = true; }
+    void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = true; }
     void                        Apply();
     void                        EnableRemoveFilter();
 };

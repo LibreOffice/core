@@ -54,7 +54,7 @@ public:
                             const OUString& rName, sal_uInt16 nFlags = 0 );
 
     /** Returns the name string of the external name. */
-    inline const OUString& GetName() const { return maName; }
+    const OUString& GetName() const { return maName; }
 
 private:
     /** Writes the start of the record that is equal in all EXTERNNAME records and calls WriteAddData(). */
@@ -197,7 +197,7 @@ public:
                             ScExternalRefCache::TableTypeRef const & xCacheTable );
 
     /** Returns the external sheet name. */
-    inline const XclExpString& GetTabName() const { return maTabName; }
+    const XclExpString& GetTabName() const { return maTabName; }
 
     /** Stores all cells in the given range in the CRN list. */
     void                StoreCellRange( const ScRange& rRange );
@@ -373,12 +373,12 @@ struct XclExpXti
     sal_uInt16          mnFirstSBTab;   /// Index to the first sheet of the range in the SUPBOOK.
     sal_uInt16          mnLastSBTab;    /// Index to the last sheet of the range in the SUPBOOK.
 
-    inline explicit     XclExpXti() : mnSupbook( 0 ), mnFirstSBTab( 0 ), mnLastSBTab( 0 ) {}
-    inline explicit     XclExpXti( sal_uInt16 nSupbook, sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) :
+    explicit     XclExpXti() : mnSupbook( 0 ), mnFirstSBTab( 0 ), mnLastSBTab( 0 ) {}
+    explicit     XclExpXti( sal_uInt16 nSupbook, sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) :
                             mnSupbook( nSupbook ), mnFirstSBTab( nFirstSBTab ), mnLastSBTab( nLastSBTab ) {}
 
     /** Writes this XTI structure (inside of the EXTERNSHEET record). */
-    inline void         Save( XclExpStream& rStrm ) const
+    void         Save( XclExpStream& rStrm ) const
                             { rStrm << mnSupbook << mnFirstSBTab << mnLastSBTab; }
 };
 
@@ -444,7 +444,7 @@ public:
     {
         sal_uInt16          mnSupbook;          /// SUPBOOK index for an Excel sheet.
         sal_uInt16          mnSBTab;            /// Sheet name index in SUPBOOK for an Excel sheet.
-        inline void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
+        void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
                                 { mnSupbook = nSupbook; mnSBTab = nSBTab; }
     };
     typedef ::std::vector< XclExpSBIndex > XclExpSBIndexVec;

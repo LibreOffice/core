@@ -238,7 +238,7 @@ namespace xmloff
 
             <p>If _bAddType is set, an additional xlink:type="simple" attribute is also added.</p>
         */
-        inline void exportTargetLocationAttribute(bool _bAddType) { exportRelativeTargetLocation(PROPERTY_TARGETURL,CCAFlags::TargetLocation,_bAddType); }
+        void exportTargetLocationAttribute(bool _bAddType) { exportRelativeTargetLocation(PROPERTY_TARGETURL,CCAFlags::TargetLocation,_bAddType); }
 
         /** add the form:image attribute to the export context.
 
@@ -246,7 +246,7 @@ namespace xmloff
 
             <p>The property needs a special handling because the URL's need to be made relative</p>
         */
-        inline void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCAFlags::ImageData,false); }
+        void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCAFlags::ImageData,false); }
 
         /** flag the style properties as 'already exported'
 

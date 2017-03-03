@@ -50,7 +50,7 @@ struct LangSvcEntries
         aSvcImplNames[0] = rSvcImplName;
     }
 
-    inline void Clear()
+    void Clear()
     {
         aSvcImplNames.realloc(0);
         nLastTriedSvcIndex  = -1;

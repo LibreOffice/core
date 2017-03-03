@@ -34,10 +34,10 @@ namespace dbaui
         OTableFieldInfo();
         ~OTableFieldInfo();
 
-        inline ETableFieldType  GetKeyType() const { return m_eFieldType; }
-        inline void             SetKey(ETableFieldType bKey) { m_eFieldType = bKey; }
-        inline sal_Int32        GetDataType() const { return m_eDataType; }
-        inline void             SetDataType(sal_Int32 eTyp) { m_eDataType = eTyp; }
+        ETableFieldType  GetKeyType() const { return m_eFieldType; }
+        void             SetKey(ETableFieldType bKey) { m_eFieldType = bKey; }
+        sal_Int32        GetDataType() const { return m_eDataType; }
+        void             SetDataType(sal_Int32 eTyp) { m_eDataType = eTyp; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_TABLEFIELDINFO_HXX

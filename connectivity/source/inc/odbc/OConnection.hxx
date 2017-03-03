@@ -120,12 +120,12 @@ namespace connectivity
             SQLHANDLE       getConnection() { return m_aConnectionHandle; }
 
             // should we use the catalog on filebased databases
-            inline bool     isCatalogUsed()                     const { return m_bUseCatalog; }
-            inline bool     isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
-            inline bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
-            inline bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
-            inline bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
-            inline ODBCDriver*      getDriver()                     const { return m_pDriver;}
+            bool     isCatalogUsed()                     const { return m_bUseCatalog; }
+            bool     isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
+            bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
+            bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
+            bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
+            ODBCDriver*      getDriver()                     const { return m_pDriver;}
 
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE

@@ -41,7 +41,7 @@ namespace pcr
             const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB
         );
 
-        inline operator const css::util::URL& () const { return m_aURL; }
+        operator const css::util::URL& () const { return m_aURL; }
     };
 
 

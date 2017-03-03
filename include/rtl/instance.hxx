@@ -270,7 +270,7 @@ template< typename Inst, typename InstCtor,
 class rtl_Instance
 {
 public:
-    static inline Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor)
+    static Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor)
     {
 #if defined _MSC_VER
         static Inst * m_pInstance = 0;
@@ -294,7 +294,7 @@ public:
         return p;
     }
 
-    static inline Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
+    static Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
                                 DataCtor aDataCtor)
     {
 #if defined _MSC_VER
@@ -320,7 +320,7 @@ public:
         return p;
     }
 
-    static inline Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
+    static Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
                                 const Data &rData)
     {
 #if defined _MSC_VER

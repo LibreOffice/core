@@ -84,28 +84,28 @@ namespace objectpositioning
         virtual ~SwAnchoredObjectPosition();
 
         // accessors for object and its corresponding data/information
-        inline SdrObject& GetObject() const
+        SdrObject& GetObject() const
         {
             return mrDrawObj;
         }
-        inline bool IsObjFly() const
+        bool IsObjFly() const
         {
             return mbIsObjFly;
         }
-        inline SwAnchoredObject& GetAnchoredObj() const
+        SwAnchoredObject& GetAnchoredObj() const
         {
             return *mpAnchoredObj;
         }
-        inline SwFrame& GetAnchorFrame() const
+        SwFrame& GetAnchorFrame() const
         {
             return *mpAnchorFrame;
         }
-        inline const SwFrameFormat& GetFrameFormat() const
+        const SwFrameFormat& GetFrameFormat() const
         {
             return *mpFrameFormat;
         }
         // #i62875#
-        inline bool DoesObjFollowsTextFlow() const
+        bool DoesObjFollowsTextFlow() const
         {
             return mbFollowTextFlow;
         }
@@ -181,7 +181,7 @@ namespace objectpositioning
             object has to be checked and thus, (if needed) the proposed
             relative position has to be adjusted. default value <true>
         */
-        inline SwTwips AdjustVertRelPos( const SwTwips nTopOfAnch,
+        SwTwips AdjustVertRelPos( const SwTwips nTopOfAnch,
                                           const bool bVert,
                                           const bool bVertL2R,
                                           const SwFrame& rPageAlignLayFrame,
@@ -261,7 +261,7 @@ namespace objectpositioning
 
             @return adjusted relative horizontal position in SwTwips.
         */
-        inline SwTwips AdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
+        SwTwips AdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                           const SwTwips _nProposedRelPosX ) const
         {
             return !mbDoNotCaptureAnchoredObj

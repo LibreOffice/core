@@ -61,7 +61,7 @@ namespace dbaccess
         // css::lang::XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
 
-        inline void setName( const OUString& _sName ) { m_sName = _sName; }
+        void setName( const OUString& _sName ) { m_sName = _sName; }
         void setDefinition( const css::uno::Reference< css::beans::XPropertySet >& _xDest);
         const css::uno::Reference< css::beans::XPropertySet >& getDefinition() const { return m_xDest; }
     };

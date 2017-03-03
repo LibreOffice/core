@@ -61,8 +61,8 @@ namespace svx
         );
 
         /// determines whether the feature we're responsible for is currently enabled
-        inline  bool                                isFeatureEnabled( ) const { return m_bFeatureEnabled; }
-        inline  const css::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
+        bool                                isFeatureEnabled( ) const { return m_bFeatureEnabled; }
+        const css::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
 
         /** dispatches the feature URL to the dispatcher
         */

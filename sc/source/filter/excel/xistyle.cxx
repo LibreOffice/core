@@ -1588,7 +1588,7 @@ namespace {
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    inline bool operator()( const OUString& rName1, const OUString& rName2 ) const
+    bool operator()( const OUString& rName1, const OUString& rName2 ) const
         { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
 };
 

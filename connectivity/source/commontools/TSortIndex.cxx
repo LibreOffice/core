@@ -33,7 +33,7 @@ struct TKeyValueFunc : std::binary_function<OSortIndex::TIntValuePairVector::val
     {
     }
     // return false if compared values are equal otherwise true
-    inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
+    bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
     {
         const std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
         std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();

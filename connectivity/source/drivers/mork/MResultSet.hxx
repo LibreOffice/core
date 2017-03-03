@@ -231,7 +231,7 @@ protected:
             ::rtl::Reference<OKeySet>     m_pKeySet;
             sal_Int32                     m_nUpdatedRow;    //updated row
             TriState                      m_bIsReadOnly;
-            inline void resetParameters() { m_nParamIndex = 0; }
+            void resetParameters() { m_nParamIndex = 0; }
 
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
             ::rtl::Reference<connectivity::OSQLColumns>  m_xParamColumns;
@@ -318,7 +318,7 @@ public:
             void            methodEntry();
 
             private:
-                inline void impl_ensureKeySet()
+                void impl_ensureKeySet()
                 {
                     if ( !m_pKeySet.is() )
                         m_pKeySet = new OKeySet();

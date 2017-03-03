@@ -34,7 +34,7 @@ class SwTextFrameInfo
     static SwTwips GetLineStart( const SwTextCursor &rLine );
 
 public:
-    inline SwTextFrameInfo( const SwTextFrame *pTextFrame ) : pFrame(pTextFrame) { }
+    SwTextFrameInfo( const SwTextFrame *pTextFrame ) : pFrame(pTextFrame) { }
 
     // Does the paragraph fit into a single line?
     bool IsOneLine() const;

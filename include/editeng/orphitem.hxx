@@ -48,7 +48,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    inline SvxOrphansItem& operator=( const SvxOrphansItem& rOrphans )
+    SvxOrphansItem& operator=( const SvxOrphansItem& rOrphans )
     {
         SetValue( rOrphans.GetValue() );
         return *this;

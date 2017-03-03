@@ -55,7 +55,7 @@ public:
     virtual void             ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
-    inline SvxFontWidthItem& operator=(const SvxFontWidthItem& rItem )
+    SvxFontWidthItem& operator=(const SvxFontWidthItem& rItem )
         {
             SetWidthValue( rItem.GetWidth() );
             SetProp( rItem.GetProp() );

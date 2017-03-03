@@ -57,10 +57,10 @@ struct XclExpScToken
     const FormulaToken* mpScToken;          /// Currently processed Calc token.
     sal_uInt8           mnSpaces;           /// Number of spaces before the Calc token.
 
-    inline explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
-    inline bool         Is() const { return mpScToken != nullptr; }
-    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
-    inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
+    explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
+    bool         Is() const { return mpScToken != nullptr; }
+    StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
+    OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
 /** Effective token class conversion types. */
@@ -83,7 +83,7 @@ struct XclExpTokenConvInfo
     or for all parameters of a function. */
 struct XclExpOperandList : public std::vector< XclExpTokenConvInfo >
 {
-    inline explicit     XclExpOperandList() { reserve( 2 ); }
+    explicit     XclExpOperandList() { reserve( 2 ); }
     void                AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eConv, bool bValType );
 };
 
@@ -106,7 +106,7 @@ struct XclExpExtFuncData
     bool                mbVBasic;           /// True = Visual Basic macro call.
     bool                mbHidden;           /// True = Create hidden defined name.
 
-    inline explicit     XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
+    explicit     XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
     void                Set( const OUString& rFuncName, bool bVBasic, bool bHidden );
 };
 
@@ -126,30 +126,30 @@ public:
                             const XclFunctionInfo& rFuncInfo,
                             const XclExpExtFuncData& rExtFuncData );
 
-    inline const FormulaToken& GetScToken() const { return *mrTokData.mpScToken; }
-    inline OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
-    inline sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
-    inline bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
-    inline bool         IsFixedParamCount() const { return mrFuncInfo.IsFixedParamCount(); }
-    inline bool         IsAddInEquivalent() const { return mrFuncInfo.IsAddInEquivalent(); }
-    inline bool         IsMacroFunc() const { return mrFuncInfo.IsMacroFunc(); }
-    inline sal_uInt8    GetSpaces() const { return mrTokData.mnSpaces; }
-    inline const XclExpExtFuncData& GetExtFuncData() const { return maExtFuncData; }
-    inline sal_uInt8    GetReturnClass() const { return mrFuncInfo.mnRetClass; }
+    const FormulaToken& GetScToken() const { return *mrTokData.mpScToken; }
+    OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
+    sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
+    bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
+    bool         IsFixedParamCount() const { return mrFuncInfo.IsFixedParamCount(); }
+    bool         IsAddInEquivalent() const { return mrFuncInfo.IsAddInEquivalent(); }
+    bool         IsMacroFunc() const { return mrFuncInfo.IsMacroFunc(); }
+    sal_uInt8    GetSpaces() const { return mrTokData.mnSpaces; }
+    const XclExpExtFuncData& GetExtFuncData() const { return maExtFuncData; }
+    sal_uInt8    GetReturnClass() const { return mrFuncInfo.mnRetClass; }
 
     const XclFuncParamInfo& GetParamInfo() const;
     bool                IsCalcOnlyParam() const;
     bool                IsExcelOnlyParam() const;
     void                IncParamInfoIdx();
 
-    inline sal_uInt8    GetMinParamCount() const { return mrFuncInfo.mnMinParamCount; }
-    inline sal_uInt8    GetMaxParamCount() const { return mrFuncInfo.mnMaxParamCount; }
-    inline sal_uInt8    GetParamCount() const { return static_cast< sal_uInt8 >( mxOperands->size() ); }
+    sal_uInt8    GetMinParamCount() const { return mrFuncInfo.mnMinParamCount; }
+    sal_uInt8    GetMaxParamCount() const { return mrFuncInfo.mnMaxParamCount; }
+    sal_uInt8    GetParamCount() const { return static_cast< sal_uInt8 >( mxOperands->size() ); }
     void                FinishParam( sal_uInt16 nTokPos );
     const XclExpOperandListRef& GetOperandList() const { return mxOperands; }
 
-    inline ScfUInt16Vec& GetAttrPosVec() { return maAttrPosVec; }
-    inline void         AppendAttrPos( sal_uInt16 nPos ) { maAttrPosVec.push_back( nPos ); }
+    ScfUInt16Vec& GetAttrPosVec() { return maAttrPosVec; }
+    void         AppendAttrPos( sal_uInt16 nPos ) { maAttrPosVec.push_back( nPos ); }
 
 private:
     ScfUInt16Vec        maAttrPosVec;       /// Token array positions of tAttr tokens.
@@ -315,7 +315,7 @@ public:
 
 private:
     const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
-    inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( mxData->maTokVec.size() ); }
+    sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( mxData->maTokVec.size() ); }
 
     void                Init( XclFormulaType eType );
     void                Init( XclFormulaType eType, const ScTokenArray& rScTokArr,

@@ -280,15 +280,15 @@ public:
     bool        IsStreamValid() const                        { return bStreamValid; }
     void        SetStreamValid( bool bSet, bool bIgnoreLock = false );
 
-    SAL_WARN_UNUSED_RESULT inline bool IsColValid( SCCOL nScCol ) const
+    SAL_WARN_UNUSED_RESULT bool IsColValid( SCCOL nScCol ) const
     {
         return nScCol >= static_cast< SCCOL >( 0 ) && nScCol < aCol.size();
     }
-    SAL_WARN_UNUSED_RESULT inline bool IsColRowValid( SCCOL nScCol, SCROW nScRow ) const
+    SAL_WARN_UNUSED_RESULT bool IsColRowValid( SCCOL nScCol, SCROW nScRow ) const
     {
         return IsColValid( nScCol ) && ValidRow( nScRow );
     }
-    SAL_WARN_UNUSED_RESULT inline bool IsColRowTabValid( SCCOL nScCol, SCROW nScRow, SCTAB nScTab ) const
+    SAL_WARN_UNUSED_RESULT bool IsColRowTabValid( SCCOL nScCol, SCROW nScRow, SCTAB nScTab ) const
     {
         return IsColValid( nScCol ) && ValidRow( nScRow ) && ValidTab( nScTab );
     }

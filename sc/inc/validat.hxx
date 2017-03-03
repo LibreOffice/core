@@ -113,8 +113,8 @@ public:
 
     ScValidationMode GetDataMode() const    { return eDataMode; }
 
-    inline sal_Int16 GetListType() const                { return mnListType; }
-    inline void     SetListType( sal_Int16 nListType )  { mnListType = nListType; }
+    sal_Int16 GetListType() const                { return mnListType; }
+    void     SetListType( sal_Int16 nListType )  { mnListType = nListType; }
 
     /** Returns true, if the validation cell will show a selection list.
         @descr  Use this instead of GetListType() which returns the raw property

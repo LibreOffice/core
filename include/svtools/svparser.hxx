@@ -110,19 +110,19 @@ public:
 
     virtual  SvParserState CallParser() = 0; // calling of the parser
 
-    inline SvParserState GetStatus() const  { return eState; }  // StatusInfo
+    SvParserState GetStatus() const  { return eState; }  // StatusInfo
 
-    inline sal_uLong    GetLineNr() const       { return nlLineNr; }
-    inline sal_uLong    GetLinePos() const      { return nlLinePos; }
-    inline void         IncLineNr()             { ++nlLineNr; }
-    inline sal_uLong    IncLinePos()            { return ++nlLinePos; }
+    sal_uLong    GetLineNr() const       { return nlLineNr; }
+    sal_uLong    GetLinePos() const      { return nlLinePos; }
+    void         IncLineNr()             { ++nlLineNr; }
+    sal_uLong    IncLinePos()            { return ++nlLinePos; }
     inline void         SetLineNr( sal_uLong nlNum );           // inline bottom
     inline void         SetLinePos( sal_uLong nlPos );          // inline bottom
 
     sal_uInt32 GetNextChar();   // Return next Unicode codepoint in UTF32.
     void RereadLookahead();
 
-    inline bool IsParserWorking() const { return SvParserState::Working == eState; }
+    bool IsParserWorking() const { return SvParserState::Working == eState; }
 
     Link<LinkParamNone*,void> GetAsynchCallLink() const
         { return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }

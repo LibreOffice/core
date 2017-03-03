@@ -150,7 +150,7 @@ public:
     void SetUpdateExpFields() {m_bUpdateExpFields = true; }
 
     inline void SetCheckPageNum( sal_uInt16 nNew );
-    inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { m_nCheckPageNum = nNew; }
+    void SetCheckPageNumDirect( sal_uInt16 nNew ) { m_nCheckPageNum = nNew; }
 
     void Action(OutputDevice* pRenderContext); // here it begins
     void Reset();   // back to CTor-defaults

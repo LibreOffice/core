@@ -59,11 +59,11 @@ class PageCache :
     size_t       m_nHit;
     size_t       m_nMissed;
 
-    static inline int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
+    static int hash_Impl(sal_uInt32 a, size_t s, size_t q, size_t m)
     {
         return static_cast<int>((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m));
     }
-    inline int hash_index_Impl (sal_uInt32 nOffset)
+    int hash_index_Impl (sal_uInt32 nOffset)
     {
         return hash_Impl(nOffset, m_hash_shift, m_page_shift, m_hash_size - 1);
     }

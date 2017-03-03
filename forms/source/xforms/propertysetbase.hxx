@@ -269,14 +269,14 @@ public:
             one previously registered via <member>registerProperty</member>.
         @see registerProperty
     */
-    inline void getCurrentPropertyValueByHandle( sal_Int32 nHandle, css::uno::Any& /* [out] */ rValue, const NotifierAccess& ) const
+    void getCurrentPropertyValueByHandle( sal_Int32 nHandle, css::uno::Any& /* [out] */ rValue, const NotifierAccess& ) const
     {
         getFastPropertyValue( rValue, nHandle );
     }
 
     /** notifies a change in a given property to all interested listeners
     */
-    inline void notifyPropertyChange( sal_Int32 nHandle, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue, const NotifierAccess& ) const
+    void notifyPropertyChange( sal_Int32 nHandle, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue, const NotifierAccess& ) const
     {
         const_cast< PropertySetBase* >( this )->firePropertyChange( nHandle, rNewValue, rOldValue );
     }
@@ -325,13 +325,13 @@ public:
             the handle of the property which is going to be changed. Must be a valid property
             handle for the given <arg>rPropertySet</arg>
     */
-    inline PropertyChangeNotifier( const PropertySetBase& rPropertySet, sal_Int32 nHandle )
+    PropertyChangeNotifier( const PropertySetBase& rPropertySet, sal_Int32 nHandle )
         :m_rPropertySet( rPropertySet )
         ,m_nHandle( nHandle )
     {
         m_rPropertySet.getCurrentPropertyValueByHandle( m_nHandle, m_aOldValue, PropertySetBase::NotifierAccess() );
     }
-    inline ~PropertyChangeNotifier()
+    ~PropertyChangeNotifier()
     {
         css::uno::Any aNewValue;
         m_rPropertySet.getCurrentPropertyValueByHandle( m_nHandle, aNewValue, PropertySetBase::NotifierAccess() );

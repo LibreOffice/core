@@ -206,7 +206,7 @@ struct XclImpChRootData : public XclChRootData
 {
     XclImpChChart&      mrChartData;            /// The chart data object.
 
-    inline explicit     XclImpChRootData( XclImpChChart& rChartData ) : mrChartData( rChartData ) {}
+    explicit     XclImpChRootData( XclImpChChart& rChartData ) : mrChartData( rChartData ) {}
 };
 
 XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData ) :

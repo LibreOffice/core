@@ -65,7 +65,7 @@ public:
         The sheet index is set while creating the Calc sheet with CreateTable(). */
     explicit            XclImpSupbookTab( const OUString& rTabName );
 
-    inline const OUString& GetTabName() const { return maTabName; }
+    const OUString& GetTabName() const { return maTabName; }
 
     /** Reads a CRN record (external referenced cell) at the specified address. */
     void                ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
@@ -99,10 +99,10 @@ public:
     void                ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv );
 
     /** Returns the SUPBOOK record type. */
-    inline XclSupbookType GetType() const { return meType; }
+    XclSupbookType GetType() const { return meType; }
 
     /** Returns the URL of the external document. */
-    inline const OUString& GetXclUrl() const { return maXclUrl; }
+    const OUString& GetXclUrl() const { return maXclUrl; }
 
     /** Returns the external name specified by an index from the Excel document (one-based). */
     const XclImpExtName* GetExternName( sal_uInt16 nXclIndex ) const;
@@ -143,7 +143,7 @@ struct XclImpXti
     sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
     sal_uInt16          mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
     sal_uInt16          mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
-    inline explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
+    explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )

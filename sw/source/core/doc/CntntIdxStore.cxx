@@ -182,9 +182,9 @@ namespace
             inline void RestoreUnoCursors(updater_t& rUpdater);
             inline void SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreShellCursors(updater_t& rUpdater);
-            static inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
+            static const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
-            static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
+            static void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
     inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark)

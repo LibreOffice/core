@@ -197,7 +197,7 @@ public:
     void            SetNewFrame(bool bNewFrame) { m_bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFormat);
     void            SetFrameType(const OUString &rType) { m_sDlgType  = rType; }
-    inline bool     IsInGraficMode() { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
+    bool     IsInGraficMode() { return m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 

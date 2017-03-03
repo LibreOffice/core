@@ -62,7 +62,7 @@ public:
             void FillItem(SwLabItem& rItem);
     virtual bool FillItemSet(SfxItemSet* rSet) override;
     virtual void Reset(const SfxItemSet* rSet) override;
-    inline Printer* GetPrt() { return pPrinter; }
+    Printer* GetPrt() { return pPrinter; }
 };
 
 #endif

@@ -75,7 +75,7 @@ namespace pcr
         {
             return m_xControl;
         }
-        inline vcl::Window* getControlWindow() const
+        vcl::Window* getControlWindow() const
         {
             return m_pControlWindow;
         }

@@ -63,12 +63,12 @@ struct XclHasher : public ::std::unary_function< Type, sal_uInt32 > {};
 template< typename Type >
 struct XclDirectHasher : public XclHasher< Type >
 {
-    inline sal_uInt32   operator()( Type nVal ) const { return nVal; }
+    sal_uInt32   operator()( Type nVal ) const { return nVal; }
 };
 
 struct XclFormatRunHasher : public XclHasher< const XclFormatRun& >
 {
-    inline sal_uInt32   operator()( const XclFormatRun& rRun ) const
+    sal_uInt32   operator()( const XclFormatRun& rRun ) const
                             { return (rRun.mnChar << 8) ^ rRun.mnFontIdx; }
 };
 

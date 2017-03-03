@@ -53,7 +53,7 @@ public:
 
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
 
-    inline SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
+    SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
 
     virtual Size GetTwipSize() const = 0;
 

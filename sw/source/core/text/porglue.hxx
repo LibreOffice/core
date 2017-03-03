@@ -34,8 +34,8 @@ public:
     void Join( SwGluePortion *pVictim );
 
     inline short GetPrtGlue() const;
-    inline sal_uInt16 GetFixWidth() const { return nFixWidth; }
-    inline void SetFixWidth( const sal_uInt16 nNew ) { nFixWidth = nNew; }
+    sal_uInt16 GetFixWidth() const { return nFixWidth; }
+    void SetFixWidth( const sal_uInt16 nNew ) { nFixWidth = nNew; }
     void MoveGlue( SwGluePortion *pTarget, const short nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
