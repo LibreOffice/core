@@ -1895,10 +1895,15 @@ void ScInterpreter::ScSLN()
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nTimeLength = GetDouble();
-        double nRest = GetDouble();
-        double nValue = GetDouble();
-        PushDouble((nValue - nRest) / nTimeLength);
+        double fTimeLength = GetDouble();
+        if ( fTimeLength == 0.0 )
+            PushIllegalArgument();
+        else
+        {
+            double fRest = GetDouble();
+            double fValue = GetDouble();
+            PushDouble((fValue - fRest) / fTimeLength);
+        }
     }
 }
 

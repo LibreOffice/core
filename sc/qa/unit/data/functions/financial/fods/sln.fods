@@ -2526,10 +2526,22 @@
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:style-name="ce26"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:formula="of:=SLN(100;10;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce71" table:formula="of:=ORG.OPENOFFICE.ERRORTYPE([.A12])=502" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=SLN(100,10,0)" calcext:value-type="string">
+      <text:p>=SLN(100,10,0)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>prevent #div/0! Error</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
