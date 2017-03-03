@@ -294,7 +294,7 @@ namespace xmloff
         exportDatabaseAttributes();
 
         // attributes related to external bindings
-        exportBindingAtributes();
+        exportBindingAttributes();
 
         // attributes special to the respective control type
         exportSpecialAttributes();
@@ -896,7 +896,7 @@ namespace xmloff
 #endif
     }
 
-    void OControlExport::exportBindingAtributes()
+    void OControlExport::exportBindingAttributes()
     {
 #if OSL_DEBUG_LEVEL > 0
         BAFlags nIncludeBinding = m_nIncludeBindings;
@@ -949,7 +949,7 @@ namespace xmloff
 
         #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( BAFlags::NONE == nIncludeBinding,
-            "OControlExport::exportBindingAtributes: forgot some flags!");
+            "OControlExport::exportBindingAttributes: forgot some flags!");
             // in the debug version, we should have removed every bit we handled from the mask, so it should
             // be 0 now ...
         #endif

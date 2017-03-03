@@ -173,7 +173,7 @@ namespace xmloff
         /** adds the XML attributes which are related to binding controls to
             external values and/or list sources
         */
-        void exportBindingAtributes();
+        void exportBindingAttributes();
 
         /** adds attributes which are special to a control type to the export context's attribute list
         */
