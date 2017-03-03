@@ -265,7 +265,7 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 }
 
 
-bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
+bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -274,8 +274,7 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
     HFONT hAltFont = nullptr;
     bool bUseAltFont = false;
-    const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
-    if (pCSL && pCSL->getFontSelData().mbVertical)
+    if (rLayout.getFontSelData().mbVertical)
     {
         LOGFONTW aLogFont;
         GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
@@ -343,7 +342,7 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
     CleanupModules();
 }
 
-bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
+bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -368,11 +367,8 @@ bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     bool bGlyphs = false;
     if (succeeded)
     {
-        bool bVertical = false;
         float nYDiff = 0.0f;
-        const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
-        if (pCSL)
-            bVertical = pCSL->getFontSelData().mbVertical;
+        bool bVertical = rLayout.getFontSelData().mbVertical;
 
         if (bVertical)
         {
@@ -527,7 +523,7 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
-bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangle & rOut) const
+bool D2DWriteTextOutRenderer::GetDWriteInkBox(CommonSalLayout const &rLayout, Rectangle & rOut) const
 {
     rOut.SetEmpty();
 
@@ -551,11 +547,8 @@ bool D2DWriteTextOutRenderer::GetDWriteInkBox(SalLayout const &rLayout, Rectangl
     if (aBoxes.empty())
         return false;
 
-    bool bVertical = false;
     double nYDiff = 0.0f;
-    const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
-    if (pCSL)
-        bVertical = pCSL->getFontSelData().mbVertical;
+    bool bVertical = rLayout.getFontSelData().mbVertical;
 
     if (bVertical)
     {
