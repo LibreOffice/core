@@ -1839,7 +1839,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
         for (int nLoop = 0; nLoop < 2; ++nLoop)
         {
-            bool bRepeatedSprm = false;
             const sal_uInt8* pParams;
             while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetAktParams()))
             {
@@ -1870,11 +1869,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         pTableBorders90 = pParams; // process at end
                         break;
                     case sprmTTableHeader:
-                        if (!bRepeatedSprm)
-                        {
-                            m_nRowsToRepeat++;
-                            bRepeatedSprm = true;
-                        }
+                        // tdf#105570
+                        if ( m_nRowsToRepeat == m_nRows )
+                            m_nRowsToRepeat = (m_nRows + 1);
                         break;
                     case sprmTJc:
                         // sprmTJc  -  Justification Code
