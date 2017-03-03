@@ -294,8 +294,8 @@ bool PSDReader::ImplReadHeader()
         if ( nResEntryLen & 1 )
             nResEntryLen++;             // the resource entries are padded
         sal_uInt32 nCurrentPos = m_rPSD.Tell();
-        if (nResEntryLen > (nLayerPos - nCurrentPos))   // check if size
-            break;                                      // is possible
+        if (nCurrentPos > nLayerPos || nResEntryLen > (nLayerPos - nCurrentPos))   // check if size
+            break;                                                                 // is possible
         switch( nUniqueID )
         {
             case 0x3ed :    // UID for the resolution info
