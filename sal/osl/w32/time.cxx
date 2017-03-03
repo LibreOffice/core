@@ -37,17 +37,17 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
 
-    static HMODULE hModule = NULL;
-    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = NULL;
+    static HMODULE hModule = nullptr;
+    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = nullptr;
 
-    OSL_ASSERT(pTimeVal != NULL);
+    OSL_ASSERT(pTimeVal != nullptr);
 
     if ( !hModule )
     {
         hModule = GetModuleHandleA( "Kernel32.dll" );
         if ( hModule )
-            pGetSystemTimePreciseAsFileTime = (GetSystemTimePreciseAsFileTime_PROC)
-                GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime");
+            pGetSystemTimePreciseAsFileTime = reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
+                GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime"));
     }
 
     // use ~1 microsecond resolution if available
@@ -70,12 +70,12 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     SystemTimeToFileTime(&SystemTime, &OffTime);
 
-    Value = *((__int64 *)&CurTime) - *((__int64 *)&OffTime);
+    Value = *reinterpret_cast<__int64 *>(&CurTime) - *reinterpret_cast<__int64 *>(&OffTime);
 
     pTimeVal->Seconds  = (unsigned long) (Value / 10000000L);
     pTimeVal->Nanosec  = (unsigned long)((Value % 10000000L) * 100);
 
-    return sal_True;
+    return true;
 }
 
 // osl_getDateTimeFromTimeValue
@@ -99,11 +99,11 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
             pDateTime->Month        =   aSystemTime.wMonth;
             pDateTime->Year         =   aSystemTime.wYear;
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // osl_getTimeValueFromDateTime
@@ -127,11 +127,11 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
         if (FileTimeToTimeValue( &aFileTime, pTimeVal  ) )
         {
             pTimeVal->Nanosec = pDateTime->NanoSeconds;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // osl_getLocalTimeFromSystemTime
@@ -156,11 +156,11 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
             pLocalTimeVal->Seconds = (sal_uInt32) (pSystemTimeVal->Seconds - ( bias * 60) );
             pLocalTimeVal->Nanosec = pSystemTimeVal->Nanosec;
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // osl_getSystemTimeFromLocalTime
@@ -185,11 +185,11 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
             pSystemTimeVal->Seconds = (sal_uInt32) ( pLocalTimeVal->Seconds + ( bias * 60) );
             pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 static struct _timeb startTime;
