@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -17,23 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_GMUTEX_H
-#define INCLUDED_SAL_OSL_W32_GMUTEX_H
+#ifndef INCLUDED_SAL_OSL_W32_SOCKIMPL_HXX
+#define INCLUDED_SAL_OSL_W32_SOCKIMPL_HXX
 
-#include <sal/config.h>
+#include <osl/socket.h>
+#include <osl/interlck.h>
 
-#include <osl/mutex.h>
+/*****************************************************************************/
+/* oslSocketImpl */
+/*****************************************************************************/
+#define OSL_SOCKET_FLAGS_NONBLOCKING    0x0001
 
-#if defined __cplusplus
-extern "C" {
+struct oslSocketImpl {
+    oslInterlockedCount m_nRefCount;
+    SOCKET              m_Socket;
+    int                 m_Flags;
+};
+
+struct oslSocketAddrImpl
+{
+    struct sockaddr m_sockaddr;
+    oslInterlockedCount m_nRefCount;
+};
+
+oslSocket osl_createSocketImpl_(SOCKET Socket);
+void osl_destroySocketImpl_(oslSocket pImpl);
+
 #endif
 
-extern oslMutex g_Mutex;
-
-#if defined __cplusplus
-}
-#endif
-
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

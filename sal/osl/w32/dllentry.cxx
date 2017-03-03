@@ -37,11 +37,11 @@
 #include <osl/mutex.h>
 #include <osl/thread.h>
 
-#include "file_url.h"
-#include "gmutex.h"
+#include "file_url.hxx"
+#include "gmutex.hxx"
 #include "rtllifecycle.h"
 
-#include <thread.h>
+#include <thread.hxx>
 
 /*
 This is needed because DllMain is called after static constructors. A DLL's

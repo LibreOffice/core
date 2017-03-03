@@ -17,21 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_FILE_ERROR_H
-#define INCLUDED_SAL_OSL_W32_FILE_ERROR_H
+#ifndef INCLUDED_SAL_OSL_W32_FILE_ERROR_HXX
+#define INCLUDED_SAL_OSL_W32_FILE_ERROR_HXX
 
 #include "osl/file.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError);
 
-#ifdef __cplusplus
-}
 #endif
-
-#endif // INCLUDED_SAL_OSL_W32_FILE_ERROR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

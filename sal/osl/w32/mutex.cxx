@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "gmutex.h"
+#include "gmutex.hxx"
 #include "system.h"
 
 #include <osl/mutex.h>

@@ -21,9 +21,9 @@
 #define _UNICODE
 #include "systools/win32/uwinapi.h"
 
-#include "file_url.h"
+#include "file_url.hxx"
 #include <sal/macros.h>
-#include "file_error.h"
+#include "file_error.hxx"
 
 #include "rtl/alloc.h"
 #include <rtl/ustring.hxx>
@@ -618,7 +618,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
     rtl_freeMemory( pszEncodedURL );
 }
 
-oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, sal_Bool bAllowRelative )
+oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
 {
     rtl_String          *strUTF8 = nullptr;
     rtl_uString         *strDecodedURL = nullptr;

@@ -34,10 +34,10 @@
 #endif
 
 #include <file-impl.hxx>
-#include "procimpl.h"
+#include "procimpl.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "secimpl.h"
+#include "secimpl.hxx"
 #include <osl/file.hxx>
 
 #include <vector>

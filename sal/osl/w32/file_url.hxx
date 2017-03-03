@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_FILE_URL_H
-#define INCLUDED_SAL_OSL_W32_FILE_URL_H
+#ifndef INCLUDED_SAL_OSL_W32_FILE_URL_HXX
+#define INCLUDED_SAL_OSL_W32_FILE_URL_HXX
 
 #include "sal/types.h"
 #include "rtl/ustring.h"
@@ -34,10 +34,6 @@
 
 #ifdef _MSC_VER
 #pragma warning(pop)
-#endif
-
-#ifdef __cplusplus
-extern "C" {
 #endif
 
 #define PATHTYPE_ERROR                      0
@@ -74,7 +70,7 @@ DWORD GetCaseCorrectPathName (
 oslFileError osl_getSystemPathFromFileURL_ (
     rtl_uString *  strURL,
     rtl_uString ** pustrPath,
-    sal_Bool       bAllowRelative
+    bool       bAllowRelative
 );
 
 oslFileError osl_getFileURLFromSystemPath_ (
@@ -84,10 +80,6 @@ oslFileError osl_getFileURLFromSystemPath_ (
 
 extern oslMutex g_CurrentDirectoryMutex;
 
-#ifdef __cplusplus
-}
 #endif
-
-#endif // INCLUDED_SAL_OSL_W32_FILE_URL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

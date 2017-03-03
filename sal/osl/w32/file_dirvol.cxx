@@ -23,10 +23,10 @@
 
 #include "osl/file.h"
 
-#include "file_url.h"
-#include <filetime.h>
+#include "file_url.hxx"
+#include <filetime.hxx>
 #include <sal/macros.h>
-#include "file_error.h"
+#include "file_error.hxx"
 
 #include "path_helper.hxx"
 
