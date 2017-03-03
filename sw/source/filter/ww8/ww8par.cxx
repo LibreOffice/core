@@ -4704,7 +4704,7 @@ void SwWW8ImplReader::ReadDocVars()
         {
             const OUString &rName = aDocVarStrings[i];
             uno::Any aValue;
-            aValue <<= OUString(aDocValueStrings[i]);
+            aValue <<= rName;
             try {
                 xUserDefinedProps->addProperty( rName,
                     beans::PropertyAttribute::REMOVABLE,

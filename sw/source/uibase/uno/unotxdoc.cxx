@@ -4064,7 +4064,7 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
     Any aRet;
     if( rPropertyName == UNO_LINK_DISPLAY_NAME )
     {
-        aRet <<= OUString(sLinkDisplayName);
+        aRet <<= sLinkDisplayName;
     }
     else if( rPropertyName == UNO_LINK_DISPLAY_BITMAP )
     {
@@ -4138,7 +4138,7 @@ Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
 {
     Any aRet;
     if(rPropertyName == UNO_LINK_DISPLAY_NAME)
-        aRet <<= OUString(sOutlineText);
+        aRet <<= sOutlineText;
     else
         throw UnknownPropertyException();
     return aRet;

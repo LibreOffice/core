@@ -1321,7 +1321,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     uno::Reference< beans::XPropertySet > xFormPropSet( xForm, UNO_QUERY );
 
     Any aTmp;
-    aTmp <<= OUString(sName);
+    aTmp <<= sName;
     xFormPropSet->setPropertyValue("Name", aTmp );
 
     if( !aAction.isEmpty() )
@@ -1334,7 +1334,7 @@ void SwHTMLParser::NewForm( bool bAppend )
         INetURLObject aURLObj( m_aPathToFile );
         aAction = aURLObj.GetPartBeforeLastName();
     }
-    aTmp <<= OUString(aAction);
+    aTmp <<= aAction;
     xFormPropSet->setPropertyValue("TargetURL",
                                     aTmp );
 
@@ -1614,7 +1614,7 @@ void SwHTMLParser::InsertInput()
     uno::Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
-    aTmp <<= OUString(sName);
+    aTmp <<= sName;
     xPropSet->setPropertyValue("Name", aTmp );
 
     if( HTML_IT_HIDDEN != eType  )
@@ -2004,7 +2004,7 @@ void SwHTMLParser::NewTextArea()
     uno::Reference< beans::XPropertySet > xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
-    aTmp <<= OUString(sName);
+    aTmp <<= sName;
     xPropSet->setPropertyValue("Name", aTmp );
 
     aTmp <<= true;
@@ -2272,7 +2272,7 @@ void SwHTMLParser::NewSelect()
     uno::Reference< beans::XPropertySet >  xPropSet( xFComp, UNO_QUERY );
 
     Any aTmp;
-    aTmp <<= OUString(sName);
+    aTmp <<= sName;
     xPropSet->setPropertyValue("Name", aTmp );
 
     if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )

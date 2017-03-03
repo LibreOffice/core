@@ -220,10 +220,10 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             {
                 xSet->insertByName (sKey, makeAny(xChild));
 
-                aValue <<= OUString(iDescriptor->msURL);
+                aValue <<= iDescriptor->msURL;
                 xChild->replaceByName (sURLMemberName, aValue);
 
-                aValue <<= OUString(iDescriptor->msName);
+                aValue <<= iDescriptor->msName;
                 xChild->replaceByName (sNameMemberName, aValue);
             }
         }

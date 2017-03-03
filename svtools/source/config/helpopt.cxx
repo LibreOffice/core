@@ -235,14 +235,14 @@ void SvtHelpOptions_Impl::ImplCommit()
                 break;
 
             case HelpProperty::Locale:
-                pValues[nProp] <<= OUString(aLocale);
+                pValues[nProp] <<= aLocale;
                 break;
 
             case HelpProperty::System:
-                pValues[nProp] <<= OUString(aSystem);
+                pValues[nProp] <<= aSystem;
                 break;
             case HelpProperty::StyleSheet:
-                pValues[nProp] <<= OUString(sHelpStyleSheet);
+                pValues[nProp] <<= sHelpStyleSheet;
             break;
 
         }

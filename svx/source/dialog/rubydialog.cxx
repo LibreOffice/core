@@ -439,9 +439,9 @@ void SvxRubyDialog::GetRubyText()
             for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
             {
                 if (pProps[nProp].Name == cRubyBaseText)
-                    pProps[nProp].Value <<= OUString(aEditArr[i]->GetText());
+                    pProps[nProp].Value <<= aEditArr[i]->GetText();
                 else if (pProps[nProp].Name == cRubyText)
-                    pProps[nProp].Value <<= OUString(aEditArr[i + 1]->GetText());
+                    pProps[nProp].Value <<= aEditArr[i + 1]->GetText();
             }
         }
     }

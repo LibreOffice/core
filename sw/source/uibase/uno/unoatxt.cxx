@@ -625,10 +625,10 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
     switch(pEntry->nWID)
     {
         case  WID_GROUP_PATH:
-            aAny <<= OUString(pGlosGroup->GetFileName());
+            aAny <<= pGlosGroup->GetFileName();
         break;
         case  WID_GROUP_TITLE:
-            aAny <<= OUString(pGlosGroup->GetName());
+            aAny <<= pGlosGroup->GetName();
         break;
     }
     return aAny;

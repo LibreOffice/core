@@ -1383,8 +1383,8 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                         {
                             const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 
-                            aSeq[nSeqIndex++] <<= OUString(pFont->GetFamilyName());
-                            aSeq[nSeqIndex++] <<= OUString(pFont->GetStyleName());
+                            aSeq[nSeqIndex++] <<= pFont->GetFamilyName();
+                            aSeq[nSeqIndex++] <<= pFont->GetStyleName();
                             aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
                             aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
                             aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
@@ -1393,8 +1393,8 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                     const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
 
-                    aSeq[nSeqIndex++] <<= OUString(rFont.GetFamilyName());
-                    aSeq[nSeqIndex++] <<= OUString(rFont.GetStyleName());
+                    aSeq[nSeqIndex++] <<= rFont.GetFamilyName();
+                    aSeq[nSeqIndex++] <<= rFont.GetStyleName();
                     aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetFamily());
                     aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetPitch());
                     aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetCharSet());

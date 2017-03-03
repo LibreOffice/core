@@ -1584,7 +1584,7 @@ bool DbFormattedField::commitControl()
         // ein LeerString wird erst mal standardmaessig als void weitergereicht
     }
     else
-        aNewVal <<= OUString(rField.GetTextValue());
+        aNewVal <<= rField.GetTextValue();
 
     m_rColumn.getModel()->setPropertyValue(FM_PROP_EFFECTIVE_VALUE, aNewVal);
     return true;

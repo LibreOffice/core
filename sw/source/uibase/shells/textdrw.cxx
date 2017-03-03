@@ -87,7 +87,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
             uno::Any aTmp;
 
-            aTmp <<= OUString(rText);
+            aTmp <<= rText;
             xPropSet->setPropertyValue( "Label", aTmp );
 
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
@@ -95,7 +95,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             if( pMedium )
                 aAbs = pMedium->GetURLObject();
 
-            aTmp <<= OUString(URIHelper::SmartRel2Abs(aAbs, rURL));
+            aTmp <<= URIHelper::SmartRel2Abs(aAbs, rURL);
             xPropSet->setPropertyValue( "TargetURL", aTmp );
 
             if( !rTarget.isEmpty() )

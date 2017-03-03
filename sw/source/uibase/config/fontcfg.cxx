@@ -152,7 +152,7 @@ void SwStdFontConfig::ImplCommit()
         if( nProp < DEF_FONT_COUNT )
         {
             if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != sDefaultFonts[nProp])
-                pValues[nProp] <<= OUString(sDefaultFonts[nProp]);
+                pValues[nProp] <<= sDefaultFonts[nProp];
         }
         else
         {

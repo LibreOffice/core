@@ -689,7 +689,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
 {
     uno::Any aRet;
     if( m_bIsBody )
-        aRet <<= OUString(m_sBody);
+        aRet <<= m_sBody;
     else
     {
         Sequence<sal_Int8> aData;

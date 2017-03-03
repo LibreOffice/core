@@ -190,13 +190,13 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
     }
 
     {
-        aVal <<= OUString(rFmt.GetPrefix());
+        aVal <<= rFmt.GetPrefix();
         beans::PropertyValue aPrefixProp( UNO_NAME_NRULE_PREFIX, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aPrefixProp;
     }
 
     {
-        aVal <<= OUString(rFmt.GetSuffix());
+        aVal <<= rFmt.GetSuffix();
         beans::PropertyValue aSuffixProp( UNO_NAME_NRULE_SUFFIX, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aSuffixProp;
     }

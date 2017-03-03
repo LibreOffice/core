@@ -703,7 +703,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
         switch ( (*ppEntries)->mnHandle )
         {
             case HANDLE_FORMULA:
-                *pValue <<= OUString(pDocSh->GetText());
+                *pValue <<= pDocSh->GetText();
             break;
             case HANDLE_FONT_NAME_VARIABLES                :
             case HANDLE_FONT_NAME_FUNCTIONS                :
@@ -714,7 +714,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_CUSTOM_FONT_NAME_FIXED             :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                *pValue <<= OUString(rFace.GetFamilyName());
+                *pValue <<= rFace.GetFamilyName();
             }
             break;
             case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
