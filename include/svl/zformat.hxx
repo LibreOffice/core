@@ -223,7 +223,8 @@ public:
         { return NumFor[nIx].Info().nCntPost; }
 
     /// Count of integer digits
-    sal_uInt16 GetFormatIntegerDigits() const { return NumFor[0].Info().nCntPre; }
+    sal_uInt16 GetFormatIntegerDigits( sal_uInt16 nIx = 0 ) const
+        { return NumFor[nIx].Info().nCntPre; }
 
     //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 5000, ... and only by the number formatter!
