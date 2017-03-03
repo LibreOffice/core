@@ -1,16 +1,3 @@
-diff -ru rasqal.orig/src/win32_rasqal_config.h rasqal/src/win32_rasqal_config.h
---- rasqal.orig/src/win32_rasqal_config.h	2015-09-02 23:12:00.733125322 +0200
-+++ rasqal/src/win32_rasqal_config.h	2015-09-02 23:28:10.152190403 +0200
-@@ -31,7 +31,9 @@
- /* MS names for these functions */
- // next line breaks build on wntmsci12
- //#define vsnprintf _vsnprintf
-+#if _MSC_VER < 1900 // older than VC 2015
- #define snprintf _snprintf
-+#endif
- #define access _access
- #define stricmp _stricmp
- #define strnicmp _strnicmp
 --- rasqal/src/rasqal_ntriples.c.orig	2016-08-26 23:29:58.343472683 +0200
 +++ rasqal/src/rasqal_ntriples.c	2016-08-26 23:30:10.553471736 +0200
 @@ -25,6 +25,10 @@

@@ -56,7 +56,7 @@
  
  /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
     significant byte first (like Motorola and SPARC, unlike Intel). */
-@@ -703,3 +703,40 @@
+@@ -703,3 +703,34 @@
  #ifndef HAVE_SOCKLEN_T
  typedef int socklen_t;
  #endif
@@ -88,15 +88,9 @@
 +#define HAVE_GETPAGESIZE
 +
 +#if defined _MSC_VER
-+#if _MSC_VER < 1500
-+#define vsnprintf _vsnprintf
-+#endif
 +#define isnan _isnan
 +#endif
 +
-+#if _MSC_VER < 1900
-+#define snprintf _snprintf
-+#endif
 --- src/common/common.h	2016-07-15 11:31:26.366735500 +0200
 +++ src/common/common.h	2016-07-17 16:18:39.121579400 +0200
 @@ -551,15 +551,6 @@
