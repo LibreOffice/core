@@ -6729,10 +6729,12 @@ void Test::testPrecisionAsShown()
         aCode = "0.00";
         fValue = 1.0/3.0;
         fExpectedRoundVal = 0.33;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        fValue = -10.001;
-        fExpectedRoundVal = -10.0;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 10.001;
+        fExpectedRoundVal = 10.0;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // thousand rounding bogus!!!! tdf#106253
         aCode = "0,,";
@@ -6747,54 +6749,105 @@ void Test::testPrecisionAsShown()
         aCode = "0.00%";
         fValue = 4.0 / 7.0;
         fExpectedRoundVal = 0.5714;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        fValue = -4.0 / 7.0;
-        fExpectedRoundVal = -0.5714;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 40.0 / 7.0;
+        fExpectedRoundVal = 5.7143;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // scientific rounding
         aCode = "0.00E0";
         fValue = 400000.0 / 7.0;
         fExpectedRoundVal = 57100.0;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
         fValue = 4.0 / 70000.0;
         fExpectedRoundVal = 5.71e-5;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        // engineering rounding bogus!!! tdf#106252
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        // engineering rounding tdf#106252
         aCode = "##0.000E0";
         fValue = 400000.0 / 7.0;
-        fExpectedRoundVal = 57143.0; // actual is 57140
-        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fExpectedRoundVal = 57.143e3;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4000000.0 / 7.0;
+        fExpectedRoundVal = 571.429e3;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 40000000.0 / 7.0;
+        fExpectedRoundVal = 5.714e6;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
         fValue = 4.0 / 70000.0;
-        fExpectedRoundVal = 5.7143e-5; // actual is 5.714e-05
-        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fExpectedRoundVal = 57.143e-6;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 7000.0;
+        fExpectedRoundVal = 571.429e-6;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 700.0;
+        fExpectedRoundVal = 5.714e-3;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        aCode = "##?0.0#E0";
+        fValue = 400000.0 / 7.0;
+        fExpectedRoundVal = 5.71e4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4000000.0 / 7.0;
+        fExpectedRoundVal = 57.14e4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 40000000.0 / 7.0;
+        fExpectedRoundVal = 571.43e4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 400000000.0 / 7.0;
+        fExpectedRoundVal = 5714.29e4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 70000.0;
+        fExpectedRoundVal = 5714.29e-8;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 7000.0;
+        fExpectedRoundVal = 5.71e-4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 700.0;
+        fExpectedRoundVal = 57.14e-4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        fValue = 4.0 / 70.0;
+        fExpectedRoundVal = 571.43e-4;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // fraction rounding tdf#105657
         aCode = "# ?/?";
         fValue = 0.35;
         fExpectedRoundVal = 1.0/3.0;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        fValue = -0.35;
-        fExpectedRoundVal = -1.0/3.0;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // exact fraction
         aCode = "# ?/??";
         fValue = 0.35;
         fExpectedRoundVal = 0.35;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        fValue = -0.35;
-        fExpectedRoundVal = -0.35;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // several sub-formats tdf#106052
         aCode = "0.00;-0.000";
         fValue = 1.0/3.0;
         fExpectedRoundVal = 0.33;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         fValue = -1.0/3.0;
         fExpectedRoundVal = -0.333;
-        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
     }
 
     setCalcAsShown( m_pDoc, false);
