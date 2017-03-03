@@ -49,9 +49,6 @@ typedef unsigned int uint32_t;
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
 
-#if _MSC_VER < 1800
-typedef double float_t;
-#endif
 typedef unsigned long _cl_dword_t;
 /* undef size_t size_t */
 
