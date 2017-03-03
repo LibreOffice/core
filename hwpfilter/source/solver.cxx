@@ -18,6 +18,7 @@
  */
 
 #include <math.h>
+#include <memory>
 #include "solver.h"
 
 
@@ -63,18 +64,15 @@ double* mgcLinearSystemD::NewVector (int N)
 
 int mgcLinearSystemD::Solve (int n, double** a, double* b)
 {
-  int* indxc = new int[n];
+  std::unique_ptr<int[]> indxc( new int[n] );
   if ( !indxc )
     return 0;
-  int* indxr = new int[n];
+  std::unique_ptr<int[]> indxr( new int[n] );
   if ( !indxr ) {
-    delete[] indxc;
     return 0;
   }
-  int* ipiv  = new int[n];
+  std::unique_ptr<int[]> ipiv( new int[n] );
   if ( !ipiv ) {
-    delete[] indxc;
-    delete[] indxr;
     return 0;
   }
 
@@ -93,25 +91,22 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     {
       if ( ipiv[j] != 1 )
       {
-    for (k = 0; k < n; k++)
-    {
-      if ( ipiv[k] == 0 )
-      {
-        if ( fabs(a[j][k]) >= big )
+        for (k = 0; k < n; k++)
         {
-          big = fabs(a[j][k]);
-          irow = j;
-          icol = k;
+          if ( ipiv[k] == 0 )
+          {
+            if ( fabs(a[j][k]) >= big )
+            {
+              big = fabs(a[j][k]);
+              irow = j;
+              icol = k;
+            }
+          }
+          else if ( ipiv[k] > 1 )
+          {
+            return 0;
+          }
         }
-      }
-      else if ( ipiv[k] > 1 )
-      {
-        delete[] ipiv;
-        delete[] indxr;
-        delete[] indxc;
-        return 0;
-      }
-    }
       }
     }
     ipiv[icol]++;
@@ -131,9 +126,6 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     indxc[i] = icol;
     if ( a[icol][icol] == 0 )
     {
-      delete[] ipiv;
-      delete[] indxr;
-      delete[] indxc;
       return 0;
     }
 
@@ -162,16 +154,13 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     {
       for (k = 0; k < n; k++)
       {
-    save = a[k][indxr[j]];
-    a[k][indxr[j]] = a[k][indxc[j]];
-    a[k][indxc[j]] = save;
+        save = a[k][indxr[j]];
+        a[k][indxr[j]] = a[k][indxc[j]];
+        a[k][indxc[j]] = save;
       }
     }
   }
 
-  delete[] ipiv;
-  delete[] indxr;
-  delete[] indxc;
   return 1;
 }
 

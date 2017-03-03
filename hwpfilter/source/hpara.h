@@ -23,6 +23,7 @@
 #include <hwplib.h>
 #include <hwpfile.h>
 #include <hinfo.h>
+#include <memory>
 
 struct HBox;
 
@@ -110,7 +111,7 @@ class DLLEXPORT HWPPara
 /**
  * Box object list
  */
-        HBox          **hhstr;
+        std::vector<std::unique_ptr<HBox>> hhstr;
 
         HWPPara(void);
         ~HWPPara(void);
@@ -135,7 +136,7 @@ class DLLEXPORT HWPPara
         HWPPara *Next(void) { return _next;}
 
     private:
-        HBox *readHBox(HWPFile &);
+        std::unique_ptr<HBox> readHBox(HWPFile &);
 };
 
 #endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
