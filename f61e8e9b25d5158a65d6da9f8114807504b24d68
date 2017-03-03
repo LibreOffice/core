@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_4ae8447d",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "You can use ScQueryOp instead of int, to make it crystal-clear what type of data is permitted here\n\n(then you of course have to SetItemData of the listbox entries fo ScQueryOp too)",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_eaf9f84e",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "Hm, so, how\u0027s this working now? All ConditionEntries have their nIndex set to -1 (implicit)  and those for SC_EQUAL and SC_NOT_EQUAL to either 0 or 1?",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8a894ccd",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "This is mildly confusing. One nIndex is here ...",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4a9f6403",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "You can do this:\nnCondPos \u003d *( static_cast\u003cScQueryOp*\u003e(lb-\u003eGetSelectEntryData()) )",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aa8610b7",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "... and here is another one (nIndex). Maybe you can rename either one of those\n\nAnd I guess you wanted to test for inequality here:  aStrCondEntries[nIdx].nIndex !\u003d -1 (i.e. whether the implicit nIndex value has been modified in constructor)",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8ab06c8d",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "static_cast\u003cScQueryOp\u003e on nIdx before setting data to entry",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2ac140e5",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "Some more descriptive name: nLBIndex, nListBox, nthListBox? \n\n... index is such an overloaded variable name here ...",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ab6848b",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "The same thing as above here:\n\nScQueryOp eOp \u003d *( static_cast\u003cScQueryOp*\u003e(lb-\u003eGetSelectEntryData()) )",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6abb4873",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "Maybe you can move this 2 line up, into \"else\" branch. It makes sense to check whether regex checkbox should be disabled/enabled *only* when one of the four operator listboxes has been changed ... but I haven\u0027t tried if it works myself",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2af30075",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-03T12:49:49Z",
+      "side": 1,
+      "message": "It seems to me you\u0027re doing something std::map does out of the box here. So perhaps you might try using std::map made of \u003cOUString, sal_Int32\u003e, possibly even \u003cOUString, ScQueryOp\u003e pairs instead... ?",
+      "revId": "f61e8e9b25d5158a65d6da9f8114807504b24d68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
