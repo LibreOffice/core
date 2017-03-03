@@ -1,12 +1,10 @@
 --- redland.orig/src/win32_rdf_config.h	2015-09-02 23:12:12.894126138 +0200
 +++ redland/src/win32_rdf_config.h	2015-09-02 23:23:54.600173246 +0200
-@@ -43,7 +43,9 @@
+@@ -43,7 +43,6 @@
  /* MS names for these functions */
  // next line breaks build on wntmsci12
  //#define vsnprintf _vsnprintf
-+#if _MSC_VER < 1900 // older than VC 2015
- #define snprintf _snprintf
-+#endif
+-#define snprintf _snprintf
  #define access _access
  #define stricmp _stricmp
  #define strnicmp _strnicmp

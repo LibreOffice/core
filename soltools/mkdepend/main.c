@@ -40,7 +40,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef _MSC_VER     /* Define ssize_t */
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86))
 #define _W64 __w64
 #else
 #define _W64

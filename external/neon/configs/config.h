@@ -235,16 +235,8 @@
 #define HAVE_SIGNAL_H 1
 
 /* Define to 1 if you have the `snprintf' function. */
-#ifdef UNX
+#if defined( UNX ) || defined(_MSC_VER)
 #define HAVE_SNPRINTF 1
-#endif
-
-#ifdef _WIN32
-#if _MSC_VER >= 1900 // VS 2015
-#define HAVE_SNPRINTF 1
-#else
-#define snprintf _snprintf
-#endif
 #endif
 
 /* Define to 1 if the system has the type `socklen_t'. */
@@ -337,7 +329,7 @@
 /* Define if the timezone global is available */
 #ifndef MACOSX
 #define HAVE_TIMEZONE 1
-#if defined(_MSC_VER) && _MSC_VER >= 1900 // VS 2015
+#if defined(_MSC_VER)
 #define timezone _timezone
 #endif
 #endif
@@ -359,7 +351,7 @@
 #endif
 
 /* Define to 1 if you have the `vsnprintf' function. */
-#if defined( UNX ) || defined(_MSC_VER)
+#if defined(UNX) || defined(_MSC_VER)
 #define HAVE_VSNPRINTF 1
 #endif
 

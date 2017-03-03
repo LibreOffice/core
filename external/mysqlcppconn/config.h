@@ -6,7 +6,7 @@
 #define HAVE_FUNCTION_STRTOL 1
 #define HAVE_FUNCTION_STRTOULL 1
 
-#if defined(MACOSX) || defined(__sun) || defined(LINUX) || (defined _MSC_VER && _MSC_VER >= 1600)
+#if defined(MACOSX) || defined(__sun) || defined(LINUX) || defined (_MSC_VER)
     #define HAVE_STDINT_H
 #ifndef _MSC_VER
     #define HAVE_INTTYPES_H

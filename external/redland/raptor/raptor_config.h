@@ -364,13 +364,7 @@
 #  endif
 
 #  ifdef _MSC_VER
-#    if _MSC_VER >= 1300
 #      define __func__    __FUNCTION__
-#    else
-       /* better than nothing */
-#      define raptor_str(s)  #s
-#      define __func__    "func@" __FILE__ ":" raptor_str(__LINE__)
-#    endif
 #  endif
 
 #  define RAPTOR_INLINE  __inline
