@@ -10,6 +10,9 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <ndtxt.hxx>
+#include <viscrs.hxx>
+#include <wrtsh.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -63,6 +66,45 @@ DECLARE_WW8IMPORT_TEST(testTdf99120, "tdf99120.doc")
     // This failed: the header was empty on the 3rd page, as the first page header was shown.
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, odd."),  parseDump("/root/page[3]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
+}
+
+DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
+{
+    /*****
+      * MS-DOC specification ( https://msdn.microsoft.com/en-us/library/cc313153 )
+      * ch. 2.6.3, sprmTTableHeader:
+      *     A Bool8 value that specifies that the current table row is a header row.
+      *     If the value is 0x01 but sprmTTableHeader is not applied with a value of 0x01
+      *     for a previous row in the same table, then this property MUST be ignored.
+      *
+      * The document have three tables with three rows.
+      * Table 1 has { 1, 0, 0 } values of the "repeat as header row" property for each row
+      * Table 2 has { 1, 1, 0 }
+      * Table 3 has { 0, 1, 1 }
+      ****/
+    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
+    SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
+    SwNodeIndex      aIdx         = SwNodeIndex( pShellCursor->Start()->nNode );
+
+    // Find first table
+    SwTableNode*     pTableNd     = aIdx.GetNode().FindTableNode();
+
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(1), pTableNd->GetTable().GetRowsToRepeat() );
+
+    // Go to next table
+    aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
+    while ( nullptr == (pTableNd = aIdx.GetNode().GetTableNode()) ) ++aIdx;
+
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(2), pTableNd->GetTable().GetRowsToRepeat() );
+
+    // Go to next table
+    aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
+    while ( nullptr == (pTableNd = aIdx.GetNode().GetTableNode()) ) ++aIdx;
+
+    // As first row hasn't sprmTTableHeader set, all following must be ignored, so no rows must be repeated
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(0), pTableNd->GetTable().GetRowsToRepeat() );
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
