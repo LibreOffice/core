@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_INC_VIEWDATA_HXX
-#define SC_INC_VIEWDATA_HXX
+#ifndef SC_INC_DOCSH_HXX
+#define SC_INC_DOCSH_HXX
 
 #include <sfx2/objsh.hxx>
 
