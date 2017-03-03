@@ -85,18 +85,37 @@ EditDLL& EditDLL::Get()
 }
 
 GlobalEditData::GlobalEditData() :
+    m_bDisposed(false),
     ppDefItems(nullptr),
     mpVirDev(VclPtr<VirtualDevice>::Create())
 {
+    std::function<void()> fDeInit = std::bind(&GlobalEditData::dispose, this);
+    AddOnDeInitVCL(this, fDeInit);
     mpVirDev->SetMapMode(MapUnit::MapTwip);
 }
 
 GlobalEditData::~GlobalEditData()
 {
+    if(!m_bDisposed)
+    {
+        SolarMutexGuard g; // if we have not been disposed by DeInitVCL(), we should be allowed to still use the SolarMutex
+        dispose();
+        RemoveOnDeInitVCL(this); // not done in the callback itself as that might invalidate iterators in DeInitVCL()
+    }
     // Destroy DefItems...
     // Or simply keep them, since at end of execution?!
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, true );
+}
+
+void GlobalEditData::dispose()
+{
+    DBG_TESTSOLARMUTEX();
+    if(!m_bDisposed)
+    {
+        m_bDisposed=true;
+        mpVirDev.disposeAndClear();
+    }
 }
 
 std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()
