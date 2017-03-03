@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <config_locales.h>
 
 #include <breakiteratorImpl.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -529,6 +530,23 @@ bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUStrin
             return true;
         }
     }
+
+#if !WITH_LOCALE_ALL && !WITH_LOCALE_ja
+    if (aLocaleName == "ja")
+        return false;
+#endif
+#if !WITH_LOCALE_ALL && !WITH_LOCALE_zh
+    if (aLocaleName == "zh" || aLocaleName == "zh_TW")
+        return false;
+#endif
+#if !WITH_LOCALE_ALL && !WITH_LOCALE_ko
+    if (aLocaleName == "ko")
+        return false;
+#endif
+#if !WITH_LOCALE_ALL && !WITH_LOCALE_th
+    if (aLocaleName == "th")
+        return false;
+#endif
 
     Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.i18n.BreakIterator_" + aLocaleName, m_xContext);
