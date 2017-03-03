@@ -20,6 +20,7 @@
 #include "FilterConfigCache.hxx"
 
 #include <vcl/graphicfilter.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -296,7 +297,9 @@ void FilterConfigCache::ImplInitSmart()
 FilterConfigCache::FilterConfigCache( bool bConfig ) :
     bUseConfig ( bConfig )
 {
-    if ( bUseConfig )
+    if (bUseConfig)
+        bUseConfig = !utl::ConfigManager::IsAvoidConfig();
+    if (bUseConfig)
         ImplInit();
     else
         ImplInitSmart();
