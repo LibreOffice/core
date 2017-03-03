@@ -103,26 +103,6 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, HDC hDC, HFONT h
         return false;
     }
 
-    // Bail for non-horizontal text.
-    {
-        wchar_t sFaceName[200];
-        int nFaceNameLen = GetTextFaceW(hNewDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
-
-        if (!nFaceNameLen)
-            SAL_WARN("vcl.gdi", "GetTextFace failed: " << WindowsErrorString(GetLastError()));
-
-        LOGFONTW aLogFont;
-        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
-
-        SelectObject(hNewDC, hOrigFont);
-        DeleteDC(hNewDC);
-
-        if (sFaceName[0] == '@' || aLogFont.lfOrientation != 0 || aLogFont.lfEscapement != 0)
-        {
-            pTxt->ReleaseFont();
-            return false;
-        }
-    }
     std::vector<WORD> aGlyphIndices(1);
     // Fetch the ink boxes and calculate the size of the atlas.
     if (!bRealGlyphIndices)
@@ -3872,13 +3852,18 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, boo
 void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
 {
     HDC hDC = getHDC();
+
+    // Our DirectWrite renderer is incomplete, skip it for non-horizontal or
+    // stretched text.
+    bool bForceGDI = rLayout.GetOrientation() || rLayout.hasHScale();
+
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
     if (!bUseOpenGL)
     {
         // no OpenGL, just classic rendering
-        DrawTextLayout(rLayout, hDC, false);
+        DrawTextLayout(rLayout, hDC, !bForceGDI);
     }
-    else if (CacheGlyphs(rLayout) &&
+    else if (!bForceGDI && CacheGlyphs(rLayout) &&
              DrawCachedGlyphs(rLayout))
     {
         // Nothing
@@ -3945,7 +3930,7 @@ void WinSalGraphics::DrawSalLayout(const CommonSalLayout& rLayout)
             SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
             // the actual drawing
-            DrawTextLayout(rLayout, aDC.getCompatibleHDC(), true);
+            DrawTextLayout(rLayout, aDC.getCompatibleHDC(), !bForceGDI);
 
             std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
             if (xTexture)

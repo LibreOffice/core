@@ -209,7 +209,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
     }
 
     // Calculate the mnAveWidthFactor, see the comment where it is used.
-    if (mrFontSelData.mnWidth && ! OpenGLHelper::isVCLOpenGLEnabled())
+    if (mrFontSelData.mnWidth)
     {
         double nUPEM = hb_face_get_upem(hb_font_get_face(mpHbFont));
 
@@ -231,6 +231,13 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
         mnAveWidthFactor = nUPEM / aFontMetric.tmAveCharWidth;
     }
+}
+
+bool CommonSalLayout::hasHScale() const
+{
+    int nHeight(mrFontSelData.mnHeight);
+    int nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
+    return nWidth != nHeight;
 }
 
 #elif defined(MACOSX) || defined(IOS)
