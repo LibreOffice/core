@@ -86,11 +86,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
-// Wir ersparen uns in Hyphenate ein GetFrame()
-// Achtung: in edlingu.cxx stehen die Variablen!
-extern const SwTextNode *pLinguNode;
-extern       SwTextFrame  *pLinguFrame;
-
 struct SwParaIdleData_Impl
 {
     SwWrongList* pWrong;                // for spell checking
