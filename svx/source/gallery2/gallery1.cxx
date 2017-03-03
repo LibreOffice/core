@@ -33,6 +33,7 @@
 #include <osl/thread.h>
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
@@ -181,7 +182,7 @@ Gallery* Gallery::GetGalleryInstance()
     if (!s_pGallery)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (!s_pGallery)
+        if (!s_pGallery && !utl::ConfigManager::IsAvoidConfig())
         {
             s_pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
         }
