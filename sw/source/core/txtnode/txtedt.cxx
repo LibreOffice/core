@@ -99,7 +99,7 @@ struct SwParaIdleData_Impl
     SwTextNode::WrongState eWrongDirty; ///< online spell checking needed/done?
     bool bGrammarCheckDirty;
     bool bSmartTagDirty;
-    bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
+    bool bAutoComplDirty;               ///< auto complete list dirty
 
     SwParaIdleData_Impl() :
         pWrong              ( nullptr ),
@@ -688,12 +688,10 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
     return nPos;
 }
 
-// Aktuelles Wort zurueckliefern:
-// Wir suchen immer von links nach rechts, es wird also das Wort
-// vor nPos gesucht. Es sei denn, wir befinden uns am Anfang des
-// Absatzes, dann wird das erste Wort zurueckgeliefert.
-// Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
-// einen leeren String.
+// Return current word:
+// Search from left to right, so find the word before nPos.
+// Except if at the start of the paragraph, then return the first word.
+// If the first word consists only of whitespace, return an empty string.
 OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index
@@ -961,11 +959,9 @@ bool SwScanner::NextWord()
     return true;
 }
 
+// Note: this is a clone of SwTextFrame::AutoSpell_, so keep them in sync when fixing things!
 bool SwTextNode::Spell(SwSpellArgs* pArgs)
 {
-    // Die Aehnlichkeiten zu SwTextFrame::AutoSpell_ sind beabsichtigt ...
-    // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-
     // modify string according to redline information and hidden text
     const OUString aOldText( m_Text );
     OUStringBuffer buf(m_Text);
@@ -1258,8 +1254,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
     return !rArgs.aConvText.isEmpty();
 }
 
-// Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
-// ACHTUNG: Ev. Bugs in beiden Routinen fixen!
+// Note: this is a clone of SwTextNode::Spell, so keep them in sync when fixing things!
 SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
@@ -1268,8 +1263,6 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
     if ( bStop )
         return aRect;
 #endif
-    // Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
-    // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
     SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )
         nActPos = COMPLETE_STRING;
@@ -1572,7 +1565,6 @@ SwRect SwTextFrame::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActP
     return aRet;
 }
 
-// Wird vom CollectAutoCmplWords gerufen
 void SwTextFrame::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwTextNode *pNode = GetTextNode();
@@ -1622,10 +1614,10 @@ void SwTextFrame::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPo
         pNode->SetAutoCompleteWordDirty( false );
 }
 
-/** Findet den TextFrame und sucht dessen CalcHyph */
+/// Find the SwTextFrame and call its Hyphenate
 bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
-    // Abkuerzung: am Absatz ist keine Sprache eingestellt:
+    // shortcut: paragraph doesn't have a language set:
     if ( LANGUAGE_NONE == sal_uInt16( GetSwAttrSet().GetLanguage().GetLanguage() )
          && USHRT_MAX == GetLang(0, m_Text.getLength()))
     {
@@ -1644,9 +1636,9 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         pFrame = &(pFrame->GetFrameAtOfst( rHyphInf.nStart ));
     else
     {
-        // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
-        // moeglich, in denen kein Frame zum Node vorliegt.
-        // Also keinOSL_ENSURE
+        // There was a comment here that claimed that the following assertion
+        // shouldn't exist as it's triggered by "Trennung ueber Sonderbereiche",
+        // whatever that means.
         OSL_ENSURE( pFrame, "!SwTextNode::Hyphenate: can't find any frame" );
         return false;
     }
@@ -1655,9 +1647,8 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         if( pFrame->Hyphenate( rHyphInf ) )
         {
-            // Das Layout ist nicht robust gegen "Direktformatierung"
-            // (7821, 7662, 7408); vgl. layact.cxx,
-            // SwLayAction::TurboAction_(), if( !pCnt->IsValid() ...
+            // The layout is not robust wrt. "direct formatting"
+            // cf. layact.cxx, SwLayAction::TurboAction_(), if( !pCnt->IsValid() ...
             pFrame->SetCompletePaint();
             return true;
         }
