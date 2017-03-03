@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ca1a7417",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-03T09:20:19Z",
+      "side": 1,
+      "message": "while LO itself doesn\u0027t use the uwinapi DLL under MSVC 2015, it is still being built and included in the install set for the rationale given in \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d0c9ddb24ee0388d03c313caf5a45f1aa26049781\u003e \"Don\u0027t redefine snprintf as VS 2015 supports ISO standard\": \"Investigation reveals that the GetShortPathNameW is presumably used by legacy Duden extension that was built by Sun in a setsolar environment. The uwinapi.lib was never part of the SDK, so ordinary extensions cannot link against it.\"\n\nSo I suggest to decouple actual removal of uwinapi from this change, and discuss it elsewhere.",
+      "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

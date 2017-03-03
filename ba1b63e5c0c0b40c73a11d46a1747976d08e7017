@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_4a268469",
+        "filename": "external/libwpd/libwpd-vs2013.patch.1",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-03T09:20:19Z",
+      "side": 0,
+      "message": "but this patch makes the declaration/definition of rint conditional for anything older than 2013, so would be still relevant for 2015 and newer?",
+      "revId": "ba1b63e5c0c0b40c73a11d46a1747976d08e7017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
