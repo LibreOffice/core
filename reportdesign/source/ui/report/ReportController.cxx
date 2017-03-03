@@ -3026,7 +3026,7 @@ void OReportController::insertGraphic()
             xController->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
             uno::Sequence<beans::PropertyValue> aArgs(2);
             aArgs[0].Name = PROPERTY_IMAGEURL;
-            aArgs[0].Value <<= OUString(aDialog.GetPath());
+            aArgs[0].Value <<= aDialog.GetPath();
             aArgs[1].Name = PROPERTY_PRESERVEIRI;
             aArgs[1].Value <<= bLink;
             createControl(aArgs,xSection,OUString(),OBJ_DLG_IMAGECONTROL);

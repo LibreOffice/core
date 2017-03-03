@@ -2134,7 +2134,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
-            aAny <<= OUString(SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SwGetPoolIdFromName::FrmFmt ) );
+            aAny <<= SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SwGetPoolIdFromName::FrmFmt );
         }
         // #i73249#
         else if( FN_UNO_TITLE == pEntry->nWID )
@@ -2142,7 +2142,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject(rFlyFormat);
-            aAny <<= OUString(rFlyFormat.GetObjTitle());
+            aAny <<= rFlyFormat.GetObjTitle();
         }
         // New attribute Description
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
@@ -2150,7 +2150,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject(rFlyFormat);
-            aAny <<= OUString(rFlyFormat.GetObjDescription());
+            aAny <<= rFlyFormat.GetObjDescription();
         }
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName == UNO_NAME_ACTUAL_SIZE))
@@ -2223,7 +2223,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 aAny <<= aHexCLSID;
             else if(FN_UNO_STREAM_NAME == pEntry->nWID)
             {
-                aAny <<= OUString(pOleNode->GetOLEObj().GetCurrentPersistName());
+                aAny <<= pOleNode->GetOLEObj().GetCurrentPersistName();
             }
             else if(FN_EMBEDDED_OBJECT == pEntry->nWID)
             {

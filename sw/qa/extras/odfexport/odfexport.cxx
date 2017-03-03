@@ -543,7 +543,7 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
     save("writer8", aTempFile);
 
     uno::Sequence<uno::Any> aArgs(1);
-    aArgs[0] <<= OUString(aTempFile.GetURL());
+    aArgs[0] <<= aTempFile.GetURL();
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
 }

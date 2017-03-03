@@ -666,7 +666,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     aDescriptor[0].Value <<= bExportAsJPEG ? OUString("PNG") : OUString("SVM");
 
     aDescriptor[1].Name = "URL";
-    aDescriptor[1].Value <<= OUString(aFile.GetURL());
+    aDescriptor[1].Value <<= aFile.GetURL();
     aDescriptor[2].Name = "FilterData";
     aDescriptor[2].Value <<= aFilterData;
     if( bOnlyBackground )

@@ -315,7 +315,7 @@ namespace XSLT
         nv.Value <<= aURL;
         args[1] <<= nv;
         nv.Name = "SourceBaseURL";
-        nv.Value <<= OUString(INetURLObject(aURL).getBase());
+        nv.Value <<= INetURLObject(aURL).getBase();
         args[2] <<= nv;
 
         m_tcontrol = impl_createTransformer(msUserData[1], args);

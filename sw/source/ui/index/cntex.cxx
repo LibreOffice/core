@@ -68,7 +68,7 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
     if(xInfo->hasPropertyByName(aPropName))
     {
         uno::Any aValue;
-        aValue <<= OUString(rValue);
+        aValue <<= rValue;
         xProps->setPropertyValue(aPropName, aValue);
     }
 }
@@ -339,7 +339,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pPropValArr[0].Name = "TokenType";
                         pPropValArr[0].Value <<= sTokenType;
                         pPropValArr[1].Name = "CharacterStyleName";
-                        pPropValArr[1].Value <<= OUString(aToken.sCharStyleName);
+                        pPropValArr[1].Value <<= aToken.sCharStyleName;
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = "TabStopRightAligned";
@@ -355,7 +355,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         else if(TOKEN_TEXT == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = "Text";
-                            pPropValArr[2].Value <<= OUString(aToken.sText);
+                            pPropValArr[2].Value <<= aToken.sText;
                         }
                         beans::PropertyValues* pValues = aSequPropVals.getArray();
                         pValues[nTokenIndex] = aPropVals;

@@ -226,7 +226,7 @@ namespace accessibility
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
-                            aOldValue <<= OUString( pData->m_sOldText );
+                            aOldValue <<= pData->m_sOldText;
                             OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
                             aNewValue <<= sNewText;
                             TriState eState = TRISTATE_INDET;

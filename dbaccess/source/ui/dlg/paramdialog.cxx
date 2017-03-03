@@ -305,7 +305,7 @@ namespace dbaui
                 return true;
             }
 
-            m_aFinalValues[m_nCurrentlySelected].Value <<= OUString(m_pParam->GetText());
+            m_aFinalValues[m_nCurrentlySelected].Value <<= m_pParam->GetText();
         }
 
         // initialize the controls with the new values

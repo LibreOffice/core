@@ -125,7 +125,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                 OUString sLabel("Label");
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
-                                    aTmp <<= OUString(rHLinkItem.GetName());
+                                    aTmp <<= rHLinkItem.GetName();
                                     xPropSet->setPropertyValue(sLabel, aTmp );
                                 }
 

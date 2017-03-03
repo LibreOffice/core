@@ -1433,7 +1433,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
         pArgs[0].Name = "SearchString";
-        pArgs[0].Value <<= OUString(m_pSearchLB->GetText());
+        pArgs[0].Value <<= m_pSearchLB->GetText();
         pArgs[1].Name = "ParentWindow";
         pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == m_pSearchComponent1PB)

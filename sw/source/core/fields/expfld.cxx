@@ -1101,7 +1101,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= GetInputFlag();
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= OUString(GetExpStr());
+        rAny <<= GetExpStr();
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);

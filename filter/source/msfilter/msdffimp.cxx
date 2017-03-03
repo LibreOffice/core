@@ -6986,7 +6986,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             aMedium[1].Name = "URL";
             aMedium[1].Value <<= OUString( "private:stream" );
             aMedium[2].Name = "DocumentBaseURL";
-            aMedium[2].Value <<= OUString(rBaseURL);
+            aMedium[2].Value <<= rBaseURL;
 
             if ( !aFilterName.isEmpty() )
             {

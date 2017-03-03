@@ -648,7 +648,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
-        pValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
+        pValues[0].Value <<= pSfxFlt->GetFilterName();
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         sal_uInt32 nErrorCode = ERRCODE_NONE;
@@ -1079,7 +1079,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
-    pValues[0].Value <<= OUString(pTargetSfxFlt->GetFilterName());
+    pValues[0].Value <<= pTargetSfxFlt->GetFilterName();
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
@@ -1130,7 +1130,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
             uno::Sequence< beans::PropertyValue > aFilterValues(withFilterOptions ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
             pFilterValues[0].Name = "FilterName";
-            pFilterValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
+            pFilterValues[0].Value <<= pSfxFlt->GetFilterName();
             if(withFilterOptions)
             {
                 pFilterValues[1].Name = "FilterOptions";
