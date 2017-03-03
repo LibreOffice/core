@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-12-29T18:23:56.522000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/326729ce54de5296cb2a673ae88d2befa3e245ef</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="282" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-12-29T18:23:56.522000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/36de6c50684c8241969a2064d30aff41e0bc5d97</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="282" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -31,14 +31,14 @@
        <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">5</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">11</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">21</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
        <config:config-item config:name="VerticalSplitPosition" config:type="int">0</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionLeft" config:type="int">6</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
@@ -132,7 +132,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">sgH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMA0wAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkxldHRlcgBJbnB1dFNsb3Q6VHJheTEARHVwbGV4Ok5vbmUAABIAQ09NUEFUX0RVUExFWF9NT0RFDwBEdXBsZXhNb2RlOjpPZmY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">sgH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMA0wAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpMZXR0ZXIAABIAQ09NUEFUX0RVUExFWF9NT0RFDwBEdXBsZXhNb2RlOjpPZmY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -3084,13 +3084,57 @@
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+  </style:style>
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
   <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce37" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0"/>
-  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="science">
+  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="science">
    <style:table-cell-properties style:glyph-orientation-vertical="0" style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="automatic"/>
    <style:paragraph-properties fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="11pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="11pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
@@ -3099,7 +3143,7 @@
    <style:text-properties style:font-name="Arial" style:font-name-asian="Droid Sans Fallback" style:font-name-complex="Arial"/>
   </style:style>
   <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N165"/>
-  <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce41" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C2"/>
@@ -3134,7 +3178,7 @@
   <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N343">
    <style:table-cell-properties fo:background-color="transparent"/>
   </style:style>
-  <style:style style:name="ce46" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+  <style:style style:name="ce54" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:text-properties style:font-name="Arial" style:font-name-asian="Droid Sans Fallback" style:font-name-complex="Arial"/>
   </style:style>
   <style:style style:name="ce47" style:family="table-cell" style:parent-style-name="Default">
@@ -3229,7 +3273,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2017-02-09">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="17:14:31.618435359">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2017-03-03">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:25:51.031147426">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -3263,10 +3307,10 @@
    <table:table table:name="Sheet1" table:style-name="ta1">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co1" table:default-cell-style-name="ce18"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce15"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
       <text:p>IMTAN Function</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
@@ -3275,10 +3319,10 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-     <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce12" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -3287,13 +3331,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro4">
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Sheet</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Description</text:p>
      </table:table-cell>
     </table:table-row>
@@ -3301,7 +3345,7 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=AND([Sheet2.C2:.C840])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce21" table:formula="of:=AND([Sheet2.C2:.C840])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -3310,37 +3354,37 @@
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
-     <table:table-cell table:style-name="ce27"/>
+     <table:table-cell table:style-name="ce22"/>
+     <table:table-cell table:style-name="ce23"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="16">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce22"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048537">
@@ -3366,7 +3410,7 @@
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co5" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co6" table:default-cell-style-name="ce18"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce15"/>
     <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co9" table:number-columns-repeated="2" table:default-cell-style-name="Default"/>
@@ -3410,7 +3454,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell table:style-name="ce56"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>-5+12i</text:p>
      </table:table-cell>
@@ -3418,7 +3462,7 @@
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell table:style-name="ce56"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3426,7 +3470,7 @@
       <text:p>-4,10750577733132e-11+1,00000000006335j</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K2:.L2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce41" table:formula="of:=AND([.K2:.L2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=IMTAN(&quot;5+12j&quot;)" calcext:value-type="string">
@@ -3446,16 +3490,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A2])" office:value-type="float" office:value="1.00000000006335" calcext:value-type="float">
       <text:p>1.00000000006335</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F2];&quot;1.00000000000000E00&quot;)=TEXT([.I2];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F2];15)=ORG.LIBREOFFICE.ROUNDSIG([.I2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G2];&quot;1.00000000000000E00&quot;)=TEXT([.J2];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G2];15)=ORG.LIBREOFFICE.ROUNDSIG([.J2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell table:style-name="ce60" table:number-columns-spanned="3" table:number-rows-spanned="1"/>
-     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce13"/>
+     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce31"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>-4+12i</text:p>
      </table:table-cell>
@@ -3463,7 +3507,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell table:style-name="ce60" table:number-columns-spanned="3" table:number-rows-spanned="1"/>
-     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce13"/>
+     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce31"/>
      <table:table-cell table:style-name="ce60" table:number-columns-spanned="3" table:number-rows-spanned="1"/>
      <table:covered-table-cell table:number-columns-repeated="2"/>
     </table:table-row>
@@ -3472,7 +3516,7 @@
       <text:p>0,999909204262595i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K3:.L3])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce41" table:formula="of:=AND([.K3:.L3])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=IMTAN(COMPLEX(0,5))" calcext:value-type="string">
@@ -3492,22 +3536,22 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A3])" office:value-type="float" office:value="0.999909204262595" calcext:value-type="float">
       <text:p>0.999909204262595</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F3];&quot;1.00000000000000E00&quot;)=TEXT([.I3];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F3];15)=ORG.LIBREOFFICE.ROUNDSIG([.I3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G3];&quot;1.00000000000000E00&quot;)=TEXT([.J3];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G3];15)=ORG.LIBREOFFICE.ROUNDSIG([.J3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>-3+12i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce47"/>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3515,7 +3559,7 @@
       <text:p>4,10750577733132e-11+1,00000000006335i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K4:.L4])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K4:.L4])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=IMTAN(&quot;-5+12i&quot;)" calcext:value-type="string">
@@ -3535,16 +3579,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A4])" office:value-type="float" office:value="1.00000000006335" calcext:value-type="float">
       <text:p>1.00000000006335</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F4];&quot;1.00000000000000E00&quot;)=TEXT([.I4];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F4];15)=ORG.LIBREOFFICE.ROUNDSIG([.I4];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G4];&quot;1.00000000000000E00&quot;)=TEXT([.J4];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G4];15)=ORG.LIBREOFFICE.ROUNDSIG([.J4];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>-2+12i</text:p>
      </table:table-cell>
@@ -3552,7 +3596,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3560,7 +3604,7 @@
       <text:p>4,10750577733132e-11+1,00000000006335i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K5:.L5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K5:.L5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=IMTAN(R1)" calcext:value-type="string">
@@ -3580,16 +3624,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A5])" office:value-type="float" office:value="1.00000000006335" calcext:value-type="float">
       <text:p>1.00000000006335</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F5];&quot;1.00000000000000E00&quot;)=TEXT([.I5];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F5];15)=ORG.LIBREOFFICE.ROUNDSIG([.I5];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G5];&quot;1.00000000000000E00&quot;)=TEXT([.J5];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G5];15)=ORG.LIBREOFFICE.ROUNDSIG([.J5];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>-1+12i</text:p>
      </table:table-cell>
@@ -3597,7 +3641,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3605,7 +3649,7 @@
       <text:p>4,10750577733132e-11+1,00000000006335i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K6:.L6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K6:.L6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3625,16 +3669,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A6])" office:value-type="float" office:value="1.00000000006335" calcext:value-type="float">
       <text:p>1.00000000006335</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F6];&quot;1.00000000000000E00&quot;)=TEXT([.I6];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F6];15)=ORG.LIBREOFFICE.ROUNDSIG([.I6];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G6];&quot;1.00000000000000E00&quot;)=TEXT([.J6];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G6];15)=ORG.LIBREOFFICE.ROUNDSIG([.J6];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>0+12i</text:p>
      </table:table-cell>
@@ -3642,7 +3686,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3650,7 +3694,7 @@
       <text:p>-7,46992098707272e-11+1,00000000001099i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K7:.L7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K7:.L7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3670,16 +3714,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A7])" office:value-type="float" office:value="1.00000000001099" calcext:value-type="float">
       <text:p>1.00000000001099</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F7];&quot;1.00000000000000E00&quot;)=TEXT([.I7];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F7];15)=ORG.LIBREOFFICE.ROUNDSIG([.I7];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G7];&quot;1.00000000000000E00&quot;)=TEXT([.J7];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G7];15)=ORG.LIBREOFFICE.ROUNDSIG([.J7];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>1+12i</text:p>
      </table:table-cell>
@@ -3687,7 +3731,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3695,7 +3739,7 @@
       <text:p>2,1096621987625e-11+0,999999999927505i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K8:.L8])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K8:.L8])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3715,16 +3759,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A8])" office:value-type="float" office:value="0.999999999927505" calcext:value-type="float">
       <text:p>0.999999999927505</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F8];&quot;1.00000000000000E00&quot;)=TEXT([.I8];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F8];15)=ORG.LIBREOFFICE.ROUNDSIG([.I8];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G8];&quot;1.00000000000000E00&quot;)=TEXT([.J8];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G8];15)=ORG.LIBREOFFICE.ROUNDSIG([.J8];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>2+12i</text:p>
      </table:table-cell>
@@ -3732,7 +3776,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3740,7 +3784,7 @@
       <text:p>5,71406248674916e-11+1,00000000004935i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K9:.L9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K9:.L9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3760,16 +3804,16 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A9])" office:value-type="float" office:value="1.00000000004935" calcext:value-type="float">
       <text:p>1.00000000004935</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F9];&quot;1.00000000000000E00&quot;)=TEXT([.I9];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F9];15)=ORG.LIBREOFFICE.ROUNDSIG([.I9];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G9];&quot;1.00000000000000E00&quot;)=TEXT([.J9];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G9];15)=ORG.LIBREOFFICE.ROUNDSIG([.J9];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>3+12i</text:p>
      </table:table-cell>
@@ -3777,7 +3821,7 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3785,7 +3829,7 @@
       <text:p>-6,86544025428317e-11+1,00000000003142i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K10:.L10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K10:.L10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3805,23 +3849,23 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A10])" office:value-type="float" office:value="1.00000000003142" calcext:value-type="float">
       <text:p>1.00000000003142</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F10];&quot;1.00000000000000E00&quot;)=TEXT([.I10];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F10];15)=ORG.LIBREOFFICE.ROUNDSIG([.I10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G10];&quot;1.00000000000000E00&quot;)=TEXT([.J10];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G10];15)=ORG.LIBREOFFICE.ROUNDSIG([.J10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>4+12i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3829,7 +3873,7 @@
       <text:p>0,999999999924497i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K11:.L11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K11:.L11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3849,23 +3893,23 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A11])" office:value-type="float" office:value="0.999999999924497" calcext:value-type="float">
       <text:p>0.999999999924497</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F11];&quot;1.00000000000000E00&quot;)=TEXT([.I11];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F11];15)=ORG.LIBREOFFICE.ROUNDSIG([.I11];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G11];&quot;1.00000000000000E00&quot;)=TEXT([.J11];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G11];15)=ORG.LIBREOFFICE.ROUNDSIG([.J11];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>5+12i</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3873,7 +3917,7 @@
       <text:p>6,86544025428317e-11+1,00000000003142i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K12:.L12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K12:.L12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3893,22 +3937,22 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A12])" office:value-type="float" office:value="1.00000000003142" calcext:value-type="float">
       <text:p>1.00000000003142</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F12];&quot;1.00000000000000E00&quot;)=TEXT([.I12];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F12];15)=ORG.LIBREOFFICE.ROUNDSIG([.I12];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G12];&quot;1.00000000000000E00&quot;)=TEXT([.J12];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G12];15)=ORG.LIBREOFFICE.ROUNDSIG([.J12];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>6+12i</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3916,7 +3960,7 @@
       <text:p>-5,71406248674916e-11+1,00000000004935i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K13:.L13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K13:.L13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3936,19 +3980,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A13])" office:value-type="float" office:value="1.00000000004935" calcext:value-type="float">
       <text:p>1.00000000004935</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F13];&quot;1.00000000000000E00&quot;)=TEXT([.I13];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F13];15)=ORG.LIBREOFFICE.ROUNDSIG([.I13];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G13];&quot;1.00000000000000E00&quot;)=TEXT([.J13];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G13];15)=ORG.LIBREOFFICE.ROUNDSIG([.J13];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3956,7 +4000,7 @@
       <text:p>-2,1096621987625e-11+0,999999999927505i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K14:.L14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K14:.L14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -3976,19 +4020,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A14])" office:value-type="float" office:value="0.999999999927505" calcext:value-type="float">
       <text:p>0.999999999927505</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F14];&quot;1.00000000000000E00&quot;)=TEXT([.I14];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F14];15)=ORG.LIBREOFFICE.ROUNDSIG([.I14];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G14];&quot;1.00000000000000E00&quot;)=TEXT([.J14];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G14];15)=ORG.LIBREOFFICE.ROUNDSIG([.J14];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -3996,7 +4040,7 @@
       <text:p>7,46992098707272e-11+1,00000000001099i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K15:.L15])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K15:.L15])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -4016,19 +4060,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A15])" office:value-type="float" office:value="1.00000000001099" calcext:value-type="float">
       <text:p>1.00000000001099</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F15];&quot;1.00000000000000E00&quot;)=TEXT([.I15];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F15];15)=ORG.LIBREOFFICE.ROUNDSIG([.I15];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G15];&quot;1.00000000000000E00&quot;)=TEXT([.J15];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G15];15)=ORG.LIBREOFFICE.ROUNDSIG([.J15];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -4036,7 +4080,7 @@
       <text:p>-4,10750577733132e-11+1,00000000006335i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K16:.L16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K16:.L16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -4056,19 +4100,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A16])" office:value-type="float" office:value="1.00000000006335" calcext:value-type="float">
       <text:p>1.00000000006335</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F16];&quot;1.00000000000000E00&quot;)=TEXT([.I16];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F16];15)=ORG.LIBREOFFICE.ROUNDSIG([.I16];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G16];&quot;1.00000000000000E00&quot;)=TEXT([.J16];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G16];15)=ORG.LIBREOFFICE.ROUNDSIG([.J16];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -4076,7 +4120,7 @@
       <text:p>-4,05126991627804e-11+0,999999999936287i</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K17:.L17])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K17:.L17])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="{=IMTAN(R1:R12)}" calcext:value-type="string">
@@ -4096,19 +4140,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A17])" office:value-type="float" office:value="0.999999999936287" calcext:value-type="float">
       <text:p>0.999999999936287</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F17];&quot;1.00000000000000E00&quot;)=TEXT([.I17];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F17];15)=ORG.LIBREOFFICE.ROUNDSIG([.I17];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G17];&quot;1.00000000000000E00&quot;)=TEXT([.J17];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G17];15)=ORG.LIBREOFFICE.ROUNDSIG([.J17];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -4116,7 +4160,7 @@
       <text:p>-0,761594155955765j</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K18:.L18])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K18:.L18])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=IMTAN(&quot;0-j&quot;)" calcext:value-type="string">
@@ -4136,19 +4180,19 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A18])" office:value-type="float" office:value="-0.761594155955765" calcext:value-type="float">
       <text:p>-0.761594155955765</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F18];&quot;1.00000000000000E00&quot;)=TEXT([.I18];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F18];15)=ORG.LIBREOFFICE.ROUNDSIG([.I18];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G18];&quot;1.00000000000000E00&quot;)=TEXT([.J18];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G18];15)=ORG.LIBREOFFICE.ROUNDSIG([.J18];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -4156,7 +4200,7 @@
       <text:p>1,15782128234958</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce35" table:formula="of:=AND([.K19:.L19])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=AND([.K19:.L19])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=IMTAN(4)" calcext:value-type="string">
@@ -4176,23 +4220,23 @@
      <table:table-cell table:formula="of:=IMAGINARY([.A19])" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.F19];&quot;1.00000000000000E00&quot;)=TEXT([.I19];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F19];15)=ORG.LIBREOFFICE.ROUNDSIG([.I19];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=TEXT([.G19];&quot;1.00000000000000E00&quot;)=TEXT([.J19];&quot;1.00000000000000E00&quot;)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce54" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G19];15)=ORG.LIBREOFFICE.ROUNDSIG([.J19];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4203,10 +4247,10 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
@@ -4221,14 +4265,14 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4239,14 +4283,14 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4258,14 +4302,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="8">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4274,14 +4318,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4290,14 +4334,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4308,14 +4352,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="6">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4324,14 +4368,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4340,14 +4384,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4356,14 +4400,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4372,14 +4416,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4390,14 +4434,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4406,14 +4450,14 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="4">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4422,28 +4466,28 @@
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="4">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4452,14 +4496,14 @@
       <text:p>58</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4468,14 +4512,14 @@
       <text:p>59</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4484,14 +4528,14 @@
       <text:p>60</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4500,14 +4544,14 @@
       <text:p>61</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4516,14 +4560,14 @@
       <text:p>62</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4532,14 +4576,14 @@
       <text:p>63</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4548,14 +4592,14 @@
       <text:p>64</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4564,14 +4608,14 @@
       <text:p>65</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4580,14 +4624,14 @@
       <text:p>66</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4596,14 +4640,14 @@
       <text:p>67</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4612,14 +4656,14 @@
       <text:p>68</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4628,14 +4672,14 @@
       <text:p>69</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4644,14 +4688,14 @@
       <text:p>70</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4660,14 +4704,14 @@
       <text:p>71</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4676,14 +4720,14 @@
       <text:p>72</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4692,14 +4736,14 @@
       <text:p>73</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4708,14 +4752,14 @@
       <text:p>74</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4724,14 +4768,14 @@
       <text:p>75</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4740,14 +4784,14 @@
       <text:p>76</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4756,14 +4800,14 @@
       <text:p>77</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4772,14 +4816,14 @@
       <text:p>78</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4788,14 +4832,14 @@
       <text:p>79</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4804,14 +4848,14 @@
       <text:p>80</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4820,14 +4864,14 @@
       <text:p>81</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4836,14 +4880,14 @@
       <text:p>82</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4852,14 +4896,14 @@
       <text:p>83</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4868,14 +4912,14 @@
       <text:p>84</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4884,14 +4928,14 @@
       <text:p>85</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4900,14 +4944,14 @@
       <text:p>86</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4916,14 +4960,14 @@
       <text:p>87</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4932,14 +4976,14 @@
       <text:p>88</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4948,14 +4992,14 @@
       <text:p>89</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4964,14 +5008,14 @@
       <text:p>90</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4980,14 +5024,14 @@
       <text:p>91</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -4996,14 +5040,14 @@
       <text:p>92</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5012,14 +5056,14 @@
       <text:p>93</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5030,14 +5074,14 @@
       <text:p>94</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5048,14 +5092,14 @@
       <text:p>95</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5064,14 +5108,14 @@
       <text:p>96</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5080,14 +5124,14 @@
       <text:p>97</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5096,14 +5140,14 @@
       <text:p>98</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5112,14 +5156,14 @@
       <text:p>99</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
@@ -5128,64 +5172,64 @@
       <text:p>100</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="47">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="54">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="22">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell table:style-name="ce24"/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="94">
-     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce31"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce28"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="4">
@@ -5194,10 +5238,10 @@
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
@@ -5207,10 +5251,10 @@
      <table:table-cell table:style-name="ce44"/>
      <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
@@ -5219,10 +5263,10 @@
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2">
@@ -5232,613 +5276,613 @@
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="221">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="548" calcext:value-type="float">
       <text:p>548</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="549" calcext:value-type="float">
       <text:p>549</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="550" calcext:value-type="float">
       <text:p>550</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="551" calcext:value-type="float">
       <text:p>551</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="552" calcext:value-type="float">
       <text:p>552</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="553" calcext:value-type="float">
       <text:p>553</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="554" calcext:value-type="float">
       <text:p>554</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="555" calcext:value-type="float">
       <text:p>555</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="556" calcext:value-type="float">
       <text:p>556</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="557" calcext:value-type="float">
       <text:p>557</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="558" calcext:value-type="float">
       <text:p>558</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="559" calcext:value-type="float">
       <text:p>559</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="560" calcext:value-type="float">
       <text:p>560</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="561" calcext:value-type="float">
       <text:p>561</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="562" calcext:value-type="float">
       <text:p>562</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="563" calcext:value-type="float">
       <text:p>563</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="564" calcext:value-type="float">
       <text:p>564</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="565" calcext:value-type="float">
       <text:p>565</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="566" calcext:value-type="float">
       <text:p>566</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="567" calcext:value-type="float">
       <text:p>567</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="568" calcext:value-type="float">
       <text:p>568</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="569" calcext:value-type="float">
       <text:p>569</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="570" calcext:value-type="float">
       <text:p>570</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="571" calcext:value-type="float">
       <text:p>571</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="572" calcext:value-type="float">
       <text:p>572</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="573" calcext:value-type="float">
       <text:p>573</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="574" calcext:value-type="float">
       <text:p>574</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="575" calcext:value-type="float">
       <text:p>575</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="576" calcext:value-type="float">
       <text:p>576</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="577" calcext:value-type="float">
       <text:p>577</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="578" calcext:value-type="float">
       <text:p>578</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="579" calcext:value-type="float">
       <text:p>579</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="580" calcext:value-type="float">
       <text:p>580</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="581" calcext:value-type="float">
       <text:p>581</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="582" calcext:value-type="float">
       <text:p>582</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="583" calcext:value-type="float">
       <text:p>583</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="584" calcext:value-type="float">
       <text:p>584</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="585" calcext:value-type="float">
       <text:p>585</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="586" calcext:value-type="float">
       <text:p>586</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="587" calcext:value-type="float">
       <text:p>587</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="588" calcext:value-type="float">
       <text:p>588</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="589" calcext:value-type="float">
       <text:p>589</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="590" calcext:value-type="float">
       <text:p>590</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="591" calcext:value-type="float">
       <text:p>591</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="592" calcext:value-type="float">
       <text:p>592</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="593" calcext:value-type="float">
       <text:p>593</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="594" calcext:value-type="float">
       <text:p>594</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="595" calcext:value-type="float">
       <text:p>595</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce55" office:value-type="float" office:value="596" calcext:value-type="float">
       <text:p>596</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="2490">
      <table:table-cell table:number-columns-repeated="13"/>
      <table:table-cell table:style-name="ce55"/>
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-repeated="4"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="1045486">
