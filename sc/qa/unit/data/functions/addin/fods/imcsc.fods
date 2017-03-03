@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-12-29T18:23:56.522000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/326729ce54de5296cb2a673ae88d2befa3e245ef</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="298" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-12-29T18:23:56.522000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/36de6c50684c8241969a2064d30aff41e0bc5d97</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="298" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">78015</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">359233</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">75111</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">360480</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -31,14 +31,14 @@
        <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">11</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">20</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
        <config:config-item config:name="VerticalSplitPosition" config:type="int">0</config:config-item>
        <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
-       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionLeft" config:type="int">2</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
@@ -132,7 +132,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">sgH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMA0wAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkxldHRlcgBJbnB1dFNsb3Q6VHJheTEARHVwbGV4Ok5vbmUAABIAQ09NUEFUX0RVUExFWF9NT0RFDwBEdXBsZXhNb2RlOjpPZmY=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">sgH+/0xleG1hcmstRTM1MmRuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpMZXhtYXJrLUUzNTJkbgAAAAAAAAAAAAAAAAAWAAMA0wAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9TGV4bWFyay1FMzUyZG4Kb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAElucHV0U2xvdDpUcmF5MQBQYWdlU2l6ZTpMZXR0ZXIAABIAQ09NUEFUX0RVUExFWF9NT0RFDwBEdXBsZXhNb2RlOjpPZmY=</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -2994,7 +2994,7 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="179.09pt"/>
   </style:style>
   <style:style style:name="co8" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="140.94pt"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="58.65pt"/>
   </style:style>
   <style:style style:name="co9" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="51.45pt"/>
@@ -3032,56 +3032,18 @@
   <style:style style:name="ro6" style:family="table-row">
    <style:table-row-properties style:row-height="15.79pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
+  <style:style style:name="ro7" style:family="table-row">
+   <style:table-row-properties style:row-height="28.35pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro8" style:family="table-row">
+   <style:table-row-properties style:row-height="40.99pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
   </style:style>
   <number:boolean-style style:name="N99">
    <number:boolean/>
   </number:boolean-style>
-  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-  </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
-  </style:style>
-  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
-  </style:style>
-  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
-   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
-   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
-  </style:style>
   <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
@@ -3123,6 +3085,50 @@
    <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
   </style:style>
   <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+  </style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+  </style:style>
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Serif" fo:font-size="10pt" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-size-asian="10pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
@@ -3189,7 +3195,9 @@
    <style:table-cell-properties fo:wrap-option="wrap"/>
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Droid Sans Fallback" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Arial" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce50" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
+  <style:style style:name="ce64" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:text-properties style:font-name="Arial" style:font-name-asian="Droid Sans Fallback" style:font-name-complex="Arial"/>
+  </style:style>
   <style:style style:name="ce65" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
@@ -3287,7 +3295,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2017-02-05">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="08:56:59.516272343">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2017-03-03">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:19:27.677990348">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -3321,10 +3329,10 @@
    <table:table table:name="Sheet1" table:style-name="ta1">
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co1" table:default-cell-style-name="ce18"/>
+    <table:table-column table:style-name="co1" table:default-cell-style-name="ce15"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
       <text:p>IMCSC Function</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
@@ -3333,10 +3341,10 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro3">
-     <table:table-cell table:style-name="ce14" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce12" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce19" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell/>
@@ -3345,13 +3353,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro4">
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Sheet</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Result</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:style-name="ce13" office:value-type="string" calcext:value-type="string">
       <text:p>Description</text:p>
      </table:table-cell>
     </table:table-row>
@@ -3359,7 +3367,7 @@
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce22" table:formula="of:=AND([Sheet2.C2:.C840])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce21" table:formula="of:=AND([Sheet2.C2:.C840])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -3368,37 +3376,37 @@
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell table:style-name="ce26"/>
+     <table:table-cell table:style-name="ce27"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="16">
      <table:table-cell/>
-     <table:table-cell table:style-name="ce23"/>
+     <table:table-cell table:style-name="ce26"/>
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="1048537">
@@ -3424,7 +3432,7 @@
     <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co4" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co5" table:default-cell-style-name="Default"/>
-    <table:table-column table:style-name="co6" table:default-cell-style-name="ce18"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="ce15"/>
     <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
     <table:table-column table:style-name="co9" table:default-cell-style-name="Default"/>
@@ -3501,10 +3509,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A2])" office:value-type="float" office:value="-0.00000348576140783804" calcext:value-type="float">
       <text:p>-3.48576140783804E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F2];7)=ROUND([.I2];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F2];15)=ORG.LIBREOFFICE.ROUNDSIG([.I2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G2];7)=ROUND([.J2];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G2];15)=ORG.LIBREOFFICE.ROUNDSIG([.J2];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3550,10 +3558,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A3])" office:value-type="float" office:value="-0.0134765058305891" calcext:value-type="float">
       <text:p>-0.013476505830589</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F3];7)=ROUND([.I3];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F3];15)=ORG.LIBREOFFICE.ROUNDSIG([.I3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G3];7)=ROUND([.J3];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G3];15)=ORG.LIBREOFFICE.ROUNDSIG([.J3];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3596,10 +3604,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A4])" office:value-type="float" office:value="-0.00000348576140783804" calcext:value-type="float">
       <text:p>-3.48576140783804E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F4];7)=ROUND([.I4];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F4];15)=ORG.LIBREOFFICE.ROUNDSIG([.I4];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G4];7)=ROUND([.J4];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G4];15)=ORG.LIBREOFFICE.ROUNDSIG([.J4];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3616,7 +3624,7 @@
      <table:table-cell table:style-name="ce31" table:number-columns-repeated="2"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro7">
      <table:table-cell table:style-name="ce37" table:formula="of:=IMCSC([.N1])" office:value-type="string" office:string-value="1,17836687482814e-05-3,48576140783804e-06i" calcext:value-type="string">
       <text:p>1,17836687482814e-05-3,48576140783804e-06i</text:p>
      </table:table-cell>
@@ -3643,10 +3651,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A5])" office:value-type="float" office:value="-0.00000348576140783804" calcext:value-type="float">
       <text:p>-3.48576140783804E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F5];7)=ROUND([.I5];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F5];15)=ORG.LIBREOFFICE.ROUNDSIG([.I5];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G5];7)=ROUND([.J5];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G5];15)=ORG.LIBREOFFICE.ROUNDSIG([.J5];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3690,10 +3698,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A6])" office:value-type="float" office:value="-0.00000348576140783804" calcext:value-type="float">
       <text:p>-3.48576140783804E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F6];7)=ROUND([.I6];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F6];15)=ORG.LIBREOFFICE.ROUNDSIG([.I6];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G6];7)=ROUND([.J6];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G6];15)=ORG.LIBREOFFICE.ROUNDSIG([.J6];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3737,10 +3745,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A7])" office:value-type="float" office:value="0.0000080322504195773" calcext:value-type="float">
       <text:p>8.0322504195773E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F7];7)=ROUND([.I7];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F7];15)=ORG.LIBREOFFICE.ROUNDSIG([.I7];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G7];7)=ROUND([.J7];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G7];15)=ORG.LIBREOFFICE.ROUNDSIG([.J7];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3784,10 +3792,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A8])" office:value-type="float" office:value="0.0000121654482550521" calcext:value-type="float">
       <text:p>1.21654482550521E-05</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F8];7)=ROUND([.I8];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F8];15)=ORG.LIBREOFFICE.ROUNDSIG([.I8];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G8];7)=ROUND([.J8];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G8];15)=ORG.LIBREOFFICE.ROUNDSIG([.J8];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3831,10 +3839,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A9])" office:value-type="float" office:value="0.00000511378906737739" calcext:value-type="float">
       <text:p>5.11378906737739E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F9];7)=ROUND([.I9];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F9];15)=ORG.LIBREOFFICE.ROUNDSIG([.I9];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G9];7)=ROUND([.J9];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G9];15)=ORG.LIBREOFFICE.ROUNDSIG([.J9];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3851,7 +3859,7 @@
      <table:table-cell table:style-name="ce31" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
+    <table:table-row table:style-name="ro8">
      <table:table-cell office:value-type="string" office:string-value="-1,03403528397133e-05-6,63946420403422e-06i" calcext:value-type="string">
       <text:p>-1,03403528397133e-05-6,63946420403422e-06i</text:p>
      </table:table-cell>
@@ -3878,10 +3886,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A10])" office:value-type="float" office:value="-0.00000663946420403422" calcext:value-type="float">
       <text:p>-6.63946420403422E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F10];7)=ROUND([.I10];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F10];15)=ORG.LIBREOFFICE.ROUNDSIG([.I10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G10];7)=ROUND([.J10];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G10];15)=ORG.LIBREOFFICE.ROUNDSIG([.J10];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3924,10 +3932,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A11])" office:value-type="float" office:value="-0.0000122884247071203" calcext:value-type="float">
       <text:p>-1.22884247071203E-05</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F11];7)=ROUND([.I11];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F11];15)=ORG.LIBREOFFICE.ROUNDSIG([.I11];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G11];7)=ROUND([.J11];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G11];15)=ORG.LIBREOFFICE.ROUNDSIG([.J11];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -3969,10 +3977,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A12])" office:value-type="float" office:value="-0.00000663946420403422" calcext:value-type="float">
       <text:p>-6.63946420403422E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F12];7)=ROUND([.I12];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F12];15)=ORG.LIBREOFFICE.ROUNDSIG([.I12];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G12];7)=ROUND([.J12];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G12];15)=ORG.LIBREOFFICE.ROUNDSIG([.J12];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4013,10 +4021,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A13])" office:value-type="float" office:value="0.00000511378906737739" calcext:value-type="float">
       <text:p>5.11378906737739E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F13];7)=ROUND([.I13];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F13];15)=ORG.LIBREOFFICE.ROUNDSIG([.I13];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G13];7)=ROUND([.J13];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G13];15)=ORG.LIBREOFFICE.ROUNDSIG([.J13];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4055,10 +4063,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A14])" office:value-type="float" office:value="0.0000121654482550521" calcext:value-type="float">
       <text:p>1.21654482550521E-05</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F14];7)=ROUND([.I14];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F14];15)=ORG.LIBREOFFICE.ROUNDSIG([.I14];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G14];7)=ROUND([.J14];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G14];15)=ORG.LIBREOFFICE.ROUNDSIG([.J14];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4097,10 +4105,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A15])" office:value-type="float" office:value="0.0000080322504195773" calcext:value-type="float">
       <text:p>8.0322504195773E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F15];7)=ROUND([.I15];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F15];15)=ORG.LIBREOFFICE.ROUNDSIG([.I15];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G15];7)=ROUND([.J15];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G15];15)=ORG.LIBREOFFICE.ROUNDSIG([.J15];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4139,10 +4147,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A16])" office:value-type="float" office:value="-0.00000348576140783804" calcext:value-type="float">
       <text:p>-3.48576140783804E-06</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F16];7)=ROUND([.I16];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F16];15)=ORG.LIBREOFFICE.ROUNDSIG([.I16];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G16];7)=ROUND([.J16];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G16];15)=ORG.LIBREOFFICE.ROUNDSIG([.J16];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4181,10 +4189,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A17])" office:value-type="float" office:value="-0.0000117989802733781" calcext:value-type="float">
       <text:p>-1.17989802733781E-05</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F17];7)=ROUND([.I17];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F17];15)=ORG.LIBREOFFICE.ROUNDSIG([.I17];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G17];7)=ROUND([.J17];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G17];15)=ORG.LIBREOFFICE.ROUNDSIG([.J17];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4223,10 +4231,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A18])" office:value-type="float" office:value="0.850918128239322" calcext:value-type="float">
       <text:p>0.850918128239322</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F18];7)=ROUND([.I18];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F18];15)=ORG.LIBREOFFICE.ROUNDSIG([.I18];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G18];7)=ROUND([.J18];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G18];15)=ORG.LIBREOFFICE.ROUNDSIG([.J18];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
@@ -4265,10 +4273,10 @@
      <table:table-cell table:style-name="ce39" table:formula="of:=IMAGINARY([.A19])" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.F19];7)=ROUND([.I19];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.F19];15)=ORG.LIBREOFFICE.ROUNDSIG([.I19];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce50" table:formula="of:=ROUND([.G19];7)=ROUND([.J19];7)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce64" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.G19];15)=ORG.LIBREOFFICE.ROUNDSIG([.J19];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce34"/>
