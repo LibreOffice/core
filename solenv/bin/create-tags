@@ -12,7 +12,7 @@ if test "$1" = "-e"; then
     ctags=etags
 fi
 
-saloptions="-ISAL_DELETED_FUNCTION -ISAL_OVERRIDE -ISAL_FINAL -ISAL_CONSTEXPR"
+saloptions="-ISAL_DELETED_FUNCTION -ISAL_OVERRIDE -ISAL_FINAL"
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 
 $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $saloptions $omnicppoptions \

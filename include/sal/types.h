@@ -418,16 +418,6 @@ namespace css = ::com::sun::star;
 #define SAL_FINAL
 #endif
 
-/** C++11 "constexpr" feature.
-
-    @since LibreOffice 5.0
-*/
-#if defined LIBO_INTERNAL_ONLY
-#define SAL_CONSTEXPR constexpr
-#else
-#define SAL_CONSTEXPR
-#endif
-
 #if defined LIBO_INTERNAL_ONLY
 #if defined __clang__
 #define SAL_FALLTHROUGH [[clang::fallthrough]]
