@@ -177,7 +177,9 @@ public:
 
     virtual ~TextOutRenderer() = default;
 
-    virtual bool operator ()(CommonSalLayout const &rLayout, HDC hDC,
+    virtual bool operator ()(CommonSalLayout const &rLayout,
+        SalGraphics &rGraphics,
+        HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) = 0;
 };
@@ -190,7 +192,9 @@ class ExTextOutRenderer : public TextOutRenderer
 public:
     explicit ExTextOutRenderer() = default;
 
-    bool operator ()(CommonSalLayout const &rLayout, HDC hDC,
+    bool operator ()(CommonSalLayout const &rLayout,
+        SalGraphics &rGraphics,
+        HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 };
@@ -213,7 +217,9 @@ public:
     explicit D2DWriteTextOutRenderer();
     virtual ~D2DWriteTextOutRenderer() override;
 
-    bool operator ()(CommonSalLayout const &rLayout, HDC hDC,
+    bool operator ()(CommonSalLayout const &rLayout,
+        SalGraphics &rGraphics,
+        HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 
@@ -245,7 +251,6 @@ private:
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
     bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
-    bool GetDWriteInkBox(CommonSalLayout const &rLayout, Rectangle &) const;
 
     ID2D1Factory        * mpD2DFactory;
     IDWriteFactory      * mpDWriteFactory;

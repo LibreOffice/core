@@ -262,7 +262,9 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 }
 
 
-bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hDC,
+bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
+    SalGraphics & /*rGraphics*/,
+    HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -339,7 +341,9 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
     CleanupModules();
 }
 
-bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hDC,
+bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
+    SalGraphics &rGraphics,
+    HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -349,11 +353,11 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout, HDC hD
     if (!BindFont(hDC))
     {
         // If for any reason we can't bind fallback to legacy APIs.
-        return ExTextOutRenderer()(rLayout, hDC, pRectToErase, pPos, pGetNextGlypInfo);
+        return ExTextOutRenderer()(rLayout, rGraphics, hDC, pRectToErase, pPos, pGetNextGlypInfo);
     }
 
     Rectangle bounds;
-    bool succeeded = GetDWriteInkBox(rLayout, bounds);
+    bool succeeded = rLayout.GetBoundRect(rGraphics, bounds);
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
     ID2D1SolidColorBrush* pBrush = nullptr;
@@ -497,44 +501,6 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
-bool D2DWriteTextOutRenderer::GetDWriteInkBox(CommonSalLayout const &rLayout, Rectangle & rOut) const
-{
-    rOut.SetEmpty();
-
-    DWRITE_FONT_METRICS aFontMetrics;
-    mpFontFace->GetMetrics(&aFontMetrics);
-
-    Point aPos;
-    const GlyphItem* pGlyph;
-    std::vector<uint16_t> indices;
-    std::vector<Point>  positions;
-    int nStart = 0;
-    while (rLayout.GetNextGlyphs(1, &pGlyph, aPos, nStart))
-    {
-        positions.push_back(aPos);
-        indices.push_back(pGlyph->maGlyphId);
-    }
-
-    auto aBoxes = GetGlyphInkBoxes(indices.data(), indices.data() + indices.size());
-    if (aBoxes.empty())
-        return false;
-
-    auto p = positions.begin();
-    for (auto &b:aBoxes)
-    {
-        b += *p;
-        p++;
-        rOut.Union(b);
-    }
-
-    // The clipping rectangle is sometimes overzealous, add an extra pixel to
-    // remedy this.
-    if (!rOut.IsEmpty())
-        rOut.expand(1);
-
-    return true;
-}
-
 SalLayout* WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (!mpWinFontEntry[nFallbackLevel])
@@ -643,7 +609,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, boo
     Point aPos(0, 0);
     int nGlyphCount(0);
     TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
-    bool result = render(rLayout, hDC, nullptr, &aPos, &nGlyphCount);
+    bool result = render(rLayout, *this, hDC, nullptr, &aPos, &nGlyphCount);
     assert(!result);
 }
 

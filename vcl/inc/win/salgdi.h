@@ -299,7 +299,7 @@ protected:
 private:
     // local helpers
 
-    static void             DrawTextLayout(const CommonSalLayout&, HDC, bool bUseDWrite);
+    void                    DrawTextLayout(const CommonSalLayout&, HDC, bool bUseDWrite);
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part
