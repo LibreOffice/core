@@ -87,7 +87,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
         SfxItemSet* pSet = pMedium->GetItemSet();
         if (pSet)
         {
-            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+            const SfxUnoAnyItem* pItem = pSet->GetItem<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
             if (pItem)
                 xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
         }

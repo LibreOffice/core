@@ -4864,7 +4864,7 @@ sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
     SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
     if ( GetAttr(aSet, nStt, nEnd) )
     {
-        const SvxRsidItem* pRsid = static_cast<const SvxRsidItem*>(aSet.GetItem(RES_CHRATR_RSID));
+        const SvxRsidItem* pRsid = aSet.GetItem<SvxRsidItem>(RES_CHRATR_RSID);
         if( pRsid )
             return pRsid->GetValue();
     }

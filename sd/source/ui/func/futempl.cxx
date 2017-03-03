@@ -414,7 +414,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             SfxItemSet aTempSet(*pOutSet);
                             static_cast<SdStyleSheet*>(pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                            const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(aTempSet.GetItem(XATTR_FILLBACKGROUND));
+                            const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>(XATTR_FILLBACKGROUND);
                             if( pBrushItem )
                             {
                                SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
@@ -432,7 +432,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             {
                                 if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
                                 {
-                                    SvxNumRule aRule(*static_cast<const SvxNumBulletItem*>(aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
+                                    SvxNumRule aRule(*aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
 
                                     OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
                                     SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);

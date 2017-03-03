@@ -380,8 +380,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     if (pFlySet)
     {
-        if (const SwFormatFrameSize* pSize =
-            static_cast<const SwFormatFrameSize*>(pFlySet->GetItem(RES_FRM_SIZE, false)))
+        if (const SwFormatFrameSize* pSize = pFlySet->GetItem<SwFormatFrameSize>(RES_FRM_SIZE, false))
         {
             aRect.SetSize(pSize->GetSize());
         }

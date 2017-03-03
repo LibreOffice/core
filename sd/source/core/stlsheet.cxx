@@ -1099,8 +1099,8 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
         {
             SfxItemSet &rStyleSet = GetItemSet();
 
-            const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(rStyleSet.GetItem(XATTR_FILLBMP_STRETCH));
-            const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(rStyleSet.GetItem(XATTR_FILLBMP_TILE));
+            const XFillBmpStretchItem* pStretchItem = rStyleSet.GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
+            const XFillBmpTileItem* pTileItem = rStyleSet.GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
 
             if( pStretchItem && pTileItem )
             {
@@ -1228,7 +1228,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINESTART:
             case XATTR_LINEDASH:
                 {
-                    const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rStyleSet.GetItem((sal_uInt16)pEntry->nWID));
+                    const NameOrIndex* pItem = rStyleSet.GetItem<NameOrIndex>((sal_uInt16)pEntry->nWID);
                     if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }

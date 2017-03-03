@@ -285,7 +285,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             }
 
             // Has to be called after RES_PARATR_GRABBAG is processed.
-            const XFillStyleItem* pXFillStyleItem(static_cast<const XFillStyleItem*>(rSet.GetItem(XATTR_FILLSTYLE)));
+            const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
             if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
             {
                 // Construct an SvxBrushItem, as expected by the exporters.
@@ -803,7 +803,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 if (SfxItemState::SET != aSet.GetItemState(RES_SURROUND))
                     aSet.Put(SwFormatSurround(css::text::WrapTextMode_NONE));
 
-                const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrameFormat.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
+                const XFillStyleItem* pXFillStyleItem(rFrameFormat.GetAttrSet().GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
                 if (pXFillStyleItem)
                 {
                     switch (pXFillStyleItem->GetValue())

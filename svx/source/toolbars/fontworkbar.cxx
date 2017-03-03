@@ -269,7 +269,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT ) == SfxItemState::SET )
             {
-                sal_Int32 nValue = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_ALIGNMENT))->GetValue();
+                sal_Int32 nValue = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_ALIGNMENT)->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
                 {
                     SdrFitToSizeType eFTS = SdrFitToSizeType::NONE;
@@ -294,7 +294,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
+                sal_Int32 nCharSpacing = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_CHARACTER_SPACING)->GetValue();
                 pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
@@ -484,7 +484,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
+                sal_Int32 nCharSpacing = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_CHARACTER_SPACING)->GetValue();
                 ScopedVclPtrInstance< FontworkCharacterSpacingDialog > aDlg( nullptr, nCharSpacing );
                 sal_uInt16 nRet = aDlg->Execute();
                 if( nRet != 0 )

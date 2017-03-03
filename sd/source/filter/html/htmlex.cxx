@@ -316,7 +316,7 @@ OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 
     OUString sStyle;
 
-    if( static_cast<const SvxFrameDirectionItem*>(aParaSet.GetItem( EE_PARA_WRITINGDIR ))->GetValue() == FRMDIR_HORI_RIGHT_TOP )
+    if( aParaSet.GetItem<SvxFrameDirectionItem>( EE_PARA_WRITINGDIR )->GetValue() == FRMDIR_HORI_RIGHT_TOP )
     {
 
         sStyle = "direction: rtl;";
@@ -830,7 +830,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
         if(rSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
-            maTextColor = static_cast<const SvxColorItem*>(rSet.GetItem(EE_CHAR_COLOR))->GetValue();
+            maTextColor = rSet.GetItem<SvxColorItem>(EE_CHAR_COLOR)->GetValue();
     }
 
     // default background from the background of the master page of the first page
@@ -1460,7 +1460,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     OUString aLink, aTarget;
     if ( pSet->GetItemState( EE_FEATURE_FIELD ) == SfxItemState::SET )
     {
-        const SvxFieldItem* pItem = static_cast<const SvxFieldItem*>(pSet->GetItem( EE_FEATURE_FIELD ));
+        const SvxFieldItem* pItem = pSet->GetItem<SvxFieldItem>( EE_FEATURE_FIELD );
         if(pItem)
         {
             const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pItem->GetField() );

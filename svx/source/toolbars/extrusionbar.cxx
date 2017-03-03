@@ -177,7 +177,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DIRECTION ) == SfxItemState::SET )
         {
-            sal_Int32 nSkew = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_DIRECTION))->GetValue();
+            sal_Int32 nSkew = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_DIRECTION)->GetValue();
 
             Position3D  aViewPoint( 3472, -3472, 25000 );
             double      fOriginX = 0.50;
@@ -261,7 +261,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_PROJECTION ) == SfxItemState::SET )
         {
-            sal_Int32 nProjection = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_PROJECTION))->GetValue();
+            sal_Int32 nProjection = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_PROJECTION)->GetValue();
             ProjectionMode eProjectionMode = nProjection == 1 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = "ProjectionMode";
@@ -274,7 +274,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET)
         {
-            double fDepth = static_cast<const SvxDoubleItem*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_DEPTH))->GetValue();
+            double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
             double fFraction = 0.0;
             EnhancedCustomShapeParameterPair aDepthPropPair;
             aDepthPropPair.First.Value <<= fDepth;
@@ -318,7 +318,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE ) == SfxItemState::SET)
         {
-            sal_Int32 nSurface = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_SURFACE))->GetValue();
+            sal_Int32 nSurface = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_SURFACE)->GetValue();
 
             ShadeMode eShadeMode( ShadeMode_FLAT );
             bool bMetal = false;
@@ -365,7 +365,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SfxItemState::SET)
         {
-            sal_Int32 nLevel = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_INTENSITY))->GetValue();
+            sal_Int32 nLevel = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_INTENSITY)->GetValue();
 
             double fBrightness;
             bool bHarsh2 = false;
@@ -425,7 +425,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_DIRECTION ) == SfxItemState::SET)
         {
-            sal_Int32 nDirection = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_DIRECTION))->GetValue();
+            sal_Int32 nDirection = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_DIRECTION)->GetValue();
 
             if((nDirection >= 0) && (nDirection < 9))
             {
@@ -568,8 +568,8 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET) &&
                 (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SfxItemState::SET))
             {
-                double fDepth = static_cast<const SvxDoubleItem*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_DEPTH))->GetValue();
-                FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(rReq.GetArgs()->GetItem(SID_ATTR_METRIC))->GetValue();
+                double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
+                FieldUnit eUnit = (FieldUnit)rReq.GetArgs()->GetItem<SfxUInt16Item>(SID_ATTR_METRIC)->GetValue();
 
                 ScopedVclPtrInstance< ExtrusionDepthDialog > aDlg(nullptr, fDepth, eUnit);
                 sal_uInt16 nRet = aDlg->Execute();

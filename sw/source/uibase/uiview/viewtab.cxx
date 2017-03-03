@@ -2242,8 +2242,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             rSet.Put( SfxBoolItem(SID_ATTR_PAGE_FOOTER, bFooterOn ) );
             if(bFooterOn)
             {
-                const SvxLRSpaceItem* rLR = static_cast<const SvxLRSpaceItem*>(rFooter.GetFooterFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE));
-                const SvxULSpaceItem* rUL = static_cast<const SvxULSpaceItem*>(rFooter.GetFooterFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE));
+                const SvxLRSpaceItem* rLR = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxLRSpaceItem>(SID_ATTR_LRSPACE);
+                const SvxULSpaceItem* rUL = rFooter.GetFooterFormat()->GetAttrSet().GetItem<SvxULSpaceItem>(SID_ATTR_ULSPACE);
                 SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_FOOTER_LRMARGIN);
                 rSet.Put(aLR);
                 SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_FOOTER_SPACING);
@@ -2274,7 +2274,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 case (drawing::FillStyle_SOLID):
                 {
-                    Color aColor =  static_cast<const XFillColorItem*>( aSet.GetItem( XATTR_FILLCOLOR, false ) )->GetColorValue();
+                    Color aColor = aSet.GetItem<XFillColorItem>( XATTR_FILLCOLOR, false )->GetColorValue();
                     XFillColorItem aFillColorItem( OUString(), aColor );
                     aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
                     rSet.Put( aFillColorItem );
@@ -2283,7 +2283,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 case (drawing::FillStyle_GRADIENT):
                 {
-                    const XGradient& xGradient =  static_cast<const XFillGradientItem*>( aSet.GetItem( XATTR_FILLGRADIENT ) )->GetGradientValue();
+                    const XGradient& xGradient = aSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
                     XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
                     rSet.Put( aFillGradientItem );
                 }
@@ -2291,7 +2291,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 case (drawing::FillStyle_HATCH):
                 {
-                    const XFillHatchItem *pFillHatchItem( static_cast<const XFillHatchItem*>( aSet.GetItem( XATTR_FILLHATCH ) ) );
+                    const XFillHatchItem *pFillHatchItem( aSet.GetItem<XFillHatchItem>( XATTR_FILLHATCH ) );
                     XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
                     aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
                     rSet.Put( aFillHatchItem );
@@ -2300,7 +2300,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 case (drawing::FillStyle_BITMAP):
                 {
-                    const XFillBitmapItem *pFillBitmapItem = static_cast<const XFillBitmapItem*>( aSet.GetItem( XATTR_FILLBITMAP ) );
+                    const XFillBitmapItem *pFillBitmapItem = aSet.GetItem<XFillBitmapItem>( XATTR_FILLBITMAP );
                     XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
                     aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
                     rSet.Put( aFillBitmapItem );
