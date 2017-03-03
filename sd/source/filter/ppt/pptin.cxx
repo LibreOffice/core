@@ -1947,7 +1947,11 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                         DffRecordHeader aSoundDataRecHd;
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd ) )
                         {
-                            OUString aGalleryDir( SvtPathOptions().GetGalleryPath() );
+                            OUString aGalleryDir;
+                            if (utl::ConfigManager::IsAvoidConfig())
+                                osl_getTempDirURL(&aGalleryDir.pData);
+                            else
+                                aGalleryDir = SvtPathOptions().GetGalleryPath();
                             sal_Int32 nTokenCount = comphelper::string::getTokenCount(aGalleryDir, ';');
                             INetURLObject aGalleryUserSound( aGalleryDir.getToken( nTokenCount - 1, ';' ) );
 
