@@ -77,7 +77,6 @@ HWPPara::HWPPara()
     , pstyno(0)
     , linfo(nullptr)
     , cshapep(nullptr)
-    , hhstr(nullptr)
 {
     memset(&cshape, 0, sizeof(cshape));
     memset(&pshape, 0, sizeof(pshape));
@@ -87,18 +86,7 @@ HWPPara::~HWPPara()
 {
     delete[] linfo;
     delete[] cshapep;
-    if (hhstr)
-    {
-// virtual destructor
-/* C++은 null에 대해서도 동작한다. */
-        for (int ii = 0; ii < nch; ++ii)
-            delete hhstr[ii];
-
-        delete[]hhstr;
-    }
-
 }
-
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
@@ -180,14 +168,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         }
     }
 // read string
-    hhstr = ::comphelper::newArray_null<HBox *>(nch);
-    if (!hhstr) { return false; }
-    for (ii = 0; ii < nch; ii++)
-        hhstr[ii] = nullptr;
+    hhstr.resize(nch);
     ii = 0;
     while (ii < nch)
     {
-        if (nullptr == (hhstr[ii] = readHBox(hwpf)))
+        hhstr[ii] = readHBox(hwpf);
+        if (!hhstr[ii])
             return false;
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
@@ -207,93 +193,93 @@ CharShape *HWPPara::GetCharShape(int pos)
 }
 
 
-HBox *HWPPara::readHBox(HWPFile & hwpf)
+std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
 {
+    std::unique_ptr<HBox> hbox;
+
     hchar hh;
     if (!hwpf.Read2b(hh))
-        return nullptr;
-
-    HBox *hbox = nullptr;
+        return hbox;
 
     if (hwpf.State() != HWP_NoError)
-        return nullptr;
+        return hbox;
 
     if (hh > 31 || hh == CH_END_PARA)
-        hbox = new HBox(hh);
+        hbox.reset(new HBox(hh));
     else if (IS_SP_SKIP_BLOCK(hh))
-        hbox = new SkipData(hh);
+        hbox.reset(new SkipData(hh));
     else
     {
         switch (hh)
         {
             case CH_FIELD:                        // 5
-                hbox = new FieldCode;
+                hbox.reset(new FieldCode);
                 break;
             case CH_BOOKMARK:                     // 6
-                hbox = new Bookmark;
+                hbox.reset(new Bookmark);
                 break;
             case CH_DATE_FORM:                    // 7
-                hbox = new DateFormat;
+                hbox.reset(new DateFormat);
                 break;
             case CH_DATE_CODE:                    // 8
-                hbox = new DateCode;
+                hbox.reset(new DateCode);
                 break;
             case CH_TAB:                          // 9
-                hbox = new Tab;
+                hbox.reset(new Tab);
                 break;
             case CH_TEXT_BOX:                     // 10
-                hbox = new TxtBox;
+                hbox.reset(new TxtBox);
                 break;
             case CH_PICTURE:                      // 11
-                hbox = new Picture;
+                hbox.reset(new Picture);
                 break;
             case CH_LINE:                         // 14
-                hbox = new Line;
+                hbox.reset(new Line);
                 break;
             case CH_HIDDEN:                       // 15
-                hbox = new Hidden;
+                hbox.reset(new Hidden);
                 break;
             case CH_HEADER_FOOTER:                // 16
-                hbox = new HeaderFooter;
+                hbox.reset(new HeaderFooter);
                 break;
             case CH_FOOTNOTE:                     // 17
-                hbox = new Footnote;
+                hbox.reset(new Footnote);
                 break;
             case CH_AUTO_NUM:                     // 18
-                hbox = new AutoNum;
+                hbox.reset(new AutoNum);
                 break;
             case CH_NEW_NUM:                      // 19
-                hbox = new NewNum;
+                hbox.reset(new NewNum);
                 break;
             case CH_SHOW_PAGE_NUM:                // 20
-                hbox = new ShowPageNum;
+                hbox.reset(new ShowPageNum);
                 break;
             case CH_PAGE_NUM_CTRL:                // 21
-                hbox = new PageNumCtrl;
+                hbox.reset(new PageNumCtrl);
                 break;
             case CH_MAIL_MERGE:                   // 22
-                hbox = new MailMerge;
+                hbox.reset(new MailMerge);
                 break;
             case CH_COMPOSE:                      // 23
-                hbox = new Compose;
+                hbox.reset(new Compose);
                 break;
             case CH_HYPHEN:                       // 24
-                hbox = new Hyphen;
+                hbox.reset(new Hyphen);
                 break;
             case CH_TOC_MARK:                     // 25
-                hbox = new TocMark;
+                hbox.reset(new TocMark);
                 break;
             case CH_INDEX_MARK:                   // 26
-                hbox = new IndexMark;
+                hbox.reset(new IndexMark);
                 break;
             case CH_OUTLINE:                      // 28
-                hbox = new Outline;
+                hbox.reset(new Outline);
                 break;
             case CH_KEEP_SPACE:                   // 30
-                hbox = new KeepSpace;
+                hbox.reset(new KeepSpace);
                 break;
             case CH_FIXED_SPACE:                  // 31
-                hbox = new FixedSpace;
+                hbox.reset(new FixedSpace);
                 break;
             default:
                 break;
@@ -301,13 +287,12 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     }
     if (!hbox || !hbox->Read(hwpf))
     {
-        delete hbox;
-
-        return nullptr;
+        hbox.reset();
+        return hbox;
     }
     if( hh == CH_TEXT_BOX || hh == CH_PICTURE || hh == CH_LINE )
     {
-        FBox *fbox = static_cast<FBox *>(hbox);
+        FBox *fbox = static_cast<FBox *>(hbox.get());
         if( ( fbox->style.anchor_type == 1) && ( fbox->pgy >= begin_ypos) )
         {
             //strange construct to compile without warning

@@ -2945,7 +2945,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         }
         else if (para->hhstr[n]->hh == CH_FIELD)
         {
-            FieldCode *hbox = static_cast<FieldCode *>(para->hhstr[n]);
+            FieldCode *hbox = static_cast<FieldCode*>(para->hhstr[n].get());
             if( hbox->location_info == 1)
             {
                 if( !pstart ) {STARTP;}
@@ -2981,7 +2981,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeBookmark(static_cast<Bookmark *>(para->hhstr[n]));
+                    makeBookmark(static_cast<Bookmark*>(para->hhstr[n].get()));
                     break;
                 case CH_DATE_FORM:                // 7
                     break;
@@ -2989,7 +2989,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeDateCode(static_cast<DateCode *>(para->hhstr[n]));
+                    makeDateCode(static_cast<DateCode*>(para->hhstr[n].get()));
                     break;
                 case CH_TAB:                      // 9
                     if( !pstart ) {STARTP;}
@@ -2998,12 +2998,12 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                         if( !tstart ) {STARTT;}
                         makeChars(str);
                     }
-                    makeTab(static_cast<Tab *>(para->hhstr[n]));
+                    makeTab(static_cast<Tab*>(para->hhstr[n].get()));
                     break;
                 case CH_TEXT_BOX:                 /* 10 - ordered by Table/text box/formula/button/hypertext */
                 {
-/* produce tables first, and treat formula as being in text:p. */
-                    TxtBox *hbox = static_cast<TxtBox *>(para->hhstr[n]);
+                    /* produce tables first, and treat formula as being in text:p. */
+                    TxtBox *hbox = static_cast<TxtBox*>(para->hhstr[n].get());
 
                     if( hbox->style.anchor_type == 0 )
                     {
@@ -3037,7 +3037,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_PICTURE:                  // 11
                 {
-                    Picture *hbox = static_cast<Picture *>(para->hhstr[n]);
+                    Picture *hbox = static_cast<Picture*>(para->hhstr[n].get());
                     if( hbox->style.anchor_type == 0 )
                     {
                         if( !pstart ) {STARTP;}
@@ -3059,7 +3059,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_LINE:                     // 14
                 {
-                    Line *hbox = static_cast<Line *>(para->hhstr[n]);
+                    Line *hbox = static_cast<Line*>(para->hhstr[n].get());
                     if (str.size() > 0)
                     {
                         if( !pstart ) {STARTP;}
@@ -3076,19 +3076,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeHidden(static_cast<Hidden *>(para->hhstr[n]));
+                    makeHidden(static_cast<Hidden*>(para->hhstr[n].get()));
                     break;
                 case CH_FOOTNOTE:                 // 17
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeFootnote(static_cast<Footnote *>(para->hhstr[n]));
+                    makeFootnote(static_cast<Footnote*>(para->hhstr[n].get()));
                     break;
                 case CH_AUTO_NUM:                 // 18
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeAutoNum(static_cast<AutoNum *>(para->hhstr[n]));
+                    makeAutoNum(static_cast<AutoNum*>(para->hhstr[n].get()));
                     break;
                 case CH_NEW_NUM:                  // 19 -skip
                     break;
@@ -3098,7 +3098,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeMailMerge(static_cast<MailMerge *>(para->hhstr[n]));
+                    makeMailMerge(static_cast<MailMerge*>(para->hhstr[n].get()));
                     break;
                 case CH_COMPOSE:                  /* 23 - overlapping letters */
                     break;
@@ -3118,7 +3118,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeOutline(static_cast<Outline *>(para->hhstr[n]));
+                    makeOutline(static_cast<Outline *>(para->hhstr[n].get()));
                     break;
                      case CH_FIXED_SPACE:
                      case CH_KEEP_SPACE:
