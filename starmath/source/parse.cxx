@@ -1548,14 +1548,12 @@ void SmParser::DoEscape()
         case TRLINE :
         case TLDLINE :
         case TRDLINE :
+            m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+            NextToken();
             break;
         default:
             Error(SmParseError::UnexpectedToken);
     }
-
-    m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
-
-    NextToken();
 }
 
 void SmParser::DoOperator()
