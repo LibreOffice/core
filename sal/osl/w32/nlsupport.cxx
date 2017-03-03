@@ -79,8 +79,8 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     localeId = strtol( lpLocaleStringA, &pszEndA, 16 );
 
     /* check params received via TLS */
-    params = (struct EnumLocalesParams *) TlsGetValue( g_dwTLSLocaleEncId );
-    if( NULL == params || '\0' == params->Language[0] )
+    params = static_cast<struct EnumLocalesParams *>(TlsGetValue( g_dwTLSLocaleEncId ));
+    if( nullptr == params || '\0' == params->Language[0] )
         return FALSE;
 
     /*
@@ -183,7 +183,7 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     }
 
     /* if pLocale is NULL, use process locale as default */
-    if( NULL == pLocale )
+    if( nullptr == pLocale )
         osl_getProcessLocale( &pLocale );
 
     /* copy in parameters to structure */

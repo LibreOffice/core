@@ -20,6 +20,10 @@
  ./bin/update_pch_bisect ./sal/inc/pch/precompiled_sal.hxx "make sal.build" --find-conflicts
 */
 
+#if !defined _CRT_RAND_S
+#define _CRT_RAND_S
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>

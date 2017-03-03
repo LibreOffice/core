@@ -35,10 +35,10 @@ oslCondition SAL_CALL osl_createCondition(void)
 {
     oslCondition Condition;
 
-    Condition= (oslCondition)CreateEvent(NULL,          /* no security */
-                                         sal_True,      /* manual reset */
-                                         sal_False,     /* initial state not signaled */
-                                         NULL);         /* automatic name */
+    Condition= reinterpret_cast<oslCondition>(CreateEvent(nullptr,          /* no security */
+                                         true,      /* manual reset */
+                                         false,     /* initial state not signaled */
+                                         nullptr));         /* automatic name */
 
     return Condition;
 
@@ -62,7 +62,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return (sal_Bool)(SetEvent((HANDLE)Condition) != FALSE);
+    return SetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
 /*****************************************************************************/
@@ -72,7 +72,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return (sal_Bool)(ResetEvent((HANDLE)Condition) != FALSE);
+    return ResetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
 /*****************************************************************************/
@@ -93,10 +93,10 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     /* It's necessary to process SendMessage calls to the current thread to give other threads
         access to COM objects instantiated in this thread */
 
-    while ( 1 )
+    while ( true )
     {
         /* Only wake up if a SendMessage call to the threads message loop is detected */
-        switch( MsgWaitForMultipleObjects( 1, (HANDLE *)(&Condition), FALSE, timeout, QS_SENDMESSAGE ) )
+        switch( MsgWaitForMultipleObjects( 1, reinterpret_cast<HANDLE *>(&Condition), FALSE, timeout, QS_SENDMESSAGE ) )
         {
             case WAIT_OBJECT_0 + 1:
                 {
@@ -105,7 +105,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
                 /* We Must not dispatch the message. PM_NOREMOVE leaves the message queue untouched
                  but dispatches SendMessage calls automatically */
 
-                PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE );
+                PeekMessage( &msg, nullptr, 0, 0, PM_NOREMOVE );
                 }
                 break;
 
@@ -128,7 +128,7 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return (sal_Bool)(WaitForSingleObject((HANDLE)Condition, 0) == WAIT_OBJECT_0);
+    return WaitForSingleObject(reinterpret_cast<HANDLE>(Condition), 0) == WAIT_OBJECT_0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

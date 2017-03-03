@@ -38,14 +38,10 @@
 #include <osl/thread.h>
 
 #include "file_url.h"
+#include "gmutex.h"
 #include "rtllifecycle.h"
 
 #include <thread.h>
-
-// externals
-
-extern CRITICAL_SECTION g_ThreadKeyListCS;
-extern oslMutex         g_Mutex;
 
 /*
 This is needed because DllMain is called after static constructors. A DLL's
