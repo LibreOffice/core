@@ -1162,7 +1162,15 @@ void GtkSalMenu::EnableUnity(bool bEnable)
 
 void GtkSalMenu::ShowMenuBar( bool bVisible )
 {
-    if (bVisible && !bUnityMode && !mpMenuBarContainerWidget)
+    // Unity tdf#106271: Can't hide global menu, so empty it instead when user wants to hide menubar,
+    if (bUnityMode)
+    {
+        if (bVisible)
+            Update();
+        else if (mpMenuModel && g_menu_model_get_n_items(G_MENU_MODEL(mpMenuModel)) > 0)
+            g_lo_menu_remove(G_LO_MENU(mpMenuModel), 0);
+    }
+    else if (bVisible && !mpMenuBarContainerWidget)
         CreateMenuBarWidget();
     else
         DestroyMenuBarWidget();
