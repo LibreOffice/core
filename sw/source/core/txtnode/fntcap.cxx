@@ -303,8 +303,8 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
 
 void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
 {
-    // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
-    // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
+    // Precondition: rInf.GetPos() has already been calculated
+
     rInf.SetDrawSpace( GetUnderline() != LINESTYLE_NONE ||
                        GetOverline()  != LINESTYLE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
@@ -409,7 +409,7 @@ void SwDoDrawStretchCapital::Do()
 
     if( rInf.GetLen() )
     {
-        // 4023: Kapitaelchen und Kerning.
+        // small caps and kerning
         long nDiff = long(nOrgWidth) - long(nCapWidth);
         if( nDiff )
         {
@@ -432,7 +432,7 @@ void SwDoDrawStretchCapital::Do()
         if ( rInf.GetFrame()->IsVertical() )
             rInf.GetFrame()->SwitchHorizontalToVertical( aPos );
 
-        // Optimierung:
+        // Optimise:
         if( 1 >= rInf.GetLen() )
             GetOut().DrawText( aPos, rInf.GetText(), rInf.GetIdx(),
                 rInf.GetLen() );
@@ -445,8 +445,7 @@ void SwDoDrawStretchCapital::Do()
 
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 {
-    // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
-    // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
+    // Precondition: rInf.GetPos() has already been calculated
 
     if( rInf.GetLen() == COMPLETE_STRING )
         rInf.SetLen( rInf.GetText().getLength() );
@@ -516,7 +515,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         else
             pSpaceFont = pLastFont;
 
-        // Wir basteln uns einen Font fuer die Grossbuchstaben:
+        // Construct a font for the capitals:
         aFont.SetUnderline( LINESTYLE_NONE );
         aFont.SetOverline( LINESTYLE_NONE );
         aFont.SetStrikeout( STRIKEOUT_NONE );
@@ -732,7 +731,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 #endif
     }
 
-    // Aufraeumen:
+    // clean up:
     if( pBigFont != pOldLast )
         delete pBigFontAccess;
 
