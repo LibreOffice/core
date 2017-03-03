@@ -25,7 +25,7 @@
 #include <osl/file.h>
 #include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
-#include "secimpl.h"
+#include "secimpl.hxx"
 
 /*****************************************************************************/
 /* Data Type Definition */

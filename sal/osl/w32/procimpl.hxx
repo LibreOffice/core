@@ -17,30 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_SECIMPL_H
-#define INCLUDED_SAL_OSL_W32_SECIMPL_H
+#ifndef INCLUDED_SAL_OSL_W32_PROCIMPL_HXX
+#define INCLUDED_SAL_OSL_W32_PROCIMPL_HXX
 
-#include <winnetwk.h>
+#include <osl/process.h>
 
-#include <osl/security.h>
-
-#define USER_BUFFER_SIZE 256
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct {
-    HANDLE m_hProfile;
-    HANDLE m_hToken;
-    sal_Unicode   m_User[USER_BUFFER_SIZE];
-/* ts: Erweiterung um Fileserver-login */
-    NETRESOURCEW *m_pNetResource;
-} oslSecurityImpl;
-
-#ifdef __cplusplus
-}
-#endif
+struct oslProcessImpl {
+    HANDLE m_hProcess;
+    DWORD  m_IdProcess;
+};
 
 #endif
 

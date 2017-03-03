@@ -20,7 +20,7 @@
 #include "system.h"
 #include <tlhelp32.h>
 
-#include "file_url.h"
+#include "file_url.hxx"
 #include "path_helper.hxx"
 
 #include <osl/module.h>

@@ -20,7 +20,7 @@
 #include "sal/config.h"
 
 #include "system.h"
-#include "time.h"
+#include "time.hxx"
 
 #include <osl/process.h>
 #include <sal/main.h>

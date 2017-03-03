@@ -19,7 +19,7 @@
 
 #include "system.h"
 
-#include "file_url.h"
+#include "file_url.hxx"
 #include "path_helper.hxx"
 
 #include <string.h>

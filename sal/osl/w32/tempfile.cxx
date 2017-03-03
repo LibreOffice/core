@@ -24,8 +24,8 @@
 #include "osl/file.h"
 
 #include <file-impl.hxx>
-#include "file_error.h"
-#include "file_url.h"
+#include "file_error.hxx"
+#include "file_url.hxx"
 #include "path_helper.hxx"
 
 #include "osl/diagnose.h"

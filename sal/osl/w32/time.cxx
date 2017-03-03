@@ -20,8 +20,8 @@
 #include <sal/config.h>
 #include "system.h"
 
-#include <filetime.h>
-#include <time.h>
+#include <filetime.hxx>
+#include <time.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/time.h>

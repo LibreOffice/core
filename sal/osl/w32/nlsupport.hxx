@@ -7,22 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_NLSUPPORT_H
-#define INCLUDED_SAL_OSL_W32_NLSUPPORT_H
+#ifndef INCLUDED_SAL_OSL_W32_NLSUPPORT_HXX
+#define INCLUDED_SAL_OSL_W32_NLSUPPORT_HXX
 
 #include <sal/config.h>
 
 #include <rtl/locale.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
 void imp_getProcessLocale(rtl_Locale ** ppLocale);
-
-#if defined __cplusplus
-}
-#endif
 
 #endif
 

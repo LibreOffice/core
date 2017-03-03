@@ -24,9 +24,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 
-#include "sockimpl.h"
-
-extern "C" {
+#include "sockimpl.hxx"
 
 /*
     oslSocketAddr is a pointer to a Berkeley struct sockaddr.
@@ -2022,8 +2020,6 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents (
                   OutgoingSet ? &OutgoingSet->m_Set : nullptr,
                   OutOfBandSet ? &OutOfBandSet->m_Set : nullptr,
                   pTimeout ? &tv : nullptr);
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

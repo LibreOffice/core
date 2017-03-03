@@ -92,7 +92,7 @@ const sal_Char* const LDP_WITH_SLASH     = ":/";
 // API accepts this case
 const sal_Char* const LDP_WITH_DOT_BACKSLASH = ":.\\";
 
-sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)
+bool osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)
 {
     const sal_Unicode* p = rtl_uString_getStr(const_cast<rtl_uString*>(pustrPath));
     if (iswalpha(*p++))
@@ -102,7 +102,7 @@ sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPat
                 (0 == rtl_ustr_ascii_compare(p, LDP_WITH_SLASH)) ||
                 (0 == rtl_ustr_ascii_compare(p, LDP_WITH_DOT_BACKSLASH)));
     }
-    return 0;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

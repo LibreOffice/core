@@ -37,11 +37,11 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
-#include <filetime.h>
-#include <nlsupport.h>
-#include "procimpl.h"
-#include "sockimpl.h"
-#include "file_url.h"
+#include <filetime.hxx>
+#include <nlsupport.hxx>
+#include "procimpl.hxx"
+#include "sockimpl.hxx"
+#include "file_url.hxx"
 #include "path_helper.hxx"
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
