@@ -34,6 +34,7 @@
 #include "displayconnectiondispatch.hxx"
 
 #include <list>
+#include <functional>
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
@@ -336,6 +337,7 @@ struct ImplSVData
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     vcl::SettingsConfigItem* mpSettingsConfigItem = nullptr;
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList = nullptr;
+    std::list<std::function<void()>> mvOnDeInitVCL;
     std::unordered_map< int, OUString >* mpPaperNames = nullptr;
 
     Link<LinkParamNone*,void> maDeInitHook;

@@ -357,6 +357,12 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 
 }
 
+void AddOnDeInitVCL(std::function<void()> fOnDeInitVCL)
+{
+    SolarMutexGuard g;
+    ImplGetSVData()->mvOnDeInitVCL.push_back(fOnDeInitVCL);
+}
+
 void DeInitVCL()
 {
     {
@@ -370,6 +376,10 @@ void DeInitVCL()
     pSVData->mbDeInit = true;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
+    // we could use ImplDeleteOnDeInit and LazyDeleters here, but seems we want to get
+    // rid of those anyway
+    for(auto& fOnDeInitVCL : pSVData->mvOnDeInitVCL)
+        fOnDeInitVCL();
 
     // give ime status a chance to destroy its own windows
     delete pSVData->mpImeStatus;
