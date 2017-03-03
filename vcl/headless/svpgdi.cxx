@@ -1353,7 +1353,7 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         unsigned char *target_surface_data = cairo_image_surface_get_data(target_surface);
         unsigned char *xor_surface_data = cairo_image_surface_get_data(surface);
 
-        cairo_format_t nFormat = cairo_image_surface_get_format(m_pSurface);
+        cairo_format_t nFormat = cairo_image_surface_get_format(target_surface);
         assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
         sal_Int32 nStride = cairo_format_stride_for_width(nFormat, nWidth * m_fScale);
         sal_Int32 nUnscaledExtentsLeft = nExtentsLeft * m_fScale;
