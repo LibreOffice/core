@@ -43,7 +43,7 @@
 #include "refreshtimerprotector.hxx"
 #include "globstr.hrc"
 
-#include <../../ui/inc/docsh.hxx>
+#include "docsh.hxx"
 #include "viewdata.hxx"
 #include <excdoc.hxx>
 
