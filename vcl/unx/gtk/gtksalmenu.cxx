@@ -766,6 +766,9 @@ static gboolean MenuBarSignalKey(GtkWidget*, GdkEventKey* pEvent, gpointer menu)
 void GtkSalMenu::CreateMenuBarWidget()
 {
 #if GTK_CHECK_VERSION(3,0,0)
+    if (mpMenuBarContainerWidget)
+        return;
+
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
     mpMenuBarContainerWidget = gtk_grid_new();
 
@@ -1153,16 +1156,33 @@ void GtkSalMenu::Deactivate(const gchar* pCommand)
 
 void GtkSalMenu::EnableUnity(bool bEnable)
 {
-    if (bUnityMode != bEnable)
+    bUnityMode = bEnable;
+
+    MenuBar* pMenuBar(static_cast<MenuBar*>(mpVCLMenu.get()));
+
+    if (bEnable)
+        DestroyMenuBarWidget();
+    else
     {
-        bUnityMode = bEnable;
-        static_cast<MenuBar*>(mpVCLMenu.get())->SetDisplayable(!bEnable);
+        Update();
+        if (pMenuBar->IsDisplayable())
+            CreateMenuBarWidget();
     }
+
+    pMenuBar->LayoutChanged();
 }
 
 void GtkSalMenu::ShowMenuBar( bool bVisible )
 {
-    if (bVisible && !bUnityMode && !mpMenuBarContainerWidget)
+    // Unity tdf#106271: Can't hide global menu, so empty it instead when user wants to hide menubar,
+    if (bUnityMode)
+    {
+        if (bVisible)
+            Update();
+        else if (mpMenuModel && g_menu_model_get_n_items(G_MENU_MODEL(mpMenuModel)) > 0)
+            g_lo_menu_remove(G_LO_MENU(mpMenuModel), 0);
+    }
+    else if (bVisible)
         CreateMenuBarWidget();
     else
         DestroyMenuBarWidget();
