@@ -1105,13 +1105,16 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
     pFS->startElement( FSNS( XML_a, XML_pPr ),
             FSEND );
 
-    WriteRunProperties(xPropSet, false, XML_defRPr);
+    bool bDummy = false;
+    sal_Int32 nDummy;
+    WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy );
 
     pFS->endElement( FSNS( XML_a, XML_pPr ) );
 
     pFS->startElement( FSNS( XML_a, XML_r ),
             FSEND );
-    WriteRunProperties( xPropSet, false );
+    bDummy = false;
+    WriteRunProperties( xPropSet, false, XML_rPr, true, bDummy, nDummy );
     pFS->startElement( FSNS( XML_a, XML_t ),
             FSEND );
     pFS->writeEscaped( sText );
@@ -2429,7 +2432,9 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
     pFS->startElement(FSNS(XML_a, XML_p), FSEND);
     pFS->startElement(FSNS(XML_a, XML_pPr), FSEND);
 
-    WriteRunProperties(xPropSet, false, XML_defRPr);
+    bool bDummy = false;
+    sal_Int32 nDummy;
+    WriteRunProperties(xPropSet, false, XML_defRPr, true, bDummy, nDummy);
 
     pFS->endElement(FSNS(XML_a, XML_pPr));
     pFS->endElement(FSNS(XML_a, XML_p));

@@ -1217,7 +1217,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
-void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement /*= XML_rPr*/, bool bCheckDirect/* = true */)
+void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
+                                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -1234,8 +1235,19 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     sal_Int32 nCharEscapement = 0;
     sal_Int32 nCharKerning = 0;
 
-    if( GETA( CharHeight ) )
+    if ( nElement == XML_endParaRPr && rbOverridingCharHeight )
+    {
+        nSize = rnCharHeight;
+    }
+    else if( GETA( CharHeight ) )
+    {
         nSize = (sal_Int32) (100*(*o3tl::doAccess<float>(mAny)));
+        if ( nElement == XML_rPr )
+        {
+            rbOverridingCharHeight = true;
+            rnCharHeight = nSize;
+        }
+    }
 
      if( GETA( CharKerning ) )
         nCharKerning = (sal_Int32)(*o3tl::doAccess<sal_Int16>(mAny));
@@ -1592,7 +1604,8 @@ OString DrawingML::GetUUID()
     return OString(str, SAL_N_ELEMENTS(str));
 }
 
-void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
+void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
+                          bool& rbOverridingCharHeight, sal_Int32& rnCharHeight)
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     sal_Int16 nLevel = -1;
@@ -1652,7 +1665,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
         }
 
         Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
-        WriteRunProperties( xPropSet, bIsURLField );
+        WriteRunProperties( xPropSet, bIsURLField, XML_rPr, true, rbOverridingCharHeight, rnCharHeight );
         mpFS->startElementNS( XML_a, XML_t, FSEND );
         mpFS->writeEscaped( sText );
         mpFS->endElementNS( XML_a, XML_t );
@@ -2034,7 +2047,8 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     }
 }
 
-void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph )
+void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
+                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight )
 {
     Reference< XEnumerationAccess > access( rParagraph, UNO_QUERY );
     if( !access.is() )
@@ -2045,7 +2059,6 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph )
         return;
 
     mpFS->startElementNS( XML_a, XML_p, FSEND );
-
 
     bool bPropertiesWritten = false;
     while( enumeration->hasMoreElements() )
@@ -2060,11 +2073,11 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph )
                 WriteParagraphProperties( rParagraph );
                 bPropertiesWritten = true;
             }
-            WriteRun( run );
+            WriteRun( run, rbOverridingCharHeight, rnCharHeight );
         }
     }
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
-    WriteRunProperties( rXPropSet , false, XML_endParaRPr, false );
+    WriteRunProperties( rXPropSet, false, XML_endParaRPr, false, rbOverridingCharHeight, rnCharHeight );
 
     mpFS->endElementNS( XML_a, XML_p );
 }
@@ -2235,15 +2248,17 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         return;
     }
 
+    bool bOverridingCharHeight = false;
+    sal_Int32 nCharHeight;
+
     while( enumeration->hasMoreElements() )
     {
         Reference< XTextContent > paragraph;
         Any any ( enumeration->nextElement() );
 
         if( any >>= paragraph)
-            WriteParagraph( paragraph );
+            WriteParagraph( paragraph, bOverridingCharHeight, nCharHeight );
     }
-
 }
 
 void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList )
