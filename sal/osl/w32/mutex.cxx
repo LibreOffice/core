@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include "gmutex.h"
 #include "system.h"
 
 #include <osl/mutex.h>
@@ -35,13 +38,13 @@ oslMutex SAL_CALL osl_createMutex(void)
 {
     CRITICAL_SECTION *pMutexImpl;
 
-    pMutexImpl = calloc(sizeof(CRITICAL_SECTION), 1);
+    pMutexImpl = static_cast<CRITICAL_SECTION *>(calloc(sizeof(CRITICAL_SECTION), 1));
 
     OSL_ASSERT(pMutexImpl); /* alloc successful? */
 
     InitializeCriticalSection(pMutexImpl);
 
-    return (oslMutex)pMutexImpl;
+    return reinterpret_cast<oslMutex>(pMutexImpl);
 }
 
 /*****************************************************************************/
@@ -49,7 +52,7 @@ oslMutex SAL_CALL osl_createMutex(void)
 /*****************************************************************************/
 void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
     if (pMutexImpl)
     {
@@ -63,13 +66,13 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
     OSL_ASSERT(Mutex);
 
     EnterCriticalSection(pMutexImpl);
 
-    return sal_True;
+    return true;
 }
 
 /*****************************************************************************/
@@ -77,11 +80,11 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
     OSL_ASSERT(Mutex);
 
-    return (sal_Bool)(TryEnterCriticalSection(pMutexImpl) != FALSE);
+    return TryEnterCriticalSection(pMutexImpl) != FALSE;
 }
 
 /*****************************************************************************/
@@ -89,13 +92,13 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
-    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
     OSL_ASSERT(Mutex);
 
     LeaveCriticalSection(pMutexImpl);
 
-    return sal_True;
+    return true;
 }
 
 /*****************************************************************************/

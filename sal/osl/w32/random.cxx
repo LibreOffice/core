@@ -14,14 +14,16 @@
 #include <stdlib.h>
 #include <memory.h>
 
+#include <oslrandom.h>
+
 int osl_get_system_random_data(char* buffer, size_t desired_len)
 {
     unsigned int val;
 
     /* if unaligned fill to alignment */
-    if((uintptr_t)buffer & 3)
+    if(reinterpret_cast<uintptr_t>(buffer) & 3)
     {
-        size_t len = 4 - ((size_t)(buffer) & 3);
+        size_t len = 4 - (reinterpret_cast<size_t>(buffer) & 3);
 
         if(len > desired_len)
         {
@@ -38,7 +40,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
     /* fill directly into the buffer as long as we can */
     while(desired_len >= 4)
     {
-        if(rand_s((unsigned int*)buffer))
+        if(rand_s(reinterpret_cast<unsigned int*>(buffer)))
         {
             return 0;
         }

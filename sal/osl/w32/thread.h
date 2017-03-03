@@ -22,6 +22,8 @@ void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void);
 
 extern DWORD g_dwTLSTextEncodingIndex;
 
+extern CRITICAL_SECTION g_ThreadKeyListCS;
+
 #if defined __cplusplus
 }
 #endif

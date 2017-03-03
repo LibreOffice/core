@@ -225,32 +225,32 @@ else # $(OS) == WNT
 
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/backtrace \
+	sal/osl/w32/conditn \
 	sal/osl/w32/file \
 	sal/osl/w32/file_dirvol \
+	sal/osl/w32/file_error \
 	sal/osl/w32/file_url \
+	sal/osl/w32/interlck \
+	sal/osl/w32/memory \
 	sal/osl/w32/module \
+	sal/osl/w32/mutex \
+	sal/osl/w32/nlsupport \
 	sal/osl/w32/path_helper \
+	sal/osl/w32/pipe \
 	sal/osl/w32/process \
 	sal/osl/w32/procimpl \
 	sal/osl/w32/profile \
+	sal/osl/w32/random \
 	sal/osl/w32/salinit \
+	sal/osl/w32/security \
 	sal/osl/w32/signal \
 	sal/osl/w32/socket \
 	sal/osl/w32/tempfile \
-))
-$(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/w32/conditn \
-	sal/osl/w32/dllentry \
-	sal/osl/w32/file_error \
-	sal/osl/w32/interlck \
-	sal/osl/w32/memory \
-	sal/osl/w32/mutex \
-	sal/osl/w32/nlsupport \
-	sal/osl/w32/pipe \
-	sal/osl/w32/random \
-	sal/osl/w32/security \
 	sal/osl/w32/thread \
 	sal/osl/w32/time \
+))
+$(eval $(call gb_Library_add_cobjects,sal,\
+	sal/osl/w32/dllentry \
 ))
 
 endif # ifneq ($(OS),WNT)
