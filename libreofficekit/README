@@ -20,8 +20,7 @@ LibreOfficeKitInit.h for you.
 (LibreOfficeKit.hxx is a simple and fully inlined C++ wrapper for the same
 functionality as in LibreOfficeKit.h.)
 
-An example program (currently using the older shim.c/static library
-integration) can be seen on:
+An example program can be seen on:
 https://github.com/ojwb/lloconv
 
 Tiled Rendering
