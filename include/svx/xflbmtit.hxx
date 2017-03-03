@@ -26,7 +26,6 @@
 class SVX_DLLPUBLIC XFillBmpTileItem : public SfxBoolItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpTileItem( bool bTile = true );
                             XFillBmpTileItem( SvStream& rIn );
 

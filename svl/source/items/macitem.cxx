@@ -25,9 +25,6 @@
 #include <svl/macitem.hxx>
 #include <stringio.hxx>
 
-SfxPoolItem* SvxMacroItem::CreateDefault() { return new SvxMacroItem(0); }
-
-
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
       eType( EXTENDED_STYPE)

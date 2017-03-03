@@ -30,8 +30,6 @@
 class EDITENG_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxLineColorItem( const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     virtual ~SvxLineColorItem() override;

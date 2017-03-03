@@ -106,34 +106,23 @@ SfxPoolItem* SvxFontItem::CreateDefault() {return new SvxFontItem(0);}
 SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_NONE, 0);}
 SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
 SfxPoolItem* SvxFontHeightItem::CreateDefault() {return new SvxFontHeightItem(240, 100, 0);}
-SfxPoolItem* SvxFontWidthItem::CreateDefault() {return new SvxFontWidthItem(0, 100, 0);}
 SfxPoolItem* SvxTextLineItem::CreateDefault() {return new SvxTextLineItem(LINESTYLE_NONE, 0);}
-SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(LINESTYLE_NONE, 0);}
-SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(LINESTYLE_NONE, 0);}
 SfxPoolItem* SvxCrossedOutItem::CreateDefault() {return new SvxCrossedOutItem(STRIKEOUT_NONE, 0);}
 SfxPoolItem* SvxShadowedItem::CreateDefault() {return new SvxShadowedItem(false, 0);}
 SfxPoolItem* SvxAutoKernItem::CreateDefault() {return new SvxAutoKernItem(false, 0);}
 SfxPoolItem* SvxWordLineModeItem::CreateDefault() {return new SvxWordLineModeItem(false, 0);}
 SfxPoolItem* SvxContourItem::CreateDefault() {return new SvxContourItem(false, 0);}
-SfxPoolItem* SvxPropSizeItem::CreateDefault() {return new SvxPropSizeItem(100, 0);}
 SfxPoolItem* SvxColorItem::CreateDefault() {return new SvxColorItem(0);}
 SfxPoolItem* SvxBackgroundColorItem::CreateDefault() {return new SvxBackgroundColorItem(0);}
-SfxPoolItem* SvxCharSetColorItem::CreateDefault() {return new SvxCharSetColorItem(0);}
 SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
 SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, 0);}
 SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
 SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
-SfxPoolItem* SvxNoLinebreakItem::CreateDefault() {return new SvxNoLinebreakItem(true, 0);}
-SfxPoolItem* SvxNoHyphenItem::CreateDefault() {return new SvxNoHyphenItem(true, 0);}
-SfxPoolItem* SvxLineColorItem::CreateDefault() {return new SvxLineColorItem(0);}
 SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
 SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, 0);}
-SfxPoolItem* SvxTwoLinesItem::CreateDefault() {return new SvxTwoLinesItem(true, 0, 0, 0);}
-SfxPoolItem* SvxScriptTypeItem::CreateDefault() {return new SvxScriptTypeItem();}
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0, false, 0);}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
-SfxPoolItem* SvxRsidItem::CreateDefault() {return new SvxRsidItem(0, 0);}
 
 
 // class SvxFontListItem -------------------------------------------------

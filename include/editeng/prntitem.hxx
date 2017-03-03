@@ -35,8 +35,6 @@
 class EDITENG_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     explicit SvxPrintItem( const sal_uInt16 nId , const bool bPrt = true );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 

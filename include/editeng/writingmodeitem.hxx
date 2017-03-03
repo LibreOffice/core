@@ -28,8 +28,6 @@
 class EDITENG_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem() override;

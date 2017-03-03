@@ -26,7 +26,6 @@
 class SVX_DLLPUBLIC XFillBmpPosOffsetXItem : public SfxUInt16Item
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX = 0 );
                             SVX_DLLPRIVATE XFillBmpPosOffsetXItem( SvStream& rIn );
 
@@ -42,7 +41,6 @@ public:
 class SVX_DLLPUBLIC XFillBmpPosOffsetYItem : public SfxUInt16Item
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY = 0 );
                             SVX_DLLPRIVATE XFillBmpPosOffsetYItem( SvStream& rIn );
 

@@ -29,7 +29,6 @@
 class SVX_DLLPUBLIC XLineEndCenterItem : public SfxBoolItem
 {
 public:
-                            static SfxPoolItem* CreateDefault();
                             XLineEndCenterItem(bool bEndCenter = false);
                             XLineEndCenterItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;

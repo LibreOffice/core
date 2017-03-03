@@ -42,8 +42,6 @@ private:
     css::uno::Sequence< OUString >  aFontNameSeq;
 
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxFontListItem( const FontList* pFontLst,
                      const sal_uInt16 nId  );
     SvxFontListItem( const SvxFontListItem& rItem );

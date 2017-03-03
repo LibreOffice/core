@@ -32,8 +32,6 @@
 class EDITENG_DLLPUBLIC SvxForbiddenRuleItem : public SfxBoolItem
 {
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxForbiddenRuleItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 

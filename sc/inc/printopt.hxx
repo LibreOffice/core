@@ -54,7 +54,6 @@ public:
 class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
-                static SfxPoolItem* CreateDefault();
                 ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
