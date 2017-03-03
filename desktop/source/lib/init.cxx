@@ -2484,7 +2484,10 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
 
     uno::Reference<document::XRedlinesSupplier> xRedlinesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
     std::stringstream aStream;
-    if (xRedlinesSupplier.is())
+    // We want positions of the track changes also which is not possible from
+    // UNO. Enable positioning information for text documents only for now, so
+    // construct the tracked changes JSON from inside the sw/, not here using UNO
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT && xRedlinesSupplier.is())
     {
         uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
         boost::property_tree::ptree aRedlines;

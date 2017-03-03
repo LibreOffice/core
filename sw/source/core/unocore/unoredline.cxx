@@ -183,21 +183,6 @@ SwXRedlinePortion::~SwXRedlinePortion()
 {
 }
 
-OUString SwRedlineTypeToOUString(RedlineType_t eType)
-{
-    OUString sRet;
-    switch(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)
-    {
-        case nsRedlineType_t::REDLINE_INSERT: sRet = "Insert"; break;
-        case nsRedlineType_t::REDLINE_DELETE: sRet = "Delete"; break;
-        case nsRedlineType_t::REDLINE_FORMAT: sRet = "Format"; break;
-        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: sRet = "ParagraphFormat"; break;
-        case nsRedlineType_t::REDLINE_TABLE:  sRet = "TextTable"; break;
-        case nsRedlineType_t::REDLINE_FMTCOLL:sRet = "Style"; break;
-    }
-    return sRet;
-}
-
 static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRangeRedline& rRedline)
 {
     uno::Sequence<beans::PropertyValue> aValues(4);
@@ -215,7 +200,7 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
         pValues[2].Name = UNO_NAME_REDLINE_COMMENT;
         pValues[2].Value <<= pNext->GetComment();
         pValues[3].Name = UNO_NAME_REDLINE_TYPE;
-        pValues[3].Value <<= SwRedlineTypeToOUString(pNext->GetType());
+        pValues[3].Value <<= nsRedlineType_t::SwRedlineTypeToOUString(pNext->GetType());
     }
     return aValues;
 }
@@ -284,7 +269,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
         aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
     else if(rPropertyName == UNO_NAME_REDLINE_TYPE)
     {
-        aRet <<= SwRedlineTypeToOUString(rRedline.GetType());
+        aRet <<= nsRedlineType_t::SwRedlineTypeToOUString(rRedline.GetType());
     }
     else if(rPropertyName == UNO_NAME_REDLINE_SUCCESSOR_DATA)
     {
@@ -324,7 +309,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_DESCRIPTION;
     pRet[nPropIdx++].Value <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;
-    pRet[nPropIdx++].Value <<= SwRedlineTypeToOUString(rRedline.GetType());
+    pRet[nPropIdx++].Value <<= nsRedlineType_t::SwRedlineTypeToOUString(rRedline.GetType());
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_IDENTIFIER;
     pRet[nPropIdx++].Value <<= OUString::number(
         sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );

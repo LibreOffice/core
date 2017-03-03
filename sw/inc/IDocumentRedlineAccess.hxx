@@ -82,6 +82,21 @@ namespace nsRedlineType_t
     // When larger than 128, flags can be inserted.
     const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
     const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// Can be a flag in RedlineType.
+
+    inline OUString SwRedlineTypeToOUString(RedlineType_t eType)
+    {
+        OUString sRet;
+        switch(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)
+        {
+            case nsRedlineType_t::REDLINE_INSERT: sRet = "Insert"; break;
+            case nsRedlineType_t::REDLINE_DELETE: sRet = "Delete"; break;
+            case nsRedlineType_t::REDLINE_FORMAT: sRet = "Format"; break;
+            case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: sRet = "ParagraphFormat"; break;
+            case nsRedlineType_t::REDLINE_TABLE:  sRet = "TextTable"; break;
+            case nsRedlineType_t::REDLINE_FMTCOLL:sRet = "Style"; break;
+        }
+        return sRet;
+    }
 }
 
 class IDocumentRedlineAccess
