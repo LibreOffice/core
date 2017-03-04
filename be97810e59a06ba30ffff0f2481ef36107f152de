@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_cd20cefa",
+        "filename": "scp2/source/winexplorerext/file_winexplorerext.scp",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-04T16:27:12Z",
+      "side": 1,
+      "message": "Shouldn\u0027t vcruntime for #if defined(WITH_VC140_REDIST) and #if defined(WITH_VC150_REDIST) should be included here?",
+      "revId": "be97810e59a06ba30ffff0f2481ef36107f152de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
