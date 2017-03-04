@@ -498,8 +498,7 @@ sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& Se
 
 css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -670,8 +669,7 @@ sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString
 
 css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -787,8 +785,7 @@ sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& S
 
 css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -907,8 +904,7 @@ sal_Bool SAL_CALL SearchFormattedToolboxController::supportsService( const OUStr
 
 css::uno::Sequence< OUString > SAL_CALL SearchFormattedToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -1024,8 +1020,7 @@ sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& Ser
 
 css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -1132,8 +1127,7 @@ sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& 
 
 css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent
@@ -1251,8 +1245,7 @@ sal_Bool SAL_CALL SearchLabelToolboxController::supportsService( const OUString&
 
 css::uno::Sequence< OUString > SAL_CALL SearchLabelToolboxController::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 // XComponent

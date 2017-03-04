@@ -123,8 +123,7 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.RecoveryUI" };
-    return lServiceNames;
+    return { "com.sun.star.dialog.RecoveryUI" };
 }
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,

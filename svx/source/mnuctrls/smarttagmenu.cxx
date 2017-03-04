@@ -221,8 +221,7 @@ OUString SmartTagMenuController::getImplementationName()
 
 css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aRet { "com.sun.star.frame.PopupMenuController" };
-    return aRet;
+    return { "com.sun.star.frame.PopupMenuController" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
