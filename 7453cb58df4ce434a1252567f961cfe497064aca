@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0d12d6b4",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-04T15:49:52Z",
+      "side": 0,
+      "message": "May be revert this change?",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 20
+      },
+      "revId": "7453cb58df4ce434a1252567f961cfe497064aca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
