@@ -61,8 +61,6 @@ void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
     const SwTOXType* pType = nullptr;
     const OUString rNm = rTOX.GetTOXType()->GetTypeName();
 
-    // kein entsprechender Verzeichnistyp vorhanden -> anlegen
-    // sonst verwenden
     for(sal_uInt16 i=0; i < nCount; ++i)
     {
         const SwTOXType* pSrcType = pDoc->GetTOXType(eType, i);
@@ -72,15 +70,15 @@ void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
             break;
         }
     }
-    // kein entsprechender Typ vorhanden -> neu erzeugen
 
+    // if the requested tox type does not exist, create it
     if(!pType)
     {
         pDoc->InsertTOXType( SwTOXType( eType, rNm ) );
         pType = pDoc->GetTOXType(eType, 0);
     }
-    // Verzeichnistyp umhaengen
 
+    // register at target tox type
     const_cast<SwTOXType*>(pType)->Add( &rTOX );
 }
 
