@@ -105,6 +105,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true)
 {
+    EE_DLL().GetGlobalData()->RegisterEditEngine(this);
     pEditEngine         = pEE;
     pRefDev             = nullptr;
     pVirtDev            = nullptr;
@@ -167,6 +168,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
 ImpEditEngine::~ImpEditEngine()
 {
+    EE_DLL().GetGlobalData()->DeregisterEditEngine(this);
     aStatusTimer.Stop();
     aOnlineSpellTimer.Stop();
     aIdleFormatter.Stop();

@@ -23,9 +23,12 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/svapp.hxx>
+#include <list>
 
 class SfxPoolItem;
 class VirtualDevice;
+class ImpEditEngine;
 
 class GlobalEditData
 {
@@ -35,6 +38,7 @@ private:
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     VclPtr<VirtualDevice> mpVirDev;
+    std::list<ImpEditEngine*> mvEditEngines;
     void dispose();
 
 public:
@@ -47,6 +51,16 @@ public:
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
 
+    void RegisterEditEngine(ImpEditEngine* pEngine)
+    {
+        SolarMutexGuard g;
+        mvEditEngines.push_back(pEngine);
+    }
+    void DeregisterEditEngine(ImpEditEngine* pEngine)
+    {
+        SolarMutexGuard g;
+        mvEditEngines.remove(pEngine);
+    }
     VclPtr<VirtualDevice> GetStdVirtualDevice();
 };
 

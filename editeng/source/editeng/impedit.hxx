@@ -1031,6 +1031,12 @@ public:
         mark (apostrophe) or not (default is on) */
     void            SetReplaceLeadingSingleQuotationMark( bool bReplace ) { mbReplaceLeadingSingleQuotationMark = bReplace; }
     bool            IsReplaceLeadingSingleQuotationMark() const { return mbReplaceLeadingSingleQuotationMark; }
+    void dispose()
+    {
+        pVirtDev.disposeAndClear();
+        pRefDev.disposeAndClear();
+        mpOwnDev.disposeAndClear();
+   }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
