@@ -251,10 +251,6 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         switch( pNew->Which() )
         {
-        case RES_TXTATR_FLDCHG:
-                // this, this -> just repaint it
-                pTextNd->ModifyNotification( this, this );
-                return;
         case RES_REFMARKFLD_UPDATE:
                 // update GetRef fields
                 if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
