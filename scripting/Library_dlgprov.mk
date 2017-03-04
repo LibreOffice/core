@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_libraries,dlgprov,\
 	vbahelper \
 	vcl \
 	xmlscript \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,dlgprov,\

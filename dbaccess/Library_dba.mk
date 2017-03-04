@@ -46,7 +46,6 @@ $(eval $(call gb_Library_use_libraries,dba,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,dba,dbaccess/util/dba))

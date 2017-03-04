@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,wpftdraw,\
 	vcl \
 	writerperfect \
 	xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\
