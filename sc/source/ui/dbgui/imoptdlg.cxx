@@ -26,8 +26,8 @@
 
 static const sal_Char pStrFix[] = "FIX";
 
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
+//  The option string can no longer contain a semicolon (because of pick list),
+//  therefore, starting with version 336 comma instead
 
 ScImportOptions::ScImportOptions( const OUString& rStr )
 {
