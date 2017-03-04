@@ -17,7 +17,6 @@ $(eval $(call gb_Library_use_libraries,invocadapt,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,invocadapt,stoc/source/invocation_adapterfactory/invocadapt))

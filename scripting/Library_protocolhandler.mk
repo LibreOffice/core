@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	sal \
 	sfx \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,protocolhandler,\

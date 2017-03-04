@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_external,cppu,boost_headers))
 $(eval $(call gb_Library_use_libraries,cppu,\
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cppu,\

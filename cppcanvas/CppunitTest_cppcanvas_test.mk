@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
 	tl \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_test))

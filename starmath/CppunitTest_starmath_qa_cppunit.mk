@@ -46,7 +46,6 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,starmath_qa_cppunit,\

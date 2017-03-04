@@ -33,7 +33,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_bitmapprocessor_test, \
     unotest \
     vcl \
     utl \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,vcl_bitmapprocessor_test,\

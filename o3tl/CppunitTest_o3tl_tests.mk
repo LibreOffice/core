@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_external,o3tl_tests,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,o3tl_tests,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\

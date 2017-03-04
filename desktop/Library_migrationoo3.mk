@@ -17,7 +17,6 @@ $(eval $(call gb_Library_use_libraries,migrationoo3,\
     sal \
     tl \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,migrationoo3,desktop/source/migration/services/migrationoo3))

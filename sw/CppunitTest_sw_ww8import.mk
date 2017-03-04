@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     sfx \
     sw \
 	utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ww8import,\

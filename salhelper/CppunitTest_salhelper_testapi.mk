@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_external,salhelper_testapi,boost_headers))
 $(eval $(call gb_CppunitTest_use_libraries,salhelper_testapi,\
     salhelper \
     sal \
-    $(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

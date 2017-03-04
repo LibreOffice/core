@@ -39,7 +39,6 @@ $(eval $(call gb_Library_use_libraries,tl,\
     cppu \
     sal \
     sax \
-	$(gb_UWINAPI) \
 ))
 
 

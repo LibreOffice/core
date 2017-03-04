@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,basprov,\
 	tl \
 	ucbhelper \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,basprov,\
