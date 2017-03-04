@@ -71,6 +71,7 @@
 #include <editeng/justifyitem.hxx>
 #include <rtl/instance.hxx>
 #include <tools/mapunit.hxx>
+#include <impedit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -108,6 +109,8 @@ GlobalEditData::~GlobalEditData()
 
 void GlobalEditData::dispose()
 {
+    for(auto& pEngine : mvEditEngines)
+        pEngine->dispose();
     mpVirDev.disposeAndClear();
 }
 
