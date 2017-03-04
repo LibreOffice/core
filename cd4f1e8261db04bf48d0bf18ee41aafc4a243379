@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0d8f3624",
+        "filename": "sc/inc/docsh.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-03-04T07:51:33Z",
+      "side": 1,
+      "message": "This is still not right. We have a convention for the include guard macro names. Follow it.",
+      "range": {
+        "startLine": 21,
+        "startChar": 8,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "cd4f1e8261db04bf48d0bf18ee41aafc4a243379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
