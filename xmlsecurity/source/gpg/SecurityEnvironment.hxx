@@ -31,9 +31,6 @@ class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XS
                                                             css::lang::XServiceInfo,
                                                             css::lang::XUnoTunnel >
 {
-private:
-    osl::Mutex m_mutex;
-
 public:
     SecurityEnvironmentGpg();
     virtual ~SecurityEnvironmentGpg() override;
