@@ -34,24 +34,23 @@ class HStream
 /**
  *
  */
-        void addData( const byte *buf, int aToAdd);
+        void addData( const byte *buf, size_t aToAdd);
 /**
  * Read some byte to buf as given size
  */
-        int readBytes( byte *buf, int aToRead);
+        size_t readBytes( byte *buf, size_t aToRead);
 /**
  * Skip some byte from stream as given size
  */
-        int skipBytes( int aToSkip );
+        size_t skipBytes( size_t aToSkip );
 /**
  * @returns Size of remained stream
  */
-        int available() const;
+        size_t available() const;
 
     private:
-        int size;
         std::vector<byte> seq;
-        int pos;
+        size_t pos;
 };
 #endif
 
