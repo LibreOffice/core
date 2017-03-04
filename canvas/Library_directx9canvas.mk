@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	tl \
 	utl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,directx9canvas,\

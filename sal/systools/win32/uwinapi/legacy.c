@@ -15,7 +15,6 @@
 #endif
 
 #if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || defined __clang__
-// older versions use uwinapi.def file for export
 __declspec(dllexport)
 #endif
 DWORD WINAPI GetShortPathNameW(LPCWSTR lpszLongPath,LPWSTR lpszShortPath,DWORD cchBuffer)

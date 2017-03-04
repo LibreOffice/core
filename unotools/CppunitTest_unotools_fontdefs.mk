@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,unotools_fontdefs, \
 	sal \
 	svt \
 	utl \
-    $(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

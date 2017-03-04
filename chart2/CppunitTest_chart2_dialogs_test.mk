@@ -51,7 +51,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_dialogs_test, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,chart2_dialogs_test,boost_headers))

@@ -28,7 +28,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
 	utl \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,filter_pict_test, \

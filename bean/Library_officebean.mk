@@ -27,8 +27,4 @@ $(eval $(call gb_Library_add_cobjects,officebean,\
 ))
 endif
 
-$(eval $(call gb_Library_use_libraries,officebean,\
-	$(gb_UWINAPI) \
-))
-
 # vim: set noet sw=4 ts=4:
