@@ -95,7 +95,6 @@ FieldCode::FieldCode()
     , str1(nullptr)
     , str2(nullptr)
     , str3(nullptr)
-    , bin(nullptr)
     , m_pDate(nullptr)
 {
     reserved1 = new char[4];
@@ -107,7 +106,6 @@ FieldCode::~FieldCode()
     delete[] str1;
     delete[] str2;
     delete[] str3;
-    delete[] bin;
     delete[] reserved1;
     delete[] reserved2;
     delete m_pDate;

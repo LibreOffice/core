@@ -90,9 +90,8 @@ struct FieldCode : public HBox
     hchar *str1;
     hchar *str2;
     hchar *str3;
-    char *bin;
 
-     DateCode *m_pDate;
+    DateCode *m_pDate;
 
     FieldCode();
     virtual ~FieldCode() override;
