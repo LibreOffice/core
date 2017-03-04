@@ -13,10 +13,6 @@ i18npool_LCDTXTS := $(if $(i18npool_ICULT53), $(i18npool_LCDALL), $(filter-out %
 
 $(eval $(call gb_Library_Library,collator_data))
 
-$(eval $(call gb_Library_use_libraries,collator_data,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Library_add_generated_exception_objects,collator_data,\
 	$(foreach txt,$(i18npool_LCDTXTS),\
 		CustomTarget/i18npool/collator/collator_$(notdir $(basename $(txt)))) \

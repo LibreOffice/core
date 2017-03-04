@@ -26,7 +26,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_firebird_test, \
     test \
     unotest \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,dbaccess_firebird_test,\

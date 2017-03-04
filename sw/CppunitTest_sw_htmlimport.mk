@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_htmlimport, \
 	unotest \
 	utl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_htmlimport,\

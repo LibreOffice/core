@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_embeddeddb_performancetest, 
     tl \
     unotest \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,dbaccess_embeddeddb_performancetest,\

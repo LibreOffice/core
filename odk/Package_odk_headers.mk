@@ -167,7 +167,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	salhelper/singletonref.hxx \
 	salhelper/thread.hxx \
 	salhelper/timer.hxx \
-	systools/win32/snprintf.h \
 	typelib/typeclass.h \
 	typelib/typedescription.h \
 	typelib/typedescription.hxx \

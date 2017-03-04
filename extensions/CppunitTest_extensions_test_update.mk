@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,extensions_test_update, \
 	salhelper \
 	test \
 	unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,extensions_test_update, \

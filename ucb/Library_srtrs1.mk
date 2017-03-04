@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,srtrs1,\
 	cppuhelper \
 	sal \
 	ucbhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,srtrs1,\

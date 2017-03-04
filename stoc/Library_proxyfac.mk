@@ -15,7 +15,6 @@ $(eval $(call gb_Library_use_libraries,proxyfac,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,proxyfac,stoc/source/proxy_factory/proxyfac))

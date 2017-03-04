@@ -36,7 +36,6 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_macros, \
 	utl \
 	vcl \
 	xmlscript \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

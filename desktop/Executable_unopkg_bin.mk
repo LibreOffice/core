@@ -21,7 +21,6 @@ $(eval $(call gb_Executable_use_libraries,unopkg_bin,\
     sal \
     tl \
     unopkgapp \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,unopkg_bin,\

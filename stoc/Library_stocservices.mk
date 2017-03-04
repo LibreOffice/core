@@ -15,7 +15,6 @@ $(eval $(call gb_Library_use_libraries,stocservices,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_external,stocservices,boost_headers))

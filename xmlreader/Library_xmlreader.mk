@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_external,xmlreader,boost_headers))
 $(eval $(call gb_Library_use_libraries,xmlreader,\
     cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
     # cppu is only needed due to the cppumaker -C hack
 

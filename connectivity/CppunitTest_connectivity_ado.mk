@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_ado, \
     unotest \
     ucbhelper \
     utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_components,connectivity_ado,\

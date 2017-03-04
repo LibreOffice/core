@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,avmediavlc,\
     vcl \
     utl \
     salhelper \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediavlc,\

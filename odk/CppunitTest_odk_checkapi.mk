@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_use_libraries,odk_checkapi,\
 	cppuhelper \
     sal \
     salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_external_code,odk_checkapi))

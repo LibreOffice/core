@@ -51,7 +51,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_export_ooxml2, \
 	utl \
 	vcl \
 	xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_export_ooxml2,\

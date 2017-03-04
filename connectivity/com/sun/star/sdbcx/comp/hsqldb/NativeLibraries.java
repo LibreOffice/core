@@ -26,7 +26,6 @@ final class NativeLibraries {
     public static void load() {
         if (System.getProperty( "os.name" ).startsWith("Windows")) {
             loadLibrary("msvcr71");
-            loadLibrary("uwinapi");
             loadLibrary("sal3");
             loadLibrary("dbtoolsmi");
         }
