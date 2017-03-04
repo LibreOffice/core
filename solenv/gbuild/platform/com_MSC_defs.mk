@@ -54,7 +54,6 @@ gb_COMPILERDEFS := \
 	-D_MT \
 	-D_DLL \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
-	$(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)),-D_USING_V110_SDK71_) \
 
 ifeq ($(CPUNAME),INTEL)
 gb_COMPILERDEFS += \
@@ -151,11 +150,13 @@ gb_CFLAGS := \
 	-wd4512 \
 	-wd4706 \
 	-wd4800 \
+	-wd4267 \
 
 ifneq ($(COM_IS_CLANG),TRUE)
 
+# clang-cl doesn't suport -Wv:18 for now
 gb_CFLAGS += \
-	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
+	-Wv:18 \
 
 endif
 
@@ -176,6 +177,7 @@ gb_CXXFLAGS := \
 	-wd4244 \
 	-wd4250 \
 	-wd4251 \
+	-wd4267 \
 	-wd4275 \
 	-wd4290 \
 	-wd4351 \
@@ -188,12 +190,7 @@ gb_CXXFLAGS := \
 	-wd4706 \
 	-wd4800 \
 
-ifeq ($(CPUNAME),X86_64)
-
-gb_CXXFLAGS += \
-	-wd4267 \
-
-else
+ifeq ($(CPUNAME),INTEL)
 
 gb_CXXFLAGS += \
 	-Zm500 \
@@ -206,7 +203,7 @@ endif
 ifneq ($(COM_IS_CLANG),TRUE)
 
 gb_CXXFLAGS += \
-	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
+	-Wv:18 \
 
 endif
 

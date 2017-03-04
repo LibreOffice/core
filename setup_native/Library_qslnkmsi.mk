@@ -33,8 +33,8 @@ $(eval $(call gb_Library_use_static_libraries,qslnkmsi,\
 $(eval $(call gb_Library_use_system_win32_libs,qslnkmsi,\
 	libcmt \
 	libcpmt \
-	$(if $(filter-out 120,$(VCVER)),libucrt) \
-	$(if $(filter-out 120,$(VCVER)),libvcruntime) \
+	libucrt \
+	libvcruntime \
 	msi \
 	kernel32 \
 	user32 \

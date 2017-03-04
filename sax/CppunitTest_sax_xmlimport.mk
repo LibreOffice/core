@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_xmlimport, \
     unotest \
     utl \
     salhelper \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sax_xmlimport,\

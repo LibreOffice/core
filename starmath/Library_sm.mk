@@ -59,7 +59,6 @@ $(eval $(call gb_Library_use_libraries,sm,\
         utl \
         vcl \
         xo \
-		$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sm,\
