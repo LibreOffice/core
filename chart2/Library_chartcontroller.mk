@@ -44,7 +44,6 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,chartcontroller,chart2/source/controller/chartcontroller))

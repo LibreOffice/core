@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \
 	expwrap \
 	sal \
 	test \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sax_parser, \

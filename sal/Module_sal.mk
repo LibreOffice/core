@@ -15,8 +15,6 @@ $(eval $(call gb_Module_add_targets,sal,\
 		Library_lo-bootstrap) \
 	Library_sal \
 	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,Library_sal_textenc)) \
-	$(if $(filter $(OS),WNT), \
-		Library_uwinapi) \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

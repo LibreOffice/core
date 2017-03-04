@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	tl \
 	utl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,hsqldb,connectivity/source/drivers/hsqldb/hsqldb))

@@ -27,7 +27,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl,\
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 # the test uses the library created by Module_DLL

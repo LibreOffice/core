@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     utl \
     vcl \
     xmlscript \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,dbmm,dbaccess/source/ext/macromigration/dbmm))

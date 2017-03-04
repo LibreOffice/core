@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_dialogs_test, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,filter_dialogs_test,boost_headers))

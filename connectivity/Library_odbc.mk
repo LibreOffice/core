@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_libraries,odbc,\
 	dbtools \
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,odbc,\

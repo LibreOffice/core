@@ -18,7 +18,6 @@ $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	i18nlangtag \
 	sal \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,lngconvex,\

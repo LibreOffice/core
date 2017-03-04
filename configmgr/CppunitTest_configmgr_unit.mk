@@ -35,7 +35,6 @@ $(eval $(call gb_CppunitTest_use_libraries,configmgr_unit, \
 	    unotest \
 	    xmlreader \
 		i18nlangtag \
-		$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,configmgr_unit))

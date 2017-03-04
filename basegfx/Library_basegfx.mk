@@ -19,7 +19,6 @@ $(eval $(call gb_Library_use_libraries,basegfx,\
     cppu \
     cppuhelper \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_include,basegfx,\

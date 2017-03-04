@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,sax,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_defs,sax,\

@@ -11,7 +11,6 @@ $(eval $(call gb_Library_Library,localedata_others))
 
 $(eval $(call gb_Library_use_libraries,localedata_others,\
 	localedata_en \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\

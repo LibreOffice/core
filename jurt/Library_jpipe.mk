@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Library_Library,jpipe))
 
-$(eval $(call gb_Library_use_libraries,jpipe,\
-	$(gb_UWINAPI) \
-))
-
 ifeq ($(OS),WNT)
 
 # The real library is called jpipx on Windows. We build only a wrapper

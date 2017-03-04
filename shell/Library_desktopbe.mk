@@ -17,7 +17,6 @@ $(eval $(call gb_Library_use_libraries,desktopbe1,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,desktopbe1,shell/source/backends/desktopbe/desktopbe1))

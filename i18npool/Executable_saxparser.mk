@@ -15,7 +15,6 @@ $(eval $(call gb_Executable_use_libraries,saxparser,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,saxparser,\

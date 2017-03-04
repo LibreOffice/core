@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,emser,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,emser,\

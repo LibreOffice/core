@@ -11,7 +11,6 @@ $(eval $(call gb_Executable_Executable,genindex_data))
 
 $(eval $(call gb_Executable_use_libraries,genindex_data,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_use_externals,genindex_data,\
