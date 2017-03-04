@@ -22,38 +22,37 @@
 #include "hstream.hxx"
 
 HStream::HStream()
-    : size(0)
-    , pos(0)
+    : pos(0)
 {
 }
 
-void HStream::addData(const byte *buf, int aToAdd)
+void HStream::addData(const byte *buf, size_t aToAdd)
 {
-    seq.resize(size + aToAdd);
-    memcpy(seq.data() + size, buf, aToAdd);
-    size += aToAdd;
+    seq.insert(seq.end(), buf, buf + aToAdd);
 }
 
-int HStream::readBytes(byte * buf, int aToRead)
+size_t HStream::readBytes(byte * buf, size_t aToRead)
 {
+    auto size = seq.size();
     if (aToRead >= (size - pos))
         aToRead = size - pos;
-    for (int i = 0; i < aToRead; i++)
+    for (size_t i = 0; i < aToRead; ++i)
         buf[i] = seq[pos++];
     return aToRead;
 }
 
-int HStream::skipBytes(int aToSkip)
+size_t HStream::skipBytes(size_t aToSkip)
 {
+    auto size = seq.size();
     if (aToSkip >= (size - pos))
         aToSkip = size - pos;
     pos += aToSkip;
     return aToSkip;
 }
 
-int HStream::available() const
+size_t HStream::available() const
 {
-    return size - pos;
+    return seq.size() - pos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
