@@ -44,7 +44,6 @@ $(eval $(call gb_Library_use_libraries,cppcanvas,\
 	svt \
 	tl \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cppcanvas,\

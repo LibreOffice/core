@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_rtftok, \
 	unotest \
 	vcl \
 	writerfilter \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,writerfilter_rtftok))

@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
 	utl \
 	tl \
 	xmlsecurity \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,vcl_pdfexport,boost_headers))
