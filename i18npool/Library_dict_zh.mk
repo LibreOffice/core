@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Library_Library,dict_zh))
 
-$(eval $(call gb_Library_use_libraries,dict_zh,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Library_add_generated_exception_objects,dict_zh,\
 	CustomTarget/i18npool/breakiterator/dict_zh \
 ))
