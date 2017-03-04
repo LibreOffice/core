@@ -13,10 +13,6 @@ $(eval $(call gb_Executable_set_targettype_gui,odbcconfig,YES))
 
 $(eval $(call gb_Library_use_sdk_api,odbcconfig))
 
-$(eval $(call gb_Executable_use_libraries,odbcconfig,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
     dbaccess/win32/source/odbcconfig/odbcconfig \
 ))

@@ -18,7 +18,6 @@ $(eval $(call gb_Library_add_defs,store,\
 $(eval $(call gb_Library_use_libraries,store,\
 	sal \
 	salhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,store,\
