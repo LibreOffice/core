@@ -187,7 +187,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     else
         nGroupIdx = nGroupNo-1;
 
-    ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
+    ScSubTotalParam theSubTotalData;            // read out, if already partly filled
     SfxTabDialog* pDlg = GetTabDialog();
     if ( pDlg )
     {
@@ -231,10 +231,10 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                 nCheck++;
             }
         }
-        theSubTotalData.SetSubTotals( nGroupNo,      // Gruppen-Nr.
+        theSubTotalData.SetSubTotals( nGroupNo,      // group number
                                       pSubTotals.get(),
                                       pFunctions.get(),
-                                      nCheckCount ); // Anzahl der Array-Elemente
+                                      nCheckCount ); // number of array elements
 
     }
 
@@ -433,7 +433,7 @@ bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(2);
 bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3); }
 #undef FILL
 
-// Optionen-Tabpage:
+// options tab page:
 
 ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
                                           const SfxItemSet&     rArgSet )
@@ -529,7 +529,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
 bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
 {
-    ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
+    ScSubTotalParam theSubTotalData;            // read out, if already partly filled
     SfxTabDialog* pDlg = GetTabDialog();
     if ( pDlg )
     {

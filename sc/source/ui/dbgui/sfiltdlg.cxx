@@ -85,7 +85,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     Init( rArgSet );
     pEdFilterArea->GrabFocus();
 
-    // Hack: RefInput-Kontrolle
+    // hack: control of RefInput
     pIdle = new Idle;
     // FIXME: this is an abomination
     pIdle->SetPriority( TaskPriority::LOWEST );
@@ -109,7 +109,7 @@ void ScSpecialFilterDlg::dispose()
 
     delete pOutItem;
 
-    // Hack: RefInput-Kontrolle
+    // hack: control of RefInput
     pIdle->Stop();
     delete pIdle;
 
@@ -184,7 +184,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pLbFilterArea->SelectEntryPos( 0 );
 
-    // Optionen initialisieren lassen:
+    // let options be initilized:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
@@ -202,14 +202,14 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             pFtDbArea,
                             aStrUndefined );
 
-    //  Spezialfilter braucht immer Spaltenkoepfe
+    //  special filters always need column headers
     pBtnHeader->Check();
     pBtnHeader->Disable();
 
-    // Modal-Modus einschalten
+    // turn on modal modus
 //  SetDispatcherLock( true );
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(false);        //! allgemeine Methode im ScAnyRefDlg
+    //@BugID 54702 enable/disalbe in base class only
+    //SFX_APPWINDOW->Disable(false);        //! general method in ScAnyRefDlg
 }
 
 bool ScSpecialFilterDlg::Close()
@@ -220,12 +220,12 @@ bool ScSpecialFilterDlg::Close()
     return DoClose( ScSpecialFilterDlgWrapper::GetChildWindowId() );
 }
 
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
+// Transfer of a table area selected with the mouse, which is then displayed
+// as a new selection in the reference edit.
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode && pRefInputEdit )       // Nur moeglich, wenn im Referenz-Editmodus
+    if ( bRefInputMode && pRefInputEdit )       // only possible if in the reference edit mode
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
@@ -330,9 +330,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
         if ( bEditInputOk )
         {
             /*
-             * Alle Edit-Felder enthalten gueltige Bereiche.
-             * Nun wird versucht aus dem Filterbereich
-             * ein ScQueryParam zu erzeugen:
+             * All edit fields contain valid areas. Now try to create
+             * a ScQueryParam from the filter area:
              */
 
             ScRefFlags  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );

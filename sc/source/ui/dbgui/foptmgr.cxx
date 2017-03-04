@@ -102,7 +102,7 @@ void ScFilterOptionsMgr::Init()
 
         theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
 
-        // Zielbereichsliste fuellen
+        // fill the target area list
 
         pLbCopyArea->Clear();
         pLbCopyArea->InsertEntry( rStrUndefined, 0 );
@@ -118,13 +118,12 @@ void ScFilterOptionsMgr::Init()
             pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
-        pBtnDestPers->Check();         // beim Aufruf immer an
+        pBtnDestPers->Check();         // always on when called
         pLbCopyArea->SelectEntryPos( 0 );
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 
         /*
-         * Ueberpruefen, ob es sich bei dem uebergebenen
-         * Bereich um einen Datenbankbereich handelt:
+         * Check whether the transferred area is a database area:
          */
 
         theDbArea = theAreaStr;
@@ -160,7 +159,7 @@ void ScFilterOptionsMgr::Init()
             pFtDbArea->SetText( OUString() );
         }
 
-        // Kopierposition:
+        // copy position:
 
         if ( !rQueryData.bInplace )
         {
