@@ -19,7 +19,7 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xsec_xmlsec \
 ))
 
-ifneq ($(filter-out WNT MACOSX,$(OS)),)
+ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xsec_gpg \
 ))
