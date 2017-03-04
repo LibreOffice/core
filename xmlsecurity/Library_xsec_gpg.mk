@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,xsec_gpg,\
 	svl \
 	tl \
 	xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsec_gpg,\

@@ -25,22 +25,11 @@ $(eval $(call gb_Library_add_defs,uwinapi,\
 		-Wno-unused-parameter -Wno-return-type) \
 ))
 
-$(eval $(call gb_Library_add_cobjects,uwinapi,\
-	sal/systools/win32/uwinapi/snprintf \
-	sal/systools/win32/uwinapi/snwprintf \
-))
-
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Library_add_cobjects,uwinapi,\
 	sal/systools/win32/uwinapi/legacy \
 ))
-
-ifeq ($(VCVER),120)
-$(eval $(call gb_Library_add_ldflags,uwinapi,\
-	/DEF:$(SRCDIR)/sal/systools/win32/uwinapi/uwinapi.def \
-))
-endif
 
 endif
 

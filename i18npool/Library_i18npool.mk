@@ -25,7 +25,6 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 	i18nlangtag \
 	i18nutil \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,i18npool,\

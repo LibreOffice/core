@@ -43,11 +43,6 @@
 
 #endif /* defined _MSC_VER */
 
-/* Provide ISO C99 compatible versions of snprint and vsnprintf */
-#ifndef _SNPRINTF_H
-#include <systools/win32/snprintf.h>
-#endif
-
 #endif /* defined WIN32 */
 
 #if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \

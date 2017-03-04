@@ -29,7 +29,6 @@ $(eval $(call gb_Library_use_libraries,scd,\
 	sot \
 	tl \
 	utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scd,\
