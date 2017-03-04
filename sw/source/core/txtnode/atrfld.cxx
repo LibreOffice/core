@@ -118,12 +118,12 @@ SwFormatField::~SwFormatField()
     SwFieldType* pType = mpField ? mpField->GetTyp() : nullptr;
 
     if (pType && pType->Which() == RES_DBFLD)
-        pType = nullptr;  // DB-Feldtypen zerstoeren sich selbst
+        pType = nullptr;  // DB field types destroy themselves
 
     Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::REMOVED ) );
     delete mpField;
 
-    // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
+    // some fields need to delete their field type
     if( pType && pType->HasOnlyOneListener() )
     {
         bool bDel = false;
@@ -144,7 +144,7 @@ SwFormatField::~SwFormatField()
 
         if( bDel )
         {
-            // vorm loeschen erstmal austragen
+            // unregister before deleting
             pType->Remove( this );
             delete pType;
         }
@@ -252,12 +252,11 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         switch( pNew->Which() )
         {
         case RES_TXTATR_FLDCHG:
-                // "Farbe hat sich geaendert !"
-                // this, this fuer "nur Painten"
+                // this, this -> just repaint it
                 pTextNd->ModifyNotification( this, this );
                 return;
         case RES_REFMARKFLD_UPDATE:
-                // GetReferenz-Felder aktualisieren
+                // update GetRef fields
                 if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
                 {
                     // #i81002#
@@ -265,7 +264,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 }
                 break;
         case RES_DOCPOS_UPDATE:
-                // Je nach DocPos aktualisieren (SwTextFrame::Modify())
+                // handled in SwTextFrame::Modify()
                 pTextNd->ModifyNotification( pNew, this );
                 return;
 
@@ -383,7 +382,6 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
 
     if (aNewExpand == m_aExpand)
     {
-        // Bei Seitennummernfeldern
         const sal_uInt16 nWhich = pField->GetTyp()->Which();
         if ( RES_CHAPTERFLD != nWhich
              && RES_PAGENUMBERFLD != nWhich
@@ -423,9 +421,8 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
 
     if( pIDFA != pDestIDFA )
     {
-        // Die Hints stehen in unterschiedlichen Dokumenten,
-        // der Feldtyp muss im neuen Dokument angemeldet werden.
-        // Z.B: Kopieren ins ClipBoard.
+        // different documents, e.g. clipboard:
+        // register field type in target document
         SwFieldType* pFieldType;
         if( nFieldWhich != RES_DBFLD
             && nFieldWhich != RES_USERFLD
@@ -440,7 +437,7 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
             pFieldType = pDestIDFA->InsertFieldType( *rDestFormatField.GetField()->GetTyp() );
         }
 
-        // Sonderbehandlung fuer DDE-Felder
+        // DDE fields need special treatment
         if( RES_DDEFLD == nFieldWhich )
         {
             if( rDestFormatField.GetTextField() )
@@ -451,11 +448,11 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
         }
 
         OSL_ENSURE( pFieldType, "unknown FieldType" );
-        pFieldType->Add( &rDestFormatField );          // ummelden
+        pFieldType->Add( &rDestFormatField ); // register at the field type
         rDestFormatField.GetField()->ChgTyp( pFieldType );
     }
 
-    // Expressionfelder Updaten
+    // update expression fields
     if( nFieldWhich == RES_SETEXPFLD
         || nFieldWhich == RES_GETEXPFLD
         || nFieldWhich == RES_HIDDENTXTFLD )
@@ -463,13 +460,13 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
         SwTextField* pField = const_cast<SwTextField*>(this);
         pDestIDFA->UpdateExpFields( pField, true );
     }
-    // Tabellenfelder auf externe Darstellung
+    // table fields: external display
     else if( RES_TABLEFLD == nFieldWhich
              && static_cast<SwTableField*>(rDestFormatField.GetField())->IsIntrnlName() )
     {
-        // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
+        // convert internal (core) to external (UI) formula
         const SwTableNode* pTableNd = m_pTextNode->FindTableNode();
-        if( pTableNd )        // steht in einer Tabelle
+        if( pTableNd )        // in a table?
             static_cast<SwTableField*>(rDestFormatField.GetField())->PtrToBoxNm( &pTableNd->GetTable() );
     }
 }
