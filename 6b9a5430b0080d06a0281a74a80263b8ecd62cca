@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ad79ca31",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-04T07:25:13Z",
+      "side": 1,
+      "message": "newer-\u003enever",
+      "revId": "6b9a5430b0080d06a0281a74a80263b8ecd62cca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
