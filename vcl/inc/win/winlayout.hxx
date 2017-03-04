@@ -180,7 +180,6 @@ public:
     virtual bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
         HDC hDC,
-        const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) = 0;
 };
 
@@ -195,7 +194,6 @@ public:
     bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
         HDC hDC,
-        const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 };
 
@@ -220,7 +218,6 @@ public:
     bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
         HDC hDC,
-        const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 
     inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 0, 0)) {

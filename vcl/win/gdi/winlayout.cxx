@@ -265,10 +265,8 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
 bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     SalGraphics & /*rGraphics*/,
     HDC hDC,
-    const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
-    bool bGlyphs = false;
     const GlyphItem* pGlyph;
     HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
     HFONT hAltFont = nullptr;
@@ -286,7 +284,6 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     }
     while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
     {
-        bGlyphs = true;
         WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
         {
@@ -302,7 +299,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
         DeleteObject(hAltFont);
     }
 
-    return (pRectToErase && bGlyphs);
+    return true;
 }
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
@@ -344,7 +341,6 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
 bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     SalGraphics &rGraphics,
     HDC hDC,
-    const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
     if (!Ready())
@@ -353,7 +349,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     if (!BindFont(hDC))
     {
         // If for any reason we can't bind fallback to legacy APIs.
-        return ExTextOutRenderer()(rLayout, rGraphics, hDC, pRectToErase, pPos, pGetNextGlypInfo);
+        return ExTextOutRenderer()(rLayout, rGraphics, hDC, pPos, pGetNextGlypInfo);
     }
 
     Rectangle bounds;
@@ -365,7 +361,6 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f), &pBrush));
 
     HRESULT hr = S_OK;
-    bool bGlyphs = false;
     if (succeeded)
     {
         mpRT->BeginDraw();
@@ -373,7 +368,6 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
         const GlyphItem* pGlyph;
         while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
         {
-            bGlyphs = true;
             UINT16 glyphIndices[] = { pGlyph->maGlyphId };
             FLOAT glyphAdvances[] = { pGlyph->mnNewWidth };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
@@ -403,7 +397,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     if (hr == D2DERR_RECREATE_TARGET)
         CreateRenderTarget();
 
-    return (succeeded && bGlyphs && pRectToErase);
+    return succeeded;
 }
 
 bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
@@ -609,8 +603,8 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout, HDC hDC, boo
     Point aPos(0, 0);
     int nGlyphCount(0);
     TextOutRenderer &render = TextOutRenderer::get(bUseDWrite);
-    bool result = render(rLayout, *this, hDC, nullptr, &aPos, &nGlyphCount);
-    assert(!result);
+    bool result = render(rLayout, *this, hDC, &aPos, &nGlyphCount);
+    assert(result);
 }
 
 void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
