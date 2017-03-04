@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0d04967c",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-04T12:27:21Z",
+      "side": 1,
+      "message": "surely you need to take the solar mutex here too?",
+      "revId": "452aa56ae26a6dfa49bfd0a8dfdb630d005adcfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
