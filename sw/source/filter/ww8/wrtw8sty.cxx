@@ -1621,6 +1621,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // in checking heuristics here.
         if ( !titlePage && pPd->GetFollow() && pPd != pPd->GetFollow() &&
              pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
+             pPd->IsHeaderShared() && pPd->IsFooterShared() &&
              ( !rSepInfo.pPDNd || pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) ) )
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
