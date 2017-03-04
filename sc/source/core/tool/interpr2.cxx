@@ -1948,10 +1948,13 @@ void ScInterpreter::ScRRI()
     nFuncFmtType = css::util::NumberFormat::PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nValueInFuture = GetDouble();
-        double nValueNow = GetDouble();
-        double nSpaceOfTime = GetDouble();
-        PushDouble(pow(nValueInFuture / nValueNow, 1.0 / nSpaceOfTime) - 1.0);
+        double fFutureValue = GetDouble();
+        double fPresentValue = GetDouble();
+        double NrOfPeriods = GetDouble();
+        if ( NrOfPeriods <= 0.0  || fPresentValue == 0.0 )
+            PushIllegalArgument();
+        else
+            PushDouble(pow(fFutureValue / fPresentValue, 1.0 / NrOfPeriods) - 1.0);
     }
 }
 

@@ -2409,7 +2409,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="ce11" table:formula="of:=RRI(96;10000;-11000)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#VALUE!</text:p>
+      <text:p>#NUM!</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
@@ -2429,7 +2429,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="ce11" table:formula="of:=RRI(96;-10000;11000)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#VALUE!</text:p>
+      <text:p>#NUM!</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>error</text:p>
@@ -2450,18 +2450,21 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="ce11" table:formula="of:=RRI(0;10000;11000)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#NUM!</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>error</text:p>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=ISERROR([.A8])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ORG.OPENOFFICE.ERRORTYPE([.A8])=502" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=RRI(0,10000,11000)" calcext:value-type="string">
       <text:p>=RRI(0,10000,11000)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="5"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>constraint N&gt;0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce37"/>
      <table:table-cell table:style-name="ce35"/>
      <table:table-cell/>
@@ -2490,18 +2493,21 @@
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="ce11" table:formula="of:=RRI(96;;11000)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#NUM!</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>error</text:p>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce70" table:formula="of:=ORG.OPENOFFICE.ERRORTYPE([.A10])=502" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=RRI(96,,11000)" calcext:value-type="string">
       <text:p>=RRI(96,,11000)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>check for divide by 0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce39"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce43"/>
@@ -2509,11 +2515,22 @@
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce12"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:style-name="ce25"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=RRI(4;0;10000)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce71" table:formula="of:=ORG.OPENOFFICE.ERRORTYPE([.A11])=502" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=RRI(4,0,10000)" calcext:value-type="string">
+      <text:p>=RRI(4,0,10000)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>check for divide by 0</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce39"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
