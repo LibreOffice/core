@@ -51,7 +51,6 @@ class CertificateChooser : public ModalDialog
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > mxSecurityEnvironments;
-    css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
     VclPtr<SvSimpleTable>   m_pCertLB;
