@@ -109,13 +109,12 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
 
     BenByte * pCurrLabel = Label + BEN_MAGIC_BYTES_SIZE;
 
-#ifndef NDEBUG
     BenWord Flags =
-#endif
         UtGetIntelWord(pCurrLabel); pCurrLabel += 2; // Flags
     // Newer files are 0x0101--indicates if big or little endian.  Older
     // files are 0x0 for flags
-    assert(Flags == 0x0101 || Flags == 0x0);
+    if (Flags != 0x0101 && Flags != 0x0)
+        return BenErr_UnknownBentoFormatVersion;
 
     cBlockSize = UtGetIntelWord(pCurrLabel) * 1024; pCurrLabel += 2;
     if (cBlockSize == 0)
