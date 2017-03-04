@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "../svgreader.hxx"
+#include "svgreader.hxx"
 #include "odfserializer.hxx"
 
 #include <sal/main.h>
