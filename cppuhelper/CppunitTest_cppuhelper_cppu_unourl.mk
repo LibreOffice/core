@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_use_libraries,cppuhelper_cppu_unourl,\
 	cppu \
     cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 # vim: set noet sw=4 ts=4:

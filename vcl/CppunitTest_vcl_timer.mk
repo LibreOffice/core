@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_timer, \
 	test \
 	unotest \
 	vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_timer))

@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
     sot \
     tl \
     unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sot_test_sot,))

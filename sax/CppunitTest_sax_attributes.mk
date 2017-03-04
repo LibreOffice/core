@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_attributes, \
 	cppuhelper \
 	sal \
 	sax \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sax_attributes))
