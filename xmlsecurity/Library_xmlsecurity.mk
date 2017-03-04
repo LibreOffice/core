@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	$(gb_UWINAPI) \
 ))
 
-ifneq ($(filter-out WNT MACOSX,$(OS)),)
+ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
 $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	xsec_gpg \
 ))
