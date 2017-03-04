@@ -30,7 +30,6 @@ $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	salhelper \
 	unoidl \
 	xmlreader \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,cppuhelper,\

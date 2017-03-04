@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_check_data_pilot_field, \
         vbahelper \
         vcl \
         xo \
-        $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_check_data_pilot_field,\

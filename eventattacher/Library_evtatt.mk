@@ -18,7 +18,6 @@ $(eval $(call gb_Library_use_libraries,evtatt,\
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,evtatt,\

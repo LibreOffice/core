@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,xmlscript,\
     sal \
     tl \
 	i18nlangtag \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_include,xmlscript,\

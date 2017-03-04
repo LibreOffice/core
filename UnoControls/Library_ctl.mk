@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,ctl,\
     cppuhelper \
     sal \
     tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,ctl,UnoControls/util/ctl))

@@ -49,7 +49,6 @@ $(eval $(call gb_CppunitTest_use_libraries,reportdesign_dialogs_test, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,reportdesign_dialogs_test,boost_headers))

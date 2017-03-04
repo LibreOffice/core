@@ -56,7 +56,6 @@ $(eval $(call gb_Library_use_libraries,dbu,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

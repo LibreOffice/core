@@ -9,8 +9,8 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/docs))
 
-odk_cpp_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper \
-	$(if $(filter WNT,$(OS)),systools)
+odk_cpp_INCDIRLIST := sal salhelper rtl osl typelib uno cppu cppuhelper
+
 odk_cpp_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Any.hxx \
 	com/sun/star/uno/genfunc.h \

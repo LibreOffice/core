@@ -44,7 +44,6 @@ $(eval $(call gb_Library_use_libraries,graphicfilter,\
 	cppuhelper \
 	cppu \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,graphicfilter,\

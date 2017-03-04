@@ -9,10 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,officecfg_cppheader_test))
 
-$(eval $(call gb_CppunitTest_use_libraries,officecfg_cppheader_test,\
-	$(gb_UWINAPI) \
-))
-
 $(eval $(call gb_CppunitTest_use_custom_headers,officecfg_cppheader_test,\
 	officecfg/registry \
 ))

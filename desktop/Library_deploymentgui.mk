@@ -39,7 +39,6 @@ $(eval $(call gb_Library_use_libraries,deploymentgui,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

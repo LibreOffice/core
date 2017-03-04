@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     utl \
     svt \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/drivers/firebird/firebird_sdbc))

@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_import,\
 	unotest \
 	utl \
 	wpftqahelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_import))

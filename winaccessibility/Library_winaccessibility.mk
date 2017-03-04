@@ -59,7 +59,6 @@ $(eval $(call gb_Library_use_libraries,winaccessibility,\
 	sal \
 	tk \
 	tl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,winaccessibility,\

@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,spell,\
 	sal \
 	tl \
 	utl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,spell,\

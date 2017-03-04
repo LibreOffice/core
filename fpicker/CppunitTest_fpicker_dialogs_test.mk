@@ -43,7 +43,6 @@ $(eval $(call gb_CppunitTest_use_libraries,fpicker_dialogs_test, \
     utl \
     vcl \
     xo \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,fpicker_dialogs_test,boost_headers))

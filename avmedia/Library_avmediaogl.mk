@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,avmediaogl,\
     salhelper \
     tl \
     vcl \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_include,avmediaogl,\

@@ -94,17 +94,6 @@ public class LocalOfficeConnection
 
             try
             {
-                NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "uwinapi");
-            }
-            catch (Throwable e)
-            {
-                // loading twice would fail
-                System.err.println("cannot find uwinapi:");
-                e.printStackTrace();
-            }
-
-            try
-            {
                 NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "jawt");
             }
             catch (Throwable e)

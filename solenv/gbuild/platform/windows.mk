@@ -35,15 +35,6 @@ gb_OSDEFS := \
 	-DNOMINMAX \
 	$(LFS_CFLAGS) \
 
-
-gb_UWINAPI :=
-
-ifeq ($(VCVER),120)
-
-gb_UWINAPI := uwinapi
-
-endif
-
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
 	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
