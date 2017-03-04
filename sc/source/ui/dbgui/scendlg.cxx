@@ -138,7 +138,7 @@ void ScNewScenarioDlg::SetScenarioData(const OUString& rName, const OUString& rC
     m_pCbShowFrame->Check ( (nFlags & ScScenarioFlags::ShowFrame) != ScScenarioFlags::NONE );
     EnableHdl(m_pCbShowFrame);
     m_pCbTwoWay->Check    ( (nFlags & ScScenarioFlags::TwoWay)    != ScScenarioFlags::NONE );
-    //  CopyAll nicht
+    //  not CopyAll
     m_pCbProtect->Check   ( (nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::NONE );
 }
 
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, Button*, void)
     else
         EndDialog( RET_OK );
 
-    //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
+    //! when editing, test whether another table has the name!
 }
 
 IMPL_LINK( ScNewScenarioDlg, EnableHdl, Button*, pBox, void )

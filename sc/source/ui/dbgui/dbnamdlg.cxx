@@ -148,7 +148,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     m_pFTSource->SetStyle(m_pFTSource->GetStyle() | WB_NOLABEL);
     m_pFTOperations->SetStyle(m_pFTOperations->GetStyle() | WB_NOLABEL);
 
-    //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
+    //  so that the strings in the resource can stay with fixed texts:
     aStrSource      = m_pFTSource->GetText();
     aStrOperations  = m_pFTOperations->GetText();
 
@@ -223,7 +223,7 @@ void ScDbNameDlg::Init()
 
         if ( pDBColl )
         {
-            // Feststellen, ob definierter DB-Bereich markiert wurde:
+            // determine if the defined DB area has been marked:
             pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::TOP_LEFT );
             if ( pDBData )
             {
@@ -283,8 +283,8 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     m_pFTOperations->SetText(aBuf.makeStringAndClear());
 }
 
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-//  neue Selektion im Referenz-Fenster angezeigt wird.
+// Transfer of a table area selected with the mouse, which is then displayed
+// as a new selection in the reference window.
 
 void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -313,9 +313,9 @@ void ScDbNameDlg::SetActive()
 {
     m_pEdAssign->GrabFocus();
 
-    //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
-    //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
-    //  (der ausgewaehlte DB-Name hat sich auch nicht veraendert)
+    //  No NameModifyHdl, because otherwise areas can not be changed
+    //  (the old content would be displayed again after the reference was rolled up)
+    //  (the selected DB name has not changed)
 
     RefInputDone();
 }
@@ -392,9 +392,9 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, Button*, void)
 {
     AddBtnHdl( nullptr );
 
-    // Der View die Aenderungen und die Remove-Liste uebergeben:
-    // beide werden nur als Referenz uebergeben, so dass an dieser
-    // Stelle keine Speicherleichen entstehen koennen:
+    // Pass the changes and the remove list to the view: both are
+    // transerred as a reference only, so that no dead memory can
+    // be created at this point:
     if ( pViewData )
     {
         ScDBDocFunc aFunc(*pViewData->GetDocShell());
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
     {
         if ( ScRangeData::IsNameValid( aNewName, pDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
         {
-            //  weil jetzt editiert werden kann, muss erst geparst werden
+            //  because editing can be done now, parsing is needed first
             ScRange aTmpRange;
             OUString aText = m_pEdAssign->GetText();
             if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & ScRefFlags::VALID )
@@ -430,7 +430,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
                 ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
                 if (pOldEntry)
                 {
-                    //  Bereich veraendern
+                    //  modify area
 
                     pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row() );
@@ -443,7 +443,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
                 }
                 else
                 {
-                    //  neuen Bereich einfuegen
+                    //  insert new area
 
                     ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
                 m_pBtnStripData->Check( false );
-                SetInfoStrings( nullptr );     // leer
+                SetInfoStrings( nullptr );     // empty
                 theCurArea = ScRange();
                 bSaved = true;
                 pSaveObj->Save();
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );
             m_pBtnStripData->Check( false );
-            SetInfoStrings( nullptr );     // leer
+            SetInfoStrings( nullptr );     // empty
             bSaved=false;
             pSaveObj->Restore();
             NameModifyHdl( *m_pEdName );
@@ -575,8 +575,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, Edit&, void)
         m_pOptions->Disable();
         //bSaved=sal_False;
         //pSaveObj->Restore();
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
+        //@BugID 54702 enable/disable in the base class only
+        //SFX_APPWINDOW->Disable(sal_False);        //! general method in ScAnyRefDlg
         bRefInputMode = false;
     }
     else
@@ -616,7 +616,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, Edit&, void)
 
         m_pAssignFrame->Enable();
 
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+        //@BugID 54702 enable/disable in the base class only
         //SFX_APPWINDOW->Enable();
         bRefInputMode = true;
     }
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, Edit&, void)
 
 IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, Edit&, void)
 {
-    //  hier parsen fuer Save() etc.
+    //  parse here for save(), etc.
 
     ScRange aTmpRange;
     OUString aText = m_pEdAssign->GetText();

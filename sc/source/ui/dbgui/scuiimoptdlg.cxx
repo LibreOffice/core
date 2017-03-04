@@ -136,7 +136,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     sFieldSep = sFieldSep.replaceFirst( "%TAB",   SC_RESSTR(SCSTR_FIELDSEP_TAB) );
     sFieldSep = sFieldSep.replaceFirst( "%SPACE", SC_RESSTR(SCSTR_FIELDSEP_SPACE) );
 
-    // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
+    // not possible in the Ctor initializer (MSC cannot do that):
     pFieldSepTab = new ScDelimiterTable( sFieldSep );
     pTextSepTab  = new ScDelimiterTable( OUString(ScResId(SCSTR_TEXTSEP)) );
 
@@ -234,7 +234,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     m_pLbCharset->SelectTextEncoding( pOptions ? pOptions->eCharSet :
         osl_getThreadTextEncoding() );
 
-    // optionaler Titel:
+    // optional title:
     if ( pStrTitle )
         SetText( *pStrTitle );
 }

@@ -424,7 +424,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
         {
             switch (pSdrHint->GetKind())
             {
-                case SdrHintKind::ObjectChange :         // Objekt geaendert
+                case SdrHintKind::ObjectChange :         // object changed
                 {
                     uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
@@ -435,7 +435,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
                     }
                 }
                 break;
-                case SdrHintKind::ObjectInserted :    // Neues Zeichenobjekt eingefuegt
+                case SdrHintKind::ObjectInserted :    // new drawing object inserted
                 {
                     uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
