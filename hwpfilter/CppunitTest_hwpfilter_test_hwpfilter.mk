@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,hwpfilter_test_hwpfilter, \
     sal \
     test \
     unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,hwpfilter_test_hwpfilter))

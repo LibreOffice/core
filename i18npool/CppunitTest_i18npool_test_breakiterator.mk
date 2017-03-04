@@ -18,7 +18,6 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_breakiterator,\
 	cppuhelper \
 	sal \
 	unotest \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\

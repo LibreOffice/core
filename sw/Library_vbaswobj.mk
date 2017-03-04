@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
     utl \
     vbahelper \
     vcl \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,vbaswobj,\
