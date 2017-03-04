@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,vclbootstrapprotector, \
     tl \
     utl \
     vcl \
-    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vclbootstrapprotector))

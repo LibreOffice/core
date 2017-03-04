@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	i18nlangtag \
 	xsec_fw \
 	xsec_xmlsec \
-	$(gb_UWINAPI) \
 ))
 
 ifneq ($(filter-out WNT MACOSX,$(OS)),)

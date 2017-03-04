@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_classification, \
 	vcl \
     sal \
     sfx \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sfx2_classification,boost_headers))
