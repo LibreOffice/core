@@ -237,8 +237,7 @@ OUString SAL_CALL NumberingToolBoxControl::getImplementationName()
 
 css::uno::Sequence< OUString > SAL_CALL NumberingToolBoxControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
-    return aRet;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
