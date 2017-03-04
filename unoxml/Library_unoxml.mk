@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,unoxml,\
     cppuhelper \
     cppu \
     sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,unoxml,\

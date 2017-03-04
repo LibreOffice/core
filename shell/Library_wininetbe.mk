@@ -15,7 +15,6 @@ $(eval $(call gb_Library_use_libraries,wininetbe1,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,wininetbe1,shell/source/backends/wininetbe/wininetbe1))

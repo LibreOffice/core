@@ -13,7 +13,6 @@ $(eval $(call gb_CppunitTest_use_external,binaryurp_test-cache,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-cache,\
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,binaryurp_test-cache,\

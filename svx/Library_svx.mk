@@ -70,7 +70,6 @@ $(eval $(call gb_Library_use_libraries,svx,\
     vcl \
     xo \
     xmlscript \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_externals,svx,\

@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,localebe1,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,localebe1,shell/source/backends/localebe/localebe1))

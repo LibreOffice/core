@@ -48,7 +48,6 @@ APP1OBJS=		$(OBJ)$/test_wincb.obj
 APP1STDLIBS=	$(SALLIB) \
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
-                $(SOLARLIBDIR)$/uwinapi.lib\
                 $(USER32LIB) \
                 $(OLE32LIB)\
                 $(COMDLG32LIB)

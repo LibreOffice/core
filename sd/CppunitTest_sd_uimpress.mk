@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),WNT)

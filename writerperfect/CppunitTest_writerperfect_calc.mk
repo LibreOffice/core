@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_calc,\
 	ucbhelper \
 	unotest \
 	wpftqahelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_calc))

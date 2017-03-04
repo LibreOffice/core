@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,dbaxml,\
     utl \
     vcl \
     xo \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))

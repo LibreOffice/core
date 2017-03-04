@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_use_sdk_api,svidl))
 $(eval $(call gb_Executable_use_libraries,svidl,\
 	tl \
 	sal \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,svidl,\

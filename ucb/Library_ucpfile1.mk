@@ -22,7 +22,6 @@ $(eval $(call gb_Library_use_libraries,ucpfile1,\
 	cppuhelper \
 	sal \
 	ucbhelper \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpfile1,\
