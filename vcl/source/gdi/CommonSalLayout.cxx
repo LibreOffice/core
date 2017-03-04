@@ -384,12 +384,16 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
     rSalGraphics.DrawTextLayout( *this );
 }
 
-// Find if the given glyph index can result from applying “vert” feature.
+// Find if the nominal glyph of the character is an input to “vert” feature.
 // We don’t check for a specific script or language as it shouldn’t matter
 // here; if the glyph would be the result from applying “vert” for any
 // script/language then we want to always treat it as upright glyph.
-bool CommonSalLayout::IsVerticalAlternate(hb_codepoint_t nGlyphIndex)
+bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSelector)
 {
+    hb_codepoint_t nGlyphIndex = 0;
+    if (!hb_font_get_glyph(mpHbFont, aChar, aVariationSelector, &nGlyphIndex))
+        return false;
+
     if (!mpVertGlyphs)
     {
         hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
@@ -407,7 +411,11 @@ bool CommonSalLayout::IsVerticalAlternate(hb_codepoint_t nGlyphIndex)
             while (hb_set_next(pLookups, &nIdx))
             {
                 hb_set_t* pGlyphs = hb_set_create();
-                hb_ot_layout_lookup_collect_glyphs(pHbFace, HB_OT_TAG_GSUB, nIdx, nullptr, nullptr, nullptr, pGlyphs);
+                hb_ot_layout_lookup_collect_glyphs(pHbFace, HB_OT_TAG_GSUB, nIdx,
+                        nullptr,  // glyphs before
+                        pGlyphs,  // glyphs input
+                        nullptr,  // glyphs after
+                        nullptr); // glyphs out
                 hb_set_union(mpVertGlyphs, pGlyphs);
             }
         }
@@ -491,16 +499,37 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                    switch (vcl::GetVerticalOrientation(aChar))
+                    VerticalOrientation aVo = vcl::GetVerticalOrientation(aChar);
+
+                    sal_UCS4 aVariationSelector = 0;
+                    if (nIdx < nEndRunPos)
                     {
-                    case VerticalOrientation::Upright:
-                    case VerticalOrientation::TransformedUpright:
-                    case VerticalOrientation::TransformedRotated:
+                        sal_Int32 nNextIdx = nIdx;
+                        sal_UCS4 aNextChar = rArgs.mrStr.iterateCodePoints(&nNextIdx);
+                        if (u_hasBinaryProperty(aNextChar, UCHAR_VARIATION_SELECTOR))
+                        {
+                            nIdx = nNextIdx;
+                            aVariationSelector = aNextChar;
+                        }
+                    }
+
+                    // Charters with U and Tu vertical orientation should
+                    // be shaped in vertical direction. But characters
+                    // with Tr should be shaped in vertical direction
+                    // only if they have vertical alternates, otherwise
+                    // they should be shaped in horizontal direction
+                    // and then rotated.
+                    // See http://unicode.org/reports/tr50/#vo
+                    if (aVo == VerticalOrientation::Upright ||
+                        aVo == VerticalOrientation::TransformedUpright ||
+                        (aVo == VerticalOrientation::TransformedRotated &&
+                         HasVerticalAlternate(aChar, aVariationSelector)))
+                    {
                         aDirection = HB_DIRECTION_TTB;
-                        break;
-                    default:
+                    }
+                    else
+                    {
                         aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
-                        break;
                     }
 
                     if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
@@ -612,13 +641,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
-                    // If the vertical orientation is Tr, then we need to
-                    // consider the glyph upright only if it was a vertical
-                    // alternate (i.e. transformed).
-                    // See http://unicode.org/reports/tr50/#vo
-                    if (vcl::GetVerticalOrientation(aChar) != VerticalOrientation::TransformedRotated
-                    || IsVerticalAlternate(pHbGlyphInfos[i].codepoint))
-                        nGlyphFlags |= GlyphItem::IS_VERTICAL;
+                    nGlyphFlags |= GlyphItem::IS_VERTICAL;
 
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset =  pHbPositions[i].y_offset;
