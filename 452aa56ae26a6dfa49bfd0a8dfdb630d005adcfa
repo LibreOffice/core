@@ -16,6 +16,24 @@
       "revId": "452aa56ae26a6dfa49bfd0a8dfdb630d005adcfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c04b3558",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-05T18:39:38Z",
+      "side": 1,
+      "message": "Yes, this needs the solar mutex. But it should only ever be called from DeInitVCL() which always holds the mutex already (I hope).\n\nAnyway: Adding a:\n\n DBG_TESTSOLARMUTEX();\n\njust in case.",
+      "parentUuid": "9a57fde8_0d04967c",
+      "revId": "452aa56ae26a6dfa49bfd0a8dfdb630d005adcfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
