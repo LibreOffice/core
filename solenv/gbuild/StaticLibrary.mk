@@ -79,9 +79,7 @@ $(eval $(foreach method,\
 	add_asmobject \
 	add_asmobjects \
 	add_exception_objects \
-	add_x64_generated_exception_objects \
 	add_generated_cobjects \
-	add_x64_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_cflags \
@@ -93,7 +91,6 @@ $(eval $(foreach method,\
 	set_include \
 	add_ldflags \
 	set_ldflags \
-	set_x64 \
 	add_libs \
 	set_library_path_flags \
 	use_api \

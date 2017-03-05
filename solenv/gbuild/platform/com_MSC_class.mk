@@ -39,10 +39,9 @@ define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter %.c,$(3)), $(gb_CC), \
 			$(if $(filter -clr,$(2)), \
-				$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))) \
+				$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(2) \
@@ -169,7 +168,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PCHOBJS) $(NATIVERES)) && \
 		$(if $(filter $(call gb_Library__get_workdir_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
-	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
+	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
@@ -195,7 +194,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter YES,$(TARGETGUI)),&& if [ -f $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest -updateresource:$(1)\;1 ; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& \
 		echo $(notdir $(1)) > $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
-		$(if $(filter YES,$(LIBRARY_X64)),$(LINK_X64_BINARY),$(gb_LINK)) \
+		$(gb_LINK) \
 			-dump -exports $(ILIBTARGET) \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp,$(WORKDIR)/LinkTarget/$(2).exports,$(1))) \

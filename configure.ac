@@ -3635,52 +3635,6 @@ if test "$_os" = "WINNT"; then
     else
         AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
     fi
-
-    # Check for 64-bit (cross-)compiler to use to build the 64-bit
-    # version of the Explorer extension (and maybe other small
-    # bits, too) needed when installing a 32-bit LibreOffice on a
-    # 64-bit OS. The 64-bit Explorer extension is a feature that
-    # has been present since long in OOo. Don't confuse it with
-    # building LibreOffice itself as 64-bit code.
-
-    BUILD_X64=
-    CXX_X64_BINARY=
-    LINK_X64_BINARY=
-
-    if test "$BITNESS_OVERRIDE" = ""; then
-        AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
-        if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
-            # Prefer native x64 compiler to cross-compiler, in case we are running
-            # the build on a 64-bit OS.
-            if "$VC_PRODUCT_DIR/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/link.exe"
-            elif "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
-            fi
-        elif test -f "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/atlmfc/lib/x64/atls.lib"; then
-            # nobody uses 32-bit OS to build, just pick the 64-bit compiler
-            if "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CXX_X64_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"
-                LINK_X64_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/link.exe"
-            fi
-        fi
-        if test "$BUILD_X64" = TRUE; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
-        fi
-    fi
-    AC_SUBST(BUILD_X64)
-
-    # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
-    AC_SUBST(CXX_X64_BINARY)
-    AC_SUBST(LINK_X64_BINARY)
 fi
 AC_SUBST(VCVER)
 AC_SUBST(DEVENV)

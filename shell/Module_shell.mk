@@ -73,20 +73,6 @@ $(eval $(call gb_Module_add_check_targets,shell,\
 ))
 endif
 
-ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_Module_add_targets,shell,\
-	CustomTarget_x64 \
-	Library_ooofilt_x64 \
-	Library_propertyhdl_x64 \
-	Library_shlxthdl_x64 \
-	StaticLibrary_shlxthandler_common_x64 \
-	StaticLibrary_xmlparser_x64 \
-	$(if $(DISABLE_ACTIVEX),,\
-		Library_spsupp_x64 \
-	) \
-))
-endif
-
 endif
 
 ifeq ($(OS),MACOSX)

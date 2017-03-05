@@ -20,11 +20,4 @@ $(eval $(call gb_Module_add_targets,expat,\
 ))
 endif
 
-# ---------------- X64 stuff special ---------------------
-ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_Module_add_targets,expat,\
-	StaticLibrary_expat_x64 \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
