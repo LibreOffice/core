@@ -149,7 +149,7 @@ enum class SvxSpellArea
 /**
  * these must match the values in css::style::NumberingType
  */
-enum SvxNumType
+enum SvxNumType : sal_Int16
 {
     SVX_NUM_CHARS_UPPER_LETTER    = css::style::NumberingType::CHARS_UPPER_LETTER,    // Counts from a-z, aa - az, ba - bz, ...
     SVX_NUM_CHARS_LOWER_LETTER    = css::style::NumberingType::CHARS_LOWER_LETTER,
@@ -176,10 +176,38 @@ enum SvxNumType
     SVX_NUM_AIU_HALFWIDTH_JA      = css::style::NumberingType::AIU_HALFWIDTH_JA,
     SVX_NUM_IROHA_FULLWIDTH_JA    = css::style::NumberingType::IROHA_FULLWIDTH_JA,
     SVX_NUM_IROHA_HALFWIDTH_JA    = css::style::NumberingType::IROHA_HALFWIDTH_JA,
-    SVX_NUM_HANGUL_SYLLABLE_KO    = css::style::NumberingType::HANGUL_SYLLABLE_KO,
-    SVX_NUM_HANGUL_JAMO_KO        = css::style::NumberingType::HANGUL_JAMO_KO,
-    SVX_NUM_NUMBER_HANGUL_KO      = css::style::NumberingType::NUMBER_HANGUL_KO,
     SVX_NUM_NUMBER_UPPER_KO       = css::style::NumberingType::NUMBER_UPPER_KO,
+    SVX_NUM_NUMBER_HANGUL_KO      = css::style::NumberingType::NUMBER_HANGUL_KO,
+    SVX_NUM_HANGUL_JAMO_KO        = css::style::NumberingType::HANGUL_JAMO_KO,
+    SVX_NUM_HANGUL_SYLLABLE_KO    = css::style::NumberingType::HANGUL_SYLLABLE_KO,
+    SVX_NUM_HANGUL_CIRCLED_JAMO_KO = css::style::NumberingType::HANGUL_CIRCLED_JAMO_KO,
+    SVX_NUM_HANGUL_CIRCLED_SYLLABLE_KO = css::style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,
+    SVX_NUM_CHARS_ARABIC          = css::style::NumberingType::CHARS_ARABIC,
+    SVX_NUM_CHARS_THAI            = css::style::NumberingType::CHARS_THAI,
+    SVX_NUM_CHARS_HEBREW          = css::style::NumberingType::CHARS_HEBREW,
+    SVX_NUM_CHARS_NEPALI          = css::style::NumberingType::CHARS_NEPALI,
+    SVX_NUM_CHARS_KHMER           = css::style::NumberingType::CHARS_KHMER,
+    SVX_NUM_CHARS_LAO             = css::style::NumberingType::CHARS_LAO,
+    SVX_NUM_CHARS_TIBETAN         = css::style::NumberingType::CHARS_TIBETAN,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_BG = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_BG,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_BG = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_BG,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_N_BG = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_BG,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_N_BG = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_BG,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_RU = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_RU = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_N_RU = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_N_RU = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU,
+    SVX_NUM_CHARS_PERSIAN         = css::style::NumberingType::CHARS_PERSIAN,
+    SVX_NUM_CHARS_MYANMAR         = css::style::NumberingType::CHARS_MYANMAR,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_SR = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_SR,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_SR = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_SR,
+    SVX_NUM_CHARS_CYRILLIC_UPPER_LETTER_N_SR = css::style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR,
+    SVX_NUM_CHARS_CYRILLIC_LOWER_LETTER_N_SR = css::style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR,
+    SVX_NUM_CHARS_GREEK_UPPER_LETTER = css::style::NumberingType::CHARS_GREEK_UPPER_LETTER,
+    SVX_NUM_CHARS_GREEK_LOWER_LETTER = css::style::NumberingType::CHARS_GREEK_LOWER_LETTER,
+    SVX_NUM_CHARS_ARABIC_ABJAD    = css::style::NumberingType::CHARS_ARABIC_ABJAD,
+    SVX_NUM_CHARS_PERSIAN_WORD    = css::style::NumberingType::CHARS_PERSIAN_WORD,
+    SVX_NUM_NUMBER_HEBREW         = css::style::NumberingType::NUMBER_HEBREW
 };
 
 #endif
