@@ -179,7 +179,9 @@ public:
 
     virtual bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) = 0;
+        HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) = 0;
 };
 
 class ExTextOutRenderer : public TextOutRenderer
@@ -192,7 +194,9 @@ public:
 
     bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) override;
+        HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
 };
 
 class D2DWriteTextOutRenderer : public TextOutRenderer
@@ -215,7 +219,9 @@ public:
 
     bool operator ()(CommonSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC) override;
+        HDC hDC,
+        const Rectangle* pRectToErase,
+        Point* pPos, int* pGetNextGlypInfo) override;
 
     inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 0, 0)) {
         RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
