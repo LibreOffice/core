@@ -239,7 +239,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
         // if the master page was visible, show it again
-        if (!bError && !aSelectedPages.empty())
+        if (!aSelectedPages.empty())
         {
             if (bOnMaster)
             {
