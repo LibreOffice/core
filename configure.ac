@@ -3501,8 +3501,13 @@ if test "$_os" = "WINNT"; then
     CL_LIB=
 
     if test "$BITNESS_OVERRIDE" = ""; then
-        MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
-        CL_DIR=bin
+        if test "$vcnum" = "150"; then
+            MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86"
+            CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX86/x86
+        else
+            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+            CL_DIR=bin
+        fi
     else
         if test "$vcexpress" = "Express"; then
             MSPDB_PATH="$VC_PRODUCT_DIR/bin"
@@ -3545,8 +3550,9 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
+        AC_MSG_CHECKING([real MSVC])
         if test "$BITNESS_OVERRIDE" = ""; then
-            if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
+            if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
                 MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
             fi
         else
@@ -3561,6 +3567,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
 
+        AC_MSG_RESULT([$MSVC_CXX])
         # This gives us a posix path with 8.3 filename restrictions
         MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
     fi
@@ -3577,7 +3584,11 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
         if test "$BITNESS_OVERRIDE" = ""; then
-            COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
+           if test "$vcnum" = "150"; then
+               COMPATH="$VC_PRODUCT_DIR"
+           else
+               COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
+           fi
         else
             if test -n "$VC_PRODUCT_DIR"; then
                 COMPATH=$VC_PRODUCT_DIR
@@ -9758,7 +9769,7 @@ ML_EXE=""
 if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         assembler=ml.exe
-        assembler_bin=bin
+        assembler_bin=$CL_DIR
     else
         if test "$vcexpress" = "Express"; then
             assembler=ml64.exe
@@ -12306,12 +12317,10 @@ if test "$build_os" = "cygwin"; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
         fi
-        if test $VCVER = 140 -o $VCVER = 150; then
-            PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x64"
-            ucrtlibpath_formatted=$formatted_path
-            ILIB="$ILIB;$ucrtlibpath_formatted"
-            ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
-        fi
+        PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x64"
+        ucrtlibpath_formatted=$formatted_path
+        ILIB="$ILIB;$ucrtlibpath_formatted"
+        ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
     else
         if test $vcnum = "150"; then
             ILIB="$ILIB;$COMPATH/lib/x86"
@@ -12326,12 +12335,10 @@ if test "$build_os" = "cygwin"; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
         fi
-        if test $VCVER = 140; then
-            PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x86"
-            ucrtlibpath_formatted=$formatted_path
-            ILIB="$ILIB;$ucrtlibpath_formatted"
-            ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
-        fi
+        PathFormat "${UCRTSDKDIR}lib/$UCRTVERSION/ucrt/x86"
+        ucrtlibpath_formatted=$formatted_path
+        ILIB="$ILIB;$ucrtlibpath_formatted"
+        ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
     fi
     if test -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
         ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
@@ -12538,6 +12545,10 @@ if test "$build_os" = "cygwin"; then
             ATL_LIB="$ATL_LIB/x64"
         else
             ATL_LIB="$ATL_LIB/amd64"
+        fi
+    else
+        if test $VCVER = "150"; then
+            ATL_LIB="$ATL_LIB/x86"
         fi
     fi
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
