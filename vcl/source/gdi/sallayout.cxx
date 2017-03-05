@@ -668,7 +668,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
 
     basegfx::B2DPolyPolygon aGlyphOutline;
 
-    Point aPos;
+    Point aPos(0, 0);
     const GlyphItem* pGlyph;
     int nStart = 0;
     while (GetNextGlyphs(1, &pGlyph, aPos, nStart))
