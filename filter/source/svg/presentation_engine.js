@@ -4574,7 +4574,11 @@ SVGPathElement.prototype.appendPath = function( aPath )
 
 function flipOnYAxis( aPath )
 {
-    var aMatrix = SVGIdentityMatrix.flipY().scaleNonUniform(-1, 1);
+    var aTransform = document.documentElement.createSVGMatrix();
+    aTransform.d = -1;
+    aTransform.f = 1.0;
+    var aMatrix = SVGIdentityMatrix.translate(1, 0).scale(-1, 1);
+    aMatrix = aMatrix.multiply(aTransform);
     aPath.matrixTransform(aMatrix);
     return aPath;
 }
@@ -5170,6 +5174,7 @@ SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 BARNDOORWIPE_TRANSITION     = 15; // 4
 VEEWIPE_TRANSITION          = 16; // 8
+SINGLESWEEPWIPE_TRANSITION  = 17; // 24
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5185,6 +5190,7 @@ aTransitionTypeInMap = {
     'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
+    'singleSweepWipe'   : SINGLESWEEPWIPE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION,
     'veeWipe'           : VEEWIPE_TRANSITION
@@ -5245,6 +5251,14 @@ UP_TRANS_SUBTYPE                    = 45; // 21
 RIGHT_TRANS_SUBTYPE                 = 46; // 22
 DIAGONALBOTTOMLEFT_TRANS_SUBTYPE    = 47; // 15
 DIAGONALTOPLEFT_TRANS_SUBTYPE       = 48; // 16
+CLOCKWISETOP_TRANS_SUBTYPE          = 49; // 40
+CLOCKWISERIGHT_TRANS_SUBTYPE        = 50; // 41
+CLOCKWISEBOTTOM_TRANS_SUBTYPE       = 51; // 42
+CLOCKWISELEFT_TRANS_SUBTYPE         = 52; // 43
+CLOCKWISETOPLEFT_TRANS_SUBTYPE      = 53; // 44
+COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE   = 54; // 45
+CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE  = 55; // 46
+COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE = 56; // 47
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5260,6 +5274,14 @@ aTransitionSubtypeInMap = {
     'clockwiseThree'    : CLOCKWISETHREE_TRANS_SUBTYPE,
     'clockwiseSix'      : CLOCKWISESIX_TRANS_SUBTYPE,
     'clockwiseNine'     : CLOCKWISENINE_TRANS_SUBTYPE,
+    'clockwiseRight'    : CLOCKWISERIGHT_TRANS_SUBTYPE,
+    'clockwiseTop'      : CLOCKWISETOP_TRANS_SUBTYPE,
+    'clockwiseBottom'   : CLOCKWISEBOTTOM_TRANS_SUBTYPE,
+    'clockwiseLeft'     : CLOCKWISELEFT_TRANS_SUBTYPE,
+    'clockwiseTopLeft'  : CLOCKWISETOPLEFT_TRANS_SUBTYPE,
+    'counterClockwiseBottomLeft' : COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE,
+    'clockwiseBottomRight' : CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE,
+    'counterClockwiseTopRight' : COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE,
     'twoBladeVertical'  : TWOBLADEVERTICAL_TRANS_SUBTYPE,
     'twoBladeHorizontal': TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
     'fourBlade'         : FOURBLADE_TRANS_SUBTYPE,
@@ -5744,6 +5766,89 @@ aTransitionInfoTable[PUSHWIPE_TRANSITION][FROMBOTTOM_TRANS_SUBTYPE] =
     'scaleX' : 1.0,
     'scaleY' : 1.0,
     'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION] = {};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISETOP_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISERIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISEBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISELEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 270.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISETOPLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SINGLESWEEPWIPE_TRANSITION][COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
     'outInvertsSweep' : true,
     'scaleIsotropically' : false
 };
@@ -9443,6 +9548,20 @@ function createClipPolyPolygon( nType, nSubtype )
             }
         case BARNDOORWIPE_TRANSITION:
             return new BarnDoorWipePath(true);
+        case SINGLESWEEPWIPE_TRANSITION:
+            return new SweepWipePath(
+                // center
+                nSubtype == CLOCKWISETOP_TRANS_SUBTYPE ||
+                nSubtype == CLOCKWISERIGHT_TRANS_SUBTYPE ||
+                nSubtype == CLOCKWISEBOTTOM_TRANS_SUBTYPE ||
+                nSubtype == CLOCKWISELEFT_TRANS_SUBTYPE,
+                // single
+                true,
+                // oppositeVertical
+                false,
+                // flipOnYAxis
+                nSubtype == COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE ||
+                nSubtype == COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE );
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
         case VEEWIPE_TRANSITION:
@@ -9564,6 +9683,51 @@ BoxWipePath.prototype.perform = function( nT ) {
     return aPath;
 }
 
+/* Class SweepWipePath
+ *
+ *
+ */
+function SweepWipePath(bCenter, bSingle, bOppositeVertical, bFlipOnYAxis) {
+  this.bCenter = bCenter;
+  this.bSingle = bSingle;
+  this.bOppositeVertical = bOppositeVertical;
+  this.bFlipOnYAxis = bFlipOnYAxis;
+  this.aBasePath = createUnitSquarePath();
+}
+
+SweepWipePath.prototype.perform = function( nT ) {
+    nT /= 2.0;
+    if(!this.bCenter)
+        nT /= 2.0;
+    if(!this.bSingle && !this.bOppositeVertical)
+        nT /= 2.0;
+
+    var aBasePath = PinWheelWipePath.calcCenteredClock( nT + 0.25, 1.0 );
+    var aTransform;
+
+    if(this.bCenter) {
+        aTransform = SVGIdentityMatrix.translate(0.5, 0.0);
+        aBasePath.matrixTransform(aTransform);
+    }
+    var res = aBasePath;
+
+    if(!this.bSingle) {
+        if(this.bOppositeVertical) {
+            aTransform = SVGIdentityMatrix.scale(1.0, -1.0);
+            aTransform.translate(0.0, 1.0);
+            poly.matrixTransform(aTransform);
+            poly.changeOrientation();
+        }
+        else {
+            aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+            aTransform.rotate(Math.PI);
+            aTransform.translate(0.5, 0.5);
+            poly.matrixTransform(aTransform);
+        }
+        res.appendPath(poly);
+    }
+    return this.bFlipOnYAxis ? flipOnYAxis(res) : res;
+}
 
 /** Class FourBoxWipePath
  *  This class handles a path made up by four squares and is utilized for
