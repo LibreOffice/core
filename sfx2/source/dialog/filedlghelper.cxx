@@ -886,12 +886,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasVersions           = false;
     mbHasPreview            = false;
     mbShowPreview           = false;
-    mbAddGraphicFilter      = bool(nFlags & FileDialogFlags::Graphic);
     mbDeleteMatcher         = false;
     mbInsert                = bool(nFlags & FileDialogFlags::Insert);
     mbExport                = bool(nFlags & FileDialogFlags::Export);
     mbIsSaveDlg             = false;
-    mbIsSaveACopyDlg        = bool(nFlags & FileDialogFlags::SaveACopy);
     mbPwdCheckBoxState      = false;
     mbSelection             = false;
     mbSelectionEnabled      = true;
@@ -1083,7 +1081,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     if ( nFlags & FileDialogFlags::MultiSelection )
         mxFileDlg->setMultiSelectionMode( true );
 
-    if (mbAddGraphicFilter) // generate graphic filter only on demand
+    if ( nFlags & FileDialogFlags::Graphic ) // generate graphic filter only on demand
     {
         addGraphicFilter();
     }
@@ -1100,7 +1098,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     }
 
     // Save a copy dialog
-    if ( mbIsSaveACopyDlg )
+    if ( nFlags & FileDialogFlags::SaveACopy )
     {
         mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ).toString() );
     }

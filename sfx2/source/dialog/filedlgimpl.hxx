@@ -81,11 +81,9 @@ namespace sfx2
         bool                    m_bHaveFilterOptions    : 1;
         bool                    mbHasVersions           : 1;
         bool                    mbHasAutoExt            : 1;
-        bool                    mbAddGraphicFilter      : 1;
         bool                    mbHasPreview            : 1;
         bool                    mbShowPreview           : 1;
         bool                    mbIsSaveDlg             : 1;
-        bool                    mbIsSaveACopyDlg        : 1;
         bool                    mbExport                : 1;
 
         bool                    mbDeleteMatcher         : 1;
