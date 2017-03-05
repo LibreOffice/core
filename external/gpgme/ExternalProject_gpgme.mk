@@ -29,6 +29,10 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
 		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
+		   $(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
+		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)
 

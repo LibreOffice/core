@@ -7,14 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,gpgme,gpgme))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libgpg-error,libgpg-error))
 
-$(eval $(call gb_ExternalPackage_use_external_project,gpgme,gpgme))
+$(eval $(call gb_ExternalPackage_use_external_project,libgpg-error,libgpg-error))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
-$(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgmepp.so.6,lang/cpp/src/.libs/libgpgmepp.so.6.3.0))
-$(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgme.so.11,src/.libs/libgpgme.so.11.17.0))
+$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.21.0))
 
 endif # $(DISABLE_DYNLOADING)
 
