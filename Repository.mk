@@ -662,14 +662,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
 	) \
 ))
 
-ifneq ($(BUILD_X64),)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin64, \
-	$(if $(DISABLE_ACTIVEX),,\
-		so_activex_x64 \
-	) \
-))
-endif
-
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
 	$(if $(WINDOWS_SDK_HOME),\
 		instooofiltmsi \
@@ -692,15 +684,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexp
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextnt6, \
 	propertyhdl \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextwin64, \
-	ooofilt_x64 \
-	shlxthdl_x64 \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_SHLXTHDL,winexplorerextwin64nt6, \
-	propertyhdl_x64 \
 ))
 
 endif # WNT

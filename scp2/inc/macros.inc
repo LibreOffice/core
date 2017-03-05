@@ -398,27 +398,6 @@ End
 
 #ifdef _MSC_VER
 
-#ifdef BUILD_X64
-
-#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
-    RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
-        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
-        ModuleID = gid_Module_Optional_Winexplorerext; \
-        ComponentCondition = "VersionNT >= 600"; \
-        Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
-        Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
-    End \
-\
-    RegistryItem CONCAT3(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension,_x64) \
-        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
-        ModuleID = gid_Module_Optional_Winexplorerext_x64; \
-        ComponentCondition = "VersionNT64 >= 600"; \
-        Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
-        Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
-    End
-
-#else
-
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
@@ -427,8 +406,6 @@ End
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End
-
-#endif
 
 #else
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
