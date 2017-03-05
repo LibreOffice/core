@@ -1114,14 +1114,14 @@ bool SwContentNode::InvalidateNumRule()
 SwContentFrame *SwContentNode::getLayoutFrame( const SwRootFrame* _pRoot,
     const Point* pPoint, const SwPosition *pPos, const bool bCalcFrame ) const
 {
-    return static_cast<SwContentFrame*>( ::GetFrameOfModify( _pRoot, *const_cast<SwModify*>(static_cast<SwModify const *>(this)), FRM_CNTNT,
+    return static_cast<SwContentFrame*>( ::GetFrameOfModify( _pRoot, *this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrame ));
 }
 
 SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
 {
     SwRect aRet;
-    SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
+    SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *this,
                                             FRM_CNTNT, pPoint ) );
     if( pFrame )
         aRet = bPrtArea ? pFrame->Prt() : pFrame->Frame();
@@ -1131,8 +1131,7 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
 SwRect SwContentNode::FindPageFrameRect() const
 {
     SwRect aRet;
-    SwFrame* pFrame = ::GetFrameOfModify( nullptr, *const_cast<SwModify*>(static_cast<SwModify const *>(this)),
-                                            FRM_CNTNT );
+    SwFrame* pFrame = ::GetFrameOfModify( nullptr, *this, FRM_CNTNT );
     if( pFrame && nullptr != ( pFrame = pFrame->FindPageFrame() ))
         aRet = pFrame->Frame();
     return aRet;
