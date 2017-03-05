@@ -256,11 +256,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 // #i16874# enable kerning by default but only for new documents
                 rSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
-                if( nLevel == 1 )
-                {
-                    vcl::Font f( GetBulletFont() );
-                    PutNumBulletItem( pSheet, f );
-                }
+                vcl::Font f( GetBulletFont() );
+                PutNumBulletItem( pSheet, f );
             }
 
             sal_uLong nFontSize = 20;
