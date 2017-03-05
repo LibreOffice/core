@@ -1984,7 +1984,7 @@ void ScInterpreter::ScFV()
 
 void ScInterpreter::ScNper()
 {
-    double nInterest, nRmz, nBw, nZw = 0;
+    double fInterest, fPmt, fPV, fFV = 0;
     bool bPayInAdvance = false;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
@@ -1992,17 +1992,23 @@ void ScInterpreter::ScNper()
     if (nParamCount == 5)
         bPayInAdvance = GetBool();
     if (nParamCount >= 4)
-        nZw   = GetDouble();
-    nBw   = GetDouble();
-    nRmz  = GetDouble();
-    nInterest = GetDouble();
-    if (nInterest == 0.0)
-        PushDouble(-(nBw + nZw)/nRmz);
+        fFV   = GetDouble();  // Future Value
+    fPV   = GetDouble();      // Present Value
+    fPmt  = GetDouble();      // Payment
+    fInterest = GetDouble();
+    // Note that due to the function specification in ODFF1.2 (and Excel) the
+    // amount to be paid to get from fPV to fFV is fFV_+_fPV.
+    if ( fPV + fFV == 0.0 )
+        PushDouble( 0.0 );
+    else if ( fPmt == 0.0 )
+        PushIllegalArgument();  // No payment, future value can never be reached
+    else if (fInterest == 0.0)
+        PushDouble(-(fPV + fFV)/fPmt);
     else if (bPayInAdvance)
-        PushDouble(log(-(nInterest*nZw-nRmz*(1.0+nInterest))/(nInterest*nBw+nRmz*(1.0+nInterest)))
-                  / rtl::math::log1p(nInterest));
+        PushDouble(log(-(fInterest*fFV-fPmt*(1.0+fInterest))/(fInterest*fPV+fPmt*(1.0+fInterest)))
+                  / rtl::math::log1p(fInterest));
     else
-        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz)) / rtl::math::log1p(nInterest));
+        PushDouble(log(-(fInterest*fFV-fPmt)/(fInterest*fPV+fPmt)) / rtl::math::log1p(fInterest));
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
