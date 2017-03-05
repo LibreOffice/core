@@ -32,7 +32,15 @@ class SvXMLUnitConverter;
     This item describes a Language.
 */
 
-class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem<LanguageType>
+// MSVC hack:
+class SvxLanguageItem_Base: public SfxEnumItem<LanguageType> {
+protected:
+    explicit SvxLanguageItem_Base(sal_uInt16 nWhich, LanguageType nValue):
+        SfxEnumItem(nWhich, nValue)
+    {}
+};
+
+class EDITENG_DLLPUBLIC SvxLanguageItem : public SvxLanguageItem_Base
 {
 public:
     static SfxPoolItem* CreateDefault();

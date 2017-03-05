@@ -101,9 +101,6 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(bool)
 {}
 
-
-template class SfxEnumItem<sal_uInt16>;
-
 SfxPoolItem* SfxBoolItem::CreateDefault()
 {
     return new SfxBoolItem();

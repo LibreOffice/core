@@ -2345,7 +2345,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 // class SvxLanguageItem -------------------------------------------------
 
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId )
-    : SfxEnumItem( nId , eLang )
+    : SvxLanguageItem_Base( nId , eLang )
 {
 }
 
