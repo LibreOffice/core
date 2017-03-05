@@ -18,6 +18,13 @@ $(eval $(call gb_ExternalProject_use_autoconf,libgpg-error,build))
 $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure \
+			--disable-rpath \
+			--disable-languages \
+			--disable-doc \
+			$(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
+			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)
 

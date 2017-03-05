@@ -1,0 +1,13 @@
+diff -ur libgpg-error.org/configure.ac libgpg-error/configure.ac
+--- configure.ac	2017-03-05 01:27:38.249210887 +0100
++++ configure.ac~	2017-03-05 01:29:36.820894687 +0100
+@@ -404,6 +404,9 @@
+    CFLAGS="$CFLAGS -fvisibility=hidden"
+ fi
+ 
++# permit disabling rpath
++AC_LIB_RPATH
++
+ #
+ # Check whether ld supports a version script.
+ # (Actually not a check but a list of systems which are known to support it.)
