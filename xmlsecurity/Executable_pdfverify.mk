@@ -34,4 +34,16 @@ $(eval $(call gb_Executable_add_exception_objects,pdfverify,\
     xmlsecurity/workben/pdfverify \
 ))
 
+# Library_xmlsecurity links against Library_xsec_gpg (on certain OS), which
+# links against gpgmepp dynamic library from external project gpgmepp, which
+# (for non-SYSTEM_GPGMEPP) is delivered to instdir/program in
+# ExternalPackage_gpgme, and at least the Linux linker wants to see all
+# (recursively) linked libraries when linking an executable:
+ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
+ifneq ($(SYSTEM_GPGMEPP),TRUE)
+$(call gb_Executable_get_target,pdfverify): \
+    $(call gb_ExternalPackage_get_target,gpgme)
+endif
+endif
+
 # vim:set noet sw=4 ts=4:
