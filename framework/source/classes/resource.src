@@ -214,4 +214,9 @@ Bitmap BMP_SAVEMODIFIED_LARGE
     File = "savemodified_large.png";
 };
 
+Bitmap BMP_SAVEMODIFIED_EXTRALARGE
+{
+    File = "savemodified_extralarge.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -507,8 +507,12 @@ void SaveToolbarController::updateImage()
     }
     else if ( m_bModified )
     {
-        Image aResImage(BitmapEx(eImageType == vcl::ImageType::Size16 ? FwkResId(BMP_SAVEMODIFIED_SMALL) : FwkResId(BMP_SAVEMODIFIED_LARGE)));
-        aImage = aResImage;
+        if (eImageType == vcl::ImageType::Size26)
+            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_LARGE)));
+        else if (eImageType == vcl::ImageType::Size32)
+            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_EXTRALARGE)));
+        else
+            aImage = Image(BitmapEx(FwkResId(BMP_SAVEMODIFIED_SMALL)));
     }
 
     if ( !aImage )
