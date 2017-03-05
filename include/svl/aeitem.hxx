@@ -26,7 +26,19 @@
 
 class SfxAllEnumValueArr;
 
-class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem<sal_uInt16>
+// MSVC hack:
+class SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16> {
+protected:
+    explicit SfxAllEnumItem_Base(sal_uInt16 nWhich, sal_uInt16 nValue):
+        SfxEnumItem(nWhich, nValue)
+    {}
+
+    explicit SfxAllEnumItem_Base(sal_uInt16 const nWhich, SvStream & rStream):
+        SfxEnumItem(nWhich, rStream)
+    {}
+};
+
+class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
 {
     SfxAllEnumValueArr*      pValues;
     std::vector<sal_uInt16>* pDisabledValues;

@@ -82,14 +82,6 @@ public:
     }
 };
 
-// We need to have this one instantiated only once to prevent LNK2005 "already defined" on 32-bit MSVC.
-// But then we run into the problem that "extern" and SVL_DLLPUBLIC are mutually exclusive on templates for MSVC.
-#ifdef _WIN32
-extern template class SfxEnumItem<sal_uInt16>;
-#else
-extern template class SVL_DLLPUBLIC SfxEnumItem<sal_uInt16>;
-#endif
-
 class SVL_DLLPUBLIC SfxBoolItem
     : public SfxPoolItem
 {

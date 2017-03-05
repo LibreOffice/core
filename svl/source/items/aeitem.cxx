@@ -35,14 +35,14 @@ class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 
 SfxAllEnumItem::SfxAllEnumItem() :
-    SfxEnumItem<sal_uInt16>(0, 0),
+    SfxAllEnumItem_Base(0, 0),
     pValues( nullptr ),
     pDisabledValues( nullptr )
 {
 }
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
-    SfxEnumItem(which, nVal),
+    SfxAllEnumItem_Base(which, nVal),
     pValues( nullptr ),
     pDisabledValues( nullptr )
 {
@@ -50,7 +50,7 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
 }
 
 SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
-    SfxEnumItem(which, rStream),
+    SfxAllEnumItem_Base(which, rStream),
     pValues( nullptr ),
     pDisabledValues( nullptr )
 {
@@ -58,14 +58,14 @@ SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
 }
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
-    SfxEnumItem(which, 0),
+    SfxAllEnumItem_Base(which, 0),
     pValues( nullptr ),
     pDisabledValues( nullptr )
 {
 }
 
 SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
-    SfxEnumItem(rCopy),
+    SfxAllEnumItem_Base(rCopy),
     pValues(nullptr),
     pDisabledValues( nullptr )
 {
