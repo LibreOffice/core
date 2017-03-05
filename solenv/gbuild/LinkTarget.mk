@@ -1327,23 +1327,9 @@ define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj),$(4)))
 endef
 
-#only useful for building x64 libraries on windows
-# call gb_LinkTarget_add_x64_generated_exception_objects,linktarget,sourcefiles,ignored,linktargetmakefilename
-define gb_LinkTarget_add_x64_generated_exception_objects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(4)))
-$(foreach obj,$(2),$(eval $(call gb_GenCxxObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
-endef
-
 # call gb_LinkTarget_add_generated_cobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
-endef
-
-#only useful for building x64 libraries on windows
-# call gb_LinkTarget_add_x64_generated_cobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
-define gb_LinkTarget_add_x64_generated_cobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
-$(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
 # call gb_LinkTarget_add_generated_cxxobjects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
@@ -1364,12 +1350,6 @@ endef
 # call gb_LinkTarget_set_targettype,linktarget,targettype
 define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := $(2)
-
-endef
-
-# call gb_LinkTarget_set_x64,linktarget,boolean
-define gb_LinkTarget_set_x64
-$(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 := $(2)
 
 endef
 

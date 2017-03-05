@@ -11,9 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,zlib))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,zlib,$(ZLIB_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_post_action,zlib,\
-	mkdir -p x64 && \
-	cp $(addsuffix .c,adler32 compress crc32 deflate inffast inflate inftrees trees zutil) x64 \
-))
-
 # vim: set noet sw=4 ts=4:
