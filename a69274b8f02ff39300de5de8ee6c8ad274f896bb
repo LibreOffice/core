@@ -16,6 +16,24 @@
       "revId": "a69274b8f02ff39300de5de8ee6c8ad274f896bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_00a1bda9",
+        "filename": "svl/source/numbers/zforscan.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2017-03-06T06:09:19Z",
+      "side": 1,
+      "message": "Fix with https://gerrit.libreoffice.org/#/c/34913/",
+      "parentUuid": "9a57fde8_cd6c4e9f",
+      "revId": "a69274b8f02ff39300de5de8ee6c8ad274f896bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
