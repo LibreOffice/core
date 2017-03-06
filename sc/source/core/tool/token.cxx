@@ -4931,7 +4931,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             bool bMapped = rCxt.mxOpCodeMap->isPODF();     // ODF 1.1 directly uses programmatical name
             if (!bMapped && rCxt.mxOpCodeMap->hasExternals())
             {
-                const ExternalHashMap& rExtMap = *rCxt.mxOpCodeMap->getReverseExternalHashMap();
+                const ExternalHashMap& rExtMap = rCxt.mxOpCodeMap->getReverseExternalHashMap();
                 ExternalHashMap::const_iterator it = rExtMap.find(aAddIn);
                 if (it != rExtMap.end())
                 {
