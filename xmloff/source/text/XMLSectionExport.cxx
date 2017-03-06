@@ -319,7 +319,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
 }
 
 
-SvXMLEnumStringMapEntry const aIndexTypeMap[] =
+SvXMLEnumStringMapEntry<SectionTypeEnum> const aIndexTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ContentIndex", TEXT_SECTION_TYPE_TOC ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.DocumentIndex", TEXT_SECTION_TYPE_ALPHABETICAL ),
@@ -328,7 +328,7 @@ SvXMLEnumStringMapEntry const aIndexTypeMap[] =
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.Bibliography", TEXT_SECTION_TYPE_BIBLIOGRAPHY ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.UserIndex", TEXT_SECTION_TYPE_USER ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.IllustrationsIndex", TEXT_SECTION_TYPE_ILLUSTRATION ),
-    ENUM_STRING_MAP_END()
+    { nullptr, 0, (SectionTypeEnum)0 }
 };
 
 enum SectionTypeEnum XMLSectionExport::MapSectionType(
@@ -336,11 +336,7 @@ enum SectionTypeEnum XMLSectionExport::MapSectionType(
 {
     enum SectionTypeEnum eType = TEXT_SECTION_TYPE_UNKNOWN;
 
-    sal_uInt16 nTmp;
-    if (SvXMLUnitConverter::convertEnum(nTmp, rServiceName, aIndexTypeMap))
-    {
-        eType = (enum SectionTypeEnum)nTmp;
-    }
+    SvXMLUnitConverter::convertEnum(eType, rServiceName, aIndexTypeMap);
 
     // TODO: index header section types, etc.
 
@@ -1073,7 +1069,7 @@ enum TemplateParamEnum
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
-SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
+SvXMLEnumStringMapEntry<TemplateTypeEnum> const aTemplateTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenEntryNumber",  TOK_TTYPE_ENTRY_NUMBER ),
     ENUM_STRING_MAP_ENTRY( "TokenEntryText",    TOK_TTYPE_ENTRY_TEXT ),
@@ -1084,10 +1080,10 @@ SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
     ENUM_STRING_MAP_ENTRY( "TokenHyperlinkStart", TOK_TTYPE_HYPERLINK_START ),
     ENUM_STRING_MAP_ENTRY( "TokenHyperlinkEnd", TOK_TTYPE_HYPERLINK_END ),
     ENUM_STRING_MAP_ENTRY( "TokenBibliographyDataField", TOK_TTYPE_BIBLIOGRAPHY ),
-    ENUM_STRING_MAP_END()
+    { nullptr, 0, (TemplateTypeEnum)0}
 };
 
-SvXMLEnumStringMapEntry const aTemplateParamMap[] =
+SvXMLEnumStringMapEntry<TemplateParamEnum> const aTemplateParamMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenType",             TOK_TPARAM_TOKEN_TYPE ),
     ENUM_STRING_MAP_ENTRY( "CharacterStyleName",    TOK_TPARAM_CHAR_STYLE ),
@@ -1100,10 +1096,10 @@ SvXMLEnumStringMapEntry const aTemplateParamMap[] =
     ENUM_STRING_MAP_ENTRY( "ChapterFormat",         TOK_TPARAM_CHAPTER_FORMAT ),
     ENUM_STRING_MAP_ENTRY( "ChapterLevel",          TOK_TPARAM_CHAPTER_LEVEL ),//i53420
     ENUM_STRING_MAP_ENTRY( "BibliographyDataField", TOK_TPARAM_BIBLIOGRAPHY_DATA ),
-    ENUM_STRING_MAP_END()
+    { nullptr, 0, (TemplateParamEnum)0}
 };
 
-SvXMLEnumMapEntry const aBibliographyDataFieldMap[] =
+SvXMLEnumMapEntry<sal_Int16> const aBibliographyDataFieldMap[] =
 {
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
@@ -1190,7 +1186,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i<nCount; i++)
     {
-        sal_uInt16 nToken;
+        TemplateParamEnum nToken;
         if ( SvXMLUnitConverter::convertEnum( nToken, rValues[i].Name,
                                               aTemplateParamMap ) )
         {
@@ -1203,13 +1199,13 @@ void XMLSectionExport::ExportIndexTemplateElement(
             {
                 case TOK_TPARAM_TOKEN_TYPE:
                 {
-                    sal_uInt16 nTmp;
+                    TemplateTypeEnum nTmp;
                     OUString sVal;
                     rValues[i].Value >>= sVal;
                     if (SvXMLUnitConverter::convertEnum( nTmp, sVal,
                                                          aTemplateTypeMap))
                     {
-                        nTokenType = (enum TemplateTypeEnum)nTmp;
+                        nTokenType = nTmp;
                     }
                     break;
                 }

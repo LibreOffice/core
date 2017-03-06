@@ -60,27 +60,27 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-static SvXMLEnumMapEntry const aXML_ColorMode_EnumMap[] =
+static SvXMLEnumMapEntry<drawing::ColorMode> const aXML_ColorMode_EnumMap[] =
 {
     { XML_GREYSCALE,    drawing::ColorMode_GREYS },
     { XML_MONO,         drawing::ColorMode_MONO },
     { XML_WATERMARK,    drawing::ColorMode_WATERMARK },
     { XML_STANDARD,     drawing::ColorMode_STANDARD },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::ColorMode)0 }
 };
 
-static SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
+static SvXMLEnumMapEntry<text::HorizontalAdjust> const aXML_HorizontalAdjust_Enum[] =
 {
     { XML_LEFT,     text::HorizontalAdjust_LEFT },
     { XML_CENTER,   text::HorizontalAdjust_CENTER },
     { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (text::HorizontalAdjust)0 }
 };
 
 // aXML_WritingDirection_Enum is used with and without 'page'
 // attribute, so you'll find uses of aXML_WritingDirection_Enum
 // directly, as well as &(aXML_WritingDirection_Enum[1])
-static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
+static SvXMLEnumMapEntry<sal_uInt16> const aXML_WritingDirection_Enum[] =
 {
     // aXML_WritingDirection_Enum
     { XML_PAGE,     text::WritingMode2::PAGE },
@@ -99,7 +99,7 @@ static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
+static SvXMLEnumMapEntry<sal_uInt16> const pXML_VertPos_Enum[] =
 {
     { XML_FROM_TOP,         text::VertOrientation::NONE       },
     { XML_TOP,              text::VertOrientation::TOP        },
@@ -419,16 +419,13 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLAttributeContainerHandler;
             break;
         case XML_TYPE_COLOR_MODE:
-            pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap,
-                            cppu::UnoType<drawing::ColorMode>::get());
+            pPropHdl = new XMLEnumPropertyHdl(aXML_ColorMode_EnumMap);
             break;
         case XML_TYPE_DURATION16_MS:
             pPropHdl = new XMLDurationMS16PropHdl_Impl;
             break;
         case XML_TYPE_TEXT_HORIZONTAL_ADJUST:
-            pPropHdl = new XMLEnumPropertyHdl(
-                aXML_HorizontalAdjust_Enum,
-                cppu::UnoType<text::HorizontalAdjust>::get());
+            pPropHdl = new XMLEnumPropertyHdl(aXML_HorizontalAdjust_Enum);
             break;
         case XML_TYPE_TEXT_DRAW_ASPECT:
             pPropHdl = new DrawAspectHdl;

@@ -78,15 +78,15 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     {
         case XML_RPT_ALGINMENT:
             {
-                static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
+                static SvXMLEnumMapEntry<style::VerticalAlignment> const pXML_VerticalAlign_Enum[] =
                 {
                     { XML_TOP,          style::VerticalAlignment_TOP },
                     { XML_MIDDLE,       style::VerticalAlignment_MIDDLE },
                     { XML_BOTTOM,       style::VerticalAlignment_BOTTOM },
-                    { XML_TOKEN_INVALID, 0 }
+                    { XML_TOKEN_INVALID, (style::VerticalAlignment)0 }
                 };
 
-                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, cppu::UnoType<css::style::VerticalAlignment>::get());
+                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum );
             }
             break;
         case (XML_SD_TYPES_START+34):
@@ -187,9 +187,9 @@ const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
     return aXMLColumnStylesProperties;
 }
 
-const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
+const SvXMLEnumMapEntry<sal_uInt16>* OXMLHelper::GetReportPrintOptions()
 {
-    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry<sal_uInt16> s_aXML_EnumMap[] =
     {
         { XML_NOT_WITH_REPORT_HEADER,               report::ReportPrintOption::NOT_WITH_REPORT_HEADER },
         { XML_NOT_WITH_REPORT_FOOTER,               report::ReportPrintOption::NOT_WITH_REPORT_FOOTER },
@@ -199,9 +199,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
     return s_aXML_EnumMap;
 }
 
-const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
+const SvXMLEnumMapEntry<sal_uInt16>* OXMLHelper::GetForceNewPageOptions()
 {
-    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry<sal_uInt16> s_aXML_EnumMap[] =
     {
         { XML_BEFORE_SECTION,       report::ForceNewPage::BEFORE_SECTION },
         { XML_AFTER_SECTION,        report::ForceNewPage::AFTER_SECTION },
@@ -211,9 +211,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
     return s_aXML_EnumMap;
 }
 
-const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
+const SvXMLEnumMapEntry<sal_Int16>* OXMLHelper::GetKeepTogetherOptions()
 {
-    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry<sal_Int16> s_aXML_EnumMap[] =
     {
         { XML_WHOLE_GROUP,          report::KeepTogether::WHOLE_GROUP },
         { XML_WITH_FIRST_DETAIL,    report::KeepTogether::WITH_FIRST_DETAIL },
@@ -222,9 +222,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
     return s_aXML_EnumMap;
 }
 
-const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
+const SvXMLEnumMapEntry<sal_uInt16>* OXMLHelper::GetCommandTypeOptions()
 {
-    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry<sal_uInt16> s_aXML_EnumMap[] =
     {
         { XML_TABLE, CommandType::TABLE },
         { XML_QUERY, CommandType::QUERY },
@@ -370,9 +370,9 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
     return new SvXMLTokenMap( aElemTokenMap );
 }
 
-const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
+const SvXMLEnumMapEntry<sal_Int16>* OXMLHelper::GetImageScaleOptions()
 {
-       static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
+       static const SvXMLEnumMapEntry<sal_Int16> s_aXML_EnumMap[] =
        {
                { XML_ISOTROPIC,        awt::ImageScaleMode::ISOTROPIC },
                { XML_ANISOTROPIC,      awt::ImageScaleMode::ANISOTROPIC },

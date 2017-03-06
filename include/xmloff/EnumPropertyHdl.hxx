@@ -22,6 +22,7 @@
 
 #include <xmloff/xmlprhdl.hxx>
 #include <com/sun/star/uno/Type.h>
+#include <cppu/unotype.hxx>
 #include <xmloff/xmlement.hxx>
 
 /**
@@ -30,11 +31,13 @@
 class XMLOFF_DLLPUBLIC XMLEnumPropertyHdl : public XMLPropertyHandler
 {
 private:
-    const SvXMLEnumMapEntry* mpEnumMap;
+    const SvXMLEnumMapEntry<sal_uInt16>* mpEnumMap;
     const css::uno::Type & mrType;
 
 public:
-    XMLEnumPropertyHdl( const SvXMLEnumMapEntry* pEnumMap, const css::uno::Type & rType ) : mpEnumMap( pEnumMap ), mrType( rType ) {}
+    template<typename EnumT>
+    XMLEnumPropertyHdl( const SvXMLEnumMapEntry<EnumT>* pEnumMap)
+        : mpEnumMap( reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pEnumMap) ), mrType( ::cppu::UnoType<EnumT>::get() ) {}
     virtual ~XMLEnumPropertyHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

@@ -57,7 +57,7 @@ XMLIndexBibliographyEntryContext::~XMLIndexBibliographyEntryContext()
 {
 }
 
-const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aBibliographyDataFieldMap[] =
 {
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
