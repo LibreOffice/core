@@ -36,6 +36,7 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     other_files=''
 else
     # We then want to sign data files, too, hmm.
+    entitlements=''
     other_files="\
  -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
  -or -name '*.jar' -or -name 'LICENSE' -or -name 'LICENSE.html' \
