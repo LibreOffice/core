@@ -30,8 +30,6 @@
 #include <sstream>
 #include <iomanip>
 
-#define MAX_DAYS    3636532
-
 namespace
 {
     const sal_Int64 nanoSecInSec = 1000000000;
@@ -270,13 +268,8 @@ namespace dbtools
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
         nTempDays += nDays;
-        if ( nTempDays > MAX_DAYS )
-        {
-            _rDate.Day      = 31;
-            _rDate.Month    = 12;
-            _rDate.Year     = 9999;
-        }
-        else if ( nTempDays <= 0 )
+        // TODO: can we remove that check? Would allow dates before 1900.
+        if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
@@ -291,13 +284,8 @@ namespace dbtools
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
         nTempDays -= nDays;
-        if ( nTempDays > MAX_DAYS )
-        {
-            _rDate.Day      = 31;
-            _rDate.Month    = 12;
-            _rDate.Year     = 9999;
-        }
-        else if ( nTempDays <= 0 )
+        // TODO: can we remove that check? Would allow dates before 1900.
+        if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
