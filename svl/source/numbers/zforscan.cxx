@@ -1079,7 +1079,6 @@ void ImpSvNumberformatScan::Reset()
     nCntExp = 0;
     bFrac = false;
     bBlank = false;
-    bDenomin = false;
     nNatNumModifier = 0;
 }
 
@@ -1562,6 +1561,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     bDecSep = false;                       // reset in case already used in TypeCheck
     bool bThaiT = false;                   // Thai T NatNum modifier present
     bool bTimePart = false;
+    bool bDenomin = false;                 // Set when reading end of denominator
 
     switch (eScannedType)
     {
