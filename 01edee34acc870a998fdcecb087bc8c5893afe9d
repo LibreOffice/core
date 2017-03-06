@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c36c1f9f",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T17:08:25Z",
+      "side": 1,
+      "message": "Btw, if both mbNumeric and mbDateTime are true, we can delete the entire block and don\u0027t need any special treatment at all.",
+      "revId": "01edee34acc870a998fdcecb087bc8c5893afe9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a36f1b91",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T17:08:25Z",
+      "side": 1,
+      "message": "Should be size_t instead of int.",
+      "range": {
+        "startLine": 599,
+        "startChar": 8,
+        "endLine": 599,
+        "endChar": 11
+      },
+      "revId": "01edee34acc870a998fdcecb087bc8c5893afe9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_035e27e9",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T17:08:25Z",
+      "side": 1,
+      "message": "nStart + nDataSize still shifts the end position and more elements than actually available are tried.",
+      "range": {
+        "startLine": 602,
+        "startChar": 40,
+        "endLine": 602,
+        "endChar": 58
+      },
+      "revId": "01edee34acc870a998fdcecb087bc8c5893afe9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
