@@ -126,7 +126,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static const SvXMLEnumMapEntry aXMLChartClassMap[] =
+static const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
 {
     { XML_LINE,         XML_CHART_CLASS_LINE    },
     { XML_AREA,         XML_CHART_CLASS_AREA    },
@@ -146,11 +146,11 @@ static const SvXMLEnumMapEntry aXMLChartClassMap[] =
 
 SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 {
-    sal_uInt16 nEnumVal = XML_CHART_CLASS_UNKNOWN;
+    SchXMLChartTypeEnum nEnumVal = XML_CHART_CLASS_UNKNOWN;
     if( !SvXMLUnitConverter::convertEnum(
                                     nEnumVal, rClassName, aXMLChartClassMap ) )
         nEnumVal = XML_CHART_CLASS_UNKNOWN;
-    return SchXMLChartTypeEnum(nEnumVal);
+    return nEnumVal;
 }
 
 typedef std::map< OUString, OUString > tMakeStringStringMap;

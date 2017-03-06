@@ -24,6 +24,10 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/drawing/Alignment.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
+#include <com/sun/star/drawing/EscapeDirection.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -37,6 +41,7 @@
 #include <xmloff/xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+template<typename EnumT>
 struct SvXMLEnumMapEntry;
 
 // common shape context
@@ -173,7 +178,7 @@ class SdXMLEllipseShapeContext : public SdXMLShapeContext
     sal_Int32                   mnRX;
     sal_Int32                   mnRY;
 
-    sal_uInt16                      meKind;
+    css::drawing::CircleKind    meKind;
     sal_Int32                   mnStartAngle;
     sal_Int32                   mnEndAngle;
 public:
@@ -281,7 +286,8 @@ private:
     css::awt::Point maStart;
     css::awt::Point maEnd;
 
-    sal_uInt16      mnType;
+    css::drawing::ConnectorType
+                    mnType;
 
     OUString        maStartShapeId;
     sal_Int32       mnStartGlueId;
@@ -619,8 +625,8 @@ private:
     bool maTemplateStylesUsed[6];
 };
 
-extern SvXMLEnumMapEntry const aXML_GlueAlignment_EnumMap[];
-extern SvXMLEnumMapEntry const aXML_GlueEscapeDirection_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::Alignment> const aXML_GlueAlignment_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumMap[];
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 

@@ -21,28 +21,35 @@
 #define INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 
 #include <xmloff/xmlement.hxx>
+#include <com/sun/star/form/FormButtonType.hpp>
+#include <com/sun/star/form/FormSubmitEncoding.hpp>
+#include <com/sun/star/form/FormSubmitMethod.hpp>
+#include <com/sun/star/form/ListSourceType.hpp>
+#include <com/sun/star/form/NavigationBarMode.hpp>
+#include <com/sun/star/form/TabulatorCycle.hpp>
+#include <tools/gen.hxx>
 
 namespace xmloff
 {
 
-extern const SvXMLEnumMapEntry aSubmitEncodingMap[];
-extern const SvXMLEnumMapEntry aSubmitMethodMap[];
-extern const SvXMLEnumMapEntry aCommandTypeMap[];
-extern const SvXMLEnumMapEntry aNavigationTypeMap[];
-extern const SvXMLEnumMapEntry aTabulatorCycleMap[];
-extern const SvXMLEnumMapEntry aFormButtonTypeMap[];
-extern const SvXMLEnumMapEntry aListSourceTypeMap[];
-extern const SvXMLEnumMapEntry aCheckStateMap[];
-extern const SvXMLEnumMapEntry aTextAlignMap[];
-extern const SvXMLEnumMapEntry aBorderTypeMap[];
-extern const SvXMLEnumMapEntry aFontEmphasisMap[];
-extern const SvXMLEnumMapEntry aFontReliefMap[];
-extern const SvXMLEnumMapEntry aListLinkageMap[];
-extern const SvXMLEnumMapEntry aOrientationMap[];
-extern const SvXMLEnumMapEntry aVisualEffectMap[];
-extern const SvXMLEnumMapEntry aImagePositionMap[];
-extern const SvXMLEnumMapEntry aImageAlignMap[];
-extern const SvXMLEnumMapEntry aScaleModeMap[];
+extern const SvXMLEnumMapEntry<css::form::FormSubmitEncoding> aSubmitEncodingMap[];
+extern const SvXMLEnumMapEntry<css::form::FormSubmitMethod>   aSubmitMethodMap[];
+extern const SvXMLEnumMapEntry<sal_Int32>                     aCommandTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::NavigationBarMode>  aNavigationTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::TabulatorCycle>     aTabulatorCycleMap[];
+extern const SvXMLEnumMapEntry<css::form::FormButtonType>     aFormButtonTypeMap[];
+extern const SvXMLEnumMapEntry<css::form::ListSourceType>     aListSourceTypeMap[];
+extern const SvXMLEnumMapEntry<TriState>   aCheckStateMap[];
+extern const SvXMLEnumMapEntry<sal_Int16>  aTextAlignMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aBorderTypeMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aFontEmphasisMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aFontReliefMap[];
+extern const SvXMLEnumMapEntry<sal_Int16>  aListLinkageMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aOrientationMap[];
+extern const SvXMLEnumMapEntry<sal_Int16>  aVisualEffectMap[];
+extern const SvXMLEnumMapEntry<sal_Int16>  aImagePositionMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aImageAlignMap[];
+extern const SvXMLEnumMapEntry<sal_uInt16> aScaleModeMap[];
 
 }   // namespace xmloff
 

@@ -303,18 +303,18 @@ static const ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 
 // maps for SvXMLUnitConverter::convertEnum
 
-static const SvXMLEnumMapEntry aStyleValueMap[] =
+static const SvXMLEnumMapEntry<bool> aStyleValueMap[] =
 {
-    { XML_SHORT,            sal_uInt16(false) },
-    { XML_LONG,             sal_uInt16(true) },
-    { XML_TOKEN_INVALID,    0 }
+    { XML_SHORT,            false },
+    { XML_LONG,             true },
+    { XML_TOKEN_INVALID,    false }
 };
 
-static const SvXMLEnumMapEntry aFormatSourceMap[] =
+static const SvXMLEnumMapEntry<bool> aFormatSourceMap[] =
 {
-    { XML_FIXED,            sal_uInt16(false) },
-    { XML_LANGUAGE,         sal_uInt16(true) },
-    { XML_TOKEN_INVALID,    0 }
+    { XML_FIXED,            false },
+    { XML_LANGUAGE,         true },
+    { XML_TOKEN_INVALID,    false }
 };
 
 struct SvXMLDefaultDateFormat
@@ -902,7 +902,6 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     bool bAttrBool(false);
     bool bVarDecimals = false;
     bool bIsMaxDenominator = false;
-    sal_uInt16 nAttrEnum;
     double fAttrDouble;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1012,8 +1011,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 aLanguageTagODF.maCountry = sValue;
                 break;
             case XML_TOK_ELEM_ATTR_STYLE:
-                if ( SvXMLUnitConverter::convertEnum( nAttrEnum, sValue, aStyleValueMap ) )
-                    bLong = (bool) nAttrEnum;
+                SvXMLUnitConverter::convertEnum( bLong, sValue, aStyleValueMap );
                 break;
             case XML_TOK_ELEM_ATTR_TEXTUAL:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
@@ -1398,7 +1396,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
     css::i18n::NativeNumberXmlAttributes aNatNumAttr;
     bool bAttrBool(false);
-    sal_uInt16 nAttrEnum;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1434,8 +1431,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                     bAutoOrder = bAttrBool;
                 break;
             case XML_TOK_STYLE_ATTR_FORMAT_SOURCE:
-                if ( SvXMLUnitConverter::convertEnum( nAttrEnum, sValue, aFormatSourceMap ) )
-                    bFromSystem = (bool) nAttrEnum;
+                SvXMLUnitConverter::convertEnum( bFromSystem, sValue, aFormatSourceMap );
                 break;
             case XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))

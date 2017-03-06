@@ -540,10 +540,10 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                     aEventTrigger = aEventTrigger.copy( nPos + 1 );
                 }
 
-                sal_uInt16 nEnum;
+                sal_Int16 nEnum;
                 if( SvXMLUnitConverter::convertEnum( nEnum, aEventTrigger, aAnimations_EnumMap_EventTrigger ) )
                 {
-                    aEvent.Trigger = (sal_Int16)nEnum;
+                    aEvent.Trigger = nEnum;
                 }
                 else
                 {

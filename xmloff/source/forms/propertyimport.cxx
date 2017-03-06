@@ -84,7 +84,7 @@ namespace
 }
 
 Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
-    const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const bool _bInvertBoolean )
+    const OUString& _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
     bool bEnumAsInt = false;

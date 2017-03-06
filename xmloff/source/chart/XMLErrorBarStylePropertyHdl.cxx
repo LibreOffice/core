@@ -25,8 +25,8 @@
 
 using namespace com::sun::star;
 
-XMLErrorBarStylePropertyHdl::XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEntry* pEnumMap, const css::uno::Type & rType )
-        : XMLEnumPropertyHdl( pEnumMap, rType )
+XMLErrorBarStylePropertyHdl::XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEntry<sal_uInt16>* pEnumMap )
+        : XMLEnumPropertyHdl( pEnumMap )
 {
 }
 
