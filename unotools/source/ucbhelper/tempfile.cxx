@@ -116,9 +116,6 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
     OUString aName;
     if ( pParent && !pParent->isEmpty() )
     {
-        css::uno::Reference< css::ucb::XUniversalContentBroker > pBroker(
-                css::ucb::UniversalContentBroker::create( comphelper::getProcessComponentContext() ) );
-
         // test for valid filename
         OUString aRet;
         if ((osl::FileBase::getSystemPathFromFileURL(*pParent, aRet)
