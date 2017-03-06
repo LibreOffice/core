@@ -990,7 +990,7 @@ bool SwFEShell::GetFlyFrameAttr( SfxItemSet &rSet ) const
         return false;
     }
 
-    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
+    SET_CURR_SHELL( const_cast<SwFEShell*>(this) );
 
     if( !rSet.Set( pFly->GetFormat()->GetAttrSet() ) )
         return false;

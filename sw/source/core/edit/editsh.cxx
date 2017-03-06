@@ -577,7 +577,7 @@ void *SwEditShell::GetIMapInventor() const
 Graphic SwEditShell::GetIMapGraphic() const
 {
     // returns always a graphic if the cursor is in a Fly
-    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
+    SET_CURR_SHELL( const_cast<SwEditShell*>(this) );
     Graphic aRet;
     SwPaM* pCursor = GetCursor();
     if ( !pCursor->HasMark() )

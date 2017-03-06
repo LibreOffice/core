@@ -598,7 +598,7 @@ FrameTypeFlags SwFEShell::GetSelFrameType() const
     {
         // obtain marked item as fly frame; if no fly frame, it must
         // be a draw object
-        const SwFlyFrame* pFly = ::GetFlyFromMarked(pMarkList, const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)));
+        const SwFlyFrame* pFly = ::GetFlyFromMarked(pMarkList, const_cast<SwFEShell*>(this));
         if ( pFly != nullptr )
         {
             if( pFly->IsFlyLayFrame() )
@@ -1153,7 +1153,7 @@ bool SwFEShell::IsFrameSelected() const
         return false;
     else
         return nullptr != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                        const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
+                                        const_cast<SwFEShell*>(this) );
 }
 
 bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const

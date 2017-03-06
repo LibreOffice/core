@@ -106,7 +106,7 @@ SwCharFormat* SwLineNumberInfo::GetCharFormat( IDocumentStylePoolAccess& rIDSPA 
     if ( !GetRegisteredIn() )
     {
         SwCharFormat* pFormat = rIDSPA.GetCharFormatFromPool( RES_POOLCHR_LINENUM );
-        pFormat->Add( const_cast<SwClient*>(static_cast<SwClient const *>(this)) );
+        pFormat->Add( const_cast<SwLineNumberInfo*>(this) );
     }
     return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn()));
 }

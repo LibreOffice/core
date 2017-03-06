@@ -2207,7 +2207,7 @@ void SwCursorShell::ShellGetFocus()
 /** Get current frame in which the cursor is positioned. */
 SwContentFrame *SwCursorShell::GetCurrFrame( const bool bCalcFrame ) const
 {
-    SET_CURR_SHELL( static_cast<SwViewShell*>(const_cast<SwCursorShell *>(this)) );
+    SET_CURR_SHELL( const_cast<SwCursorShell*>(this) );
     SwContentFrame *pRet = nullptr;
     SwContentNode *pNd = m_pCurrentCursor->GetContentNode();
     if ( pNd )

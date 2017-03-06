@@ -976,7 +976,7 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
             {
                 if( !rURL.GetMap() ||
                     m_pFlyFrame->GetFormat()->GetIMapObject( rRec.aPos, m_pFlyFrame ))
-                    return const_cast<SdrObject*>(static_cast<SdrObject const *>(this));
+                    return const_cast<SwVirtFlyDrawObj*>(this);
 
                 return nullptr;
             }
