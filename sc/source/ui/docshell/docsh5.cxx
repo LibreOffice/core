@@ -829,6 +829,9 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             PostPaintExtras();                                          // Tabellenreiter
             aModificator.SetDocumentModified();
 
+            // A scenario tab is like a hidden sheet, broadcasting also
+            // notifies ScTabViewShell to add an ScViewData::maTabData entry.
+            Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ));
             SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
             return nNewTab;
