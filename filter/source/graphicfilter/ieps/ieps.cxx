@@ -418,6 +418,22 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
     OString aComment("EPSReplacementGraphic");
     if ( nSizeWMF || nSizeTIFF )
     {
+        std::vector<sal_uInt8> aWMFBuf;
+        if (nSizeWMF && checkSeek(rStrm, nOrigPos + nPosWMF) && rStrm.remainingSize() >= nSizeWMF)
+        {
+            aWMFBuf.resize(nSizeWMF);
+            aWMFBuf.resize(rStrm.ReadBytes(aWMFBuf.data(), nSizeWMF));
+        }
+        nSizeWMF = aWMFBuf.size();
+
+        std::vector<sal_uInt8> aTIFFBuf;
+        if (nSizeTIFF && checkSeek(rStrm, nOrigPos + nPosTIFF) && rStrm.remainingSize() >= nSizeTIFF)
+        {
+            aTIFFBuf.resize(nSizeTIFF);
+            aTIFFBuf.resize(rStrm.ReadBytes(aTIFFBuf.data(), nSizeTIFF));
+        }
+        nSizeTIFF = aTIFFBuf.size();
+
         SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );
         sal_uInt32 nMagic = 0xc6d3d0c5;
         sal_uInt32 nPPos = 28 + nSizeWMF + nSizeTIFF;
@@ -427,18 +443,9 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         aReplacement.WriteUInt32( nMagic ).WriteUInt32( nPPos ).WriteUInt32( nPSSize )
                     .WriteUInt32( nWPos ).WriteUInt32( nSizeWMF )
                     .WriteUInt32( nTPos ).WriteUInt32( nSizeTIFF );
-        if (nSizeWMF && checkSeek(rStrm, nOrigPos + nPosWMF) && rStrm.remainingSize() >= nSizeWMF)
-        {
-            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeWMF ]);
-            rStrm.ReadBytes(pBuf.get(), nSizeWMF);
-            aReplacement.WriteBytes(pBuf.get(), nSizeWMF);
-        }
-        if (nSizeTIFF && checkSeek(rStrm, nOrigPos + nPosTIFF) && rStrm.remainingSize() >= nSizeTIFF)
-        {
-            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeTIFF ]);
-            rStrm.ReadBytes(pBuf.get(), nSizeTIFF);
-            aReplacement.WriteBytes(pBuf.get(), nSizeTIFF);
-        }
+
+        aReplacement.WriteBytes(aWMFBuf.data(), nSizeWMF);
+        aReplacement.WriteBytes(aTIFFBuf.data(), nSizeTIFF);
         rMtf.AddAction( static_cast<MetaAction*>( new MetaCommentAction( aComment, 0, static_cast<const sal_uInt8*>(aReplacement.GetData()), aReplacement.Tell() ) ) );
     }
     else
