@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <ostream>
+#include <vector>
+std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
+
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -14,6 +18,16 @@
 
 #include <osl/file.hxx>
 #include <osl/process.h>
+
+std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
+{
+    rStream << "{ ";
+    for (size_t i = 0; i < rVec.size() - 1; i++)
+        rStream << rVec[i] << ", ";
+    rStream << rVec.back();
+    rStream << " }";
+    return rStream;
+}
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
@@ -55,14 +69,14 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-    std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
-    long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
-    CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
-    for (size_t i = 0; i < aCharWidths.size(); i++)
-        CPPUNIT_ASSERT_EQUAL(aRefCharWidths[i], aCharWidths[i]);
+    std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
+    long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
+    CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(72L, pOutDev->GetTextWidth(aOneTwoThree));
