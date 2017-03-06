@@ -6314,23 +6314,6 @@ CXXFLAGS=$save_CXXFLAGS
 
 AC_SUBST(CXXFLAGS_CXX11)
 
-AC_MSG_CHECKING([whether $CXX supports C++11 constexpr])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    struct S {
-        int n_;
-        constexpr S(int n): n_(n) {}
-    };
-    ]])], [cxx11_constexpr=yes], [cxx11_constexpr=no])
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$cxx11_constexpr])
-if test "$cxx11_constexpr" = no; then
-    AC_MSG_ERROR([Your $CXX does not support 'constexpr'. This is no longer supported.])
-fi
-
 AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6382,20 +6365,6 @@ CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx11_ref_qualifier])
 if test "$cxx11_ref_qualifier" = yes; then
     AC_DEFINE([HAVE_CXX11_REF_QUALIFIER])
-fi
-
-AC_MSG_CHECKING([whether $CXX supports C++11 char16_t string literals])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    auto s = u"";
-    ]])], [cxx11_utf16_string_literal=yes], [cxx11_utf16_string_literal=no])
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$cxx11_utf16_string_literal])
-if test "$cxx11_utf16_string_literal" = no; then
-    AC_MSG_ERROR([Your $CXX does not support UTF-16 string literals. This is no longer supported.])
 fi
 
 dnl _Pragma support (may require C++11)
