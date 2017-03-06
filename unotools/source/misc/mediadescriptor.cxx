@@ -19,6 +19,7 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -483,8 +484,10 @@ bool MediaDescriptor::addInputStream()
 /*-----------------------------------------------*/
 bool MediaDescriptor::addInputStreamOwnLock()
 {
-    return impl_addInputStream(
-        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get());
+    const bool bLock = utl::ConfigManager::IsAvoidConfig()
+                     ? false
+                     : officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get();
+    return impl_addInputStream(bLock);
 }
 
 /*-----------------------------------------------*/
