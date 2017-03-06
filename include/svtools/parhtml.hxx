@@ -65,11 +65,11 @@ enum HTMLInputType
     HTML_IT_BUTTON =    0x0c
 };
 
-enum HTMLScriptLanguage
+enum class HTMLScriptLanguage
 {
-    HTML_SL_STARBASIC,
-    HTML_SL_JAVASCRIPT,
-    HTML_SL_UNKNOWN
+    StarBasic,
+    JavaScript,
+    Unknown
 };
 
 template<typename EnumT>

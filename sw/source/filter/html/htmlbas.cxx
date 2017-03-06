@@ -77,7 +77,7 @@ void SwHTMLParser::EndScript()
 
     switch( m_eScriptLang )
     {
-    case HTML_SL_STARBASIC:
+    case HTMLScriptLanguage::StarBasic:
         bInsIntoBasic = true;
         break;
     default:
@@ -184,7 +184,7 @@ void SwHTMLParser::AddScriptSource()
 {
     // We'll just remember a few strings here
     if( aToken.getLength() > 2 &&
-        (HTML_SL_STARBASIC==m_eScriptLang && aToken[ 0 ] == '\'') )
+        (HTMLScriptLanguage::StarBasic==m_eScriptLang && aToken[ 0 ] == '\'') )
     {
         sal_Int32 nPos = -1;
         if( m_aBasicLib.isEmpty() )

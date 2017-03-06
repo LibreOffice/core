@@ -28,10 +28,10 @@
 // Table for converting option values into strings
 static HTMLOptionEnum<HTMLScriptLanguage> const aScriptLangOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_LG_starbasic,    HTML_SL_STARBASIC     },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript,   HTML_SL_JAVASCRIPT    },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript11, HTML_SL_JAVASCRIPT    },
-    { OOO_STRING_SVTOOLS_HTML_LG_livescript,   HTML_SL_JAVASCRIPT    },
+    { OOO_STRING_SVTOOLS_HTML_LG_starbasic,    HTMLScriptLanguage::StarBasic     },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript,   HTMLScriptLanguage::JavaScript    },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript11, HTMLScriptLanguage::JavaScript    },
+    { OOO_STRING_SVTOOLS_HTML_LG_livescript,   HTMLScriptLanguage::JavaScript    },
     { nullptr,                                 (HTMLScriptLanguage)0 }
 };
 
@@ -44,7 +44,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
     const HTMLOptions& aScriptOptions = GetOptions();
 
     rLangString.clear();
-    rLang = HTML_SL_JAVASCRIPT;
+    rLang = HTMLScriptLanguage::JavaScript;
     rSrc.clear();
     rLibrary.clear();
     rModule.clear();
@@ -61,7 +61,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
                 if( aOption.GetEnum( nLang, aScriptLangOptEnums ) )
                     rLang = (HTMLScriptLanguage)nLang;
                 else
-                    rLang = HTML_SL_UNKNOWN;
+                    rLang = HTMLScriptLanguage::Unknown;
             }
             break;
 

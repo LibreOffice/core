@@ -301,7 +301,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_nEventId = nullptr;
     m_bUpperSpace = m_bViewCreated = m_bChkJumpMark = false;
 
-    m_eScriptLang = HTML_SL_UNKNOWN;
+    m_eScriptLang = HTMLScriptLanguage::Unknown;
 
     rCursor.DeleteMark();
     m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
