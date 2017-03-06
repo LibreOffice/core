@@ -50,7 +50,7 @@ ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(Ob
 ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
 :   ViewContact(),
     mrObject(rObj),
-    meRememberedAnimationKind(SDRTEXTANI_NONE)
+    meRememberedAnimationKind(SdrTextAniKind::NONE)
 {
     // init AnimationKind
     if(dynamic_cast<const SdrTextObj*>( &GetSdrObject() ) != nullptr)

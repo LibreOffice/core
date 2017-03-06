@@ -1083,7 +1083,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         if(pTextObj)
         {
             // no text and no text animation
-            pClone->SetMergedItem(SdrTextAniKindItem(SDRTEXTANI_NONE));
+            pClone->SetMergedItem(SdrTextAniKindItem(SdrTextAniKind::NONE));
             pClone->SetOutlinerParaObject(nullptr);
         }
 

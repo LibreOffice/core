@@ -811,9 +811,9 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_ANIKIND,pItem)) {
                 SdrTextAniKind eAniKind=static_cast<const SdrTextAniKindItem*>(pItem)->GetValue();
-                if (eAniKind==SDRTEXTANI_NONE) return true;
-                if (eAniKind==SDRTEXTANI_BLINK && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return true;
-                if (eAniKind==SDRTEXTANI_SLIDE && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return true;
+                if (eAniKind==SdrTextAniKind::NONE) return true;
+                if (eAniKind==SdrTextAniKind::Blink && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return true;
+                if (eAniKind==SdrTextAniKind::Slide && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return true;
             }
         } break;
 

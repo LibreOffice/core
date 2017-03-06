@@ -26,22 +26,22 @@
 /**
  * Animation type for text frame.
  */
-enum SdrTextAniKind {
-    SDRTEXTANI_NONE,      /// no animation
-    SDRTEXTANI_BLINK,     /// blinking
-    SDRTEXTANI_SCROLL,    /// scroll through
-    SDRTEXTANI_ALTERNATE, /// scroll back and forth
-    SDRTEXTANI_SLIDE      /// scroll in
+enum class SdrTextAniKind {
+    NONE,      /// no animation
+    Blink,     /// blinking
+    Scroll,    /// scroll through
+    Alternate, /// scroll back and forth
+    Slide      /// scroll in
 };
 
-// - SDRTEXTANI_BLINK:
+// - SdrTextAniKind::Blink:
 //   Just blink.  Direction and Amount don't effect things.
 //   Frequency delay: 0 = 0.5Hz (Delay = 250).
 //   Count = number of blinks. (0 = forever)
 //   start inside: sal_False = begin with the blinker off, sal_True  = begin with the blinker on
 //   stop inside: sal_False = end with the blinker off, sal_True = end with the blinker on
 //                (Only if count! = 0)
-// - SDRTEXTANI_SCROLL:
+// - SdrTextAniKind::Scroll:
 //   Text just scrolls all the way through, and starts over when it is done.
 
 //   Delay in ms: (except delay = 0 means 50ms (20Hz) default)
@@ -55,15 +55,15 @@ enum SdrTextAniKind {
 //                (Only if count! = 0)
 //   Amount: Step size in logical units. Negative values = use Pixels instead
 //           of logical units. If Amount = 0, then default to 1 Pixel.
-// - SDRTEXTANI_ALTERNATE:
-//   Like SDRTEXTANI_SCROLL, except don't scroll until all of the text is out,
+// - SdrTextAniKind::Alternate:
+//   Like SdrTextAniKind::Scroll, except don't scroll until all of the text is out,
 //        but just until the last part is visible.  Then, change direction and
 //        scroll the text the other way.
 //   Count = number of passes (number of direction changes minus 1)
-//        If count = 1, this is the same as SDRTEXTANI_SCROLL
+//        If count = 1, this is the same as SdrTextAniKind::Scroll
 //   Direction = the starting direction.
-//   All Other Parameters: just like SDRTEXTANI_SCROLL
-// - SDRTEXTANI_SLIDE:
+//   All Other Parameters: just like SdrTextAniKind::Scroll
+// - SdrTextAniKind::Slide:
 //   Text will slide in to the original position.
 //   -> same as SCROLL with StartInside = sal_False, StopInside = sal_True
 //   and Count = 1 (Count = 0 is interpreted as count = 1).
@@ -71,14 +71,14 @@ enum SdrTextAniKind {
 //   (much like ALTERNATE) and then slid back in again.
 //   StopInside is not evaluated, because inside is always stopped.
 //   StartInside is not evaluated, because outside is always started.
-//   All other parameters are like SDRTEXTANI_SCROLL
+//   All other parameters are like SdrTextAniKind::Scroll
 // StartInside, StopInside: When sal_True, the starting / final position
 //   of the text depends on the anchor of the drawing object.  This
 //   corresponds to the position of the text in normal Paint (without scrolling).
 
 class SVX_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem<SdrTextAniKind> {
 public:
-    SdrTextAniKindItem(SdrTextAniKind eKind=SDRTEXTANI_NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND, eKind) {}
+    SdrTextAniKindItem(SdrTextAniKind eKind=SdrTextAniKind::NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND, eKind) {}
     SdrTextAniKindItem(SvStream& rIn)                       : SfxEnumItem(SDRATTR_TEXT_ANIKIND, rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const override;

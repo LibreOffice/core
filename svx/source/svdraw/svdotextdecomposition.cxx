@@ -1205,7 +1205,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
 {
-    if(SDRTEXTANI_BLINK == GetTextAniKind())
+    if(SdrTextAniKind::Blink == GetTextAniKind())
     {
         // get values
         const SfxItemSet& rSet = GetObjectItemSet();
@@ -1368,7 +1368,7 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 {
     const SdrTextAniKind eAniKind(GetTextAniKind());
 
-    if(SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind)
+    if(SdrTextAniKind::Scroll == eAniKind || SdrTextAniKind::Alternate == eAniKind || SdrTextAniKind::Slide == eAniKind)
     {
         // get data. Goal is to calculate fTimeFullPath which is the time needed to
         // move animation from (0.0) to (1.0) state
@@ -1411,23 +1411,23 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
 
         switch(eAniKind)
         {
-            case SDRTEXTANI_SCROLL :
+            case SdrTextAniKind::Scroll :
             {
                 impCreateScrollTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
                 break;
             }
-            case SDRTEXTANI_ALTERNATE :
+            case SdrTextAniKind::Alternate :
             {
                 double fRelativeTextLength(fTextLength / (fFrameLength + fTextLength));
                 impCreateAlternateTiming(rSet, rAnimList, fRelativeTextLength, bForward, fTimeFullPath, fAnimationDelay);
                 break;
             }
-            case SDRTEXTANI_SLIDE :
+            case SdrTextAniKind::Slide :
             {
                 impCreateSlideTiming(rSet, rAnimList, bForward, fTimeFullPath, fAnimationDelay);
                 break;
             }
-            default : break; // SDRTEXTANI_NONE, SDRTEXTANI_BLINK
+            default : break; // SdrTextAniKind::NONE, SdrTextAniKind::Blink
         }
     }
 }
