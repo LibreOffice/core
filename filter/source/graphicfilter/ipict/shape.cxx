@@ -240,6 +240,7 @@ void drawPolygon(VirtualDevice *dev, bool drawFrame, tools::Polygon const &orig,
 
     using namespace basegfx;
     B2DPolygon poly;
+    poly.reserve(numPt);
     // Note: a polygon can be open, so we must not close it when we draw the frame
     for (int i = 0; i < numPt; i++) {
       Point const &pt = orig.GetPoint(i);
