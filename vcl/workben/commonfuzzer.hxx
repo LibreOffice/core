@@ -16,6 +16,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/configmgr.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <vcl/print.hxx>
@@ -31,21 +32,26 @@ using namespace cppu;
 
 namespace
 {
-    void setFontConfigConf()
+    OUString getExecutableDir()
+    {
+        OUString uri;
+        if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
+            abort();
+        }
+        sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
+        if (lastDirSeperatorPos >= 0) {
+            uri = uri.copy(0, lastDirSeperatorPos + 1);
+        }
+        return uri;
+    }
+
+    void setFontConfigConf(const OUString &execdir)
     {
         osl::File aFontConfig("file:///tmp/wmffuzzerfonts.conf");
         if (aFontConfig.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write) == osl::File::E_None)
         {
-            OUString uri;
-            if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
-                abort();
-            }
-            sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
-            if (lastDirSeperatorPos >= 0) {
-                uri = uri.copy(0, lastDirSeperatorPos + 1);
-            }
             OUString path;
-            osl::FileBase::getSystemPathFromFileURL(uri, path);
+            osl::FileBase::getSystemPathFromFileURL(execdir, path);
             OString sFontDir = OUStringToOString(path, osl_getThreadTextEncoding());
 
             rtl::OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
@@ -77,7 +83,9 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 
     osl_setCommandArgs(*argc, *argv);
 
-    setFontConfigConf();
+    OUString sExecDir = getExecutableDir();
+    rtl::Bootstrap::set("BRAND_BASE_DIR", sExecDir);
+    setFontConfigConf(sExecDir);
 
     tools::extendApplicationEnvironment();
 
