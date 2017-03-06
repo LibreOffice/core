@@ -1394,7 +1394,7 @@ void SwHTMLParser::InsertInput()
     sal_Int16 nMaxLen = 0;
     sal_Int16 nChecked = TRISTATE_FALSE;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
-    HTMLInputType eType = HTML_IT_TEXT;
+    HTMLInputType eType = HTMLInputType::Text;
     bool bDisabled = false, bValue = false;
     bool bSetGrfWidth = false, bSetGrfHeight = false;
     bool bHidden = false;
@@ -1530,7 +1530,7 @@ void SwHTMLParser::InsertInput()
         }
     }
 
-    if( HTML_IT_IMAGE==eType )
+    if( HTMLInputType::Image==eType )
     {
         // Image-Controls ohne Image-URL werden ignoriert (wie bei MS)
         if( sImgSrc.isEmpty() )
@@ -1545,42 +1545,42 @@ void SwHTMLParser::InsertInput()
         eHoriOri = text::HoriOrientation::NONE;
     }
 
-    // Defaults entsprechen HTML_IT_TEXT
+    // Defaults entsprechen HTMLInputType::Text
     const sal_Char *pType = "TextField";
     bool bKeepCRLFInValue = false;
     switch( eType )
     {
-    case HTML_IT_CHECKBOX:
+    case HTMLInputType::Checkbox:
         pType = "CheckBox";
         bKeepCRLFInValue = true;
         break;
 
-    case HTML_IT_RADIO:
+    case HTMLInputType::Radio:
         pType = "RadioButton";
         bKeepCRLFInValue = true;
         break;
 
-    case HTML_IT_PASSWORD:
+    case HTMLInputType::Password:
         bKeepCRLFInValue = true;
         break;
 
-    case HTML_IT_BUTTON:
+    case HTMLInputType::Button:
         bKeepCRLFInValue = true;
         SAL_FALLTHROUGH;
-    case HTML_IT_SUBMIT:
-    case HTML_IT_RESET:
+    case HTMLInputType::Submit:
+    case HTMLInputType::Reset:
         pType = "CommandButton";
         break;
 
-    case HTML_IT_IMAGE:
+    case HTMLInputType::Image:
         pType = "ImageButton";
         break;
 
-    case HTML_IT_FILE:
+    case HTMLInputType::File:
         pType = "FileControl";
         break;
 
-    case HTML_IT_HIDDEN:
+    case HTMLInputType::Hidden:
         pType = "HiddenControl";
         bKeepCRLFInValue = true;
         break;
@@ -1617,7 +1617,7 @@ void SwHTMLParser::InsertInput()
     aTmp <<= sName;
     xPropSet->setPropertyValue("Name", aTmp );
 
-    if( HTML_IT_HIDDEN != eType  )
+    if( HTMLInputType::Hidden != eType  )
     {
         if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
         {
@@ -1639,8 +1639,8 @@ void SwHTMLParser::InsertInput()
     bool bUseSize = false;
     switch( eType )
     {
-    case HTML_IT_CHECKBOX:
-    case HTML_IT_RADIO:
+    case HTMLInputType::Checkbox:
+    case HTMLInputType::Radio:
         {
             if( !bValue )
                 aTmp <<= OUString( OOO_STRING_SVTOOLS_HTML_on );
@@ -1653,7 +1653,7 @@ void SwHTMLParser::InsertInput()
             // erst gesetzt werden, wenn das Control angelegt und ein
             // activateTabOrder gerufen wurde, weil es sonst noch zu der
             // vorhergehenden Gruppe gehoert.
-            if( HTML_IT_CHECKBOX == eType )
+            if( HTMLInputType::Checkbox == eType )
             {
                 aTmp <<= (sal_Int16) nChecked ;
                 xPropSet->setPropertyValue("DefaultState", aTmp );
@@ -1670,7 +1670,7 @@ void SwHTMLParser::InsertInput()
         }
         break;
 
-    case HTML_IT_IMAGE:
+    case HTMLInputType::Image:
         {
             // SIZE = WIDTH
             aSz.Width() = nSize ? nSize : nWidth;
@@ -1690,22 +1690,22 @@ void SwHTMLParser::InsertInput()
         }
         break;
 
-    case HTML_IT_BUTTON:
-    case HTML_IT_SUBMIT:
-    case HTML_IT_RESET:
+    case HTMLInputType::Button:
+    case HTMLInputType::Submit:
+    case HTMLInputType::Reset:
         {
              FormButtonType eButtonType;
             switch( eType )
             {
-            case HTML_IT_BUTTON:
+            case HTMLInputType::Button:
                 eButtonType = FormButtonType_PUSH;
                 break;
-            case HTML_IT_SUBMIT:
+            case HTMLInputType::Submit:
                 eButtonType = FormButtonType_SUBMIT;
                 if (sText.isEmpty())
                     sText = OOO_STRING_SVTOOLS_HTML_IT_submit;
                 break;
-            case HTML_IT_RESET:
+            case HTMLInputType::Reset:
                 eButtonType = FormButtonType_RESET;
                 if (sText.isEmpty())
                     sText = OOO_STRING_SVTOOLS_HTML_IT_reset;
@@ -1725,10 +1725,10 @@ void SwHTMLParser::InsertInput()
         }
         break;
 
-    case HTML_IT_PASSWORD:
-    case HTML_IT_TEXT:
-    case HTML_IT_FILE:
-        if( HTML_IT_FILE != eType )
+    case HTMLInputType::Password:
+    case HTMLInputType::Text:
+    case HTMLInputType::File:
+        if( HTMLInputType::File != eType )
         {
         // Beim File-Control wird der VALUE aus Sicherheitsgruenden ignoriert.
             xPropSet->setPropertyValue("DefaultText", aTmp );
@@ -1739,7 +1739,7 @@ void SwHTMLParser::InsertInput()
             }
         }
 
-        if( HTML_IT_PASSWORD == eType )
+        if( HTMLInputType::Password == eType )
         {
             aTmp <<= (sal_Int16)'*' ;
             xPropSet->setPropertyValue("EchoChar", aTmp );
@@ -1753,7 +1753,7 @@ void SwHTMLParser::InsertInput()
         bMinHeight = true;
         break;
 
-    case HTML_IT_HIDDEN:
+    case HTMLInputType::Hidden:
         xPropSet->setPropertyValue("HiddenValue", aTmp );
         bHidden = true;
         break;
@@ -1798,7 +1798,7 @@ void SwHTMLParser::InsertInput()
 
     // Beim Image-Button bei nicht gegebern Groesse einen sinnvollen Default
     // setzen
-    if( HTML_IT_IMAGE== eType )
+    if( HTMLInputType::Image== eType )
     {
         if( !aSz.Width() )
         {
@@ -1831,13 +1831,13 @@ void SwHTMLParser::InsertInput()
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
     }
 
-    if( HTML_IT_RADIO == eType )
+    if( HTMLInputType::Radio == eType )
     {
         aTmp <<= (sal_Int16) nChecked ;
         xPropSet->setPropertyValue("DefaultState", aTmp );
     }
 
-    if( HTML_IT_IMAGE == eType )
+    if( HTMLInputType::Image == eType )
     {
         // Die URL erst nach dem Einfuegen setzen, weil sich der
         // Download der Grafik erst dann am XModel anmelden kann,

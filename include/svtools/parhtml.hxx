@@ -49,20 +49,20 @@ enum HTMLTableFrame { HTML_TF_VOID, HTML_TF_ABOVE, HTML_TF_BELOW,
 enum HTMLTableRules { HTML_TR_NONE, HTML_TR_GROUPS, HTML_TR_ROWS,
     HTML_TR_COLS, HTML_TR_ALL };
 
-enum HTMLInputType
+enum class HTMLInputType
 {
-    HTML_IT_TEXT =      0x01,
-    HTML_IT_PASSWORD =  0x02,
-    HTML_IT_CHECKBOX =  0x03,
-    HTML_IT_RADIO =     0x04,
-    HTML_IT_RANGE =     0x05,
-    HTML_IT_SCRIBBLE =  0x06,
-    HTML_IT_FILE =      0x07,
-    HTML_IT_HIDDEN =    0x08,
-    HTML_IT_SUBMIT =    0x09,
-    HTML_IT_IMAGE =     0x0a,
-    HTML_IT_RESET =     0x0b,
-    HTML_IT_BUTTON =    0x0c
+    Text =      1,
+    Password,
+    Checkbox,
+    Radio,
+    Range,
+    Scribble,
+    File,
+    Hidden,
+    Submit,
+    Image,
+    Reset,
+    Button
 };
 
 enum class HTMLScriptLanguage

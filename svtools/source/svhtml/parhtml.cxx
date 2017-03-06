@@ -53,18 +53,18 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
-    { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
-    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,  HTML_IT_CHECKBOX    },
-    { OOO_STRING_SVTOOLS_HTML_IT_radio,     HTML_IT_RADIO       },
-    { OOO_STRING_SVTOOLS_HTML_IT_range,     HTML_IT_RANGE       },
-    { OOO_STRING_SVTOOLS_HTML_IT_scribble,  HTML_IT_SCRIBBLE    },
-    { OOO_STRING_SVTOOLS_HTML_IT_file,      HTML_IT_FILE        },
-    { OOO_STRING_SVTOOLS_HTML_IT_hidden,    HTML_IT_HIDDEN      },
-    { OOO_STRING_SVTOOLS_HTML_IT_submit,    HTML_IT_SUBMIT      },
-    { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
-    { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
-    { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
+    { OOO_STRING_SVTOOLS_HTML_IT_text,      HTMLInputType::Text        },
+    { OOO_STRING_SVTOOLS_HTML_IT_password,  HTMLInputType::Password    },
+    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,  HTMLInputType::Checkbox    },
+    { OOO_STRING_SVTOOLS_HTML_IT_radio,     HTMLInputType::Radio       },
+    { OOO_STRING_SVTOOLS_HTML_IT_range,     HTMLInputType::Range       },
+    { OOO_STRING_SVTOOLS_HTML_IT_scribble,  HTMLInputType::Scribble    },
+    { OOO_STRING_SVTOOLS_HTML_IT_file,      HTMLInputType::File        },
+    { OOO_STRING_SVTOOLS_HTML_IT_hidden,    HTMLInputType::Hidden      },
+    { OOO_STRING_SVTOOLS_HTML_IT_submit,    HTMLInputType::Submit      },
+    { OOO_STRING_SVTOOLS_HTML_IT_image,     HTMLInputType::Image       },
+    { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTMLInputType::Reset       },
+    { OOO_STRING_SVTOOLS_HTML_IT_button,    HTMLInputType::Button      },
     { nullptr,                              (HTMLInputType)0    }
 };
 
@@ -198,7 +198,7 @@ void HTMLOption::GetColor( Color& rColor ) const
 HTMLInputType HTMLOption::GetInputType() const
 {
     DBG_ASSERT( nToken==HTML_O_TYPE, "GetInputType: Option not TYPE" );
-    return (HTMLInputType)GetEnum( aInputTypeOptEnums, HTML_IT_TEXT );
+    return (HTMLInputType)GetEnum( aInputTypeOptEnums, HTMLInputType::Text );
 }
 
 HTMLTableFrame HTMLOption::GetTableFrame() const
