@@ -34,9 +34,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 		$(if $(DISABLE_ACTIVEX),,InstallModule_activex) \
 		InstallModule_quickstart \
 		InstallModule_windows \
-		$(if $(filter MSC,$(COM)),\
-			InstallModule_winexplorerext \
-		) \
+		InstallModule_winexplorerext \
 	) \
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK) $(ENABLE_GTK3)),\
 		InstallModule_gnome \
