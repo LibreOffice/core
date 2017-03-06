@@ -230,7 +230,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/printhelper \
     sfx2/source/doc/querytemplate \
     sfx2/source/doc/docundomanager \
-    sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \

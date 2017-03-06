@@ -119,7 +119,6 @@
 #include "doc.hrc"
 #include "openflag.hxx"
 #include <sfx2/sfxresid.hxx>
-#include "sfxacldetect.hxx"
 #include <officecfg/Office/Common.hxx>
 
 #include <memory>
@@ -1130,22 +1129,6 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     aContent.getPropertyValue("IsReadOnly") >>= bContentReadonly;
                 }
                 catch( const uno::Exception& ) {}
-
-#if EXTRA_ACL_CHECK
-                // This block was introduced as a fix to i#102464, but removing
-                // this does not make the problem re-appear.  But leaving this
-                // part would interfere with documents saved in samba share.  This
-                // affects Windows only.
-                if ( !bContentReadonly )
-                {
-                    // the file is not readonly, check the ACL
-
-                    OUString aPhysPath;
-                    if ( osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ), aPhysPath )
-                         == osl::FileBase::E_None )
-                        bContentReadonly = IsReadonlyAccordingACL( aPhysPath.getStr() );
-                }
-#endif
             }
 
             // do further checks only if the file not readonly in fs
