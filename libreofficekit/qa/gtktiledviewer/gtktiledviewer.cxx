@@ -1525,10 +1525,17 @@ static void signalPart(LOKDocView* pLOKDocView, int nPart, gpointer /*pData*/)
 }
 
 /// User clicked on a command button -> inform LOKDocView.
-static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+static void signalHyperlink(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
 {
     GError* pError = nullptr;
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_show_uri_on_window(
+            GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pLOKDocView))),
+            pPayload, GDK_CURRENT_TIME, &pError);
+#else
+    (void) pLOKDocView;
     gtk_show_uri(nullptr, pPayload, GDK_CURRENT_TIME, &pError);
+#endif
     if (pError != nullptr)
     {
         g_warning("Unable to show URI %s : %s", pPayload, pError->message);
