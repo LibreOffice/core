@@ -1802,7 +1802,10 @@ void SmParser::DoColor()
             NextToken();
         }
         else
+        {
             Error(SmParseError::ColorExpected);
+            return;
+        }
     } while (m_aCurToken.eType == TCOLOR);
 
     m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
@@ -1822,7 +1825,10 @@ void SmParser::DoFont()
             NextToken();
         }
         else
+        {
             Error(SmParseError::FontExpected);
+            return;
+        }
     } while (m_aCurToken.eType == TFONT);
 
     m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
