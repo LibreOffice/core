@@ -28,18 +28,18 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const pXML_BrushHorizontalPos[] =
+SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushHorizontalPos[] =
 {
     { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
     { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
-    { XML_TOKEN_INVALID,    0       }
+    { XML_TOKEN_INVALID,    (style::GraphicLocation)0       }
 };
 
-SvXMLEnumMapEntry const pXML_BrushVerticalPos[] =
+SvXMLEnumMapEntry<style::GraphicLocation> const pXML_BrushVerticalPos[] =
 {
     { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
     { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
-    { XML_TOKEN_INVALID,    0       }
+    { XML_TOKEN_INVALID,    (style::GraphicLocation)0       }
 };
 
 
@@ -55,7 +55,7 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
 {
     bool bRet = true;
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
-    sal_uInt16 nTmp;
+    style::GraphicLocation nTmpGraphicLocation;
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     OUString aToken;
     bool bHori = false, bVert = false;
@@ -102,23 +102,23 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
             else
                 ePos = style::GraphicLocation_MIDDLE_MIDDLE;
         }
-        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken, pXML_BrushHorizontalPos ) )
+        else if( SvXMLUnitConverter::convertEnum( nTmpGraphicLocation, aToken, pXML_BrushHorizontalPos ) )
         {
             if( bVert )
-                MergeXMLHoriPos( ePos, (style::GraphicLocation)nTmp );
+                MergeXMLHoriPos( ePos, nTmpGraphicLocation );
             else if( !bHori )
-                ePos = (style::GraphicLocation)nTmp;
+                ePos = nTmpGraphicLocation;
             else
                 bRet = false;
 
             bHori = true;
         }
-        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken, pXML_BrushVerticalPos ) )
+        else if( SvXMLUnitConverter::convertEnum( nTmpGraphicLocation, aToken, pXML_BrushVerticalPos ) )
         {
             if( bHori )
-                MergeXMLVertPos( ePos, (style::GraphicLocation)nTmp );
+                MergeXMLVertPos( ePos, nTmpGraphicLocation );
             else if( !bVert )
-                ePos = (style::GraphicLocation)nTmp;
+                ePos = nTmpGraphicLocation;
             else
                 bRet = false;
             bVert = true;

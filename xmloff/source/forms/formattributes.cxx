@@ -247,9 +247,9 @@ namespace xmloff
         implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), OUString::number( _nAttributeDefault ) );
     }
 
-    void OAttribute2Property::addEnumProperty(
+    void OAttribute2Property::addEnumPropertyImpl(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
+            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const css::uno::Type* _pType)
     {
         OUStringBuffer aDefault;

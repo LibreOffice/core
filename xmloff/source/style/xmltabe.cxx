@@ -32,14 +32,14 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const pXML_tabstop_style[] =
+SvXMLEnumMapEntry<style::TabAlign> const pXML_tabstop_style[] =
 {
     { XML_LEFT,     style::TabAlign_LEFT    },
     { XML_CENTER,   style::TabAlign_CENTER  },
     { XML_RIGHT,    style::TabAlign_RIGHT   },
     { XML_CHAR,     style::TabAlign_DECIMAL },
     { XML_DEFAULT,  style::TabAlign_DEFAULT  }, // ?????????????????????????????????????
-    { XML_TOKEN_INVALID,        0 }
+    { XML_TOKEN_INVALID,        (style::TabAlign)0 }
 };
 
 void SvxXMLTabStopExport::exportTabStop( const css::style::TabStop* pTabStop )

@@ -22,26 +22,26 @@
 
 #include <xmloff/xmltoken.hxx>
 
-struct SvXMLEnumMapEntry;
+template<typename EnumT> struct SvXMLEnumMapEntry;
 
 namespace xmloff
 {
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_FillDefault[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[];
-extern const SvXMLEnumMapEntry aAnimations_EnumMap_Command[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Fill[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_FillDefault[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Restart[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_RestartDefault[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Endsync[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_CalcMode[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_AdditiveMode[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransformType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EventTrigger[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectPresetClass[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectNodeType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_SubItem[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_IterateType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Command[];
 
 struct ImplAttributeNameConversion
 {

@@ -27,12 +27,12 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-static SvXMLEnumMapEntry pXML_Casemap_Enum[] =
+static SvXMLEnumMapEntry<sal_uInt16> pXML_Casemap_Enum[] =
 {
-    { XML_NONE,                 style::CaseMap::NONE },
-    { XML_CASEMAP_LOWERCASE,    style::CaseMap::LOWERCASE },
-    { XML_CASEMAP_UPPERCASE,    style::CaseMap::UPPERCASE },
-    { XML_CASEMAP_CAPITALIZE,   style::CaseMap::TITLE },
+    { XML_NONE,                 (sal_uInt16)style::CaseMap::NONE },
+    { XML_CASEMAP_LOWERCASE,    (sal_uInt16)style::CaseMap::LOWERCASE },
+    { XML_CASEMAP_UPPERCASE,    (sal_uInt16)style::CaseMap::UPPERCASE },
+    { XML_CASEMAP_CAPITALIZE,   (sal_uInt16)style::CaseMap::TITLE },
     { XML_TOKEN_INVALID,        0 }
 };
 
