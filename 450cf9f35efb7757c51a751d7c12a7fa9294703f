@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c3bedffe",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T16:39:11Z",
+      "side": 1,
+      "message": "Hum.. My Excel2010 doesn\u0027t have RRI yet, https://support.office.com/en-US/article/RRI-function-6F5822D8-7EF1-4233-944C-79E8172930F4 says #NUM! error (which we more detail with IllegalArgument Err:502) for invalid arguments, personally I would had said #DIV/0! in this case as well, but.. consistency is overrated ;-)",
+      "revId": "450cf9f35efb7757c51a751d7c12a7fa9294703f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
