@@ -124,7 +124,7 @@ namespace xmloff
         if (_rValue >>= nFontEmphasis)
         {
             // the type
-            sal_Int16 nType = nFontEmphasis & ~(awt::FontEmphasisMark::ABOVE | awt::FontEmphasisMark::BELOW);
+            sal_uInt16 nType = nFontEmphasis & ~(awt::FontEmphasisMark::ABOVE | awt::FontEmphasisMark::BELOW);
             // the position of the mark
             bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
 
@@ -184,7 +184,7 @@ namespace xmloff
         if (bSuccess)
         {
             nEmphasis |= bBelow ? awt::FontEmphasisMark::BELOW : awt::FontEmphasisMark::ABOVE;
-            _rValue <<= (sal_Int16)nEmphasis;
+            _rValue <<= nEmphasis;
         }
 
         return bSuccess;
@@ -242,7 +242,7 @@ namespace xmloff
         {
         case STYLE:
         {
-            sal_Int16 nBorder = 0;
+            sal_uInt16 nBorder = 0;
             bSuccess =  (_rValue >>= nBorder)
                     &&  SvXMLUnitConverter::convertEnum( aOut, nBorder, aBorderTypeMap );
         }

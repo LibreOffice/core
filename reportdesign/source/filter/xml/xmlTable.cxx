@@ -46,10 +46,10 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    sal_uInt16 lcl_getForceNewPageOption(const OUString& _sValue)
+    sal_Int16 lcl_getForceNewPageOption(const OUString& _sValue)
     {
-        sal_uInt16 nRet = report::ForceNewPage::NONE;
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
+        sal_Int16 nRet = report::ForceNewPage::NONE;
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
         (void)SvXMLUnitConverter::convertEnum( nRet,_sValue,aXML_EnumMap );
         return nRet;
     }

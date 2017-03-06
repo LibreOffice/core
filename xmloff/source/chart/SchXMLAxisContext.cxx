@@ -51,19 +51,19 @@ using namespace com::sun::star;
 
 using com::sun::star::uno::Reference;
 
-static const SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
+static const SvXMLEnumMapEntry<SchXMLAxisDimension> aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
     { XML_Z,  SCH_XML_AXIS_Z  },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (SchXMLAxisDimension)0 }
 };
 
-static const SvXMLEnumMapEntry aXMLAxisTypeMap[] =
+static const SvXMLEnumMapEntry<sal_uInt16> aXMLAxisTypeMap[] =
 {
-    { XML_AUTO,  css::chart::ChartAxisType::AUTOMATIC },
-    { XML_TEXT,  css::chart::ChartAxisType::CATEGORY },
-    { XML_DATE,  css::chart::ChartAxisType::DATE },
+    { XML_AUTO,  (sal_uInt16)css::chart::ChartAxisType::AUTOMATIC },
+    { XML_TEXT,  (sal_uInt16)css::chart::ChartAxisType::CATEGORY },
+    { XML_DATE,  (sal_uInt16)css::chart::ChartAxisType::DATE },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -271,9 +271,9 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
         {
             case XML_TOK_AXIS_DIMENSION:
                 {
-                    sal_uInt16 nEnumVal;
+                    SchXMLAxisDimension nEnumVal;
                     if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
-                        m_aCurrentAxis.eDimension = ( SchXMLAxisDimension )nEnumVal;
+                        m_aCurrentAxis.eDimension = nEnumVal;
                 }
                 break;
             case XML_TOK_AXIS_NAME:

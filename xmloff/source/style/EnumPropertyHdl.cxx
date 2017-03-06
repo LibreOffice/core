@@ -30,7 +30,6 @@ using namespace ::com::sun::star::uno;
 
 // class XMLEnumPropertyHdl
 
-
 XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 {
     // Nothing to do
@@ -75,7 +74,7 @@ bool XMLEnumPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, c
 
     OUStringBuffer aOut;
 
-    if(!SvXMLUnitConverter::convertEnum( aOut, nValue, mpEnumMap ))
+    if(!SvXMLUnitConverter::convertEnum( aOut, (sal_uInt16)nValue, mpEnumMap ))
         return false;
 
     rStrExpValue = aOut.makeStringAndClear();

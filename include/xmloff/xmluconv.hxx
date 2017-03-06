@@ -122,25 +122,48 @@ public:
 
     /** convert string to enum using given enum map, if the enum is
         not found in the map, this method will return false */
-    static bool convertEnum( sal_uInt16& rEnum,
+    template<typename EnumT>
+    static bool convertEnum( EnumT& rEnum,
                              const OUString& rValue,
-                             const SvXMLEnumMapEntry *pMap );
+                             const SvXMLEnumMapEntry<EnumT> *pMap )
+    {
+        sal_uInt16 nTmp;
+        bool bRet = convertEnumImpl(nTmp, rValue,
+                        reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pMap));
+        if (bRet)
+            rEnum = static_cast<EnumT>(nTmp);
+        return bRet;
+    }
 
     /** convert string to enum using given token map, if the enum is
         not found in the map, this method will return false */
-    static bool convertEnum( sal_uInt16& rEnum,
+    template<typename EnumT>
+    static bool convertEnum( EnumT& rEnum,
                              const OUString& rValue,
-                             const SvXMLEnumStringMapEntry *pMap );
+                             const SvXMLEnumStringMapEntry<EnumT> *pMap )
+    {
+        sal_uInt16 nTmp;
+        bool bRet = convertEnumImpl(nTmp, rValue,
+                        reinterpret_cast<const SvXMLEnumStringMapEntry<sal_uInt16>*>(pMap));
+        if (bRet)
+            rEnum = static_cast<EnumT>(nTmp);
+        return bRet;
+    }
 
     /** convert enum to string using given enum map with an optional
         default token. If the enum is not found in the map,
         this method will either use the given default or return
         false if not default is set */
+    template<typename EnumT>
     static bool convertEnum( OUStringBuffer& rBuffer,
-                                 unsigned int nValue,
-                                 const SvXMLEnumMapEntry *pMap,
-                                 enum ::xmloff::token::XMLTokenEnum eDefault =
-                                         ::xmloff::token::XML_TOKEN_INVALID );
+                             EnumT nValue,
+                             const SvXMLEnumMapEntry<EnumT> *pMap,
+                             enum ::xmloff::token::XMLTokenEnum eDefault =
+                                         ::xmloff::token::XML_TOKEN_INVALID )
+    {
+        return convertEnumImpl(rBuffer, nValue,
+                   reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pMap), eDefault);
+    }
 
     /** convert double number to string (using ::rtl::math) and DO
         convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
@@ -219,6 +242,20 @@ public:
     /** convert number (sal_uInt32) to string (hex) */
     static void convertHex( OUStringBuffer& rBuffer,
                                sal_uInt32 nVal );
+
+private:
+    static bool convertEnumImpl( sal_uInt16& rEnum,
+                             const OUString& rValue,
+                             const SvXMLEnumMapEntry<sal_uInt16> *pMap );
+
+    static bool convertEnumImpl( sal_uInt16& rEnum,
+                             const OUString& rValue,
+                             const SvXMLEnumStringMapEntry<sal_uInt16> *pMap );
+
+    static bool convertEnumImpl( OUStringBuffer& rBuffer,
+                             sal_uInt16 nValue,
+                             const SvXMLEnumMapEntry<sal_uInt16> *pMap,
+                             enum ::xmloff::token::XMLTokenEnum eDefault );
 };
 
 #endif // INCLUDED_XMLOFF_XMLUCONV_HXX

@@ -41,7 +41,6 @@
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -54,7 +53,6 @@
 #include "xexptran.hxx"
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -97,7 +95,7 @@ using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
-SvXMLEnumMapEntry const aXML_GlueAlignment_EnumMap[] =
+SvXMLEnumMapEntry<drawing::Alignment> const aXML_GlueAlignment_EnumMap[] =
 {
     { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
     { XML_TOP,          drawing::Alignment_TOP },
@@ -108,10 +106,10 @@ SvXMLEnumMapEntry const aXML_GlueAlignment_EnumMap[] =
     { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
     { XML_BOTTOM,       drawing::Alignment_BOTTOM },
     { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::Alignment)0 }
 };
 
-SvXMLEnumMapEntry const aXML_GlueEscapeDirection_EnumMap[] =
+SvXMLEnumMapEntry<drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumMap[] =
 {
     { XML_AUTO,         drawing::EscapeDirection_SMART },
     { XML_LEFT,         drawing::EscapeDirection_LEFT },
@@ -120,7 +118,7 @@ SvXMLEnumMapEntry const aXML_GlueEscapeDirection_EnumMap[] =
     { XML_DOWN,         drawing::EscapeDirection_DOWN },
     { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
     { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::EscapeDirection)0 }
 };
 
 static bool ImpIsEmptyURL( const OUString& rURL )
@@ -304,20 +302,16 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
             }
             else if( IsXMLToken( aLocalName, XML_ALIGN ) )
             {
-                sal_uInt16 eKind;
+                drawing::Alignment eKind;
                 if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueAlignment_EnumMap ) )
                 {
-                    aGluePoint.PositionAlignment = (drawing::Alignment)eKind;
+                    aGluePoint.PositionAlignment = eKind;
                     aGluePoint.IsRelative = false;
                 }
             }
             else if( IsXMLToken( aLocalName, XML_ESCAPE_DIRECTION ) )
             {
-                sal_uInt16 eKind;
-                if( SvXMLUnitConverter::convertEnum( eKind, sValue, aXML_GlueEscapeDirection_EnumMap ) )
-                {
-                    aGluePoint.Escape = (drawing::EscapeDirection)eKind;
-                }
+                SvXMLUnitConverter::convertEnum( aGluePoint.Escape, sValue, aXML_GlueEscapeDirection_EnumMap );
             }
         }
     }
@@ -1173,11 +1167,7 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     {
         if( IsXMLToken( rLocalName, XML_KIND ) )
         {
-            sal_uInt16 eKind;
-            if( SvXMLUnitConverter::convertEnum( eKind, rValue, aXML_CircleKind_EnumMap ) )
-            {
-                meKind = eKind;
-            }
+            SvXMLUnitConverter::convertEnum( meKind, rValue, aXML_CircleKind_EnumMap );
             return;
         }
         if( IsXMLToken( rLocalName, XML_START_ANGLE ) )
@@ -1754,7 +1744,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1),
-    mnType( (sal_uInt16)drawing::ConnectorType_STANDARD ),
+    mnType( drawing::ConnectorType_STANDARD ),
     mnStartGlueId(-1),
     mnEndGlueId(-1),
     mnDelta1(0),

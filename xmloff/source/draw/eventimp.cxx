@@ -51,7 +51,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
+SvXMLEnumMapEntry<ClickAction> const aXML_EventActions_EnumMap[] =
 {
     { XML_NONE,             ClickAction_NONE    },
     { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },
@@ -67,7 +67,7 @@ SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
     { XML_VERB,             ClickAction_VERB },
     { XML_FADE_OUT,         ClickAction_VANISH },
     { XML_SOUND,            ClickAction_SOUND },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (ClickAction)0 }
 };
 
 class SdXMLEventContext : public SvXMLImportContext
@@ -174,21 +174,15 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         case XML_NAMESPACE_PRESENTATION:
             if( IsXMLToken( aAttrLocalName, XML_ACTION ) )
             {
-                sal_uInt16 eEnum;
-                if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_EventActions_EnumMap ) )
-                    meClickAction = (ClickAction)eEnum;
+                SvXMLUnitConverter::convertEnum( meClickAction, sValue, aXML_EventActions_EnumMap );
             }
             if( IsXMLToken( aAttrLocalName, XML_EFFECT ) )
             {
-                sal_uInt16 eEnum;
-                if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationEffect_EnumMap ) )
-                    meEffect = (XMLEffect)eEnum;
+                SvXMLUnitConverter::convertEnum( meEffect, sValue, aXML_AnimationEffect_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_DIRECTION ) )
             {
-                sal_uInt16 eEnum;
-                if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationDirection_EnumMap ) )
-                    meDirection = (XMLEffectDirection)eEnum;
+                SvXMLUnitConverter::convertEnum( meDirection, sValue, aXML_AnimationDirection_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_START_SCALE ) )
             {
@@ -198,9 +192,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             }
             else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
             {
-                sal_uInt16 eEnum;
-                if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationSpeed_EnumMap ) )
-                    meSpeed = (AnimationSpeed)eEnum;
+                SvXMLUnitConverter::convertEnum( meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
             }
             else if( IsXMLToken( aAttrLocalName, XML_VERB ) )
             {
