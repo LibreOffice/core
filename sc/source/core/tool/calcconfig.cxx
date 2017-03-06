@@ -178,7 +178,7 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
-    const formula::OpCodeHashMap *pHashMap(pOpCodeMap->getHashMap());
+    const formula::OpCodeHashMap& rHashMap(pOpCodeMap->getHashMap());
 
     sal_Int32 fromIndex(0);
     sal_Int32 semicolon;
@@ -194,8 +194,8 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
                 result->insert(static_cast<OpCode>(n));
             else
             {
-                auto opcode(pHashMap->find(element));
-                if (opcode != pHashMap->end())
+                auto opcode(rHashMap.find(element));
+                if (opcode != rHashMap.end())
                     result->insert(opcode->second);
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");

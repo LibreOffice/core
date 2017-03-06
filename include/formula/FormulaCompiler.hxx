@@ -81,8 +81,8 @@ public:
     /** Mappings from strings to OpCodes and vice versa. */
     class FORMULA_DLLPUBLIC OpCodeMap final
     {
-        OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, OUString -> OpCode
-        OUString              * mpTable;                   /// Array of symbols, OpCode -> OUString, offset==OpCode
+        OpCodeHashMap           maHashMap;                  /// Hash map of symbols, OUString -> OpCode
+        std::unique_ptr<OUString[]> mpTable;                /// Array of symbols, OpCode -> OUString, offset==OpCode
         ExternalHashMap         maExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
         ExternalHashMap         maReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
@@ -96,15 +96,14 @@ public:
     public:
 
         OpCodeMap(sal_uInt16 nSymbols, bool bCore, FormulaGrammar::Grammar eGrammar ) :
-            mpHashMap( new OpCodeHashMap( nSymbols)),
+            maHashMap(nSymbols),
             mpTable( new OUString[ nSymbols ]),
             meGrammar( eGrammar),
             mnSymbols( nSymbols),
-            mbCore( bCore)
+            mbCore( bCore),
+            mbEnglish ( FormulaGrammar::isEnglish( meGrammar) )
         {
-            mbEnglish = FormulaGrammar::isEnglish( meGrammar);
         }
-        ~OpCodeMap();
 
         /** Copy mappings from r into this map, effectively replacing this map.
 
@@ -115,13 +114,13 @@ public:
         void copyFrom( const OpCodeMap& r );
 
         /// Get the symbol String -> OpCode hash map for finds.
-        const OpCodeHashMap* getHashMap() const { return mpHashMap; }
+        const OpCodeHashMap& getHashMap() const { return maHashMap; }
 
         /// Get the symbol String -> AddIn String hash map for finds.
-        const ExternalHashMap* getExternalHashMap() const { return &maExternalHashMap; }
+        const ExternalHashMap& getExternalHashMap() const { return maExternalHashMap; }
 
         /// Get the AddIn String -> symbol String hash map for finds.
-        const ExternalHashMap* getReverseExternalHashMap() const { return &maReverseExternalHashMap; }
+        const ExternalHashMap& getReverseExternalHashMap() const { return maReverseExternalHashMap; }
 
         /// Get the symbol string matching an OpCode.
         const OUString& getSymbol( const OpCode eOp ) const
