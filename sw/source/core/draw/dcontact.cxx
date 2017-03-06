@@ -180,8 +180,8 @@ bool IsMarqueeTextObj( const SdrObject& rObj )
     SdrTextAniKind eTKind;
     return SdrInventor::Default == rObj.GetObjInventor() &&
         OBJ_TEXT == rObj.GetObjIdentifier() &&
-        ( SDRTEXTANI_SCROLL == ( eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind())
-         || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
+        ( SdrTextAniKind::Scroll == ( eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind())
+         || SdrTextAniKind::Alternate == eTKind || SdrTextAniKind::Slide == eTKind );
 }
 
 SwContact::SwContact( SwFrameFormat *pToRegisterIn ) :

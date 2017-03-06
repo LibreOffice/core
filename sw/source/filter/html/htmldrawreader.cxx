@@ -57,9 +57,9 @@ using namespace css;
 
 static HTMLOptionEnum<SdrTextAniKind> aHTMLMarqBehaviorTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,    SDRTEXTANI_SCROLL       },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate, SDRTEXTANI_ALTERNATE    },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,     SDRTEXTANI_SLIDE        },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,    SdrTextAniKind::Scroll       },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate, SdrTextAniKind::Alternate    },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,     SdrTextAniKind::Slide        },
     { nullptr,                                 (SdrTextAniKind)0       }
 };
 
@@ -259,7 +259,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
-    SdrTextAniKind eAniKind = SDRTEXTANI_SCROLL;
+    SdrTextAniKind eAniKind = SdrTextAniKind::Scroll;
     SdrTextAniDirection eAniDir = SdrTextAniDirection::Left;
     sal_uInt16 nCount = 0, nDelay = 60;
     sal_Int16 nAmount = -6;
@@ -365,7 +365,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         InsertBookmark( aId );
 
     // (Nur) Alternate leueft per Default von links nach rechts
-    if( SDRTEXTANI_ALTERNATE==eAniKind && !bDirection )
+    if( SdrTextAniKind::Alternate==eAniKind && !bDirection )
         eAniDir = SdrTextAniDirection::Right;
 
     // die fuer das Scrollen benoetigten Attribute umsetzen
@@ -381,7 +381,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     aItemSet.Put( SdrTextAniCountItem( nCount ) );
     aItemSet.Put( SdrTextAniDelayItem( nDelay ) );
     aItemSet.Put( SdrTextAniAmountItem( nAmount ) );
-    if( SDRTEXTANI_ALTERNATE==eAniKind )
+    if( SdrTextAniKind::Alternate==eAniKind )
     {
         // (Nur) Alternate startet und stoppt per default Inside
         aItemSet.Put( SdrTextAniStartInsideItem(true) );

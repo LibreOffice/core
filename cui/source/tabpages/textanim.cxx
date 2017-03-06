@@ -95,7 +95,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemS
                                   ,"cui/ui/textanimtabpage.ui"
                                   ,&rInAttrs ),
                 rOutAttrs       ( rInAttrs ),
-                eAniKind        ( SDRTEXTANI_NONE )
+                eAniKind        ( SdrTextAniKind::NONE )
 {
     get(m_pLbEffect, "LB_EFFECT");
     get(m_pBoxDirection,"boxDIRECTION");
@@ -251,7 +251,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
         m_pNumFldCount->SetValue( nValue );
         if( nValue == 0 )
         {
-            if( eAniKind == SDRTEXTANI_SLIDE )
+            if( eAniKind == SdrTextAniKind::Slide )
             {
                 m_pTsbEndless->SetState( TRISTATE_FALSE );
                 m_pTsbEndless->Enable( false );
@@ -488,20 +488,20 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
         eAniKind = (SdrTextAniKind) nPos;
         switch( eAniKind )
         {
-            case SDRTEXTANI_NONE:
+            case SdrTextAniKind::NONE:
             {
                 m_pBoxDirection->Disable();
                 m_pFlProperties->Disable();
             }
             break;
 
-            case SDRTEXTANI_BLINK:
-            case SDRTEXTANI_SCROLL:
-            case SDRTEXTANI_ALTERNATE:
-            case SDRTEXTANI_SLIDE:
+            case SdrTextAniKind::Blink:
+            case SdrTextAniKind::Scroll:
+            case SdrTextAniKind::Alternate:
+            case SdrTextAniKind::Slide:
             {
                 m_pFlProperties->Enable();
-                if( eAniKind == SDRTEXTANI_SLIDE )
+                if( eAniKind == SdrTextAniKind::Slide )
                 {
                     m_pTsbStartInside->Disable();
                     m_pTsbStopInside->Disable();
@@ -520,7 +520,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
                 m_pTsbAuto->Enable();
                 ClickAutoHdl_Impl( nullptr );
 
-                if( eAniKind == SDRTEXTANI_BLINK )
+                if( eAniKind == SdrTextAniKind::Blink )
                 {
                     m_pBoxDirection->Disable();
                     m_pBoxCount->Disable();
@@ -540,7 +540,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, Button*, void)
 {
 
-    if( eAniKind != SDRTEXTANI_SLIDE )
+    if( eAniKind != SdrTextAniKind::Slide )
     {
         TriState eState = m_pTsbEndless->GetState();
         if( eState != TRISTATE_FALSE )
