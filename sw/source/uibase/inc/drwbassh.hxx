@@ -46,7 +46,7 @@ public:
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);
     void        GetDrawAttrStateForIFBX( SfxItemSet& rSet );
-    void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
+    void        DisableState(SfxItemSet &rSet);
     bool        Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
 };
 
