@@ -479,7 +479,8 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
         {
-            aString += " Title:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            const char* pStr = reinterpret_cast<char*>(pDest);
+            aString += " Title:" + OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
@@ -491,7 +492,8 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        aString += " Creator:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+        const char* pStr = reinterpret_cast<char*>(pDest);
+        aString += " Creator:" + OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US) + "\n";
         pDest[ nLen ] = aOldValue;
     }
     pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%CreationDate:"), nBytesRead - 32, 15 );
@@ -504,7 +506,8 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
         {
-            aString += " CreationDate:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            const char* pStr = reinterpret_cast<char*>(pDest);
+            aString += " CreationDate:" + OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
