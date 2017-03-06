@@ -1827,38 +1827,38 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
     return bFound;
 }
 
-enum eHtmlMetas {
-    HTML_META_NONE = 0,
-    HTML_META_AUTHOR,
-    HTML_META_DESCRIPTION,
-    HTML_META_KEYWORDS,
-    HTML_META_REFRESH,
-    HTML_META_CLASSIFICATION,
-    HTML_META_CREATED,
-    HTML_META_CHANGEDBY,
-    HTML_META_CHANGED,
-    HTML_META_GENERATOR,
-    HTML_META_SDFOOTNOTE,
-    HTML_META_SDENDNOTE,
-    HTML_META_CONTENT_TYPE
+enum class HtmlMeta {
+    NONE = 0,
+    Author,
+    Description,
+    Keywords,
+    Refresh,
+    Classification,
+    Created,
+    ChangedBy,
+    Changed,
+    Generator,
+    SDFootnote,
+    SDEndnote,
+    ContentType
 };
 
 // <META NAME=xxx>
-static HTMLOptionEnum<eHtmlMetas> const aHTMLMetaNameTable[] =
+static HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
-    { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },
-    { OOO_STRING_SVTOOLS_HTML_META_changedby,     HTML_META_CHANGEDBY     },
-    { OOO_STRING_SVTOOLS_HTML_META_classification,HTML_META_CLASSIFICATION},
-    { OOO_STRING_SVTOOLS_HTML_META_content_type,  HTML_META_CONTENT_TYPE  },
-    { OOO_STRING_SVTOOLS_HTML_META_created,       HTML_META_CREATED       },
-    { OOO_STRING_SVTOOLS_HTML_META_description,   HTML_META_DESCRIPTION   },
-    { OOO_STRING_SVTOOLS_HTML_META_keywords,      HTML_META_KEYWORDS      },
-    { OOO_STRING_SVTOOLS_HTML_META_generator,     HTML_META_GENERATOR     },
-    { OOO_STRING_SVTOOLS_HTML_META_refresh,       HTML_META_REFRESH       },
-    { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HTML_META_SDENDNOTE     },
-    { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
-    { nullptr,                                    (eHtmlMetas)0           }
+    { OOO_STRING_SVTOOLS_HTML_META_author,        HtmlMeta::Author        },
+    { OOO_STRING_SVTOOLS_HTML_META_changed,       HtmlMeta::Changed       },
+    { OOO_STRING_SVTOOLS_HTML_META_changedby,     HtmlMeta::ChangedBy     },
+    { OOO_STRING_SVTOOLS_HTML_META_classification,HtmlMeta::Classification},
+    { OOO_STRING_SVTOOLS_HTML_META_content_type,  HtmlMeta::ContentType   },
+    { OOO_STRING_SVTOOLS_HTML_META_created,       HtmlMeta::Created       },
+    { OOO_STRING_SVTOOLS_HTML_META_description,   HtmlMeta::Description   },
+    { OOO_STRING_SVTOOLS_HTML_META_keywords,      HtmlMeta::Keywords      },
+    { OOO_STRING_SVTOOLS_HTML_META_generator,     HtmlMeta::Generator     },
+    { OOO_STRING_SVTOOLS_HTML_META_refresh,       HtmlMeta::Refresh       },
+    { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HtmlMeta::SDEndnote     },
+    { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HtmlMeta::SDFootnote    },
+    { nullptr,                                    (HtmlMeta)0             }
 };
 
 
@@ -1873,7 +1873,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         rtl_TextEncoding& o_rEnc )
 {
     OUString aName, aContent;
-    eHtmlMetas nAction = HTML_META_NONE;
+    HtmlMeta nAction = HtmlMeta::NONE;
     bool bHTTPEquiv = false, bChanged = false;
 
     for ( size_t i = aOptions.size(); i; )
@@ -1883,7 +1883,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         {
             case HTML_O_NAME:
                 aName = aOption.GetString();
-                if ( HTML_META_NONE==nAction )
+                if ( HtmlMeta::NONE==nAction )
                 {
                     aOption.GetEnum( nAction, aHTMLMetaNameTable );
                 }
@@ -1903,7 +1903,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         }
     }
 
-    if ( bHTTPEquiv || HTML_META_DESCRIPTION != nAction )
+    if ( bHTTPEquiv || HtmlMeta::Description != nAction )
     {
         // if it is not a Description, remove CRs and LFs from CONTENT
         aContent = aContent.replaceAll("\r", "").replaceAll("\n", "");
@@ -1927,40 +1927,40 @@ bool HTMLParser::ParseMetaOptionsImpl(
 
     switch ( nAction )
     {
-        case HTML_META_AUTHOR:
+        case HtmlMeta::Author:
             if (i_xDocProps.is()) {
                 i_xDocProps->setAuthor( aContent );
                 bChanged = true;
             }
             break;
-        case HTML_META_DESCRIPTION:
+        case HtmlMeta::Description:
             if (i_xDocProps.is()) {
                 i_xDocProps->setDescription( aContent );
                 bChanged = true;
             }
             break;
-        case HTML_META_KEYWORDS:
+        case HtmlMeta::Keywords:
             if (i_xDocProps.is()) {
                 i_xDocProps->setKeywords(
                     ::comphelper::string::convertCommaSeparated(aContent));
                 bChanged = true;
             }
             break;
-        case HTML_META_CLASSIFICATION:
+        case HtmlMeta::Classification:
             if (i_xDocProps.is()) {
                 i_xDocProps->setSubject( aContent );
                 bChanged = true;
             }
             break;
 
-        case HTML_META_CHANGEDBY:
+        case HtmlMeta::ChangedBy:
             if (i_xDocProps.is()) {
                 i_xDocProps->setModifiedBy( aContent );
             }
             break;
 
-        case HTML_META_CREATED:
-        case HTML_META_CHANGED:
+        case HtmlMeta::Created:
+        case HtmlMeta::Changed:
             if ( i_xDocProps.is() && !aContent.isEmpty() &&
                  comphelper::string::getTokenCount(aContent, ';') == 2 )
             {
@@ -1968,7 +1968,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 tools::Time aTime( (sal_uLong)aContent.getToken(1, ';').toInt32() );
                 DateTime aDateTime( aDate, aTime );
                 ::util::DateTime uDT = aDateTime.GetUNODateTime();
-                if ( HTML_META_CREATED==nAction )
+                if ( HtmlMeta::Created==nAction )
                     i_xDocProps->setCreationDate( uDT );
                 else
                     i_xDocProps->setModificationDate( uDT );
@@ -1976,19 +1976,19 @@ bool HTMLParser::ParseMetaOptionsImpl(
             }
             break;
 
-        case HTML_META_REFRESH:
+        case HtmlMeta::Refresh:
             DBG_ASSERT( !bHTTPEquiv || i_pHTTPHeader,
         "Reload-URL aufgrund unterlassener MUSS-Aenderung verlorengegangen" );
             break;
 
-        case HTML_META_CONTENT_TYPE:
+        case HtmlMeta::ContentType:
             if ( !aContent.isEmpty() )
             {
                 o_rEnc = GetEncodingByMIME( aContent );
             }
             break;
 
-        case HTML_META_NONE:
+        case HtmlMeta::NONE:
             if ( !bHTTPEquiv )
             {
                 if (i_xDocProps.is())
