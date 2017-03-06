@@ -30,6 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+template<typename EnumT>
 struct SvXMLEnumMapEntry;
 
     // flags for common control attributes
@@ -280,8 +281,9 @@ namespace xmloff
             css::uno::Type           aPropertyType;          // the property type
 
             // entries which are special to some value types
-            const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
-            bool                        bInverseSemantics;      // for booleans: attribute and property value have the same or an inverse semantics?
+            const SvXMLEnumMapEntry<sal_uInt16>*
+                                     pEnumMap;               // the enum map, if applicable
+            bool                     bInverseSemantics;      // for booleans: attribute and property value have the same or an inverse semantics?
 
             AttributeAssignment() : pEnumMap(nullptr), bInverseSemantics(false) { }
         };
@@ -373,12 +375,21 @@ namespace xmloff
             @param _pType
                 the type of the property. May be NULL, in this case 32bit integer is assumed.
         */
+        template<typename EnumT>
         void    addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
-            const css::uno::Type* _pType = nullptr);
+            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<EnumT>* _pValueMap,
+            const css::uno::Type* _pType = nullptr)
+        {
+            addEnumPropertyImpl(_pAttributeName, _rPropertyName, _nAttributeDefault,
+                                reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pValueMap), _pType);
+        }
 
     private:
+        void addEnumPropertyImpl(
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
+            const css::uno::Type* _pType = nullptr);
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,

@@ -388,8 +388,8 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
         if ( _xReportDefinition->getPageHeaderOn() )
         {
             OUStringBuffer sValue;
-            sal_uInt16 nRet = _xReportDefinition->getPageHeaderOption();
-            const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+            sal_Int16 nRet = _xReportDefinition->getPageHeaderOption();
+            const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
                 AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
 
@@ -402,8 +402,8 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
         if ( _xReportDefinition->getPageFooterOn() )
         {
             OUStringBuffer sValue;
-            sal_uInt16 nRet = _xReportDefinition->getPageFooterOption();
-            const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+            sal_Int16 nRet = _xReportDefinition->getPageFooterOption();
+            const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
                 AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
             SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, true, true);
@@ -707,8 +707,8 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
 
     if ( !bHeader )
     {
-        sal_uInt16 nRet = _xSection->getForceNewPage();
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
+        sal_Int16 nRet = _xSection->getForceNewPage();
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
         if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
             AddAttribute(XML_NAMESPACE_REPORT, XML_FORCE_NEW_PAGE,sValue.makeStringAndClear());
 
@@ -886,7 +886,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                 }
                                 bExportData = true;
                                 OUStringBuffer sValue;
-                                const SvXMLEnumMapEntry* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
+                                const SvXMLEnumMapEntry<sal_Int16>* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
                                 if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
                                     AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
                             }
@@ -1073,8 +1073,8 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                     AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
                     sal_Int16 nRet = xGroup->getKeepTogether();
                     OUStringBuffer sValue;
-                    const SvXMLEnumMapEntry* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
-                    if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_KeepTogetherEnumMap ) )
+                    const SvXMLEnumMapEntry<sal_Int16>* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
+                    if ( SvXMLUnitConverter::convertEnum( sValue, nRet, aXML_KeepTogetherEnumMap ) )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
 
                     SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, true, true);
@@ -1254,8 +1254,8 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
     if ( _xReport.is() )
     {
         OUStringBuffer sValue;
-        const SvXMLEnumMapEntry* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
-        if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(_xReport->getCommandType()),aXML_CommnadTypeEnumMap ) )
+        const SvXMLEnumMapEntry<sal_Int32>* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
+        if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommnadTypeEnumMap ) )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
         OUString sComamnd = _xReport->getCommand();
