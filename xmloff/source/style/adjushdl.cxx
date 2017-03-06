@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const pXML_Para_Adjust_Enum[] =
+SvXMLEnumMapEntry<style::ParagraphAdjust> const pXML_Para_Adjust_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_END,          style::ParagraphAdjust_RIGHT },
@@ -37,16 +37,16 @@ SvXMLEnumMapEntry const pXML_Para_Adjust_Enum[] =
     { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
     { XML_LEFT,         style::ParagraphAdjust_LEFT },
     { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (style::ParagraphAdjust)0 }
 };
 
-SvXMLEnumMapEntry const pXML_Para_Align_Last_Enum[] =
+SvXMLEnumMapEntry<style::ParagraphAdjust> const pXML_Para_Align_Last_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
     { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (style::ParagraphAdjust)0 }
 };
 
 
@@ -60,7 +60,7 @@ XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
 
 bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eAdjust;
+    style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum );
     if( bRet )
         rValue <<= (sal_Int16)eAdjust;
@@ -77,7 +77,7 @@ bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 
     rValue >>= nVal;
 
-    bool bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START );
+    bool bRet = SvXMLUnitConverter::convertEnum( aOut, (style::ParagraphAdjust)nVal, pXML_Para_Adjust_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -95,7 +95,7 @@ XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
 
 bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eAdjust;
+    style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum );
     if( bRet )
         rValue <<= (sal_Int16)eAdjust;
@@ -112,7 +112,7 @@ bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     rValue >>= nVal;
 
     if( nVal != style::ParagraphAdjust_LEFT )
-        bRet = SvXMLUnitConverter::convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START );
+        bRet = SvXMLUnitConverter::convertEnum( aOut, (style::ParagraphAdjust)nVal, pXML_Para_Align_Last_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 

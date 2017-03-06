@@ -70,18 +70,18 @@ static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 }
 
 
-static const SvXMLEnumMapEntry psXML_BrushHoriPos[] =
+static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
     { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
-    { XML_TOKEN_INVALID,                    0           }
+    { XML_TOKEN_INVALID,                    (GraphicLocation)0           }
 };
 
-static const SvXMLEnumMapEntry psXML_BrushVertPos[] =
+static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushVertPos[] =
 {
     { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
     { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
-    { XML_TOKEN_INVALID,                    0           }
+    { XML_TOKEN_INVALID,                    (GraphicLocation)0           }
 };
 
 static void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
@@ -196,13 +196,13 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_TOK_BGIMG_POSITION:
             {
                 GraphicLocation eNewPos = GraphicLocation_NONE, eTmp;
-                sal_uInt16 nTmp;
                 SvXMLTokenEnumerator aTokenEnum( rValue );
                 OUString aToken;
                 bool bHori = false, bVert = false;
                 bool bOK = true;
                 while( bOK && aTokenEnum.getNextToken( aToken ) )
                 {
+                    GraphicLocation nTmpGraphicLocation;
                     if( bHori && bVert )
                     {
                         bOK = false;
@@ -247,26 +247,24 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         else
                             eNewPos = GraphicLocation_MIDDLE_MIDDLE;
                     }
-                    else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
+                    else if( SvXMLUnitConverter::convertEnum( nTmpGraphicLocation, aToken,
                                                          psXML_BrushHoriPos ) )
                     {
                         if( bVert )
-                            lcl_xmlbic_MergeHoriPos( eNewPos,
-                                        (GraphicLocation)nTmp );
+                            lcl_xmlbic_MergeHoriPos( eNewPos, nTmpGraphicLocation );
                         else if( !bHori )
-                            eNewPos = (GraphicLocation)nTmp;
+                            eNewPos = nTmpGraphicLocation;
                         else
                             bOK = false;
                         bHori = true;
                     }
-                    else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
+                    else if( SvXMLUnitConverter::convertEnum( nTmpGraphicLocation, aToken,
                                                          psXML_BrushVertPos ) )
                     {
                         if( bHori )
-                            lcl_xmlbic_MergeVertPos( eNewPos,
-                                            (GraphicLocation)nTmp );
+                            lcl_xmlbic_MergeVertPos( eNewPos, nTmpGraphicLocation );
                         else if( !bVert )
-                            eNewPos = (GraphicLocation)nTmp;
+                            eNewPos = nTmpGraphicLocation;
                         else
                             bOK = false;
                         bVert = true;
@@ -284,13 +282,13 @@ void XMLBackgroundImageContext::ProcessAttrs(
             break;
         case XML_TOK_BGIMG_REPEAT:
             {
-                sal_uInt16 nPos = GraphicLocation_NONE;
-                static const SvXMLEnumMapEntry psXML_BrushRepeat[] =
+                GraphicLocation nPos = GraphicLocation_NONE;
+                static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushRepeat[] =
                 {
-                    { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
-                    { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },
-                    { XML_BACKGROUND_STRETCH,       GraphicLocation_AREA    },
-                    { XML_TOKEN_INVALID,            0           }
+                    { XML_BACKGROUND_REPEAT,    GraphicLocation_TILED   },
+                    { XML_BACKGROUND_NO_REPEAT, GraphicLocation_MIDDLE_MIDDLE       },
+                    { XML_BACKGROUND_STRETCH,   GraphicLocation_AREA    },
+                    { XML_TOKEN_INVALID,        (GraphicLocation)0      }
                 };
                 if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                 psXML_BrushRepeat ) )
@@ -299,7 +297,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         GraphicLocation_NONE == ePos ||
                         GraphicLocation_AREA == ePos ||
                         GraphicLocation_TILED == ePos )
-                        ePos = (GraphicLocation)nPos;
+                        ePos = nPos;
                 }
             }
             break;

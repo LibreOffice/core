@@ -673,13 +673,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_GRAPHIC_REPEAT:
                 {
                     SvxGraphicPosition eGraphicPos = rBrush.GetGraphicPos();
-                    sal_uInt16 nPos = GPOS_NONE;
+                    SvxGraphicPosition nPos = GPOS_NONE;
                     if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                     psXML_BrushRepeat ) )
                     {
                         if( GPOS_MM != nPos || GPOS_NONE == eGraphicPos ||
                             GPOS_AREA == eGraphicPos || GPOS_TILED == eGraphicPos )
-                            rBrush.SetGraphicPos( (SvxGraphicPosition)nPos );
+                            rBrush.SetGraphicPos( nPos );
                         bOk = true;
                     }
                 }
@@ -688,7 +688,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_GRAPHIC_POSITION:
                 {
                     SvxGraphicPosition ePos = GPOS_NONE, eTmp;
-                    sal_uInt16 nTmp;
+                    SvxGraphicPosition nTmp;
                     SvXMLTokenEnumerator aTokenEnum( rValue );
                     OUString aToken;
                     bool bHori = false, bVert = false;
@@ -738,9 +738,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             if( bVert )
                                 sw_frmitems_MergeXMLHoriPos(
-                                    ePos, (SvxGraphicPosition)nTmp );
+                                    ePos, nTmp );
                             else if( !bHori )
-                                ePos = (SvxGraphicPosition)nTmp;
+                                ePos = nTmp;
                             else
                                 bOk = false;
                             bHori = true;
@@ -750,9 +750,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             if( bHori )
                                 sw_frmitems_MergeXMLVertPos(
-                                    ePos, (SvxGraphicPosition)nTmp );
+                                    ePos, nTmp );
                             else if( !bVert )
-                                ePos = (SvxGraphicPosition)nTmp;
+                                ePos = nTmp;
                             else
                                 bOk = false;
                             bVert = true;
@@ -819,7 +819,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         {
             SwFormatHoriOrient& rHoriOrient = dynamic_cast<SwFormatHoriOrient&>(rItem);
 
-            sal_uInt16 nValue;
+            sal_Int16 nValue;
             bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableAlignMap );
             if( bOk )
@@ -831,7 +831,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         {
             SwFormatVertOrient& rVertOrient = dynamic_cast<SwFormatVertOrient&>(rItem);
 
-            sal_uInt16 nValue;
+            sal_Int16 nValue;
             bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableVAlignMap );
             if( bOk )
