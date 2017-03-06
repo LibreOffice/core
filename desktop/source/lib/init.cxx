@@ -1292,7 +1292,7 @@ static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
             aErr.Value >>= nErrCode;
 
             pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";
-            SAL_INFO("lok", "Macro execution terminated with error (error code: " + OUString::number( nErrCode ) + ")");
+            SAL_INFO("lok", "Macro execution terminated with error code " << nErrCode);
 
             return false;
         }
