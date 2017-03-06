@@ -30,9 +30,9 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-static const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
+static const SvXMLEnumMapEntry<FontFamily>* lcl_getFontFamilyGenericMapping()
 {
-    static SvXMLEnumMapEntry const aFontFamilyGenericMapping[] =
+    static SvXMLEnumMapEntry<FontFamily> const aFontFamilyGenericMapping[] =
     {
         { XML_DECORATIVE,       FAMILY_DECORATIVE },
 
@@ -41,16 +41,16 @@ static const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
         { XML_SCRIPT,           FAMILY_SCRIPT   },
         { XML_SWISS,            FAMILY_SWISS    },
         { XML_SYSTEM,           FAMILY_SYSTEM   },
-        { XML_TOKEN_INVALID,    0               }
+        { XML_TOKEN_INVALID,    (FontFamily)0   }
     };
     return aFontFamilyGenericMapping;
 }
 
-static SvXMLEnumMapEntry const aFontPitchMapping[] =
+static SvXMLEnumMapEntry<FontPitch> const aFontPitchMapping[] =
 {
     { XML_FIXED,            PITCH_FIXED     },
     { XML_VARIABLE,         PITCH_VARIABLE  },
-    { XML_TOKEN_INVALID,    0               }
+    { XML_TOKEN_INVALID,    (FontPitch)0    }
 };
 
 // class XMLFontFamilyNamePropHdl
@@ -193,7 +193,7 @@ XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
 
 bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewFamily;
+    FontFamily eNewFamily;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, lcl_getFontFamilyGenericMapping() );
     if( bRet )
         rValue <<= (sal_Int16)eNewFamily;
@@ -264,7 +264,7 @@ XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 
 bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewPitch;
+    FontPitch eNewPitch;
     bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
     if( bRet )
         rValue <<= (sal_Int16)eNewPitch;

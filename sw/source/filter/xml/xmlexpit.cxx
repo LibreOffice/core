@@ -136,7 +136,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = dynamic_cast<const SfxBoolItem*>( &rItem );
                 assert(pSplit && "Wrong Which-ID");
-                const unsigned int eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
+                const sal_uInt16 eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
                 SvXMLUnitConverter::convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
             }
@@ -839,7 +839,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
         {
             const SvxFormatBreakItem& rFormatBreak = dynamic_cast<const SvxFormatBreakItem&>(rItem);
 
-            unsigned int eEnum = 0;
+            sal_uInt16 eEnum = 0;
 
             switch( nMemberId )
             {

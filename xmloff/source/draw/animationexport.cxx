@@ -96,7 +96,7 @@ using ::com::sun::star::container::XEnumeration;
 namespace xmloff
 {
 
-const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Fill[] =
 {
     { XML_DEFAULT,      AnimationFill::DEFAULT },
     { XML_REMOVE,       AnimationFill::REMOVE },
@@ -106,7 +106,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
     { XML_AUTO,         AnimationFill::AUTO },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_FillDefault[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_FillDefault[] =
 {
     { XML_INHERIT,      AnimationFill::INHERIT },
     { XML_REMOVE,       AnimationFill::REMOVE },
@@ -116,7 +116,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_FillDefault[] =
     { XML_AUTO,         AnimationFill::AUTO },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Restart[] =
 {
     { XML_DEFAULT,      AnimationRestart::DEFAULT },
     { XML_ALWAYS,       AnimationRestart::ALWAYS },
@@ -124,7 +124,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
     { XML_NEVER,        AnimationRestart::NEVER },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_RestartDefault[] =
 {
     { XML_INHERIT,      AnimationRestart::INHERIT },
     { XML_ALWAYS,       AnimationRestart::ALWAYS },
@@ -132,7 +132,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
     { XML_NEVER,        AnimationRestart::NEVER },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Endsync[] =
 {
     { XML_FIRST,        AnimationEndSync::FIRST },
     { XML_LAST,         AnimationEndSync::LAST },
@@ -140,7 +140,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
     { XML_MEDIA,        AnimationEndSync::MEDIA },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_CalcMode[] =
 {
     { XML_DISCRETE,     AnimationCalcMode::DISCRETE },
     { XML_LINEAR,       AnimationCalcMode::LINEAR },
@@ -148,7 +148,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
     { XML_SPLINE,       AnimationCalcMode::SPLINE },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_AdditiveMode[] =
 {
     { XML_BASE,         AnimationAdditiveMode::BASE },
     { XML_SUM,          AnimationAdditiveMode::SUM },
@@ -157,7 +157,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
     { XML_NONE,         AnimationAdditiveMode::NONE },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransformType[] =
 {
     { XML_TRANSLATE,    AnimationTransformType::TRANSLATE },
     { XML_SCALE,        AnimationTransformType::SCALE },
@@ -166,7 +166,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
     { XML_SKEWY,        AnimationTransformType::SKEWY },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionType[] =
 {
     { XML_BARWIPE,          TransitionType::BARWIPE },
     { XML_BOXWIPE,          TransitionType::BOXWIPE },
@@ -213,7 +213,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
     { XML_ZOOM,             TransitionType::ZOOM },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[] =
 {
     { XML_DEFAULT,              TransitionSubType::DEFAULT },
     { XML_LEFTTORIGHT,          TransitionSubType::LEFTTORIGHT },
@@ -334,7 +334,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
 
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EventTrigger[] =
 {
     { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
     { XML_ONEND,            EventTrigger::ON_END },
@@ -350,7 +350,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
     { XML_REPEAT,           EventTrigger::REPEAT },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectPresetClass[] =
 {
     { XML_CUSTOM,       EffectPresetClass::CUSTOM },
     { XML_ENTRANCE,     EffectPresetClass::ENTRANCE },
@@ -361,7 +361,7 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
     { XML_MEDIA_CALL,   EffectPresetClass::MEDIACALL },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectNodeType[] =
 {
     { XML_DEFAULT,                  EffectNodeType::DEFAULT },
     { XML_ON_CLICK,                 EffectNodeType::ON_CLICK },
@@ -372,21 +372,21 @@ const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
     { XML_INTERACTIVE_SEQUENCE,     EffectNodeType::INTERACTIVE_SEQUENCE },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_SubItem[] =
 {
     { XML_WHOLE,                    ShapeAnimationSubType::AS_WHOLE },
     { XML_BACKGROUND,               ShapeAnimationSubType::ONLY_BACKGROUND },
     { XML_TEXT,                     ShapeAnimationSubType::ONLY_TEXT },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_IterateType[] =
 {
     { XML_BY_PARAGRAPH,             TextAnimationType::BY_PARAGRAPH },
     { XML_BY_WORD,                  TextAnimationType::BY_WORD },
     { XML_BY_LETTER,                TextAnimationType::BY_LETTER },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_Command[] =
 {
     { XML_CUSTOM,                   EffectCommands::CUSTOM },
     { XML_VERB,                     EffectCommands::VERB },
@@ -601,12 +601,12 @@ void AnimationsExporterImpl::exportTransitionNode()
             sTmp.append( 's');
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
 
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, aAnimations_EnumMap_TransitionType );
+            SvXMLUnitConverter::convertEnum( sTmp, nTransition, aAnimations_EnumMap_TransitionType );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
 
             if( nSubtype != TransitionSubType::DEFAULT )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, aAnimations_EnumMap_TransitionSubType );
+                SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
             }
 
@@ -775,7 +775,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         }
 
         double fTemp = 0;
-        sal_Int32 nTemp;
+        sal_Int16 nTemp;
 
         aTemp = xNode->getDuration();
         if( aTemp.hasValue() )
@@ -804,28 +804,28 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         nTemp = xNode->getFill();
         if( nTemp != AnimationFill::DEFAULT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Fill );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_Fill );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILL, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getFillDefault();
         if( nTemp != AnimationFill::INHERIT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_FillDefault );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_FillDefault );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILLDEFAULT, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getRestart();
         if( nTemp != AnimationRestart::DEFAULT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Restart );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_Restart );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTART, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getRestartDefault();
         if( nTemp != AnimationRestart::INHERIT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_RestartDefault );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_RestartDefault );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT, sTmp.makeStringAndClear() );
         }
 
@@ -883,7 +883,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         {
             if( aTemp >>= nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Endsync );
+                SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_Endsync );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ENDSYNC, sTmp.makeStringAndClear() );
             }
         }
@@ -902,7 +902,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 {
                     if( (pValue->Value >>= nContainerNodeType) && (nContainerNodeType != EffectNodeType::DEFAULT) )
                     {
-                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nContainerNodeType, aAnimations_EnumMap_EffectNodeType );
+                        SvXMLUnitConverter::convertEnum( sTmp, nContainerNodeType, aAnimations_EnumMap_EffectNodeType );
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
                     }
                 }
@@ -923,10 +923,10 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 }
                 else if( IsXMLToken( pValue->Name, XML_PRESET_CLASS ) )
                 {
-                    sal_Int16 nEffectPresetClass = sal_Int16();
+                    sal_Int16 nEffectPresetClass = sal_uInt16();
                     if( pValue->Value >>= nEffectPresetClass )
                     {
-                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nEffectPresetClass, aAnimations_EnumMap_EffectPresetClass );
+                        SvXMLUnitConverter::convertEnum( sTmp, nEffectPresetClass, aAnimations_EnumMap_EffectPresetClass );
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS, sTmp.makeStringAndClear() );
                     }
                 }
@@ -1025,14 +1025,14 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             sal_Int16 nTemp = xIter->getSubItem();
             if( nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_SubItem );
+                SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_SubItem );
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
             }
 
             nTemp = xIter->getIterateType();
             if( nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_IterateType );
+                SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_IterateType );
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE, sTmp.makeStringAndClear() );
             }
 
@@ -1092,7 +1092,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         const sal_Int16 nNodeType = xAnimate->getType();
 
         OUStringBuffer sTmp;
-        sal_Int32 nTemp;
+        sal_Int16 nTemp;
         bool bTemp;
 
         Any aTemp( xAnimate->getTarget() );
@@ -1105,7 +1105,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         nTemp = xAnimate->getSubItem();
         if( nTemp )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_SubItem );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_SubItem );
             mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
         }
 
@@ -1211,7 +1211,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 if( ((nNodeType == AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::PACED)) ||
                     ((nNodeType != AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::LINEAR)) )
                 {
-                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_CalcMode );
+                    SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_CalcMode );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_CALCMODE, sTmp.makeStringAndClear() );
                 }
 
@@ -1222,7 +1222,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 nTemp = xAnimate->getAdditive();
                 if( nTemp != AnimationAdditiveMode::REPLACE )
                 {
-                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_AdditiveMode );
+                    SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_AdditiveMode );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ADDITIVE, sTmp.makeStringAndClear() );
                 }
             }
@@ -1299,7 +1299,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
             Reference< XAnimateTransform > xTransform( xAnimate, UNO_QUERY_THROW );
             nTemp = xTransform->getTransformType();
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_TransformType );
+            SvXMLUnitConverter::convertEnum( sTmp, nTemp, aAnimations_EnumMap_TransformType );
             mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_TYPE, sTmp.makeStringAndClear() );
         }
         break;
@@ -1310,13 +1310,13 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             eElementToken = XML_TRANSITIONFILTER;
 
             sal_Int16 nTransition = xTransitionFilter->getTransition();
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, aAnimations_EnumMap_TransitionType );
+            SvXMLUnitConverter::convertEnum( sTmp, nTransition, aAnimations_EnumMap_TransitionType );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
 
             sal_Int16 nSubtype = xTransitionFilter->getSubtype();
             if( nSubtype != TransitionSubType::DEFAULT )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, aAnimations_EnumMap_TransitionSubType );
+                SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
             }
 
@@ -1392,7 +1392,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         }
 
         sal_Int16 nCommand = xCommand->getCommand();
-        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nCommand, aAnimations_EnumMap_Command );
+        SvXMLUnitConverter::convertEnum( sTmp, nCommand, aAnimations_EnumMap_Command );
         mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
 // todo virtual css::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
@@ -1570,7 +1570,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
                 sTmp.append( '.' );
             }
 
-            SvXMLUnitConverter::convertEnum( sTmp2, (sal_uInt16)pEvent->Trigger, aAnimations_EnumMap_EventTrigger );
+            SvXMLUnitConverter::convertEnum( sTmp2, pEvent->Trigger, aAnimations_EnumMap_EventTrigger );
 
             sTmp.append( sTmp2.makeStringAndClear() );
         }
