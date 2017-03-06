@@ -38,9 +38,9 @@ namespace configmgr {
 
 PropertyNode::PropertyNode(
     int layer, Type staticType, bool nillable, css::uno::Any const & value,
-    bool extension):
+    bool extension, Type typeHint):
     Node(layer), staticType_(staticType), nillable_(nillable),
-    extension_(extension), value_(value)
+    extension_(extension), value_(value), m_aTypeHint(typeHint)
 {}
 
 rtl::Reference< Node > PropertyNode::clone(bool) const {
@@ -86,7 +86,7 @@ void PropertyNode::setExternal(int layer, OUString const & descriptor) {
 PropertyNode::PropertyNode(PropertyNode const & other):
     Node(other), staticType_(other.staticType_), nillable_(other.nillable_),
     extension_(other.extension_), externalDescriptor_(other.externalDescriptor_),
-    value_(other.value_)
+    value_(other.value_), m_aTypeHint(other.m_aTypeHint)
 {}
 
 PropertyNode::~PropertyNode() {}

@@ -637,7 +637,7 @@ void XcuParser::handleUnknownGroupProp(
             rtl::Reference< Node > prop(
                 new PropertyNode(
                     valueParser_.getLayer(), TYPE_ANY, true, css::uno::Any(),
-                    true));
+                    true, type));
             if (finalized) {
                 prop->setFinalized(valueParser_.getLayer());
             }
@@ -682,6 +682,10 @@ void XcuParser::handlePlainGroupProp(
             "invalid type for prop " + name + " in " + reader.getUrl());
     }
     valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
+    if (valueParser_.type_ == TYPE_ANY && property->getTypeHint() != TYPE_ANY)
+    {
+        valueParser_.type_ = property->getTypeHint();
+    }
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_REPLACE:

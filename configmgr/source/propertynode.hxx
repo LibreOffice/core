@@ -37,11 +37,13 @@ class PropertyNode: public Node {
 public:
     PropertyNode(
         int layer, Type staticType, bool nillable,
-        css::uno::Any const & value, bool extension);
+        css::uno::Any const & value, bool extension,
+        Type typeHint = TYPE_ANY);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
     Type getStaticType() const { return staticType_;}
+    Type getTypeHint() const   { return m_aTypeHint; }
 
     bool isNillable() const { return nillable_;}
 
@@ -68,6 +70,9 @@ private:
     bool extension_;
     OUString externalDescriptor_;
     css::uno::Any value_;
+    // Used for extensible group properties (staticType_ = TYPE_ANY)
+    // This hint can be used to read group property if type is not specified explicitely
+    Type m_aTypeHint;
 };
 
 }
