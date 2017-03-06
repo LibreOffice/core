@@ -37,26 +37,26 @@ using namespace ::xmloff::token;
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
 
-SvXMLEnumMapEntry const pXML_BorderStyles[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_BorderStyles[] =
 {
-    { XML_NONE,          table::BorderLineStyle::NONE   },
-    { XML_HIDDEN,        table::BorderLineStyle::NONE   },
-    { XML_SOLID,         table::BorderLineStyle::SOLID  },
-    { XML_DOUBLE,        table::BorderLineStyle::DOUBLE },
-    { XML_DOUBLE_THIN,   table::BorderLineStyle::DOUBLE_THIN },
-    { XML_DOTTED,        table::BorderLineStyle::DOTTED },
-    { XML_DASHED,        table::BorderLineStyle::DASHED },
-    { XML_GROOVE,        table::BorderLineStyle::ENGRAVED },
-    { XML_RIDGE,         table::BorderLineStyle::EMBOSSED },
-    { XML_INSET,         table::BorderLineStyle::INSET  },
-    { XML_OUTSET,        table::BorderLineStyle::OUTSET },
-    { XML_FINE_DASHED,   table::BorderLineStyle::FINE_DASHED },
-    { XML_DASH_DOT,      table::BorderLineStyle::DASH_DOT },
-    { XML_DASH_DOT_DOT,  table::BorderLineStyle::DASH_DOT_DOT },
+    { XML_NONE,          (sal_uInt16)table::BorderLineStyle::NONE   },
+    { XML_HIDDEN,        (sal_uInt16)table::BorderLineStyle::NONE   },
+    { XML_SOLID,         (sal_uInt16)table::BorderLineStyle::SOLID  },
+    { XML_DOUBLE,        (sal_uInt16)table::BorderLineStyle::DOUBLE },
+    { XML_DOUBLE_THIN,   (sal_uInt16)table::BorderLineStyle::DOUBLE_THIN },
+    { XML_DOTTED,        (sal_uInt16)table::BorderLineStyle::DOTTED },
+    { XML_DASHED,        (sal_uInt16)table::BorderLineStyle::DASHED },
+    { XML_GROOVE,        (sal_uInt16)table::BorderLineStyle::ENGRAVED },
+    { XML_RIDGE,         (sal_uInt16)table::BorderLineStyle::EMBOSSED },
+    { XML_INSET,         (sal_uInt16)table::BorderLineStyle::INSET  },
+    { XML_OUTSET,        (sal_uInt16)table::BorderLineStyle::OUTSET },
+    { XML_FINE_DASHED,   (sal_uInt16)table::BorderLineStyle::FINE_DASHED },
+    { XML_DASH_DOT,      (sal_uInt16)table::BorderLineStyle::DASH_DOT },
+    { XML_DASH_DOT_DOT,  (sal_uInt16)table::BorderLineStyle::DASH_DOT_DOT },
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_NamedBorderWidths[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_NamedBorderWidths[] =
 {
     { XML_THIN,             SVX_XML_BORDER_WIDTH_THIN   },
     { XML_MIDDLE,           SVX_XML_BORDER_WIDTH_MIDDLE },

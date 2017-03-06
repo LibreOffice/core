@@ -41,10 +41,10 @@ namespace rptxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-    sal_uInt16 lcl_getReportPrintOption(const OUString& _sValue)
+    sal_Int16 lcl_getReportPrintOption(const OUString& _sValue)
     {
-        sal_uInt16 nRet = report::ReportPrintOption::ALL_PAGES;
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        sal_Int16 nRet = report::ReportPrintOption::ALL_PAGES;
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
         (void)SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
         return nRet;
     }

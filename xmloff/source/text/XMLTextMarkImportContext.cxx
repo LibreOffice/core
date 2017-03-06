@@ -111,18 +111,18 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
                   };
 
-static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
+static SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 {
-    { XML_REFERENCE_MARK,           TypeReference },
-    { XML_REFERENCE_MARK_START,     TypeReferenceStart },
-    { XML_REFERENCE_MARK_END,       TypeReferenceEnd },
-    { XML_BOOKMARK,                 TypeBookmark },
-    { XML_BOOKMARK_START,           TypeBookmarkStart },
-    { XML_BOOKMARK_END,             TypeBookmarkEnd },
-    { XML_FIELDMARK,                TypeFieldmark },
-    { XML_FIELDMARK_START,          TypeFieldmarkStart },
-    { XML_FIELDMARK_END,            TypeFieldmarkEnd },
-    { XML_TOKEN_INVALID,            0 },
+    { XML_REFERENCE_MARK,         TypeReference },
+    { XML_REFERENCE_MARK_START,   TypeReferenceStart },
+    { XML_REFERENCE_MARK_END,     TypeReferenceEnd },
+    { XML_BOOKMARK,               TypeBookmark },
+    { XML_BOOKMARK_START,         TypeBookmarkStart },
+    { XML_BOOKMARK_END,           TypeBookmarkEnd },
+    { XML_FIELDMARK,              TypeFieldmark },
+    { XML_FIELDMARK_START,        TypeFieldmarkStart },
+    { XML_FIELDMARK_END,          TypeFieldmarkEnd },
+    { XML_TOKEN_INVALID,          (lcl_MarkType)0 },
 };
 
 
@@ -180,11 +180,11 @@ void XMLTextMarkImportContext::EndElement()
 
     if (!m_sBookmarkName.isEmpty())
     {
-        sal_uInt16 nTmp;
+        lcl_MarkType nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
                                             lcl_aMarkTypeMap))
         {
-            switch ((lcl_MarkType)nTmp)
+            switch (nTmp)
             {
                 case TypeReference:
                     // export point reference mark

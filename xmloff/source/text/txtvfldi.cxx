@@ -1078,7 +1078,7 @@ enum ValueType
     XML_VALUE_TYPE_BOOLEAN
 };
 
-static SvXMLEnumMapEntry const aValueTypeMap[] =
+static SvXMLEnumMapEntry<ValueType> const aValueTypeMap[] =
 {
     { XML_FLOAT,        XML_VALUE_TYPE_FLOAT },
     { XML_CURRENCY,     XML_VALUE_TYPE_CURRENCY },
@@ -1087,7 +1087,7 @@ static SvXMLEnumMapEntry const aValueTypeMap[] =
     { XML_TIME,         XML_VALUE_TYPE_TIME },
     { XML_BOOLEAN,      XML_VALUE_TYPE_BOOLEAN },
     { XML_STRING,       XML_VALUE_TYPE_STRING },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (ValueType)0 }
 };
 
 XMLValueImportHelper::XMLValueImportHelper(
@@ -1124,13 +1124,11 @@ void XMLValueImportHelper::ProcessAttribute(
         case XML_TOK_TEXTFIELD_VALUE_TYPE:
         {
             // convert enum
-            sal_uInt16 nTmp = 0;
+            ValueType eValueType = XML_VALUE_TYPE_STRING;
             bool bRet = SvXMLUnitConverter::convertEnum(
-                nTmp, sAttrValue, aValueTypeMap);
+                eValueType, sAttrValue, aValueTypeMap);
 
             if (bRet) {
-                ValueType eValueType = (ValueType)nTmp;
-
                 bTypeOK = true;
 
                 switch (eValueType)
