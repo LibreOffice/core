@@ -211,13 +211,26 @@ namespace xmloff
                 the default of the attribute. If the current property value equals this default, no
                 attribute is added.
         */
+        template<typename EnumT>
         void exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const OUString& _rPropertyName,
-            const SvXMLEnumMapEntry* _pValueMap,
-            const sal_Int32 _nDefault,
-            const bool _bVoidDefault = false);
+            const SvXMLEnumMapEntry<EnumT>* _pValueMap,
+            const EnumT _nDefault,
+            const bool _bVoidDefault = false)
+        {
+            exportEnumPropertyAttributeImpl(_nNamespaceKey, _pAttributeName, _rPropertyName,
+                            reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pValueMap),
+                            static_cast<sal_Int16>(_nDefault), _bVoidDefault);
+        }
+        void exportEnumPropertyAttributeImpl(
+            const sal_uInt16 _nNamespaceKey,
+            const sal_Char* _pAttributeName,
+            const OUString& _rPropertyName,
+            const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
+            const sal_Int16 _nDefault,
+            const bool _bVoidDefault);
 
         // some very special methods for some very special attribute/property pairs
 

@@ -341,17 +341,17 @@ namespace xmloff
         exportedProperty( _rPropertyName );
     }
 
-    void OPropertyExport::exportEnumPropertyAttribute(
+    void OPropertyExport::exportEnumPropertyAttributeImpl(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const OUString &rPropertyName, const SvXMLEnumMapEntry* _pValueMap,
-            const sal_Int32 _nDefault, const bool _bVoidDefault)
+            const OUString &rPropertyName, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
+            const sal_Int16 _nDefault, const bool _bVoidDefault)
     {
         // get the value
-        sal_Int32 nCurrentValue(_nDefault);
         Any aValue = m_xProps->getPropertyValue(rPropertyName);
 
         if (aValue.hasValue())
         {   // we have a non-void current value
+            sal_Int32 nCurrentValue(_nDefault);
             ::cppu::enum2int(nCurrentValue, aValue);
 
             // add the attribute

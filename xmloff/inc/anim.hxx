@@ -45,7 +45,7 @@ enum XMLEffect
     EK_stretch
 };
 
-extern const SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[];
+extern const SvXMLEnumMapEntry<XMLEffect> aXML_AnimationEffect_EnumMap[];
 
 enum XMLEffectDirection
 {
@@ -84,9 +84,9 @@ enum XMLEffectDirection
     ED_cclockwise
 };
 
-extern const SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[];
+extern const SvXMLEnumMapEntry<XMLEffectDirection> aXML_AnimationDirection_EnumMap[];
 
-extern const SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[];
+extern const SvXMLEnumMapEntry<css::presentation::AnimationSpeed> aXML_AnimationSpeed_EnumMap[];
 
 void SdXMLImplSetEffect( css::presentation::AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDirection& eDirection, sal_Int16& nStartScale, bool& bIn );
 css::presentation::AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, bool bIn );
