@@ -10,6 +10,9 @@
 
 fuzzer_externals = \
     boost_headers \
+    orcus \
+    orcus-parser \
+    boost_filesystem \
     curl \
     harfbuzz \
     graphite \
@@ -35,6 +38,10 @@ fuzzer_externals = \
     zlib \
 
 fuzzer_libraries = \
+    sdfilt \
+    sd \
+    sdd \
+    icg \
     basctl \
     avmedia \
     basegfx \
@@ -68,6 +75,10 @@ fuzzer_libraries = \
     svt \
     svx \
     svxcore \
+    emboleobj \
+    svgfilter \
+    svgio \
+    animcore \
     tk \
     tl \
     ucb1 \
