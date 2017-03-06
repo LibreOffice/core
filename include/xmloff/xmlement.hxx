@@ -23,13 +23,23 @@
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
 
-/** Map an XMLTokenEnum to a sal_uInt16 value.
+/** Map an XMLTokenEnum to an enum value.
  * To be used with SvXMLUnitConverter::convertEnum(...)
+ * We store the enum internally as a fixed size field, since there are
+ * places where we want to store a generic pointer to an array of SvXMLEnumMapEntry
+ * and we don't want to templatize the class.
  */
+template<typename EnumT>
 struct SvXMLEnumMapEntry
 {
+private:
     ::xmloff::token::XMLTokenEnum   eToken;
     sal_uInt16                      nValue;
+public:
+    SvXMLEnumMapEntry(::xmloff::token::XMLTokenEnum eToken_, EnumT nValue_)
+        : eToken(eToken_), nValue(nValue_) {}
+    ::xmloff::token::XMLTokenEnum   GetToken() const { return eToken; }
+    EnumT                           GetValue() const { return static_cast<EnumT>(nValue); }
 };
 
 #define ENUM_STRING_MAP_ENTRY(name,tok) { name, sizeof(name)-1, tok }
@@ -39,11 +49,19 @@ struct SvXMLEnumMapEntry
 /** Map a const sal_Char* (with length) to a sal_uInt16 value.
  * To be used with SvXMLUnitConverter::convertEnum(...)
  */
+template<typename EnumT>
 struct SvXMLEnumStringMapEntry
 {
-    const sal_Char *    pName;
-    sal_Int32           nNameLength;
-    sal_uInt16          nValue;
+private:
+    const char *    pName;
+    sal_Int32       nNameLength;
+    sal_uInt16      nValue;
+public:
+    SvXMLEnumStringMapEntry(const char * pName_, sal_Int32 nNameLength_, EnumT nValue_)
+        : pName(pName_), nNameLength(nNameLength_), nValue(nValue_) {}
+    const char * GetName() const { return pName; }
+    sal_Int32    GetNameLength() const { return nNameLength; }
+    EnumT        GetValue() const { return static_cast<EnumT>(nValue); }
 };
 
 #endif // INCLUDED_XMLOFF_XMLEMENT_HXX

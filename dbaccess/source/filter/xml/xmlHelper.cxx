@@ -54,11 +54,11 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
         case XML_DB_TYPE_EQUAL:
             if ( !m_pDisplayHandler.get() )
             {
-                static const SvXMLEnumMapEntry aDisplayMap[] =
+                static const SvXMLEnumMapEntry<bool> aDisplayMap[] =
                 {
-                    { XML_VISIBLE,      sal_uInt16(true) },
-                    { XML_COLLAPSE,     sal_uInt16(false) },
-                    { XML_TOKEN_INVALID, 0 }
+                    { XML_VISIBLE,       true },
+                    { XML_COLLAPSE,      false },
+                    { XML_TOKEN_INVALID, false }
                 };
                 m_pDisplayHandler.reset(new XMLConstantsPropertyHandler(aDisplayMap, XML_TOKEN_INVALID ));
             }

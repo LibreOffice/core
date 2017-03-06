@@ -37,7 +37,7 @@ using namespace ::xmloff::token;
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
 
-SvXMLEnumMapEntry const pXML_BorderStyles[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_BorderStyles[] =
 {
     { XML_NONE,          table::BorderLineStyle::NONE   },
     { XML_HIDDEN,        table::BorderLineStyle::NONE   },
@@ -56,7 +56,7 @@ SvXMLEnumMapEntry const pXML_BorderStyles[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_NamedBorderWidths[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_NamedBorderWidths[] =
 {
     { XML_THIN,             SVX_XML_BORDER_WIDTH_THIN   },
     { XML_MIDDLE,           SVX_XML_BORDER_WIDTH_MIDDLE },

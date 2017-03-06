@@ -64,13 +64,13 @@ static SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
+SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =
 {
     { XML_RECT,         drawing::DashStyle_RECT },
     { XML_ROUND,        drawing::DashStyle_ROUND },
     { XML_RECT,         drawing::DashStyle_RECTRELATIVE },
     { XML_ROUND,        drawing::DashStyle_ROUNDRELATIVE },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::DashStyle)0 }
 };
 
 // Import
@@ -127,11 +127,7 @@ void XMLDashStyleImport::importXML(
             break;
         case XML_TOK_DASH_STYLE:
             {
-                sal_uInt16 eValue;
-                if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_DashStyle_Enum ) )
-                {
-                    aLineDash.Style = (drawing::DashStyle) eValue;
-                }
+                SvXMLUnitConverter::convertEnum( aLineDash.Style, rStrValue, pXML_DashStyle_Enum );
             }
             break;
         case XML_TOK_DASH_DOTS1:
