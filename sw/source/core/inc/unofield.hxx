@@ -30,6 +30,7 @@
 
 #include <unobaseclass.hxx>
 #include <unocoll.hxx>
+#include <fldbas.hxx>
 
 class SwFieldType;
 class SwDoc;
@@ -56,13 +57,13 @@ private:
     SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc);
 
     /// descriptor
-    SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
+    SwXFieldMaster(SwDoc* pDoc, SwFieldIds nResId);
 
 public:
 
     static css::uno::Reference<css::beans::XPropertySet>
         CreateXFieldMaster(SwDoc * pDoc, SwFieldType * pType,
-                sal_uInt16 nResId = 0xFFFF);
+                SwFieldIds nResId = SwFieldIds::Unknown);
 
     static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
     static OUString LocalizeFormula(const SwSetExpField& rField, const OUString& rFormula, bool bQuery);

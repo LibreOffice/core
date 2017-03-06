@@ -75,7 +75,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     pMgr = new SwFieldMgr(pSh);
     pField = static_cast<SwScriptField*>(pMgr->GetCurField());
 
-    bNew = !(pField && pField->GetTyp()->Which() == RES_SCRIPTFLD);
+    bNew = !(pField && pField->GetTyp()->Which() == SwFieldIds::Script);
 
     CheckTravel();
 

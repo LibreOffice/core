@@ -737,7 +737,7 @@ void SwUiWriterTest::testFdo74981()
     // create a document with an input field
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, RES_INPUTFLD)), "foo", "bar", 0, 0);
+    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::Input)), "foo", "bar", 0, 0);
     pWrtShell->Insert(aField);
 
     {
@@ -767,7 +767,7 @@ void SwUiWriterTest::testTdf98512()
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
-                pWrtShell->GetFieldType(0, RES_INPUTFLD)));
+                pWrtShell->GetFieldType(0, SwFieldIds::Input)));
     SwInputField aField1(pType, "foo", "bar", INP_TXT, 0);
     pWrtShell->Insert(aField1);
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -2086,7 +2086,7 @@ void SwUiWriterTest::testTdf77342()
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     //inserting first footnote
     pWrtShell->InsertFootnote("");
-    SwFieldType* pField = pWrtShell->GetFieldType(0, RES_GETREFFLD);
+    SwFieldType* pField = pWrtShell->GetFieldType(0, SwFieldIds::GetRef);
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pField);
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
@@ -2327,10 +2327,10 @@ void SwUiWriterTest::testTdf63553()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     //inserting sequence field 1
-    SwSetExpFieldType* pSeqType = static_cast<SwSetExpFieldType*>(pWrtShell->GetFieldType(RES_SETEXPFLD, "Illustration"));
+    SwSetExpFieldType* pSeqType = static_cast<SwSetExpFieldType*>(pWrtShell->GetFieldType(SwFieldIds::SetExp, "Illustration"));
     SwSetExpField aSetField1(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField1);
-    SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pWrtShell->GetFieldType(0, RES_GETREFFLD));
+    SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::GetRef));
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
     //inserting reference field 1

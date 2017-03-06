@@ -53,7 +53,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
         m_pNextPB->Show();
         m_pNextPB->SetClickHdl(aButtonLk);
     }
-    if( RES_DROPDOWN == pField->GetTyp()->Which() )
+    if( SwFieldIds::Dropdown == pField->GetTyp()->Which() )
     {
 
         pDropField = static_cast<SwDropDownField*>(pField);

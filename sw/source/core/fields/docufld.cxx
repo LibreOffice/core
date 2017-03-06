@@ -97,7 +97,7 @@ using namespace ::com::sun::star::uno;
 using namespace nsSwDocInfoSubType;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
-    : SwFieldType( RES_PAGENUMBERFLD ),
+    : SwFieldType( SwFieldIds::PageNumber ),
     nNumberingType( SVX_NUM_ARABIC ),
     bVirtuell( false )
 {
@@ -309,7 +309,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwAuthorFieldType::SwAuthorFieldType()
-    : SwFieldType( RES_AUTHORFLD )
+    : SwFieldType( SwFieldIds::Author )
 {
 }
 
@@ -398,7 +398,7 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
-    : SwFieldType( RES_FILENAMEFLD )
+    : SwFieldType( SwFieldIds::Filename )
 {
     pDoc = pDocument;
 }
@@ -571,7 +571,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
-    : SwFieldType( RES_TEMPLNAMEFLD )
+    : SwFieldType( SwFieldIds::TemplateName )
 {
     pDoc = pDocument;
 }
@@ -715,7 +715,7 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
-    : SwFieldType( RES_DOCSTATFLD ), nNumberingType( SVX_NUM_ARABIC )
+    : SwFieldType( SwFieldIds::DocStat ), nNumberingType( SVX_NUM_ARABIC )
 {
     pDoc = pDocument;
 }
@@ -836,7 +836,7 @@ bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // Document info field type
 
 SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
-    : SwValueFieldType( pDc, RES_DOCINFOFLD )
+    : SwValueFieldType( pDc, SwFieldIds::DocInfo )
 {
 }
 
@@ -1255,7 +1255,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwHiddenTextFieldType::SwHiddenTextFieldType( bool bSetHidden )
-    : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
+    : SwFieldType( SwFieldIds::HiddenText ), bHidden( bSetHidden )
 {
 }
 
@@ -1545,7 +1545,7 @@ OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
 // field type for line height 0
 
 SwHiddenParaFieldType::SwHiddenParaFieldType()
-    : SwFieldType( RES_HIDDENPARAFLD )
+    : SwFieldType( SwFieldIds::HiddenPara )
 {
 }
 
@@ -1624,7 +1624,7 @@ OUString SwHiddenParaField::GetPar1() const
 // PostIt field type
 
 SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
-    : SwFieldType( RES_POSTITFLD )
+    : SwFieldType( SwFieldIds::Postit )
     , mpDoc(pDoc)
 {}
 
@@ -1846,7 +1846,7 @@ void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
 // extended user information field type
 
 SwExtUserFieldType::SwExtUserFieldType()
-    : SwFieldType( RES_EXTUSERFLD )
+    : SwFieldType( SwFieldIds::ExtUser )
 {
 }
 
@@ -1976,7 +1976,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // field type for relative page numbers
 
 SwRefPageSetFieldType::SwRefPageSetFieldType()
-    : SwFieldType( RES_REFPAGESETFLD )
+    : SwFieldType( SwFieldIds::RefPageSet )
 {
 }
 
@@ -2053,7 +2053,7 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // relative page numbers - query field
 
 SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
-    : SwFieldType( RES_REFPAGEGETFLD ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
+    : SwFieldType( SwFieldIds::RefPageGet ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
 {
 }
 
@@ -2087,7 +2087,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 
 bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
 {
-    SwIterator<SwFormatField,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_REFPAGESETFLD));
+    SwIterator<SwFormatField,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::RefPageSet));
     for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
     {
             // update only the GetRef fields
@@ -2299,7 +2299,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // field type to jump to and edit
 
 SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
-    : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, nullptr )
+    : SwFieldType( SwFieldIds::JumpEdit ), pDoc( pD ), aDep( this, nullptr )
 {
 }
 
@@ -2427,7 +2427,7 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // combined character field type
 
 SwCombinedCharFieldType::SwCombinedCharFieldType()
-    : SwFieldType( RES_COMBINED_CHARS )
+    : SwFieldType( SwFieldIds::CombinedChars )
 {
 }
 

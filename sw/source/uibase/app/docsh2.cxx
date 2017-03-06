@@ -275,7 +275,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         switch( nAction )
         {
         case 2:
-            m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_FILENAMEFLD )->UpdateFields();
+            m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Filename )->UpdateFields();
             break;
         // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.

@@ -215,13 +215,13 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     if (!pSh)
         return;
 
-    const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(RES_SETEXPFLD);
+    const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(SwFieldIds::SetExp);
 
     OSL_ENSURE( nFieldTypeCnt < static_cast<size_t>(REFFLDFLAG), "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
 
     for (size_t n = 0; n < nFieldTypeCnt; ++n)
     {
-        SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(n, RES_SETEXPFLD));
+        SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(n, SwFieldIds::SetExp));
 
         if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
         {
@@ -647,7 +647,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             // get the fields to Seq-FieldType:
 
             SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(
-                                nTypeId & ~REFFLDFLAG, RES_SETEXPFLD ));
+                                nTypeId & ~REFFLDFLAG, SwFieldIds::SetExp ));
             if( pType )
             {
                 SwSeqFieldList aArr;
@@ -866,7 +866,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
         case TYP_SETREFFLD:
         {
-            SwFieldType* pType = GetFieldMgr().GetFieldType(RES_SETEXPFLD, aName);
+            SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::SetExp, aName);
 
             if(!pType)  // Only insert when the name doesn't exist yet
             {
@@ -981,7 +981,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         {
             // get fields for Seq-FieldType:
             SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(
-                                    nTypeId & ~REFFLDFLAG, RES_SETEXPFLD ));
+                                    nTypeId & ~REFFLDFLAG, SwFieldIds::SetExp ));
             if( pType )
             {
                 SwSeqFieldList aArr;

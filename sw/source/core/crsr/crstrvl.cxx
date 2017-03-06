@@ -646,7 +646,7 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
 bool SwCursorShell::MoveFieldType(
     const SwFieldType* pFieldType,
     const bool bNext,
-    const sal_uInt16 nResType,
+    const SwFieldIds nResType,
     const bool bAddSetExpressionFieldsToInputFields )
 {
     // sorted list of all fields
@@ -654,7 +654,7 @@ bool SwCursorShell::MoveFieldType(
 
     if ( pFieldType )
     {
-        if( RES_INPUTFLD != pFieldType->Which() && !pFieldType->HasWriterListeners() )
+        if( SwFieldIds::Input != pFieldType->Which() && !pFieldType->HasWriterListeners() )
         {
             return false;
         }
@@ -662,7 +662,7 @@ bool SwCursorShell::MoveFieldType(
         // found Modify object, add all fields to array
         ::lcl_MakeFieldLst( aSrtLst, *pFieldType, IsReadOnlyAvailable() );
 
-        if( RES_INPUTFLD == pFieldType->Which() && bAddSetExpressionFieldsToInputFields )
+        if( SwFieldIds::Input == pFieldType->Which() && bAddSetExpressionFieldsToInputFields )
         {
             // there are hidden input fields in the set exp. fields
             const SwFieldTypes& rFieldTypes = *mpDoc->getIDocumentFieldsAccess().GetFieldTypes();
@@ -670,7 +670,7 @@ bool SwCursorShell::MoveFieldType(
             for( size_t i=0; i < nSize; ++i )
             {
                 pFieldType = rFieldTypes[ i ];
-                if ( RES_SETEXPFLD == pFieldType->Which() )
+                if ( SwFieldIds::SetExp == pFieldType->Which() )
                 {
                     ::lcl_MakeFieldLst( aSrtLst, *pFieldType, IsReadOnlyAvailable(), true );
                 }
@@ -714,7 +714,7 @@ bool SwCursorShell::MoveFieldType(
         {
             // create dummy for the search
             SwFormatField* pFormatField = new SwFormatField( SwDateTimeField(
-                static_cast<SwDateTimeFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_DATETIMEFLD ) ) ) );
+                static_cast<SwDateTimeFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime ) ) ) );
 
             pTextField = new SwTextField( *pFormatField, rPos.nContent.GetIndex(),
                         mpDoc->IsClipBoard() );
@@ -852,7 +852,7 @@ SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) cons
 
     SwField* pCurField = GetFieldAtCursor( pCursor, bIncludeInputFieldAtStart );
     if ( pCurField != nullptr
-         && RES_TABLEFLD == pCurField->GetTyp()->Which() )
+         && SwFieldIds::Table == pCurField->GetTyp()->Which() )
     {
         // TabellenFormel ? wandel internen in externen Namen um
         const SwTableNode* pTableNd = IsCursorInTable();
@@ -1249,13 +1249,13 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 // allow click fields in protected sections
                                 // only placeholder is not possible
                                 if( IsAttrAtPos::Field & rContentAtPos.eContentAtPos
-                                    || RES_JUMPEDITFLD == pField->Which() )
+                                    || SwFieldIds::JumpEdit == pField->Which() )
                                     pField = nullptr;
                             }
                             else
                                 UpdateCursor();
                         }
-                        else if( RES_TABLEFLD == pField->Which() &&
+                        else if( SwFieldIds::Table == pField->Which() &&
                             static_cast<const SwTableField*>(pField)->IsIntrnlName() )
                         {
                             // create from internal (for CORE) the external
@@ -1654,7 +1654,7 @@ const SwPostItField* SwCursorShell::GetPostItFieldAtCursor() const
         {
             SwTextAttr* pTextAttr = pTextNd->GetFieldTextAttrAt( pCursorPos->nContent.GetIndex() );
             const SwField* pField = pTextAttr != nullptr ? pTextAttr->GetFormatField().GetField() : nullptr;
-            if ( pField && pField->Which()== RES_POSTITFLD )
+            if ( pField && pField->Which()== SwFieldIds::Postit )
             {
                 pPostItField = static_cast<const SwPostItField*>(pField);
             }

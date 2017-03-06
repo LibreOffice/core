@@ -477,7 +477,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     {
         for ( auto i = pMgr->GetFieldTypeCount(); i; )
         {
-            SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
+            SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
             if (!pFieldType->GetName().isEmpty()
                 && pFieldType->GetName().equals(m_pCategoryBox->GetText()))
             {
@@ -508,7 +508,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     if (pSh)
     {
         SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
-                                            RES_SETEXPFLD, m_pCategoryBox->GetText() ));
+                                            SwFieldIds::SetExp, m_pCategoryBox->GetText() ));
         if( pFieldType )
         {
             sDelim = pFieldType->GetDelimiter();
@@ -699,8 +699,8 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
 
             for (size_t i = 0; i < nCount; ++i)
             {
-                SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
-                if( pType->Which() == RES_SETEXPFLD &&
+                SwFieldType *pType = pMgr->GetFieldType( SwFieldIds::Unknown, i );
+                if( pType->Which() == SwFieldIds::SetExp &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
                     m_pCategoryBox->InsertSwEntry(pType->GetName());
             }
@@ -881,7 +881,7 @@ void SwCaptionOptPage::InvalidatePreview()
             if (pSh)
             {
                 SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
-                                                RES_SETEXPFLD, m_pCategoryBox->GetText() ));
+                                                SwFieldIds::SetExp, m_pCategoryBox->GetText() ));
                 if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     sal_uInt8 nLvl = pFieldType->GetOutlineLvl();

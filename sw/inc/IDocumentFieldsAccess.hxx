@@ -36,6 +36,7 @@ class DateTime;
 class SetGetExpField;
 struct SwHash;
 class SwNode;
+enum class SwFieldIds : sal_uInt16;
 
 namespace rtl { class OUString; }
 using rtl::OUString;
@@ -50,9 +51,9 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual SwFieldType *InsertFieldType(const SwFieldType &) = 0;
 
-    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const = 0;
+    virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const = 0;
 
-    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
+    virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
 
     virtual void RemoveFieldType(size_t nField) = 0;
 

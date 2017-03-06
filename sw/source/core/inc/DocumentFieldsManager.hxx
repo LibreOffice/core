@@ -36,8 +36,8 @@ public:
 
     virtual const SwFieldTypes *GetFieldTypes() const override;
     virtual SwFieldType *InsertFieldType(const SwFieldType &) override;
-    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const override;
-    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const override;
+    virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const override;
+    virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const override;
     virtual void RemoveFieldType(size_t nField) override;
     virtual void UpdateFields(bool bCloseDB) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;

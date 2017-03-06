@@ -699,7 +699,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_GOTO_PREV_MARK:
         {
             SwFieldMgr aFieldMgr;
-            SwFieldType* pFieldType = aFieldMgr.GetFieldType(RES_JUMPEDITFLD);
+            SwFieldType* pFieldType = aFieldMgr.GetFieldType(SwFieldIds::JumpEdit);
 
             if (pFieldType)
             {

@@ -33,7 +33,7 @@ using namespace com::sun::star;
 using std::vector;
 
 SwDropDownFieldType::SwDropDownFieldType()
-    : SwFieldType(RES_DROPDOWN)
+    : SwFieldType(SwFieldIds::Dropdown)
 {
 }
 

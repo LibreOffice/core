@@ -1116,7 +1116,7 @@ static OUString lcl_GenerateFieldTypeName(const OUString& sPrefix, SwTableNode* 
         ++nCount;
         sName = sPrefixStr + OUString::number(nCount);
     }
-    while (nullptr != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_DDEFLD, sName, false));
+    while (nullptr != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
 
     return sName;
 }
@@ -1150,7 +1150,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     else
     {
         // check for existing DDE field type with the same name
-        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_DDEFLD, sName, false));
+        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
         if (nullptr != pOldType)
         {
             // same values -> return old type

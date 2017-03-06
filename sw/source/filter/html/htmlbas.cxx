@@ -92,7 +92,7 @@ void SwHTMLParser::EndScript()
     if( bInsSrcIntoField && !m_bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
-            static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
+            static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Script ));
 
         SwScriptField aField( pType, m_aScriptType,
                             !m_aScriptURL.isEmpty() ? m_aScriptURL : m_aScriptSource,

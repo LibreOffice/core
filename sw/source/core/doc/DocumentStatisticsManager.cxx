@@ -81,8 +81,8 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc
 
 void DocumentStatisticsManager::DocInfoChgd(bool const isEnableSetModified)
 {
-    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_DOCINFOFLD )->UpdateFields();
-    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_TEMPLNAMEFLD )->UpdateFields();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )->UpdateFields();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::TemplateName )->UpdateFields();
     if (isEnableSetModified)
     {
         m_rDoc.getIDocumentState().SetModified();
@@ -164,7 +164,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
 
     // #i93174#: notes contain paragraphs that are not nodes
     {
-        SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD) );
+        SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit) );
         SwIterator<SwFormatField,SwFieldType> aIter( *pPostits );
         for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
         {
@@ -226,7 +226,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     // optionally update stat. fields
     if (bFields)
     {
-        SwFieldType *pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_DOCSTATFLD);
+        SwFieldType *pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);
         pType->UpdateFields();
     }
 

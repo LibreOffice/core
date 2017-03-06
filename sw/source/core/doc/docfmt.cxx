@@ -1738,7 +1738,7 @@ SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )
         ( pNFormat = rDest.GetNumberFormatter())->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )
-        static_cast<SwGetRefFieldType*>(rSrc.getIDocumentFieldsAccess().GetSysFieldType( RES_GETREFFLD ))->
+        static_cast<SwGetRefFieldType*>(rSrc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef ))->
             MergeWithOtherDoc( rDest );
 }
 

@@ -488,7 +488,7 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
         maDBData = rNewData;
         getIDocumentState().SetModified();
     }
-    getIDocumentFieldsAccess().GetSysFieldType(RES_DBNAMEFLD)->UpdateFields();
+    getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName)->UpdateFields();
 }
 
 struct PostItField_ : public SetGetExpField
@@ -542,7 +542,7 @@ bool sw_GetPostIts(
 {
     bool bHasPostIts = false;
 
-    SwFieldType* pFieldType = pIDFA->GetSysFieldType( RES_POSTITFLD );
+    SwFieldType* pFieldType = pIDFA->GetSysFieldType( SwFieldIds::Postit );
     assert(pFieldType);
 
     if( pFieldType->HasWriterListeners() )
@@ -1317,7 +1317,7 @@ bool SwDoc::RemoveInvisibleContent()
 
     {
         SwTextNode* pTextNd;
-        SwIterator<SwFormatField,SwFieldType> aIter( *getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENPARAFLD )  );
+        SwIterator<SwFormatField,SwFieldType> aIter( *getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenPara )  );
         for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
         {
             if( pFormatField->GetTextField() &&
@@ -1480,7 +1480,7 @@ bool SwDoc::RemoveInvisibleContent()
 
 bool SwDoc::HasInvisibleContent() const
 {
-    if(SwIterator<SwFormatField,SwFieldType>(*getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENPARAFLD)).First())
+    if(SwIterator<SwFormatField,SwFieldType>(*getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenPara)).First())
         return true;
 
     // Search for any hidden paragraph (hidden text attribute)
@@ -1533,7 +1533,7 @@ bool SwDoc::ConvertFieldsToText()
     {
         const SwFieldType *pCurType = (*pMyFieldTypes)[nType - 1];
 
-        if ( RES_POSTITFLD == pCurType->Which() )
+        if ( SwFieldIds::Postit == pCurType->Which() )
             continue;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *pCurType );
@@ -1559,20 +1559,20 @@ bool SwDoc::ConvertFieldsToText()
                 const SwField*  pField = rFormatField.GetField();
 
                 //#i55595# some fields have to be excluded in headers/footers
-                sal_uInt16 nWhich = pField->GetTyp()->Which();
+                SwFieldIds nWhich = pField->GetTyp()->Which();
                 if(!bInHeaderFooter ||
-                        (nWhich != RES_PAGENUMBERFLD &&
-                        nWhich != RES_CHAPTERFLD &&
-                        nWhich != RES_GETEXPFLD&&
-                        nWhich != RES_SETEXPFLD&&
-                        nWhich != RES_INPUTFLD&&
-                        nWhich != RES_REFPAGEGETFLD&&
-                        nWhich != RES_REFPAGESETFLD))
+                        (nWhich != SwFieldIds::PageNumber &&
+                        nWhich != SwFieldIds::Chapter &&
+                        nWhich != SwFieldIds::GetExp&&
+                        nWhich != SwFieldIds::SetExp&&
+                        nWhich != SwFieldIds::Input&&
+                        nWhich != SwFieldIds::RefPageGet&&
+                        nWhich != SwFieldIds::RefPageSet))
                 {
                     OUString sText = pField->ExpandField(true);
 
                     // database fields should not convert their command into text
-                    if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
+                    if( SwFieldIds::Database == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.clear();
 
                     SwPaM aInsertPam(*pTextField->GetpTextNode(), pTextField->GetStart());

@@ -261,7 +261,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
 }
 
 SwGetExpFieldType::SwGetExpFieldType(SwDoc* pDc)
-    : SwValueFieldType( pDc, RES_GETEXPFLD )
+    : SwValueFieldType( pDc, SwFieldIds::GetExp )
 {
 }
 
@@ -342,7 +342,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     // #i82544#
     if( bLateInitialization )
     {
-        SwFieldType* pSetExpField = rDoc.getIDocumentFieldsAccess().GetFieldType(RES_SETEXPFLD, GetFormula(), false);
+        SwFieldType* pSetExpField = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, GetFormula(), false);
         if( pSetExpField )
         {
             bLateInitialization = false;
@@ -486,7 +486,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
-    : SwValueFieldType( pDc, RES_SETEXPFLD ),
+    : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     sName( rName ),
     pOutlChgNd( nullptr ),
     sDelim( "." ),
@@ -1110,7 +1110,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 }
 
 SwInputFieldType::SwInputFieldType( SwDoc* pD )
-    : SwFieldType( RES_INPUTFLD )
+    : SwFieldType( SwFieldIds::Input )
     , pDoc( pD )
 {
 }
@@ -1155,7 +1155,7 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
     else if( (nSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
-            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( RES_USERFLD, getContent(), false ) );
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
         if( pUserTyp )
         {
             pUserTyp->SetContent( rNewFieldContent );
@@ -1220,7 +1220,7 @@ OUString SwInputField::Expand() const
     if( (nSubType & 0x00ff) == INP_USR )
     {
         SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
-            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( RES_USERFLD, getContent(), false ) );
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::User, getContent(), false ) );
         if( pUserTyp )
             return pUserTyp->GetContent();
     }

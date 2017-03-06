@@ -261,10 +261,10 @@ SwHistorySetTextField::SwHistorySetTextField( SwTextField* pTextField, sal_uLong
     SwDoc* pDoc = pTextField->GetTextNode().GetDoc();
 
     m_nFieldWhich = m_pField->GetField()->GetTyp()->Which();
-    if (m_nFieldWhich == RES_DBFLD ||
-        m_nFieldWhich == RES_USERFLD ||
-        m_nFieldWhich == RES_SETEXPFLD ||
-        m_nFieldWhich == RES_DDEFLD ||
+    if (m_nFieldWhich == SwFieldIds::Database ||
+        m_nFieldWhich == SwFieldIds::User ||
+        m_nFieldWhich == SwFieldIds::SetExp ||
+        m_nFieldWhich == SwFieldIds::Dde ||
         !pDoc->getIDocumentFieldsAccess().GetSysFieldType( m_nFieldWhich ))
     {
         m_pFieldType.reset( m_pField->GetField()->GetTyp()->Copy() );

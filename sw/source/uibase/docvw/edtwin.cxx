@@ -1487,7 +1487,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
         const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN;
-        const SwFieldType* pFieldType = rSh.GetFieldType( 0, RES_POSTITFLD );
+        const SwFieldType* pFieldType = rSh.GetFieldType( 0, SwFieldIds::Postit );
         rSh.MoveFieldType( pFieldType, bNext );
         return;
     }
@@ -4169,7 +4169,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false, &aFieldRect ) )
             {
                 const SwField* pField = aContentAtPos.aFnd.pField;
-                if (pField->Which()== RES_POSTITFLD)
+                if (pField->Which()== SwFieldIds::Postit)
                 {
                     m_rView.GetPostItMgr()->SetShadowState(reinterpret_cast<const SwPostItField*>(pField),false);
                 }

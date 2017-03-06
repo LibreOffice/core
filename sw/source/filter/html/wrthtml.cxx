@@ -915,10 +915,10 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
                      && pHt->Which() != RES_TXTATR_ANNOTATION ) )
                 break;
 
-            const sal_uInt16 nFieldWhich =
+            const SwFieldIds nFieldWhich =
                 static_cast<const SwFormatField&>(pHt->GetAttr()).GetField()->GetTyp()->Which();
-            if( RES_POSTITFLD!=nFieldWhich &&
-                RES_SCRIPTFLD!=nFieldWhich )
+            if( SwFieldIds::Postit!=nFieldWhich &&
+                SwFieldIds::Script!=nFieldWhich )
                 break;
 
             OutNewLine();

@@ -45,9 +45,9 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     for(size_t i=0; i < nSize; ++i)
     {
         SwFieldType* pFieldType = rFieldTypes[ i ];
-        const sal_uInt16 nType = pFieldType->Which();
+        const SwFieldIds nType = pFieldType->Which();
 
-        if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
+        if( SwFieldIds::SetExp == nType || SwFieldIds::Input == nType || SwFieldIds::Dropdown == nType )
         {
             SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
             for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
@@ -55,7 +55,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
                 const SwTextField* pTextField = pFormatField->GetTextField();
 
                 // only process InputFields, interactive SetExpFields and DropDown fields
-                if( !pTextField || ( RES_SETEXPFLD == nType &&
+                if( !pTextField || ( SwFieldIds::SetExp == nType &&
                     !static_cast<SwSetExpField*>(pFormatField->GetField())->GetInputFlag()))
                     continue;
 
@@ -132,9 +132,9 @@ bool SwInputFieldList::BuildSortLst()
     for( size_t i = 0; i < nSize; ++i )
     {
         SwFieldType* pFieldType = rFieldTypes[ i ];
-        const sal_uInt16 nType = pFieldType->Which();
+        const SwFieldIds nType = pFieldType->Which();
 
-        if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
+        if( SwFieldIds::SetExp == nType || SwFieldIds::Input == nType )
         {
             SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
             for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
@@ -142,7 +142,7 @@ bool SwInputFieldList::BuildSortLst()
                 const SwTextField* pTextField = pFormatField->GetTextField();
 
                 //  process only InputFields and interactive SetExpFields
-                if( !pTextField || ( RES_SETEXPFLD == nType &&
+                if( !pTextField || ( SwFieldIds::SetExp == nType &&
                     !static_cast<SwSetExpField*>(pFormatField->GetField())->GetInputFlag()))
                     continue;
 

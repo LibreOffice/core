@@ -69,7 +69,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         pTextNd->UpdateOutlineState();
 
         // update the structure fields
-        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD )->UpdateFields();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->UpdateFields();
     }
 }
 

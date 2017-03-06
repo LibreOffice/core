@@ -299,7 +299,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
 void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD );
+    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter );
     SwIterator<SwFormatField,SwFieldType> aFormatFields( *pType );
     for ( SwFormatField* pField = aFormatFields.First(); pField; pField = aFormatFields.Next() )
     {
@@ -847,7 +847,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
 bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
 
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_GETREFFLD );
+    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef );
     SwIterator<SwFormatField, SwFieldType> aFormatFields( *pType );
     for ( SwFormatField* pFormatField = aFormatFields.First(); pFormatField; pFormatField = aFormatFields.Next() )
     {
@@ -1711,7 +1711,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
 
         if (pField)
         {
-            if (pField->GetTyp()->Which() == RES_GETREFFLD &&
+            if (pField->GetTyp()->Which() == SwFieldIds::GetRef &&
                 ( eFieldType == ww::ePAGEREF || eFieldType == ww::eREF ||
                   eFieldType == ww::eNOTEREF || eFieldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
@@ -1762,7 +1762,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
 
             if (pField)
             {
-                if (pField->GetTyp()->Which() == RES_INPUTFLD &&
+                if (pField->GetTyp()->Which() == SwFieldIds::Input &&
                     eFieldType == ww::eFORMTEXT)
                 {
                     sal_uInt8 aArr[12];
@@ -1788,7 +1788,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
 
         if (pField)
         {
-            if (pField->GetTyp()->Which() == RES_INPUTFLD &&
+            if (pField->GetTyp()->Which() == SwFieldIds::Input &&
                 eFieldType == ww::eFORMTEXT)
             {
                 sal_uInt16 nSubType = pField->GetSubType();
@@ -2464,7 +2464,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 
     switch (pField->GetTyp()->Which())
     {
-    case RES_GETEXPFLD:
+    case SwFieldIds::GetExp:
         if (nSubType == nsSwGetSetExpType::GSE_STRING)
         {
             const SwGetExpField *pGet = static_cast<const SwGetExpField*>(pField);
@@ -2473,7 +2473,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         else
             bWriteExpand = true;
         break;
-    case RES_SETEXPFLD:
+    case SwFieldIds::SetExp:
         if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
             OUString sStr;
@@ -2516,14 +2516,14 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         else
             bWriteExpand = true;
         break;
-    case RES_PAGENUMBERFLD:
+    case SwFieldIds::PageNumber:
         {
             OUString sStr = FieldString(ww::ePAGE);
             GetNumberPara(sStr, *pField);
             GetExport().OutputField(pField, ww::ePAGE, sStr);
         }
         break;
-    case RES_FILENAMEFLD:
+    case SwFieldIds::Filename:
         {
             OUString sStr = FieldString(ww::eFILENAME);
             if (pField->GetFormat() == FF_PATHNAME)
@@ -2531,7 +2531,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             GetExport().OutputField(pField, ww::eFILENAME, sStr);
         }
         break;
-    case RES_DBNAMEFLD:
+    case SwFieldIds::DatabaseName:
         {
             SwDBData aData = GetExport().m_pDoc->GetDBData();
             const OUString sStr = FieldString(ww::eDATABASE)
@@ -2541,17 +2541,17 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             GetExport().OutputField(pField, ww::eDATABASE, sStr);
         }
         break;
-    case RES_AUTHORFLD:
+    case SwFieldIds::Author:
         {
             ww::eField eField =
                 ((AF_SHORTCUT & pField->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pField, eField, FieldString(eField));
         }
         break;
-    case RES_TEMPLNAMEFLD:
+    case SwFieldIds::TemplateName:
         GetExport().OutputField(pField, ww::eTEMPLATE, FieldString(ww::eTEMPLATE));
         break;
-    case RES_DOCINFOFLD:    // Last printed, last edited,...
+    case SwFieldIds::DocInfo:    // Last printed, last edited,...
         if( DI_SUB_FIXED & nSubType )
             bWriteExpand = true;
         else
@@ -2632,7 +2632,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 bWriteExpand = true;
         }
         break;
-    case RES_DATETIMEFLD:
+    case SwFieldIds::DateTime:
         {
             OUString sStr;
             if (!GetExport().GetNumberFormat(*pField, sStr))
@@ -2644,7 +2644,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             }
         }
         break;
-    case RES_DOCSTATFLD:
+    case SwFieldIds::DocStat:
         {
             ww::eField eField = ww::eNONE;
 
@@ -2671,7 +2671,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 bWriteExpand = true;
         }
         break;
-    case RES_EXTUSERFLD:
+    case SwFieldIds::ExtUser:
         {
             ww::eField eField = ww::eNONE;
             switch (0xFF & nSubType)
@@ -2699,7 +2699,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 bWriteExpand = true;
         }
         break;
-    case RES_AUTHORITY:
+    case SwFieldIds::TableOfAuthorities:
     {
         OUString sRet(static_cast<SwAuthorityField const*>(pField)
                         ->ExpandCitation(AUTH_FIELD_IDENTIFIER));
@@ -2713,14 +2713,14 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         GetExport().OutputField( pField, ww::eCITATION, sRet );
     }
     break;
-    case RES_POSTITFLD:
+    case SwFieldIds::Postit:
         //Sadly only possible for word in main document text
         if (GetExport().m_nTextTyp == TXT_MAINTEXT)
         {
             PostitField( pField );
         }
         break;
-    case RES_INPUTFLD:
+    case SwFieldIds::Input:
         {
             const SwInputField * pInputField = dynamic_cast<const SwInputField *>(pField);
 
@@ -2735,7 +2735,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             }
         }
         break;
-    case RES_GETREFFLD:
+    case SwFieldIds::GetRef:
         {
             ww::eField eField = ww::eNONE;
             OUString sStr;
@@ -2813,7 +2813,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 bWriteExpand = true;
         }
         break;
-    case RES_COMBINED_CHARS:
+    case SwFieldIds::CombinedChars:
         {
         /*
         We need a font size to fill in the defaults, if these are overridden
@@ -2858,10 +2858,10 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         GetExport().OutputField(pField, ww::eEQ, sStr);
         }
         break;
-    case RES_DROPDOWN:
+    case SwFieldIds::Dropdown:
         bWriteExpand = DropdownField( pField );
         break;
-    case RES_CHAPTERFLD:
+    case SwFieldIds::Chapter:
         bWriteExpand = true;
         if (GetExport().m_bOutKF && rField.GetTextField())
         {
@@ -2884,7 +2884,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             }
         }
         break;
-    case RES_HIDDENTXTFLD:
+    case SwFieldIds::HiddenText:
         {
             OUString sExpand(pField->GetPar2());
             if (!sExpand.isEmpty())
@@ -2893,10 +2893,10 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             }
         }
         break;
-    case RES_JUMPEDITFLD:
+    case SwFieldIds::JumpEdit:
         bWriteExpand = PlaceholderField( pField );
         break;
-    case RES_MACROFLD:
+    case SwFieldIds::Macro:
         {
             const OUString sStr = " MACROBUTTON"
                 + pField->GetPar1().replaceFirst("StarOffice.Standard.Modul1.", " ")

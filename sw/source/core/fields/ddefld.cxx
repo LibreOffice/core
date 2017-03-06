@@ -232,7 +232,7 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,
                                const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
-    : SwFieldType( RES_DDEFLD ),
+    : SwFieldType( SwFieldIds::Dde ),
     aName( rName ), pDoc( nullptr ), nRefCnt( 0 )
 {
     bCRLFFlag = bDeleted = false;

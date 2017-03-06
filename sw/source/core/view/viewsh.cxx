@@ -2098,14 +2098,14 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
-        static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
+        static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = true;
     }
     if ( mpOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
     {
         SwHiddenParaFieldType* pFieldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
-                                          getIDocumentFieldsAccess().GetSysFieldType(RES_HIDDENPARAFLD));
+                                          getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::HiddenPara));
         if( pFieldType && pFieldType->HasWriterListeners() )
         {
             SwMsgPoolItem aHint( RES_HIDDENPARA_PRINT );

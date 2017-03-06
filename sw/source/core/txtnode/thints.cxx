@@ -1145,36 +1145,37 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                 const SwField* pField = pAttr->GetFormatField().GetField();
 
                 //JP 06-08-95: DDE-fields are an exception
-                assert(RES_DDEFLD == pField->GetTyp()->Which() ||
+                assert(SwFieldIds::Dde == pField->GetTyp()->Which() ||
                        this == pTextField->GetpTextNode());
 
                 // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
                 {
-                case RES_HIDDENPARAFLD:
+                case SwFieldIds::HiddenPara:
                 // HiddenParaField must trigger recalculation of visible flag
                     SetCalcHiddenParaField();
                     SAL_FALLTHROUGH;
-                case RES_DBSETNUMBERFLD:
-                case RES_GETEXPFLD:
-                case RES_DBFLD:
-                case RES_SETEXPFLD:
-                case RES_HIDDENTXTFLD:
-                case RES_DBNUMSETFLD:
-                case RES_DBNEXTSETFLD:
+                case SwFieldIds::DbSetNumber:
+                case SwFieldIds::GetExp:
+                case SwFieldIds::Database:
+                case SwFieldIds::SetExp:
+                case SwFieldIds::HiddenText:
+                case SwFieldIds::DbNumSet:
+                case SwFieldIds::DbNextSet:
                     if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() && GetNodes().IsDocNodes() )
                         pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
                     break;
-                case RES_DDEFLD:
+                case SwFieldIds::Dde:
                     if (GetNodes().IsDocNodes() && pTextField->GetpTextNode())
                         static_cast<SwDDEFieldType*>(pField->GetTyp())->DecRefCnt();
                     break;
-                case RES_POSTITFLD:
+                case SwFieldIds::Postit:
                     {
                         const_cast<SwFormatField&>(pAttr->GetFormatField()).Broadcast(
                             SwFormatFieldHint(&pTextField->GetFormatField(), SwFormatFieldHintWhich::REMOVED));
                         break;
                     }
+                default: break;
                 }
             }
             static_cast<SwFormatField&>(pAttr->GetAttr()).InvalidateField();
@@ -1438,7 +1439,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             case RES_TXTATR_FIELD:
                 {
                     // trigger notification for HiddenParaFields
-                    if( RES_HIDDENPARAFLD == pAttr->GetFormatField().GetField()->GetTyp()->Which() )
+                    if( SwFieldIds::HiddenPara == pAttr->GetFormatField().GetField()->GetTyp()->Which() )
                     {
                         bHiddenPara = true;
                     }
@@ -2559,7 +2560,7 @@ void SwpHints::CalcFlags()
         case RES_TXTATR_FIELD:
             {
                 const SwField* pField = pAttr->GetFormatField().GetField();
-                if( RES_DDEFLD == pField->GetTyp()->Which() )
+                if( SwFieldIds::Dde == pField->GetTyp()->Which() )
                 {
                     m_bDDEFields = true;
                     if ( m_bFootnote )
@@ -2587,7 +2588,7 @@ bool SwpHints::CalcHiddenParaField()
         if( RES_TXTATR_FIELD == nWhich )
         {
             const SwFormatField& rField = pTextHt->GetFormatField();
-            if( RES_HIDDENPARAFLD == rField.GetField()->GetTyp()->Which() )
+            if( SwFieldIds::HiddenPara == rField.GetField()->GetTyp()->Which() )
             {
                 if( !static_cast<const SwHiddenParaField*>(rField.GetField())->IsHidden() )
                 {
@@ -2997,12 +2998,12 @@ bool SwpHints::TryInsertHint(
                 // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
                 {
-                case RES_DBFLD:
-                case RES_SETEXPFLD:
-                case RES_HIDDENPARAFLD:
-                case RES_HIDDENTXTFLD:
-                case RES_DBNUMSETFLD:
-                case RES_DBNEXTSETFLD:
+                case SwFieldIds::Database:
+                case SwFieldIds::SetExp:
+                case SwFieldIds::HiddenPara:
+                case SwFieldIds::HiddenText:
+                case SwFieldIds::DbNumSet:
+                case SwFieldIds::DbNextSet:
                     {
                         if( bDelFirst )
                             pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
@@ -3010,10 +3011,11 @@ bool SwpHints::TryInsertHint(
                             pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(true, *pTextField);
                     }
                     break;
-                case RES_DDEFLD:
+                case SwFieldIds::Dde:
                     if( rNode.GetNodes().IsDocNodes() )
                         static_cast<SwDDEFieldType*>(pField->GetTyp())->IncRefCnt();
                     break;
+                default: break;
                 }
             }
 
@@ -3023,7 +3025,7 @@ bool SwpHints::TryInsertHint(
                 bool bInsFieldType = false;
                 switch( pField->GetTyp()->Which() )
                 {
-                case RES_SETEXPFLD:
+                case SwFieldIds::SetExp:
                     bInsFieldType = static_cast<SwSetExpFieldType*>(pField->GetTyp())->IsDeleted();
                     if( nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pField->GetTyp())->GetType() )
                     {
@@ -3040,23 +3042,24 @@ bool SwpHints::TryInsertHint(
                         pFieldType->SetSeqRefNo( *const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField)) );
                     }
                     break;
-                case RES_USERFLD:
+                case SwFieldIds::User:
                     bInsFieldType = static_cast<SwUserFieldType*>(pField->GetTyp())->IsDeleted();
                     break;
 
-                case RES_DDEFLD:
+                case SwFieldIds::Dde:
                     if( pDoc->getIDocumentFieldsAccess().IsNewFieldLst() )
                         static_cast<SwDDEFieldType*>(pField->GetTyp())->IncRefCnt();
                     bInsFieldType = static_cast<SwDDEFieldType*>(pField->GetTyp())->IsDeleted();
                     break;
 
-                case RES_POSTITFLD:
+                case SwFieldIds::Postit:
                     if ( pDoc->GetDocShell() )
                     {
                         pDoc->GetDocShell()->Broadcast( SwFormatFieldHint(
                             &pTextField->GetFormatField(), SwFormatFieldHintWhich::INSERTED));
                     }
                     break;
+                default: break;
                 }
                 if( bInsFieldType )
                     pDoc->getIDocumentFieldsAccess().InsDeletedFieldType( *pField->GetTyp() );
@@ -3270,7 +3273,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     {
         SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pHint));
         const SwFieldType* pFieldTyp = pTextField->GetFormatField().GetField()->GetTyp();
-        if( RES_DDEFLD == pFieldTyp->Which() )
+        if( SwFieldIds::Dde == pFieldTyp->Which() )
         {
             const SwTextNode* pNd = pTextField->GetpTextNode();
             if( pNd && pNd->GetNodes().IsDocNodes() )
@@ -3278,7 +3281,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
             pTextField->ChgTextNode(nullptr);
         }
         else if ( m_bHasHiddenParaField &&
-                 RES_HIDDENPARAFLD == pFieldTyp->Which() )
+                 SwFieldIds::HiddenPara == pFieldTyp->Which() )
         {
             m_bCalcHiddenParaField = true;
         }

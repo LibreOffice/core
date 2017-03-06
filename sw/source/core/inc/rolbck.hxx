@@ -53,7 +53,7 @@ class SwpHints;
 class SwFormatChain;
 class SwNode;
 class SwCharFormat;
-
+enum class SwFieldIds : sal_uInt16;
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -134,7 +134,7 @@ class SwHistorySetTextField : public SwHistoryHint
 
     sal_uLong m_nNodeIndex;
     sal_Int32 m_nPos;
-    sal_uInt16 m_nFieldWhich;
+    SwFieldIds m_nFieldWhich;
 
 public:
     SwHistorySetTextField( SwTextField* pTextField, sal_uLong nNode );

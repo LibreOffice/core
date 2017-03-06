@@ -1483,7 +1483,7 @@ void lcl_CopyHint(
 
             // Table Formula must be copied relative.
             const SwFormatField& rField = pHt->GetFormatField();
-            if( RES_TABLEFLD == rField.GetField()->GetTyp()->Which()
+            if( SwFieldIds::Table == rField.GetField()->GetTyp()->Which()
                 && static_cast<const SwTableField*>(rField.GetField())->IsIntrnlName())
             {
                 // convert internal formula to external

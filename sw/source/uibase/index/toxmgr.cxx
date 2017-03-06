@@ -348,7 +348,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if(TOX_AUTHORITIES == eCurTOXType)
             {
                 SwAuthorityFieldType* pFType = static_cast<SwAuthorityFieldType*>(
-                                                pSh->GetFieldType(RES_AUTHORITY, aEmptyOUStr));
+                                                pSh->GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
                 if (!pFType)
                 {
                     SwAuthorityFieldType const type(pSh->GetDoc());

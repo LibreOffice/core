@@ -58,7 +58,7 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
     // evaluation here
     OUString aStr;
-    if( RES_INPUTFLD == pField->GetTyp()->Which() )
+    if( SwFieldIds::Input == pField->GetTyp()->Which() )
     {   // it is an input field
 
         pInpField = static_cast<SwInputField*>(pField);
@@ -74,7 +74,7 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
             case INP_USR:
                 // user field
                 if( nullptr != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
-                            RES_USERFLD, pInpField->GetPar1() ) )  ) )
+                            SwFieldIds::User, pInpField->GetPar1() ) )  ) )
                     aStr = pUsrType->GetContent();
                 break;
         }

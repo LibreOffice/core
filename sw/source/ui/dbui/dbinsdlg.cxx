@@ -1265,7 +1265,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBField( static_cast<SwDBNextSetFieldType*>(rSh.
-                                            GetFieldType( 0, RES_DBNEXTSETFLD )),
+                                            GetFieldType( 0, SwFieldIds::DbNextSet )),
                                         "1", "", aDBData );
 
             bool bSetCursor = true;

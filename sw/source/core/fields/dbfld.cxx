@@ -53,7 +53,7 @@ static OUString lcl_DBTrennConv(const OUString& aContent)
 // database field type
 
 SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBData& rDBData ) :
-    SwValueFieldType( pDocPtr, RES_DBFLD ),
+    SwValueFieldType( pDocPtr, SwFieldIds::Database ),
     aDBData(rDBData),
     sName(rNam),
     sColumn(rNam),
@@ -550,7 +550,7 @@ void SwDBNameInfField::SetSubType(sal_uInt16 nType)
 // next dataset
 
 SwDBNextSetFieldType::SwDBNextSetFieldType()
-    : SwFieldType( RES_DBNEXTSETFLD )
+    : SwFieldType( SwFieldIds::DbNextSet )
 {
 }
 
@@ -636,7 +636,7 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 // dataset with certain ID
 
 SwDBNumSetFieldType::SwDBNumSetFieldType() :
-    SwFieldType( RES_DBNUMSETFLD )
+    SwFieldType( SwFieldIds::DbNumSet )
 {
 }
 
@@ -745,7 +745,7 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
-    : SwFieldType( RES_DBNAMEFLD )
+    : SwFieldType( SwFieldIds::DatabaseName )
 {
     pDoc = pDocument;
 }
@@ -795,7 +795,7 @@ bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwDBSetNumberFieldType::SwDBSetNumberFieldType()
-    : SwFieldType( RES_DBSETNUMBERFLD )
+    : SwFieldType( SwFieldIds::DbSetNumber )
 {
 }
 

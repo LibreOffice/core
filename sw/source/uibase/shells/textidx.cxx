@@ -239,7 +239,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, nullptr != pAuthMark));
 
         if( bInReadonly || !pField ||
-            pField->GetTyp()->Which() != RES_AUTHORITY)
+            pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
             rSet.DisableItem(FN_EDIT_AUTH_ENTRY_DLG);
         rSet.DisableItem(FN_REMOVE_CUR_TOX);
     }

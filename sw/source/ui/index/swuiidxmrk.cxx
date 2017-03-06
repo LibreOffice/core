@@ -1188,7 +1188,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
         if(!sEntry.isEmpty())
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : nullptr;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
@@ -1214,7 +1214,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : nullptr;
@@ -1347,7 +1347,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
     else
     {
         const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    pSh->GetFieldType(RES_AUTHORITY, OUString()));
+                                    pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
         if(pFType)
         {
             std::vector<OUString> aIds;
@@ -1386,7 +1386,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit, bool)
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFieldType(RES_AUTHORITY, OUString()));
+                                        pSh->GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
@@ -1410,7 +1410,7 @@ void SwAuthorMarkPane::InitControls()
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = m_sCreatedEntry[i];
     }
-    if(bNewEntry || !pField || pField->GetTyp()->Which() != RES_AUTHORITY)
+    if(bNewEntry || !pField || pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
         return;
 
     const SwAuthEntry* pEntry = static_cast<SwAuthorityFieldType*>(pField->GetTyp())->
@@ -1490,7 +1490,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
 
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        rSh.GetFieldType(RES_AUTHORITY, OUString()));
+                                        rSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             if(pFType)
             {
                 std::vector<OUString> aIds;
@@ -1584,7 +1584,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                rWrtSh.GetFieldType(RES_AUTHORITY, OUString()));
+                                rWrtSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(

@@ -410,8 +410,8 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     {
         rDesc.SetNumType( rChged.GetNumType() );
         // Notify page number fields that NumFormat has changed
-        getIDocumentFieldsAccess().GetSysFieldType( RES_PAGENUMBERFLD )->UpdateFields();
-        getIDocumentFieldsAccess().GetSysFieldType( RES_REFPAGEGETFLD )->UpdateFields();
+        getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::PageNumber )->UpdateFields();
+        getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::RefPageGet )->UpdateFields();
 
         // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
         // that refer to a changed page, so we invalidate foot notes.

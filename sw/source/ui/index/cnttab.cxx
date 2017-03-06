@@ -280,7 +280,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
             if(TOX_AUTHORITIES == eCurrentTOXType.eType)
             {
                 const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                                rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
+                                                rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
                 if(pFType)
                 {
                     OUString sBrackets;
@@ -428,7 +428,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
         if(TOX_AUTHORITIES == eType.eType)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                            rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
+                                            rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
             if(pFType)
             {
                 pDescArr[nIndex]->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
@@ -1268,11 +1268,11 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
-    const size_t nCount = rSh.GetFieldTypeCount(RES_SETEXPFLD);
+    const size_t nCount = rSh.GetFieldTypeCount(SwFieldIds::SetExp);
     for (size_t i = 0; i < nCount; ++i)
     {
-        SwFieldType *pType = rSh.GetFieldType( i, RES_SETEXPFLD );
-        if( pType->Which() == RES_SETEXPFLD &&
+        SwFieldType *pType = rSh.GetFieldType( i, SwFieldIds::SetExp );
+        if( pType->Which() == SwFieldIds::SetExp &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             m_pCaptionSequenceLB->InsertEntry(pType->GetName());
     }
@@ -2095,7 +2095,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         {
             SwWrtShell& rSh = pTOXDlg->GetWrtShell();
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    rSh.GetFieldType(RES_AUTHORITY, aEmptyOUStr));
+                                    rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
             if(pFType)
             {
                 if(pFType->IsSortByDocument())

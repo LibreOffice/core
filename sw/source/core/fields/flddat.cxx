@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 
 SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
-    : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
+    : SwValueFieldType( pInitDoc, SwFieldIds::DateTime )
 {}
 
 SwFieldType* SwDateTimeFieldType::Copy() const

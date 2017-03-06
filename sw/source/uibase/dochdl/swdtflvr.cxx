@@ -2112,7 +2112,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
         for( j = INIT_FLDTYPES; j < nSize; j++ )
         {
             pTyp = rWrtShell.GetFieldType( j );
-            if( RES_DDEFLD == pTyp->Which() )
+            if( SwFieldIds::Dde == pTyp->Which() )
             {
                 OUString sTmp( static_cast<SwDDEFieldType*>(pTyp)->GetCmd() );
                 if( rColl.isEqual( sTmp, aCmd ) &&

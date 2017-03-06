@@ -142,7 +142,7 @@ class SwDocUpdateField
     bool bFieldsDirty : 1;        // some fields are invalid
 
     void MakeFieldList_( SwDoc& pDoc, int eGetMode );
-    void GetBodyNode( const SwTextField& , sal_uInt16 nFieldWhich );
+    void GetBodyNode( const SwTextField& , SwFieldIds nFieldWhich );
     void GetBodyNode( const SwSectionNode&);
 
 public:

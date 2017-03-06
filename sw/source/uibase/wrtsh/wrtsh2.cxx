@@ -83,7 +83,7 @@ void SwWrtShell::Insert(SwField &rField)
     std::unique_ptr<SwPaM> pAnnotationTextRange;
     if ( HasSelection() )
     {
-        if ( rField.GetTyp()->Which() == RES_POSTITFLD )
+        if ( rField.GetTyp()->Which() == SwFieldIds::Postit )
         {
             // for annotation fields:
             // - keep the current selection in order to create a corresponding annotation mark
@@ -150,7 +150,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         {
             pTmp->GotoFieldPos( i );
             SwField* pField = pTmp->GetField( i );
-            if(pField->GetTyp()->Which() == RES_DROPDOWN)
+            if(pField->GetTyp()->Which() == SwFieldIds::Dropdown)
                 bCancel = StartDropDownFieldDlg( pField, true, &aDlgPos );
             else
                 bCancel = StartInputFieldDlg( pField, true, nullptr, &aDlgPos);
@@ -317,7 +317,7 @@ bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 void SwWrtShell::ClickToField( const SwField& rField )
 {
     // cross reference field must not be selected because it moves the cursor
-    if (RES_GETREFFLD != rField.GetTyp()->Which())
+    if (SwFieldIds::GetRef != rField.GetTyp()->Which())
     {
         StartAllAction();
         Right( CRSR_SKIP_CHARS, true, 1, false ); // Select the field.
@@ -328,7 +328,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
     m_bIsInClickToEdit = true;
     switch( rField.GetTyp()->Which() )
     {
-    case RES_JUMPEDITFLD:
+    case SwFieldIds::JumpEdit:
         {
             sal_uInt16 nSlotId = 0;
             switch( rField.GetFormat() )
@@ -358,7 +358,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
         }
         break;
 
-    case RES_MACROFLD:
+    case SwFieldIds::Macro:
         {
             const SwMacroField *pField = static_cast<const SwMacroField*>(&rField);
             const OUString sText( rField.GetPar2() );
@@ -376,7 +376,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
         }
         break;
 
-    case RES_GETREFFLD:
+    case SwFieldIds::GetRef:
         StartAllAction();
         SwCursorShell::GotoRefMark( static_cast<const SwGetRefField&>(rField).GetSetRefName(),
                                     static_cast<const SwGetRefField&>(rField).GetSubType(),
@@ -384,7 +384,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
         EndAllAction();
         break;
 
-    case RES_INPUTFLD:
+    case SwFieldIds::Input:
         {
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
             if ( pInputField == nullptr )
@@ -394,11 +394,11 @@ void SwWrtShell::ClickToField( const SwField& rField )
         }
         break;
 
-    case RES_SETEXPFLD:
+    case SwFieldIds::SetExp:
         if( static_cast<const SwSetExpField&>(rField).GetInputFlag() )
             StartInputFieldDlg( const_cast<SwField*>(&rField), false );
         break;
-    case RES_DROPDOWN :
+    case SwFieldIds::Dropdown :
         StartDropDownFieldDlg( const_cast<SwField*>(&rField), false );
     break;
     default:

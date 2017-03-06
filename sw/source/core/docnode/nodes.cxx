@@ -273,7 +273,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                     rNds.GetDoc()->getIDocumentFieldsAccess().InsDelFieldInFieldLst( !bToUndo, *pTextField );
 
                                     const SwFieldType* pTyp = pTextField->GetFormatField().GetField()->GetTyp();
-                                    if ( RES_POSTITFLD == pTyp->Which() )
+                                    if ( SwFieldIds::Postit == pTyp->Which() )
                                     {
                                         rNds.GetDoc()->GetDocShell()->Broadcast(
                                             SwFormatFieldHint(
@@ -282,7 +282,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                                   ? SwFormatFieldHintWhich::INSERTED
                                                   : SwFormatFieldHintWhich::REMOVED ) ) );
                                     }
-                                    else if( RES_DDEFLD == pTyp->Which() )
+                                    else if( SwFieldIds::Dde == pTyp->Which() )
                                     {
                                         if( bToUndo )
                                             const_cast<SwDDEFieldType*>(static_cast<const SwDDEFieldType*>(pTyp))->DecRefCnt();

@@ -163,7 +163,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         case FN_EXECUTE_MACROFIELD:
         {
             SwField* pField = rSh.GetCurField();
-            if(pField && pField->GetTyp()->Which() == RES_MACROFLD)
+            if(pField && pField->GetTyp()->Which() == SwFieldIds::Macro)
             {
 
                 const OUString& rMacro = static_cast<SwMacroField*>(pField)->GetMacro();
@@ -181,13 +181,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         case FN_GOTO_PREV_INPUTFLD:
             {
                 bool bRet = false;
-                SwFieldType* pField = rSh.GetFieldType( 0, RES_INPUTFLD );
+                SwFieldType* pField = rSh.GetFieldType( 0, SwFieldIds::Input );
                 const bool bAddSetExpressionFields = !( rSh.GetViewOptions()->IsReadonly() );
                 if ( pField != nullptr
                      && rSh.MoveFieldType(
                             pField,
                             FN_GOTO_NEXT_INPUTFLD == nSlot,
-                            USHRT_MAX,
+                            SwFieldIds::Unknown,
                             bAddSetExpressionFields ) )
                 {
                     rSh.ClearMark();
@@ -382,7 +382,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
                 if (pIdItem && !pIdItem->GetValue().isEmpty())
                 {
-                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(), false);
+                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
                     SwIterator<SwFormatField,SwFieldType> aIter( *pType );
                     SwFormatField* pSwFormatField = aIter.First();
                     while( pSwFormatField )
@@ -411,7 +411,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_POSTIT:
             {
                 SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFieldMgr.GetCurField());
-                bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
+                bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == SwFieldIds::Postit);
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
                     const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg<SvxPostItAuthorItem>(SID_ATTR_POSTIT_AUTHOR);
@@ -461,7 +461,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if (pPostIt)
                 {
-                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(), false);
+                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
                     SwIterator<SwFormatField,SwFieldType> aIter( *pType );
                     SwFormatField* pSwFormatField = aIter.First();
                     while( pSwFormatField )
@@ -615,7 +615,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         bIsUrl = pIsUrl->GetValue();
 
                     SwScriptField* pField = static_cast<SwScriptField*>(aMgr.GetCurField());
-                    bNew = !pField || !(pField->GetTyp()->Which() == RES_SCRIPTFLD);
+                    bNew = !pField || !(pField->GetTyp()->Which() == SwFieldIds::Script);
                     bUpdate = pField && ( bIsUrl != (bool)pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
                 }
                 else
@@ -742,13 +742,13 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     bGetField = true;
                 }
 
-                sal_uInt16 nTempWhich = pField ? pField->GetTyp()->Which() : USHRT_MAX;
-                if( USHRT_MAX == nTempWhich ||
-                    RES_POSTITFLD == nTempWhich ||
-                    RES_SCRIPTFLD == nTempWhich ||
-                    RES_AUTHORITY == nTempWhich )
+                SwFieldIds nTempWhich = pField ? pField->GetTyp()->Which() : SwFieldIds::Unknown;
+                if( SwFieldIds::Unknown == nTempWhich ||
+                    SwFieldIds::Postit == nTempWhich ||
+                    SwFieldIds::Script == nTempWhich ||
+                    SwFieldIds::TableOfAuthorities == nTempWhich )
                     rSet.DisableItem( nWhich );
-                else if( RES_DDEFLD == nTempWhich &&
+                else if( SwFieldIds::Dde == nTempWhich &&
                     !static_cast<SwDDEFieldType*>(pField->GetTyp())->GetBaseLink().IsVisible())
                 {
                     // nested links cannot be edited
@@ -764,7 +764,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     pField = rSh.GetCurField();
                     bGetField = true;
                 }
-                if(!pField || pField->GetTyp()->Which() != RES_MACROFLD)
+                if(!pField || pField->GetTyp()->Which() != SwFieldIds::Macro)
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -822,9 +822,9 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 bool bCurField = false;
                 pField = rSh.GetCurField();
                 if(nWhich == FN_POSTIT || nWhich == FN_REPLY)
-                    bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;
+                    bCurField = pField && pField->GetTyp()->Which() == SwFieldIds::Postit;
                 else
-                    bCurField = pField && pField->GetTyp()->Which() == RES_SCRIPTFLD;
+                    bCurField = pField && pField->GetTyp()->Which() == SwFieldIds::Script;
 
                 if( !bCurField && rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() )
                 {

@@ -280,7 +280,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
         {
             // change or create user type
             SwUserFieldType* pType = static_cast<SwUserFieldType*>(
-                GetFieldMgr().GetFieldType(RES_USERFLD, nSelData));
+                GetFieldMgr().GetFieldType(SwFieldIds::User, nSelData));
 
             if (pType)
             {
@@ -346,7 +346,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                         if(pSh)
                         {
                             SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
-                                    pSh->GetFieldType(RES_SETEXPFLD, sName));
+                                    pSh->GetFieldType(SwFieldIds::SetExp, sName));
 
                             if (pSetTyp && pSetTyp->GetType() == nsSwGetSetExpType::GSE_STRING)
                                 m_pNumFormatLB->SelectEntryPos(0); // textual
@@ -396,7 +396,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                     if(pSh)
                     {
                         SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
-                                pSh->GetFieldType(RES_SETEXPFLD, sName));
+                                pSh->GetFieldType(SwFieldIds::SetExp, sName));
 
                         if(pSetTyp)
                         {
@@ -428,13 +428,13 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
 
                 // User- or SetField ?
                 const sal_uInt16 nInpType = static_cast< sal_uInt16 >
-                    (GetFieldMgr().GetFieldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
+                    (GetFieldMgr().GetFieldType(SwFieldIds::User, sName) ? 0 : TYP_SETINPFLD);
 
                 if (nInpType)   // SETEXPFLD
                 {
                     // is there a corresponding SetField
                     SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
-                                GetFieldMgr().GetFieldType(RES_SETEXPFLD, sName));
+                                GetFieldMgr().GetFieldType(SwFieldIds::SetExp, sName));
 
                     if(pSetTyp)
                     {
@@ -463,7 +463,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
                     SwDDEFieldType* pType =
-                        static_cast<SwDDEFieldType*>( GetFieldMgr().GetFieldType(RES_DDEFLD, nSelData) );
+                        static_cast<SwDDEFieldType*>( GetFieldMgr().GetFieldType(SwFieldIds::Dde, nSelData) );
 
                     if(pType)
                     {
@@ -495,7 +495,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                 {
                     OUString sFieldTypeName( m_pSelectionLB->GetEntry( nSelPos ));
                     if( !sFieldTypeName.isEmpty() )
-                        pFieldTyp = GetFieldMgr().GetFieldType( RES_SETEXPFLD,
+                        pFieldTyp = GetFieldMgr().GetFieldType( SwFieldIds::SetExp,
                                                           sFieldTypeName );
                     else
                         pFieldTyp = nullptr;
@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
             // is there already a corresponding type
             bInsert = bApply = true;
 
-            SwFieldType* pType = GetFieldMgr().GetFieldType(RES_DDEFLD, sName);
+            SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::Dde, sName);
 
             SwWrtShell *pSh = GetWrtShell();
             if(!pSh)
@@ -879,7 +879,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
         if( nLen )
         {
             // is there already a corresponding type
-            SwFieldType* pType = GetFieldMgr().GetFieldType(RES_USERFLD, sName);
+            SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::User, sName);
 
             SwWrtShell *pSh = GetWrtShell();
             if(!pSh)
@@ -887,7 +887,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
             if(pSh && pType)
                 bDelete = !pSh->IsUsed( *pType );
 
-            pType = GetFieldMgr().GetFieldType(RES_SETEXPFLD, sName);
+            pType = GetFieldMgr().GetFieldType(SwFieldIds::SetExp, sName);
             if (!pType) // no name conflict with variables
             {
                 // user fields can also be inserted without content!
@@ -903,7 +903,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
         if (nTypeId == TYP_SETFLD || nTypeId == TYP_SEQFLD)
         {
             SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(
-                GetFieldMgr().GetFieldType(RES_SETEXPFLD, sName));
+                GetFieldMgr().GetFieldType(SwFieldIds::SetExp, sName));
 
             if (pFieldType)
             {
@@ -933,7 +933,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
                         bInsert = false;
                 }
             }
-            if (GetFieldMgr().GetFieldType(RES_USERFLD, sName))
+            if (GetFieldMgr().GetFieldType(SwFieldIds::User, sName))
                 bInsert = false;
         }
 
@@ -961,19 +961,19 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
     if (nCurId == m_nDeleteId)
     {
         if( nTypeId == TYP_USERFLD )
-            GetFieldMgr().RemoveFieldType(RES_USERFLD, m_pSelectionLB->GetSelectEntry());
+            GetFieldMgr().RemoveFieldType(SwFieldIds::User, m_pSelectionLB->GetSelectEntry());
         else
         {
-            sal_uInt16 nWhich;
+            SwFieldIds nWhich;
 
             switch(nTypeId)
             {
                 case TYP_SETFLD:
                 case TYP_SEQFLD:
-                    nWhich = RES_SETEXPFLD;
+                    nWhich = SwFieldIds::SetExp;
                     break;
                 default:
-                    nWhich = RES_DDEFLD;
+                    nWhich = SwFieldIds::Dde;
                     break;
             }
 
@@ -993,14 +993,14 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
     {
         OUString sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
         SwFieldType* pType = nullptr;
-        sal_uInt16 nId = 0;
+        SwFieldIds nId = SwFieldIds::Database;
         sal_Int32 nNumFormatPos = m_pNumFormatLB->GetSelectEntryPos();
 
         switch (nTypeId)
         {
-            case TYP_USERFLD:   nId = RES_USERFLD;  break;
-            case TYP_DDEFLD:    nId = RES_DDEFLD;   break;
-            case TYP_SETFLD:    nId = RES_SETEXPFLD;break;
+            case TYP_USERFLD:   nId = SwFieldIds::User;  break;
+            case TYP_DDEFLD:    nId = SwFieldIds::Dde;   break;
+            case TYP_SETFLD:    nId = SwFieldIds::SetExp;break;
         }
         pType = GetFieldMgr().GetFieldType(nId, sName);
 
@@ -1182,7 +1182,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         }
         case TYP_INPUTFLD:
         {
-            SwFieldType* pType = GetFieldMgr().GetFieldType(RES_USERFLD, aName);
+            SwFieldType* pType = GetFieldMgr().GetFieldType(SwFieldIds::User, aName);
             nSubType = static_cast< sal_uInt16 >((nSubType & 0xff00) | ((pType) ? INP_USR : INP_VAR));
             break;
         }

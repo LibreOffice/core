@@ -4283,11 +4283,11 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions, 
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
     const bool bContainsHiddenChars         = m_pShell->GetDoc()->ContainsHiddenChars();
-    const SwFieldType* pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD );
+    const SwFieldType* pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText );
     const bool bContainsHiddenFields        = pFieldType && pFieldType->HasWriterListeners();
-    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENPARAFLD );
+    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenPara );
     const bool bContainsHiddenParagraphs    = pFieldType && pFieldType->HasWriterListeners();
-    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_JUMPEDITFLD );
+    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::JumpEdit );
     const bool bContainsPlaceHolders        = pFieldType && pFieldType->HasWriterListeners();
     const bool bContainsFields              = m_pShell->IsAnyFieldInDoc();
 

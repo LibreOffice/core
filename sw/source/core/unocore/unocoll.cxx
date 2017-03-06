@@ -768,13 +768,13 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case SwServiceType::FieldMasterSetExp :
         case SwServiceType::FieldMasterDatabase:
         {
-            sal_uInt16 nResId = USHRT_MAX;
+            SwFieldIds nResId = SwFieldIds::Unknown;
             switch(nObjectType)
             {
-                case SwServiceType::FieldMasterUser: nResId = RES_USERFLD; break;
-                case SwServiceType::FieldMasterDDE:  nResId = RES_DDEFLD; break;
-                case SwServiceType::FieldMasterSetExp : nResId = RES_SETEXPFLD; break;
-                case SwServiceType::FieldMasterDatabase: nResId = RES_DBFLD; break;
+                case SwServiceType::FieldMasterUser: nResId = SwFieldIds::User; break;
+                case SwServiceType::FieldMasterDDE:  nResId = SwFieldIds::Dde; break;
+                case SwServiceType::FieldMasterSetExp : nResId = SwFieldIds::SetExp; break;
+                case SwServiceType::FieldMasterDatabase: nResId = SwFieldIds::Database; break;
                 default: break;
             }
             xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, nullptr, nResId);
@@ -782,7 +782,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         break;
         case SwServiceType::FieldMasterBibliography:
         {
-            SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType(RES_AUTHORITY, aEmptyOUStr, true);
+            SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr, true);
             if(!pType)
             {
                 SwAuthorityFieldType aType(&rDoc);

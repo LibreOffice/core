@@ -634,7 +634,7 @@ void SwHTMLParser::Continue( int nToken )
             if( !m_aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
-                    static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
+                    static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Script ));
 
                 SwScriptField aField( pType, m_aScriptType, m_aScriptSource,
                                     false );
@@ -2827,12 +2827,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
                     {
-                        sal_uInt16 nFieldWhich =
+                        SwFieldIds nFieldWhich =
                             pPostIts
                             ? static_cast<const SwFormatField *>(pAttr->pItem.get())->GetField()->GetTyp()->Which()
-                            : 0;
-                        if( pPostIts && (RES_POSTITFLD == nFieldWhich ||
-                                         RES_SCRIPTFLD == nFieldWhich) )
+                            : SwFieldIds::Database;
+                        if( pPostIts && (SwFieldIds::Postit == nFieldWhich ||
+                                         SwFieldIds::Script == nFieldWhich) )
                         {
                             pPostIts->push_front( pAttr );
                         }
@@ -5404,7 +5404,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
     sText.append("\">");
 
     SwPostItField aPostItField(
-        static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
+        static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
         aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFormatField aFormatField( aPostItField );
     InsertAttr( aFormatField,  false );
