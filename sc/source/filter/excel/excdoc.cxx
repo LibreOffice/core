@@ -490,7 +490,8 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     {
         Add( new XclExpProtection(true) );
         Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
-        Add( new XclExpBoolRecord(0x0063, pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS)) );
+        if (pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS))
+            Add( new XclExpBoolRecord(0x0063, true ));
         Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
     }
 
