@@ -3013,14 +3013,19 @@ StyleSettings::DetermineIconTheme() const
     OUString sTheme(mxData->mIconTheme);
     if (sTheme.isEmpty())
     {
-        // read from the configuration, or fallback to what the desktop wants
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-        if (xContext.is())
+        if (utl::ConfigManager::IsAvoidConfig())
+            sTheme = "galaxy";
+        else
         {
-            sTheme = officecfg::Office::Common::Misc::SymbolStyle::get(xContext);
+            // read from the configuration, or fallback to what the desktop wants
+            uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+            if (xContext.is())
+            {
+                sTheme = officecfg::Office::Common::Misc::SymbolStyle::get(xContext);
 
-            if (sTheme.isEmpty() || sTheme == "auto")
-                sTheme = GetAutomaticallyChosenIconTheme();
+                if (sTheme.isEmpty() || sTheme == "auto")
+                    sTheme = GetAutomaticallyChosenIconTheme();
+            }
         }
     }
 
