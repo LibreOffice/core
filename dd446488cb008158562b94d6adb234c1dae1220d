@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_a08631b7",
+        "filename": "sc/source/ui/drawfunc/futext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-06T11:50:20Z",
+      "side": 1,
+      "message": "the event isnt from SdrView, it;s *handled by* SdrView",
+      "revId": "dd446488cb008158562b94d6adb234c1dae1220d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c09335f9",
+        "filename": "sc/source/ui/drawfunc/futext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-06T11:50:20Z",
+      "side": 1,
+      "message": "english it\u0027s \"mode\"",
+      "revId": "dd446488cb008158562b94d6adb234c1dae1220d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e09039ef",
+        "filename": "sc/source/ui/drawfunc/futext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-06T11:50:20Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "dd446488cb008158562b94d6adb234c1dae1220d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_00bc5d6b",
+        "filename": "sc/source/ui/drawfunc/futext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-06T11:50:20Z",
+      "side": 1,
+      "message": "\"mode\" again, also \"single click\" is more idiomatic",
+      "revId": "dd446488cb008158562b94d6adb234c1dae1220d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_60bb6973",
+        "filename": "sc/source/ui/drawfunc/futext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-06T11:50:20Z",
+      "side": 1,
+      "message": "\"therefor\" and \"therefore\" are different words and you want the latter here",
+      "revId": "dd446488cb008158562b94d6adb234c1dae1220d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
