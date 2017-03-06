@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     cppu \
     cppuhelper \
     sal \
+    ucbhelper \
     sofficeapp \
 ))
 
