@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0031bd0b",
+        "filename": "odk/Package_odk_headers.mk",
+        "patchSetId": 17
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-06T13:15:31Z",
+      "side": 0,
+      "message": "when the last remaining systools include file is removed, mention of \"systools\" should be removed from odk/CustomTarget_doxygen.mk, too",
+      "revId": "b398dacbb471913e573e9b0b4cd31d94a9109223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
