@@ -91,11 +91,31 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
     VclPtr<OWizardPage> pRet;
     switch(_nState)
     {
-        case MM_DOCUMENTSELECTPAGE : pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this);     break;
-        case MM_OUTPUTTYPETPAGE : pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this);       break;
-        case MM_ADDRESSBLOCKPAGE  : pRet = VclPtr<SwMailMergeAddressBlockPage>::Create(this);     break;
-        case MM_GREETINGSPAGE     : pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this);      break;
-        case MM_LAYOUTPAGE        : pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);     break;
+        case MM_DOCUMENTSELECTPAGE :
+            pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this);
+
+            /* tdf#52986 Set help ID using SetRoadmapHelpId for all pages
+            so that when by default the focus is on the left side pane of
+            the wizard the relevant help page is displayed when hitting
+            the Help / F1 button */
+            SetRoadmapHelpId("modules/swriter/ui/mmselectpage/MMSelectPage");
+        break;
+        case MM_OUTPUTTYPETPAGE    :
+            pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this);
+            SetRoadmapHelpId("modules/swriter/ui/mmoutputtypepage/MMOutputTypePage");
+        break;
+        case MM_ADDRESSBLOCKPAGE   :
+            pRet = VclPtr<SwMailMergeAddressBlockPage>::Create(this);
+            SetRoadmapHelpId("modules/swriter/ui/mmaddressblockpage/MMAddressBlockPage");
+        break;
+        case MM_GREETINGSPAGE      :
+            pRet = VclPtr<SwMailMergeGreetingsPage>::Create(this);
+            SetRoadmapHelpId("modules/swriter/ui/mmsalutationpage/MMSalutationPage");
+        break;
+        case MM_LAYOUTPAGE         :
+            pRet = VclPtr<SwMailMergeLayoutPage>::Create(this);
+            SetRoadmapHelpId("modules/swriter/ui/mmlayoutpage/MMLayoutPage");
+        break;
     }
     OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
