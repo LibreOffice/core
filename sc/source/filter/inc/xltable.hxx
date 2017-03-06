@@ -65,7 +65,7 @@ const sal_uInt16 EXC_ID4_FORMULA            = 0x0406;
 const sal_uInt16 EXC_FORMULA_RECALC_ALWAYS  = 0x0001;
 const sal_uInt16 EXC_FORMULA_RECALC_ONLOAD  = 0x0002;
 const sal_uInt16 EXC_FORMULA_SHARED         = 0x0008;
-const sal_uInt16 EXC_FORMULA_DEFAULTFLAGS   = EXC_FORMULA_RECALC_ONLOAD;
+const sal_uInt16 EXC_FORMULA_DEFAULTFLAGS   = 0x0000;
 
 const sal_uInt8 EXC_FORMULA_RES_STRING      = 0x00;     /// Result is a string.
 const sal_uInt8 EXC_FORMULA_RES_BOOL        = 0x01;     /// Result is Boolean value.
