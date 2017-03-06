@@ -38,6 +38,7 @@
 #include <svl/documentlockfile.hxx>
 
 #include <cstdio>
+#include <fstream>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
@@ -163,6 +164,35 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     if (nURIlen < 0)
         nURIlen = rest2.getLength();
     arg = rest2.copy(0, nURIlen);
+    return curEvt;
+}
+
+// Web query: http://support.microsoft.com/kb/157482
+CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curEvt)
+{
+    // Only handle files with extension .iqy
+    if (!arg.endsWithIgnoreAsciiCase(".iqy"))
+        return curEvt;
+
+    try
+    {
+        std::ifstream iqy(arg.getStr());
+        std::string line;
+        iqy >> line; // line 1: Type of Query
+        if (line != "WEB")
+            return curEvt;
+        iqy >> line; // line 2: Version
+        if (line != "1")
+            return curEvt;
+        iqy >> line; // line 3: URL (with parameters for GET method)
+        // TODO: process dynamic parameters ["name","prompt"], as well as POST parameters in line 4
+        arg = OUString::createFromAscii(line.c_str());
+    }
+    catch (...)
+    {
+        SAL_WARN("sofficeapp", "An error processing Web Query file: " << arg);
+    }
+
     return curEvt;
 }
 
@@ -529,6 +559,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // This will possibly adjust event for this argument
                 // and put real URI to aArg
                 CommandLineEvent eThisEvent = CheckOfficeURI(aArg, eCurrentEvent);
+
+                // Now check if this is a Web Query file
+                eThisEvent = CheckWebQuery(aArg, eThisEvent);
 
                 switch (eThisEvent)
                 {
