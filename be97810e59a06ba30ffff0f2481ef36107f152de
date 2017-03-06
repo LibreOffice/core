@@ -34,6 +34,24 @@
       "revId": "be97810e59a06ba30ffff0f2481ef36107f152de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e0e2f99e",
+        "filename": "scp2/source/winexplorerext/file_winexplorerext.scp",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-06T11:04:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_806dad34",
+      "revId": "be97810e59a06ba30ffff0f2481ef36107f152de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
