@@ -53,10 +53,10 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include <../source/filter/igif/gifread.hxx>
-#include <../source/filter/ixbm/xbmread.hxx>
-#include <../source/filter/ixpm/xpmread.hxx>
-#include <../source/filter/jpeg/jpeg.hxx>
+#include <gifread.hxx>
+#include <xbmread.hxx>
+#include <xpmread.hxx>
+#include <jpeg.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

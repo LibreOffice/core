@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
+#ifndef INCLUDED_VCL_INC_JPEG_HXX
+#define INCLUDED_VCL_INC_JPEG_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

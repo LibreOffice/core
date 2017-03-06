@@ -8,8 +8,9 @@
  */
 
 #include <tools/stream.hxx>
-#include <../source/filter/ixpm/xpmread.hxx>
 #include "commonfuzzer.hxx"
+
+#include <xpmread.hxx>
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {

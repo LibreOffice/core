@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
+#ifndef INCLUDED_VCL_INC_GIFREAD_HXX
+#define INCLUDED_VCL_INC_GIFREAD_HXX
 
-#include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/bitmapaccess.hxx>
 
-class Graphic;
+VCL_DLLPUBLIC bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
-VCL_DLLPUBLIC bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

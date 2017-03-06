@@ -41,11 +41,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
-#include "igif/gifread.hxx"
 #include "ipdf/pdfread.hxx"
-#include "jpeg/jpeg.hxx"
-#include "ixbm/xbmread.hxx"
-#include "ixpm/xpmread.hxx"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -68,6 +64,10 @@
 #include <vector>
 #include <memory>
 
+#include "gifread.hxx"
+#include "jpeg.hxx"
+#include "xbmread.hxx"
+#include "xpmread.hxx"
 #include "FilterConfigCache.hxx"
 #include "graphicfilter_internal.hxx"
 
