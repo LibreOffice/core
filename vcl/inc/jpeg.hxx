@@ -17,14 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
+#ifndef INCLUDED_VCL_INC_JPEG_HXX
+#define INCLUDED_VCL_INC_JPEG_HXX
 
 #include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/fltcall.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
-VCL_DLLPUBLIC bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags );
 
-#endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
+bool ExportJPEG(SvStream& rOutputStream,
+                    const Graphic& rGraphic,
+                    const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                    bool* pExportWasGrey);
+
+#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

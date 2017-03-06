@@ -8,7 +8,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <../source/filter/igif/gifread.hxx>
+#include <gifread.hxx>
 #include "commonfuzzer.hxx"
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)

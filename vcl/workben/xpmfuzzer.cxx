@@ -8,7 +8,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <../source/filter/ixpm/xpmread.hxx>
+#include <xpmread.hxx>
 #include "commonfuzzer.hxx"
 
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
