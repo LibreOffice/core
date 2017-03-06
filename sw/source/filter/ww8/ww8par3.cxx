@@ -111,7 +111,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aFormula.msDefault = GetFieldResult(pF);
 
         SwInputField aField(
-            static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_INPUTFLD )),
+            static_cast<SwInputFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )),
             aFormula.msDefault,
             aFormula.msTitle,
             INP_TXT,
@@ -228,7 +228,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
     if (!bUseEnhFields)
     {
-        SwDropDownField aField(static_cast<SwDropDownFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_DROPDOWN)));
+        SwDropDownField aField(static_cast<SwDropDownFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Dropdown)));
 
         aField.SetName(aFormula.msTitle);
         aField.SetHelp(aFormula.msHelp);

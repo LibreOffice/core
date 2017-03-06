@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 
 SwScriptFieldType::SwScriptFieldType( SwDoc* pD )
-    : SwFieldType( RES_SCRIPTFLD ), pDoc( pD )
+    : SwFieldType( SwFieldIds::Script ), pDoc( pD )
 {}
 
 SwFieldType* SwScriptFieldType::Copy() const

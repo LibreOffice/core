@@ -464,7 +464,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     {
         SwCalcExp* pFndExp = static_cast<SwCalcExp*>(pFnd);
 
-        if( pFndExp->pFieldType && pFndExp->pFieldType->Which() == RES_USERFLD )
+        if( pFndExp->pFieldType && pFndExp->pFieldType->Which() == SwFieldIds::User )
         {
             SwUserFieldType* pUField = const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFndExp->pFieldType));
             if( nsSwGetSetExpType::GSE_STRING & pUField->GetType() )
@@ -520,7 +520,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             sDBNum = m_pCharClass->lowercase(sDBNum);
 
             // Initialize again because this doesn't happen in docfld anymore for
-            // elements != RES_DBFLD. E.g. if there is an expression field before
+            // elements != SwFieldIds::Database. E.g. if there is an expression field before
             // an DB_Field in a document.
             VarChange( sDBNum, pMgr->GetSelectedRecordId(sSourceName, sTableName));
 

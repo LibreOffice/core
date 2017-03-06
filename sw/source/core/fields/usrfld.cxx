@@ -156,7 +156,7 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
-    : SwValueFieldType( pDocPtr, RES_USERFLD ),
+    : SwValueFieldType( pDocPtr, SwFieldIds::User ),
     nValue( 0 ),
     nType(nsSwGetSetExpType::GSE_STRING)
 {
@@ -207,7 +207,7 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if ( !IsModifyLocked() )
     {
         LockModify();
-        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_INPUTFLD )->UpdateFields();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )->UpdateFields();
         UnlockModify();
     }
 }

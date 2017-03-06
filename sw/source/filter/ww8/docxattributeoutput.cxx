@@ -1699,7 +1699,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( rInfos.pField )
     {
         sal_uInt16 nSubType = rInfos.pField->GetSubType( );
-        bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == RES_SETEXPFLD;
+        bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == SwFieldIds::SetExp;
         bool bShowRef = bIsSetField && ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) == 0;
 
         if ( ( !m_sFieldBkm.isEmpty() ) && bShowRef )
@@ -6653,8 +6653,8 @@ void DocxAttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat 
 
 void DocxAttributeOutput::RefField( const SwField&  rField, const OUString& rRef )
 {
-    sal_uInt16 nType = rField.GetTyp( )->Which( );
-    if ( nType == RES_GETEXPFLD )
+    SwFieldIds nType = rField.GetTyp( )->Which( );
+    if ( nType == SwFieldIds::GetExp )
     {
         OUString sCmd = FieldString( ww::eREF );
         sCmd += "\"" + rRef + "\" ";
@@ -6788,16 +6788,16 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eTy
 
     if ( pField )
     {
-        sal_uInt16 nType = pField->GetTyp( )->Which( );
+        SwFieldIds nType = pField->GetTyp( )->Which( );
         sal_uInt16 nSubType = pField->GetSubType();
 
         // TODO Any other field types here ?
-        if ( ( nType == RES_SETEXPFLD ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
+        if ( ( nType == SwFieldIds::SetExp ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
         {
             const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pField );
             m_sFieldBkm = pSet->GetPar1( );
         }
-        else if ( nType == RES_DROPDOWN )
+        else if ( nType == SwFieldIds::Dropdown )
         {
             const SwDropDownField* pDropDown = static_cast<const SwDropDownField*>( pField );
             m_sFieldBkm = pDropDown->GetName( );

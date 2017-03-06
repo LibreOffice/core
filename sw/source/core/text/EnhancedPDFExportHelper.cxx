@@ -1413,12 +1413,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
                 {
                     const SwField* pField = pHint->GetFormatField().GetField();
-                    if ( RES_GETREFFLD == pField->Which() )
+                    if ( SwFieldIds::GetRef == pField->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;
                         aPDFType = aLinkString;
                     }
-                    else if ( RES_AUTHORITY == pField->Which() )
+                    else if ( SwFieldIds::TableOfAuthorities == pField->Which() )
                     {
                         nPDFType = vcl::PDFWriter::BibEntry;
                         aPDFType = aBibEntryString;
@@ -1564,7 +1564,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         if ( pPDFExtOutDevData->GetIsExportNotes() )
         {
-            SwFieldType* pType = mrSh.GetFieldType( RES_POSTITFLD, OUString() );
+            SwFieldType* pType = mrSh.GetFieldType( SwFieldIds::Postit, OUString() );
             SwIterator<SwFormatField,SwFieldType> aIter( *pType );
             for( SwFormatField* pFirst = aIter.First(); pFirst; )
             {
@@ -1852,7 +1852,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         // REFERENCES
 
-        SwFieldType* pType = mrSh.GetFieldType( RES_GETREFFLD, OUString() );
+        SwFieldType* pType = mrSh.GetFieldType( SwFieldIds::GetRef, OUString() );
         SwIterator<SwFormatField,SwFieldType> aIter( *pType );
         for( SwFormatField* pFirst = aIter.First(); pFirst; )
         {

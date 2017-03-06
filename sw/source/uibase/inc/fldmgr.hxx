@@ -43,6 +43,7 @@ class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
 namespace vcl { class Window; }
+enum class SwFieldIds : sal_uInt16;
 
 // the groups of fields
 enum SwFieldGroups
@@ -154,10 +155,10 @@ public:
 
     // access to field types via ResId
     size_t          GetFieldTypeCount() const;
-    SwFieldType*    GetFieldType(sal_uInt16 nResId, size_t nField = 0) const;
-    SwFieldType*    GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
+    SwFieldType*    GetFieldType(SwFieldIds nResId, size_t nField = 0) const;
+    SwFieldType*    GetFieldType(SwFieldIds nResId, const OUString& rName) const;
 
-    void            RemoveFieldType(sal_uInt16 nResId, const OUString& rName);
+    void            RemoveFieldType(SwFieldIds nResId, const OUString& rName);
 
     // access via TypeId from the dialog
     // Ids for a range of fields

@@ -289,9 +289,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         const SwField* pField = aContentAtPos.aFnd.pField;
                         switch( pField->Which() )
                         {
-                        case RES_SETEXPFLD:
-                        case RES_TABLEFLD:
-                        case RES_GETEXPFLD:
+                        case SwFieldIds::SetExp:
+                        case SwFieldIds::Table:
+                        case SwFieldIds::GetExp:
                         {
                             sal_uInt16 nOldSubType = pField->GetSubType();
                             const_cast<SwField*>(pField)->SetSubType(nsSwExtendedSubType::SUB_CMD);
@@ -300,34 +300,34 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                         break;
 
-                        case RES_POSTITFLD:
+                        case SwFieldIds::Postit:
                             {
                                 break;
                             }
-                        case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
+                        case SwFieldIds::Input:  // BubbleHelp, because the suggestion could be quite long
                             bBalloon = true;
                             SAL_FALLTHROUGH;
-                        case RES_JUMPEDITFLD:
+                        case SwFieldIds::JumpEdit:
                             sText = pField->GetPar2();
                             break;
 
-                        case RES_DBFLD:
+                        case SwFieldIds::Database:
                             sText = pField->GetFieldName();
                             break;
 
-                        case RES_USERFLD:
-                        case RES_HIDDENTXTFLD:
+                        case SwFieldIds::User:
+                        case SwFieldIds::HiddenText:
                             sText = pField->GetPar1();
                             break;
 
-                        case RES_DOCSTATFLD:
+                        case SwFieldIds::DocStat:
                             break;
 
-                        case RES_MACROFLD:
+                        case SwFieldIds::Macro:
                             sText = static_cast<const SwMacroField*>(pField)->GetMacro();
                             break;
 
-                        case RES_GETREFFLD:
+                        case SwFieldIds::GetRef:
                         {
                             // #i85090#
                             const SwGetRefField* pRefField( dynamic_cast<const SwGetRefField*>(pField) );
@@ -351,6 +351,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             }
                         }
                         break;
+                        default: break;
                         }
                     }
 

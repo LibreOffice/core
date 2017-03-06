@@ -66,7 +66,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFieldType* pFieldTyp = pField->GetTyp();
-    sal_uInt16 nField = pFieldTyp->Which();
+    SwFieldIds nField = pFieldTyp->Which();
     sal_uLong nFormat = pField->GetFormat();
 
     const sal_Char *pTypeStr=nullptr, // TYPE
@@ -81,7 +81,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
 
     switch( nField )
     {
-        case RES_EXTUSERFLD:
+        case SwFieldIds::ExtUser:
             pTypeStr = OOO_STRING_SW_HTML_FT_sender;
             switch( (SwExtUserSubType)pField->GetSubType() )
             {
@@ -107,7 +107,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             bFixed = static_cast<const SwExtUserField*>(pField)->IsFixed();
             break;
 
-        case RES_AUTHORFLD:
+        case SwFieldIds::Author:
             pTypeStr = OOO_STRING_SW_HTML_FT_author;
             switch( (SwAuthorFormat)nFormat & 0xff)
             {
@@ -118,7 +118,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             bFixed = static_cast<const SwAuthorField*>(pField)->IsFixed();
             break;
 
-        case RES_DATETIMEFLD:
+        case SwFieldIds::DateTime:
             pTypeStr = OOO_STRING_SW_HTML_FT_datetime;
             bNumFormat = true;
             if( static_cast<const SwDateTimeField*>(pField)->IsFixed() )
@@ -128,7 +128,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             }
             break;
 
-        case RES_PAGENUMBERFLD:
+        case SwFieldIds::PageNumber:
             {
                 pTypeStr = OOO_STRING_SW_HTML_FT_page;
                 SwPageNumSubType eSubType = (SwPageNumSubType)pField->GetSubType();
@@ -158,7 +158,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 }
             }
             break;
-        case RES_DOCINFOFLD:
+        case SwFieldIds::DocInfo:
             {
                 sal_uInt16 nSubType = pField->GetSubType();
                 pTypeStr = OOO_STRING_SW_HTML_FT_docinfo;
@@ -219,7 +219,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             }
             break;
 
-        case RES_DOCSTATFLD:
+        case SwFieldIds::DocStat:
             {
                 pTypeStr = OOO_STRING_SW_HTML_FT_docstat;
                 sal_uInt16 nSubType = pField->GetSubType();
@@ -238,7 +238,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             }
             break;
 
-        case RES_FILENAMEFLD:
+        case SwFieldIds::Filename:
             pTypeStr = OOO_STRING_SW_HTML_FT_filename;
             switch( (SwFileNameFormat)(nFormat & ~FF_FIXED) )
             {
@@ -252,6 +252,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             bFixed = static_cast<const SwFileNameField*>(pField)->IsFixed();
             OSL_ENSURE( pFormatStr, "unbekanntes Format fuer SwFileNameField" );
             break;
+        default: break;
     }
 
     // <SDFIELD>-Tag ausgeben
@@ -437,7 +438,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     const SwField* pField = rField.GetField();
     const SwFieldType* pFieldTyp = pField->GetTyp();
 
-    if( RES_SETEXPFLD == pFieldTyp->Which() &&
+    if( SwFieldIds::SetExp == pFieldTyp->Which() &&
         (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()) )
     {
         const bool bOn = pFieldTyp->GetName() == "HTML_ON";
@@ -454,7 +455,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
         rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteChar( '>' );
     }
-    else if( RES_POSTITFLD == pFieldTyp->Which() )
+    else if( SwFieldIds::Postit == pFieldTyp->Which() )
     {
         // Kommentare werden im ANSI-Zeichensetz, aber mit System-Zeilen-
         // Umbruechen gesschrieben.
@@ -506,7 +507,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm().WriteCharPtr( sOut.getStr() );
         }
     }
-    else if( RES_SCRIPTFLD == pFieldTyp->Which() )
+    else if( SwFieldIds::Script == pFieldTyp->Which() )
     {
         SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
         if( rHTMLWrt.m_bLFPossible )

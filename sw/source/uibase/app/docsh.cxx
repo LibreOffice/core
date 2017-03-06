@@ -923,7 +923,7 @@ HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStat
         OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
         if ( GetWrtShell() )
         {
-            SwFieldType* pType = GetWrtShell()->GetFieldType( RES_POSTITFLD, aEmptyOUStr );
+            SwFieldType* pType = GetWrtShell()->GetFieldType( SwFieldIds::Postit, aEmptyOUStr );
             SwIterator<SwFormatField,SwFieldType> aIter( *pType );
             SwFormatField* pFirst = aIter.First();
             while( pFirst )

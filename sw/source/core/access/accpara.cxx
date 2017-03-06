@@ -1449,15 +1449,15 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         if (pField)
         {
             strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
-            const sal_uInt16 nWhich = pField->GetTyp()->Which();
+            const SwFieldIds nWhich = pField->GetTyp()->Which();
             OUString sEntry;
             sal_Int32 subType = 0;
             switch (nWhich)
             {
-            case RES_DOCSTATFLD:
+            case SwFieldIds::DocStat:
                 subType = static_cast<const SwDocStatField*>(pField)->GetSubType();
                 break;
-            case RES_GETREFFLD:
+            case SwFieldIds::GetRef:
                 {
                     switch( pField->GetSubType() )
                     {
@@ -1499,10 +1499,10 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     }
                 }
                 break;
-            case RES_DATETIMEFLD:
+            case SwFieldIds::DateTime:
                 subType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
                 break;
-            case RES_JUMPEDITFLD:
+            case SwFieldIds::JumpEdit:
                 {
                     const sal_uInt16 nFormat= pField->GetFormat();
                     const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
@@ -1517,11 +1517,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     }
                 }
                 break;
-            case RES_EXTUSERFLD:
+            case SwFieldIds::ExtUser:
                 subType = static_cast<const SwExtUserField*>(pField)->GetSubType();
                 break;
-            case RES_HIDDENTXTFLD:
-            case RES_SETEXPFLD:
+            case SwFieldIds::HiddenText:
+            case SwFieldIds::SetExp:
                 {
                     sEntry = pField->GetTyp()->GetName();
                     if (sEntry.getLength() > 0)
@@ -1531,11 +1531,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     }
                 }
                 break;
-            case RES_DOCINFOFLD:
+            case SwFieldIds::DocInfo:
                 subType = pField->GetSubType();
                 subType &= 0x00ff;
                 break;
-            case RES_REFPAGESETFLD:
+            case SwFieldIds::RefPageSet:
                 {
                     const SwRefPageSetField* pRPld = static_cast<const SwRefPageSetField*>(pField);
                     bool bOn = pRPld->IsOn();
@@ -1546,14 +1546,15 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         strTypeName += "off";
                 }
                 break;
-            case RES_AUTHORFLD:
+            case SwFieldIds::Author:
                 {
                     strTypeName += "-";
                     strTypeName += aMgr.GetFormatStr(pField->GetTypeId(), pField->GetFormat() & 0xff);
                 }
                 break;
+            default: break;
             }
-            if (subType > 0 || (subType == 0 && (nWhich == RES_DOCINFOFLD || nWhich == RES_EXTUSERFLD || nWhich == RES_DOCSTATFLD)))
+            if (subType > 0 || (subType == 0 && (nWhich == SwFieldIds::DocInfo || nWhich == SwFieldIds::ExtUser || nWhich == SwFieldIds::DocStat)))
             {
                 std::vector<OUString> aLst;
                 aMgr.GetSubTypes(pField->GetTypeId(), aLst);
@@ -1561,7 +1562,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     sEntry = aLst[subType];
                 if (sEntry.getLength() > 0)
                 {
-                    if (nWhich == RES_DOCINFOFLD)
+                    if (nWhich == SwFieldIds::DocInfo)
                     {
                         strTypeName = sEntry;
                         sal_uInt32 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);

@@ -126,13 +126,13 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     SwFieldMgr aMgr(&rSh);
     SwSetExpFieldType* pFieldType =
-            static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(RES_SETEXPFLD, rName));
+            static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(SwFieldIds::SetExp, rName));
     if (!pFieldType && !rName.isEmpty() )
     {
         // Create new field types
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFieldType(aSwSetExpFieldType);
-        pFieldType = static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(RES_SETEXPFLD, rName));
+        pFieldType = static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(SwFieldIds::SetExp, rName));
     }
 
     if (!pOpt->IgnoreSeqOpts())
@@ -151,9 +151,9 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     {
         for (size_t i = 0; i < nCount; ++i)
         {
-            pType = aMgr.GetFieldType(USHRT_MAX, i);
+            pType = aMgr.GetFieldType(SwFieldIds::Unknown, i);
             OUString aTmpName( pType->GetName() );
-            if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
+            if (aTmpName == rName && pType->Which() == SwFieldIds::SetExp)
             {
                 nID = i;
                 OSL_ENSURE(nID==i, "Downcasting to sal_uInt16 lost information!");

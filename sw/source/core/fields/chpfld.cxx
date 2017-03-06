@@ -52,7 +52,7 @@ OUString removeControlChars(const OUString& sIn)
 }
 
 SwChapterFieldType::SwChapterFieldType()
-    : SwFieldType( RES_CHAPTERFLD )
+    : SwFieldType( SwFieldIds::Chapter )
 {
 }
 

@@ -370,12 +370,12 @@ public:
 
     void UpdateFields( SwField & );   ///< One single field.
 
-    size_t GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
-    SwFieldType* GetFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX) const;
-    SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
+    size_t GetFieldTypeCount(SwFieldIds nResId = SwFieldIds::Unknown) const;
+    SwFieldType* GetFieldType(size_t nField, SwFieldIds nResId = SwFieldIds::Unknown) const;
+    SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName) const;
 
     void RemoveFieldType(size_t nField);
-    void RemoveFieldType(sal_uInt16 nResId, const OUString& rName);
+    void RemoveFieldType(SwFieldIds nResId, const OUString& rName);
 
     void FieldToText( SwFieldType* pType );
 

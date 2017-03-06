@@ -685,7 +685,7 @@ public:
     bool MoveFieldType(
         const SwFieldType* pFieldType,
         const bool bNext,
-        const sal_uInt16 nResType = USHRT_MAX,
+        const SwFieldIds nResType = SwFieldIds::Unknown,
         const bool bAddSetExpressionFieldsToInputFields = true );
 
     bool GotoFormatField( const SwFormatField& rField );

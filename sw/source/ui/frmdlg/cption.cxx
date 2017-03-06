@@ -145,8 +145,8 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     size_t nCount = pMgr->GetFieldTypeCount();
     for (size_t i = 0; i < nCount; ++i)
     {
-        SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
-        if( pType->Which() == RES_SETEXPFLD &&
+        SwFieldType *pType = pMgr->GetFieldType( SwFieldIds::Unknown, i );
+        if( pType->Which() == SwFieldIds::SetExp &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             m_pCategoryBox->InsertEntry(pType->GetName());
     }
@@ -207,7 +207,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     nCount = pMgr->GetFieldTypeCount();
     for ( size_t i = nCount; i; )
     {
-        SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
+        SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
         if( pFieldType->GetName().equals(m_pCategoryBox->GetText()) )
         {
             nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl, Edit&, void)
     bool bCorrectFieldName = !sFieldTypeName.isEmpty();
     bool bNone = sFieldTypeName == m_sNone;
     SwFieldType* pType = (bCorrectFieldName && !bNone)
-                    ? rSh.GetFieldType( RES_SETEXPFLD, sFieldTypeName )
+                    ? rSh.GetFieldType( SwFieldIds::SetExp, sFieldTypeName )
                     : nullptr;
     m_pOKButton->Enable( bCorrectFieldName &&
                         (!pType ||
@@ -363,7 +363,7 @@ void SwCaptionDialog::DrawSample()
 
             SwWrtShell &rSh = rView.GetWrtShell();
             SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
-                                            RES_SETEXPFLD, sFieldTypeName ));
+                                            SwFieldIds::SetExp, sFieldTypeName ));
             if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
             {
                 SwNumberTree::tNumberVector aNumVector;
@@ -448,7 +448,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
         m_pLbLevel->InsertEntry( OUString::number(n+1) );
 
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
-                                        RES_SETEXPFLD, aFieldTypeName ));
+                                        SwFieldIds::SetExp, aFieldTypeName ));
 
     sal_Unicode nLvl = MAXLEVEL;
     OUString sDelim(": ");
@@ -486,7 +486,7 @@ void SwSequenceOptionDialog::Apply()
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
-                                        RES_SETEXPFLD, aFieldTypeName ));
+                                        SwFieldIds::SetExp, aFieldTypeName ));
 
     sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];

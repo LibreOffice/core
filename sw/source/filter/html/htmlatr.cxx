@@ -2381,10 +2381,10 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         else
                         {
                             pTextHt = pHt;
-                            sal_uInt16 nFieldWhich;
+                            SwFieldIds nFieldWhich;
                             if( RES_TXTATR_FIELD != pHt->Which()
-                                || ( RES_POSTITFLD != (nFieldWhich = static_cast<const SwFormatField&>(pHt->GetAttr()).GetField()->Which())
-                                     && RES_SCRIPTFLD != nFieldWhich ) )
+                                || ( SwFieldIds::Postit != (nFieldWhich = static_cast<const SwFormatField&>(pHt->GetAttr()).GetField()->Which())
+                                     && SwFieldIds::Script != nFieldWhich ) )
                             {
                                 bWriteBreak = false;
                             }

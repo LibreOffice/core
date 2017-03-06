@@ -92,7 +92,7 @@ namespace sw { namespace mark
 
         SwFormatField* pAnnotationFormatField = nullptr;
 
-        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFieldType( RES_POSTITFLD, OUString(), false );
+        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::Postit, OUString(), false );
         SwIterator<SwFormatField,SwFieldType> aIter( *pType );
         for( SwFormatField* pFormatField = aIter.First(); pFormatField != nullptr; pFormatField = aIter.Next() )
         {

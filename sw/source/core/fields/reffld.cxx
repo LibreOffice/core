@@ -753,7 +753,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
         const OUString rPar1 = GetPar1();
         // don't convert when the name points to an existing field type
-        if(!pDoc->getIDocumentFieldsAccess().GetFieldType(RES_SETEXPFLD, rPar1, false))
+        if(!pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
             sal_uInt16 nResId = USHRT_MAX;
@@ -779,7 +779,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
 }
 
 SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
-    : SwFieldType( RES_GETREFFLD ), pDoc( pDc )
+    : SwFieldType( SwFieldIds::GetRef ), pDoc( pDc )
 {}
 
 SwFieldType* SwGetRefFieldType::Copy() const
@@ -839,7 +839,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
 
     case REF_SEQUENCEFLD:
         {
-            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( RES_SETEXPFLD, rRefMark, false );
+            SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, rRefMark, false );
             if( pFieldType && pFieldType->HasWriterListeners() &&
                 nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
             {
@@ -949,7 +949,7 @@ public:
 /// @param[in,out] rIds The list of IDs found in the document.
 void RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
-    SwFieldType *const pType = rDoc.getIDocumentFieldsAccess().GetFieldType(RES_SETEXPFLD, aName, false);
+    SwFieldType *const pType = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, aName, false);
 
     if (!pType)
         return;
@@ -997,7 +997,7 @@ void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
             AddId( GetFirstUnusedId(aIds), *pIt );
 
         // Change the Sequence number of all SetExp fields in the source document
-        SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType( RES_SETEXPFLD, aName, false );
+        SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, aName, false );
         if( pType )
         {
             SwIterator<SwFormatField,SwFieldType> aIter( *pType );
@@ -1090,7 +1090,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         {
             // when copying _to_ clipboard, expectation is that no fields exist
             // so no re-mapping is required to avoid collisions
-            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_GETREFFLD)->HasWriterListeners());
+            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef)->HasWriterListeners());
             return; // don't modify the fields in the source doc
         }
 

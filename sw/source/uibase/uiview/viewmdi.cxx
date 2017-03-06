@@ -420,7 +420,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(nullptr);
-                SwFieldType* pFieldType = rSh.GetFieldType(0, RES_POSTITFLD);
+                SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
                 if ( rSh.MoveFieldType( pFieldType, bNext ) )
                     GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                 else

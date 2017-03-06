@@ -162,13 +162,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             const SwField* pField = pTextField->GetFormatField().GetField();
             switch ( pField->GetTyp()->Which() )
             {
-            case RES_SETEXPFLD:
+            case SwFieldIds::SetExp:
                 nRet = static_cast<const SwSetExpField*>(pField)->GetValue();
                 break;
-            case RES_USERFLD:
+            case SwFieldIds::User:
                 nRet = static_cast<const SwUserField*>(pField)->GetValue();
                 break;
-            case RES_TABLEFLD:
+            case SwFieldIds::Table:
                 {
                     SwTableField* pTableField = const_cast<SwTableField*>(static_cast<const SwTableField*>(pField));
                     if( !pTableField->IsValid() )
@@ -183,11 +183,11 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 }
                 break;
 
-            case RES_DATETIMEFLD:
+            case SwFieldIds::DateTime:
                 nRet = static_cast<const SwDateTimeField*>( pField )->GetValue();
                 break;
 
-            case RES_JUMPEDITFLD:
+            case SwFieldIds::JumpEdit:
                 //JP 14.09.98: Bug 56112 - placeholder never have the right content!
                 nRet = 0;
                 break;

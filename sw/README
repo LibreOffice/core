@@ -109,7 +109,7 @@ There are several sub-categories of SwTextAttr:
 
 There are multiple model classes involved for fields:
 
-- enum RES_FIELDS enumerates the different types of fields.
+- enum SwFieldIds enumerates the different types of fields.
 - SwFieldType contains some shared stuff for all fields of a type.
   There are many subclasses of SwFieldType, one for each different type
   of field.
@@ -117,7 +117,7 @@ There are multiple model classes involved for fields:
   which is created in DocumentFieldsManager::InitFieldTypes()
   but for some there are more than one, and they are dynamically created, see
   DocumentFieldsManager::InsertFieldType().  An example for the latter are
-  variable fields (RES_GETEXPFLD/RES_SETEXPFLD), with one SwFieldType per
+  variable fields (SwFieldIds::GetExp/SwFieldIds::SetExp), with one SwFieldType per
   variable.
 - SwXFieldMaster is the UNO wrapper of a field type.
   It is a SwClient registered at the SwFieldType.

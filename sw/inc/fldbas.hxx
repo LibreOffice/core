@@ -32,50 +32,51 @@
 class SwDoc;
 class SvNumberFormatter;
 
-enum RES_FIELDS {
+enum class SwFieldIds : sal_uInt16 {
 /// For old documents the Field-Which IDs must be preserved !!!
-    RES_FIELDS_BEGIN,
-    RES_DBFLD = RES_FIELDS_BEGIN,
-    RES_USERFLD,
-    RES_FILENAMEFLD,
-    RES_DBNAMEFLD,
-    RES_DATEFLD,
-    RES_TIMEFLD,
-    RES_PAGENUMBERFLD,
-    RES_AUTHORFLD,
-    RES_CHAPTERFLD,
-    RES_DOCSTATFLD,
-    RES_GETEXPFLD,
-    RES_SETEXPFLD,
-    RES_GETREFFLD,
-    RES_HIDDENTXTFLD,
-    RES_POSTITFLD,
-    RES_FIXDATEFLD,
-    RES_FIXTIMEFLD,
-    RES_REGFLD,
-    RES_VARREGFLD,
-    RES_SETREFFLD,
-    RES_INPUTFLD,
-    RES_MACROFLD,
-    RES_DDEFLD,
-    RES_TABLEFLD,
-    RES_HIDDENPARAFLD,
-    RES_DOCINFOFLD,
-    RES_TEMPLNAMEFLD,
-    RES_DBNEXTSETFLD,
-    RES_DBNUMSETFLD,
-    RES_DBSETNUMBERFLD,
-    RES_EXTUSERFLD,
-    RES_REFPAGESETFLD,
-    RES_REFPAGEGETFLD,
-    RES_INTERNETFLD,
-    RES_JUMPEDITFLD,
-    RES_SCRIPTFLD,
-    RES_DATETIMEFLD,
-    RES_AUTHORITY,  ///< Table of authorities
-    RES_COMBINED_CHARS,
-    RES_DROPDOWN,
-    RES_FIELDS_END
+    Database,
+    User,
+    Filename,
+    DatabaseName,
+    Date,
+    Time,
+    PageNumber,
+    Author,
+    Chapter,
+    DocStat,
+    GetExp,
+    SetExp,
+    GetRef,
+    HiddenText,
+    Postit,
+    FixDate,
+    FixTime,
+    Reg,
+    VarReg,
+    SetRef,
+    Input,
+    Macro,
+    Dde,
+    Table,
+    HiddenPara,
+    DocInfo,
+    TemplateName,
+    DbNextSet,
+    DbNumSet,
+    DbSetNumber,
+    ExtUser,
+    RefPageSet,
+    RefPageGet,
+    Internet,
+    JumpEdit,
+    Script,
+    DateTime,
+    TableOfAuthorities,
+    CombinedChars,
+    Dropdown,
+    LAST = Dropdown,
+
+    Unknown = USHRT_MAX, // used as default value in some method calls
 };
 
 /// List of FieldTypes at UI.
@@ -228,7 +229,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
 {
     css::uno::WeakReference<css::beans::XPropertySet> m_wXFieldMaster;
 
-    sal_uInt16 m_nWhich;
+    SwFieldIds m_nWhich;
 
     friend void FinitUI();     ///< In order to delete pointer!
     static  std::vector<OUString>* s_pFieldNames;
@@ -237,7 +238,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
 
 protected:
     /// Single argument ctors shall be explicit.
-    explicit SwFieldType( sal_uInt16 nWhichId );
+    explicit SwFieldType( SwFieldIds nWhichId );
 
 public:
 
@@ -256,9 +257,7 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
 
-    sal_uInt16          Which() const {
-        return m_nWhich;
-    }
+    SwFieldIds              Which() const { return m_nWhich; }
 
     inline  void            UpdateFields() const;
 };
@@ -318,7 +317,7 @@ public:
     SwField *           CopyField() const;
 
     /// ResId
-    sal_uInt16              Which() const
+    SwFieldIds          Which() const
 #ifdef DBG_UTIL
     ;       // implemented in fldbas.cxx
 #else
@@ -390,7 +389,7 @@ private:
     bool    m_bUseFormat; ///< Use number formatter.
 
 protected:
-    SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId );
+    SwValueFieldType( SwDoc* pDocPtr, SwFieldIds nWhichId );
     SwValueFieldType( const SwValueFieldType& rTyp );
 
 public:

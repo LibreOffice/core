@@ -190,7 +190,7 @@ sal_uInt32 SwAnnotationWin::CalcParent()
             RES_TXTATR_ANNOTATION );
     const SwField* pField = pTextAttr ? pTextAttr->GetFormatField().GetField() : nullptr;
     sal_uInt32 nParentId = 0;
-    if (pField && pField->Which() == RES_POSTITFLD)
+    if (pField && pField->Which() == SwFieldIds::Postit)
     {
         const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
         nParentId = pPostItField->GetPostItId();
@@ -212,7 +212,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
     SwField* pField = pTextAttr
                     ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
                     : nullptr;
-    while ( pField && ( pField->Which()== RES_POSTITFLD ) )
+    while ( pField && ( pField->Which()== SwFieldIds::Postit ) )
     {
         aCount++;
         pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(

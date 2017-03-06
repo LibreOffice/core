@@ -195,7 +195,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrameFormat is created.
@@ -268,7 +268,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
-    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrameFormat is created.

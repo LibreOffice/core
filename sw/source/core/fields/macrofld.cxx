@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 
 SwMacroFieldType::SwMacroFieldType(SwDoc* pDocument)
-    : SwFieldType( RES_MACROFLD ),
+    : SwFieldType( SwFieldIds::Macro ),
       pDoc(pDocument)
 {
 }

@@ -1300,7 +1300,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList, con
 void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFields.empty();
-    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(),false);
+    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(),false);
     SwIterator<SwFormatField,SwFieldType> aIter( *pType );
     SwFormatField* pSwFormatField = aIter.First();
     while(pSwFormatField)
@@ -1347,7 +1347,7 @@ class IsPostitField : public FilterFunctor
 public:
     bool operator()(const SwFormatField* pField) const override
     {
-        return pField->GetField()->GetTyp()->Which() == RES_POSTITFLD;
+        return pField->GetField()->GetTyp()->Which() == SwFieldIds::Postit;
     }
 };
 
@@ -1361,7 +1361,7 @@ public:
     }
     bool operator()(const SwFormatField* pField) const override
     {
-        if (pField->GetField()->GetTyp()->Which() != RES_POSTITFLD)
+        if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
             return false;
         return static_cast<const SwPostItField*>(pField->GetField())->GetPar1() == m_sAuthor;
     }
@@ -1377,7 +1377,7 @@ public:
 
     bool operator()(const SwFormatField* pField) const override
     {
-        if (pField->GetField()->GetTyp()->Which() != RES_POSTITFLD)
+        if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
             return false;
         return static_cast<const SwPostItField*>(pField->GetField())->GetPostItId() == m_nPostItId;
     }

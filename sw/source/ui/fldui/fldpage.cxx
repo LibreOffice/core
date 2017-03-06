@@ -237,7 +237,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
         case TYP_INPUTFLD:
             {
                 // User- or SetField ?
-                if (m_aMgr.GetFieldType(RES_USERFLD, sPar1) == nullptr &&
+                if (m_aMgr.GetFieldType(SwFieldIds::User, sPar1) == nullptr &&
                 !(pTmpField->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
                     SwSetExpField* pField = static_cast<SwSetExpField*>(pTmpField);

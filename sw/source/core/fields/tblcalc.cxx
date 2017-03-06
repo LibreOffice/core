@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 
 SwTableFieldType::SwTableFieldType(SwDoc* pDocPtr)
-    : SwValueFieldType( pDocPtr, RES_TABLEFLD )
+    : SwValueFieldType( pDocPtr, SwFieldIds::Table )
 {}
 
 SwFieldType* SwTableFieldType::Copy() const

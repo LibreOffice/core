@@ -599,7 +599,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
-                SwFieldType* pFT = pDoc->getIDocumentFieldsAccess().GetFieldType(RES_SETEXPFLD, rName, false);
+                SwFieldType* pFT = pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rName, false);
                 if (!pFT)
                 {
                     SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);

@@ -1601,7 +1601,7 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
 {
     const SwField* pField = rFormatField.GetField();
     sal_uInt16 nSubType;
-    if(pField && (RES_GETREFFLD == pField->Which())
+    if(pField && (SwFieldIds::GetRef == pField->Which())
         && ((REF_FOOTNOTE == (nSubType = pField->GetSubType())) || (REF_ENDNOTE  == nSubType))
         && !static_cast<const SwGetRefField*>(pField)->GetSetRefName().isEmpty())
     {
@@ -2214,7 +2214,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     m_pFormatOfJustInsertedApo = nullptr;
     SwPostItField aPostIt(
-        static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD)), sAuthor,
+        static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), sAuthor,
         sText, sInitials, OUString(), aDate );
     aPostIt.SetTextObject(pOutliner);
 
@@ -3516,7 +3516,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 // Page number
                 SwPageNumberField aField(
                     static_cast<SwPageNumberFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(
-                    RES_PAGENUMBERFLD )), PG_RANDOM, SVX_NUM_ARABIC);
+                    SwFieldIds::PageNumber )), PG_RANDOM, SVX_NUM_ARABIC);
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
             }
             break;

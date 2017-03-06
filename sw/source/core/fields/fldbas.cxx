@@ -28,6 +28,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <editeng/unolingu.hxx>
+#include <o3tl/enumarray.hxx>
 #include <unofldmid.h>
 #include <doc.hxx>
 #include <editsh.hxx>
@@ -78,47 +79,47 @@ std::vector<OUString>* SwFieldType::s_pFieldNames = nullptr;
 namespace
 {
 
-    const sal_uInt16 aTypeTab[] = {
-    /* RES_DBFLD            */      TYP_DBFLD,
-    /* RES_USERFLD          */      TYP_USERFLD,
-    /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,
-    /* RES_DBNAMEFLD        */      TYP_DBNAMEFLD,
-    /* RES_DATEFLD          */      TYP_DATEFLD,
-    /* RES_TIMEFLD          */      TYP_TIMEFLD,
-    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  // dynamic
-    /* RES_AUTHORFLD        */      TYP_AUTHORFLD,
-    /* RES_CHAPTERFLD       */      TYP_CHAPTERFLD,
-    /* RES_DOCSTATFLD       */      TYP_DOCSTATFLD,
-    /* RES_GETEXPFLD        */      TYP_GETFLD,         // dynamic
-    /* RES_SETEXPFLD        */      TYP_SETFLD,         // dynamic
-    /* RES_GETREFFLD        */      TYP_GETREFFLD,
-    /* RES_HIDDENTXTFLD     */      TYP_HIDDENTXTFLD,
-    /* RES_POSTITFLD        */      TYP_POSTITFLD,
-    /* RES_FIXDATEFLD       */      TYP_FIXDATEFLD,
-    /* RES_FIXTIMEFLD       */      TYP_FIXTIMEFLD,
-    /* RES_REGFLD           */      0,                  // old (no change since 2000)
-    /* RES_VARREGFLD        */      0,                  // old (no change since 2000)
-    /* RES_SETREFFLD        */      TYP_SETREFFLD,
-    /* RES_INPUTFLD         */      TYP_INPUTFLD,
-    /* RES_MACROFLD         */      TYP_MACROFLD,
-    /* RES_DDEFLD           */      TYP_DDEFLD,
-    /* RES_TABLEFLD         */      TYP_FORMELFLD,
-    /* RES_HIDDENPARAFLD    */      TYP_HIDDENPARAFLD,
-    /* RES_DOCINFOFLD       */      TYP_DOCINFOFLD,
-    /* RES_TEMPLNAMEFLD     */      TYP_TEMPLNAMEFLD,
-    /* RES_DBNEXTSETFLD     */      TYP_DBNEXTSETFLD,
-    /* RES_DBNUMSETFLD      */      TYP_DBNUMSETFLD,
-    /* RES_DBSETNUMBERFLD   */      TYP_DBSETNUMBERFLD,
-    /* RES_EXTUSERFLD       */      TYP_EXTUSERFLD,
-    /* RES_REFPAGESETFLD    */      TYP_SETREFPAGEFLD,
-    /* RES_REFPAGEGETFLD    */      TYP_GETREFPAGEFLD,
-    /* RES_INTERNETFLD      */      TYP_INTERNETFLD,
-    /* RES_JUMPEDITFLD      */      TYP_JUMPEDITFLD,
-    /* RES_SCRIPTFLD        */      TYP_SCRIPTFLD,
-    /* RES_DATETIMEFLD      */      0,                  // dynamic
-    /* RES_AUTHORITY        */      TYP_AUTHORITY,
-    /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
-    /* RES_DROPDOWN         */      TYP_DROPDOWN
+    const o3tl::enumarray<SwFieldIds,SwFieldTypesEnum> aTypeTab {
+    /* SwFieldIds::Database      */      TYP_DBFLD,
+    /* SwFieldIds::User          */      TYP_USERFLD,
+    /* SwFieldIds::Filename      */      TYP_FILENAMEFLD,
+    /* SwFieldIds::DatabaseName  */      TYP_DBNAMEFLD,
+    /* SwFieldIds::Date          */      TYP_DATEFLD,
+    /* SwFieldIds::Time          */      TYP_TIMEFLD,
+    /* SwFieldIds::PageNumber    */      TYP_PAGENUMBERFLD,  // dynamic
+    /* SwFieldIds::Author        */      TYP_AUTHORFLD,
+    /* SwFieldIds::Chapter       */      TYP_CHAPTERFLD,
+    /* SwFieldIds::DocStat       */      TYP_DOCSTATFLD,
+    /* SwFieldIds::GetExp        */      TYP_GETFLD,         // dynamic
+    /* SwFieldIds::SetExp        */      TYP_SETFLD,         // dynamic
+    /* SwFieldIds::GetRef        */      TYP_GETREFFLD,
+    /* SwFieldIds::HiddenText    */      TYP_HIDDENTXTFLD,
+    /* SwFieldIds::Postit        */      TYP_POSTITFLD,
+    /* SwFieldIds::FixDate       */      TYP_FIXDATEFLD,
+    /* SwFieldIds::FixTime       */      TYP_FIXTIMEFLD,
+    /* SwFieldIds::Reg           */      TYP_BEGIN,         // old (no change since 2000)
+    /* SwFieldIds::VarReg        */      TYP_BEGIN,         // old (no change since 2000)
+    /* SwFieldIds::SetRef        */      TYP_SETREFFLD,
+    /* SwFieldIds::Input         */      TYP_INPUTFLD,
+    /* SwFieldIds::Macro         */      TYP_MACROFLD,
+    /* SwFieldIds::Dde           */      TYP_DDEFLD,
+    /* SwFieldIds::Table         */      TYP_FORMELFLD,
+    /* SwFieldIds::HiddenPara    */      TYP_HIDDENPARAFLD,
+    /* SwFieldIds::DocInfo       */      TYP_DOCINFOFLD,
+    /* SwFieldIds::TemplateName  */      TYP_TEMPLNAMEFLD,
+    /* SwFieldIds::DbNextSet     */      TYP_DBNEXTSETFLD,
+    /* SwFieldIds::DbNumSet      */      TYP_DBNUMSETFLD,
+    /* SwFieldIds::DbSetNumber   */      TYP_DBSETNUMBERFLD,
+    /* SwFieldIds::ExtUser       */      TYP_EXTUSERFLD,
+    /* SwFieldIds::RefPageSet    */      TYP_SETREFPAGEFLD,
+    /* SwFieldIds::RefPageGet    */      TYP_GETREFPAGEFLD,
+    /* SwFieldIds::Internet      */      TYP_INTERNETFLD,
+    /* SwFieldIds::JumpEdit      */      TYP_JUMPEDITFLD,
+    /* SwFieldIds::Script        */      TYP_SCRIPTFLD,
+    /* SwFieldIds::DateTime      */      TYP_BEGIN,         // dynamic
+    /* SwFieldIds::TableOfAuthorities*/  TYP_AUTHORITY,
+    /* SwFieldIds::CombinedChars */      TYP_COMBINED_CHARS,
+    /* SwFieldIds::Dropdown      */      TYP_DROPDOWN
     };
 
 }
@@ -134,7 +135,7 @@ OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 }
 
 // each field refences a field type that is unique for each document
-SwFieldType::SwFieldType( sal_uInt16 nWhichId )
+SwFieldType::SwFieldType( SwFieldIds nWhichId )
     : SwModify(nullptr)
     , m_nWhich(nWhichId)
 {
@@ -192,7 +193,7 @@ SwField::~SwField()
 // instead of indirectly via the type
 
 #ifdef DBG_UTIL
-sal_uInt16 SwField::Which() const
+SwFieldIds SwField::Which() const
 {
     assert(m_pType);
     return m_pType->Which();
@@ -205,21 +206,21 @@ sal_uInt16 SwField::GetTypeId() const
     sal_uInt16 nRet;
     switch (m_pType->Which())
     {
-    case RES_DATETIMEFLD:
+    case SwFieldIds::DateTime:
         if (GetSubType() & FIXEDFLD)
             nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD);
         else
             nRet = static_cast<sal_uInt16>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
         break;
-    case RES_GETEXPFLD:
+    case SwFieldIds::GetExp:
         nRet = static_cast<sal_uInt16>(nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD);
         break;
 
-    case RES_HIDDENTXTFLD:
+    case SwFieldIds::HiddenText:
         nRet = GetSubType();
         break;
 
-    case RES_SETEXPFLD:
+    case SwFieldIds::SetExp:
         if( nsSwGetSetExpType::GSE_SEQ & GetSubType() )
             nRet = TYP_SEQFLD;
         else if( static_cast<const SwSetExpField*>(this)->GetInputFlag() )
@@ -228,7 +229,7 @@ sal_uInt16 SwField::GetTypeId() const
             nRet = TYP_SETFLD;
         break;
 
-    case RES_PAGENUMBERFLD:
+    case SwFieldIds::PageNumber:
         nRet = GetSubType();
         if( PG_NEXT == nRet )
             nRet = TYP_NEXTPAGEFLD;
@@ -248,7 +249,7 @@ sal_uInt16 SwField::GetTypeId() const
 OUString SwField::GetFieldName() const
 {
     sal_uInt16 nTypeId = GetTypeId();
-    if (RES_DATETIMEFLD == GetTyp()->Which())
+    if (SwFieldIds::DateTime == GetTyp()->Which())
     {
         nTypeId = static_cast<sal_uInt16>(
             ((GetSubType() & DATEFLD) != 0) ? TYP_DATEFLD : TYP_TIMEFLD);
@@ -343,18 +344,19 @@ bool SwField::HasClickHdl() const
     bool bRet = false;
     switch (m_pType->Which())
     {
-    case RES_INTERNETFLD:
-    case RES_JUMPEDITFLD:
-    case RES_GETREFFLD:
-    case RES_MACROFLD:
-    case RES_INPUTFLD:
-    case RES_DROPDOWN :
+    case SwFieldIds::Internet:
+    case SwFieldIds::JumpEdit:
+    case SwFieldIds::GetRef:
+    case SwFieldIds::Macro:
+    case SwFieldIds::Input:
+    case SwFieldIds::Dropdown :
         bRet = true;
         break;
 
-    case RES_SETEXPFLD:
+    case SwFieldIds::SetExp:
         bRet = static_cast<const SwSetExpField*>(this)->GetInputFlag();
         break;
+    default: break;
     }
     return bRet;
 }
@@ -374,27 +376,28 @@ bool SwField::IsFixed() const
     bool bRet = false;
     switch (m_pType->Which())
     {
-    case RES_FIXDATEFLD:
-    case RES_FIXTIMEFLD:
+    case SwFieldIds::FixDate:
+    case SwFieldIds::FixTime:
         bRet = true;
         break;
 
-    case RES_DATETIMEFLD:
+    case SwFieldIds::DateTime:
         bRet = 0 != (GetSubType() & FIXEDFLD);
         break;
 
-    case RES_EXTUSERFLD:
-    case RES_AUTHORFLD:
+    case SwFieldIds::ExtUser:
+    case SwFieldIds::Author:
         bRet = 0 != (GetFormat() & AF_FIXED);
         break;
 
-    case RES_FILENAMEFLD:
+    case SwFieldIds::Filename:
         bRet = 0 != (GetFormat() & FF_FIXED);
         break;
 
-    case RES_DOCINFOFLD:
+    case SwFieldIds::DocInfo:
         bRet = 0 != (GetSubType() & DI_SUB_FIXED);
         break;
+    default: break;
     }
     return bRet;
 }
@@ -443,7 +446,7 @@ OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat)
     return aNumber.GetNumStr(nNum);
 }
 
-SwValueFieldType::SwValueFieldType(SwDoc *const pDoc, sal_uInt16 const nWhichId)
+SwValueFieldType::SwValueFieldType(SwDoc *const pDoc, SwFieldIds const nWhichId)
     : SwFieldType(nWhichId)
     , m_pDoc(pDoc)
     , m_bUseFormat(true)
@@ -621,7 +624,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
              LANGUAGE_SYSTEM != nFormatLng ) &&
-            !(Which() == RES_USERFLD && (GetSubType()&nsSwExtendedSubType::SUB_CMD) ) )
+            !(Which() == SwFieldIds::User && (GetSubType()&nsSwExtendedSubType::SUB_CMD) ) )
         {
             const SvNumberformat* pEntry = pFormatter->GetEntry(GetFormat());
 
@@ -747,13 +750,14 @@ bool SwField::IsClickable() const
 {
     switch (Which())
     {
-    case RES_JUMPEDITFLD:
-    case RES_MACROFLD:
-    case RES_GETREFFLD:
-    case RES_INPUTFLD:
-    case RES_SETEXPFLD:
-    case RES_DROPDOWN:
+    case SwFieldIds::JumpEdit:
+    case SwFieldIds::Macro:
+    case SwFieldIds::GetRef:
+    case SwFieldIds::Input:
+    case SwFieldIds::SetExp:
+    case SwFieldIds::Dropdown:
         return true;
+    default: break;
     }
     return false;
 }
