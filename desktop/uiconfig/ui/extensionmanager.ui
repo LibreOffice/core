@@ -114,6 +114,7 @@
                     <property name="can_default">True</property>
                     <property name="has_default">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Extension installation is currently disabled. Please consult your system administrator.</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
