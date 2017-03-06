@@ -109,9 +109,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmloff/source/transform/xof \
 	xmloff/util/xo \
 	xmlscript/util/xmlscript \
-	$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),xmlsecurity/util/xsec_gpg) \
 	$(if $(ENABLE_NSS), \
 		xmlsecurity/util/xmlsecurity \
+		$(if $(filter-out WNT MACOSX ANDROID IOS,$(OS)),xmlsecurity/util/xsec_gpg) \
 		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
 	$(if $(ENABLE_COINMP), \
 		sccomp/source/solver/coinmpsolver \
