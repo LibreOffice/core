@@ -745,6 +745,31 @@ bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
     return bDisable;
 }
 
+void SwDrawBaseShell::DisableState( SfxItemSet& rSet )
+{
+    SwWrtShell *pSh = &GetShell();
+    SdrView*    pSdrView = pSh->GetDrawView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+
+    if ( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+
+        // If marked object is 2D, disable format area command.
+        if ( nObjType == OBJ_PLIN     ||
+             nObjType == OBJ_LINE     ||
+             nObjType == OBJ_PATHLINE ||
+             nObjType == OBJ_FREELINE ||
+             nObjType == OBJ_EDGE     ||
+             nObjType == OBJ_CARC )
+            rSet.DisableItem( SID_ATTRIBUTES_AREA );
+    }
+
+    Disable(rSet);
+
+}
+
 // Validate of drawing positions
 
 IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation, void )
