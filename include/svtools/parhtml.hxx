@@ -43,8 +43,8 @@ class SvKeyValueIterator;
 #define HTMLFONTSZ6_DFLT 24
 #define HTMLFONTSZ7_DFLT 36
 
-enum HTMLTableFrame { HTML_TF_VOID, HTML_TF_ABOVE, HTML_TF_BELOW,
-    HTML_TF_HSIDES, HTML_TF_LHS, HTML_TF_RHS, HTML_TF_VSIDES, HTML_TF_BOX };
+enum class HTMLTableFrame { Void, Above, Below,
+    HSides, LHS, RHS, VSides, Box };
 
 enum HTMLTableRules { HTML_TR_NONE, HTML_TR_GROUPS, HTML_TR_ROWS,
     HTML_TR_COLS, HTML_TR_ALL };

@@ -1893,18 +1893,18 @@ void HTMLTable::SetBorders()
             (*m_pRows)[i]->bBottomBorder = true;
         }
 
-    if( m_bTopAllowed && (HTML_TF_ABOVE==m_eFrame || HTML_TF_HSIDES==m_eFrame ||
-                     HTML_TF_BOX==m_eFrame) )
+    if( m_bTopAllowed && (HTMLTableFrame::Above==m_eFrame || HTMLTableFrame::HSides==m_eFrame ||
+                     HTMLTableFrame::Box==m_eFrame) )
         m_bTopBorder = true;
-    if( HTML_TF_BELOW==m_eFrame || HTML_TF_HSIDES==m_eFrame ||
-        HTML_TF_BOX==m_eFrame )
+    if( HTMLTableFrame::Below==m_eFrame || HTMLTableFrame::HSides==m_eFrame ||
+        HTMLTableFrame::Box==m_eFrame )
     {
         (*m_pRows)[m_nRows-1]->bBottomBorder = true;
     }
-    if( (HTML_TF_RHS==m_eFrame || HTML_TF_VSIDES==m_eFrame ||
-                      HTML_TF_BOX==m_eFrame) )
+    if( (HTMLTableFrame::RHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame ||
+                      HTMLTableFrame::Box==m_eFrame) )
         m_bRightBorder = true;
-    if( HTML_TF_LHS==m_eFrame || HTML_TF_VSIDES==m_eFrame || HTML_TF_BOX==m_eFrame )
+    if( HTMLTableFrame::LHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame || HTMLTableFrame::Box==m_eFrame )
     {
         ((*m_pColumns)[0])->bLeftBorder = true;
     }
@@ -4842,7 +4842,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     nBorder( USHRT_MAX ),
     nHSpace( 0 ), nVSpace( 0 ),
     eAdjust( eParentAdjust ), eVertOri( text::VertOrientation::CENTER ),
-    eFrame( HTML_TF_VOID ), eRules( HTML_TR_NONE ),
+    eFrame( HTMLTableFrame::Void ), eRules( HTML_TR_NONE ),
     bPrcWidth( false ),
     bTableAdjust( false ),
     bBGColor( false ),
@@ -4902,7 +4902,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                 nBorder = 1;
 
             if( !bHasFrame )
-                eFrame = ( nBorder ? HTML_TF_BOX : HTML_TF_VOID );
+                eFrame = ( nBorder ? HTMLTableFrame::Box : HTMLTableFrame::Void );
             if( !bHasRules )
                 eRules = ( nBorder ? HTML_TR_ALL : HTML_TR_NONE );
             break;
@@ -4961,7 +4961,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     // If BORDER=0 or no BORDER given, then there shouldn't be a border
     if( 0==nBorder || USHRT_MAX==nBorder )
     {
-        eFrame = HTML_TF_VOID;
+        eFrame = HTMLTableFrame::Void;
         eRules = HTML_TR_NONE;
     }
 }

@@ -71,15 +71,15 @@ static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
 // <TABLE FRAME=xxx>
 static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TF_void,    HTML_TF_VOID    },
-    { OOO_STRING_SVTOOLS_HTML_TF_above,   HTML_TF_ABOVE   },
-    { OOO_STRING_SVTOOLS_HTML_TF_below,   HTML_TF_BELOW   },
-    { OOO_STRING_SVTOOLS_HTML_TF_hsides,  HTML_TF_HSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_lhs,     HTML_TF_LHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_rhs,     HTML_TF_RHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_vsides,  HTML_TF_VSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_box,     HTML_TF_BOX     },
-    { OOO_STRING_SVTOOLS_HTML_TF_border,  HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_void,    HTMLTableFrame::Void    },
+    { OOO_STRING_SVTOOLS_HTML_TF_above,   HTMLTableFrame::Above   },
+    { OOO_STRING_SVTOOLS_HTML_TF_below,   HTMLTableFrame::Below   },
+    { OOO_STRING_SVTOOLS_HTML_TF_hsides,  HTMLTableFrame::HSides  },
+    { OOO_STRING_SVTOOLS_HTML_TF_lhs,     HTMLTableFrame::LHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_rhs,     HTMLTableFrame::RHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_vsides,  HTMLTableFrame::VSides  },
+    { OOO_STRING_SVTOOLS_HTML_TF_box,     HTMLTableFrame::Box     },
+    { OOO_STRING_SVTOOLS_HTML_TF_border,  HTMLTableFrame::Box     },
     { nullptr,                            (HTMLTableFrame)0 }
 };
 
