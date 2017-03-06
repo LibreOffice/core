@@ -992,6 +992,8 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nAttr = EXC_FONTATTR_NONE;
     ::set_flag( nAttr, EXC_FONTATTR_ITALIC, maData.mbItalic );
+    if( maData.mnUnderline > 0 )
+        ::set_flag( nAttr, EXC_FONTATTR_UNDERLINE, true );
     ::set_flag( nAttr, EXC_FONTATTR_STRIKEOUT, maData.mbStrikeout );
     ::set_flag( nAttr, EXC_FONTATTR_OUTLINE, maData.mbOutline );
     ::set_flag( nAttr, EXC_FONTATTR_SHADOW, maData.mbShadow );
