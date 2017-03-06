@@ -262,14 +262,14 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
     {
         bool bIsAutoScroll;
         if ( (aAny >>= bIsAutoScroll) && bIsAutoScroll )
-            maFrmDescr.SetScrollingMode( ScrollingAuto );
+            maFrmDescr.SetScrollingMode( ScrollingMode::Auto );
     }
     break;
     case WID_FRAME_IS_SCROLLING_MODE:
     {
         bool bIsScroll;
         if ( aAny >>= bIsScroll )
-            maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingYes : ScrollingNo );
+            maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingMode::Yes : ScrollingMode::No );
     }
     break;
     case WID_FRAME_IS_BORDER:
@@ -337,13 +337,13 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     break;
     case WID_FRAME_IS_AUTO_SCROLL:
     {
-        bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingAuto );
+        bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingMode::Auto );
         aAny <<= bIsAutoScroll;
     }
     break;
     case WID_FRAME_IS_SCROLLING_MODE:
     {
-        bool bIsScroll = ( maFrmDescr.GetScrollingMode() == ScrollingYes );
+        bool bIsScroll = ( maFrmDescr.GetScrollingMode() == ScrollingMode::Yes );
         aAny <<= bIsScroll;
     }
     break;

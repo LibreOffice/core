@@ -545,13 +545,13 @@ short SfxInsertFloatingFrameDialog::Execute()
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
                 OUString aName = m_pEDName->GetText();
-                ScrollingMode eScroll = ScrollingNo;
+                ScrollingMode eScroll = ScrollingMode::No;
                 if ( m_pRBScrollingOn->IsChecked() )
-                    eScroll = ScrollingYes;
+                    eScroll = ScrollingMode::Yes;
                 if ( m_pRBScrollingOff->IsChecked() )
-                    eScroll = ScrollingNo;
+                    eScroll = ScrollingMode::No;
                 if ( m_pRBScrollingAuto->IsChecked() )
-                    eScroll = ScrollingAuto;
+                    eScroll = ScrollingMode::Auto;
 
                 bool bHasBorder = m_pRBFrameBorderOn->IsChecked();
 
@@ -570,10 +570,10 @@ short SfxInsertFloatingFrameDialog::Execute()
                 xSet->setPropertyValue( "FrameURL", Any( aURL ) );
                 xSet->setPropertyValue( "FrameName", Any( aName ) );
 
-                if ( eScroll == ScrollingAuto )
+                if ( eScroll == ScrollingMode::Auto )
                     xSet->setPropertyValue( "FrameIsAutoScroll", Any( true ) );
                 else
-                    xSet->setPropertyValue( "FrameIsScrollingMode", Any( eScroll == ScrollingYes ) );
+                    xSet->setPropertyValue( "FrameIsScrollingMode", Any( eScroll == ScrollingMode::Yes ) );
 
                 xSet->setPropertyValue( "FrameIsBorder", Any( bHasBorder ) );
                 xSet->setPropertyValue( "FrameMarginWidth", Any( sal_Int32( lMarginWidth ) ) );

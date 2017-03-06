@@ -271,8 +271,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             {
                 try
                 {
-                    ScrollingMode eScroll = ScrollingAuto;
-                    if( pScrollingItem && pScrollingItem->GetValue() <= ScrollingAuto )
+                    ScrollingMode eScroll = ScrollingMode::Auto;
+                    if( pScrollingItem && pScrollingItem->GetValue() <= (int)ScrollingMode::Auto )
                         eScroll = (ScrollingMode) pScrollingItem->GetValue();
 
                     Size aMargin;
@@ -284,12 +284,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if ( pNameItem )
                         xSet->setPropertyValue("FrameName", uno::makeAny( OUString( pNameItem->GetValue() ) ) );
 
-                    if ( eScroll == ScrollingAuto )
+                    if ( eScroll == ScrollingMode::Auto )
                         xSet->setPropertyValue("FrameIsAutoScroll",
                             uno::makeAny( true ) );
                     else
                         xSet->setPropertyValue("FrameIsScrollingMode",
-                            uno::makeAny( eScroll == ScrollingYes ) );
+                            uno::makeAny( eScroll == ScrollingMode::Yes ) );
 
                     if ( pBorderItem )
                         xSet->setPropertyValue("FrameIsBorder",

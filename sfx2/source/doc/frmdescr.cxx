@@ -40,7 +40,7 @@ struct SfxFrameDescriptor_Impl
 
 SfxFrameDescriptor::SfxFrameDescriptor() :
     aMargin( -1, -1 ),
-    eScroll( ScrollingAuto ),
+    eScroll( ScrollingMode::Auto ),
     bHasBorder( true ),
     bHasBorderSet( false ),
     bResizeHorizontal( true ),

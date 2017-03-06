@@ -763,7 +763,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                          RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
-    ScrollingMode eScrollMode = ScrollingAuto;
+    ScrollingMode eScrollMode = ScrollingMode::Auto;
     bool bHasBorder = false;
     bool bIsBorderSet = false;
     Size aMargin( SIZE_NOT_SET, SIZE_NOT_SET );
@@ -795,7 +795,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     case CTF_FRAME_DISPLAY_SCROLLBAR:
                         {
                             bool bYes = *o3tl::doAccess<bool>(rProp.maValue);
-                            eScrollMode = bYes ? ScrollingYes : ScrollingNo;
+                            eScrollMode = bYes ? ScrollingMode::Yes : ScrollingMode::No;
                         }
                         break;
                     case CTF_FRAME_DISPLAY_BORDER:
@@ -854,12 +854,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                 xSet->setPropertyValue("FrameName",
                     makeAny( OUString( rName ) ) );
 
-                if ( eScrollMode == ScrollingAuto )
+                if ( eScrollMode == ScrollingMode::Auto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
                         makeAny( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        makeAny( eScrollMode == ScrollingYes ) );
+                        makeAny( eScrollMode == ScrollingMode::Yes ) );
 
                 if ( bIsBorderSet )
                     xSet->setPropertyValue("FrameIsBorder",
