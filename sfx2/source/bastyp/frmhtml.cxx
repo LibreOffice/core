@@ -40,9 +40,9 @@ static sal_Char const sHTML_SC_auto[] = "AUTO";
 
 static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
 {
-    { sHTML_SC_yes,     ScrollingYes    },
-    { sHTML_SC_no,      ScrollingNo     },
-    { sHTML_SC_auto,    ScrollingAuto   },
+    { sHTML_SC_yes,     ScrollingMode::Yes    },
+    { sHTML_SC_no,      ScrollingMode::No     },
+    { sHTML_SC_auto,    ScrollingMode::Auto   },
     { nullptr,          (ScrollingMode)0 }
 };
 
@@ -93,7 +93,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             bMarginHeight = true;
             break;
         case HTML_O_SCROLLING:
-            pFrame->SetScrollingMode( rOption.GetEnum( aScrollingTable, ScrollingAuto ) );
+            pFrame->SetScrollingMode( rOption.GetEnum( aScrollingTable, ScrollingMode::Auto ) );
             break;
         case HTML_O_FRAMEBORDER:
         {

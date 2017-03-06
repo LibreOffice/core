@@ -43,11 +43,11 @@ class Wallpaper;
 // aligned, from which also the alignment of the FrameSet is given.
 
 
-enum ScrollingMode
+enum class ScrollingMode
 {
-    ScrollingYes,
-    ScrollingNo,
-    ScrollingAuto
+    Yes,
+    No,
+    Auto
 };
 
 #define SPACING_NOT_SET     -1L
