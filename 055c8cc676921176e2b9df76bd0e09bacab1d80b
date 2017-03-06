@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_03d0e752",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T16:23:29Z",
+      "side": 1,
+      "message": "Ugh.. I overlooked that Excel returns #DIV/0! in this case, and so should we. So instead simply use\n\n PushDouble( div( fValue - fRest, fTimeLength));\n\nIf you could correct that in a follow-up patch?\nFor comparison to #DIV/0! error you can use ERROR.TYPE(...)\u003d2 in the test doc (if we want to test for detailed error values at all?)",
+      "revId": "055c8cc676921176e2b9df76bd0e09bacab1d80b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
