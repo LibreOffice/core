@@ -11,12 +11,16 @@
 #define INCLUDED_XMLOFF_INC_ENUMMAPS_HXX
 
 #include <sal/config.h>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
+template<typename EnumT>
 struct SvXMLEnumMapEntry;
 
-extern SvXMLEnumMapEntry const aXML_FillStyle_EnumMap[];
-extern SvXMLEnumMapEntry const aXML_RefPoint_EnumMap[];
-extern SvXMLEnumMapEntry const aXML_BitmapMode_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::FillStyle> const aXML_FillStyle_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::RectanglePoint> const aXML_RefPoint_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::BitmapMode> const aXML_BitmapMode_EnumMap[];
 
 #endif
 

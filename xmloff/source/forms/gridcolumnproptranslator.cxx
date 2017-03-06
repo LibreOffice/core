@@ -74,8 +74,8 @@ namespace xmloff
             { ParagraphAdjust_RIGHT,            awt::TextAlign::RIGHT    },
             { ParagraphAdjust_BLOCK,            awt::TextAlign::RIGHT    },
             { ParagraphAdjust_STRETCH,          awt::TextAlign::LEFT     },
-            { ParagraphAdjust_MAKE_FIXED_SIZE,  awt::TextAlign::LEFT     },
-            { ParagraphAdjust_MAKE_FIXED_SIZE,  -1 }
+            { ParagraphAdjust::ParagraphAdjust_MAKE_FIXED_SIZE,  awt::TextAlign::LEFT     },
+            { ParagraphAdjust::ParagraphAdjust_MAKE_FIXED_SIZE,  -1 }
         };
 
         void valueAlignToParaAdjust(Any& rValue)

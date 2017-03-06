@@ -20,6 +20,8 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLENUMCONVERTER_HXX
 
 #include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/chart/ChartLegendPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
 class SchXMLEnumConverter
 {

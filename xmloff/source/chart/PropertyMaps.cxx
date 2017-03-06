@@ -69,12 +69,12 @@ using namespace ::xmloff::token;
 
 namespace {
 
-SvXMLEnumMapEntry const aLineStyleMap[] =
+SvXMLEnumMapEntry<drawing::LineStyle> const aLineStyleMap[] =
 {
     { XML_NONE,     drawing::LineStyle_NONE },
     { XML_SOLID,    drawing::LineStyle_SOLID },
     { XML_DASH,     drawing::LineStyle_DASH },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::LineStyle)0 }
 };
 
 }
@@ -106,24 +106,20 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_AXIS_LABEL_POSITION:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisLabelPositionEnumMap,
-                                               cppu::UnoType<chart::ChartAxisLabelPosition>::get());
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisLabelPositionEnumMap);
                 break;
 
             case XML_SCH_TYPE_TICK_MARK_POSITION:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisMarkPositionEnumMap,
-                                               cppu::UnoType<chart::ChartAxisMarkPosition>::get());
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisMarkPositionEnumMap);
                 break;
 
             case XML_SCH_TYPE_AXIS_ARRANGEMENT:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisArrangementEnumMap,
-                                               cppu::UnoType<chart::ChartAxisArrangeOrderType>::get());
+                pHdl = new XMLEnumPropertyHdl( aXMLChartAxisArrangementEnumMap);
                 break;
 
             case XML_SCH_TYPE_ERROR_BAR_STYLE:
                 // here we have a constant rather than an enum
-                pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap,
-                                               ::cppu::UnoType<sal_Int32>::get() );
+                pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap );
                 break;
 
             case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:
@@ -135,25 +131,21 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_SOLID_TYPE:
                 // here we have a constant rather than an enum
-                pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap,
-                                               ::cppu::UnoType<sal_Int32>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap );
                 break;
             case XML_SCH_TYPE_LABEL_PLACEMENT_TYPE:
                 // here we have a constant rather than an enum
-                pHdl = new XMLEnumPropertyHdl( aXMLChartDataLabelPlacementEnumMap,
-                                                ::cppu::UnoType<sal_Int32>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXMLChartDataLabelPlacementEnumMap );
                 break;
             case XML_SCH_TYPE_DATAROWSOURCE:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
-                                               cppu::UnoType<chart::ChartDataRowSource>::get());
+                pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap);
                 break;
             case XML_SCH_TYPE_TEXT_ORIENTATION:
                 pHdl = new XMLTextOrientationHdl;
                 break;
 
             case XML_SCH_TYPE_INTERPOLATION:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap,
-                                               ::cppu::UnoType<sal_Int32>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap );
                 break;
             case XML_SCH_TYPE_SYMBOL_TYPE:
                 pHdl = new XMLSymbolTypePropertyHdl( false );
@@ -164,11 +156,10 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_MISSING_VALUE_TREATMENT:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartMissingValueTreatmentEnumMap,
-                                               ::cppu::UnoType<sal_Int32>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXMLChartMissingValueTreatmentEnumMap );
                 break;
             case XML_SCH_TYPE_LABEL_BORDER_STYLE:
-                pHdl = new XMLEnumPropertyHdl(aLineStyleMap, cppu::UnoType<drawing::LineStyle>::get());
+                pHdl = new XMLEnumPropertyHdl( aLineStyleMap );
             break;
             case XML_SCH_TYPE_LABEL_BORDER_OPACITY:
                 pHdl = new XMLOpacityPropertyHdl(nullptr);

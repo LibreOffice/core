@@ -76,14 +76,14 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     break;
                 case XML_TOK_SCALE:
                 {
-                    sal_uInt16 nRet = awt::ImageScaleMode::NONE;
+                    sal_Int16 nRet = awt::ImageScaleMode::NONE;
                     if ( s_sTRUE == sValue )
                     {
                         nRet = awt::ImageScaleMode::ANISOTROPIC;
                     }
                     else
                     {
-                        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
+                        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
                         bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
                     }

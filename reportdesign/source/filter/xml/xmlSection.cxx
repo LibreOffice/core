@@ -44,7 +44,7 @@ namespace rptxml
     sal_uInt16 lcl_getReportPrintOption(const OUString& _sValue)
     {
         sal_uInt16 nRet = report::ReportPrintOption::ALL_PAGES;
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        const SvXMLEnumMapEntry<sal_uInt16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
         (void)SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
         return nRet;
     }
