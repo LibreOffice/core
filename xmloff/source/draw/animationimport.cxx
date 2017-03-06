@@ -540,10 +540,10 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                     aEventTrigger = aEventTrigger.copy( nPos + 1 );
                 }
 
-                sal_uInt16 nEnum;
+                sal_Int16 nEnum;
                 if( SvXMLUnitConverter::convertEnum( nEnum, aEventTrigger, aAnimations_EnumMap_EventTrigger ) )
                 {
-                    aEvent.Trigger = (sal_Int16)nEnum;
+                    aEvent.Trigger = nEnum;
                 }
                 else
                 {
@@ -750,7 +750,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         OUString sXmlId;
 
         const sal_Int16 nCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        sal_uInt16 nEnum;
+        sal_Int16 nEnum;
         sal_Int16 nAttribute;
         for( nAttribute = 0; nAttribute < nCount; nAttribute++ )
         {
@@ -779,25 +779,25 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case ANA_Fill:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_Fill ) )
-                    mxNode->setFill( (sal_Int16)nEnum );
+                    mxNode->setFill( nEnum );
             }
             break;
             case ANA_FillDefault:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_FillDefault ) )
-                    mxNode->setFillDefault( (sal_Int16)nEnum );
+                    mxNode->setFillDefault( nEnum );
             }
             break;
             case ANA_Restart:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_Restart ) )
-                    mxNode->setRestart( (sal_Int16)nEnum );
+                    mxNode->setRestart( nEnum );
             }
             break;
             case ANA_RestartDefault:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_RestartDefault ) )
-                    mxNode->setRestartDefault( (sal_Int16)nEnum );
+                    mxNode->setRestartDefault( nEnum );
             }
             break;
             case ANA_Accelerate:
@@ -832,13 +832,13 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case ANA_EndSync:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_Endsync ) )
-                    mxNode->setEndSync( makeAny( (sal_Int16)nEnum ) );
+                    mxNode->setEndSync( makeAny( nEnum ) );
             }
             break;
             case ANA_Node_Type:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_EffectNodeType ) )
-                    aUserData.push_back( NamedValue( GetXMLToken( XML_NODE_TYPE ), makeAny( (sal_Int16)nEnum ) ) );
+                    aUserData.push_back( NamedValue( GetXMLToken( XML_NODE_TYPE ), makeAny( nEnum ) ) );
             }
             break;
             case ANA_Preset_ID:
@@ -854,7 +854,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case ANA_Preset_Class:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_EffectPresetClass ) )
-                    aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_CLASS ), makeAny( (sal_Int16)nEnum ) ) );
+                    aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_CLASS ), makeAny( nEnum ) ) );
             }
             break;
             case ANA_After_Effect:
@@ -921,11 +921,11 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 {
                     if( xAnimate.is() )
                     {
-                        xAnimate->setSubItem( (sal_Int16)nEnum );
+                        xAnimate->setSubItem( nEnum );
                     }
                     else if( xIter.is() )
                     {
-                        xIter->setSubItem( (sal_Int16)nEnum );
+                        xIter->setSubItem( nEnum );
                     }
                 }
             }
@@ -1010,7 +1010,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( xAnimate.is() )
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_CalcMode ) )
-                        xAnimate->setCalcMode( (sal_Int16)nEnum );
+                        xAnimate->setCalcMode( nEnum );
                 }
             }
             break;
@@ -1027,7 +1027,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( xAnimate.is() )
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_AdditiveMode ) )
-                        xAnimate->setAdditive( (sal_Int16)nEnum );
+                        xAnimate->setAdditive( nEnum );
                 }
             }
             break;
@@ -1070,7 +1070,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_TransformType ) )
                     {
-                        xTransform->setTransformType( (sal_Int16)nEnum );
+                        xTransform->setTransformType( nEnum );
                         switch( nEnum )
                         {
                         case AnimationTransformType::SCALE: meAttributeName = XML_SCALE; break;
@@ -1136,7 +1136,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_IterateType ) )
                 {
                     if( xIter.is() )
-                        xIter->setIterateType( (sal_Int16)nEnum );
+                        xIter->setIterateType( nEnum );
                 }
             }
             break;
@@ -1178,7 +1178,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_Command ) )
                     {
-                        xCommand->setCommand( (sal_Int16)nEnum );
+                        xCommand->setCommand( nEnum );
                     }
                 }
             }

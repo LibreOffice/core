@@ -31,7 +31,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 
-struct SvXMLEnumMapEntry;
+template<typename EnumT> struct SvXMLEnumMapEntry;
 class Color;
 
 namespace xmloff

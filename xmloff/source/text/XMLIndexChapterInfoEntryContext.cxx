@@ -66,15 +66,15 @@ XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
 {
 }
 
-static const SvXMLEnumMapEntry aChapterDisplayMap[] =
+static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 {
-    { XML_NAME,                     ChapterFormat::NAME },
-    { XML_NUMBER,                   ChapterFormat::NUMBER },
-    { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
+    { XML_NAME,                     (sal_uInt16)ChapterFormat::NAME },
+    { XML_NUMBER,                   (sal_uInt16)ChapterFormat::NUMBER },
+    { XML_NUMBER_AND_NAME,          (sal_uInt16)ChapterFormat::NAME_NUMBER },
     //---> i89791
     // enabled for ODF 1.2, full index support in 3.0
-    { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
-    { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
+    { XML_PLAIN_NUMBER_AND_NAME,    (sal_uInt16)ChapterFormat::NO_PREFIX_SUFFIX },
+    { XML_PLAIN_NUMBER,             (sal_uInt16)ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
 };
 

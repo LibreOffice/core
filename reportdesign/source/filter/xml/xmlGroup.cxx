@@ -39,10 +39,10 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
 
-    sal_uInt16 lcl_getKeepTogetherOption(const OUString& _sValue)
+    sal_Int16 lcl_getKeepTogetherOption(const OUString& _sValue)
     {
-        sal_uInt16 nRet = report::KeepTogether::NO;
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetKeepTogetherOptions();
+        sal_Int16 nRet = report::KeepTogether::NO;
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetKeepTogetherOptions();
         (void)SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
         return nRet;
     }
