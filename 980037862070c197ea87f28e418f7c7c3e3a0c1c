@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_43410f0b",
+        "filename": "sc/qa/unit/data/functions/financial/fods/nper.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-06T16:45:16Z",
+      "side": 1,
+      "message": "Btw, what settings do you use that you end up with such a neat clean small diff for the .fods files?",
+      "revId": "980037862070c197ea87f28e418f7c7c3e3a0c1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
