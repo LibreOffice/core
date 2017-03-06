@@ -888,12 +888,12 @@ void SwHTMLParser::InsertFloatingFrame()
                 xSet->setPropertyValue("FrameURL", uno::makeAny( OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) ) );
                 xSet->setPropertyValue("FrameName", uno::makeAny( aName ) );
 
-                if ( eScroll == ScrollingAuto )
+                if ( eScroll == ScrollingMode::Auto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
                         uno::makeAny( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        uno::makeAny( eScroll == ScrollingYes ) );
+                        uno::makeAny( eScroll == ScrollingMode::Yes ) );
 
                 xSet->setPropertyValue("FrameIsBorder",
                         uno::makeAny( bHasBorder ) );
