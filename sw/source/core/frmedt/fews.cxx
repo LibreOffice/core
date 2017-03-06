@@ -72,7 +72,7 @@ void SwFEShell::EndAllActionAndCall()
 // Determine the Content's nearest to the point
 Point SwFEShell::GetContentPos( const Point& rPoint, bool bNext ) const
 {
-    SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
+    SET_CURR_SHELL( const_cast<SwFEShell*>(this) );
     return GetLayout()->GetNextPrevContentPos( rPoint, bNext );
 }
 
@@ -81,7 +81,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 {
     const SwFrame *pFrame = Imp()->HasDrawView()
                 ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                      const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)))
+                                      const_cast<SwFEShell*>(this))
                 : nullptr;
 
     if( !pFrame )
