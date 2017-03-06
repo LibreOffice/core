@@ -52,7 +52,7 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     Reference<XPropertySet> & rPropSet,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const SvXMLEnumMapEntry* pLevelNameMap,
+    const SvXMLEnumMapEntry<sal_uInt16>* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
     const bool* pAllowedTokenTypes,
@@ -197,7 +197,7 @@ enum TemplateTokenType
 };
 
 
-SvXMLEnumMapEntry const aTemplateTokenTypeMap[] =
+SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
 {
     { XML_INDEX_ENTRY_TEXT,         XML_TOK_INDEX_TYPE_ENTRY_TEXT },
     { XML_INDEX_ENTRY_TAB_STOP,     XML_TOK_INDEX_TYPE_TAB_STOP },
@@ -207,7 +207,7 @@ SvXMLEnumMapEntry const aTemplateTokenTypeMap[] =
     { XML_INDEX_ENTRY_LINK_START,   XML_TOK_INDEX_TYPE_LINK_START },
     { XML_INDEX_ENTRY_LINK_END,     XML_TOK_INDEX_TYPE_LINK_END },
     { XML_INDEX_ENTRY_BIBLIOGRAPHY, XML_TOK_INDEX_TYPE_BIBLIOGRAPHY },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (TemplateTokenType)0 }
 };
 
 SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
@@ -219,14 +219,14 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
-        sal_uInt16 nToken;
+        TemplateTokenType nToken;
         if (SvXMLUnitConverter::convertEnum(nToken, rLocalName,
                                             aTemplateTokenTypeMap))
         {
             // can this index accept this kind of token?
             if (pAllowedTokenTypesMap[nToken])
             {
-                switch ((TemplateTokenType)nToken)
+                switch (nToken)
                 {
                     case XML_TOK_INDEX_TYPE_ENTRY_TEXT:
                         pContext = new XMLIndexSimpleEntryContext(
@@ -296,7 +296,7 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
 // table of content and user defined index:
 
-const SvXMLEnumMapEntry aSvLevelNameTOCMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aSvLevelNameTOCMap[] =
 {
     { XML_1, 1 },
     { XML_2, 2 },
@@ -344,7 +344,7 @@ const bool aAllowedTokenTypesUser[] =
 
 // alphabetical index
 
-const SvXMLEnumMapEntry aLevelNameAlphaMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aLevelNameAlphaMap[] =
 {
     { XML_SEPARATOR, 1 },
     { XML_1, 2 },
@@ -372,7 +372,7 @@ const bool aAllowedTokenTypesAlpha[] =
 
 // bibliography index:
 
-const SvXMLEnumMapEntry aLevelNameBibliographyMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aLevelNameBibliographyMap[] =
 {
     { XML_ARTICLE, 1 },
     { XML_BOOK, 2 },
@@ -427,7 +427,7 @@ const bool aAllowedTokenTypesBibliography[] =
 // table, illustration and object index
 
 // no name map
-const SvXMLEnumMapEntry* aLevelNameTableMap = nullptr;
+const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameTableMap = nullptr;
 
 const sal_Char* aLevelStylePropNameTableMap[] =
     { nullptr, "ParaStyleLevel1", nullptr };

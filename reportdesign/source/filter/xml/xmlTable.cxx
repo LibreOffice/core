@@ -49,7 +49,7 @@ namespace rptxml
     sal_uInt16 lcl_getForceNewPageOption(const OUString& _sValue)
     {
         sal_uInt16 nRet = report::ForceNewPage::NONE;
-        const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
+        const SvXMLEnumMapEntry<sal_uInt16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
         (void)SvXMLUnitConverter::convertEnum( nRet,_sValue,aXML_EnumMap );
         return nRet;
     }

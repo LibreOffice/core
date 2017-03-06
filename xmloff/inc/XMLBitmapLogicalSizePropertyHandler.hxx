@@ -22,6 +22,7 @@
 
 #include <xmloff/xmlprhdl.hxx>
 
+template<typename EnumT>
 struct SvXMLEnumMapEntry;
 
 

@@ -51,11 +51,11 @@ namespace rptxml
     public:
         static rtl::Reference < XMLPropertySetMapper > GetCellStylePropertyMap(bool _bOldFormat, bool bForExport);
 
-        static const SvXMLEnumMapEntry* GetReportPrintOptions();
-        static const SvXMLEnumMapEntry* GetForceNewPageOptions();
-        static const SvXMLEnumMapEntry* GetKeepTogetherOptions();
-        static const SvXMLEnumMapEntry* GetCommandTypeOptions();
-        static const SvXMLEnumMapEntry* GetImageScaleOptions();
+        static const SvXMLEnumMapEntry<sal_uInt16>* GetReportPrintOptions();
+        static const SvXMLEnumMapEntry<sal_uInt16>* GetForceNewPageOptions();
+        static const SvXMLEnumMapEntry<sal_Int16>*  GetKeepTogetherOptions();
+        static const SvXMLEnumMapEntry<sal_uInt16>* GetCommandTypeOptions();
+        static const SvXMLEnumMapEntry<sal_Int16>*  GetImageScaleOptions();
 
         static const XMLPropertyMapEntry* GetTableStyleProps();
         static const XMLPropertyMapEntry* GetColumnStyleProps();

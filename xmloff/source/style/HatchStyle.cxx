@@ -49,12 +49,12 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
+SvXMLEnumMapEntry<drawing::HatchStyle> const pXML_HatchStyle_Enum[] =
 {
     { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
     { XML_HATCHSTYLE_DOUBLE,    drawing::HatchStyle_DOUBLE },
     { XML_HATCHSTYLE_TRIPLE,    drawing::HatchStyle_TRIPLE },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (drawing::HatchStyle)0 }
 };
 
 // Import
@@ -117,10 +117,10 @@ void XMLHatchStyleImport::importXML(
                 break;
             case XML_TOK_HATCH_STYLE:
                 {
-                    sal_uInt16 eValue;
+                    drawing::HatchStyle eValue;
                     bHasStyle = SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_HatchStyle_Enum );
                     if( bHasStyle )
-                        aHatch.Style = (drawing::HatchStyle) eValue;
+                        aHatch.Style = eValue;
                 }
                 break;
             case XML_TOK_HATCH_COLOR:

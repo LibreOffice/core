@@ -143,7 +143,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNewAttribs = pList;
         OUStringBuffer sValue;
-        static const SvXMLEnumMapEntry aXML_CommnadTypeEnumMap[] =
+        static const SvXMLEnumMapEntry<sal_uInt16> aXML_CommnadTypeEnumMap[] =
         {
             { XML_TABLE, sdb::CommandType::TABLE },
             { XML_QUERY, sdb::CommandType::QUERY },
