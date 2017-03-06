@@ -52,6 +52,24 @@
       "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8025adc3",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-06T13:20:07Z",
+      "side": 1,
+      "message": "I\u0027ve revisited the issue of removing uwinapi now in the mail thread starting at \u003chttps://lists.freedesktop.org/archives/libreoffice/2017-March/077199.html\u003e \"The uwinapi mess\".  Depending on the outcome, we may want to remove uwinapi completely as part of this Gerrit change after all.  (What made me revisit this is the late insight that in MSVC 2015 builds, uwinapi is already crippled anyway, so that keeping it alive for now as I requested previously doesn\u0027t make much sense anyway and leaves us in an even more confusing state.)",
+      "parentUuid": "9a57fde8_ca1a7417",
+      "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
