@@ -19,7 +19,6 @@
 
 #include "java/util/Date.hxx"
 #include "java/tools.hxx"
-#include <connectivity/dbconversion.hxx>
 using namespace connectivity;
 
 //************ Class: java.util.Date
