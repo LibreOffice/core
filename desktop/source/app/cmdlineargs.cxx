@@ -38,6 +38,11 @@
 #include <svl/documentlockfile.hxx>
 
 #include <cstdio>
+#include <fstream>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <ucbhelper/content.hxx>
+#include <rtl/strbuf.hxx>
+#include <osl/file.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
@@ -163,6 +168,89 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     if (nURIlen < 0)
         nURIlen = rest2.getLength();
     arg = rest2.copy(0, nURIlen);
+    return curEvt;
+}
+
+// Skip single newline (be it *NIX LF, MacOS CR, of Win CRLF)
+// Moves the pointer, and returns true if moved
+bool SkipNewline(const char* pStr, sal_Int32& rOffset)
+{
+    if ((pStr[rOffset] != '\r') && (pStr[rOffset] != '\n'))
+        return false;
+    if (pStr[rOffset] == '\r')
+        ++rOffset;
+    if (pStr[rOffset] == '\n')
+        ++rOffset;
+    return true;
+}
+
+// Web query: http://support.microsoft.com/kb/157482
+CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curEvt)
+{
+    // Only handle files with extension .iqy
+    if (!arg.endsWithIgnoreAsciiCase(".iqy"))
+        return curEvt;
+
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
+
+    try
+    {
+        OUString sFileURL;
+        if (osl::FileBase::getFileURLFromSystemPath(arg, sFileURL) != osl::FileBase::RC::E_None)
+            return curEvt;
+        css::uno::Reference < css::ucb::XCommandEnvironment > xEnv;
+        ucbhelper::Content aSourceContent(sFileURL, xEnv, comphelper::getProcessComponentContext());
+
+        // the file can be opened readonly, no locking will be done
+        css::uno::Reference< css::io::XInputStream > xInput = aSourceContent.openStream();
+        if (!xInput.is())
+            return curEvt;
+
+        const sal_Int32 nBufLen = 32000;
+        css::uno::Sequence< sal_Int8 > aBuffer(nBufLen);
+        sal_Int32 nRead = xInput->readBytes(aBuffer, nBufLen);
+        if (nRead < 8) // WEB\n1\n...
+            return curEvt;
+
+        const char* sBuf = reinterpret_cast<const char*>(aBuffer.getConstArray());
+        sal_Int32 nOffset = 0;
+        if (strncmp(sBuf+nOffset, "WEB", 3) != 0)
+            return curEvt;
+        nOffset += 3;
+        if (!SkipNewline(sBuf, nOffset))
+            return curEvt;
+        if (sBuf[nOffset] != '1')
+            return curEvt;
+        ++nOffset;
+        if (!SkipNewline(sBuf, nOffset))
+            return curEvt;
+
+        rtl::OStringBuffer aResult(nRead);
+        do
+        {
+            // xInput->readBytes() can relocate buffer
+            sBuf = reinterpret_cast<const char*>(aBuffer.getConstArray());
+            const char* sPos = sBuf + nOffset;
+            const char* sPos1 = sPos;
+            const char* sEnd = sBuf + nRead;
+            while ((sPos1 < sEnd) && (*sPos1 != '\r') && (*sPos1 != '\n'))
+                ++sPos1;
+            aResult.append(sPos, sPos1 - sPos);
+            if (sPos1 < sEnd) // newline
+                break;
+            nOffset = 0;
+        } while ((nRead = xInput->readBytes(aBuffer, nBufLen)) > 0);
+
+        xInput->closeInput();
+
+        arg = OUString::createFromAscii(aResult.getStr());
+    }
+    catch (...)
+    {
+        SAL_WARN("desktop.app", "An error processing Web Query file: " << arg);
+    }
+
     return curEvt;
 }
 
@@ -529,6 +617,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // This will possibly adjust event for this argument
                 // and put real URI to aArg
                 CommandLineEvent eThisEvent = CheckOfficeURI(aArg, eCurrentEvent);
+
+                // Now check if this is a Web Query file
+                eThisEvent = CheckWebQuery(aArg, eThisEvent);
 
                 switch (eThisEvent)
                 {
