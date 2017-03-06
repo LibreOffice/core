@@ -86,11 +86,11 @@ static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
 // <TABLE RULES=xxx>
 static HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TR_none,   HTML_TR_NONE      },
-    { OOO_STRING_SVTOOLS_HTML_TR_groups, HTML_TR_GROUPS    },
-    { OOO_STRING_SVTOOLS_HTML_TR_rows,   HTML_TR_ROWS      },
-    { OOO_STRING_SVTOOLS_HTML_TR_cols,   HTML_TR_COLS      },
-    { OOO_STRING_SVTOOLS_HTML_TR_all,    HTML_TR_ALL       },
+    { OOO_STRING_SVTOOLS_HTML_TR_none,   HTMLTableRules::NONE      },
+    { OOO_STRING_SVTOOLS_HTML_TR_groups, HTMLTableRules::Groups    },
+    { OOO_STRING_SVTOOLS_HTML_TR_rows,   HTMLTableRules::Rows      },
+    { OOO_STRING_SVTOOLS_HTML_TR_cols,   HTMLTableRules::Cols      },
+    { OOO_STRING_SVTOOLS_HTML_TR_all,    HTMLTableRules::All       },
     { nullptr,                           (HTMLTableRules)0 }
 };
 

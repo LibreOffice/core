@@ -1878,16 +1878,16 @@ void HTMLTable::SetBorders()
 {
     sal_uInt16 i;
     for( i=1; i<m_nCols; i++ )
-        if( HTML_TR_ALL==m_eRules || HTML_TR_COLS==m_eRules ||
-            ((HTML_TR_ROWS==m_eRules || HTML_TR_GROUPS==m_eRules) &&
+        if( HTMLTableRules::All==m_eRules || HTMLTableRules::Cols==m_eRules ||
+            ((HTMLTableRules::Rows==m_eRules || HTMLTableRules::Groups==m_eRules) &&
              ((*m_pColumns)[i-1])->IsEndOfGroup()))
         {
             ((*m_pColumns)[i])->bLeftBorder = true;
         }
 
     for( i=0; i<m_nRows-1; i++ )
-        if( HTML_TR_ALL==m_eRules || HTML_TR_ROWS==m_eRules ||
-            ((HTML_TR_COLS==m_eRules || HTML_TR_GROUPS==m_eRules) &&
+        if( HTMLTableRules::All==m_eRules || HTMLTableRules::Rows==m_eRules ||
+            ((HTMLTableRules::Cols==m_eRules || HTMLTableRules::Groups==m_eRules) &&
              (*m_pRows)[i]->IsEndOfGroup()))
         {
             (*m_pRows)[i]->bBottomBorder = true;
@@ -4842,7 +4842,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     nBorder( USHRT_MAX ),
     nHSpace( 0 ), nVSpace( 0 ),
     eAdjust( eParentAdjust ), eVertOri( text::VertOrientation::CENTER ),
-    eFrame( HTMLTableFrame::Void ), eRules( HTML_TR_NONE ),
+    eFrame( HTMLTableFrame::Void ), eRules( HTMLTableRules::NONE ),
     bPrcWidth( false ),
     bTableAdjust( false ),
     bBGColor( false ),
@@ -4904,7 +4904,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             if( !bHasFrame )
                 eFrame = ( nBorder ? HTMLTableFrame::Box : HTMLTableFrame::Void );
             if( !bHasRules )
-                eRules = ( nBorder ? HTML_TR_ALL : HTML_TR_NONE );
+                eRules = ( nBorder ? HTMLTableRules::All : HTMLTableRules::NONE );
             break;
         case HTML_O_FRAME:
             eFrame = rOption.GetTableFrame();
@@ -4962,7 +4962,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
     if( 0==nBorder || USHRT_MAX==nBorder )
     {
         eFrame = HTMLTableFrame::Void;
-        eRules = HTML_TR_NONE;
+        eRules = HTMLTableRules::NONE;
     }
 }
 
