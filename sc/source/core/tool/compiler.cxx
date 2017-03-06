@@ -2706,8 +2706,8 @@ Label_MaskStateMachine:
 
 bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
 {
-    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
-    bool bFound = (iLook != mxSymbols->getHashMap()->end());
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
+    bool bFound = (iLook != mxSymbols->getHashMap().end());
     if (bFound)
     {
         OpCode eOp = iLook->second;
@@ -2846,8 +2846,8 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         {
             // If symbols are set by filters get mapping to exact name.
             ExternalHashMap::const_iterator iExt(
-                    mxSymbols->getExternalHashMap()->find( rName));
-            if (iExt != mxSymbols->getExternalHashMap()->end())
+                    mxSymbols->getExternalHashMap().find( rName));
+            if (iExt != mxSymbols->getExternalHashMap().end())
             {
                 if (ScGlobal::GetAddInCollection()->GetFuncData( (*iExt).second))
                     aIntName = (*iExt).second;
@@ -3706,8 +3706,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
 
 bool ScCompiler::IsBoolean( const OUString& rName )
 {
-    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName ) );
-    if( iLook != mxSymbols->getHashMap()->end() &&
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName ) );
+    if( iLook != mxSymbols->getHashMap().end() &&
         ((*iLook).second == ocTrue ||
          (*iLook).second == ocFalse) )
     {
@@ -3733,8 +3733,8 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
 bool ScCompiler::IsTableRefItem( const OUString& rName ) const
 {
     bool bItem = false;
-    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
-    if (iLook != mxSymbols->getHashMap()->end())
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
+    if (iLook != mxSymbols->getHashMap().end())
     {
         // Only called when there actually is a current TableRef, hence
         // accessing maTableRefs.back() is safe.

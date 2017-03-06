@@ -389,8 +389,8 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
     OUString const * const pStop = pName + nLen;
     for ( ; pName < pStop; ++pName, ++pToken)
     {
-        OpCodeHashMap::const_iterator iLook( mpHashMap->find( *pName));
-        if (iLook != mpHashMap->end())
+        OpCodeHashMap::const_iterator iLook( maHashMap.find( *pName));
+        if (iLook != maHashMap.end())
             pToken->OpCode = (*iLook).second;
         else
         {
@@ -491,7 +491,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_CLOSE,
                 SC_OPCODE_SEP,
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::ARRAY_SEPARATORS) != 0)
         {
@@ -501,16 +501,16 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_ARRAY_ROW_SEP,
                 SC_OPCODE_ARRAY_COL_SEP
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
         }
         if ((nGroups & FormulaMapGroup::UNARY_OPERATORS) != 0)
         {
             // Due to the nature of the percent operator following its operand
             // it isn't sorted into unary operators for compiler interna.
-            lclPushOpCodeMapEntry( aVec, mpTable, ocPercentSign );
+            lclPushOpCodeMapEntry( aVec, mpTable.get(), ocPercentSign );
             // "+" can be used as unary operator too, push only if binary group is not set
             if ((nGroups & FormulaMapGroup::BINARY_OPERATORS) == 0)
-                lclPushOpCodeMapEntry( aVec, mpTable, ocAdd );
+                lclPushOpCodeMapEntry( aVec, mpTable.get(), ocAdd );
             // regular unary operators
             for (sal_uInt16 nOp = SC_OPCODE_START_UN_OP; nOp < SC_OPCODE_STOP_UN_OP && nOp < mnSymbols; ++nOp)
             {
@@ -522,7 +522,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                     case SC_OPCODE_NEG :
                         break;   // nothing,
                     default:
-                        lclPushOpCodeMapEntry( aVec, mpTable, nOp );
+                        lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
                 }
             }
         }
@@ -538,7 +538,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                     case SC_OPCODE_OR :
                         break;   // nothing,
                     default:
-                        lclPushOpCodeMapEntry( aVec, mpTable, nOp );
+                        lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
                 }
             }
         }
@@ -546,9 +546,9 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         {
             // Function names are not consecutive, skip the gaps between
             // functions with no parameter, functions with 1 parameter
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR,
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_NO_PAR,
                     ::std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR,
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), SC_OPCODE_START_1_PAR,
                     ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
@@ -561,7 +561,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_NOT,
                 SC_OPCODE_NEG
             };
-            lclPushOpCodeMapEntries( aVec, mpTable, aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
+            lclPushOpCodeMapEntries( aVec, mpTable.get(), aOpCodes, SAL_N_ELEMENTS(aOpCodes) );
             // functions with 2 or more parameters.
             for (sal_uInt16 nOp = SC_OPCODE_START_2_PAR; nOp < SC_OPCODE_STOP_2_PAR && nOp < mnSymbols; ++nOp)
             {
@@ -571,7 +571,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                     case SC_OPCODE_NO_NAME :
                         break;   // nothing,
                     default:
-                        lclPushOpCodeMapEntry( aVec, mpTable, nOp );
+                        lclPushOpCodeMapEntry( aVec, mpTable.get(), nOp );
                 }
             }
             // If AddIn functions are present in this mapping, use them, and only those.
@@ -679,14 +679,14 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
         {
             OUString aUpper( pCharClass ? pCharClass->uppercase( mpTable[eOp]) : rStr.toAsciiUpperCase());
             // Ensure we remove a mapping only for the requested OpCode.
-            OpCodeHashMap::const_iterator it( mpHashMap->find( aUpper));
-            if (it != mpHashMap->end() && (*it).second == eOp)
-                mpHashMap->erase( it);
+            OpCodeHashMap::const_iterator it( maHashMap.find( aUpper));
+            if (it != maHashMap.end() && (*it).second == eOp)
+                maHashMap.erase( it);
         }
         if (bPutOp)
             mpTable[eOp] = rStr;
         OUString aUpper( pCharClass ? pCharClass->uppercase( rStr) : rStr.toAsciiUpperCase());
-        mpHashMap->insert( OpCodeHashMap::value_type( aUpper, eOp));
+        maHashMap.insert( OpCodeHashMap::value_type( aUpper, eOp));
     }
     else
     {
@@ -966,8 +966,8 @@ OpCode FormulaCompiler::GetEnglishOpCode( const OUString& rName ) const
 {
     FormulaCompiler::OpCodeMapPtr xMap = GetOpCodeMap( sheet::FormulaLanguage::ENGLISH);
 
-    formula::OpCodeHashMap::const_iterator iLook( xMap->getHashMap()->find( rName ) );
-    bool bFound = (iLook != xMap->getHashMap()->end());
+    formula::OpCodeHashMap::const_iterator iLook( xMap->getHashMap().find( rName ) );
+    bool bFound = (iLook != xMap->getHashMap().end());
     return bFound ? (*iLook).second : ocNone;
 }
 
@@ -1061,30 +1061,23 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
 }
 
 
-FormulaCompiler::OpCodeMap::~OpCodeMap()
-{
-    delete [] mpTable;
-    delete mpHashMap;
-}
-
 void FormulaCompiler::OpCodeMap::putCopyOpCode( const OUString& rSymbol, OpCode eOp )
 {
     SAL_WARN_IF( !mpTable[eOp].isEmpty() && rSymbol.isEmpty(), "formula.core",
             "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << static_cast<sal_uInt16>(eOp)
             << " '" << mpTable[eOp] << "' with empty name!");
     if (!mpTable[eOp].isEmpty() && rSymbol.isEmpty())
-        mpHashMap->insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
+        maHashMap.insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
     else
     {
         mpTable[eOp] = rSymbol;
-        mpHashMap->insert( OpCodeHashMap::value_type( rSymbol, eOp));
+        maHashMap.insert( OpCodeHashMap::value_type( rSymbol, eOp));
     }
 }
 
 void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 {
-    delete mpHashMap;
-    mpHashMap = new OpCodeHashMap( mnSymbols);
+    maHashMap = OpCodeHashMap( mnSymbols);
 
     sal_uInt16 n = r.getSymbolCount();
     SAL_WARN_IF( n != mnSymbols, "formula.core",
@@ -1139,8 +1132,8 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
 {
     FormulaError nError = FormulaError::NONE;
-    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
-    if (iLook != mxSymbols->getHashMap()->end())
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
+    if (iLook != mxSymbols->getHashMap().end())
     {
         switch ((*iLook).second)
         {
@@ -2267,8 +2260,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
                 if (!bMapped && mxSymbols->hasExternals())
                 {
-                    ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap()->find( aAddIn);
-                    if (iLook != mxSymbols->getReverseExternalHashMap()->end())
+                    ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap().find( aAddIn);
+                    if (iLook != mxSymbols->getReverseExternalHashMap().end())
                     {
                         aAddIn = (*iLook).second;
                         bMapped = true;
