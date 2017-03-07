@@ -46,6 +46,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
+
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -709,11 +711,11 @@ void SAL_CALL ChartModel::removeModifyListener(
 // util::XModifyListener
 void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
 {
-    uno::Reference<chart2::data::XDataProvider> xDataProvider(rEvenObject.Source, uno::UNO_QUERY);
-    if (xDataProvider.is())
+    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rEvenObject.Source, uno::UNO_QUERY);
+    if (xPivotChartDataProvider.is())
     {
         lockControllers();
-        Reference<frame::XModel> xModel(this);
+        uno::Reference<chart2::data::XDataProvider> xDataProvider(xPivotChartDataProvider, uno::UNO_QUERY);
         try
         {
             uno::Sequence<beans::PropertyValue> aArguments =
