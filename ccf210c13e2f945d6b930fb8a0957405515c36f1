@@ -70,6 +70,24 @@
       "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7ef946c8",
+        "filename": "sal/Module_sal.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-07T20:04:27Z",
+      "side": 1,
+      "message": "\u003e Depending on the outcome, we may want to remove uwinapi completely as part of this Gerrit change after all.\n\nDone.",
+      "parentUuid": "9a57fde8_8025adc3",
+      "revId": "ccf210c13e2f945d6b930fb8a0957405515c36f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
