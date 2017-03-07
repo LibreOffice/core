@@ -1155,8 +1155,11 @@ void GtkSalMenu::EnableUnity(bool bEnable)
 {
     if (bUnityMode != bEnable)
     {
-        bUnityMode = bEnable;
         static_cast<MenuBar*>(mpVCLMenu.get())->SetDisplayable(!bEnable);
+        bUnityMode = bEnable;
+
+        if (!bEnable)
+            ShowMenuBar(true);
     }
 }
 
