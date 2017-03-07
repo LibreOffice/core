@@ -63,7 +63,7 @@ class SmParser
     // grammar
     SmTableNode *DoTable();
     void    DoLine();
-    void    DoExpression();
+    SmNode *DoExpression();
     void    DoRelation();
     void    DoSum();
     void    DoProduct();
