@@ -160,7 +160,6 @@ public:
     // members
     SfxFilterMatcher&           GetFilterMatcher();
     SfxProgress*                GetProgress() const;
-    const OUString&               GetLastSaveDirectory() const;
     sal_uInt16                  GetFreeIndex();
     void                        ReleaseIndex(sal_uInt16 i);
 

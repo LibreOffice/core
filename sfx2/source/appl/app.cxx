@@ -260,21 +260,6 @@ const OUString& SfxApplication::GetLastDir_Impl() const
     return pImpl->aLastDir;
 }
 
-const OUString& SfxApplication::GetLastSaveDirectory() const
-
-/*  [Description]
-
-    As <SfxApplication::GetLastDir_Impl()>, only external
-
-    [Cross-reference]
-    <SfxApplication::GetLastDir_Impl()>
-*/
-
-{
-    return GetLastDir_Impl();
-}
-
-
 void SfxApplication::SetLastDir_Impl
 (
     const OUString&   rNewDir     /* Complete directory path as a string */

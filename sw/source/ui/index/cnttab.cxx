@@ -106,9 +106,6 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
     xFltMgr->appendFilter( rFileString, "*.sdi" );
     xFltMgr->setCurrentFilter( rFileString ) ;
 
-    OUString& rLastSaveDir = (OUString&)SfxGetpApp()->GetLastSaveDirectory();
-    OUString sSaveDir = rLastSaveDir;
-
     if( !rURL.isEmpty() )
         xFP->setDisplayDirectory( rURL );
     else
@@ -121,7 +118,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
     {
         sRet = xFP->getSelectedFiles().getConstArray()[0];
     }
-    rLastSaveDir = sSaveDir;
+
     return sRet;
 }
 
