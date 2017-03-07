@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a57fde8_837777d3",
+        "filename": "desktop/scripts/soffice.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-07T12:42:58Z",
+      "side": 1,
+      "message": "it looks like this broke things:\n\nawk: cmd. line:1: { print \\$1 }\nawk: cmd. line:1:         ^ backslash not last character on line\nawk: cmd. line:1: { print \\$1 }\nawk: cmd. line:1:         ^ syntax error\nawk: cmd. line:1: { print \\$2 }\nawk: cmd. line:1:         ^ backslash not last character on line\nawk: cmd. line:1: { print \\$2 }\nawk: cmd. line:1:         ^ syntax error\ninstdir/program/soffice: line 116: [: : integer expression expected\ninstdir/program/soffice: line 116: [: : integer expression expected\n\n\nhmm didn\u0027t know that this is different between $(..) and `..` ... learn something new every day...\n\nfixed on master in commit 4722bb82f8f2a181d882b8ad683ee5740da95cfa",
+      "revId": "e6a9dc22a4e58b565894f8cdb6a19755af7b14de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_9a819f92",
         "filename": "desktop/scripts/soffice.sh",
         "patchSetId": 2
