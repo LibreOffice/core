@@ -889,7 +889,6 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
         sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark)
 {
     sal_uInt16 i;
-    sal_uInt8 j;
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
 
@@ -935,7 +934,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
         pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
         xNewRow->SetStyleName(pOldRow->GetStyleName());
-        for (j=1;j<=pCellMark[i];j++)
+        for (sal_uInt8 j=1;j<=pCellMark[i];j++)
         {
             xNewCell = pOldRow->GetCell(j);
             xNewRow->AddCell(xNewCell);
@@ -953,7 +952,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
         pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
         xNewRow->SetStyleName(pOldRow->GetStyleName());
-        for(j=pCellMark[i]+1;j<=pOldRow->GetCellCount();j++)
+        for(sal_Int32 j=pCellMark[i]+1;j<=pOldRow->GetCellCount();j++)
         {
             xNewCell = pOldRow->GetCell(j);
             xNewRow->AddCell(xNewCell);
@@ -972,7 +971,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     for (i=1;i<=nRowNum;i++)
     {
         pOldRow = pTmpTable->GetRow(i);
-        for(j=1;j<=pOldRow->GetCellCount();j++)
+        for(sal_Int32 j=1;j<=pOldRow->GetCellCount();j++)
             pOldRow->RemoveCell(j);
         pTmpTable->RemoveRow(i);
     }
@@ -988,7 +987,6 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
 {
     sal_uInt16 nRowNum = pXFTable->GetRowCount();
     sal_uInt8 nColNum = static_cast<sal_uInt8>(pXFTable->GetColumnCount());
-    sal_uInt8 nCellMark=0;
     sal_uInt8 nCount;
     sal_uInt8 nColSpan;
     bool bFindFlag = false;
@@ -997,14 +995,13 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
     for(sal_uInt8 i=1;i<=nColNum;i++)
     {
         sal_uInt16 nRowLoop;
-        sal_uInt8 nCellLoop;
 
         //find current max column span
         nMaxColSpan = 1;
         for (nRowLoop=1;nRowLoop<=nRowNum;nRowLoop++)
         {
             nColSpan = 0;
-            for(nCellLoop=1; nCellLoop<i+1; nCellLoop++)
+            for(sal_uInt8 nCellLoop=1; nCellLoop<i+1; nCellLoop++)
             {
                 pTmpRow = pXFTable->GetRow(nRowLoop);
                 XFCell* pCell = pTmpRow->GetCell(nCellLoop);
@@ -1023,8 +1020,8 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
         {
             pTmpRow = pXFTable->GetRow(nRowLoop);
             nCount = 0;
-            nCellMark = 0;
-            for (nCellLoop=1; nCellLoop<=pTmpRow->GetCellCount(); nCellLoop++)
+            sal_Int32 nCellMark = 0;
+            for (sal_Int32 nCellLoop=1; nCellLoop<=pTmpRow->GetCellCount(); nCellLoop++)
             {
                 if (nCount>nMaxColSpan)
                     break;
