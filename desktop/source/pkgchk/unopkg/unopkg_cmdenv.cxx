@@ -219,7 +219,6 @@ void CommandEnvironmentImpl::handle(
     deployment::VersionException verExc;
 
 
-    bool bLicenseException = false;
     if (request >>= wtExc) {
         // ignore intermediate errors of legacy packages, i.e.
         // former pkgchk behaviour:
@@ -282,9 +281,7 @@ void CommandEnvironmentImpl::handle(
             return; // unknown request => no selection at all
     }
 
-    //In case of a user declining a license abort is true but this is intended,
-    //therefore no logging
-    if (abort && m_option_verbose && !bLicenseException)
+    if (abort && m_option_verbose)
     {
         OUString msg = ::comphelper::anyToString(request);
         dp_misc::writeConsoleError("\nERROR: " + msg + "\n");
