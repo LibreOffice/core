@@ -469,6 +469,10 @@ public:
 
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+    bool isDataFromSpreadsheet();
+
+    bool isDataFromPivotTable();
+
 #if HAVE_FEATURE_OPENGL
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
 #endif

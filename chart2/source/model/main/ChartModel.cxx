@@ -38,6 +38,7 @@
 #include <vcl/openglwin.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1353,6 +1354,17 @@ void ChartModel::update()
 #if HAVE_FEATURE_OPENGL
     mxChartView->updateOpenGLWindow();
 #endif
+}
+
+bool ChartModel::isDataFromSpreadsheet()
+{
+    return !isDataFromPivotTable() && !hasInternalDataProvider();
+}
+
+bool ChartModel::isDataFromPivotTable()
+{
+    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(m_xDataProvider, uno::UNO_QUERY);
+    return xPivotChartDataProvider.is();
 }
 
 }  // namespace chart
