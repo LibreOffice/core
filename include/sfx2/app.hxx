@@ -128,11 +128,10 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
+    SfxApplication();
 
 public:
-
-                                SfxApplication();
-                                virtual ~SfxApplication() override;
+    virtual ~SfxApplication() override;
     static SfxApplication*      GetOrCreate();
     static SfxApplication*      Get();
 
