@@ -16,6 +16,24 @@
       "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a322bbb7",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-07T12:54:38Z",
+      "side": 1,
+      "message": "From the failures, it seems that editeng can be torn down before DeInitVCL() too. In that case, we need two additional things over dispose(): a/ get the SolarMutex (which should be safe if we havent sailed past DeInitVCL() yet b/ remove the callback, so that vcl doesnt get upset on Windows to dtor a std::function to a gone location.\n\nAnd yeah, std::atomic\u003cbool\u003e is a good idea indeed.",
+      "parentUuid": "9a57fde8_234fab93",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
