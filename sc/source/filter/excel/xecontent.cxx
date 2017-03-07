@@ -1278,14 +1278,24 @@ XclExpCondfmt::~XclExpCondfmt()
 {
 }
 
-bool XclExpCondfmt::IsValid() const
+bool XclExpCondfmt::IsValidForBinary() const
+{
+    // ccf (2 bytes): An unsigned integer that specifies the count of CF records that follow this
+    // record. MUST be greater than or equal to 0x0001, and less than or equal to 0x0003.
+
+    SAL_WARN_IF( maCFList.GetSize() > 3, "sc.filter", "More than 3 conditional filters for cell(s), won't export");
+
+    return !maCFList.IsEmpty() && maCFList.GetSize() <= 3 && !maXclRanges.empty();
+}
+
+bool XclExpCondfmt::IsValidForXml() const
 {
     return !maCFList.IsEmpty() && !maXclRanges.empty();
 }
 
 void XclExpCondfmt::Save( XclExpStream& rStrm )
 {
-    if( IsValid() )
+    if( IsValidForBinary() )
     {
         XclExpRecord::Save( rStrm );
         maCFList.Save( rStrm );
@@ -1305,7 +1315,7 @@ void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 
 void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !IsValid() )
+    if( !IsValidForXml() )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1476,8 +1486,7 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtL
                         itr != pCondFmtList->end(); ++itr)
         {
             XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **itr, xExtLst, nIndex ));
-            if( xCondfmtRec->IsValid() )
-                maCondfmtList.AppendRecord( xCondfmtRec );
+            maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
 }
