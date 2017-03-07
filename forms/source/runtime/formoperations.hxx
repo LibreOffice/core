@@ -235,7 +235,7 @@ namespace frm
             A grid control can have columns which are currently hidden, so the index of a
             column in the view is not necessarily the same as its index in the model.
         */
-        static sal_Int16   impl_gridView2ModelPos_nothrow( const css::uno::Reference< css::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
+        static sal_Int32   impl_gridView2ModelPos_nothrow( const css::uno::Reference< css::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
 
         /** moves our cursor one position to the left, caring for different possible
             cursor states.

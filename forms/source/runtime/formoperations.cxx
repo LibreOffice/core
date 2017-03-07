@@ -1364,10 +1364,9 @@ namespace frm
         if ( xGrid.is() )
         {
             Reference< XIndexAccess > xColumns( xControl->getModel(), UNO_QUERY_THROW );
-            sal_Int16 nCurrentPos = xGrid->getCurrentColumnPosition();
-            nCurrentPos = impl_gridView2ModelPos_nothrow( xColumns, nCurrentPos );
+            sal_Int32 nCurrentPos = impl_gridView2ModelPos_nothrow( xColumns, xGrid->getCurrentColumnPosition() );
 
-            if ( nCurrentPos != (sal_Int16)-1 )
+            if ( nCurrentPos != -1 )
                 xColumns->getByIndex( nCurrentPos ) >>= xControlModel;
         }
         else if ( xControl.is() )
@@ -1402,13 +1401,13 @@ namespace frm
     }
 
 
-    sal_Int16 FormOperations::impl_gridView2ModelPos_nothrow( const Reference< XIndexAccess >& _rxColumns, sal_Int16 _nViewPos )
+    sal_Int32 FormOperations::impl_gridView2ModelPos_nothrow( const Reference< XIndexAccess >& _rxColumns, sal_Int16 _nViewPos )
     {
         OSL_PRECOND( _rxColumns.is(), "FormOperations::impl_gridView2ModelPos_nothrow: invalid columns container!" );
         try
         {
             // loop through all columns
-            sal_Int16 col = 0;
+            sal_Int32 col = 0;
             Reference< XPropertySet > xCol;
             bool bHidden( false );
             for ( col = 0; col < _rxColumns->getCount(); ++col )
@@ -1432,7 +1431,7 @@ namespace frm
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return (sal_Int16)-1;
+        return -1;
     }
 
 
