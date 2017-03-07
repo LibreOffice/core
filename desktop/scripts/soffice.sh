@@ -110,8 +110,8 @@ for arg in "$@" $EXTRAOPT ; do
                 test -z "$VALGRIND" && VALGRIND="memcheck"
                 # --trace-children-skip is pretty useful but supported only with valgrind >= 3.6.0
                 valgrind_ver=$(valgrind --version | sed -e "s/valgrind-//")
-                valgrind_ver_maj=$(echo "$valgrind_ver" | awk -F. '{ print \$1 }')
-                valgrind_ver_min=$(echo "$valgrind_ver" | awk -F. '{ print \$2 }')
+                valgrind_ver_maj=$(echo "$valgrind_ver" | awk -F. '{ print $1 }')
+                valgrind_ver_min=$(echo "$valgrind_ver" | awk -F. '{ print $2 }')
                 valgrind_skip=
                 if [ "$valgrind_ver_maj" -gt 3 ] || ( [ "$valgrind_ver_maj" -eq 3 ] && [ "$valgrind_ver_min" -ge 6 ] ) ; then
                     valgrind_skip='--trace-children-skip=*/java,*/gij'
