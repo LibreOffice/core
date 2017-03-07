@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8302173d",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-07T11:30:02Z",
+      "side": 1,
+      "message": "Umm.. this nStart + nDataSize still leads to attempting to operate on more elements than available, as nStart is incremented during the loop ...",
+      "range": {
+        "startLine": 606,
+        "startChar": 40,
+        "endLine": 606,
+        "endChar": 58
+      },
+      "revId": "8831b43ea4e71c7cfc306aae48d7a647613760f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a3ff1b33",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-07T11:30:02Z",
+      "side": 1,
+      "message": "... here.",
+      "revId": "8831b43ea4e71c7cfc306aae48d7a647613760f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
