@@ -68,6 +68,18 @@ namespace {
 //         </node>
 //     </node>
 // </item>
+//
+// Third example (property of an extensible group -> needs type):
+// [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Jobs\Jobs\org.openoffice.Office.Jobs:Job['UpdateCheck']\Arguments\AutoCheckEnabled]
+// "Value"="false"
+// "Final"=dword:00000001
+// "Type"="xs:boolean"
+// becomes the following in configuration:
+// <item oor:path="/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments">
+//     <prop oor:name="AutoCheckEnabled" oor:type="xs::boolean" oor:finalized="true">
+//         <value>false</value>
+//     </prop>
+// </item>
 
 void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFileHandle)
 {
@@ -112,6 +124,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
             bool bFinal = false;
             OUString aValue;
+            OUString aType;
 
             for(DWORD i = 0; i < nValues; ++i)
             {
@@ -121,9 +134,12 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue.get()), &nValueLen);
                 const wchar_t wsValue[] = L"Value";
                 const wchar_t wsFinal[] = L"Final";
+                const wchar_t wsType[] = L"Type";
 
                 if(!wcscmp(pValueName.get(), wsValue))
                     aValue = OUString(pValue.get());
+                if (!wcscmp(pValueName.get(), wsType))
+                    aType = OUString(pValue.get());
                 if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
                     bFinal = true;
             }
@@ -173,6 +189,12 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             writeData(aFileHandle, "<prop oor:name=\"");
             writeAttributeValue(aFileHandle, aProp);
             writeData(aFileHandle, "\"");
+            if(!aType.isEmpty())
+            {
+                writeData(aFileHandle, " oor:type=\"");
+                writeAttributeValue(aFileHandle, aType);
+                writeData(aFileHandle, "\"");
+            }
             if(bFinal)
                 writeData(aFileHandle, " oor:finalized=\"true\"");
             writeData(aFileHandle, "><value>");
