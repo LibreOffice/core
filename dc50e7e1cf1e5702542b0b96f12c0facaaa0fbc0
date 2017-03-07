@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_234fab93",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-07T12:42:19Z",
+      "side": 1,
+      "message": "surely, in this dtor, the only thing we should be doing is asserting that m_bDisposed is true?\nAll the other logic belongs in dispose().\nNote that if you do this, you might need to make m_bDisposed a std::atomic\u003cbool\u003e",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
