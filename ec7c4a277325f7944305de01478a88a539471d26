@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_43358f44",
+        "filename": "sw/source/ui/dbui/mailmergewizard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-07T09:03:03Z",
+      "side": 1,
+      "message": "The \"this-\u003e\" part is no needed here and later.",
+      "revId": "ec7c4a277325f7944305de01478a88a539471d26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
