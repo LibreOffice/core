@@ -716,16 +716,12 @@ namespace
 sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, Rectangle* pSrcRect,
                                     Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
-    Bitmap              aBitmap;
-    sal_uInt16              nColTabSize;
-    sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nPackType,
-                        nPixelSize, nCmpCount, nCmpSize;
-    sal_uInt32          nHRes, nVRes;
-    sal_uInt8               nDat, nRed, nGreen, nBlue, nDummy;
-    size_t              i, nDataSize = 0;
+    Bitmap     aBitmap;
+    sal_uInt16 nPackType(0), nPixelSize(0), nCmpCount(0), nCmpSize(0);
+    sal_uInt8  nDat(0), nRed(0), nGreen(0), nBlue(0);
 
     // The calculation of nDataSize is considering the size of the whole data.
-    nDataSize = 0;
+    size_t nDataSize = 0;
 
     // conditionally skip BaseAddr
     if ( bBaseAddr )
@@ -735,7 +731,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     }
 
     // Read PixMap or Bitmap structure;
-    pPict->ReadUInt16( nRowBytes ).ReadUInt16( nBndY ).ReadUInt16( nBndX ).ReadUInt16( nHeight ).ReadUInt16( nWidth );
+    sal_uInt16 nRowBytes(0), nBndX(0), nBndY(0), nWidth(0), nHeight(0);
+    pPict->ReadUInt16(nRowBytes).ReadUInt16(nBndY).ReadUInt16(nBndX).ReadUInt16(nHeight).ReadUInt16(nWidth);
     nHeight = nHeight - nBndY;
     nWidth = nWidth - nBndX;
     sal_uInt16 nDstBitCount = 1;
@@ -749,6 +746,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         sal_uInt32 nPackSize;
         sal_uInt16 nPixelType;
         sal_uInt32 nPlaneBytes;
+        sal_uInt32 nHRes, nVRes;
         pPict->ReadUInt16( nVersion ).ReadUInt16( nPackType ).ReadUInt32( nPackSize ).ReadUInt32( nHRes ).ReadUInt32( nVRes ).ReadUInt16( nPixelType ).ReadUInt16( nPixelSize ).ReadUInt16( nCmpCount ).ReadUInt16( nCmpSize ).ReadUInt32( nPlaneBytes );
 
         pPict->SeekRel( 8 );
@@ -764,7 +762,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( bColorTable )
         {
             pPict->SeekRel( 6 );
-            pPict->ReadUInt16( nColTabSize );
+            sal_uInt16 nColTabSize(0);
+            pPict->ReadUInt16(nColTabSize);
 
             if (nColTabSize > 255)
                 return 0xffffffff;
@@ -773,9 +772,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
             aPalette = BitmapPalette(nColTabSize);
 
-            for ( i = 0; i < nColTabSize; i++ )
+            for (size_t i = 0; i < nColTabSize; ++i)
             {
                 pPict->SeekRel(2);
+                sal_uInt8 nDummy;
                 pPict->ReadUChar( nRed ).ReadUChar( nDummy ).ReadUChar( nGreen ).ReadUChar( nDummy ).ReadUChar( nBlue ).ReadUChar( nDummy );
                 aPalette[i] = BitmapColor(nRed, nGreen, nBlue);
             }
@@ -786,8 +786,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     else
     {
         nRowBytes &= 0x3fff;
-        nPackType = 0;
-        // nHRes = nVRes = 0;
         nPixelSize = nCmpCount = nCmpSize = 1;
         nDataSize += 10;
         aBitmap = Bitmap(Size(nWidth, nHeight), nDstBitCount);
@@ -833,8 +831,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
     BitmapWriteAccess*  pAcc = nullptr;
 
-//  aSMem << (nHRes/1665L) << (nVRes/1665L) << ((sal_uLong)0) << ((sal_uLong)0);
-
     // read and write Bitmap bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
@@ -869,7 +865,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
-                for ( i = 0; i < nRowBytes; i++ )
+                for (size_t i = 0; i < nRowBytes; ++i)
                 {
                     pPict->ReadUChar( nDat );
                     if ( nx < nWidth )
@@ -900,7 +896,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     if ( ( nFlagCounterByte & 0x80 ) == 0 )
                     {
                         nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
-                        for ( i = 0; i < nCount; i++ )
+                        for (size_t i = 0; i < nCount; ++i)
                         {
                             pPict->ReadUChar( nDat );
                             if ( nx < nWidth )
@@ -912,7 +908,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     {
                         nCount = static_cast<sal_uInt16>( 1 - sal_Int16( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                         pPict->ReadUChar( nDat );
-                        for ( i = 0; i < nCount; i++ )
+                        for (size_t i = 0; i < nCount; ++i)
                         {
                             if ( nx < nWidth )
                                 SETBYTE;
@@ -952,7 +948,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             sal_uInt16 nx = 0;
             if ( nRowBytes < 8 || nPackType == 1 )
             {
-                for ( i = 0; i < nWidth; i++ )
+                for (size_t i = 0; i < nWidth; ++i)
                 {
                     pPict->ReadUInt16( nD );
                     nRed = (sal_uInt8)( nD >> 7 );
@@ -991,7 +987,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                            this case. Have a look at 32bit, there I changed the
                            encoding, so that it is used a straight forward array
                          */
-                        for (i=0; i<nCount; i++)
+                        for (size_t i = 0; i < nCount; ++i)
                         {
                             pPict->ReadUInt16( nD );
                             nRed = (sal_uInt8)( nD >> 7 );
@@ -1011,7 +1007,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         nRed = (sal_uInt8)( nD >> 7 );
                         nGreen = (sal_uInt8)( nD >> 2 );
                         nBlue = (sal_uInt8)( nD << 3 );
-                        for (i=0; i<nCount; i++)
+                        for (size_t i = 0; i < nCount; ++i)
                         {
                             pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue ) );
                         }
@@ -1048,6 +1044,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             {
                 for (sal_uInt16 nx = 0; nx < nWidth; ++nx)
                 {
+                    sal_uInt8 nDummy;
                     pPict->ReadUChar( nDummy ).ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
                     pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
                 }
@@ -1105,7 +1102,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         nByteCount = (sal_uInt8)nByteCountAsByte;
                         nByteCount++;
                     }
-                    i = 0;
+                    size_t i = 0;
                     while( i < (sal_uInt32)( nWidth * nCmpCount ) )
                     {
                         pPict->ReadUChar( nFlagCounterByte );
