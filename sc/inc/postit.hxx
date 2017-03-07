@@ -45,9 +45,11 @@ public:
     ScCaptionPtr();
     explicit ScCaptionPtr( SdrCaptionObj* p );
     ScCaptionPtr( const ScCaptionPtr& r );
+    ScCaptionPtr( ScCaptionPtr&& r );
     ~ScCaptionPtr();
 
     ScCaptionPtr& operator=( const ScCaptionPtr& r );
+    ScCaptionPtr& operator=( ScCaptionPtr&& r );
     inline explicit operator bool() const    { return mpCaption != nullptr; }
     inline SdrCaptionObj* get() const        { return mpCaption; }
     inline SdrCaptionObj* operator->() const { return mpCaption; }
@@ -95,6 +97,12 @@ private:
         it.
      */
     void removeFromList();
+
+    /** Replace this instance with pNew in a list, if any.
+
+        Used by move-ctor and move assignment operator.
+     */
+    void replaceInList( ScCaptionPtr* pNew );
 
     /** Dissolve list when the caption object is released or gone. */
     void dissolve();

@@ -476,6 +476,28 @@ ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
     }
 }
 
+ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
+    mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption)
+{
+    r.replaceInList( this );
+    r.mpCaption = nullptr;
+}
+
+ScCaptionPtr& ScCaptionPtr::operator=( ScCaptionPtr&& r )
+{
+    if (this == &r)
+        return *this;
+
+    mpHead = r.mpHead;
+    mpNext = r.mpNext;
+    mpCaption = r.mpCaption;
+
+    r.replaceInList( this );
+    r.mpCaption = nullptr;
+
+    return *this;
+}
+
 ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
 {
     if (this == &r)
@@ -519,6 +541,32 @@ void ScCaptionPtr::newHead()
     mpHead = new Head;
     mpHead->mpFirst = this;
     mpHead->mnRefs = 1;
+}
+
+void ScCaptionPtr::replaceInList( ScCaptionPtr* pNew )
+{
+    if (!mpHead && !mpNext)
+        return;
+
+    assert(mpHead);
+    assert(mpCaption == pNew->mpCaption);
+
+    ScCaptionPtr* pThat = mpHead->mpFirst;
+    while (pThat && pThat != this && pThat->mpNext != this)
+    {
+        pThat = pThat->mpNext;
+    }
+    if (pThat && pThat != this)
+    {
+        assert(pThat->mpNext == this);
+        pThat->mpNext = pNew;
+    }
+    pNew->mpNext = mpNext;
+    if (mpHead->mpFirst == this)
+        mpHead->mpFirst = pNew;
+
+    mpHead = nullptr;
+    mpNext = nullptr;
 }
 
 void ScCaptionPtr::removeFromList()
