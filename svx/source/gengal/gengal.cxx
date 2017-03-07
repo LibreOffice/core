@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <sfx2/app.hxx>
 #include <sal/types.h>
 #include <vcl/svapp.hxx>
 
@@ -274,6 +275,8 @@ int GalApp::Main()
 {
     try
     {
+        SfxApplication::GetOrCreate();
+
         OUString aPath, aDestDir;
         OUString aName( "Default name" );
         std::vector<INetURLObject> aFiles;

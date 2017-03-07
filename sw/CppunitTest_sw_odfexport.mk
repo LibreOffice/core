@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfexport, \
     cppu \
     cppuhelper \
     sal \
+	sfx \
 	sw \
     test \
     tl \
