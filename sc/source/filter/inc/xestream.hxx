@@ -61,9 +61,9 @@ typedef std::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
     If some data exceeds the record size limit, a CONTINUE record is started automatically
     and the new data will be written to this record.
 
-    If specific data pieces must not be splitted, use SetSliceLen(). For instance:
+    If specific data pieces must not be splitted, use SetSliceSize(). For instance:
     To write a sequence of 16-bit values, where 4 values form a unit and cannot be
-    split, call SetSliceLen( 8 ) first (4*2 bytes == 8).
+    split, call SetSliceSize( 8 ) first (4*2 bytes == 8).
 
     To write unicode character arrays, call WriteUnicodeBuffer(). It creates CONTINUE
     records and repeats the unicode string flag byte automatically. This function is used
