@@ -16,12 +16,11 @@
 		397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */; };
 		397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */; };
 		3992D8581E5B761700BEA987 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8571E5B761700BEA987 /* ViewController.swift */; };
-		3992D85A1E5B762A00BEA987 /* ViewDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* ViewDocument.swift */; };
+		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
 		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
-		3992D85E1E5B764A00BEA987 /* ViewFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */; };
+		3992D85E1E5B764A00BEA987 /* FileManagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85C1E5B764A00BEA987 /* FileManagerController.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
 		399648491E5C4E5500E73E83 /* LO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648481E5C4E5500E73E83 /* LO.swift */; };
-		399BA3721E6881FC003D74A6 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399BA3711E6881FC003D74A6 /* WebView.swift */; };
 		39A83A8F1E5F471D00D0C683 /* lokit.c in Sources */ = {isa = PBXBuildFile; fileRef = 39A83A8E1E5F471D00D0C683 /* lokit.c */; };
 		39B084E31E5F0A9600682A59 /* lo.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E21E5F0A9600682A59 /* lo.xcconfig */; };
 		39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E51E5F0BB400682A59 /* fundamentalrc */; };
@@ -68,12 +67,11 @@
 		397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightUITests.swift; path = LibreOfficeLightUITests/LibreOfficeLightUITests.swift; sourceTree = SOURCE_ROOT; };
 		397E09221E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightUITests/Info.plist; sourceTree = SOURCE_ROOT; };
 		3992D8571E5B761700BEA987 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = LibreOfficeLight/ViewController.swift; sourceTree = SOURCE_ROOT; };
-		3992D8591E5B762A00BEA987 /* ViewDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewDocument.swift; path = LibreOfficeLight/ViewDocument.swift; sourceTree = SOURCE_ROOT; };
+		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
-		3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewFileManager.swift; path = LibreOfficeLight/ViewFileManager.swift; sourceTree = SOURCE_ROOT; };
+		3992D85C1E5B764A00BEA987 /* FileManagerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileManagerController.swift; path = LibreOfficeLight/FileManagerController.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
 		399648481E5C4E5500E73E83 /* LO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LO.swift; path = LibreOfficeLight/LO.swift; sourceTree = SOURCE_ROOT; };
-		399BA3711E6881FC003D74A6 /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		39A83A8D1E5F471C00D0C683 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; name = "lokit-Bridging-Header.h"; path = "LibreOfficeLight/lokit-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		39A83A8E1E5F471D00D0C683 /* lokit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lokit.c; path = LibreOfficeLight/lokit.c; sourceTree = SOURCE_ROOT; };
 		39B084E21E5F0A9600682A59 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = "../../../../ios-work/workdir/ios/generated/lo.xcconfig"; sourceTree = SOURCE_ROOT; };
@@ -156,15 +154,14 @@
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D8571E5B761700BEA987 /* ViewController.swift */,
 				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
-				3992D8591E5B762A00BEA987 /* ViewDocument.swift */,
-				3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */,
+				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
+				3992D85C1E5B764A00BEA987 /* FileManagerController.swift */,
 				392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */,
 				399648461E5B87DC00E73E83 /* ViewProperties.swift */,
 				399648481E5C4E5500E73E83 /* LO.swift */,
 				397E09011E597BD8001374E0 /* Main.storyboard */,
 				397868D81E59A3EA007F9248 /* LaunchScreen.xib */,
 				39A83A8D1E5F471C00D0C683 /* lokit-Bridging-Header.h */,
-				399BA3711E6881FC003D74A6 /* WebView.swift */,
 			);
 			path = LibreOfficeLight;
 			sourceTree = SOURCE_ROOT;
@@ -351,13 +348,12 @@
 				397E09061E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld in Sources */,
 				3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
-				3992D85E1E5B764A00BEA987 /* ViewFileManager.swift in Sources */,
-				3992D85A1E5B762A00BEA987 /* ViewDocument.swift in Sources */,
+				3992D85E1E5B764A00BEA987 /* FileManagerController.swift in Sources */,
+				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
 				39A83A8F1E5F471D00D0C683 /* lokit.c in Sources */,
 				399648491E5C4E5500E73E83 /* LO.swift in Sources */,
 				3992D8581E5B761700BEA987 /* ViewController.swift in Sources */,
-				399BA3721E6881FC003D74A6 /* WebView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

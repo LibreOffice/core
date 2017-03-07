@@ -8,14 +8,14 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
     
     
     // MARK: - ViewController menu actions
     
     
     
-    @IBAction func doMenu(_ sender: UIBarButtonItem)
+    func doMenu(_ sender: UIBarButtonItem)
     {
         if (sender.tag == 10)
         {
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
 
 
 
-    @IBAction func doDelete(_ sender: UIBarButtonItem)
+    func doDelete(_ sender: UIBarButtonItem)
     {
         LOinterface.DeleteCurrentDocument()
     }
@@ -79,4 +79,21 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+//    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+//        return UIModalPresentationStyle.none
+//    }
+    
+    
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+//    {
+//        if segue.identifier == "doShowFileManagerActions" {
+//            let popoverViewController = segue.destination
+//            popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
+//            popoverViewController.popoverPresentationController!.delegate = self
+//        }
+//    }
+
 }

@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DGj-7d-jfR">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Document-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="Document" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vXZ-lx-hvc" customClass="ViewDocument" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Document" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vXZ-lx-hvc" customClass="DocumentController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lZa-u5-V0W"/>
                         <viewControllerLayoutGuide type="bottom" id="uE0-fS-86O"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Ej-ex-Oyr" customClass="WebView" customModule="LibreOfficeLight">
-                                <rect key="frame" x="16" y="64" width="343" height="559"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="uE0-fS-86O" firstAttribute="top" secondItem="1Ej-ex-Oyr" secondAttribute="bottom" id="22v-Sf-uWf"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1Ej-ex-Oyr" secondAttribute="trailing" id="2Wt-Tn-erC"/>
-                            <constraint firstItem="1Ej-ex-Oyr" firstAttribute="top" secondItem="lZa-u5-V0W" secondAttribute="bottom" id="jzQ-1h-4Ni"/>
-                            <constraint firstItem="1Ej-ex-Oyr" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="vT5-Un-8bf"/>
-                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Document" id="5c6-32-T4J">
@@ -42,9 +31,11 @@
                                 <action selector="doMenu:" destination="vXZ-lx-hvc" id="sJP-Fp-Kn2"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="BNq-ol-ZVK">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="BNq-ol-ZVK">
                             <connections>
-                                <action selector="doDelete:" destination="vXZ-lx-hvc" id="lUR-yj-rgv"/>
+                                <segue destination="IER-X5-Ax8" kind="popoverPresentation" identifier="doShowActions" popoverAnchorBarButtonItem="BNq-ol-ZVK" id="xmZ-1A-ZrW">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -52,41 +43,209 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1109.5999999999999" y="-378.26086956521743"/>
+            <point key="canvasLocation" x="1231" y="304"/>
         </scene>
         <!--File Manager-->
-        <scene sceneID="q6l-iR-WN3">
+        <scene sceneID="2JR-NV-Eo3">
             <objects>
-                <viewController storyboardIdentifier="FileManager" useStoryboardIdentifierAsRestorationIdentifier="YES" id="khG-SL-0rk" customClass="ViewFileManager" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7nB-gN-E7d"/>
-                        <viewControllerLayoutGuide type="bottom" id="ykb-8v-9YB"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8Tm-V4-HTY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <tableViewController id="cip-1Z-62J" customClass="FileManagerController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ugl-w8-9oc">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My File Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHy-9g-bWe">
-                                <rect key="frame" x="124" y="377" width="172" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="File Manager" id="f24-Ia-thn">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="R1E-Ko-iZM">
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fileEntry" id="kKu-xM-S1e" customClass="FileManagerCell" customModule="LibreOfficeLight" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kKu-xM-S1e" id="80i-6K-kty">
+                                    <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="fileEntry" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vlx-gc-YQQ">
+                                            <rect key="frame" x="21" y="11" width="739" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <variation key="default">
+                                        <mask key="subviews">
+                                            <exclude reference="vlx-gc-YQQ"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <mask key="subviews">
+                                            <include reference="vlx-gc-YQQ"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="fileLabel" destination="vlx-gc-YQQ" id="ORx-l5-Dst"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="cip-1Z-62J" id="gkR-g9-bcD"/>
+                            <outlet property="delegate" destination="cip-1Z-62J" id="uyZ-lZ-r0j"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="File Manager" id="fBX-vO-7Rj">
+                        <leftBarButtonItems>
+                            <barButtonItem title="Back" id="q43-8I-nlC">
+                                <connections>
+                                    <segue destination="iOm-U1-ALi" kind="unwind" unwindAction="returnedWithSegue:" id="oBt-oU-XA8"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="iCloud" id="aad-FF-63q">
+                                <connections>
+                                    <action selector="doSelectStorage:" destination="cip-1Z-62J" id="uv2-gA-Pqq"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="IgM-Gx-FQp">
                             <connections>
-                                <action selector="doMenu:" destination="khG-SL-0rk" id="x2w-2j-oWj"/>
+                                <segue destination="5ff-kT-49H" kind="popoverPresentation" popoverAnchorBarButtonItem="IgM-Gx-FQp" id="If5-Nv-a7W">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mmn-PL-HS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HFd-ah-Xo4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="iOm-U1-ALi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="256.80000000000001" y="1145.577211394303"/>
+            <point key="canvasLocation" x="1229.6875" y="1200.5859375"/>
+        </scene>
+        <!--File Manager Actions-->
+        <scene sceneID="H5Y-px-61Q">
+            <objects>
+                <tableViewController autoresizesArchivedViewToFullSize="NO" title="File Manager Actions" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" clearsSelectionOnViewWillAppear="NO" id="5ff-kT-49H" customClass="FileManagerActions" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" id="2t6-op-1gZ">
+                        <rect key="frame" x="0.0" y="0.0" width="134" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="LCb-p9-A8u">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VuG-w2-cW6">
+                                        <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VuG-w2-cW6" id="8SA-cA-5eZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZSm-By-dJs">
+                                                    <rect key="frame" x="10" y="0.0" width="124" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Up/Download"/>
+                                                    <connections>
+                                                        <action selector="doUploadDownload:" destination="5ff-kT-49H" eventType="touchUpInside" id="lEl-tA-956"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="L5l-rq-TxW">
+                                        <rect key="frame" x="0.0" y="30" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L5l-rq-TxW" id="dmK-Lh-hje">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IQ3-hK-KmM">
+                                                    <rect key="frame" x="10" y="0.0" width="124" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Delete..."/>
+                                                    <connections>
+                                                        <action selector="doDelete:" destination="5ff-kT-49H" eventType="touchUpInside" id="ACi-Rs-Tog"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="gCu-Su-BAB">
+                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gCu-Su-BAB" id="P2T-Nb-OqI">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSN-dd-e84">
+                                                    <rect key="frame" x="10" y="-1" width="124" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Open..."/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="5ff-kT-49H" eventType="touchUpInside" id="jbn-Nr-8dd"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="bzW-XI-AgR">
+                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bzW-XI-AgR" id="z9x-qQ-lou">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNi-5u-PqA">
+                                                    <rect key="frame" x="10" y="-1" width="124" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Level up"/>
+                                                    <connections>
+                                                        <action selector="doLevelUp:" destination="5ff-kT-49H" eventType="touchUpInside" id="fM6-nH-5Z1"/>
+                                                        <action selector="doOpen:" destination="5ff-kT-49H" eventType="touchUpInside" id="kNJ-PT-8Y6"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="b9s-rz-SjN">
+                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b9s-rz-SjN" id="NVs-9k-H8m">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Rk-LW-Ub9">
+                                                    <rect key="frame" x="10" y="-1" width="124" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Create directory"/>
+                                                    <connections>
+                                                        <action selector="doCreateDirectory:" destination="5ff-kT-49H" eventType="touchUpInside" id="58c-Ul-UIL"/>
+                                                        <action selector="doLevelUp:" destination="5ff-kT-49H" eventType="touchUpInside" id="4pP-76-PsI"/>
+                                                        <action selector="doOpen:" destination="5ff-kT-49H" eventType="touchUpInside" id="gZm-0c-D2v"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="5ff-kT-49H" id="UgT-eg-0zE"/>
+                            <outlet property="delegate" destination="5ff-kT-49H" id="LEX-V1-HLr"/>
+                        </connections>
+                    </tableView>
+                    <value key="contentSizeForViewInPopover" type="size" width="134" height="150"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="134" height="150"/>
+                    <connections>
+                        <outlet property="buttonCreateDirectory" destination="5Rk-LW-Ub9" id="4oy-Px-rKR"/>
+                        <outlet property="buttonDelete" destination="IQ3-hK-KmM" id="GNv-Wu-Gdw"/>
+                        <outlet property="buttonLevelUp" destination="fNi-5u-PqA" id="phL-bi-HaC"/>
+                        <outlet property="buttonOpen" destination="BSN-dd-e84" id="j4Q-KH-UFt"/>
+                        <outlet property="buttonUploadDownload" destination="ZSm-By-dJs" id="oVW-Nt-Pfx"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gPn-3u-MDl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1930" y="1201"/>
         </scene>
         <!--Print Manager-->
         <scene sceneID="viJ-XJ-htc">
@@ -97,7 +256,7 @@
                         <viewControllerLayoutGuide type="bottom" id="pxU-MS-J0z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="uQ6-KY-cCv">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Print Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbo-NR-JZi">
@@ -122,7 +281,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S7J-dT-DQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1109.5999999999999" y="1145.577211394303"/>
+            <point key="canvasLocation" x="2508" y="882"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nrt-yR-DmY">
@@ -142,9 +301,9 @@
                     <nil name="viewControllers"/>
                     <connections>
                         <segue destination="h7c-B7-pKT" kind="show" identifier="showProperties" id="dDf-1s-0HH"/>
-                        <segue destination="khG-SL-0rk" kind="show" identifier="showFilemanager" id="Xag-AL-gHQ"/>
                         <segue destination="ay1-ce-WHs" kind="show" identifier="showPrintManager" id="BgL-QR-QJ0"/>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="BEf-s3-rE8"/>
+                        <segue destination="cip-1Z-62J" kind="relationship" relationship="rootViewController" id="Arf-4X-z72"/>
+                        <segue destination="vXZ-lx-hvc" kind="show" identifier="showDocument" id="IHH-Cc-Xk7"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XfU-3W-Qcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -160,11 +319,11 @@
                         <viewControllerLayoutGuide type="bottom" id="syI-80-ufe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="e1u-sT-aSe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3a-CQ-sBC">
-                                <rect key="frame" x="16" y="359" width="150" height="45"/>
+                                <rect key="frame" x="20" y="359" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Rg4-bW-MQk"/>
                                     <constraint firstAttribute="width" constant="150" id="y0o-Nq-4z4"/>
@@ -178,7 +337,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hk4-yl-lM9">
-                                <rect key="frame" x="16" y="304" width="150" height="45"/>
+                                <rect key="frame" x="20" y="304" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="UL6-xy-1qB"/>
                                     <constraint firstAttribute="height" constant="45" id="hty-y5-gVo"/>
@@ -192,7 +351,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-V3-BKJ">
-                                <rect key="frame" x="16" y="249" width="150" height="45"/>
+                                <rect key="frame" x="20" y="249" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="U6W-G1-H2J"/>
                                     <constraint firstAttribute="height" constant="45" id="wOH-9b-B8P"/>
@@ -206,7 +365,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZV-Rh-hCf">
-                                <rect key="frame" x="16" y="194" width="150" height="45"/>
+                                <rect key="frame" x="20" y="194" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="N7I-YK-5uo"/>
                                     <constraint firstAttribute="width" constant="150" id="eLW-p8-QBZ"/>
@@ -220,7 +379,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTV-Y5-L8R">
-                                <rect key="frame" x="16" y="139" width="150" height="45"/>
+                                <rect key="frame" x="20" y="139" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4H0-0k-rm5"/>
                                     <constraint firstAttribute="width" constant="150" id="Q1z-1N-WMF"/>
@@ -234,7 +393,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mv-7b-xjF">
-                                <rect key="frame" x="16" y="414" width="150" height="45"/>
+                                <rect key="frame" x="20" y="414" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Fyt-Iq-YWv"/>
                                     <constraint firstAttribute="width" constant="150" id="eFy-qB-RER"/>
@@ -248,7 +407,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5y-SJ-jU1">
-                                <rect key="frame" x="16" y="84" width="150" height="45"/>
+                                <rect key="frame" x="20" y="84" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="Uuo-01-tfU"/>
                                     <constraint firstAttribute="height" constant="45" id="v75-o1-ii6"/>
@@ -285,16 +444,16 @@
             </objects>
             <point key="canvasLocation" x="-612" y="304.4977511244378"/>
         </scene>
-        <!--LibreOffice - Properties-->
+        <!--Properties-->
         <scene sceneID="XNm-Ch-28q">
             <objects>
-                <viewController storyboardIdentifier="Properties" title="LibreOffice - Properties" useStoryboardIdentifierAsRestorationIdentifier="YES" id="h7c-B7-pKT" customClass="ViewProperties" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Properties" title="Properties" useStoryboardIdentifierAsRestorationIdentifier="YES" id="h7c-B7-pKT" customClass="ViewProperties" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VKw-5g-PNK"/>
                         <viewControllerLayoutGuide type="bottom" id="BiA-CR-Pte"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Z9n-50-7Jf">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Properties" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Jt-Yy-kcR">
@@ -322,7 +481,209 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vaO-NX-hiP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1109.5999999999999" y="304.4977511244378"/>
+            <point key="canvasLocation" x="-447" y="-745"/>
+        </scene>
+        <!--Document Actions-->
+        <scene sceneID="U7J-9A-X5o">
+            <objects>
+                <tableViewController autoresizesArchivedViewToFullSize="NO" title="Document Actions" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" clearsSelectionOnViewWillAppear="NO" id="IER-X5-Ax8" customClass="DocumentActions" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" id="RqF-IL-YJc">
+                        <rect key="frame" x="0.0" y="0.0" width="134" height="210"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="iZc-fF-wRk">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KLS-lN-QYa">
+                                        <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KLS-lN-QYa" id="dA0-Ji-bxj">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCx-kB-iUI">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="New"/>
+                                                    <connections>
+                                                        <action selector="doNew:" destination="IER-X5-Ax8" eventType="touchUpInside" id="nAN-4l-w68"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VNE-JL-Lw0">
+                                        <rect key="frame" x="0.0" y="30" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VNE-JL-Lw0" id="EB2-HA-y79">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Open..."/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="2AU-aR-NF4"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mPa-wa-TDO">
+                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mPa-wa-TDO" id="jhW-pd-Qkl">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iva-rO-9V3">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Delete..."/>
+                                                    <connections>
+                                                        <action selector="doDelete:" destination="IER-X5-Ax8" eventType="touchUpInside" id="mFt-G6-sGA"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="XW7-H5-0ob">
+                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XW7-H5-0ob" id="lJN-OL-mO8">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Save"/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="3N4-Kv-vVS"/>
+                                                        <action selector="doSave:" destination="IER-X5-Ax8" eventType="touchUpInside" id="rsu-KH-DDF"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fqs-uC-KiW">
+                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fqs-uC-KiW" id="nT7-Ly-JW5">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ioJ-xc-RrS">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Save as..."/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="IhZ-cb-cgC"/>
+                                                        <segue destination="gVG-YM-Glc" kind="popoverPresentation" popoverAnchorView="ioJ-xc-RrS" id="5Pw-2I-6DI">
+                                                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                                        </segue>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="GmK-gj-GYu">
+                                        <rect key="frame" x="0.0" y="150" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GmK-gj-GYu" id="3OK-Zz-mqN">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="PDF"/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="utd-hj-l3F"/>
+                                                        <action selector="doPDF:" destination="IER-X5-Ax8" eventType="touchUpInside" id="fm0-3u-e0T"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1ly-sz-g0x">
+                                        <rect key="frame" x="0.0" y="180" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ly-sz-g0x" id="wVi-tX-eKD">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="516-b0-K4N">
+                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Print..."/>
+                                                    <connections>
+                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="tqe-2K-EJc"/>
+                                                        <segue destination="ay1-ce-WHs" kind="presentation" id="tJ8-Jt-UeD"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="IER-X5-Ax8" id="BBZ-8e-Waf"/>
+                            <outlet property="delegate" destination="IER-X5-Ax8" id="sji-7W-aF0"/>
+                        </connections>
+                    </tableView>
+                    <value key="contentSizeForViewInPopover" type="size" width="200" height="200"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="134" height="210"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D6j-Ov-CSK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1930" y="303"/>
+        </scene>
+        <!--Save As-->
+        <scene sceneID="FH4-dv-F8q">
+            <objects>
+                <viewController autoresizesArchivedViewToFullSize="NO" title="Save As" id="gVG-YM-Glc" customClass="DocumentSaveAsAction" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JoI-LP-cup"/>
+                        <viewControllerLayoutGuide type="bottom" id="lV5-3e-Ctd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8ob-86-sqW">
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="60"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cFj-yx-7J7">
+                                <rect key="frame" x="16" y="8" width="58" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CTF-ig-GzQ">
+                                <rect key="frame" x="87" y="8" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="200" height="200"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="200" height="60"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EUo-VR-TkH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2596.8000000000002" y="303.14842578710648"/>
         </scene>
     </scenes>
     <resources>
@@ -334,4 +695,7 @@
         <image name="save" width="20" height="20"/>
         <image name="saveas" width="20" height="20"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="BgL-QR-QJ0"/>
+    </inferredMetricsTieBreakers>
 </document>
