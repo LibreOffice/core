@@ -216,7 +216,7 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
 void Layout::SplittedSide::Remove (DockingWindow* pWin)
 {
     // contains?
-    unsigned iWin;
+    std::vector<Item>::size_type iWin;
     for (iWin = 0; iWin != vItems.size(); ++iWin)
         if (vItems[iWin].pWin == pWin)
             break;
@@ -251,8 +251,8 @@ bool Layout::SplittedSide::IsDocking (DockingWindow const& rWin)
 // IsEmpty() -- are there no windows docked in this strip?
 bool Layout::SplittedSide::IsEmpty () const
 {
-    for (unsigned i = 0; i != vItems.size(); ++i)
-        if (IsDocking(*vItems[i].pWin))
+    for (auto const & i: vItems)
+        if (IsDocking(*i.pWin))
             return false;
     return true;
 }
@@ -301,9 +301,9 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     // positioning separator lines and windows
     bool bPrevDocking = false; // is the previous window docked?
     long nStartPos = 0; // window position in the strip
-    unsigned iLastWin = vItems.size(); // index of last docking window in the strip
+    std::vector<Item>::size_type iLastWin = vItems.size(); // index of last docking window in the strip
 
-    for (unsigned i = 0; i != vItems.size(); ++i)
+    for (std::vector<Item>::size_type i = 0; i != vItems.size(); ++i)
     {
         // window
         DockingWindow& rWin = *vItems[i].pWin;

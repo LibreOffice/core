@@ -2891,12 +2891,12 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
         return;
     }
 
-    unsigned int j = 1;//start from aVect[1]: aVect[0] is the variable name
+    auto j = aVect.begin() + 1;//start from aVect[1]: aVect[0] is the variable name
     OUString sMethName;
 
-    while( j != aVect.size() )
+    while( j != aVect.end() )
     {
-        sMethName = aVect[j];
+        sMethName = *j;
 
         if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
         {

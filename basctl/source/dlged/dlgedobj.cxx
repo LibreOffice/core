@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "dlged.hxx"
 #include "dlgeddef.hxx"
 #include "dlgedlist.hxx"
@@ -541,11 +545,10 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
             Sequence< OUString > aNames = xNameAcc->getElementNames();
             const OUString* pNames = aNames.getConstArray();
             sal_Int32 nCtrls = aNames.getLength();
-            sal_Int16 i;
 
             // create a map of tab indices and control names, sorted by tab index
             IndexToNameMap aIndexToNameMap;
-            for ( i = 0; i < nCtrls; ++i )
+            for ( sal_Int32 i = 0; i < nCtrls; ++i )
             {
                 // get control name
                 OUString aName( pNames[i] );
@@ -588,13 +591,19 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
             aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
 
             // set new tab indices
-            for ( i = 0; i < nCtrls; ++i )
+            for ( sal_Int32 i = 0; i < nCtrls; ++i )
             {
                 Any aCtrl = xNameAcc->getByName( aNameList[i] );
                 Reference< beans::XPropertySet > xPSet;
                    aCtrl >>= xPSet;
                 if ( xPSet.is() )
                 {
+                    assert(i >= SAL_MIN_INT16);
+                    if (i > SAL_MAX_INT16)
+                    {
+                        SAL_WARN("basctl", "tab " << i << " > SAL_MAX_INT16");
+                        continue;
+                    }
                     xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) i) );
                 }
             }
