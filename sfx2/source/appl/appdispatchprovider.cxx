@@ -173,15 +173,15 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
     SolarMutexGuard aGuard;
 
     std::vector< sal_Int16 > aGroupList;
-    SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
+    SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
 
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+    for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
     {
-        pAppSlotPool->SeekGroup( i );
-        const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
+        rAppSlotPool.SeekGroup(i);
+        const SfxSlot* pSfxSlot = rAppSlotPool.FirstSlot();
         while ( pSfxSlot )
         {
             if ( pSfxSlot->GetMode() & nMode )
@@ -190,7 +190,7 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
                 aGroupList.push_back( nCommandGroup );
                 break;
             }
-            pSfxSlot = pAppSlotPool->NextSlot();
+            pSfxSlot = rAppSlotPool.NextSlot();
         }
     }
 
@@ -202,36 +202,33 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
     std::list< frame::DispatchInformation > aCmdList;
 
     SolarMutexGuard aGuard;
-    SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
+    SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
 
-    if ( pAppSlotPool )
+    const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
+    OUString aCmdPrefix( ".uno:" );
+
+    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
     {
-        const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
-        OUString aCmdPrefix( ".uno:" );
-
-        // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-        for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+        rAppSlotPool.SeekGroup(i);
+        const SfxSlot* pSfxSlot = rAppSlotPool.FirstSlot();
+        if ( pSfxSlot )
         {
-            pAppSlotPool->SeekGroup( i );
-            const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
-            if ( pSfxSlot )
+            sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
+            if ( nCommandGroup == nCmdGroup )
             {
-                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
-                if ( nCommandGroup == nCmdGroup )
+                while ( pSfxSlot )
                 {
-                    while ( pSfxSlot )
+                    if ( pSfxSlot->GetMode() & nMode )
                     {
-                        if ( pSfxSlot->GetMode() & nMode )
-                        {
-                            frame::DispatchInformation aCmdInfo;
-                            OUStringBuffer aBuf( aCmdPrefix );
-                            aBuf.appendAscii( pSfxSlot->GetUnoName() );
-                            aCmdInfo.Command = aBuf.makeStringAndClear();
-                            aCmdInfo.GroupId = nCommandGroup;
-                            aCmdList.push_back( aCmdInfo );
-                        }
-                        pSfxSlot = pAppSlotPool->NextSlot();
+                        frame::DispatchInformation aCmdInfo;
+                        OUStringBuffer aBuf( aCmdPrefix );
+                        aBuf.appendAscii( pSfxSlot->GetUnoName() );
+                        aCmdInfo.Command = aBuf.makeStringAndClear();
+                        aCmdInfo.GroupId = nCommandGroup;
+                        aCmdList.push_back( aCmdInfo );
                     }
+                    pSfxSlot = rAppSlotPool.NextSlot();
                 }
             }
         }
