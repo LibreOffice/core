@@ -1896,14 +1896,9 @@ void ScInterpreter::ScSLN()
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fTimeLength = GetDouble();
-        if ( fTimeLength == 0.0 )
-            PushIllegalArgument();
-        else
-        {
-            double fRest = GetDouble();
-            double fValue = GetDouble();
-            PushDouble((fValue - fRest) / fTimeLength);
-        }
+        double fRest = GetDouble();
+        double fValue = GetDouble();
+        PushDouble( div( fValue - fRest, fTimeLength ) );
     }
 }
 
