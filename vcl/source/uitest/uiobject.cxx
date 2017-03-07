@@ -442,6 +442,15 @@ OUString WindowUIObject::get_name() const
     return OUString("WindowUIObject");
 }
 
+namespace {
+
+OUString escape(const OUString& rStr)
+{
+    return rStr.replaceAll("\"", "\\\"");
+}
+
+}
+
 OUString WindowUIObject::dumpState() const
 {
     OUStringBuffer aStateString = "{\"name\":\"" + mxWindow->get_id() + "\"";
@@ -449,7 +458,7 @@ OUString WindowUIObject::dumpState() const
     StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
     for (auto itr = aState.begin(), itrEnd = aState.end(); itr != itrEnd; ++itr)
     {
-        OUString property = ",\"" + itr->first + "\":\"" + itr->second + "\"";
+        OUString property = ",\"" + itr->first + "\":\"" + escape(itr->second) + "\"";
         aStateString.append(property);
     }
 
