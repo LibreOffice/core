@@ -1094,7 +1094,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             nSurround = text::WrapTextMode_THROUGHT;
             bSetSurround = true;
         }
-        else if( SVX_ADJUST_LEFT == rCSS1PropInfo.m_eFloat ||
+        else if( SvxAdjust::Left == rCSS1PropInfo.m_eFloat ||
                  text::HoriOrientation::LEFT == eHoriOri )
         {
             nAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;

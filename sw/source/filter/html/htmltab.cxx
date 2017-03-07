@@ -534,7 +534,7 @@ public:
 
     SvxAdjust GetTableAdjust( bool bAny ) const
     {
-        return (m_bTableAdjustOfTag || bAny) ? m_eTableAdjust : SVX_ADJUST_END;
+        return (m_bTableAdjustOfTag || bAny) ? m_eTableAdjust : SvxAdjust::End;
     }
 
     sal_uInt16 GetHSpace() const { return m_nHSpace; }
@@ -771,7 +771,7 @@ HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
     bIsEndOfGroup(false),
     nHeight(0),
     nEmptyRows(0),
-    eAdjust(SVX_ADJUST_END),
+    eAdjust(SvxAdjust::End),
     eVertOri(text::VertOrientation::TOP),
     pBGBrush(nullptr),
     bBottomBorder(false)
@@ -866,7 +866,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 HTMLTableColumn::HTMLTableColumn():
     bIsEndOfGroup(false),
     nWidth(0), bRelWidth(false),
-    eAdjust(SVX_ADJUST_END), eVertOri(text::VertOrientation::TOP),
+    eAdjust(SvxAdjust::End), eVertOri(text::VertOrientation::TOP),
     bLeftBorder(false)
 {
     for(SwFrameFormat* & rp : aFrameFormats)
@@ -1436,7 +1436,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                                      ->IsTextFormat( nNumFormat );
                 SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(),
                                      RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-                SvxAdjust eAdjust = SVX_ADJUST_END;
+                SvxAdjust eAdjust = SvxAdjust::End;
                 SwContentNode *pCNd = nullptr;
                 if( !bLock )
                 {
@@ -1461,7 +1461,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 pFrameFormat->SetFormatAttr( aItemSet );
                 if( bLock )
                     pFrameFormat->UnlockModify();
-                else if( pCNd && SVX_ADJUST_END != eAdjust )
+                else if( pCNd && SvxAdjust::End != eAdjust )
                 {
                     SvxAdjustItem aAdjItem( eAdjust, RES_PARATR_ADJUST );
                     pCNd->SetAttr( aAdjItem );
@@ -1966,8 +1966,8 @@ inline HTMLTableCell *HTMLTable::GetCell( sal_uInt16 nRow,
 SvxAdjust HTMLTable::GetInheritedAdjust() const
 {
     SvxAdjust eAdjust = (m_nCurrentColumn<m_nCols ? ((*m_pColumns)[m_nCurrentColumn])->GetAdjust()
-                                       : SVX_ADJUST_END );
-    if( SVX_ADJUST_END==eAdjust )
+                                       : SvxAdjust::End );
+    if( SvxAdjust::End==eAdjust )
         eAdjust = (*m_pRows)[m_nCurrentRow]->GetAdjust();
 
     return eAdjust;
@@ -2392,15 +2392,15 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // The table either fits the page but shouldn't get a text frame,
             // or it's wider than the page so it doesn't need a text frame
 
-        case SVX_ADJUST_RIGHT:
+        case SvxAdjust::Right:
             // Don't be considerate of the right margin in right-adjusted tables
             eHoriOri = text::HoriOrientation::RIGHT;
             break;
-        case SVX_ADJUST_CENTER:
+        case SvxAdjust::Center:
             // Centred tables are not considerate of margins
             eHoriOri = text::HoriOrientation::CENTER;
             break;
-        case SVX_ADJUST_LEFT:
+        case SvxAdjust::Left:
         default:
             // left-adjusted tables are only considerate of the left margin
             eHoriOri = m_nLeftMargin ? text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::LEFT;
@@ -2548,8 +2548,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( bIsInFlyFrame && !m_nWidth )
         {
             SvxAdjust eAdjust = GetTableAdjust(false);
-            if (eAdjust != SVX_ADJUST_LEFT &&
-                eAdjust != SVX_ADJUST_RIGHT)
+            if (eAdjust != SvxAdjust::Left &&
+                eAdjust != SvxAdjust::Right)
             {
                 // If a table with a width attribute isn't flowed around left or right
                 // we'll stack it with a border of 100% width, so its size will
@@ -3123,7 +3123,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         nColl = RES_POOLCOLL_TABLE;
     }
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aEmptyOUStr, true );
-    if( SVX_ADJUST_END != m_eAdjust )
+    if( SvxAdjust::End != m_eAdjust )
         rParser.InsertAttr( &rParser.m_aAttrTab.pAdjust, SvxAdjustItem(m_eAdjust, RES_PARATR_ADJUST),
                             pCntxt );
 
@@ -3401,8 +3401,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 // If the table is left or right adjusted or should be in a text frame,
                 // it'll get one
-                bForceFrame = eTableAdjust == SVX_ADJUST_LEFT ||
-                              eTableAdjust == SVX_ADJUST_RIGHT ||
+                bForceFrame = eTableAdjust == SvxAdjust::Left ||
+                              eTableAdjust == SvxAdjust::Right ||
                               pCurTable->HasToFly();
 
                 // The table either shouldn't get in a text frame and isn't in one
@@ -3541,14 +3541,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                     switch( pCurTable->GetTableAdjust(true) )
                     {
-                    case SVX_ADJUST_RIGHT:
+                    case SvxAdjust::Right:
                         eHori = text::HoriOrientation::RIGHT;
                         eSurround = css::text::WrapTextMode_LEFT;
                         break;
-                    case SVX_ADJUST_CENTER:
+                    case SvxAdjust::Center:
                         eHori = text::HoriOrientation::CENTER;
                         break;
-                    case SVX_ADJUST_LEFT:
+                    case SvxAdjust::Left:
                         eSurround = css::text::WrapTextMode_RIGHT;
                         SAL_FALLTHROUGH;
                     default:
@@ -3741,7 +3741,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TABLE_ON:
             {
                 bool bHasToFly = false;
-                SvxAdjust eTabAdjust = SVX_ADJUST_END;
+                SvxAdjust eTabAdjust = SvxAdjust::End;
                 if( !m_pPendStack )
                 {
                     // only if we create a new table, but not if we're still
@@ -3759,9 +3759,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         {
                             if( HTML_O_ALIGN==rOption.GetToken() )
                             {
-                                SvxAdjust eAdjust = rOption.GetEnum( aHTMLPAlignTable, SVX_ADJUST_END );
-                                bNeedsSection = SVX_ADJUST_LEFT == eAdjust ||
-                                                SVX_ADJUST_RIGHT == eAdjust;
+                                SvxAdjust eAdjust = rOption.GetEnum( aHTMLPAlignTable, SvxAdjust::End );
+                                bNeedsSection = SvxAdjust::Left == eAdjust ||
+                                                SvxAdjust::Right == eAdjust;
                                 break;
                             }
                         }
@@ -3782,7 +3782,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     eTabAdjust = m_aAttrTab.pAdjust
                         ? static_cast<const SvxAdjustItem&>(m_aAttrTab.pAdjust->GetItem()).
                                                  GetAdjust()
-                        : SVX_ADJUST_END;
+                        : SvxAdjust::End;
                 }
 
                 HTMLTable *pSubTable = BuildTable( eTabAdjust,
@@ -3794,8 +3794,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     // Only if the table is really complete
                     if( pSubTable )
                     {
-                        OSL_ENSURE( pSubTable->GetTableAdjust(false)!= SVX_ADJUST_LEFT &&
-                                pSubTable->GetTableAdjust(false)!= SVX_ADJUST_RIGHT,
+                        OSL_ENSURE( pSubTable->GetTableAdjust(false)!= SvxAdjust::Left &&
+                                pSubTable->GetTableAdjust(false)!= SvxAdjust::Right,
                                 "links oder rechts ausgerichtete Tabellen gehoehren in Rahmen" );
 
                         HTMLTableCnts *pParentContents =
@@ -3996,7 +3996,7 @@ public:
     bool bHasCells;
 
     RowSaveStruct() :
-        eAdjust( SVX_ADJUST_END ), eVertOri( text::VertOrientation::TOP ), bHasCells( false )
+        eAdjust( SvxAdjust::End ), eVertOri( text::VertOrientation::TOP ), bHasCells( false )
     {}
 };
 
@@ -4376,7 +4376,7 @@ struct TableColGrpSaveStruct : public SwPendingStackData
 
 inline TableColGrpSaveStruct::TableColGrpSaveStruct() :
     nColGrpSpan( 1 ), nColGrpWidth( 0 ),
-    bRelColGrpWidth( false ), eColGrpAdjust( SVX_ADJUST_END ),
+    bRelColGrpWidth( false ), eColGrpAdjust( SvxAdjust::End ),
     eColGrpVertOri( text::VertOrientation::TOP )
 {}
 
@@ -4661,7 +4661,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_CAPTION_ON );
 
         // Table headers are always centered
-        NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SVX_ADJUST_CENTER, RES_PARATR_ADJUST) );
+        NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST) );
 
         HTMLAttrs &rAttrs = pCntxt->GetAttrs();
         rAttrs.push_back( m_aAttrTab.pAdjust );
@@ -4698,7 +4698,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             }
             else
             {
-                BuildTable( SVX_ADJUST_END );
+                BuildTable( SvxAdjust::End );
             }
             if( SvParserState::Pending != GetStatus() )
             {

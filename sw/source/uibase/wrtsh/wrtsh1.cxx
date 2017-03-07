@@ -1247,7 +1247,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             // numbering/bullet should be rtl in rtl paragraph:
             if ( bRightToLeft )
             {
-                aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                aFormat.SetNumAdjust( SvxAdjust::Right );
             }
 
             aNumRule.Set( nLvl, aFormat );

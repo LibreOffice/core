@@ -358,7 +358,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 if (GetDefaultFrameDirection(nAppLanguage) ==
                     FRMDIR_HORI_RIGHT_TOP)
                 {
-                    SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST );
+                    SvxAdjustItem aAdjust(SvxAdjust::Right, RES_PARATR_ADJUST );
                     aSet.Put(aAdjust);
                 }
                 if (nAppLanguage == LANGUAGE_KOREAN)
@@ -592,7 +592,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TABLE_HDLN:
             {
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
-                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+                aSet.Put( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ) );
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
                 aSet.Put( aLN );
@@ -977,7 +977,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_28, 100, RES_CHRATR_FONTSIZE ) );
 
-                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+                aSet.Put( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ) );
 
                 pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
             }
@@ -989,7 +989,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aSet.Put( aUL );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_18, 100, RES_CHRATR_FONTSIZE ));
 
-                aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
+                aSet.Put( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ));
 
                 pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
             }

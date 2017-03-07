@@ -206,13 +206,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
     OUString sDesc;
     switch (meAdjust)
     {
-    case SVX_ADJUST_LEFT :
+    case SvxAdjust::Left :
         sDesc = OUString(ScResId(STR_ACC_LEFTAREA_DESCR));
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         sDesc = OUString(ScResId(STR_ACC_RIGHTAREA_DESCR));
         break;
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         sDesc = OUString(ScResId(STR_ACC_CENTERAREA_DESCR));
         break;
     default:
@@ -227,13 +227,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
     OUString sName;
     switch (meAdjust)
     {
-    case SVX_ADJUST_LEFT :
+    case SvxAdjust::Left :
         sName = OUString(ScResId(STR_ACC_LEFTAREA_NAME));
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         sName = OUString(ScResId(STR_ACC_RIGHTAREA_NAME));
         break;
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         sName = OUString(ScResId(STR_ACC_CENTERAREA_NAME));
         break;
     default:

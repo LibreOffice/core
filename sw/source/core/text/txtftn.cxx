@@ -1139,7 +1139,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         {
             switch( GetAdjust() )
             {
-                case SVX_ADJUST_BLOCK:
+                case SvxAdjust::Block:
                 {
                     if( !m_pCurr->GetLen() ||
                         CH_BREAK != GetInfo().GetChar(m_nStart+m_pCurr->GetLen()-1))
@@ -1147,13 +1147,13 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
                     nQuoWidth = nQuoWidth + nLastLeft;
                     break;
                 }
-                case SVX_ADJUST_RIGHT:
+                case SvxAdjust::Right:
                 {
                     nLastLeft = pQuo->GetAscent();
                     nQuoWidth = nQuoWidth + nLastLeft;
                     break;
                 }
-                case SVX_ADJUST_CENTER:
+                case SvxAdjust::Center:
                 {
                     nQuoWidth = nQuoWidth + pQuo->GetAscent();
                     long nDiff = nLastLeft - nQuoWidth;

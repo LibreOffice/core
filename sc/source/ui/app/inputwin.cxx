@@ -1135,7 +1135,7 @@ static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
 
 static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
 {
-    rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+    rSet.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
 
     // always using rtl writing direction would break formulas
     //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );

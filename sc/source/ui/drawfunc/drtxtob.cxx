@@ -674,25 +674,25 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_ALIGNLEFT:
         case SID_ALIGN_ANY_LEFT:
         case SID_ATTR_PARA_ADJUST_LEFT:
-            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             break;
 
         case SID_ALIGNCENTERHOR:
         case SID_ALIGN_ANY_HCENTER:
         case SID_ATTR_PARA_ADJUST_CENTER:
-            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
             break;
 
         case SID_ALIGNRIGHT:
         case SID_ALIGN_ANY_RIGHT:
         case SID_ATTR_PARA_ADJUST_RIGHT:
-            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             break;
 
         case SID_ALIGNBLOCK:
         case SID_ALIGN_ANY_JUSTIFIED:
         case SID_ATTR_PARA_ADJUST_BLOCK:
-            aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
+            aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
             break;
 
         case SID_ATTR_PARA_LINESPACE_10:
@@ -1007,25 +1007,25 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     SvxAdjust eAdj = static_cast<const SvxAdjustItem&>(aAttrSet.Get(EE_PARA_JUST)).GetAdjust();
     switch( eAdj )
     {
-    case SVX_ADJUST_LEFT:
+    case SvxAdjust::Left:
         {
             rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, true ) );
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
         }
         break;
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         {
             rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, true ) );
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
         }
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         {
             rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, true ) );
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
         }
         break;
-    case SVX_ADJUST_BLOCK:
+    case SvxAdjust::Block:
         {
             rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, true ) );
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
@@ -1037,10 +1037,10 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         }
     }
     // pseudo slots for Format menu
-    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SVX_ADJUST_LEFT ) );
-    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_HCENTER,   eAdj == SVX_ADJUST_CENTER ) );
-    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SVX_ADJUST_RIGHT ) );
-    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SVX_ADJUST_BLOCK ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SvxAdjust::Left ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_HCENTER,   eAdj == SvxAdjust::Center ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SvxAdjust::Right ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SvxAdjust::Block ) );
 
         SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>(aAttrSet.Get( EE_PARA_LRSPACE ));
     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);

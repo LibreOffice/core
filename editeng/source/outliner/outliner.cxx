@@ -1535,8 +1535,8 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         {
             // Adjust when centered or align right
             const SvxAdjustItem& rItem = static_cast<const SvxAdjustItem&>(pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST ));
-            if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_LEFT ) ) ||
-                 ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_RIGHT ) ) )
+            if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Left ) ) ||
+                 ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Right ) ) )
             {
                 aTopLeft.X() = pEditEngine->GetFirstLineStartX( nPara ) - nBulletWidth;
             }
@@ -1569,11 +1569,11 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         }
 
         // Horizontal:
-        if( pFmt->GetNumAdjust() == SVX_ADJUST_RIGHT )
+        if( pFmt->GetNumAdjust() == SvxAdjust::Right )
         {
             aTopLeft.X() += nBulletWidth - aBulletSize.Width();
         }
-        else if( pFmt->GetNumAdjust() == SVX_ADJUST_CENTER )
+        else if( pFmt->GetNumAdjust() == SvxAdjust::Center )
         {
             aTopLeft.X() += ( nBulletWidth - aBulletSize.Width() ) / 2;
         }

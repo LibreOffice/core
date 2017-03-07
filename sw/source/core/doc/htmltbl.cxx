@@ -1497,12 +1497,12 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         // Calculate the size and position of the additional cells.
         switch( m_eTableAdjust )
         {
-        case SVX_ADJUST_RIGHT:
+        case SvxAdjust::Right:
             nAbsLeftFill = nAbsLeftFill + nAbsDist;
             m_nRelLeftFill = m_nRelLeftFill + nRelDist;
             nParentInhAbsLeftSpace = nParentInhAbsSpace;
             break;
-        case SVX_ADJUST_CENTER:
+        case SvxAdjust::Center:
             {
                 sal_uInt16 nAbsLeftDist = nAbsDist / 2;
                 nAbsLeftFill = nAbsLeftFill + nAbsLeftDist;
@@ -1515,7 +1515,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                                           nParentInhAbsLeftSpace;
             }
             break;
-        case SVX_ADJUST_LEFT:
+        case SvxAdjust::Left:
         default:
             nAbsRightFill = nAbsRightFill + nAbsDist;
             m_nRelRightFill = m_nRelRightFill + nRelDist;

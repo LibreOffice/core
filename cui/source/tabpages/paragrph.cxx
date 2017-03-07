@@ -1093,29 +1093,29 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     bool bModified = false;
 
     bool bAdj = false, bChecked = false;
-    SvxAdjust eAdjust = SVX_ADJUST_LEFT;
+    SvxAdjust eAdjust = SvxAdjust::Left;
 
     if ( m_pLeft->IsChecked() )
     {
-        eAdjust = SVX_ADJUST_LEFT;
+        eAdjust = SvxAdjust::Left;
         bAdj = !m_pLeft->GetSavedValue();
         bChecked = true;
     }
     else if ( m_pRight->IsChecked() )
     {
-        eAdjust = SVX_ADJUST_RIGHT;
+        eAdjust = SvxAdjust::Right;
         bAdj = !m_pRight->GetSavedValue();
         bChecked = true;
     }
     else if ( m_pCenter->IsChecked() )
     {
-        eAdjust = SVX_ADJUST_CENTER;
+        eAdjust = SvxAdjust::Center;
         bAdj = !m_pCenter->GetSavedValue();
         bChecked = true;
     }
     else if ( m_pJustify->IsChecked() )
     {
-        eAdjust = SVX_ADJUST_BLOCK;
+        eAdjust = SvxAdjust::Block;
         bAdj = !m_pJustify->GetSavedValue() ||
             m_pExpandCB->IsValueChangedFromSaved() ||
             m_pLastLineLB->IsValueChangedFromSaved();
@@ -1127,15 +1127,15 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     {
         const SvxAdjustItem* pOld = static_cast<const SvxAdjustItem*>(GetOldItem( *rOutSet, SID_ATTR_PARA_ADJUST ));
 
-        SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SVX_ADJUST_BLOCK : SVX_ADJUST_LEFT;
+        SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SvxAdjust::Block : SvxAdjust::Left;
 
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectEntryPos();
-        SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
+        SvxAdjust eLastBlock = SvxAdjust::Left;
 
         if ( 1 == nLBPos )
-            eLastBlock = SVX_ADJUST_CENTER;
+            eLastBlock = SvxAdjust::Center;
         else if ( 2 == nLBPos )
-            eLastBlock = SVX_ADJUST_BLOCK;
+            eLastBlock = SvxAdjust::Block;
 
         bool bNothingWasChecked =
             !m_pLeft->GetSavedValue() && !m_pRight->GetSavedValue() &&
@@ -1190,13 +1190,13 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         switch ( rAdj.GetAdjust() /*!!! ask VB rAdj.GetLastBlock()*/ )
         {
-            case SVX_ADJUST_LEFT: m_pLeft->Check(); break;
+            case SvxAdjust::Left: m_pLeft->Check(); break;
 
-            case SVX_ADJUST_RIGHT: m_pRight->Check(); break;
+            case SvxAdjust::Right: m_pRight->Check(); break;
 
-            case SVX_ADJUST_CENTER: m_pCenter->Check(); break;
+            case SvxAdjust::Center: m_pCenter->Check(); break;
 
-            case SVX_ADJUST_BLOCK: m_pJustify->Check(); break;
+            case SvxAdjust::Block: m_pJustify->Check(); break;
             default: ; //prevent warning
         }
         bool bEnable = m_pJustify->IsChecked();
@@ -1205,15 +1205,15 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         switch(rAdj.GetLastBlock())
         {
-            case SVX_ADJUST_LEFT:  nLBSelect = 0; break;
+            case SvxAdjust::Left:  nLBSelect = 0; break;
 
-            case SVX_ADJUST_CENTER: nLBSelect = 1;  break;
+            case SvxAdjust::Center: nLBSelect = 1;  break;
 
-            case SVX_ADJUST_BLOCK: nLBSelect = 2;  break;
+            case SvxAdjust::Block: nLBSelect = 2;  break;
             default: ; //prevent warning
         }
         m_pExpandCB->Enable(bEnable && nLBSelect == 2);
-        m_pExpandCB->Check(SVX_ADJUST_BLOCK == rAdj.GetOneWord());
+        m_pExpandCB->Check(SvxAdjust::Block == rAdj.GetOneWord());
     }
     else
     {
@@ -1324,20 +1324,20 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
 void SvxParaAlignTabPage::UpdateExample_Impl()
 {
     if ( m_pLeft->IsChecked() )
-        m_pExampleWin->SetAdjust( SVX_ADJUST_LEFT );
+        m_pExampleWin->SetAdjust( SvxAdjust::Left );
     else if ( m_pRight->IsChecked() )
-        m_pExampleWin->SetAdjust( SVX_ADJUST_RIGHT );
+        m_pExampleWin->SetAdjust( SvxAdjust::Right );
     else if ( m_pCenter->IsChecked() )
-        m_pExampleWin->SetAdjust( SVX_ADJUST_CENTER );
+        m_pExampleWin->SetAdjust( SvxAdjust::Center );
     else if ( m_pJustify->IsChecked() )
     {
-        m_pExampleWin->SetAdjust( SVX_ADJUST_BLOCK );
-        SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
+        m_pExampleWin->SetAdjust( SvxAdjust::Block );
+        SvxAdjust eLastBlock = SvxAdjust::Left;
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectEntryPos();
         if(nLBPos == 1)
-            eLastBlock = SVX_ADJUST_CENTER;
+            eLastBlock = SvxAdjust::Center;
         else if(nLBPos == 2)
-            eLastBlock = SVX_ADJUST_BLOCK;
+            eLastBlock = SvxAdjust::Block;
         m_pExampleWin->SetLastLine( eLastBlock );
     }
 

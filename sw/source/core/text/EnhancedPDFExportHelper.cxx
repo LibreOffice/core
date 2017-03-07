@@ -631,13 +631,13 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             OSL_ENSURE( pFrame->IsTextFrame(), "Frame type <-> tag attribute mismatch" );
             const SwAttrSet& aSet = static_cast<const SwTextFrame*>(pFrame)->GetTextNode()->GetSwAttrSet();
             const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
-            if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
-                 (  (pFrame->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust) ||
-                   (!pFrame->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust) ) )
+            if ( SvxAdjust::Block == nAdjust || SvxAdjust::Center == nAdjust ||
+                 (  (pFrame->IsRightToLeft() && SvxAdjust::Left == nAdjust) ||
+                   (!pFrame->IsRightToLeft() && SvxAdjust::Right == nAdjust) ) )
             {
-                eVal = SVX_ADJUST_BLOCK == nAdjust ?
+                eVal = SvxAdjust::Block == nAdjust ?
                        vcl::PDFWriter::Justify :
-                       SVX_ADJUST_CENTER == nAdjust ?
+                       SvxAdjust::Center == nAdjust ?
                        vcl::PDFWriter::Center :
                        vcl::PDFWriter::End;
 

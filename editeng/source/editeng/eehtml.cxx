@@ -217,7 +217,7 @@ void EditHTMLParser::NextToken( int nToken )
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
                                 aItems.ClearItem( EE_PARA_JUST );
                                 if ( nToken == HTML_CENTER_ON )
-                                    aItems.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+                                    aItems.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
                                 mpEditEngine->SetParaAttribsOnly(nNode, aItems);
                             }
                             break;
@@ -698,7 +698,7 @@ void EditHTMLParser::StartPara( bool bReal )
     if ( bReal )
     {
         const HTMLOptions& aOptions = GetOptions();
-        SvxAdjust eAdjust = SVX_ADJUST_LEFT;
+        SvxAdjust eAdjust = SvxAdjust::Left;
         for (const auto & aOption : aOptions)
         {
             switch( aOption.GetToken() )
@@ -707,13 +707,13 @@ void EditHTMLParser::StartPara( bool bReal )
                 {
                     OUString const& rTmp(aOption.GetString());
                     if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_right))
-                        eAdjust = SVX_ADJUST_RIGHT;
+                        eAdjust = SvxAdjust::Right;
                     else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_middle))
-                        eAdjust = SVX_ADJUST_CENTER;
+                        eAdjust = SvxAdjust::Center;
                     else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_center))
-                        eAdjust = SVX_ADJUST_CENTER;
+                        eAdjust = SvxAdjust::Center;
                     else
-                        eAdjust = SVX_ADJUST_LEFT;
+                        eAdjust = SvxAdjust::Left;
                 }
                 break;
             }

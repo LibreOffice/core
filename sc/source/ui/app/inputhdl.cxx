@@ -1953,20 +1953,20 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
                     ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
                     bNumber = ( rDoc.GetCellType( aCursorPos ) == CELLTYPE_VALUE );
                 }
-                eSvxAdjust = bNumber ? SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
+                eSvxAdjust = bNumber ? SvxAdjust::Right : SvxAdjust::Left;
             }
             break;
         case SVX_HOR_JUSTIFY_BLOCK:
-            eSvxAdjust = SVX_ADJUST_BLOCK;
+            eSvxAdjust = SvxAdjust::Block;
             break;
         case SVX_HOR_JUSTIFY_CENTER:
-            eSvxAdjust = SVX_ADJUST_CENTER;
+            eSvxAdjust = SvxAdjust::Center;
             break;
         case SVX_HOR_JUSTIFY_RIGHT:
-            eSvxAdjust = SVX_ADJUST_RIGHT;
+            eSvxAdjust = SvxAdjust::Right;
             break;
         default:    // SVX_HOR_JUSTIFY_LEFT
-            eSvxAdjust = SVX_ADJUST_LEFT;
+            eSvxAdjust = SvxAdjust::Left;
             break;
     }
 
@@ -1976,7 +1976,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     if ( bAsianVertical )
     {
         // Always edit at top of cell -> LEFT when editing vertically
-        eSvxAdjust = SVX_ADJUST_LEFT;
+        eSvxAdjust = SvxAdjust::Left;
     }
 
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
@@ -2329,7 +2329,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
 
-        bool bNeedGrow = ( rViewData.GetEditAdjust() != SVX_ADJUST_LEFT ); // Always right-aligned
+        bool bNeedGrow = ( rViewData.GetEditAdjust() != SvxAdjust::Left ); // Always right-aligned
         if (!bNeedGrow)
         {
             // Cursor before the end?

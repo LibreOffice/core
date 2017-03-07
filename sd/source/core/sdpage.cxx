@@ -478,22 +478,22 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CTL ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CJK ) );
 
-            SvxAdjust eH = SVX_ADJUST_LEFT;
+            SvxAdjust eH = SvxAdjust::Left;
 
             if( (eObjKind == PRESOBJ_DATETIME) && (mePageKind != PageKind::Standard ) )
             {
-                eH = SVX_ADJUST_RIGHT;
+                eH = SvxAdjust::Right;
             }
             else if( (eObjKind == PRESOBJ_FOOTER) && (mePageKind == PageKind::Standard ) )
             {
-                eH = SVX_ADJUST_CENTER;
+                eH = SvxAdjust::Center;
             }
             else if( eObjKind == PRESOBJ_SLIDENUMBER )
             {
-                eH = SVX_ADJUST_RIGHT;
+                eH = SvxAdjust::Right;
             }
 
-            if( eH != SVX_ADJUST_LEFT )
+            if( eH != SvxAdjust::Left )
                 aTempAttr.Put(SvxAdjustItem(eH, EE_PARA_JUST ));
 
             pSdrObj->SetMergedItemSet(aTempAttr);
@@ -537,7 +537,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         {
             SfxItemSet aSet( static_cast<SdDrawDocument*>(pModel)->GetPool() );
             aSet.Put( makeSdrTextContourFrameItem( true ) );
-            aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+            aSet.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
 
             pSdrObj->SetMergedItemSet(aSet);
         }

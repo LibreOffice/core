@@ -714,7 +714,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
 void SwTextFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 {
-    if( SVX_ADJUST_LEFT != GetAdjust() && !pMulti)
+    if( SvxAdjust::Left != GetAdjust() && !pMulti)
     {
         pCurrent->SetFormatAdj(true);
         if( IsFlyInCntBase() )
@@ -1960,7 +1960,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
     {
         switch( GetAdjust() )
         {
-        case SVX_ADJUST_BLOCK:
+        case SvxAdjust::Block:
         {
             if( IsLastBlock() || IsLastCenter() )
                 bOptimizeRepaint = false;
@@ -1978,8 +1978,8 @@ bool SwTextFormatter::AllowRepaintOpt() const
             }
             break;
         }
-        case SVX_ADJUST_CENTER:
-        case SVX_ADJUST_RIGHT:
+        case SvxAdjust::Center:
+        case SvxAdjust::Right:
             bOptimizeRepaint = false;
             break;
         default: ;

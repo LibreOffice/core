@@ -326,20 +326,20 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
             nFirst = nRight - 1;
     }
     const SvxAdjustItem& rAdjust = m_pFrame->GetTextNode()->GetSwAttrSet().GetAdjust();
-    nAdjust = static_cast<sal_uInt16>(rAdjust.GetAdjust());
+    nAdjust = rAdjust.GetAdjust();
 
     // left is left and right is right
     if ( m_pFrame->IsRightToLeft() )
     {
-        if ( SVX_ADJUST_LEFT == nAdjust )
-            nAdjust = SVX_ADJUST_RIGHT;
-        else if ( SVX_ADJUST_RIGHT == nAdjust )
-            nAdjust = SVX_ADJUST_LEFT;
+        if ( SvxAdjust::Left == nAdjust )
+            nAdjust = SvxAdjust::Right;
+        else if ( SvxAdjust::Right == nAdjust )
+            nAdjust = SvxAdjust::Left;
     }
 
-    m_bOneBlock = rAdjust.GetOneWord() == SVX_ADJUST_BLOCK;
-    m_bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
-    m_bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;
+    m_bOneBlock = rAdjust.GetOneWord() == SvxAdjust::Block;
+    m_bLastBlock = rAdjust.GetLastBlock() == SvxAdjust::Block;
+    m_bLastCenter = rAdjust.GetLastBlock() == SvxAdjust::Center;
 
     // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
@@ -368,14 +368,14 @@ void SwTextMargin::DropInit()
 SwTwips SwTextMargin::GetLineStart() const
 {
     SwTwips nRet = GetLeftMargin();
-    if( GetAdjust() != SVX_ADJUST_LEFT &&
+    if( GetAdjust() != SvxAdjust::Left &&
         !m_pCurr->GetFirstPortion()->IsMarginPortion() )
     {
         // If the first portion is a Margin, then the
         // adjustment is expressed by the portions.
-        if( GetAdjust() == SVX_ADJUST_RIGHT )
+        if( GetAdjust() == SvxAdjust::Right )
             nRet = Right() - CurrWidth();
-        else if( GetAdjust() == SVX_ADJUST_CENTER )
+        else if( GetAdjust() == SvxAdjust::Center )
             nRet += (GetLineWidth() - CurrWidth()) / 2;
     }
     return nRet;

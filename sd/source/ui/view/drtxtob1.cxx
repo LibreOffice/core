@@ -491,22 +491,22 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                     case SID_ATTR_PARA_ADJUST_LEFT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_CENTER:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_RIGHT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_ADJUST_BLOCK:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
                     }
                     break;
                     case SID_ATTR_PARA_LINESPACE_10:
@@ -579,21 +579,21 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
-                sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
+                SvxAdjust nAdjust = SvxAdjust::Left;
                 if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                    nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetEnumValue();
+                    nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetAdjust();
 
                 if( bLeftToRight )
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SVX_ADJUST_RIGHT )
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                    if( nAdjust == SvxAdjust::Right )
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
                 }
                 else
                 {
                     aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SVX_ADJUST_LEFT )
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                    if( nAdjust == SvxAdjust::Left )
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
                 }
 
                 rReq.Done( aNewAttr );
@@ -627,22 +627,22 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 {
                 case SID_ATTR_PARA_ADJUST_LEFT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
                     }
                     break;
                 case SID_ATTR_PARA_ADJUST_CENTER:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
                     }
                     break;
                 case SID_ATTR_PARA_ADJUST_RIGHT:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
                     }
                     break;
                 case SID_ATTR_PARA_ADJUST_BLOCK:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
+                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
                     }
                     break;
                 }

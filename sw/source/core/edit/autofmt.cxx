@@ -645,8 +645,8 @@ bool SwAutoFormat::DoTable()
         sal_Int16 eHori;
         switch( m_pCurTextNd->GetSwAttrSet().GetAdjust().GetAdjust() )
         {
-        case SVX_ADJUST_CENTER:     eHori = text::HoriOrientation::CENTER;    break;
-        case SVX_ADJUST_RIGHT:      eHori = text::HoriOrientation::RIGHT;     break;
+        case SvxAdjust::Center:     eHori = text::HoriOrientation::CENTER;    break;
+        case SvxAdjust::Right:      eHori = text::HoriOrientation::RIGHT;     break;
 
         default:
             if( nSttPos )
@@ -1010,9 +1010,9 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
                         false, reinterpret_cast<const SfxPoolItem**>(&pAdj) ))
         {
             SvxAdjust eAdj = pAdj->GetAdjust();
-            if( bHdLineOrText ? (SVX_ADJUST_RIGHT != eAdj &&
-                                 SVX_ADJUST_CENTER != eAdj)
-                              : SVX_ADJUST_BLOCK != eAdj )
+            if( bHdLineOrText ? (SvxAdjust::Right != eAdj &&
+                                 SvxAdjust::Center != eAdj)
+                              : SvxAdjust::Block != eAdj )
                 aSet.ClearItem( RES_PARATR_ADJUST );
         }
     }
@@ -1474,7 +1474,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         if( !aFormat.GetCharFormat() )
                             aFormat.SetCharFormat( pCFormat );
                         if( bRTL )
-                            aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                            aFormat.SetNumAdjust( SvxAdjust::Right );
 
                         aRule.Set( n, aFormat );
 
@@ -1535,7 +1535,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetNumberingType((SvxNumType)(aNumTypes[ 0 ] - '0'));
 
                     if( bRTL )
-                        aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                        aFormat.SetNumAdjust( SvxAdjust::Right );
                     aRule.Set( nLvl, aFormat );
                 }
                 else
@@ -1561,7 +1561,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         if( !aFormat.GetCharFormat() )
                             aFormat.SetCharFormat( pCFormat );
                         if( bRTL )
-                            aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                            aFormat.SetNumAdjust( SvxAdjust::Right );
 
                         aRule.Set( n, aFormat );
                     }

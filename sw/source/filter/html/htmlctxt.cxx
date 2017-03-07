@@ -468,7 +468,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 {
     // Put together a DropCap attribute, if a "float:left" is before the first character
     if( bCharLvl && !m_pPam->GetPoint()->nContent.GetIndex() &&
-        SVX_ADJUST_LEFT == rPropInfo.m_eFloat )
+        SvxAdjust::Left == rPropInfo.m_eFloat )
     {
         SwFormatDrop aDrop;
         aDrop.GetChars() = 1;

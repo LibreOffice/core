@@ -291,7 +291,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
                 SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
-                if ( eAdj == SVX_ADJUST_LEFT)
+                if ( eAdj == SvxAdjust::Left)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
                 }
@@ -308,7 +308,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
                 SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
-                if ( eAdj == SVX_ADJUST_CENTER)
+                if ( eAdj == SvxAdjust::Center)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
                 }
@@ -325,7 +325,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
                 SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
-                if ( eAdj == SVX_ADJUST_RIGHT)
+                if ( eAdj == SvxAdjust::Right)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
                 }
@@ -342,7 +342,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
                 SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
-                if ( eAdj == SVX_ADJUST_BLOCK)
+                if ( eAdj == SvxAdjust::Block)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
                 }

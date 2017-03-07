@@ -912,24 +912,24 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         SvxCellHorJustify eVal;
         switch ( static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
         {
-            case SVX_ADJUST_LEFT:
+            case SvxAdjust::Left:
                 // EditEngine Default is always set in the GetAttribs() ItemSet !
                 // whether left or right, is decided in text / number
                 eVal = SVX_HOR_JUSTIFY_STANDARD;
                 break;
-            case SVX_ADJUST_RIGHT:
+            case SvxAdjust::Right:
                 eVal = SVX_HOR_JUSTIFY_RIGHT;
                 break;
-            case SVX_ADJUST_BLOCK:
+            case SvxAdjust::Block:
                 eVal = SVX_HOR_JUSTIFY_BLOCK;
                 break;
-            case SVX_ADJUST_CENTER:
+            case SvxAdjust::Center:
                 eVal = SVX_HOR_JUSTIFY_CENTER;
                 break;
-            case SVX_ADJUST_BLOCKLINE:
+            case SvxAdjust::BlockLine:
                 eVal = SVX_HOR_JUSTIFY_BLOCK;
                 break;
-            case SVX_ADJUST_END:
+            case SvxAdjust::End:
                 eVal = SVX_HOR_JUSTIFY_RIGHT;
                 break;
             default:
@@ -959,10 +959,10 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
     SvxAdjust eSvxAdjust;
     switch (eHorJust)
     {
-        case SVX_HOR_JUSTIFY_RIGHT:  eSvxAdjust = SVX_ADJUST_RIGHT;  break;
-        case SVX_HOR_JUSTIFY_CENTER: eSvxAdjust = SVX_ADJUST_CENTER; break;
-        case SVX_HOR_JUSTIFY_BLOCK:  eSvxAdjust = SVX_ADJUST_BLOCK;  break;
-        default:                     eSvxAdjust = SVX_ADJUST_LEFT;   break;
+        case SVX_HOR_JUSTIFY_RIGHT:  eSvxAdjust = SvxAdjust::Right;  break;
+        case SVX_HOR_JUSTIFY_CENTER: eSvxAdjust = SvxAdjust::Center; break;
+        case SVX_HOR_JUSTIFY_BLOCK:  eSvxAdjust = SvxAdjust::Block;  break;
+        default:                     eSvxAdjust = SvxAdjust::Left;   break;
     }
     pEditSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 }

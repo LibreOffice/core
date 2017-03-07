@@ -743,7 +743,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     const CharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
     // justification type
-    const bool bAdjustBlock = SVX_ADJUST_BLOCK ==
+    const bool bAdjustBlock = SvxAdjust::Block ==
                                   rNode.GetSwAttrSet().GetAdjust().GetAdjust();
 
     // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:

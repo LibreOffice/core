@@ -53,6 +53,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/enumarray.hxx>
 #include <vcl/font.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -239,7 +240,7 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 }
 
 // Numbering
-const unsigned short aSvxToUnoAdjust[] =
+const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
 {
     text::HoriOrientation::LEFT,   //3
     text::HoriOrientation::RIGHT,  //1
@@ -252,9 +253,9 @@ const unsigned short aSvxToUnoAdjust[] =
 const unsigned short aUnoToSvxAdjust[] =
 {
     USHRT_MAX,
-    SVX_ADJUST_RIGHT,       // 1
-    SVX_ADJUST_CENTER,      // 3
-    SVX_ADJUST_LEFT,        // 0
+    (unsigned short)SvxAdjust::Right,       // 1
+    (unsigned short)SvxAdjust::Center,      // 3
+    (unsigned short)SvxAdjust::Left,        // 0
     USHRT_MAX,
     USHRT_MAX
 };

@@ -469,8 +469,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             nLevel = MAXLEVEL - 1;
 
         const SwNumFormat &rNumFormat = pNumRule->Get( nLevel );
-        const bool bLeft = SVX_ADJUST_LEFT == rNumFormat.GetNumAdjust();
-        const bool bCenter = SVX_ADJUST_CENTER == rNumFormat.GetNumAdjust();
+        const bool bLeft = SvxAdjust::Left == rNumFormat.GetNumAdjust();
+        const bool bCenter = SvxAdjust::Center == rNumFormat.GetNumAdjust();
         const bool bLabelAlignmentPosAndSpaceModeActive(
                 rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
         const sal_uInt16 nMinDist = bLabelAlignmentPosAndSpaceModeActive

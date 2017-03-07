@@ -175,7 +175,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                            rCSS1PropInfo.m_nTop + nUpperSpace) );
         aFrameSet.Put( SwFormatSurround(css::text::WrapTextMode_THROUGHT) );
     }
-    else if( SVX_ADJUST_LEFT == rCSS1PropInfo.m_eFloat ||
+    else if( SvxAdjust::Left == rCSS1PropInfo.m_eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )
     {
         aAnchor.SetType( FLY_AT_PARA );

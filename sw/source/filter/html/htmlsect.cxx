@@ -60,8 +60,8 @@ void SwHTMLParser::NewDivision( int nToken )
     OUString aId, aHRef;
     OUString aStyle, aLang, aDir;
     OUString aClass;
-    SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
-                                               : SVX_ADJUST_END;
+    SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SvxAdjust::Center
+                                               : SvxAdjust::End;
 
     bool bHeader=false, bFooter=false;
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -366,7 +366,7 @@ void SwHTMLParser::NewDivision( int nToken )
         pCntxt->SetAppendMode( AM_NOSPACE );
     }
 
-    if( SVX_ADJUST_END != eAdjust )
+    if( SvxAdjust::End != eAdjust )
     {
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), pCntxt );
     }

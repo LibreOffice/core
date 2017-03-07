@@ -306,16 +306,16 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
         case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
         case SID_ATTR_PARA_ADJUST_LEFT:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_LEFT, EE_PARA_JUST));
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::Left, EE_PARA_JUST));
         break;
         case SID_ATTR_PARA_ADJUST_CENTER:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST));
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST));
         break;
         case SID_ATTR_PARA_ADJUST_RIGHT:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_RIGHT, EE_PARA_JUST));
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::Right, EE_PARA_JUST));
         break;
         case SID_ATTR_PARA_ADJUST_BLOCK:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST));
+            aNewAttr.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
         break;
 
         case SID_ATTR_PARA_LINESPACE_10:
@@ -581,21 +581,21 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                         EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                         0 );
 
-            sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
+            SvxAdjust nAdjust = SvxAdjust::Left;
             if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetEnumValue();
+                nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetAdjust();
 
             if( bLeftToRight )
             {
                 aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
-                if( nAdjust == SVX_ADJUST_RIGHT )
-                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                if( nAdjust == SvxAdjust::Right )
+                    aAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             }
             else
             {
                 aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                if( nAdjust == SVX_ADJUST_LEFT )
-                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                if( nAdjust == SvxAdjust::Left )
+                    aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }
             pOLV->SetAttribs(aAttr);
             break;
@@ -744,15 +744,15 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_ADJUST_CENTER:
             case SID_ATTR_PARA_ADJUST_BLOCK:
                 {
-                    int eAdjust = 0;
+                    SvxAdjust eAdjust = SvxAdjust::Left;
                     if (nWhich==SID_ATTR_PARA_ADJUST_LEFT)
-                        eAdjust = SVX_ADJUST_LEFT;
+                        eAdjust = SvxAdjust::Left;
                     else if (nWhich==SID_ATTR_PARA_ADJUST_RIGHT)
-                        eAdjust = SVX_ADJUST_RIGHT;
+                        eAdjust = SvxAdjust::Right;
                     else if (nWhich==SID_ATTR_PARA_ADJUST_CENTER)
-                        eAdjust = SVX_ADJUST_CENTER;
+                        eAdjust = SvxAdjust::Center;
                     else if (nWhich==SID_ATTR_PARA_ADJUST_BLOCK)
-                        eAdjust = SVX_ADJUST_BLOCK;
+                        eAdjust = SvxAdjust::Block;
 
                     const SfxPoolItem *pAdjust = nullptr;
                     aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);

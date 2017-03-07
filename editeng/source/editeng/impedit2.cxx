@@ -1993,7 +1993,7 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_Int32 nPara, sal_Int32 nPos, sal_In
 
 SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
 {
-    SvxAdjust eJustification = SVX_ADJUST_LEFT;
+    SvxAdjust eJustification = SvxAdjust::Left;
 
     if ( !aStatus.IsOutliner() )
     {
@@ -2001,10 +2001,10 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
 
         if ( IsRightToLeft( nPara ) )
         {
-            if ( eJustification == SVX_ADJUST_LEFT )
-                eJustification = SVX_ADJUST_RIGHT;
-            else if ( eJustification == SVX_ADJUST_RIGHT )
-                eJustification = SVX_ADJUST_LEFT;
+            if ( eJustification == SvxAdjust::Left )
+                eJustification = SvxAdjust::Right;
+            else if ( eJustification == SvxAdjust::Right )
+                eJustification = SvxAdjust::Left;
         }
     }
     return eJustification;
@@ -3126,7 +3126,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
             break;
             case PortionKind::TEXT:
             {
-                if ( ( eJustification != SVX_ADJUST_BLOCK ) || ( !bIgnoreExtraSpace ) )
+                if ( ( eJustification != SvxAdjust::Block ) || ( !bIgnoreExtraSpace ) )
                 {
                     nWidth += rTextPortion.GetSize().Width();
                 }

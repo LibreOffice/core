@@ -1663,8 +1663,8 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 
     if( 1 < aLine.GetDropLines() )
     {
-        if( SVX_ADJUST_LEFT != aLine.GetAdjust() &&
-            SVX_ADJUST_BLOCK != aLine.GetAdjust() )
+        if( SvxAdjust::Left != aLine.GetAdjust() &&
+            SvxAdjust::Block != aLine.GetAdjust() )
         {
             aLine.CalcDropAdjust();
             aLine.SetPaintDrop( true );

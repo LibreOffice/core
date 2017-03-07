@@ -639,7 +639,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        _pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ,ITEMID_ADJUST) );
+        _pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center ,ITEMID_ADJUST) );
         _pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         _pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         _pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );

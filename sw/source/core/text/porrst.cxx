@@ -291,8 +291,8 @@ bool SwTextFrame::FormatEmpty()
         return false;
     const SwAttrSet& aSet = GetTextNode()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
-    if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
-          (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
+    if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SvxAdjust::Left != nAdjust ) ) ||
+          (   IsRightToLeft() && ( SvxAdjust::Right != nAdjust ) ) ) ||
           aSet.GetRegister().GetValue() ) )
         return false;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();

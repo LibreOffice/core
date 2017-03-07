@@ -364,7 +364,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rTitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rTitleSet.Put(SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ));
-        rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
+        rTitleSet.Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rTitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
@@ -410,7 +410,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rSubtitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rSubtitleSet.Put(SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ));
-        rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
+        rSubtitleSet.Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
@@ -1097,7 +1097,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetBulletRelSize(45);
             aNumberFormat.SetBulletColor(Color(COL_AUTO));
             aNumberFormat.SetStart(1);
-            aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
+            aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 
             SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
 
@@ -1154,7 +1154,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
             aNumberFormat.SetBulletColor(Color(COL_AUTO));
             aNumberFormat.SetStart(1);
-            aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
+            aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 
             SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR |
                                  SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,

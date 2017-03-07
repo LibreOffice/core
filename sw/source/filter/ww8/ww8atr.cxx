@@ -4348,19 +4348,19 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     sal_uInt8 nAdjBiDi = 255;
     switch ( rAdjust.GetAdjust() )
     {
-        case SVX_ADJUST_LEFT:
+        case SvxAdjust::Left:
             nAdj = 0;
             nAdjBiDi = 2;
             break;
-        case SVX_ADJUST_RIGHT:
+        case SvxAdjust::Right:
             nAdj = 2;
             nAdjBiDi = 0;
             break;
-        case SVX_ADJUST_BLOCKLINE:
-        case SVX_ADJUST_BLOCK:
+        case SvxAdjust::BlockLine:
+        case SvxAdjust::Block:
             nAdj = nAdjBiDi = 3;
             break;
-        case SVX_ADJUST_CENTER:
+        case SvxAdjust::Center:
             nAdj = nAdjBiDi = 1;
             break;
         default:

@@ -63,7 +63,7 @@ class  SVX_DLLPUBLIC NumSettings_Impl
             , nParentNumbering(0)
             , eLabelFollowedBy(SvxNumberFormat::NOTHING)
             , nTabValue (0)
-            , eNumAlign(SVX_ADJUST_LEFT)
+            , eNumAlign(SvxAdjust::Left)
             , nNumAlignAt(0)
             , nNumIndentAt(0)
             , pBrushItem(nullptr)
