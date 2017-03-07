@@ -253,7 +253,6 @@ const sal_Int32 BIFF12_ID_XF                = 0x002F;
     BIFF_UNKNOWN               /// Unknown BIFF version.
 */
 
-/** unused -- keep for documentation */
 //const sal_uInt16 BIFF2_MAXRECSIZE           = 2080;
 //const sal_uInt16 BIFF8_MAXRECSIZE           = 8224;
 
@@ -282,7 +281,10 @@ const sal_uInt16 BIFF_ID_PCITEM_STRING      = 0x00CD;
 
 const sal_uInt16 BIFF_ID_UNKNOWN            = SAL_MAX_UINT16;
 
-/** unused -- keep for documentation
+/* Many of thse constants might be unused, but please keep for documentation. If you notice
+ * hardcoded numbers in the code that actually correspond in meaning in the context (not just value)
+ * to one of the named constants, feel free to change it to use the constant instead, of course.
+ */
 const sal_uInt16 BIFF2_ID_ARRAY             = 0x0021;
 const sal_uInt16 BIFF3_ID_ARRAY             = 0x0221;
 const sal_uInt16 BIFF_ID_AUTOFILTER         = 0x009D;
@@ -532,10 +534,8 @@ const sal_uInt16 BIFF4_ID_XF                = 0x0443;
 const sal_uInt16 BIFF5_ID_XF                = 0x00E0;
 const sal_uInt16 BIFF_ID_XFCRC              = 0x087C;
 const sal_uInt16 BIFF_ID_XFEXT              = 0x087D;
-*/
 
 // OBJ subrecord identifiers --------------------------------------------------
-/**  unused -- keep for documentation
 const sal_uInt16 BIFF_ID_OBJEND             = 0x0000;   /// End of OBJ.
 const sal_uInt16 BIFF_ID_OBJMACRO           = 0x0004;   /// Macro link.
 const sal_uInt16 BIFF_ID_OBJBUTTON          = 0x0005;   /// Button data.
@@ -555,7 +555,7 @@ const sal_uInt16 BIFF_ID_OBJCBLSDATA        = 0x0012;   /// Check box/radio butt
 const sal_uInt16 BIFF_ID_OBJLBSDATA         = 0x0013;   /// List box/combo box data.
 const sal_uInt16 BIFF_ID_OBJCBLSFMLA        = 0x0014;   /// Check box/radio button cell link.
 const sal_uInt16 BIFF_ID_OBJCMO             = 0x0015;   /// Common object settings.
-*/
+
 // record constants -----------------------------------------------------------
 
 const sal_uInt8 BIFF_ERR_NULL               = 0x00;
@@ -566,7 +566,6 @@ const sal_uInt8 BIFF_ERR_NAME               = 0x1D;
 const sal_uInt8 BIFF_ERR_NUM                = 0x24;
 const sal_uInt8 BIFF_ERR_NA                 = 0x2A;
 
-/**  unused -- keep for documentation
 const sal_uInt16 BIFF_BOF_BIFF2             = 0x0200;
 const sal_uInt16 BIFF_BOF_BIFF3             = 0x0300;
 const sal_uInt16 BIFF_BOF_BIFF4             = 0x0400;
@@ -588,7 +587,6 @@ const sal_uInt8 BIFF_STRF_16BIT             = 0x01;
 const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
-*/
 
 /** Static helper functions for BIFF filters. */
 class BiffHelper
