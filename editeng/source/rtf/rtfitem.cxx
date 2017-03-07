@@ -554,11 +554,11 @@ SET_FONTALIGNMENT:
                 {
                     SvxCaseMap eCaseMap;
                     if( !nTokenValue )
-                        eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+                        eCaseMap = SvxCaseMap::NotMapped;
                     else if( RTF_CAPS == nToken )
-                        eCaseMap = SVX_CASEMAP_VERSALIEN;
+                        eCaseMap = SvxCaseMap::Uppercase;
                     else
-                        eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
+                        eCaseMap = SvxCaseMap::SmallCaps;
 
                     pSet->Put( SvxCaseMapItem( eCaseMap, aPlainMap.nCaseMap ));
                 }

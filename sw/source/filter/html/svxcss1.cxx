@@ -102,16 +102,16 @@ static CSS1PropertyEnum const aFontStyleTable[] =
 
 static CSS1PropertyEnum const aFontVariantTable[] =
 {
-    { "normal",      SVX_CASEMAP_NOT_MAPPED      },
-    { "small-caps",  SVX_CASEMAP_KAPITAELCHEN    },
+    { "normal",      (sal_uInt16)SvxCaseMap::NotMapped      },
+    { "small-caps",  (sal_uInt16)SvxCaseMap::SmallCaps    },
     { nullptr,                    0                   }
 };
 
 static CSS1PropertyEnum const aTextTransformTable[] =
 {
-    { "uppercase",  SVX_CASEMAP_VERSALIEN },
-    { "lowercase",  SVX_CASEMAP_GEMEINE   },
-    { "capitalize", SVX_CASEMAP_TITEL     },
+    { "uppercase",  (sal_uInt16)SvxCaseMap::Uppercase },
+    { "lowercase",  (sal_uInt16)SvxCaseMap::Lowercase   },
+    { "capitalize", (sal_uInt16)SvxCaseMap::Capitalize     },
     { nullptr,                   0                     }
 };
 
@@ -1215,7 +1215,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
     bool bPosture = false;
     bool bCaseMap = false;
     FontItalic eItalic = ITALIC_NONE;
-    SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
 
     // normal | italic || small-caps | oblique || small-caps | small-caps
     // (wobei nor noch normal | italic und oblique zulaessig sind
@@ -1236,7 +1236,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                 if( !bCaseMap && ITALIC_NONE==eItalic )
                 {
                     // fuer 'normal' muessen wir auch die case-map aussch.
-                    eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+                    eCaseMap = SvxCaseMap::NotMapped;
                     bCaseMap = true;
                 }
                 bPosture = true;
@@ -1244,7 +1244,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
             else if( !bCaseMap &&
                      rValue.equalsIgnoreAsciiCase( "small-caps" ) )
             {
-                eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
+                eCaseMap = SvxCaseMap::SmallCaps;
                 bCaseMap = true;
             }
         }
@@ -1736,7 +1736,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     FontItalic eItalic = ITALIC_NONE;
-    SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
     FontWeight eWeight = WEIGHT_NORMAL;
 
     // [ <font-style> || <font-variant> || <font-weight> ] ?

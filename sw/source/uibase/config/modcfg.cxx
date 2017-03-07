@@ -275,12 +275,13 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
         case  SID_ATTR_CHAR_STRIKEOUT: nRet = 3; break;
         case  SID_ATTR_CHAR_CASEMAP:
         {
-            switch(rAttr.nAttr)
+            switch((SvxCaseMap)rAttr.nAttr)
             {
-                case  SVX_CASEMAP_VERSALIEN   : nRet = 5;break;
-                case  SVX_CASEMAP_GEMEINE     : nRet = 6;break;
-                case  SVX_CASEMAP_KAPITAELCHEN: nRet = 7;break;
-                case  SVX_CASEMAP_TITEL       : nRet = 8;break;
+                case  SvxCaseMap::Uppercase : nRet = 5;break;
+                case  SvxCaseMap::Lowercase : nRet = 6;break;
+                case  SvxCaseMap::SmallCaps : nRet = 7;break;
+                case  SvxCaseMap::Capitalize: nRet = 8;break;
+                default: break;
             }
         }
         break;
@@ -335,10 +336,10 @@ static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, bool bDe
                 }
         break;
         case 4: rAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;rAttr.nAttr = LINESTYLE_DOUBLE         ; break;
-        case 5: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_VERSALIEN    ; break;
-        case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_GEMEINE      ; break;
-        case 7: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_KAPITAELCHEN ; break;
-        case 8: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_TITEL        ; break;
+        case 5: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Uppercase; break;
+        case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Lowercase; break;
+        case 7: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::SmallCaps; break;
+        case 8: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = (sal_uInt16)SvxCaseMap::Capitalize; break;
         case 9: rAttr.nItemId = SID_ATTR_BRUSH; break;
     }
 }

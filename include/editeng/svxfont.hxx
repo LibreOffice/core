@@ -65,8 +65,8 @@ public:
     void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
 
     // Is-Methods:
-    bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
-    bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
+    bool IsCaseMap() const { return SvxCaseMap::NotMapped != eCaseMap; }
+    bool IsCapital() const { return SvxCaseMap::SmallCaps == eCaseMap; }
     bool IsKern() const { return 0 != nKern; }
     bool IsEsc() const { return 0 != nEsc; }
 

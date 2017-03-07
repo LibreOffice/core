@@ -1528,10 +1528,11 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     sal_Int32 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
-        rCJKFont.SetCaseMap( (SvxCaseMap)nCapsPos );
+        SvxCaseMap eCaps = (SvxCaseMap)nCapsPos;
+        rFont.SetCaseMap( eCaps );
+        rCJKFont.SetCaseMap( eCaps );
         // #i78474# small caps do not exist in CTL fonts
-        rCTLFont.SetCaseMap( static_cast<SvxCaseMap>( nCapsPos == SVX_CASEMAP_KAPITAELCHEN ? SVX_CASEMAP_NOT_MAPPED : (SvxCaseMap)nCapsPos) );
+        rCTLFont.SetCaseMap( eCaps == SvxCaseMap::SmallCaps ? SvxCaseMap::NotMapped : eCaps );
     }
 
     bool bWordLine = m_pIndividualWordsBtn->IsChecked();
@@ -1545,7 +1546,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
 
 void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 {
-    if ( SVX_CASEMAP_END > eCaseMap )
+    if ( SvxCaseMap::End > eCaseMap )
         m_pEffectsLB->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( eCaseMap ) );
     else
@@ -1919,7 +1920,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         // this is for consistency only. Here it would be allowed to call SelectHdl_Impl directly ...
 
     // Effects
-    SvxCaseMap eCaseMap = SVX_CASEMAP_END;
+    SvxCaseMap eCaseMap = SvxCaseMap::End;
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
     eState = rSet->GetItemState( nWhich );
     switch ( eState )
@@ -2290,7 +2291,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     // Effects
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CASEMAP );
-    SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
     bool bChecked = false;
     sal_Int32 nCapsPos = m_pEffectsLB->GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
