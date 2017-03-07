@@ -1530,7 +1530,14 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
         else if (std::get<0>(aTuple) == BUFFER_STARTSHAPE)
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
         else if (std::get<0>(aTuple) == BUFFER_RESOLVESHAPE)
+        {
+            // Make sure there is no current buffer while replaying the shape,
+            // otherwise it gets re-buffered.
+            RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
+            m_aStates.top().pCurrentBuffer = nullptr;
             m_pSdrImport->resolve(std::get<1>(aTuple)->getShape(), true, RTFSdrImport::SHAPE);
+            m_aStates.top().pCurrentBuffer = pCurrentBuffer;
+        }
         else if (std::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
         else if (std::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
@@ -1541,6 +1548,8 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
             OUString aCustomMark = rAttributes.find(2)->getString();
             resolveSubstream(nPos, nId, aCustomMark);
         }
+        else if (std::get<0>(aTuple) == BUFFER_PICTURE)
+            m_aStates.top().aPicture = std::get<1>(aTuple)->getPicture();
         else
             assert(false);
     }
@@ -2085,6 +2094,10 @@ RTFError RTFDocumentImpl::popState()
             else
             {
                 // Shape inside table: buffer the import to have correct anchor position.
+                // Also buffer the RTFPicture of the state stack as it contains
+                // the shape size.
+                auto pPictureValue = std::make_shared<RTFValue>(m_aStates.top().aPicture);
+                m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PICTURE, pPictureValue, nullptr));
                 auto pValue = std::make_shared<RTFValue>(m_aStates.top().aShape);
                 m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
             }
