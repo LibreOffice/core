@@ -70,6 +70,24 @@
       "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c306df1f",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-07T13:16:52Z",
+      "side": 1,
+      "message": "Maybe just don\u0027t have a RemoteOnDeInitVCL method at all, and rely on VCL cleaning itself up? Then this problem goes away.\n\nOtherwise, you could just do what other code does - inside the broadcast method, before doing the actual broadcasting, take a copy of the data-structure, and then iterate over that.",
+      "parentUuid": "9a57fde8_6317f351",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
