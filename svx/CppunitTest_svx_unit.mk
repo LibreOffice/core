@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 
 $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	sal \
+	sfx \
 	svxcore \
 	tl \
 	unotest \

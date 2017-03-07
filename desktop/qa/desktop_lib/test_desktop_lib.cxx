@@ -62,6 +62,7 @@ public:
     {
         UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+        SfxApplication::GetOrCreate();
     };
 
     virtual void tearDown() override

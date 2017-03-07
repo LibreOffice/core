@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_globalfilter, \
     cppu \
     cppuhelper \
     sal \
+    sfx \
     svt \
     sw \
     test \

@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export2, \
     cppuhelper \
     $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
     sal \
+    sfx \
     test \
     unotest \
     utl \

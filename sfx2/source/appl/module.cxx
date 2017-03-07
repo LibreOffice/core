@@ -115,7 +115,7 @@ SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pF
 
 void SfxModule::Construct_Impl()
 {
-    SfxApplication *pApp = SfxGetpApp();
+    SfxApplication *pApp = SfxApplication::GetOrCreate();
     pImpl = new SfxModule_Impl;
     pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
 

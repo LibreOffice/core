@@ -38,6 +38,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
+#include <sfx2/app.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -197,8 +198,8 @@ public:
     virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
-
         mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+        SfxApplication::GetOrCreate();
     }
 
     virtual void tearDown() override
