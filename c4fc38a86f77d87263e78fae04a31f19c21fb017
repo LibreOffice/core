@@ -16,6 +16,24 @@
       "revId": "c4fc38a86f77d87263e78fae04a31f19c21fb017",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c3589f59",
+        "filename": "external/lcms2/ExternalProject_lcms2.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-07T12:45:44Z",
+      "side": 0,
+      "message": "well you can hardly use project files that aren\u0027t there, given that upstreams aren\u0027t likely to maintain them for 10 different VS versions.",
+      "parentUuid": "9a57fde8_43b66f8b",
+      "revId": "c4fc38a86f77d87263e78fae04a31f19c21fb017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
