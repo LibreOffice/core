@@ -40,6 +40,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
 
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
+
 #include <vector>
 #include <algorithm>
 
@@ -766,14 +768,12 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel, long& nUsedHeight)
 {
-// TODO: get this info from the Pivot Table
-    std::vector<OUString> aRowFields {
-//        "Service Months"
-    };
+    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
+    uno::Sequence<OUString> aColumnFields = xPivotChartDataProvider->getColumnFields();
 
     std::vector<std::shared_ptr<VButton>> aButtons;
 
-    if (aRowFields.empty())
+    if (!aColumnFields.hasElements())
         return aButtons;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
@@ -781,13 +781,13 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
     int nCIDIndex = 0;
     awt::Size aSize(2000, 700);
 
-    for (OUString const & sRowField : aRowFields)
+    for (OUString const & sColumnField : aColumnFields)
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
         awt::Point aNewPosition = awt::Point(100, 100);
-        pButton->setLabel(sRowField);
+        pButton->setLabel(sColumnField);
         pButton->setCID("RowFieldButton." + OUString::number(nCIDIndex));
         pButton->createShapes(aNewPosition, aSize, xModelPage);
         nCIDIndex += 1;

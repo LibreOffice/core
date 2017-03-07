@@ -114,6 +114,8 @@
 #include <comphelper/classids.hxx>
 #include "servicenames_charttypes.hxx"
 
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
@@ -2490,35 +2492,29 @@ void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
                        ChartModel& rModel,
                        awt::Rectangle& rRemainingSpace)
 {
+    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
+
+    uno::Sequence<OUString> aRowFields = xPivotChartDataProvider->getRowFields();
+    uno::Sequence<OUString> aPageFields = xPivotChartDataProvider->getPageFields();
+    uno::Sequence<OUString> aDataFields = xPivotChartDataProvider->getDataFields();
+
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
-
-// TODO: Get this from the PivotTable
-    std::vector<OUString> aPageFields {
-//        "Subdivision", "Subdivision2"
-    };
-    std::vector<OUString> aDataFields {
-//        "Sum - Revenue", "Sum - Expenses"
-    };
-    std::vector<OUString> aColumnFields {
-//        "Group Segment", "Group Segment 2"
-    };
-
     awt::Size aSize(3000, 700); // size of the button
 
     long x = 0;
     int nCIDIndex = 0;
 
-    if (!aPageFields.empty())
+    if (aPageFields.hasElements())
     {
         x = 0;
         nCIDIndex = 0;
 
-        for (OUString const & aPageField : aPageFields)
+        for (OUString const & rPageField : aPageFields)
         {
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
             awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
-            pButton->setLabel(aPageField);
+            pButton->setLabel(rPageField);
             pButton->setCID("PageFieldButton." + OUString::number(nCIDIndex));
             pButton->createShapes(aNewPosition, aSize, xModelPage);
             x += aSize.Width + 100;
@@ -2528,16 +2524,16 @@ void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
         rRemainingSpace.Height -= (aSize.Height + 100 + 100);
     }
 
-    if (!aDataFields.empty())
+    if (aDataFields.hasElements())
     {
         x = 200;
         nCIDIndex = 0;
-        for (OUString const & aDataField : aDataFields)
+        for (OUString const & rDataField : aDataFields)
         {
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
             awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100, rRemainingSpace.Y + 100);
-            pButton->setLabel(aDataField);
+            pButton->setLabel(rDataField);
             pButton->setCID("DataFieldButton." + OUString::number(nCIDIndex));
             pButton->createShapes(aNewPosition, aSize, xModelPage);
             x += aSize.Width + 100;
@@ -2547,17 +2543,17 @@ void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
         rRemainingSpace.Height -= (aSize.Height + 100 + 100);
     }
 
-    if (!aColumnFields.empty())
+    if (aRowFields.hasElements())
     {
         x = 200;
         nCIDIndex = 0;
-        for (OUString const & aColumnField : aColumnFields)
+        for (OUString const & rRowField : aRowFields)
         {
             std::unique_ptr<VButton> pButton(new VButton);
             pButton->init(xPageShapes, xShapeFactory);
             awt::Point aNewPosition = awt::Point(rRemainingSpace.X + x + 100,
                                                  rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
-            pButton->setLabel(aColumnField);
+            pButton->setLabel(rRowField);
             pButton->setCID("ColumnFieldButton." + OUString::number(nCIDIndex));
             pButton->createShapes(aNewPosition, aSize, xModelPage);
             x += aSize.Width + 100;
