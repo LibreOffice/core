@@ -522,7 +522,7 @@ OUString readConsole()
         return value.trim();
     }
 #endif
-    return OUString();
+    throw css::uno::RuntimeException("reading from stdin failed");
 }
 
 void TRACE(OUString const & sText)
