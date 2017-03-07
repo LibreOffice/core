@@ -636,7 +636,7 @@ void XcuParser::handleUnknownGroupProp(
             valueParser_.type_ = type;
             rtl::Reference< Node > prop(
                 new PropertyNode(
-                    valueParser_.getLayer(), type, true, css::uno::Any(),
+                    valueParser_.getLayer(), TYPE_ANY, true, css::uno::Any(),
                     true));
             if (finalized) {
                 prop->setFinalized(valueParser_.getLayer());
