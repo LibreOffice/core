@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_use_libraries,gengal,\
     basegfx \
     sal \
     tl \
+    sfx \
     svl \
     svt \
     comphelper \

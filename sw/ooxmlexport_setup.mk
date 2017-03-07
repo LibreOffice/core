@@ -14,6 +14,7 @@ define sw_ooxmlexport_libraries
 	cppu \
 	cppuhelper \
 	sal \
+	sfx \
 	sw \
 	test \
 	tl \

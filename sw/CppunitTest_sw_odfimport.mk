@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfimport, \
     cppuhelper \
     sal \
 	svt \
+	sfx \
 	sw \
     test \
     unotest \
