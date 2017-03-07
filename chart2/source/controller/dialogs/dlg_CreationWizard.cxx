@@ -77,10 +77,7 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
     aSize.Width() += aAdditionalRoadmapSize.Width();
     this->SetSizePixel(aSize);
 
-    uno::Reference<chart2::XChartDocument> xChartDoc(m_xChartModel, uno::UNO_QUERY);
-    bool bHasOwnData = (xChartDoc.is() && xChartDoc->hasInternalDataProvider());
-
-    if(bHasOwnData)
+    if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
     {
         enableState(STATE_SIMPLE_RANGE, false);
         enableState(STATE_DATA_SERIES, false);
