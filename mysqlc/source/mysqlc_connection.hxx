@@ -184,10 +184,10 @@ namespace connectivity
 
             // TODO: Not used
             //sal_Int32 sdbcColumnType(rtl::OUString typeName);
-            inline const ConnectionSettings& getConnectionSettings() const { return m_settings; }
+            const ConnectionSettings& getConnectionSettings() const { return m_settings; }
             rtl::OUString transFormPreparedStatement(const rtl::OUString& _sSQL);
 
-            inline const MysqlCDriver&  getDriver()         const { return m_rDriver;}
+            const MysqlCDriver&  getDriver()         const { return m_rDriver;}
 
         }; /* OConnection */
         // TODO: Not used.

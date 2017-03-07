@@ -53,7 +53,7 @@ struct ProviderRequest
     {
     }
 
-    inline bool CREATE_PROVIDER(
+    bool CREATE_PROVIDER(
                 const rtl::OUString& Implname,
                 const Sequence< rtl::OUString > & Services,
                 ::cppu::ComponentInstantiation Factory,

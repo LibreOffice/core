@@ -48,7 +48,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     {
         return m_aUnicodeEntry;
     }
-    inline SalGenericDataType GetType() const
+    SalGenericDataType GetType() const
     {
         return m_eType;
     }

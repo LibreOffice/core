@@ -84,11 +84,11 @@ public:
     inline  Display*                GetXDisplay() const;
     inline  const SalVisual&        GetVisual() const;
     SalGeometryProvider*            GetGeometryProvider() const;
-    inline  Drawable                GetDrawable() const { return hDrawable_; }
+    Drawable                GetDrawable() const { return hDrawable_; }
     void                            SetDrawable( Drawable d, SalX11Screen nXScreen );
     XRenderPictFormat*              GetXRenderFormat() const;
-    inline  void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
-    inline  const SalColormap&      GetColormap() const { return *m_pColormap; }
+    void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
+    const SalColormap&      GetColormap() const { return *m_pColormap; }
 
     using SalGraphics::GetPixel;
     inline  Pixel                   GetPixel( SalColor nSalColor ) const;

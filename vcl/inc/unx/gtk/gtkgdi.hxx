@@ -258,9 +258,9 @@ public:
     GtkSalGraphics(GtkSalFrame *, GtkWidget *window, SalX11Screen nXScreen);
     virtual ~GtkSalGraphics() override;
 
-    inline GtkWidget*  GetGtkWidget() const { return m_pWindow; }
-    inline GdkWindow*  GetGdkWindow() const { return m_pWindow->window; }
-    inline GtkSalFrame* GetGtkFrame() const { return static_cast<GtkSalFrame*>(m_pFrame); }
+    GtkWidget*  GetGtkWidget() const { return m_pWindow; }
+    GdkWindow*  GetGdkWindow() const { return m_pWindow->window; }
+    GtkSalFrame* GetGtkFrame() const { return static_cast<GtkSalFrame*>(m_pFrame); }
     void SetWindow( GtkWidget* window ) { m_pWindow = window; }
 
     // will be set when UI theme was changed

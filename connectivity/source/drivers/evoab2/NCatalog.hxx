@@ -32,7 +32,7 @@ namespace connectivity
             OEvoabConnection *m_pConnection;
         public:
             explicit OEvoabCatalog(OEvoabConnection *_pCon);
-            inline OEvoabConnection* getConnection() const { return m_pConnection; }
+            OEvoabConnection* getConnection() const { return m_pConnection; }
             virtual void refreshTables() override;
             virtual void refreshViews() override {}
             virtual void refreshGroups() override {}

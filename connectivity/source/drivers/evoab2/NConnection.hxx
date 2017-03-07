@@ -68,10 +68,10 @@ namespace connectivity
             /// @throws css::sdbc::SQLException
             virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
-            inline OString const & getPassword() { return m_aPassword; }
-            inline void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
+            OString const & getPassword() { return m_aPassword; }
+            void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
             // own methods
-            inline const OEvoabDriver& getDriver() const { return m_rDriver; }
+            const OEvoabDriver& getDriver() const { return m_rDriver; }
 
             SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
             void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}

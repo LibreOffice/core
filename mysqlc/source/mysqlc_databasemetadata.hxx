@@ -57,7 +57,7 @@ namespace connectivity
             bool impl_getRSTypeMetaData( const sal_Char* _methodName, bool (sql::DatabaseMetaData::*Method)(int), sal_Int32 _resultSetType );
 
         public:
-            inline const OConnection& getOwnConnection() const { return m_rConnection; }
+            const OConnection& getOwnConnection() const { return m_rConnection; }
 
             explicit ODatabaseMetaData(OConnection& _rCon);
             virtual ~ODatabaseMetaData();

@@ -70,7 +70,7 @@ public:
 
     void                    DeleteDisplay(); // for shutdown
 
-    inline  SalXLib*        GetLib() const { return pXLib_; }
+    SalXLib*        GetLib() const { return pXLib_; }
 
     static void             Timeout( bool idle );
 

@@ -85,7 +85,7 @@ namespace connectivity
 
             virtual ~OEvoabDatabaseMetaData() override;
         public:
-            inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
+            OEvoabConnection* getOwnConnection() const { return m_pConnection; }
 
             explicit OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
 

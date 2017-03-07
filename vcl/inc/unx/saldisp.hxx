@@ -92,10 +92,10 @@ public:
                             ~SalVisual();
                             SalVisual( const XVisualInfo* pXVI );
 
-    inline  VisualID        GetVisualId() const { return visualid; }
-    inline  Visual         *GetVisual() const { return visual; }
-    inline  int             GetClass() const { return c_class; }
-    inline  int             GetDepth() const { return depth; }
+    VisualID        GetVisualId() const { return visualid; }
+    Visual         *GetVisual() const { return visual; }
+    int             GetClass() const { return c_class; }
+    int             GetDepth() const { return depth; }
 
             Pixel           GetTCPixel( SalColor nColor ) const;
             SalColor        GetTCColor( Pixel nPixel ) const;
@@ -122,14 +122,14 @@ public:
     SalColormap( sal_uInt16         nDepth );
     SalColormap();
 
-    inline  Colormap            GetXColormap() const { return m_hColormap; }
-    inline  const SalDisplay*   GetDisplay() const { return m_pDisplay; }
+    Colormap            GetXColormap() const { return m_hColormap; }
+    const SalDisplay*   GetDisplay() const { return m_pDisplay; }
     inline  Display*            GetXDisplay() const;
-    inline  const SalVisual&    GetVisual() const { return m_aVisual; }
-    inline  Visual*             GetXVisual() const { return m_aVisual.GetVisual(); }
-    inline  Pixel               GetWhitePixel() const { return m_nWhitePixel; }
-    inline  Pixel               GetBlackPixel() const { return m_nBlackPixel; }
-    inline  Pixel               GetUsed() const { return m_nUsed; }
+    const SalVisual&    GetVisual() const { return m_aVisual; }
+    Visual*             GetXVisual() const { return m_aVisual.GetVisual(); }
+    Pixel               GetWhitePixel() const { return m_nWhitePixel; }
+    Pixel               GetBlackPixel() const { return m_nBlackPixel; }
+    Pixel               GetUsed() const { return m_nUsed; }
 
     bool            GetXPixels( XColor  &rColor,
                                     int      r,

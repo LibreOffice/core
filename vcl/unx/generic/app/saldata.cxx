@@ -578,9 +578,9 @@ struct YieldEntry
     YieldFunc       queued;     // read and queue up events
     YieldFunc       handle;     // handle pending events
 
-    inline int  HasPendingEvent()   const { return pending( fd, data ); }
-    inline int  IsEventQueued()     const { return queued( fd, data ); }
-    inline void HandleNextEvent()   const { handle( fd, data ); }
+    int  HasPendingEvent()   const { return pending( fd, data ); }
+    int  IsEventQueued()     const { return queued( fd, data ); }
+    void HandleNextEvent()   const { handle( fd, data ); }
 };
 
 #define MAX_NUM_DESCRIPTORS 128

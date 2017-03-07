@@ -53,7 +53,7 @@ public:
                  SalGenericDisplay();
     virtual      ~SalGenericDisplay();
 
-    inline osl::Mutex& getEventGuardMutex() { return m_aEventGuard; }
+    osl::Mutex& getEventGuardMutex() { return m_aEventGuard; }
 
     void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );

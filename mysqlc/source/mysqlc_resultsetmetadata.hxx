@@ -51,7 +51,7 @@ namespace connectivity
             {
             }
 
-            inline rtl::OUString convert( const ::std::string& _string ) const
+            rtl::OUString convert( const ::std::string& _string ) const
             {
                 return rtl::OUString( _string.c_str(), _string.size(), m_encoding );
             }
