@@ -59,7 +59,9 @@ enum RTFBufferTypes
     /// Imports a shape.
     BUFFER_RESOLVESHAPE,
     BUFFER_ENDSHAPE,
-    BUFFER_RESOLVESUBSTREAM
+    BUFFER_RESOLVESUBSTREAM,
+    /// Restores RTFParserState::aPicture.
+    BUFFER_PICTURE
 };
 
 /// Form field types
