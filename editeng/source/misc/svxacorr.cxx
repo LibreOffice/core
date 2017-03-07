@@ -1822,12 +1822,12 @@ static bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUString
 {
     OUString sAbk('~');
     SvStringsISortDtor::const_iterator it = pList->find( sAbk );
-    sal_uInt16 nPos = it - pList->begin();
+    SvStringsISortDtor::size_type nPos = it - pList->begin();
     if( nPos < pList->size() )
     {
         OUString sLowerWord(sWord.toAsciiLowerCase());
         OUString sAbr;
-        for( sal_uInt16 n = nPos;
+        for( SvStringsISortDtor::size_type n = nPos;
                 n < pList->size() &&
                 '~' == ( sAbr = (*pList)[ n ])[ 0 ];
             ++n )

@@ -495,13 +495,13 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
     aBoolArr.clear();
     bInner = false;
     Calc( *pPoly ); // Note that this updates pLongArr, which is why we swapped it out earlier.
-    sal_uInt16 nCount = pLongArr->size();
-    sal_uInt16 nIdx = 0;
-    sal_uInt16 i = 0;
+    std::deque<long>::size_type nCount = pLongArr->size();
+    std::deque<long>::size_type nIdx = 0;
+    std::deque<long>::size_type i = 0;
     bool bSubtract = pTextRanger->IsInner();
     while( i < nCount )
     {
-        sal_uLong nOldCount = pOld->size();
+        std::deque<long>::size_type nOldCount = pOld->size();
         if( nIdx == nOldCount )
         {   // Reached the end of the old Array...
             if( !bSubtract )
@@ -510,7 +510,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
         }
         long nLeft = (*pLongArr)[ i++ ];
         long nRight = (*pLongArr)[ i++ ];
-        sal_uInt16 nLeftPos = nIdx + 1;
+        std::deque<long>::size_type nLeftPos = nIdx + 1;
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
         if( nLeftPos >= nOldCount )
@@ -519,7 +519,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
                 pOld->insert( pOld->begin() + nOldCount, pLongArr->begin() + i - 2, pLongArr->end() );
             break;
         }
-        sal_uInt16 nRightPos = nLeftPos - 1;
+        std::deque<long>::size_type nRightPos = nLeftPos - 1;
         while( nRightPos < nOldCount && nRight >= (*pOld)[ nRightPos ] )
             nRightPos += 2;
         if( nRightPos < nLeftPos )

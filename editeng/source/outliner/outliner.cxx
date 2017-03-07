@@ -448,7 +448,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                 ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ) )
             {
                 // Extract Tabs
-                sal_uInt16 nTabs = 0;
+                sal_Int32 nTabs = 0;
                 while ( ( nTabs < aStr.getLength() ) && ( aStr[nTabs] == '\t' ) )
                     nTabs++;
                 if ( nTabs )
@@ -457,7 +457,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                 // Keep depth?  (see Outliner::Insert)
                 if( !(pPara->nFlags & ParaFlag::HOLDDEPTH) )
                 {
-                    nCurDepth = nTabs-1;
+                    nCurDepth = nTabs-1; //TODO: sal_Int32 -> sal_Int16!
                     ImplCheckDepth( nCurDepth );
                     pPara->SetDepth( nCurDepth );
                     pPara->nFlags &= (~ParaFlag::HOLDDEPTH);

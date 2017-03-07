@@ -360,8 +360,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     rOutput << endl;
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FONTTBL );
-    sal_uInt16 j;
-    for ( j = 0; j < aFontTable.size(); j++ )
+    for ( std::vector<SvxFontItem*>::size_type j = 0; j < aFontTable.size(); j++ )
     {
         SvxFontItem* pFontItem = aFontTable[ j ];
         rOutput.WriteChar( '{' );
@@ -434,7 +433,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     }
 
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );
-    for ( j = 0; j < aColorList.size(); j++ )
+    for ( SvxColorList::size_type j = 0; j < aColorList.size(); j++ )
     {
         Color const color = aColorList[j];
         if (color != COL_AUTO) // auto is represented by "empty" element

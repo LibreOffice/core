@@ -406,8 +406,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 
         fprintf( fp, "\n\nLines:" );
         // First the content ...
-        sal_uInt16 nLine;
-        for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
+        for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine& rLine = pPPortion->GetLines()[nLine];
 
@@ -415,7 +414,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
-        for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
+        for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine& rLine = pPPortion->GetLines()[nLine];
             fprintf( fp, "\nZeile %i:\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
