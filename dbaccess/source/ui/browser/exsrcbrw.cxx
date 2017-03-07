@@ -138,8 +138,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         OUString sControlType;
         sal_Int32 nControlPos = -1;
         Sequence< css::beans::PropertyValue> aControlProps;
-        sal_uInt16 i;
-        for ( i = 0; i < aArgs.getLength(); ++i, ++pArguments )
+        for ( sal_Int32 i = 0; i < aArgs.getLength(); ++i, ++pArguments )
         {
             if ( pArguments->Name == "ColumnType" )
             {
@@ -183,7 +182,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         if (xNewColProperties.is())
         {
             const css::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
-            for (i=0; i<aControlProps.getLength(); ++i, ++pControlProps)
+            for (sal_Int32 i=0; i<aControlProps.getLength(); ++i, ++pControlProps)
             {
                 try
                 {

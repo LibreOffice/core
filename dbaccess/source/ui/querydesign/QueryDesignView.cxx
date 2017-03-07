@@ -2114,7 +2114,7 @@ namespace
             Reference< XConnection> xConnection = rController.getConnection();
 
             OUString aColumnName,aTableRange;
-            for (sal_uInt32 i = 0; i < pParseTree->count() && eOk == eErrorCode ; ++i)
+            for (size_t i = 0; i < pParseTree->count() && eOk == eErrorCode ; ++i)
             {
                 ::connectivity::OSQLParseNode * pColumnRef = pParseTree->getChild(i);
 
@@ -2361,7 +2361,7 @@ namespace
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             ::connectivity::OSQLParseNode* pGroupBy = pSelectRoot->getChild(3)->getChild(2)->getChild(2);
 
-            for( sal_uInt32 i=0 ; i < pGroupBy->count() && eOk == eErrorCode; ++i )
+            for( size_t i=0 ; i < pGroupBy->count() && eOk == eErrorCode; ++i )
             {
                 OTableFieldDescRef aDragInfo = new OTableFieldDesc();
                 ::connectivity::OSQLParseNode* pParamRef = nullptr;

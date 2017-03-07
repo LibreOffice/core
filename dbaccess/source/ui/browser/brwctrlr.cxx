@@ -2368,7 +2368,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rIn
 
     // and move to the field
     Reference< css::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
-    sal_uInt16 nViewPos;
+    sal_Int32 nViewPos;
 
     for ( nViewPos = 0; nViewPos < aColumnControls->getCount(); ++nViewPos )
     {
@@ -2383,7 +2383,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rIn
     }
 
     Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-    xGrid->setCurrentColumnPosition(nViewPos);
+    xGrid->setCurrentColumnPosition(nViewPos); //TODO: sal_Int32 -> sal_Int16!
 }
 
 IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation&, rInfo, void)

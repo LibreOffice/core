@@ -1124,7 +1124,7 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
         if (SQL_ISRULE(pCondition->getChild(0), column_ref))
         {
             nPos = 0;
-            sal_uInt32 i=1;
+            size_t i=1;
 
             aItem.Handle = getPredicateType(pCondition->getChild(i));
 
@@ -1202,14 +1202,13 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
         OSQLParseNode *pRhs = pCondition->getChild(2);
 
         // Field names
-        sal_uInt16 i;
-        for (i=0;i< pLhs->count();i++)
+        for (size_t i=0;i< pLhs->count();i++)
              pLhs->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
         // Criterion
         aItem.Handle = getPredicateType(pCondition->getChild(1));
         aValue       = pCondition->getChild(1)->getTokenValue();
-        for(i=0;i< pRhs->count();i++)
+        for(size_t i=0;i< pRhs->count();i++)
             pRhs->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
         aItem.Name = aName;
