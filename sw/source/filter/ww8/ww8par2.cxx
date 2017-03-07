@@ -618,8 +618,8 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
         SVX_NUM_ARABIC, SVX_NUM_ARABIC };
 
-    static const SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
-        SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
+    static const SvxAdjust eAdjA[4] = { SvxAdjust::Left,
+        SvxAdjust::Right, SvxAdjust::Left, SvxAdjust::Left };
     if (rAV.nfc < 8) {
         rNum.SetNumberingType( eNumA[ rAV.nfc ] );
     } else {

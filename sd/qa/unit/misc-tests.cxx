@@ -73,6 +73,12 @@ private:
     sd::DrawDocShellRef Load(const OUString& rURL, sal_Int32 nFormat);
 };
 
+std::ostream& operator<<(std::ostream& s, SvxAdjust n)
+{
+    s << (int)n;
+    return s;
+}
+
 sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
@@ -204,7 +210,7 @@ void SdMiscTest::testTdf99396TextEdit()
         SfxItemSet aEditAttr(xDocSh->GetDoc()->GetPool());
         pView->GetAttributes(aEditAttr);
         SfxItemSet aNewAttr(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
-        aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_RIGHT, EE_PARA_JUST));
+        aNewAttr.Put(SvxAdjustItem(SvxAdjust::Right, EE_PARA_JUST));
         aRequest.Done(aNewAttr);
         const SfxItemSet* pArgs = aRequest.GetArgs();
         pView->SetAttributes(*pArgs);
@@ -228,7 +234,7 @@ void SdMiscTest::testTdf99396TextEdit()
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
         auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
-        CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, pAdjust->GetAdjust());
+        CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, pAdjust->GetAdjust());
     }
 
     // Now undo.
@@ -246,7 +252,7 @@ void SdMiscTest::testTdf99396TextEdit()
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
         auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
-        CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_CENTER, pAdjust->GetAdjust());
+        CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, pAdjust->GetAdjust());
     }
 
 

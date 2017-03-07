@@ -340,7 +340,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST ));
+    pISet->Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST ));
 
     // Text body, indented
     aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_INDENT);
@@ -387,7 +387,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
+    pISet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
 
     // Title2
 
@@ -416,7 +416,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Paragraph margin above/below: 1 mm
 
-    pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
+    pISet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST ));
 
     // Headline
 
@@ -1210,7 +1210,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetBulletRelSize(45);
     aNumberFormat.SetBulletColor(Color(COL_AUTO));
     aNumberFormat.SetStart(1);
-    aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
+    aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 
     SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
 
@@ -1270,10 +1270,10 @@ void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
         SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
         pItemPool->SetPoolDefaultItem( aModeItem );
 
-        SvxAdjustItem aAdjust( SVX_ADJUST_LEFT, EE_PARA_JUST );
+        SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );
 
         if( eMode == css::text::WritingMode_RL_TB )
-            aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
+            aAdjust.SetAdjust( SvxAdjust::Right );
 
         pItemPool->SetPoolDefaultItem( aAdjust );
 

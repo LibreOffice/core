@@ -1264,9 +1264,9 @@ long GetListFirstLineIndent(const SwNumFormat &rFormat)
 
     SvxAdjust eAdj = rFormat.GetNumAdjust();
     long nReverseListIndented;
-    if (eAdj == SVX_ADJUST_RIGHT)
+    if (eAdj == SvxAdjust::Right)
         nReverseListIndented = -rFormat.GetCharTextDistance();
-    else if (eAdj == SVX_ADJUST_CENTER)
+    else if (eAdj == SvxAdjust::Center)
         nReverseListIndented = rFormat.GetFirstLineOffset()/2;
     else
         nReverseListIndented = rFormat.GetFirstLineOffset();

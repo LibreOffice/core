@@ -1922,8 +1922,8 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
 
                     const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>(pCNd->
                                         GetAttr( RES_PARATR_ADJUST ));
-                    if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
-                        aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
+                    if( SvxAdjust::Left != rAdj.GetAdjust() )
+                        aSet.Put( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
 
                     GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurrentCursor, aSet );
                 }
@@ -1947,14 +1947,14 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             case FILL_MARGIN:
                 if( text::HoriOrientation::NONE != aFPos.eOrient )
                 {
-                    SvxAdjustItem aAdj( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
+                    SvxAdjustItem aAdj( SvxAdjust::Left, RES_PARATR_ADJUST );
                     switch( aFPos.eOrient )
                     {
                     case text::HoriOrientation::CENTER:
-                        aAdj.SetAdjust( SVX_ADJUST_CENTER );
+                        aAdj.SetAdjust( SvxAdjust::Center );
                         break;
                     case text::HoriOrientation::RIGHT:
-                        aAdj.SetAdjust( SVX_ADJUST_RIGHT );
+                        aAdj.SetAdjust( SvxAdjust::Right );
                         break;
                     default:
                         break;

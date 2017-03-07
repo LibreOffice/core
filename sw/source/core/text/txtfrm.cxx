@@ -2208,13 +2208,13 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
                 }
 
                 if ( ( IsRightToLeft() &&
-                       rNumFormat.GetNumAdjust() == SVX_ADJUST_LEFT ) ||
+                       rNumFormat.GetNumAdjust() == SvxAdjust::Left ) ||
                      ( !IsRightToLeft() &&
-                       rNumFormat.GetNumAdjust() == SVX_ADJUST_RIGHT ) )
+                       rNumFormat.GetNumAdjust() == SvxAdjust::Right ) )
                 {
                     mnAdditionalFirstLineOffset = -nNumberPortionWidth;
                 }
-                else if ( rNumFormat.GetNumAdjust() == SVX_ADJUST_CENTER )
+                else if ( rNumFormat.GetNumAdjust() == SvxAdjust::Center )
                 {
                     mnAdditionalFirstLineOffset = -(nNumberPortionWidth/2);
                 }

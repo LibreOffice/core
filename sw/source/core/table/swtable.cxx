@@ -1970,10 +1970,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         {
             pItem = &pTNd->SwContentNode::GetAttr( RES_PARATR_ADJUST );
             SvxAdjust eAdjust = static_cast<const SvxAdjustItem*>(pItem)->GetAdjust();
-            if( SVX_ADJUST_LEFT == eAdjust || SVX_ADJUST_BLOCK == eAdjust )
+            if( SvxAdjust::Left == eAdjust || SvxAdjust::Block == eAdjust )
             {
                 SvxAdjustItem aAdjust( *static_cast<const SvxAdjustItem*>(pItem) );
-                aAdjust.SetAdjust( SVX_ADJUST_RIGHT );
+                aAdjust.SetAdjust( SvxAdjust::Right );
                 pTNd->SetAttr( aAdjust );
             }
         }
@@ -2097,9 +2097,9 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         // assign adjustment
         if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
             RES_PARATR_ADJUST, false, &pItem ) &&
-                SVX_ADJUST_RIGHT == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
+                SvxAdjust::Right == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
         {
-            pTNd->SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
+            pTNd->SetAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
         }
 
         // assign color or save "user color"

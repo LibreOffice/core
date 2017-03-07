@@ -738,10 +738,10 @@ static sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 
     switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
     {
-        case SVX_ADJUST_LEFT:   nHorAlign = EXC_OBJ_HOR_LEFT;      break;
-        case SVX_ADJUST_CENTER: nHorAlign = EXC_OBJ_HOR_CENTER;    break;
-        case SVX_ADJUST_RIGHT:  nHorAlign = EXC_OBJ_HOR_RIGHT;     break;
-        case SVX_ADJUST_BLOCK:  nHorAlign = EXC_OBJ_HOR_JUSTIFY;   break;
+        case SvxAdjust::Left:   nHorAlign = EXC_OBJ_HOR_LEFT;      break;
+        case SvxAdjust::Center: nHorAlign = EXC_OBJ_HOR_CENTER;    break;
+        case SvxAdjust::Right:  nHorAlign = EXC_OBJ_HOR_RIGHT;     break;
+        case SvxAdjust::Block:  nHorAlign = EXC_OBJ_HOR_JUSTIFY;   break;
         default:;
     }
     return nHorAlign;

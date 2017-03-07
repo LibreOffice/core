@@ -160,7 +160,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
+        pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, RES_PARATR_ADJUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );

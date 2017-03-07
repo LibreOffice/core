@@ -4339,7 +4339,7 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nL
         return;
     }
 
-    SvxAdjust eAdjust(SVX_ADJUST_LEFT);
+    SvxAdjust eAdjust(SvxAdjust::Left);
     bool bDistributed = false;
     switch (*pData)
     {
@@ -4347,22 +4347,22 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nL
         case 0:
             break;
         case 1:
-            eAdjust = SVX_ADJUST_CENTER;
+            eAdjust = SvxAdjust::Center;
             break;
         case 2:
-            eAdjust = SVX_ADJUST_RIGHT;
+            eAdjust = SvxAdjust::Right;
             break;
         case 3:
-            eAdjust = SVX_ADJUST_BLOCK;
+            eAdjust = SvxAdjust::Block;
             break;
         case 4:
-            eAdjust = SVX_ADJUST_BLOCK;
+            eAdjust = SvxAdjust::Block;
             bDistributed = true;
             break;
     }
     SvxAdjustItem aAdjust(eAdjust, RES_PARATR_ADJUST);
     if (bDistributed)
-        aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
+        aAdjust.SetLastBlock(SvxAdjust::Block);
 
     NewAttr(aAdjust);
 }
@@ -4398,7 +4398,7 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16, const sal_uInt8* pData, short
         Read_Justify(0x2403 /*dummy*/, pData, nLen);
     else
     {
-        SvxAdjust eAdjust(SVX_ADJUST_RIGHT);
+        SvxAdjust eAdjust(SvxAdjust::Right);
         bool bDistributed = false;
         switch (*pData)
         {
@@ -4406,22 +4406,22 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16, const sal_uInt8* pData, short
             case 0:
                 break;
             case 1:
-                eAdjust = SVX_ADJUST_CENTER;
+                eAdjust = SvxAdjust::Center;
                 break;
             case 2:
-                eAdjust = SVX_ADJUST_LEFT;
+                eAdjust = SvxAdjust::Left;
                 break;
             case 3:
-                eAdjust = SVX_ADJUST_BLOCK;
+                eAdjust = SvxAdjust::Block;
                 break;
             case 4:
-                eAdjust = SVX_ADJUST_BLOCK;
+                eAdjust = SvxAdjust::Block;
                 bDistributed = true;
                 break;
         }
         SvxAdjustItem aAdjust(eAdjust, RES_PARATR_ADJUST);
         if (bDistributed)
-            aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
+            aAdjust.SetLastBlock(SvxAdjust::Block);
 
         NewAttr(aAdjust);
     }

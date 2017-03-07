@@ -779,7 +779,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
         if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD && rDoc.HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
-            pEditEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            pEditEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
         }
 
         Size aTextSize;

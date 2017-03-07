@@ -359,6 +359,12 @@ private:
     SwDoc* createDoc(const char* pName = nullptr);
 };
 
+std::ostream& operator<<(std::ostream& s, SvxAdjust n)
+{
+    s << (int)n;
+    return s;
+}
+
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
 {
     if (!pName)
@@ -1567,12 +1573,12 @@ void SwUiWriterTest::testTdf79236()
     SvxAdjustItem AdjustItem = rAttrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();
     //By default the adjust is LEFT
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, initialAdjust);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, initialAdjust);
     //Changing the adjust to RIGHT
-    AdjustItem.SetAdjust(SVX_ADJUST_RIGHT);
+    AdjustItem.SetAdjust(SvxAdjust::Right);
     //Checking whether the change is made or not
     SvxAdjust modifiedAdjust = AdjustItem.GetAdjust();
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, modifiedAdjust);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, modifiedAdjust);
     //Modifying the itemset, putting *one* item
     pNewSet->Put(AdjustItem);
     //The count should increment by 1
@@ -1586,7 +1592,7 @@ void SwUiWriterTest::testTdf79236()
     const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
     SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust2);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName("Text Body");
@@ -1594,7 +1600,7 @@ void SwUiWriterTest::testTdf79236()
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
     //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust3);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
     SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName("Text Body");
@@ -1602,7 +1608,7 @@ void SwUiWriterTest::testTdf79236()
     const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
     SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
     //The adjust should be RIGHT as per the modifications made
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust4);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
     SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName("Text Body");
@@ -1610,7 +1616,7 @@ void SwUiWriterTest::testTdf79236()
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
     //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust5);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust5);
 }
 
 void SwUiWriterTest::testTextSearch()

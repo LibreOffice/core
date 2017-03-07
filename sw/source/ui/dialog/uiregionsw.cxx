@@ -2191,8 +2191,8 @@ VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( vcl::Window* pParent, const S
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     //set sensible values at the preview
-    m_pPreviewWin->SetAdjust(SVX_ADJUST_BLOCK);
-    m_pPreviewWin->SetLastLine(SVX_ADJUST_BLOCK);
+    m_pPreviewWin->SetAdjust(SvxAdjust::Block);
+    m_pPreviewWin->SetLastLine(SvxAdjust::Block);
     const SwRect& rPageRect = rSh.GetAnyCurRect( CurRectType::Page );
     Size aPageSize(rPageRect.Width(), rPageRect.Height());
     m_pPreviewWin->SetSize(aPageSize);

@@ -665,7 +665,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         else if( !nNewDefListLvl && !rHWrt.m_bCfgOutStyles && bPara &&
                  rULSpace.GetLower()==0 &&
                  ((bUseParSpace && bIsNextTextNode) || rHWrt.m_nDefListLvl==1) &&
-                 (!pAdjItem || SVX_ADJUST_LEFT==
+                 (!pAdjItem || SvxAdjust::Left==
                     static_cast<const SvxAdjustItem *>(pAdjItem)->GetAdjust()) )
         {
             // Export paragraphs without a lower spacing as DT
@@ -3110,10 +3110,10 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char* pStr = nullptr;
     switch( rAdjust.GetAdjust() )
     {
-    case SVX_ADJUST_CENTER: pStr = OOO_STRING_SVTOOLS_HTML_AL_center; break;
-    case SVX_ADJUST_LEFT: pStr = OOO_STRING_SVTOOLS_HTML_AL_left; break;
-    case SVX_ADJUST_RIGHT: pStr = OOO_STRING_SVTOOLS_HTML_AL_right; break;
-    case SVX_ADJUST_BLOCK: pStr = OOO_STRING_SVTOOLS_HTML_AL_justify; break;
+    case SvxAdjust::Center: pStr = OOO_STRING_SVTOOLS_HTML_AL_center; break;
+    case SvxAdjust::Left: pStr = OOO_STRING_SVTOOLS_HTML_AL_left; break;
+    case SvxAdjust::Right: pStr = OOO_STRING_SVTOOLS_HTML_AL_right; break;
+    case SvxAdjust::Block: pStr = OOO_STRING_SVTOOLS_HTML_AL_justify; break;
     default:
         ;
     }

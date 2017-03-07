@@ -979,7 +979,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
              pNext->GetString().equalsIgnoreAsciiCase( "first-letter" ) &&
-             SVX_ADJUST_LEFT == rPropInfo.m_eFloat) )
+             SvxAdjust::Left == rPropInfo.m_eFloat) )
         {
             // Entweder kein zusammengesetzter Selektor oder
             // ein X:first-line { float: left; ... }
@@ -1063,7 +1063,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // ggf. angelegte Zeichen-Vorlage spaeter ueber den Namen
                 // gesucht und gesetzt.
                 if( aDrop.GetLines() > 1 &&
-                    (SVX_ADJUST_LEFT == rPropInfo.m_eFloat  ||
+                    (SvxAdjust::Left == rPropInfo.m_eFloat  ||
                      Css1ScriptFlags::AllMask == nScript) )
                 {
                     pColl->SetFormatAttr( aDrop );
@@ -1446,7 +1446,7 @@ bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                SVX_CSS1_LTYPE_PERCENTAGE != rPropInfo.m_eTopType &&
               (SVX_CSS1_LTYPE_TWIP       == rPropInfo.m_eLeftType ||
                SVX_CSS1_LTYPE_TWIP       != rPropInfo.m_eTopType) ) ||
-             ( SVX_ADJUST_END            != rPropInfo.m_eFloat  ) ) &&
+             ( SvxAdjust::End            != rPropInfo.m_eFloat  ) ) &&
            ( bAutoWidth ||
              SVX_CSS1_LTYPE_TWIP         == rPropInfo.m_eWidthType ||
              SVX_CSS1_LTYPE_PERCENTAGE   == rPropInfo.m_eWidthType );
@@ -2021,7 +2021,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
-        if( SVX_ADJUST_RIGHT==rPropInfo.m_eFloat )
+        if( SvxAdjust::Right==rPropInfo.m_eFloat )
         {
             eHoriOri = text::HoriOrientation::RIGHT;
             eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;

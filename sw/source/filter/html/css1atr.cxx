@@ -2725,10 +2725,10 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char* pStr = nullptr;
     switch( static_cast<const SvxAdjustItem&>(rHt).GetAdjust() )
     {
-    case SVX_ADJUST_LEFT:   pStr = sCSS1_PV_left;       break;
-    case SVX_ADJUST_RIGHT:  pStr = sCSS1_PV_right;      break;
-    case SVX_ADJUST_BLOCK:  pStr = sCSS1_PV_justify;    break;
-    case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center;     break;
+    case SvxAdjust::Left:   pStr = sCSS1_PV_left;       break;
+    case SvxAdjust::Right:  pStr = sCSS1_PV_right;      break;
+    case SvxAdjust::Block:  pStr = sCSS1_PV_justify;    break;
+    case SvxAdjust::Center: pStr = sCSS1_PV_center;     break;
     default:
         ;
     }

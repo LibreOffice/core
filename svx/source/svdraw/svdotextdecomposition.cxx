@@ -1026,9 +1026,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
                 SvxAdjust eAdjust = static_cast<const SvxAdjustItem&>(GetObjectItemSet().Get(EE_PARA_JUST)).GetAdjust();
                 switch(eAdjust)
                 {
-                    case SVX_ADJUST_LEFT:   eHAdj = SDRTEXTHORZADJUST_LEFT; break;
-                    case SVX_ADJUST_RIGHT:  eHAdj = SDRTEXTHORZADJUST_RIGHT; break;
-                    case SVX_ADJUST_CENTER: eHAdj = SDRTEXTHORZADJUST_CENTER; break;
+                    case SvxAdjust::Left:   eHAdj = SDRTEXTHORZADJUST_LEFT; break;
+                    case SvxAdjust::Right:  eHAdj = SDRTEXTHORZADJUST_RIGHT; break;
+                    case SvxAdjust::Center: eHAdj = SDRTEXTHORZADJUST_CENTER; break;
                     default: break;
                 }
             }

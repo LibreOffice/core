@@ -1801,7 +1801,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
         const EditTextObject* pObject = pHFItem->GetLeftArea();
         if (pObject)
         {
-            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
@@ -1815,7 +1815,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
         pObject = pHFItem->GetCenterArea();
         if (pObject)
         {
-            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+            pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
             pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
@@ -1829,7 +1829,7 @@ void ScPrintFunc::PrintHF( long nPageNo, bool bHeader, long nStartY,
         pObject = pHFItem->GetRightArea();
         if (pObject)
         {
-            pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
@@ -1854,7 +1854,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
         pDev->SetMapMode(aTwipMode);
 
     MakeEditEngine();
-    pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+    pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
     pEditEngine->SetDefaults( *pEditDefaults );
 
     vcl::Font aMarkFont;

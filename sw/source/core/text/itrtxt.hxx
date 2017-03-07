@@ -149,7 +149,7 @@ private:
           sal_uInt16  nDropHeight;
           sal_uInt16  nDropDescent;
           sal_uInt16  nDropLines;
-          sal_uInt16  nAdjust;
+          SvxAdjust  nAdjust;
           // #i91133#
           SwTwips mnTabLeft;
 
@@ -167,7 +167,7 @@ protected:
         , nDropHeight(0)
         , nDropDescent(0)
         , nDropLines(0)
-        , nAdjust(0)
+        , nAdjust(SvxAdjust::Left)
         , mnTabLeft(0)
     {
     }
@@ -188,7 +188,7 @@ public:
     bool IsOneBlock() const { return m_bOneBlock; }
     bool IsLastBlock() const { return m_bLastBlock; }
     bool IsLastCenter() const { return m_bLastCenter; }
-    sal_uInt16 GetAdjust() const { return nAdjust; }
+    SvxAdjust GetAdjust() const { return nAdjust; }
     sal_uInt16 GetLineWidth() const
            { return sal_uInt16( Right() - GetLeftMargin() + 1 ); }
     SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }

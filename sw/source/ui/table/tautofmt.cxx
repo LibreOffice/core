@@ -755,10 +755,10 @@ MAKENUMSTR:
             const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
             switch (rAdj.GetAdjust())
             {
-                case SVX_ADJUST_LEFT:
+                case SvxAdjust::Left:
                     aPos.X() += FRAME_OFFSET;
                     break;
-                case SVX_ADJUST_RIGHT:
+                case SvxAdjust::Right:
                     aPos.X() += nRightX;
                     break;
                 default:

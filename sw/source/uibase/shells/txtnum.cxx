@@ -167,7 +167,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     // numbering/bullet should be rtl in rtl paragraph:
                     if ( bRightToLeft )
                     {
-                        aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                        aFormat.SetNumAdjust( SvxAdjust::Right );
                     }
                     aSvxRule.SetLevel( n, aFormat, false );
                 }

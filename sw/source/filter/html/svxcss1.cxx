@@ -150,10 +150,10 @@ static CSS1PropertyEnum const aBGVertPosTable[] =
 
 static CSS1PropertyEnum const aTextAlignTable[] =
 {
-    { "left",        SVX_ADJUST_LEFT     },
-    { "center",      SVX_ADJUST_CENTER   },
-    { "right",       SVX_ADJUST_RIGHT    },
-    { "justify",     SVX_ADJUST_BLOCK    },
+    { "left",        (sal_uInt16)SvxAdjust::Left     },
+    { "center",      (sal_uInt16)SvxAdjust::Center   },
+    { "right",       (sal_uInt16)SvxAdjust::Right    },
+    { "justify",     (sal_uInt16)SvxAdjust::Block    },
     { nullptr,                    0                   }
 };
 
@@ -183,9 +183,9 @@ static CSS1PropertyEnum const aBorderStyleTable[] =
 
 static CSS1PropertyEnum const aFloatTable[] =
 {
-    { "left",    SVX_ADJUST_LEFT         },
-    { "right",   SVX_ADJUST_RIGHT        },
-    { "none",    SVX_ADJUST_END          },
+    { "left",    (sal_uInt16)SvxAdjust::Left         },
+    { "right",   (sal_uInt16)SvxAdjust::Right        },
+    { "none",    (sal_uInt16)SvxAdjust::End          },
     { nullptr,                0                       }
 };
 
@@ -427,7 +427,7 @@ void SvxCSS1PropertyInfo::Clear()
     m_bLeftMargin = m_bRightMargin = m_bTextIndent = false;
     m_bNumbering = m_bBullet = false;
     m_nLeftMargin = m_nRightMargin = 0;
-    m_eFloat = SVX_ADJUST_END;
+    m_eFloat = SvxAdjust::End;
 
     m_ePosition = SVX_CSS1_POS_NONE;
     m_nTopBorderDistance = m_nBottomBorderDistance =
@@ -491,7 +491,7 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
 
     m_nColumnCount = rProp.m_nColumnCount;
 
-    if( rProp.m_eFloat != SVX_ADJUST_END )
+    if( rProp.m_eFloat != SvxAdjust::End )
         m_eFloat = rProp.m_eFloat;
 
     if( rProp.m_ePosition != SVX_CSS1_POS_NONE )

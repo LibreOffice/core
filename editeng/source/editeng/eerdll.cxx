@@ -123,7 +123,7 @@ std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()
         rDefItems[11] = new SvxLRSpaceItem( EE_PARA_LRSPACE );
         rDefItems[12] = new SvxULSpaceItem( EE_PARA_ULSPACE );
         rDefItems[13] = new SvxLineSpacingItem( 0, EE_PARA_SBL );
-        rDefItems[14] = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
+        rDefItems[14] = new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST );
         rDefItems[15] = new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
         rDefItems[16] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD );
         rDefItems[17] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, EE_PARA_VER_JUST );

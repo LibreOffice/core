@@ -322,25 +322,25 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_QL:
                 if( aPardMap.nAdjust )
                 {
-                    pSet->Put( SvxAdjustItem( SVX_ADJUST_LEFT, aPardMap.nAdjust ));
+                    pSet->Put( SvxAdjustItem( SvxAdjust::Left, aPardMap.nAdjust ));
                 }
                 break;
             case RTF_QR:
                 if( aPardMap.nAdjust )
                 {
-                    pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, aPardMap.nAdjust ));
+                    pSet->Put( SvxAdjustItem( SvxAdjust::Right, aPardMap.nAdjust ));
                 }
                 break;
             case RTF_QJ:
                 if( aPardMap.nAdjust )
                 {
-                    pSet->Put( SvxAdjustItem( SVX_ADJUST_BLOCK, aPardMap.nAdjust ));
+                    pSet->Put( SvxAdjustItem( SvxAdjust::Block, aPardMap.nAdjust ));
                 }
                 break;
             case RTF_QC:
                 if( aPardMap.nAdjust )
                 {
-                    pSet->Put( SvxAdjustItem( SVX_ADJUST_CENTER, aPardMap.nAdjust ));
+                    pSet->Put( SvxAdjustItem( SvxAdjust::Center, aPardMap.nAdjust ));
                 }
                 break;
 

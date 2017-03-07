@@ -81,7 +81,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         if ( rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess()->get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) )
         {
-            if ( rAdjust == SVX_ADJUST_RIGHT || rAdjust == SVX_ADJUST_CENTER )
+            if ( rAdjust == SvxAdjust::Right || rAdjust == SvxAdjust::Center )
             {
                 sal_Int32 nSpaceCnt = 0;
                 for ( int i = (rInf.GetText().getLength() - 1); i >= rInf.GetIdx(); --i )
@@ -241,7 +241,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nBreakPos = nCutPos;
         sal_Int32 nX = nBreakPos;
 
-        if ( rAdjust == SVX_ADJUST_LEFT )
+        if ( rAdjust == SvxAdjust::Left )
         {
             // we step back until a non blank character has been found
             // or there is only one more character left
@@ -451,7 +451,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetText()[ nBreakPos - 1 ] )
                 nBreakPos = rInf.GetIdx() - 1;
 
-            if( rAdjust != SVX_ADJUST_LEFT )
+            if( rAdjust != SvxAdjust::Left )
             {
                 // Delete any blanks at the end of a line, but be careful:
                 // If a field has been expanded, we do not want to delete any

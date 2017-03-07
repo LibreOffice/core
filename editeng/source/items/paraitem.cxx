@@ -22,6 +22,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/extract.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
 #include <tools/mapunit.hxx>
@@ -54,7 +55,7 @@ using namespace ::com::sun::star;
 
 
 SfxPoolItem* SvxLineSpacingItem::CreateDefault() { return new  SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0);}
-SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SVX_ADJUST_LEFT, 0);}
+SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SvxAdjust::Left, 0);}
 SfxPoolItem* SvxWidowsItem::CreateDefault() { return new  SvxWidowsItem(0, 0);}
 SfxPoolItem* SvxOrphansItem::CreateDefault() { return new  SvxOrphansItem(0, 0);}
 SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(false, 0);}
@@ -375,22 +376,16 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_LAST_LINE_ADJUST :
         {
             sal_Int32 eVal = - 1;
-            try
-            {
-                eVal = ::comphelper::getEnumAsINT32(rVal);
-            }
-            catch(...) {}
+            ::cppu::enum2int(eVal,rVal);
             if(eVal >= 0 && eVal <= 4)
             {
+                SvxAdjust eAdjust = (SvxAdjust)eVal;
                 if(MID_LAST_LINE_ADJUST == nMemberId &&
-                    eVal != SVX_ADJUST_LEFT &&
-                    eVal != SVX_ADJUST_BLOCK &&
-                    eVal != SVX_ADJUST_CENTER)
+                    eAdjust != SvxAdjust::Left &&
+                    eAdjust != SvxAdjust::Block &&
+                    eAdjust != SvxAdjust::Center)
                         return false;
-                if(eVal < (sal_uInt16)SVX_ADJUST_END)
-                    nMemberId == MID_PARA_ADJUST ?
-                        SetAdjust((SvxAdjust)eVal) :
-                            SetLastBlock((SvxAdjust)eVal);
+                nMemberId == MID_PARA_ADJUST ? SetAdjust(eAdjust) : SetLastBlock(eAdjust);
             }
         }
         break;
@@ -430,13 +425,13 @@ bool SvxAdjustItem::GetPresentation
 
 sal_uInt16 SvxAdjustItem::GetValueCount() const
 {
-    return SVX_ADJUST_END;  // SVX_ADJUST_BLOCKLINE + 1
+    return (sal_uInt16)SvxAdjust::End;  // SvxAdjust::BlockLine + 1
 }
 
 
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= (sal_uInt16)SVX_ADJUST_BLOCKLINE, "enum overflow!" );
+    DBG_ASSERT( nPos <= (sal_uInt16)SvxAdjust::BlockLine, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_ADJUST_BEGIN + nPos);
 }
 

@@ -1464,7 +1464,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                 (with no content) while exporting to XLS, which can cause a
                 corrupted exported document. */
 
-            SvxAdjust eHorAlign = SVX_ADJUST_LEFT;
+            SvxAdjust eHorAlign = SvxAdjust::Left;
             SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
 
             // orientation (this is only a fake, drawing does not support real text orientation)
@@ -1478,10 +1478,10 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     eWriteMode = csst::WritingMode_LR_TB;
                     switch( maTextData.maData.GetHorAlign() )
                     {
-                        case EXC_OBJ_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
-                        case EXC_OBJ_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                        case EXC_OBJ_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
-                        case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                        case EXC_OBJ_HOR_LEFT:      eHorAlign = SvxAdjust::Left;    break;
+                        case EXC_OBJ_HOR_CENTER:    eHorAlign = SvxAdjust::Center;  break;
+                        case EXC_OBJ_HOR_RIGHT:     eHorAlign = SvxAdjust::Right;   break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SvxAdjust::Block;   break;
                     }
                     switch( maTextData.maData.GetVerAlign() )
                     {
@@ -1520,7 +1520,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         case mso_anchorMiddleCentered :
                         case mso_anchorBottomCentered :
                         {
-                            eHorAlign = SVX_ADJUST_CENTER;
+                            eHorAlign = SvxAdjust::Center;
                         }
                         break;
 
@@ -1528,10 +1528,10 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         {
                             switch( maTextData.maData.GetVerAlign() )
                             {
-                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_RIGHT;   break;
-                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_LEFT;    break;
-                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                                case EXC_OBJ_VER_TOP:       eHorAlign = SvxAdjust::Right;   break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SvxAdjust::Center;  break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SvxAdjust::Left;    break;
+                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SvxAdjust::Block;   break;
                             }
                         }
                     }
@@ -1560,7 +1560,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         case mso_anchorMiddleCentered :
                         case mso_anchorBottomCentered :
                         {
-                            eHorAlign = SVX_ADJUST_CENTER;
+                            eHorAlign = SvxAdjust::Center;
                         }
                         break;
 
@@ -1568,10 +1568,10 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                         {
                             switch( maTextData.maData.GetVerAlign() )
                             {
-                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_LEFT;   break;
-                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_RIGHT;   break;
-                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                                case EXC_OBJ_VER_TOP:       eHorAlign = SvxAdjust::Left;   break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SvxAdjust::Center;  break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SvxAdjust::Right;   break;
+                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SvxAdjust::Block;   break;
                             }
                         }
                     }

@@ -235,7 +235,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
+        pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, 0 ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );

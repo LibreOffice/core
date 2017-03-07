@@ -6235,7 +6235,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     {
         if ( nVal <= 3 )
         {   // paragraph adjustment
-            static SvxAdjust const aAdj[ 4 ] = { SVX_ADJUST_LEFT, SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
+            static SvxAdjust const aAdj[ 4 ] = { SvxAdjust::Left, SvxAdjust::Center, SvxAdjust::Right, SvxAdjust::Block };
             rSet.Put( SvxAdjustItem( aAdj[ nVal ], EE_PARA_JUST ) );
         }
     }

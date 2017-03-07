@@ -38,6 +38,7 @@
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/numdef.hxx>
+#include <o3tl/enumarray.hxx>
 #include <memory>
 
 using ::com::sun::star::util::XCloneable;
@@ -52,16 +53,16 @@ using namespace ::com::sun::star::container;
 
 const SvxAdjust aUnoToSvxAdjust[] =
 {
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_RIGHT,
-    SVX_ADJUST_CENTER,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_BLOCK
+    SvxAdjust::Left,
+    SvxAdjust::Right,
+    SvxAdjust::Center,
+    SvxAdjust::Left,
+    SvxAdjust::Left,
+    SvxAdjust::Left,
+    SvxAdjust::Block
 };
 
-const unsigned short aSvxToUnoAdjust[] =
+const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
 {
     text::HoriOrientation::LEFT,
     text::HoriOrientation::RIGHT,
@@ -79,7 +80,7 @@ SvxAdjust ConvertUnoAdjust( unsigned short nAdjust )
 
 unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
 {
-    DBG_ASSERT( eAdjust <= 6, "Enum hat sich geaendert! [CL]" );
+    DBG_ASSERT( (int)eAdjust <= 6, "Enum hat sich geaendert! [CL]" );
     return aSvxToUnoAdjust[eAdjust];
 }
 

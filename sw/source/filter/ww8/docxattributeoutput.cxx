@@ -4046,7 +4046,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxLineSpacingItem& >(rHt).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
             break;
         case RES_PARATR_ADJUST:
-            bMustWrite = static_cast< const SvxAdjustItem& >(rHt).GetAdjust() != SVX_ADJUST_LEFT;
+            bMustWrite = static_cast< const SvxAdjustItem& >(rHt).GetAdjust() != SvxAdjust::Left;
             break;
         case RES_PARATR_SPLIT:
             bMustWrite = !static_cast< const SvxFormatSplitItem& >(rHt).GetValue();
@@ -6164,8 +6164,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     bool ecmaDialect = ( m_rExport.GetFilter().getVersion() == oox::core::ECMA_DIALECT );
     switch ( eAdjust )
     {
-        case SVX_ADJUST_CENTER: pJc = "center"; break;
-        case SVX_ADJUST_RIGHT:  pJc = !ecmaDialect ? "end" : "right";  break;
+        case SvxAdjust::Center: pJc = "center"; break;
+        case SvxAdjust::Right:  pJc = !ecmaDialect ? "end" : "right";  break;
         default:                pJc = !ecmaDialect ? "start" : "left";   break;
     }
     m_pSerializer->singleElementNS( XML_w, XML_lvlJc,
@@ -7085,7 +7085,7 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 
     switch ( rAdjust.GetAdjust() )
     {
-        case SVX_ADJUST_LEFT:
+        case SvxAdjust::Left:
             if ( bEcma )
             {
                 if ( bRtl )
@@ -7098,7 +7098,7 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             else
                 pAdjustString = "start";
             break;
-        case SVX_ADJUST_RIGHT:
+        case SvxAdjust::Right:
             if ( bEcma )
             {
                 if ( bRtl )
@@ -7111,11 +7111,11 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             else
                 pAdjustString = "end";
             break;
-        case SVX_ADJUST_BLOCKLINE:
-        case SVX_ADJUST_BLOCK:
+        case SvxAdjust::BlockLine:
+        case SvxAdjust::Block:
             pAdjustString = "both";
             break;
-        case SVX_ADJUST_CENTER:
+        case SvxAdjust::Center:
             pAdjustString = "center";
             break;
         default:

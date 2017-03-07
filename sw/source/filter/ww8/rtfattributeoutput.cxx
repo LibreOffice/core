@@ -1483,10 +1483,10 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel,
 
     switch (eAdjust)
     {
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         nVal = 1;
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         nVal = 2;
         break;
     default:
@@ -2706,17 +2706,17 @@ void RtfAttributeOutput::ParaAdjust(const SvxAdjustItem& rAdjust)
 {
     switch (rAdjust.GetAdjust())
     {
-    case SVX_ADJUST_LEFT:
+    case SvxAdjust::Left:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QL);
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QR);
         break;
-    case SVX_ADJUST_BLOCKLINE:
-    case SVX_ADJUST_BLOCK:
+    case SvxAdjust::BlockLine:
+    case SvxAdjust::Block:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QJ);
         break;
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QC);
         break;
     default:

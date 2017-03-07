@@ -889,23 +889,23 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     switch( aLVL.nAlign )
     {
         case 0:
-            eAdj = SVX_ADJUST_LEFT;
+            eAdj = SvxAdjust::Left;
             break;
         case 1:
-            eAdj = SVX_ADJUST_CENTER;
+            eAdj = SvxAdjust::Center;
             break;
         case 2:
-            eAdj = SVX_ADJUST_RIGHT;
+            eAdj = SvxAdjust::Right;
             break;
         case 3:
             // Writer here cannot do block justification
-            eAdj = SVX_ADJUST_LEFT;
+            eAdj = SvxAdjust::Left;
             break;
          default:
             // undefined value
             OSL_ENSURE( false, "Value of aLVL.nAlign is not supported" );
             // take default
-            eAdj = SVX_ADJUST_LEFT;
+            eAdj = SvxAdjust::Left;
             break;
     }
 
@@ -941,7 +941,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     if ( rNumFormat.GetPositionAndSpaceMode() ==
                               SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        if (eAdj == SVX_ADJUST_RIGHT)
+        if (eAdj == SvxAdjust::Right)
         {
             rNumFormat.SetAbsLSpace(aLVL.nDxaLeft);
             rNumFormat.SetFirstLineOffset(-aLVL.nDxaLeft);
@@ -1561,10 +1561,10 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     SwNumFormat aFormat(rLFOInfo.pNumRule->Get(nLevel));
 
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
-        if ( aFormat.GetNumAdjust() == SVX_ADJUST_RIGHT)
-            aFormat.SetNumAdjust(SVX_ADJUST_LEFT);
-        else if ( aFormat.GetNumAdjust() == SVX_ADJUST_LEFT)
-            aFormat.SetNumAdjust(SVX_ADJUST_RIGHT);
+        if ( aFormat.GetNumAdjust() == SvxAdjust::Right)
+            aFormat.SetNumAdjust(SvxAdjust::Left);
+        else if ( aFormat.GetNumAdjust() == SvxAdjust::Left)
+            aFormat.SetNumAdjust(SvxAdjust::Right);
         rLFOInfo.pNumRule->Set(nLevel, aFormat);
     }
     nLastLFOPosition = nLFOPosition;
