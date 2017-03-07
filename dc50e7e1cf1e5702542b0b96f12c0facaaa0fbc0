@@ -88,6 +88,24 @@
       "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_fefe1604",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-07T13:20:04Z",
+      "side": 1,
+      "message": "the GlobalEditData is owned by the theEditDLL, which is a rtl::Static\u003c\u003e that only goes away when the EditEngine dll goes down.\n\nAnd yeah, something like that should not have a VclPtr anyway. But for now I just want to get rid of the non-null VclPtrs\u003c\u003e on DeInitVCL() so that no new ones get introduced (by asserting on that should it ever happen). The change for now just pushes the problem from VCL back to editengine, where it can be solved properly later.\n\ntl;dr: If editengine does foolish stuff like keeping non-null VclPtr\u003c\u003e in statics, it should also have to deal with the ugliness that comes with that (or clean up its mess).",
+      "parentUuid": "9a57fde8_e32cc3ad",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
