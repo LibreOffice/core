@@ -1068,7 +1068,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nPos = 0;
+    sfx2::SvBaseLinks::size_type nPos = 0;
     while ( nPos < rLinks.size() )
     {
         const ::sfx2::SvBaseLink* pBase = rLinks[nPos].get();

@@ -602,7 +602,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
     if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
     {
         bool    bFound  = false;
-        sal_uInt16 i;
+        sal_Int32 i;
 
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {

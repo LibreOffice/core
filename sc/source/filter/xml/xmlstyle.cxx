@@ -1012,7 +1012,7 @@ bool XmlScPropHdl_CellProtection::importXML(
         }
         else
         {
-            sal_Int16 i(0);
+            sal_Int32 i(0);
             while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
                 ++i;
             OUString sFirst(rStrImpValue.copy(0, i));

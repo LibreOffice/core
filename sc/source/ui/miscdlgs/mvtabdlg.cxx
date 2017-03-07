@@ -163,7 +163,7 @@ void ScMoveTableDlg::CheckNewTabName()
     bool bMoveInCurrentDoc = pBtnMove->IsChecked() && pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
     bool bFound = false;
     const sal_Int32 nLast = pLbTable->GetEntryCount();
-    for ( sal_uInt16 i=0; i<nLast && !bFound; ++i )
+    for ( sal_Int32 i=0; i<nLast && !bFound; ++i )
     {
         if ( aNewName.equals(pLbTable->GetEntry(i)) )
         {

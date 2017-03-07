@@ -3123,7 +3123,7 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
 {
     sal_Int32 nRangeType(0);
     OUStringBuffer sBuffer;
-    sal_Int16 i = 0;
+    sal_Int32 i = 0;
     while (i <= sRangeType.getLength())
     {
         if ((i == sRangeType.getLength()) || (sRangeType[i] == ' '))

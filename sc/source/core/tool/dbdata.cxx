@@ -343,14 +343,13 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    sal_uInt16 i;
     long nDifX = ((long) nCol1) - ((long) nStartCol);
     long nDifY = ((long) nRow1) - ((long) nStartRow);
 
     long nSortDif = bByRow ? nDifX : nDifY;
     long nSortEnd = bByRow ? static_cast<long>(nCol2) : static_cast<long>(nRow2);
 
-    for (i=0; i<mpSortParam->GetSortKeyCount(); i++)
+    for (sal_uInt16 i=0; i<mpSortParam->GetSortKeyCount(); i++)
     {
         mpSortParam->maKeyState[i].nField += nSortDif;
         if (mpSortParam->maKeyState[i].nField > nSortEnd)
@@ -361,7 +360,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     }
 
     SCSIZE nCount = mpQueryParam->GetEntryCount();
-    for (i = 0; i < nCount; ++i)
+    for (SCSIZE i = 0; i < nCount; ++i)
     {
         ScQueryEntry& rEntry = mpQueryParam->GetEntry(i);
         rEntry.nField += nDifX;
@@ -371,7 +370,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             rEntry.bDoQuery = false;
         }
     }
-    for (i=0; i<MAXSUBTOTAL; i++)
+    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
         mpSubTotal->nField[i] = sal::static_int_cast<SCCOL>( mpSubTotal->nField[i] + nDifX );
         if (mpSubTotal->nField[i] > nCol2)

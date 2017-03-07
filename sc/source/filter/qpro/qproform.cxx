@@ -174,7 +174,7 @@ do { \
 
 ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 {
-    sal_uInt8 nFmla[ nBufSize ], i, nArg;
+    sal_uInt8 nFmla[ nBufSize ], nArg;
     sal_uInt8 nArgArray[ nBufSize ] = {0};
     sal_Int8 nCol, nPage;
     sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
@@ -197,7 +197,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
 
     if( nRef < nBufSize )
     {
-        for( i=0; i < nRef; i++)
+        for( sal_uInt16 i=0; i < nRef; i++)
         {
             maIn.ReadUChar( nFmla[i] );
 
@@ -239,7 +239,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
     else
         return ConvErr::Count;
 
-    i = 0;
+    sal_uInt16 i = 0;
     nIntCount = 0;
     nFloatCount = 0;
     nDLLCount = 0;

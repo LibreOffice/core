@@ -295,15 +295,13 @@ static SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
 void ScUndoDeleteTab::Undo()
 {
     BeginUndo();
-    unsigned int i=0;
     ScDocument& rDoc = pDocShell->GetDocument();
 
     bool bLink = false;
     OUString aName;
 
-    for(i=0; i<theTabs.size(); ++i)
+    for(SCTAB nTab: theTabs)
     {
-        SCTAB nTab = theTabs[i];
         pRefUndoDoc->GetName( nTab, aName );
 
         bDrawIsInUndo = true;
@@ -355,9 +353,9 @@ void ScUndoDeleteTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-    for(i=0; i<theTabs.size(); ++i)
+    for(SCTAB nTab: theTabs)
     {
-        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
+        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab) );
     }
     SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
