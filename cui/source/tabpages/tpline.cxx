@@ -1262,7 +1262,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = static_cast<const XLineStartItem&>(rAttrs->Get(XATTR_LINESTART)).GetLineStartValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
+        for(long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
             const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
@@ -1294,7 +1294,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = static_cast<const XLineEndItem&>(rAttrs->Get(XATTR_LINEEND)).GetLineEndValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
+        for(long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
             const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();

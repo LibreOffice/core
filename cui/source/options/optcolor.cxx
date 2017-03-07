@@ -653,8 +653,8 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 void ColorConfigWindow_Impl::SetLinks (
     Link<Button*,void> const& aCheckLink, Link<SvxColorListBox&,void> const& aColorLink, Link<Control&,void> const& aGetFocusLink
 ) {
-    for (unsigned i = 0; i != vEntries.size(); ++i)
-        vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
+    for (auto const & i: vEntries)
+        i->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
 }
 
 // Update()
@@ -672,7 +672,7 @@ void ColorConfigWindow_Impl::Update (
     }
 
     // updating extended entries
-    unsigned i = ColorConfigEntryCount;
+    decltype(vEntries)::size_type i = ColorConfigEntryCount;
     unsigned const nExtCount = pExtConfig->GetComponentCount();
     for (unsigned j = 0; j != nExtCount; ++j)
     {
@@ -784,8 +784,8 @@ void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
         StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
         bool const bHighContrast = rStyleSettings.GetHighContrastMode();
         Wallpaper const aBackWall(Color(bHighContrast ? COL_TRANSPARENT : COL_LIGHTGRAY));
-        for (unsigned i = 0; i != vChapters.size(); ++i)
-            vChapters[i]->SetBackground(aBackWall);
+        for (auto const & i: vChapters)
+            i->SetBackground(aBackWall);
         SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
     }
 }

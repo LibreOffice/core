@@ -1453,7 +1453,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     sal_uInt16 nGroup = 0;
 
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 i, nPageId;
+    sal_uInt16 nPageId;
 
     // %PRODUCTNAME options
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
@@ -1463,7 +1463,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         nGroup = AddGroup( rGeneralArray.GetString(0), nullptr, nullptr, SID_GENERAL_OPTIONS );
         sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
 
-        for ( i = 1; i < nEnd; ++i )
+        for ( sal_uInt16 i = 1; i < nEnd; ++i )
         {
             OUString sNewTitle = rGeneralArray.GetString(i);
             nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
@@ -1503,7 +1503,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
         setGroupName( "LoadSave", rFilterArray.GetString(0) );
         nGroup = AddGroup( rFilterArray.GetString(0), nullptr, nullptr, SID_FILTER_DLG );
-        for ( i = 1; i < rFilterArray.Count(); ++i )
+        for ( sal_uInt32 i = 1; i < rFilterArray.Count(); ++i )
         {
             nPageId = (sal_uInt16)rFilterArray.GetValue(i);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1518,7 +1518,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ResStringArray& rLangArray = aDlgResource.GetLangArray();
         setGroupName( "LanguageSettings", rLangArray.GetString(0) );
         nGroup = AddGroup( rLangArray.GetString(0), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
-        for ( i = 1; i < rLangArray.Count(); ++i )
+        for ( sal_uInt32 i = 1; i < rLangArray.Count(); ++i )
         {
             nPageId = (sal_uInt16)rLangArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1552,7 +1552,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 else
                     setGroupName( "Writer", rTextArray.GetString(0) );
                 nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
-                for ( i = 1; i < rTextArray.Count(); ++i )
+                for ( sal_uInt32 i = 1; i < rTextArray.Count(); ++i )
                 {
                     nPageId = (sal_uInt16)rTextArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1572,7 +1572,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             {
                 ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
                 nGroup = AddGroup(rHTMLArray.GetString(0), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
-                for( i = 1; i < rHTMLArray.Count(); ++i )
+                for( sal_uInt32 i = 1; i < rHTMLArray.Count(); ++i )
                 {
                     nPageId = (sal_uInt16)rHTMLArray.GetValue(i);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1597,7 +1597,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 setGroupName( "Calc", rCalcArray.GetString(0) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rCalcArray.Count() );
-                for ( i = 1; i < nCount; ++i )
+                for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rCalcArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1621,7 +1621,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 setGroupName( "Impress", rImpressArray.GetString(0) );
                 nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rImpressArray.Count() );
-                for ( i = 1; i < nCount; ++i )
+                for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rImpressArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1644,7 +1644,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 setGroupName( "Draw", rDrawArray.GetString(0) );
                 nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rDrawArray.Count() );
-                for ( i = 1; i < nCount; ++i )
+                for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rDrawArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1667,7 +1667,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 SfxModule* pSmMod = SfxApplication::GetModule(SfxToolsModule::Math);
                 setGroupName( "Math", rStarMathArray.GetString(0) );
                 nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
-                for ( i = 1; i < rStarMathArray.Count(); ++i )
+                for ( sal_uInt32 i = 1; i < rStarMathArray.Count(); ++i )
                 {
                     nPageId = (sal_uInt16)rStarMathArray.GetValue(i);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1687,7 +1687,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
         setGroupName( "Base", rDSArray.GetString(0) );
         nGroup = AddGroup( rDSArray.GetString(0), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
-        for ( i = 1; i < rDSArray.Count(); ++i )
+        for ( sal_uInt32 i = 1; i < rDSArray.Count(); ++i )
         {
             nPageId = (sal_uInt16)rDSArray.GetValue(i);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1701,7 +1701,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ResStringArray& rChartArray = aDlgResource.GetChartArray();
         setGroupName( "Charts", rChartArray.GetString(0) );
         nGroup = AddGroup( rChartArray.GetString(0), nullptr, nullptr, SID_SCH_EDITOPTIONS );
-        for ( i = 1; i < rChartArray.Count(); ++i )
+        for ( sal_uInt32 i = 1; i < rChartArray.Count(); ++i )
         {
             nPageId = (sal_uInt16)rChartArray.GetValue(i);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1716,7 +1716,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         setGroupName( "Internet", rInetArray.GetString(0) );
         nGroup = AddGroup(rInetArray.GetString(0), nullptr, nullptr, SID_INET_DLG );
 
-        for ( i = 1; i < rInetArray.Count(); ++i )
+        for ( sal_uInt32 i = 1; i < rInetArray.Count(); ++i )
         {
             nPageId = (sal_uInt16)rInetArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1851,7 +1851,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                             else
                             {
                                 // search position of the node
-                                sal_uInt32 y = 0;
+                                std::vector<OrderedEntry *>::size_type y = 0;
                                 for ( ; y < pModule->m_aNodeList.size(); ++y )
                                 {
                                     sal_Int32 nNodeIdx = pModule->m_aNodeList[y]->m_nIndex;
@@ -1953,7 +1953,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                         if ( rGroup.size() > 0 &&
                                              rGroup[0]->m_sGroupId == sLeafGrpId )
                                         {
-                                            sal_uInt32 l = 0;
+                                            std::vector<OptionsLeaf *>::size_type l = 0;
                                             for ( ; l < rGroup.size(); ++l )
                                             {
                                                 if ( rGroup[l]->m_nGroupIndex >= nLeafGrpIdx )
@@ -1991,11 +1991,10 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
     if ( pModule && aNodeList.size() > 0 )
     {
-        sal_uInt32 i = 0, j = 0;
-        for ( ; i < pModule->m_aNodeList.size(); ++i )
+        for ( auto const & i: pModule->m_aNodeList )
         {
-            OUString sNodeId = pModule->m_aNodeList[i]->m_sId;
-            for ( j = 0; j < aNodeList.size(); ++j )
+            OUString sNodeId = i->m_sId;
+            for ( VectorOfNodes::size_type j = 0; j < aNodeList.size(); ++j )
             {
                 OptionsNode* pNode = aNodeList[j];
                 if ( pNode->m_sId == sNodeId )
@@ -2007,8 +2006,8 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             }
         }
 
-        for ( i = 0; i < aNodeList.size(); ++i )
-            aOutNodeList.push_back( aNodeList[i] );
+        for ( auto const & i: aNodeList )
+            aOutNodeList.push_back( i );
     }
     return aOutNodeList;
 }
@@ -2063,19 +2062,18 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
     {
         if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
         {
-            sal_uInt32 j = 0;
-            for ( ; j < pNode->m_aGroupedLeaves.size(); ++j )
+            for ( auto const & j: pNode->m_aGroupedLeaves )
             {
-                for ( size_t k = 0; k < pNode->m_aGroupedLeaves[j].size(); ++k )
+                for ( size_t k = 0; k < j.size(); ++k )
                 {
-                    OptionsLeaf* pLeaf = pNode->m_aGroupedLeaves[j][k];
+                    OptionsLeaf* pLeaf = j[k];
                     lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
                 }
             }
 
-            for ( j = 0; j < pNode->m_aLeaves.size(); ++j )
+            for ( auto const & j: pNode->m_aLeaves )
             {
-                OptionsLeaf* pLeaf = pNode->m_aLeaves[j];
+                OptionsLeaf* pLeaf = j;
                 lcl_insertLeaf( this, pNode, pLeaf, *pTreeLB );
             }
         }

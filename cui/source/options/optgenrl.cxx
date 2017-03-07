@@ -277,8 +277,8 @@ VclPtr<SfxTabPage> SvxGeneralTabPage::Create( vcl::Window* pParent, const SfxIte
 bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 {
     // remove leading and trailing whitespaces
-    for (unsigned i = 0; i != vFields.size(); ++i)
-        vFields[i]->pEdit->SetText(comphelper::string::strip(vFields[i]->pEdit->GetText(), ' '));
+    for (auto const & i: vFields)
+        i->pEdit->SetText(comphelper::string::strip(i->pEdit->GetText(), ' '));
 
     bool bModified = false;
     bModified |= GetData_Impl();
@@ -302,9 +302,9 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
         EditPosition nField = static_cast<EditPosition>(static_cast<const SfxUInt16Item&>(rSet->Get(nWhich)).GetValue());
         if (nField != EditPosition::UNKNOWN)
         {
-            for (unsigned i = 0; i != vFields.size(); ++i)
-                if (nField == vFieldInfo[vFields[i]->iField].nGrabFocusId)
-                    vFields[i]->pEdit->GrabFocus();
+            for (auto const & i: vFields)
+                if (nField == vFieldInfo[i->iField].nGrabFocusId)
+                    i->pEdit->GrabFocus();
         }
         else
             vFields.front()->pEdit->GrabFocus();
@@ -340,14 +340,14 @@ bool SvxGeneralTabPage::GetData_Impl()
 {
     // updating
     SvtUserOptions aUserOpt;
-    for (unsigned i = 0; i != vFields.size(); ++i)
+    for (auto const & i: vFields)
     {
         aUserOpt.SetToken(
-            vFieldInfo[vFields[i]->iField].nUserOptionsId,
-            vFields[i]->pEdit->GetText()
+            vFieldInfo[i->iField].nUserOptionsId,
+            i->pEdit->GetText()
         );
         // Blank out first name and father's name which aren't kept separately any longer
-        if (vFieldInfo[vFields[i]->iField].nUserOptionsId == UserOptToken::LastName)
+        if (vFieldInfo[i->iField].nUserOptionsId == UserOptToken::LastName)
         {
             aUserOpt.SetToken(UserOptToken::FirstName, "");
             aUserOpt.SetToken(UserOptToken::FathersName, "");
@@ -355,8 +355,8 @@ bool SvxGeneralTabPage::GetData_Impl()
     }
 
     // modified?
-    for (unsigned i = 0; i != vFields.size(); ++i)
-        if (vFields[i]->pEdit->IsValueChangedFromSaved())
+    for (auto const & i: vFields)
+        if (i->pEdit->IsValueChangedFromSaved())
             return true;
     return false;
 }
@@ -366,9 +366,9 @@ void SvxGeneralTabPage::SetData_Impl()
 {
     // updating and disabling edit boxes
     SvtUserOptions aUserOpt;
-    for (unsigned iRow = 0; iRow != vRows.size(); ++iRow)
+    for (auto const & i: vRows)
     {
-        Row& rRow = *vRows[iRow];
+        Row& rRow = *i;
         // the label is enabled if any of its edit fields are enabled
         bool bEnableLabel = false;
         for (unsigned iField = rRow.nFirstField; iField != rRow.nLastField; ++iField)
@@ -419,8 +419,8 @@ void SvxGeneralTabPage::SetData_Impl()
     }
 
     // saving
-    for (unsigned i = 0; i != vFields.size(); ++i)
-        vFields[i]->pEdit->SaveValue();
+    for (auto const & i: vFields)
+        i->pEdit->SaveValue();
 }
 
 
