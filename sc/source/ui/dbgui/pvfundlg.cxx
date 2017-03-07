@@ -157,14 +157,7 @@ ScDPFunctionListBox::ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     FillFunctionNames();
 }
 
-VCL_BUILDER_DECL_FACTORY(ScDPFunctionListBox)
-{
-    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<ScDPFunctionListBox>::Create(pParent, nWinStyle);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(ScDPFunctionListBox, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE)
 
 void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
 {

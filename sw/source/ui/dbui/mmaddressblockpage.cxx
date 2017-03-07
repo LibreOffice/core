@@ -1324,14 +1324,8 @@ Size AddressMultiLineEdit::GetOptimalSize() const
     return LogicToPixel(Size(160, 60), MapUnit::MapAppFont);
 }
 
-VCL_BUILDER_DECL_FACTORY(AddressMultiLineEdit)
-{
-    WinBits nWinStyle = WB_LEFT|WB_TABSTOP;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<AddressMultiLineEdit>::Create(pParent, nWinStyle);
-}
+
+VCL_BUILDER_FACTORY_CONSTRUCTOR(AddressMultiLineEdit, WB_LEFT|WB_TABSTOP)
 
 void AddressMultiLineEdit::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
 {
