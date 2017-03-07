@@ -2789,6 +2789,14 @@ DECLARE_RTFIMPORT_TEST(testTdf105852, "tdf105852.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(2), "TableColumnSeparators").getLength());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf104287, "tdf104287.rtf")
+{
+    uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    // This failed, the bitmap had no valid anchor.
+    CPPUNIT_ASSERT(xShape->getAnchor().is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
