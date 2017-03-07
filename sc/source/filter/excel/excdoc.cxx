@@ -55,6 +55,7 @@
 #include "excdoc.hxx"
 #include "namebuff.hxx"
 #include "xeextlst.hxx"
+#include "biffhelper.hxx"
 
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
@@ -105,7 +106,7 @@ static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, ExcTable& self )
     aRecList.AppendNewRecord( new XclRefmode( rDoc ) );
     aRecList.AppendNewRecord( new XclIteration( rDoc ) );
     aRecList.AppendNewRecord( new XclDelta( rDoc ) );
-    aRecList.AppendNewRecord( new XclExpBoolRecord(0x005F, true) ); // SAVERECALC
+    aRecList.AppendNewRecord( new XclExpBoolRecord(oox::xls::BIFF_ID_SAVERECALC, true) );
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );  // XML_calcPr
 }
 
@@ -489,9 +490,9 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     if (pTabProtect && pTabProtect->isProtected())
     {
         Add( new XclExpProtection(true) );
-        Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
+        Add( new XclExpBoolRecord(oox::xls::BIFF_ID_SCENPROTECT, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
         if (pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS))
-            Add( new XclExpBoolRecord(0x0063, true ));
+            Add( new XclExpBoolRecord(oox::xls::BIFF_ID_OBJECTPROTECT, true ));
         Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
     }
 
