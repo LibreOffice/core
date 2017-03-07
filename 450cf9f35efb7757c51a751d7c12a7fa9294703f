@@ -16,6 +16,24 @@
       "revId": "450cf9f35efb7757c51a751d7c12a7fa9294703f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3e7c1e72",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-03-07T16:12:50Z",
+      "side": 1,
+      "message": "Excel Online returns #NUM! for both NrOfPeriods\u003c\u003d0 and PresentValue\u003d\u003d0.",
+      "parentUuid": "9a57fde8_c3bedffe",
+      "revId": "450cf9f35efb7757c51a751d7c12a7fa9294703f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
