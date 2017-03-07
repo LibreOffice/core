@@ -1803,9 +1803,9 @@ void ScViewData::CreateSelectedTabData()
 
 void ScViewData::EnsureTabDataSize(size_t nSize)
 {
-    if (nSize >= maTabData.size())
+    if (nSize > maTabData.size())
     {
-        size_t n = nSize - maTabData.size() + 1;
+        size_t n = nSize - maTabData.size();
         maTabData.insert(maTabData.end(), n, nullptr);
     }
 }
@@ -3135,7 +3135,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     sal_Int16 nTemp16(0);
     bool bPageMode(false);
 
-    EnsureTabDataSize(GetDocument()->GetTableCount()-1);
+    EnsureTabDataSize(GetDocument()->GetTableCount());
 
     for (sal_Int32 i = 0; i < nCount; i++)
     {
