@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/debug.hxx>
+#include <osl/interlck.h>
 
 #include <cassert>
 
@@ -28,21 +29,19 @@ class VclReferenceBase;
 
 class VCL_DLLPUBLIC VclReferenceBase
 {
-    mutable int mnRefCnt;
+    mutable oslInterlockedCount mnRefCnt;
 
     template<typename T> friend class VclPtr;
 
 public:
     void acquire() const
     {
-        assert(mnRefCnt>0);
-        mnRefCnt++;
+        osl_atomic_increment(&mnRefCnt);
     }
 
     void release() const
     {
-        assert(mnRefCnt>0);
-        if (!--mnRefCnt)
+        if (osl_atomic_decrement(&mnRefCnt) == 0)
             delete this;
     }
 private:
