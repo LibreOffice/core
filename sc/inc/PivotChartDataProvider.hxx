@@ -16,6 +16,7 @@
 #include "types.hxx"
 
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -40,6 +41,7 @@ namespace sc
 class PivotChartItem;
 
 typedef cppu::WeakImplHelper<css::chart2::data::XDataProvider,
+                             css::chart2::data::XPivotChartDataProvider,
                              css::beans::XPropertySet,
                              css::lang::XServiceInfo,
                              css::util::XModifyBroadcaster>
@@ -75,6 +77,12 @@ public:
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation ) override;
 
     virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
+
+    // XPivotChartDataProvider
+    virtual css::uno::Sequence<OUString> SAL_CALL getColumnFields() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getRowFields() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getPageFields() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getDataFields() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -151,6 +159,11 @@ private:
     std::vector<std::vector<PivotChartItem>> m_aCategoriesRowOrientation;
     std::vector<std::vector<PivotChartItem>> m_aLabels;
     std::vector<std::vector<PivotChartItem>> m_aDataRowVector;
+
+    std::vector<OUString> m_aColumnFields;
+    std::vector<OUString> m_aRowFields;
+    std::vector<OUString> m_aPageFields;
+    std::vector<OUString> m_aDataFields;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };
