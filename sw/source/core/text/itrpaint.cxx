@@ -67,7 +67,7 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            rPor.IsHolePortion() ||
           ( rPor.IsMultiPortion() && ! static_cast<const SwMultiPortion&>(rPor).IsBidi() ) ||
            rFnt.GetEscapement() < 0 || rFnt.IsWordLineMode() ||
-           SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
+           SvxCaseMap::SmallCaps == rFnt.GetCaseMap();
 }
 
 void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo *pNewInf )
@@ -590,7 +590,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             aIter.Seek( nTmpIdx );
 
             if ( aIter.GetFnt()->GetEscapement() < 0 || m_pFont->IsWordLineMode() ||
-                 SVX_CASEMAP_KAPITAELCHEN == m_pFont->GetCaseMap() )
+                 SvxCaseMap::SmallCaps == m_pFont->GetCaseMap() )
                 break;
 
             if ( !aIter.GetFnt()->GetEscapement() )

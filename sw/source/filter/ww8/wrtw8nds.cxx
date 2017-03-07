@@ -1650,7 +1650,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
     m_rExport.m_aCurrentCharPropStarts.push( nAktPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
 
-    if (SVX_CASEMAP_TITEL == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
+    if (SvxCaseMap::Capitalize == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
     {
         sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
         if (g_pBreakIt->GetBreakIter().is())
@@ -1672,7 +1672,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
         }
 
         SvxFont aFontHelper;
-        aFontHelper.SetCaseMap(SVX_CASEMAP_TITEL);
+        aFontHelper.SetCaseMap(SvxCaseMap::Capitalize);
         aFontHelper.SetLanguage(nLanguage);
         aSnippet = aFontHelper.CalcCaseMap(aSnippet);
 

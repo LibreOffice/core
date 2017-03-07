@@ -3142,12 +3142,12 @@ void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
             NewAttr( SvxShadowedItem( bOn, RES_CHRATR_SHADOWED ) );
             break;
         case 5:
-            NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_KAPITAELCHEN
-                                              : SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP ) );
+            NewAttr( SvxCaseMapItem( bOn ? SvxCaseMap::SmallCaps
+                                              : SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP ) );
             break;
         case 6:
-            NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_VERSALIEN
-                                             : SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP ) );
+            NewAttr( SvxCaseMapItem( bOn ? SvxCaseMap::Uppercase
+                                             : SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP ) );
             break;
         case 7:
             NewAttr(SvxCharHiddenItem(bOn, RES_CHRATR_HIDDEN));

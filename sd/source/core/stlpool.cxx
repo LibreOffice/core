@@ -242,7 +242,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 rSet.Put( SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE ) );
                 rSet.Put( SvxOverlineItem(LINESTYLE_NONE, EE_CHAR_OVERLINE ) );
                 rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-                rSet.Put( SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP ) );
+                rSet.Put( SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ) );
                 rSet.Put( SvxShadowedItem(false, EE_CHAR_SHADOW ) );
                 rSet.Put( SvxContourItem(false, EE_CHAR_OUTLINE ) );
                 rSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
@@ -357,7 +357,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rTitleSet.Put(SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE ));
         rTitleSet.Put(SvxOverlineItem(LINESTYLE_NONE, EE_CHAR_OVERLINE ));
         rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-        rTitleSet.Put(SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP ));
+        rTitleSet.Put(SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ));
         rTitleSet.Put(SvxShadowedItem(false, EE_CHAR_SHADOW ));
         rTitleSet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
         rTitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
@@ -403,7 +403,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rSubtitleSet.Put(SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE ));
         rSubtitleSet.Put(SvxOverlineItem(LINESTYLE_NONE, EE_CHAR_OVERLINE ));
         rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-        rSubtitleSet.Put(SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP ));
+        rSubtitleSet.Put(SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ));
         rSubtitleSet.Put(SvxShadowedItem(false, EE_CHAR_SHADOW ));
         rSubtitleSet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
         rSubtitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
@@ -452,7 +452,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rNotesSet.Put( SvxUnderlineItem(LINESTYLE_NONE, EE_CHAR_UNDERLINE ) );
         rNotesSet.Put( SvxOverlineItem(LINESTYLE_NONE, EE_CHAR_OVERLINE ) );
         rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-        rNotesSet.Put( SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP ) );
+        rNotesSet.Put( SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ) );
         rNotesSet.Put( SvxShadowedItem(false, EE_CHAR_SHADOW ) );
         rNotesSet.Put( SvxContourItem(false, EE_CHAR_OUTLINE ) );
         rNotesSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );

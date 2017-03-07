@@ -133,21 +133,21 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 
         case FN_SET_SMALL_CAPS:
         {
-            SvxCaseMap eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
+            SvxCaseMap eCaseMap = SvxCaseMap::SmallCaps;
             switch (eState)
             {
             case STATE_TOGGLE:
             {
                 SvxCaseMap eTmpCaseMap = static_cast<const SvxCaseMapItem&>(aSet.Get(RES_CHRATR_CASEMAP)).GetCaseMap();
-                if (eTmpCaseMap == SVX_CASEMAP_KAPITAELCHEN)
-                    eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+                if (eTmpCaseMap == SvxCaseMap::SmallCaps)
+                    eCaseMap = SvxCaseMap::NotMapped;
             }
             break;
             case STATE_ON:
                 // Nothing to do, already set.
                 break;
             case STATE_OFF:
-                eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+                eCaseMap = SvxCaseMap::NotMapped;
                 break;
             }
             SvxCaseMapItem aCaseMap(eCaseMap, RES_CHRATR_CASEMAP);
@@ -581,7 +581,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             nLineSpace = static_cast<const SvxLineSpacingItem* >(pItem)->GetPropLineSpace();
     }
 
-    SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    SvxCaseMap eCaseMap = SvxCaseMap::NotMapped;
     eState = aCoreSet.GetItemState(RES_CHRATR_CASEMAP, false, &pItem);
     if (eState == SfxItemState::DEFAULT)
         pItem = &rPool.GetDefaultItem(RES_CHRATR_CASEMAP);
@@ -599,7 +599,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     bFlag = 0 > nEsc;
                 break;
             case FN_SET_SMALL_CAPS:
-                bFlag = eCaseMap == SVX_CASEMAP_KAPITAELCHEN;
+                bFlag = eCaseMap == SvxCaseMap::SmallCaps;
                 break;
             case SID_ATTR_PARA_ADJUST_LEFT:
                 if (!bAdjustGood)

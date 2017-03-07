@@ -2359,19 +2359,19 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 
     switch( static_cast<const SvxCaseMapItem&>(rHt).GetCaseMap() )
     {
-    case SVX_CASEMAP_NOT_MAPPED:
+    case SvxCaseMap::NotMapped:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_normal );
         break;
-    case SVX_CASEMAP_KAPITAELCHEN:
+    case SvxCaseMap::SmallCaps:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_small_caps );
         break;
-    case SVX_CASEMAP_VERSALIEN:
+    case SvxCaseMap::Uppercase:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_uppercase );
         break;
-    case SVX_CASEMAP_GEMEINE:
+    case SvxCaseMap::Lowercase:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_lowercase );
         break;
-    case SVX_CASEMAP_TITEL:
+    case SvxCaseMap::Capitalize:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_capitalize );
         break;
     default:

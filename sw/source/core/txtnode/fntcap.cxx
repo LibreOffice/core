@@ -66,7 +66,7 @@ sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
     OSL_ENSURE( nEnd <= rOrigString.getLength(), "sw_CalcCaseMap: Wrong parameters" );
 
     // special case for title case:
-    const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
+    const bool bTitle = SvxCaseMap::Capitalize == rFnt.GetCaseMap() &&
                         g_pBreakIt->GetBreakIter().is();
     for ( sal_Int32 i = nOfst; i < nEnd; ++i )
     {

@@ -32,7 +32,7 @@ SvxFont::SvxFont()
 {
     nKern = nEsc = 0;
     nPropr = 100;
-    eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
 }
 
@@ -41,7 +41,7 @@ SvxFont::SvxFont( const vcl::Font &rFont )
 {
     nKern = nEsc = 0;
     nPropr = 100;
-    eCaseMap = SVX_CASEMAP_NOT_MAPPED;
+    eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
 }
 
@@ -106,19 +106,19 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 
     switch( eCaseMap )
     {
-        case SVX_CASEMAP_KAPITAELCHEN:
-        case SVX_CASEMAP_VERSALIEN:
+        case SvxCaseMap::SmallCaps:
+        case SvxCaseMap::Uppercase:
         {
             aTxt = aCharClass.uppercase( aTxt );
             break;
         }
 
-        case SVX_CASEMAP_GEMEINE:
+        case SvxCaseMap::Lowercase:
         {
             aTxt = aCharClass.lowercase( aTxt );
             break;
         }
-        case SVX_CASEMAP_TITEL:
+        case SvxCaseMap::Capitalize:
         {
             // Every beginning of a word is capitalized,  the rest of the word
             // is taken over as is.

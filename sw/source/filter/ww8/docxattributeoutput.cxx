@@ -3920,7 +3920,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
     switch (rHt.Which())
     {
         case RES_CHRATR_CASEMAP:
-            bMustWrite = static_cast< const SvxCaseMapItem& >(rHt).GetCaseMap() != SVX_CASEMAP_NOT_MAPPED;
+            bMustWrite = static_cast< const SvxCaseMapItem& >(rHt).GetCaseMap() != SvxCaseMap::NotMapped;
             break;
         case RES_CHRATR_COLOR:
             bMustWrite = static_cast< const SvxColorItem& >(rHt).GetValue().GetColor() != COL_AUTO;
@@ -6223,10 +6223,10 @@ void DocxAttributeOutput::CharCaseMap( const SvxCaseMapItem& rCaseMap )
 {
     switch ( rCaseMap.GetValue() )
     {
-        case SVX_CASEMAP_KAPITAELCHEN:
+        case SvxCaseMap::SmallCaps:
             m_pSerializer->singleElementNS( XML_w, XML_smallCaps, FSEND );
             break;
-        case SVX_CASEMAP_VERSALIEN:
+        case SvxCaseMap::Uppercase:
             m_pSerializer->singleElementNS( XML_w, XML_caps, FSEND );
             break;
         default: // Something that ooxml does not support
