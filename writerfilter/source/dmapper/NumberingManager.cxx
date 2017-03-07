@@ -540,14 +540,14 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aProps = GetPropertyValues( );
 
             sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
-            sal_Int16 nLevel = 0;
+            sal_Int32 nLevel = 0;
             while ( nLevel < nAbstLevels )
             {
                 ListLevel::Pointer pAbsLevel = m_pAbstractDef->GetLevel( nLevel );
                 ListLevel::Pointer pLevel = GetLevel( nLevel );
 
                 // Get the merged level properties
-                auto aLvlProps = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aProps[sal_Int32(nLevel)]);
+                auto aLvlProps = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aProps[nLevel]);
 
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
