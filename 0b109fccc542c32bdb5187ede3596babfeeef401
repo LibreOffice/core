@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_23688bf5",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-07T12:25:22Z",
+      "side": 1,
+      "message": "FWIW, thats why I was reluctant to have a SolarMutex explicit here (or in dispose()). Trying to get it when its already is gone is unhealthy.",
+      "revId": "0b109fccc542c32bdb5187ede3596babfeeef401",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
