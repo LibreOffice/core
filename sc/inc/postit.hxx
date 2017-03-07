@@ -45,13 +45,15 @@ public:
     ScCaptionPtr();
     explicit ScCaptionPtr( SdrCaptionObj* p );
     ScCaptionPtr( const ScCaptionPtr& r );
+    ScCaptionPtr( ScCaptionPtr&& r );
     ~ScCaptionPtr();
 
     ScCaptionPtr& operator=( const ScCaptionPtr& r );
-    inline explicit operator bool() const    { return mpCaption != nullptr; }
-    inline SdrCaptionObj* get() const        { return mpCaption; }
-    inline SdrCaptionObj* operator->() const { return mpCaption; }
-    inline SdrCaptionObj& operator*() const  { return *mpCaption; }
+    ScCaptionPtr& operator=( ScCaptionPtr&& r );
+    explicit operator bool() const    { return mpCaption != nullptr; }
+    SdrCaptionObj* get() const        { return mpCaption; }
+    SdrCaptionObj* operator->() const { return mpCaption; }
+    SdrCaptionObj& operator*() const  { return *mpCaption; }
 
     // Does not default to nullptr to make it visually obvious where such is used.
     void reset( SdrCaptionObj* p );
@@ -95,6 +97,12 @@ private:
         it.
      */
     void removeFromList();
+
+    /** Replace this instance with pNew in a list, if any.
+
+        Used by move-ctor and move assignment operator.
+     */
+    void replaceInList( ScCaptionPtr* pNew );
 
     /** Dissolve list when the caption object is released or gone. */
     void dissolve();
