@@ -52,6 +52,24 @@
       "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6317f351",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-07T13:11:49Z",
+      "side": 1,
+      "message": "addendum: I dont want to call:\n\n RemoveOnDeInitVCL(this);\n\nin the callback, as that changes the container that is being iterated over in DeInitVCL(). So I call it here, and for that I need the SolarMutex. DeInitVCl() clears the callbacks itself when it iterated over them.\n\nThe current implementation in VCL uses std::map::erase which http://www.cplusplus.com/reference/map/map/erase/ says:\n\u003e Iterators, pointers and references referring to elements removed by the function are invalidated.\n\nso this likely wouldnt work. One use a different container in vcl ... but as-is, a callback should not remove itself.",
+      "parentUuid": "9a57fde8_a322bbb7",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
