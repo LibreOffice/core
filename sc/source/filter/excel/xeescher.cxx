@@ -1207,7 +1207,13 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
                 }
-                maAuthor = XclExpString( pScNote->GetAuthor() );
+                // stAuthor (variable): An XLUnicodeString that specifies the name of the comment
+                // author. String length MUST be greater than or equal to 1 and less than or equal
+                // to 54.
+                if( pScNote->GetAuthor().isEmpty() )
+                    maAuthor = XclExpString( " " );
+                else
+                    maAuthor = XclExpString( pScNote->GetAuthor(), EXC_STR_DEFAULT, 54 );
             }
 
             SetRecSize( 9 + maAuthor.GetSize() );
