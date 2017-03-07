@@ -462,10 +462,10 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
-    SwPaM& rPam(AddUndoRedoPaM(rContext));
 
     if( bInsert )
     {
+        SwPaM& rPam(AddUndoRedoPaM(rContext));
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
             SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
@@ -474,7 +474,10 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
                 !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
+        {
             rDoc.getIDocumentRedlineAccess().SplitRedline(rPam);
+        }
+        SetPaM(rPam, true);
     }
     else
     {
@@ -488,14 +491,15 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         delete pUnDel;
         pUnDel = nullptr;
 
-        SetPaM(rPam);
+        // note: don't call SetPaM before executing Undo of members
+        SwPaM& rPam(AddUndoRedoPaM(rContext));
 
         SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
         static_cast<SwRedlineTable&>(rDoc.getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
         pTmp->InvalidateRange();
-    }
 
-    SetPaM(rPam, true);
+        SetPaM(rPam, true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
