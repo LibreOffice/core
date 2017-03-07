@@ -1965,7 +1965,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
     const long nVisWidth = mnViewWidth - 2 * nBorder;
     const long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
                                            : (pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
-                                                  : SwViewOption::GetDefGapBetweenPages());
+                                                  : SwViewOption::defGapBetweenPages);
 
     // check how many pages fit into the first page layout row:
     SwPageFrame* pPageFrame = static_cast<SwPageFrame*>(Lower());

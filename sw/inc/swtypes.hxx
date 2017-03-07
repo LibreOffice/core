@@ -84,7 +84,7 @@ const SwTwips lMinBorder = 1134;
 
 // Margin left and above document.
 // Half of it is gap between the pages.
-//TODO: Replace with SwViewOption::GetDefDocumentBorder()
+//TODO: Replace with SwViewOption::defDocumentBorder
 #define DOCUMENTBORDER  284L
 
 // Constant strings.

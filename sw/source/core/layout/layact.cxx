@@ -1291,7 +1291,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             {
                 const SwViewShell *pSh = pLay->getRootFrame()->GetCurrShell();
                 const SwTwips nHalfDocBorder = pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
-                                                   : SwViewOption::GetDefGapBetweenPages();
+                                                   : SwViewOption::defGapBetweenPages;
                 const bool bLeftToRightViewLayout = m_pRoot->IsLeftToRightViewLayout();
                 const bool bPrev = bLeftToRightViewLayout ? pLay->GetPrev() : pLay->GetNext();
                 const bool bNext = bLeftToRightViewLayout ? pLay->GetNext() : pLay->GetPrev();
