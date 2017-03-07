@@ -646,7 +646,7 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
         std::vector< std::pair< sal_Int32, sal_Int32> > &rHandlePositionList,
         Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
 {
-    sal_uInt16 k, j;
+    sal_uInt16 k;
     sal_uInt16 nHandles = rHandles.getLength();
     for ( k = 0; k < nHandles ; k++ )
     {
@@ -657,9 +657,8 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
         EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShapeParameterPair aPolar;
         const Sequence< PropertyValue >& rPropSeq = rHandles[ k ];
-        for ( j = 0; j < rPropSeq.getLength(); j++ )
+        for ( const PropertyValue& rPropVal: rPropSeq )
         {
-            const PropertyValue& rPropVal = rPropSeq[ j ];
             if ( rPropVal.Name.equals( sPosition ) )
             {
                 if ( rPropVal.Value >>= aPosition )

@@ -64,7 +64,7 @@ uno::Sequence< sal_Int8 > CustomShapeProperties::getShapePresetTypeName() const
 
 sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )
 {
-    sal_uInt32 nIndex = 0;
+    std::vector<CustomShapeGuide>::size_type nIndex = 0;
     for( ; nIndex < rGuideList.size(); nIndex++ )
     {
         if ( rGuideList[ nIndex ].maName == rGuide.maName )
@@ -234,7 +234,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     }
     else
     {
-        sal_uInt32 i;
         PropertyMap aPropertyMap;
         aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
@@ -249,7 +248,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
-        for ( i = 0; i < maAdjustmentGuideList.size(); i++ )
+        for ( std::vector<CustomShapeGuide>::size_type i = 0; i < maAdjustmentGuideList.size(); i++ )
         {
             EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
             aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
@@ -272,22 +271,23 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             aPath.setProperty( PROP_TextFrames, aTextFrames);
         }
 
-        sal_uInt32 j, k, nParameterPairs = 0;
-        for ( i = 0; i < maPath2DList.size(); i++ )
-            nParameterPairs += maPath2DList[ i ].parameter.size();
+        sal_uInt32 nParameterPairs = 0;
+        for ( auto const & i: maPath2DList )
+            nParameterPairs += i.parameter.size();
 
         Sequence< EnhancedCustomShapeParameterPair > aParameterPairs( nParameterPairs );
-        for ( i = 0, k = 0; i < maPath2DList.size(); i++ )
-            for ( j = 0; j < maPath2DList[ i ].parameter.size(); j++ )
-                aParameterPairs[ k++ ] = maPath2DList[ i ].parameter[ j ];
+        sal_uInt32 k = 0;
+        for ( auto const & i: maPath2DList )
+            for ( auto const & j: i.parameter )
+                aParameterPairs[ k++ ] = j;
         aPath.setProperty( PROP_Coordinates, aParameterPairs);
 
         if ( maPath2DList.size() )
         {
             bool bAllZero = true;
-            for ( i=0; i < maPath2DList.size(); i++ )
+            for ( auto const & i: maPath2DList )
             {
-                if ( maPath2DList[i].w || maPath2DList[i].h ) {
+                if ( i.w || i.h ) {
                     bAllZero = false;
                     break;
                 }
@@ -295,7 +295,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
             if ( !bAllZero ) {
                 Sequence< awt::Size > aSubViewSize( maPath2DList.size() );
-                for ( i=0; i < maPath2DList.size(); i++ )
+                for ( std::vector<Path2D>::size_type i=0; i < maPath2DList.size(); i++ )
                 {
                     aSubViewSize[i].Width = static_cast< sal_Int32 >( maPath2DList[i].w );
                     aSubViewSize[i].Height = static_cast< sal_Int32 >( maPath2DList[i].h );
@@ -312,12 +312,12 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap.setProperty( PROP_Path, aPathSequence);
 
         Sequence< OUString > aEquations( maGuideList.size() );
-        for ( i = 0; i < maGuideList.size(); i++ )
+        for ( std::vector<CustomShapeGuide>::size_type i = 0; i < maGuideList.size(); i++ )
             aEquations[ i ] = maGuideList[ i ].maFormula;
         aPropertyMap.setProperty( PROP_Equations, aEquations);
 
         Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
-        for ( i = 0; i < maAdjustHandleList.size(); i++ )
+        for ( std::vector<AdjustHandle>::size_type i = 0; i < maAdjustHandleList.size(); i++ )
         {
             PropertyMap aHandle;
             // maAdjustmentHandle[ i ].gdRef1 ... maAdjustmentHandle[ i ].gdRef2 ... :(
