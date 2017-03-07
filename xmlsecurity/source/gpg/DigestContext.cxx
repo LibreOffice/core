@@ -23,8 +23,8 @@ void SAL_CALL DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& /*
 uno::Sequence< sal_Int8 > SAL_CALL DigestContext::finalizeDigestAndDispose()
     throw (DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8>* seq = new Sequence< sal_Int8 >(0);
-    return *seq;
+    Sequence<sal_Int8> seq(0);
+    return seq;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

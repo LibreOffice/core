@@ -16,15 +16,15 @@ using namespace css::lang;
 Sequence< sal_Int8 > SAL_CALL CipherContext::convertWithCipherContext( const Sequence< sal_Int8 >& /*aData*/ )
     throw ( IllegalArgumentException, DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8>* seq = new Sequence< sal_Int8 >(0);
-    return *seq;
+    Sequence<sal_Int8> seq(0);
+    return seq;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL CipherContext::finalizeCipherContextAndDispose()
     throw (DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8>* seq = new Sequence< sal_Int8 >(0);
-    return *seq;
+    Sequence<sal_Int8> seq(0);
+    return seq;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
