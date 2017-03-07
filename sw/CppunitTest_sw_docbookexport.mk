@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_docbookexport, \
 	cppuhelper \
 	i18nlangtag \
     sal \
+    sfx \
     sw \
     test \
 	tl \
