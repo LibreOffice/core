@@ -1680,6 +1680,17 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
+                // tdf#106218 try to avoid losing a paragraph break here:
+                if (pTmp->GetMark()->nContent == 0)
+                {
+                    SwNodeIndex const prev(pTmp->GetMark()->nNode, -1);
+                    if (prev.GetNode().IsTextNode())
+                    {
+                        *pTmp->GetMark() = SwPosition(
+                            *prev.GetNode().GetTextNode(),
+                            prev.GetNode().GetTextNode()->Len());
+                    }
+                }
             }
 
             rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTmp, false, USHRT_MAX );
@@ -1712,6 +1723,17 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 SwContentNode *const pContentNode( pTmp->GetContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
+                // tdf#106218 try to avoid losing a paragraph break here:
+                if (pTmp->GetMark()->nContent == 0)
+                {
+                    SwNodeIndex const prev(pTmp->GetMark()->nNode, -1);
+                    if (prev.GetNode().IsTextNode())
+                    {
+                        *pTmp->GetMark() = SwPosition(
+                            *prev.GetNode().GetTextNode(),
+                            prev.GetNode().GetTextNode()->Len());
+                    }
+                }
             }
         } while( pInsRing != ( pTmp = pTmp->GetNext()) );
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
