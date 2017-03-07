@@ -2587,23 +2587,23 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
 {
     if (isVerticallyOriented() || mbAsianVertical)
     {
-        SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+        SvxAdjust eSvxAdjust = SvxAdjust::Left;
         switch (meVerJust)
         {
             case SVX_VER_JUSTIFY_TOP:
                 eSvxAdjust = (meOrient == SVX_ORIENTATION_TOPBOTTOM || mbAsianVertical) ?
-                            SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
+                            SvxAdjust::Left : SvxAdjust::Right;
                 break;
             case SVX_VER_JUSTIFY_CENTER:
-                eSvxAdjust = SVX_ADJUST_CENTER;
+                eSvxAdjust = SvxAdjust::Center;
                 break;
             case SVX_VER_JUSTIFY_BOTTOM:
             case SVX_VER_JUSTIFY_STANDARD:
                 eSvxAdjust = (meOrient == SVX_ORIENTATION_TOPBOTTOM || mbAsianVertical) ?
-                            SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
+                            SvxAdjust::Right : SvxAdjust::Left;
                 break;
             case SVX_VER_JUSTIFY_BLOCK:
-                eSvxAdjust = SVX_ADJUST_BLOCK;
+                eSvxAdjust = SvxAdjust::Block;
                 break;
         }
 
@@ -2619,9 +2619,9 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         //  (for values with number formats with mixed script types)
         //  -> always set adjustment
 
-        SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+        SvxAdjust eSvxAdjust = SvxAdjust::Left;
         if (meOrient == SVX_ORIENTATION_STACKED)
-            eSvxAdjust = SVX_ADJUST_CENTER;
+            eSvxAdjust = SvxAdjust::Center;
         else if (mbBreak)
         {
             if (meOrient == SVX_ORIENTATION_STANDARD)
@@ -2632,33 +2632,33 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
                         SAL_WARN("sc.ui","meHorJustResult does not match getAlignmentFromContext()");
                         SAL_FALLTHROUGH;
                     case SVX_HOR_JUSTIFY_LEFT:
-                        eSvxAdjust = SVX_ADJUST_LEFT;
+                        eSvxAdjust = SvxAdjust::Left;
                         break;
                     case SVX_HOR_JUSTIFY_CENTER:
-                        eSvxAdjust = SVX_ADJUST_CENTER;
+                        eSvxAdjust = SvxAdjust::Center;
                         break;
                     case SVX_HOR_JUSTIFY_RIGHT:
-                        eSvxAdjust = SVX_ADJUST_RIGHT;
+                        eSvxAdjust = SvxAdjust::Right;
                         break;
                     case SVX_HOR_JUSTIFY_BLOCK:
-                        eSvxAdjust = SVX_ADJUST_BLOCK;
+                        eSvxAdjust = SvxAdjust::Block;
                         break;
                 }
             else
                 switch (meVerJust)
                 {
                     case SVX_VER_JUSTIFY_TOP:
-                        eSvxAdjust = SVX_ADJUST_RIGHT;
+                        eSvxAdjust = SvxAdjust::Right;
                         break;
                     case SVX_VER_JUSTIFY_CENTER:
-                        eSvxAdjust = SVX_ADJUST_CENTER;
+                        eSvxAdjust = SvxAdjust::Center;
                         break;
                     case SVX_VER_JUSTIFY_BOTTOM:
                     case SVX_VER_JUSTIFY_STANDARD:
-                        eSvxAdjust = SVX_ADJUST_LEFT;
+                        eSvxAdjust = SvxAdjust::Left;
                         break;
                     case SVX_VER_JUSTIFY_BLOCK:
-                        eSvxAdjust = SVX_ADJUST_BLOCK;
+                        eSvxAdjust = SvxAdjust::Block;
                         break;
                 }
         }
@@ -2696,7 +2696,7 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
     if (meHorJustResult == SVX_HOR_JUSTIFY_RIGHT || meHorJustResult == SVX_HOR_JUSTIFY_CENTER)
     {
         SvxAdjust eEditAdjust = (meHorJustResult == SVX_HOR_JUSTIFY_CENTER) ?
-            SVX_ADJUST_CENTER : SVX_ADJUST_RIGHT;
+            SvxAdjust::Center : SvxAdjust::Right;
 
         pEngine->SetUpdateMode(false);
         pEngine->SetDefaultItem( SvxAdjustItem(eEditAdjust, EE_PARA_JUST) );
@@ -4791,9 +4791,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 pPattern->FillEditItemSet( pSet, pCondSet );
 
                                                                     // adjustment for EditEngine
-                                SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+                                SvxAdjust eSvxAdjust = SvxAdjust::Left;
                                 if (eOrient==SVX_ORIENTATION_STACKED)
-                                    eSvxAdjust = SVX_ADJUST_CENTER;
+                                    eSvxAdjust = SvxAdjust::Center;
                                 // adjustment for bBreak is omitted here
                                 pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
@@ -5160,7 +5160,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                             SvxAdjust eSvxAdjust =
                                                 (eHorJust==SVX_HOR_JUSTIFY_RIGHT) ?
-                                                    SVX_ADJUST_RIGHT : SVX_ADJUST_CENTER;
+                                                    SvxAdjust::Right : SvxAdjust::Center;
                                             pEngine->SetDefaultItem(
                                                 SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 

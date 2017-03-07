@@ -150,7 +150,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
 SvxNumberFormat::SvxNumberFormat( SvxNumType eType,
                                   SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
     : SvxNumberType(eType),
-      eNumAdjust(SVX_ADJUST_LEFT),
+      eNumAdjust(SvxAdjust::Left),
       nInclUpperLevels(0),
       nStart(1),
       cBullet(SVX_DEF_BULLET),
@@ -255,7 +255,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     rStream.WriteUInt16( NUMITEM_VERSION_04 );
 
     rStream.WriteUInt16( GetNumberingType() );
-    rStream.WriteUInt16( eNumAdjust );
+    rStream.WriteUInt16( (sal_uInt16)eNumAdjust );
     rStream.WriteUInt16( nInclUpperLevels );
     rStream.WriteUInt16( nStart );
     rStream.WriteUInt16( cBullet );

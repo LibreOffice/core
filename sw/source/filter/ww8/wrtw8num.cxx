@@ -124,7 +124,7 @@ sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat)
             "<GetWordFirstLineOffset> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     short nFirstLineOffset;
-    if (rFormat.GetNumAdjust() == SVX_ADJUST_RIGHT)
+    if (rFormat.GetNumAdjust() == SvxAdjust::Right)
         nFirstLineOffset = -rFormat.GetCharTextDistance();
     else
         nFirstLineOffset = rFormat.GetFirstLineOffset();
@@ -257,10 +257,10 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     sal_uInt8 nAlign;
     switch ( eAdjust )
     {
-    case SVX_ADJUST_CENTER:
+    case SvxAdjust::Center:
         nAlign = 1;
         break;
-    case SVX_ADJUST_RIGHT:
+    case SvxAdjust::Right:
         nAlign = 2;
         break;
     default:

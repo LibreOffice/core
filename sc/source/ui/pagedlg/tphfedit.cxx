@@ -167,7 +167,7 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pNewItem.reset(rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL));
     pSet->Put( *pNewItem );
     if (mbRTL)
-        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+        pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
     pEdEngine->SetDefaults( pSet );
 }
 

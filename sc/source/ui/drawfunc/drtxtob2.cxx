@@ -171,7 +171,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                 bLeft ? FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP,
                                 EE_PARA_WRITINGDIR ) );
                 aAttr.Put( SvxAdjustItem(
-                                bLeft ? SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT,
+                                bLeft ? SvxAdjust::Left : SvxAdjust::Right,
                                 EE_PARA_JUST ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();

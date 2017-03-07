@@ -165,7 +165,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             // EditView.GetAttribs always returns complete Set filled with
             // defaults
             const SfxPoolItem& rItem = aSet.Get( EE_PARA_JUST );
-            if ( static_cast<const SvxAdjustItem&>(rItem).GetAdjust() == SVX_ADJUST_LEFT )
+            if ( static_cast<const SvxAdjustItem&>(rItem).GetAdjust() == SvxAdjust::Left )
                 aSet.ClearItem( EE_PARA_JUST );
 
             // Test whether simple String without mixed attributes

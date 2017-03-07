@@ -166,14 +166,14 @@ namespace frm
 
     ParaAlignmentHandler::ParaAlignmentHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_JUST )
-        ,m_eAdjust( SVX_ADJUST_CENTER )
+        ,m_eAdjust( SvxAdjust::Center )
     {
         switch ( getAttribute() )
         {
-            case SID_ATTR_PARA_ADJUST_LEFT  : m_eAdjust = SVX_ADJUST_LEFT;    break;
-            case SID_ATTR_PARA_ADJUST_CENTER: m_eAdjust = SVX_ADJUST_CENTER;  break;
-            case SID_ATTR_PARA_ADJUST_RIGHT : m_eAdjust = SVX_ADJUST_RIGHT;   break;
-            case SID_ATTR_PARA_ADJUST_BLOCK : m_eAdjust = SVX_ADJUST_BLOCK;   break;
+            case SID_ATTR_PARA_ADJUST_LEFT  : m_eAdjust = SvxAdjust::Left;    break;
+            case SID_ATTR_PARA_ADJUST_CENTER: m_eAdjust = SvxAdjust::Center;  break;
+            case SID_ATTR_PARA_ADJUST_RIGHT : m_eAdjust = SvxAdjust::Right;   break;
+            case SID_ATTR_PARA_ADJUST_BLOCK : m_eAdjust = SvxAdjust::Block;   break;
             default:
                 OSL_FAIL( "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
                 break;
@@ -376,21 +376,21 @@ namespace frm
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
         ,m_eParagraphDirection( FRMDIR_HORI_LEFT_TOP )
-        ,m_eDefaultAdjustment( SVX_ADJUST_RIGHT )
-        ,m_eOppositeDefaultAdjustment( SVX_ADJUST_LEFT )
+        ,m_eDefaultAdjustment( SvxAdjust::Right )
+        ,m_eOppositeDefaultAdjustment( SvxAdjust::Left )
     {
         switch ( getAttributeId() )
         {
-            case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = FRMDIR_HORI_LEFT_TOP; m_eDefaultAdjustment = SVX_ADJUST_LEFT; break;
-            case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = FRMDIR_HORI_RIGHT_TOP; m_eDefaultAdjustment = SVX_ADJUST_RIGHT; break;
+            case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = FRMDIR_HORI_LEFT_TOP; m_eDefaultAdjustment = SvxAdjust::Left; break;
+            case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = FRMDIR_HORI_RIGHT_TOP; m_eDefaultAdjustment = SvxAdjust::Right; break;
             default:
                 OSL_FAIL( "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
         }
 
-        if ( SVX_ADJUST_RIGHT == m_eDefaultAdjustment )
-            m_eOppositeDefaultAdjustment = SVX_ADJUST_LEFT;
+        if ( SvxAdjust::Right == m_eDefaultAdjustment )
+            m_eOppositeDefaultAdjustment = SvxAdjust::Left;
         else
-            m_eOppositeDefaultAdjustment = SVX_ADJUST_RIGHT;
+            m_eOppositeDefaultAdjustment = SvxAdjust::Right;
     }
 
 
@@ -408,7 +408,7 @@ namespace frm
 
         // if the current adjustment of the was the default adjustment for the *previous* text direction,
         // then we toggle the adjustment, too
-        SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
+        SvxAdjust eCurrentAdjustment = SvxAdjust::Left;
         const SfxPoolItem* pCurrentAdjustment = nullptr;
         if ( SfxItemState::SET == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
             eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();

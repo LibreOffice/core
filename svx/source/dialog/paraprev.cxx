@@ -29,8 +29,8 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
     nFirstLineOfst  ( 0 ),
     nUpper          ( 0 ),
     nLower          ( 0 ),
-    eAdjust         ( SVX_ADJUST_LEFT ),
-    eLastLine       ( SVX_ADJUST_LEFT ),
+    eAdjust         ( SvxAdjust::Left ),
+    eLastLine       ( SvxAdjust::Left ),
     eLine           ( SvxPrevLineSpace::N1 ),
     nLineVal        ( 0 )
 
@@ -156,31 +156,31 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
             switch (eAdjust)
             {
-                case SVX_ADJUST_LEFT:
+                case SvxAdjust::Left:
                     break;
-                case SVX_ADJUST_RIGHT:
+                case SvxAdjust::Right:
                     aPnt.X() += ( aSiz.Width() - nLW );
                     break;
-                case SVX_ADJUST_CENTER:
+                case SvxAdjust::Center:
                     aPnt.X() += ( aSiz.Width() - nLW ) / 2;
                     break;
                 default: ; //prevent warning
             }
-            if (SVX_ADJUST_BLOCK == eAdjust)
+            if (SvxAdjust::Block == eAdjust)
             {
                 if(5 == i)
                 {
                     switch( eLastLine )
                     {
-                        case SVX_ADJUST_LEFT:
+                        case SvxAdjust::Left:
                             break;
-                        case SVX_ADJUST_RIGHT:
+                        case SvxAdjust::Right:
                             aPnt.X() += ( aSiz.Width() - nLW );
                             break;
-                        case SVX_ADJUST_CENTER:
+                        case SvxAdjust::Center:
                             aPnt.X() += ( aSiz.Width() - nLW ) / 2;
                             break;
-                        case SVX_ADJUST_BLOCK:
+                        case SvxAdjust::Block:
                             nLW = aSiz.Width();
                             break;
                         default: ; //prevent warning

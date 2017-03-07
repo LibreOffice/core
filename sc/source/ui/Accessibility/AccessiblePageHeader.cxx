@@ -206,9 +206,9 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
                 nPageWhichId = mpViewShell->GetLocationData().IsFooterLeft() ? ATTR_PAGE_FOOTERLEFT : ATTR_PAGE_FOOTERRIGHT;
 
             const ScPageHFItem& rPageItem = static_cast<const ScPageHFItem&>(pStyle->GetItemSet().Get(nPageWhichId));
-            AddChild(rPageItem.GetLeftArea(), 0, SVX_ADJUST_LEFT);
-            AddChild(rPageItem.GetCenterArea(), 1, SVX_ADJUST_CENTER);
-            AddChild(rPageItem.GetRightArea(), 2, SVX_ADJUST_RIGHT);
+            AddChild(rPageItem.GetLeftArea(), 0, SvxAdjust::Left);
+            AddChild(rPageItem.GetCenterArea(), 1, SvxAdjust::Center);
+            AddChild(rPageItem.GetRightArea(), 2, SvxAdjust::Right);
         }
     }
 

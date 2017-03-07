@@ -466,7 +466,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         else
             rAttr.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
 
-        rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+        rAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
         rAttr.Put( makeSdrTextLeftDistItem( 100 ) );
         rAttr.Put( makeSdrTextRightDistItem( 100 ) );
         rAttr.Put( makeSdrTextUpperDistItem( 100 ) );

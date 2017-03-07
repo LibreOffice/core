@@ -4978,22 +4978,22 @@ SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
         static_cast<SvxCellHorJustify>(
             static_cast<const SvxHorJustifyItem&>(rPat.GetItem(ATTR_HOR_JUSTIFY)).GetValue());
 
-    SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+    SvxAdjust eSvxAdjust = SvxAdjust::Left;
     switch (eHorJust)
     {
         case SVX_HOR_JUSTIFY_LEFT:
         case SVX_HOR_JUSTIFY_REPEAT:            // not implemented
         case SVX_HOR_JUSTIFY_STANDARD:          // always Text if an EditCell type
-                eSvxAdjust = SVX_ADJUST_LEFT;
+                eSvxAdjust = SvxAdjust::Left;
                 break;
         case SVX_HOR_JUSTIFY_RIGHT:
-                eSvxAdjust = SVX_ADJUST_RIGHT;
+                eSvxAdjust = SvxAdjust::Right;
                 break;
         case SVX_HOR_JUSTIFY_CENTER:
-                eSvxAdjust = SVX_ADJUST_CENTER;
+                eSvxAdjust = SvxAdjust::Center;
                 break;
         case SVX_HOR_JUSTIFY_BLOCK:
-                eSvxAdjust = SVX_ADJUST_BLOCK;
+                eSvxAdjust = SvxAdjust::Block;
                 break;
     }
 

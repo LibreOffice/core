@@ -311,9 +311,9 @@ void SwNumPositionTabPage::InitControls()
     if(bSameAdjust)
     {
         sal_Int32 nPos = 1; // centered
-        if(aNumFormatArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
+        if(aNumFormatArr[nLvl]->GetNumAdjust() == SvxAdjust::Left)
             nPos = 0;
-        else if(aNumFormatArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
+        else if(aNumFormatArr[nLvl]->GetNumAdjust() == SvxAdjust::Right)
             nPos = 2;
         m_pAlignLB->SelectEntryPos(nPos);
         m_pAlign2LB->SelectEntryPos( nPos );
@@ -600,11 +600,11 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
             const sal_Int32 nPos = m_pAlignLB->IsVisible()
                                 ? m_pAlignLB->GetSelectEntryPos()
                                 : m_pAlign2LB->GetSelectEntryPos();
-            SvxAdjust eAdjust = SVX_ADJUST_CENTER;
+            SvxAdjust eAdjust = SvxAdjust::Center;
             if(nPos == 0)
-                eAdjust = SVX_ADJUST_LEFT;
+                eAdjust = SvxAdjust::Left;
             else if(nPos == 2)
-                eAdjust = SVX_ADJUST_RIGHT;
+                eAdjust = SvxAdjust::Right;
             aNumFormat.SetNumAdjust( eAdjust );
             pActNum->Set(i, aNumFormat);
         }

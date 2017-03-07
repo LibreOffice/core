@@ -525,7 +525,7 @@ void ImpEditEngine::CheckAutoPageSize()
                 ParaPortion* pParaPortion = GetParaPortions()[nPara];
                 ContentNode* pNode = pParaPortion->GetNode();
                 SvxAdjust eJustification = GetJustification( nPara );
-                if ( eJustification != SVX_ADJUST_LEFT )
+                if ( eJustification != SvxAdjust::Left )
                 {
                     pParaPortion->MarkSelectionInvalid( 0, pNode->Len() );
                     CreateLines( nPara, 0 );  // 0: For AutoPageSize no TextRange!
@@ -1457,14 +1457,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         pLine->SetTextWidth( aTextSize.Width() );
         switch ( eJustification )
         {
-            case SVX_ADJUST_CENTER:
+            case SvxAdjust::Center:
             {
                 long n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
                 n += nStartX;  // Indentation is kept.
                 pLine->SetStartPosX( n );
             }
             break;
-            case SVX_ADJUST_RIGHT:
+            case SvxAdjust::Right:
             {
                 // For automatically wrapped lines, which has a blank at the end
                 // the blank must not be displayed!
@@ -1473,7 +1473,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 pLine->SetStartPosX( n );
             }
             break;
-            case SVX_ADJUST_BLOCK:
+            case SvxAdjust::Block:
             {
                 bool bDistLastLine = (GetJustifyMethod(nPara) == SvxCellJustifyMethod::Distribute);
                 long nRemainingSpace = nMaxLineWidth - aTextSize.Width();
@@ -1691,9 +1691,9 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         long nTextXOffset = 0;
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
-        if ( eJustification ==  SVX_ADJUST_CENTER )
+        if ( eJustification ==  SvxAdjust::Center )
             nStartX = nMaxLineWidth / 2;
-        else if ( eJustification ==  SVX_ADJUST_RIGHT )
+        else if ( eJustification ==  SvxAdjust::Right )
             nStartX = nMaxLineWidth;
 
         nStartX = nStartX + nTextXOffset;
@@ -1997,9 +1997,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     if ( !bCompressBlank && !bHangingPunctuation )
     {
-        // When justification is not SVX_ADJUST_LEFT, it's important to compress
+        // When justification is not SvxAdjust::Left, it's important to compress
         // the trailing space even if there is enough room for the space...
-        // Don't check for SVX_ADJUST_LEFT, doesn't matter to compress in this case too...
+        // Don't check for SvxAdjust::Left, doesn't matter to compress in this case too...
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLines - BreakPos not expected!" );
         if ( pNode->GetChar( nBreakPos-1 ) == ' ' )
             bCompressBlank = true;

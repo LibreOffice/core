@@ -349,7 +349,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPasteFlags ( ScPasteFlags::NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
         nFillMode   ( ScFillMode::NONE ),
-        eEditAdjust ( SVX_ADJUST_LEFT ),
+        eEditAdjust ( SvxAdjust::Left ),
         bActive     ( true ),                   // how to initialize?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
@@ -1052,7 +1052,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
-    if ( GetEditAdjust() == SVX_ADJUST_RIGHT || bAsianVertical )
+    if ( GetEditAdjust() == SvxAdjust::Right || bAsianVertical )
         aPixRect.Right() += 1;
 
     Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
@@ -1128,12 +1128,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Size aPaper = pNewEngine->GetPaperSize();
         Rectangle aVis = pEditView[eWhich]->GetVisArea();
         long nDiff = aVis.Right() - aVis.Left();
-        if ( GetEditAdjust() == SVX_ADJUST_RIGHT )
+        if ( GetEditAdjust() == SvxAdjust::Right )
         {
             aVis.Right() = aPaper.Width() - 1;
             bMoveArea = !bLayoutRTL;
         }
-        else if ( GetEditAdjust() == SVX_ADJUST_CENTER )
+        else if ( GetEditAdjust() == SvxAdjust::Center )
         {
             aVis.Right() = ( aPaper.Width() - 1 + nDiff ) / 2;
             bMoveArea = true;   // always
@@ -1347,7 +1347,7 @@ void ScViewData::EditGrowX()
             {
                 //  switch to center-aligned (undo?) and reset VisArea to center
 
-                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
 
                 long nCenter = aSize.Width() / 2;
                 long nVisSize = aArea.GetWidth();
@@ -1358,7 +1358,7 @@ void ScViewData::EditGrowX()
             {
                 //  switch to right-aligned (undo?) and reset VisArea to the right
 
-                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
 
                 aVis.Right() = aSize.Width() - 1;
                 aVis.Left() = aSize.Width() - aArea.GetWidth();     // with the new, increased area
@@ -1367,7 +1367,7 @@ void ScViewData::EditGrowX()
             {
                 //  switch to left-aligned (undo?) and reset VisArea to the left
 
-                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
 
                 long nMove = aVis.Left();
                 aVis.Left() = 0;

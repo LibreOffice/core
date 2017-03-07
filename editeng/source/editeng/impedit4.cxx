@@ -770,9 +770,9 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             SvxAdjust eJustification = static_cast<const SvxAdjustItem&>(rItem).GetAdjust();
             switch ( eJustification )
             {
-                case SVX_ADJUST_CENTER: rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );
+                case SvxAdjust::Center: rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );
                                         break;
-                case SVX_ADJUST_RIGHT:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QR );
+                case SvxAdjust::Right:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QR );
                                         break;
                 default:                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QL );
                                         break;

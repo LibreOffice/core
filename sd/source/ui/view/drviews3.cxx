@@ -685,7 +685,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         break;
         case SID_ATTR_PARA_ADJUST_LEFT:
         {
-            SvxAdjustItem aItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::Left, EE_PARA_JUST );
             SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
 
             aEditAttr.Put( aItem );
@@ -696,7 +696,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         break;
         case SID_ATTR_PARA_ADJUST_CENTER:
         {
-            SvxAdjustItem aItem( SVX_ADJUST_CENTER, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::Center, EE_PARA_JUST );
             SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
 
             aEditAttr.Put( aItem );
@@ -707,7 +707,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         break;
         case SID_ATTR_PARA_ADJUST_RIGHT:
         {
-            SvxAdjustItem aItem( SVX_ADJUST_RIGHT, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::Right, EE_PARA_JUST );
             SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
 
             aEditAttr.Put( aItem );
@@ -718,7 +718,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         break;
         case SID_ATTR_PARA_ADJUST_BLOCK:
         {
-            SvxAdjustItem aItem( SVX_ADJUST_BLOCK, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
             SfxItemSet aEditAttr( GetPool(), EE_PARA_JUST, EE_PARA_JUST );
 
             aEditAttr.Put( aItem );

@@ -311,7 +311,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
     {
-        m_pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
+        m_pDoc->SetDefault( SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST ) );
     }
 
 // #i29550#

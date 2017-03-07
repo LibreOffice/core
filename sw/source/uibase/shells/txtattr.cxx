@@ -325,7 +325,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
             {
                 const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( pArgs->Get(RES_PARATR_ADJUST) );
                 SvxAdjustItem aAdj( rAdj.GetAdjust(), RES_PARATR_ADJUST );
-                if ( rAdj.GetAdjust() == SVX_ADJUST_BLOCK )
+                if ( rAdj.GetAdjust() == SvxAdjust::Block )
                 {
                     aAdj.SetLastBlock( rAdj.GetLastBlock() );
                     aAdj.SetOneWord( rAdj.GetOneWord() );
@@ -335,10 +335,10 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_PARA_ADJUST_LEFT:     eAdjst =  SVX_ADJUST_LEFT;      goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjst =  SVX_ADJUST_RIGHT;     goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjst =  SVX_ADJUST_CENTER;    goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjst =  SVX_ADJUST_BLOCK;     goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_LEFT:     eAdjst =  SvxAdjust::Left;      goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjst =  SvxAdjust::Right;     goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjst =  SvxAdjust::Center;    goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjst =  SvxAdjust::Block;     goto SET_ADJUST;
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
@@ -381,10 +381,10 @@ SET_LINESPACE:
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
             if(eAdjustState  >= SfxItemState::DEFAULT)
             {
-                int eAdjust = (int)static_cast<const SvxAdjustItem& >(
+                SvxAdjust eAdjust = static_cast<const SvxAdjustItem& >(
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
-                bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
-                             (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
+                bChgAdjust = (SvxAdjust::Left  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
+                             (SvxAdjust::Right == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
             else
                 bChgAdjust = true;
@@ -397,7 +397,7 @@ SET_LINESPACE:
             if (bChgAdjust)
             {
                 SvxAdjust eAdjust = (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
-                        SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
+                        SvxAdjust::Left : SvxAdjust::Right;
                 SvxAdjustItem aAdjust( eAdjust, RES_PARATR_ADJUST );
                 aSet.Put( aAdjust );
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
@@ -411,11 +411,11 @@ SET_LINESPACE:
                     for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
                     {
                         SvxNumberFormat aFormat(aRule.GetLevel(i));
-                        if(SVX_ADJUST_LEFT == aFormat.GetNumAdjust())
-                            aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
+                        if(SvxAdjust::Left == aFormat.GetNumAdjust())
+                            aFormat.SetNumAdjust( SvxAdjust::Right );
 
-                        else if(SVX_ADJUST_RIGHT == aFormat.GetNumAdjust())
-                            aFormat.SetNumAdjust( SVX_ADJUST_LEFT );
+                        else if(SvxAdjust::Right == aFormat.GetNumAdjust())
+                            aFormat.SetNumAdjust( SvxAdjust::Left );
 
                         aRule.SetLevel(i, aFormat, aRule.Get(i) != nullptr);
                     }
@@ -548,13 +548,17 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     bool bFlag = false;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = nullptr;
-    int eAdjust = -1;   // Illegal value to recognize DONTCARE.
+    SvxAdjust eAdjust = SvxAdjust::Left;
+    bool bAdjustGood = false;
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 
     if( SfxItemState::DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_ADJUST);
     if( SfxItemState::DEFAULT <= eState )
-        eAdjust = (int)static_cast<const SvxAdjustItem* >( pItem)->GetAdjust();
+    {
+        eAdjust = static_cast<const SvxAdjustItem* >( pItem)->GetAdjust();
+        bAdjustGood = true;
+    }
 
     short nEsc = 0;
     eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, false, &pItem);
@@ -598,42 +602,42 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 bFlag = eCaseMap == SVX_CASEMAP_KAPITAELCHEN;
                 break;
             case SID_ATTR_PARA_ADJUST_LEFT:
-                if (eAdjust == -1)
+                if (!bAdjustGood)
                 {
                     rSet.InvalidateItem( nSlot );
                     nSlot = 0;
                 }
                 else
-                    bFlag = SVX_ADJUST_LEFT == eAdjust;
+                    bFlag = SvxAdjust::Left == eAdjust;
                 break;
             case SID_ATTR_PARA_ADJUST_RIGHT:
-                if (eAdjust == -1)
+                if (!bAdjustGood)
                 {
                     rSet.InvalidateItem( nSlot );
                     nSlot = 0;
                 }
                 else
-                    bFlag = SVX_ADJUST_RIGHT == eAdjust;
+                    bFlag = SvxAdjust::Right == eAdjust;
                 break;
             case SID_ATTR_PARA_ADJUST_CENTER:
-                if (eAdjust == -1)
+                if (!bAdjustGood)
                 {
                     rSet.InvalidateItem( nSlot );
                     nSlot = 0;
                 }
                 else
-                    bFlag = SVX_ADJUST_CENTER == eAdjust;
+                    bFlag = SvxAdjust::Center == eAdjust;
                 break;
             case SID_ATTR_PARA_ADJUST_BLOCK:
             {
-                if (eAdjust == -1)
+                if (!bAdjustGood)
                 {
                     rSet.InvalidateItem( nSlot );
                     nSlot = 0;
                 }
                 else
                 {
-                    bFlag = SVX_ADJUST_BLOCK == eAdjust;
+                    bFlag = SvxAdjust::Block == eAdjust;
                     sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_FULL_STYLES ))
                     {
@@ -707,10 +711,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             }
             break;
             case SID_ATTR_PARA_ADJUST:
-                if (eAdjust == -1)
+                if (!bAdjustGood)
                     rSet.InvalidateItem( nSlot );
                 else
-                    rSet.Put(SvxAdjustItem((SvxAdjust)eAdjust, SID_ATTR_PARA_ADJUST ));
+                    rSet.Put(SvxAdjustItem(eAdjust, SID_ATTR_PARA_ADJUST ));
                 nSlot = 0;
             break;
             case SID_ATTR_PARA_LRSPACE:

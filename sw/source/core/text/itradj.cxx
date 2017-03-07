@@ -246,7 +246,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
 void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal, bool bSkipKashida )
 {
-    OSL_ENSURE( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
+    OSL_ENSURE( GetInfo().IsMulti() || SvxAdjust::Block == GetAdjust(),
             "CalcNewBlock: Why?" );
     OSL_ENSURE( pCurrent->Height(), "SwTextAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
@@ -602,7 +602,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
             // in tab compat mode we do not want to change tab portions
             // in non tab compat mode we do not want to change margins if we
             // found a multi portion with tabs
-            if( SVX_ADJUST_RIGHT == GetAdjust() )
+            if( SvxAdjust::Right == GetAdjust() )
                 static_cast<SwGluePortion*>(pPos)->MoveAllGlue( pGlue );
             else
             {
@@ -644,7 +644,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
         pPos = pPos->GetPortion();
      }
 
-     if( ! bTabCompat && ! bMultiTab && SVX_ADJUST_RIGHT == GetAdjust() )
+     if( ! bTabCompat && ! bMultiTab && SvxAdjust::Right == GetAdjust() )
         // portions are moved to the right if possible
         pLeft->AdjustRight( pCurrent );
 }
@@ -659,14 +659,14 @@ void SwTextAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 
     switch( GetAdjust() )
     {
-        case SVX_ADJUST_RIGHT:
-        case SVX_ADJUST_CENTER:
+        case SvxAdjust::Right:
+        case SvxAdjust::Center:
         {
             CalcFlyAdjust( pCurrent );
             pPara->GetRepaint().SetOfst( 0 );
             break;
         }
-        case SVX_ADJUST_BLOCK:
+        case SvxAdjust::Block:
         {
             FormatBlock();
             break;
@@ -726,7 +726,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
 // CalcDropAdjust is called at the end by Format() if needed
 void SwTextAdjuster::CalcDropAdjust()
 {
-    OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
+    OSL_ENSURE( 1<GetDropLines() && SvxAdjust::Left!=GetAdjust() && SvxAdjust::Block!=GetAdjust(),
             "CalcDropAdjust: No reason for DropAdjustment." );
 
     const sal_uInt16 nLineNumber = GetLineNr();

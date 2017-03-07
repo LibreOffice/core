@@ -49,7 +49,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
+    SvxAdjustItem( const SvxAdjust eAdjst /*= SvxAdjust::Left*/,
                    const sal_uInt16 nId );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -73,53 +73,53 @@ public:
 
     void SetOneWord( const SvxAdjust eType )
     {
-        bOneBlock  = eType == SVX_ADJUST_BLOCK;
+        bOneBlock  = eType == SvxAdjust::Block;
     }
 
     void SetLastBlock( const SvxAdjust eType )
     {
-        bLastBlock = eType == SVX_ADJUST_BLOCK;
-        bLastCenter = eType == SVX_ADJUST_CENTER;
+        bLastBlock = eType == SvxAdjust::Block;
+        bLastCenter = eType == SvxAdjust::Center;
     }
 
     void SetAdjust( const SvxAdjust eType )
     {
-        bLeft = eType == SVX_ADJUST_LEFT;
-        bRight = eType == SVX_ADJUST_RIGHT;
-        bCenter = eType == SVX_ADJUST_CENTER;
-        bBlock = eType == SVX_ADJUST_BLOCK;
+        bLeft = eType == SvxAdjust::Left;
+        bRight = eType == SvxAdjust::Right;
+        bCenter = eType == SvxAdjust::Center;
+        bBlock = eType == SvxAdjust::Block;
     }
 
     SvxAdjust GetLastBlock() const
     {
-        SvxAdjust eRet = SVX_ADJUST_LEFT;
+        SvxAdjust eRet = SvxAdjust::Left;
 
         if ( bLastBlock )
-            eRet = SVX_ADJUST_BLOCK;
+            eRet = SvxAdjust::Block;
         else if( bLastCenter )
-            eRet = SVX_ADJUST_CENTER;
+            eRet = SvxAdjust::Center;
         return eRet;
     }
 
     SvxAdjust GetOneWord() const
     {
-        SvxAdjust eRet = SVX_ADJUST_LEFT;
+        SvxAdjust eRet = SvxAdjust::Left;
 
         if ( bBlock && bOneBlock )
-            eRet = SVX_ADJUST_BLOCK;
+            eRet = SvxAdjust::Block;
         return eRet;
     }
 
     SvxAdjust GetAdjust() const
     {
-        SvxAdjust eRet = SVX_ADJUST_LEFT;
+        SvxAdjust eRet = SvxAdjust::Left;
 
         if ( bRight )
-            eRet = SVX_ADJUST_RIGHT;
+            eRet = SvxAdjust::Right;
         else if ( bCenter )
-            eRet = SVX_ADJUST_CENTER;
+            eRet = SvxAdjust::Center;
         else if ( bBlock )
-            eRet = SVX_ADJUST_BLOCK;
+            eRet = SvxAdjust::Block;
         return eRet;
     }
 };

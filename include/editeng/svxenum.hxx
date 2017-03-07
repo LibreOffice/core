@@ -73,14 +73,15 @@ enum class SvxInterLineSpaceRule
     Fix
 };
 
-enum SvxAdjust
+enum class SvxAdjust
 {
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_RIGHT,
-    SVX_ADJUST_BLOCK,
-    SVX_ADJUST_CENTER,
-    SVX_ADJUST_BLOCKLINE,
-    SVX_ADJUST_END
+    Left,
+    Right,
+    Block,
+    Center,
+    BlockLine,
+    End,
+    LAST = End
 };
 
 enum class SvxBreak

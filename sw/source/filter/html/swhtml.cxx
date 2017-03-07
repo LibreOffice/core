@@ -128,12 +128,12 @@ using namespace ::com::sun::star;
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
 HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,    SVX_ADJUST_LEFT     },
-    { OOO_STRING_SVTOOLS_HTML_AL_center,  SVX_ADJUST_CENTER   },
-    { OOO_STRING_SVTOOLS_HTML_AL_middle,  SVX_ADJUST_CENTER   }, // Netscape
-    { OOO_STRING_SVTOOLS_HTML_AL_right,   SVX_ADJUST_RIGHT    },
-    { OOO_STRING_SVTOOLS_HTML_AL_justify, SVX_ADJUST_BLOCK    },
-    { OOO_STRING_SVTOOLS_HTML_AL_char,    SVX_ADJUST_LEFT     },
+    { OOO_STRING_SVTOOLS_HTML_AL_left,    SvxAdjust::Left     },
+    { OOO_STRING_SVTOOLS_HTML_AL_center,  SvxAdjust::Center   },
+    { OOO_STRING_SVTOOLS_HTML_AL_middle,  SvxAdjust::Center   }, // Netscape
+    { OOO_STRING_SVTOOLS_HTML_AL_right,   SvxAdjust::Right    },
+    { OOO_STRING_SVTOOLS_HTML_AL_justify, SvxAdjust::Block    },
+    { OOO_STRING_SVTOOLS_HTML_AL_char,    SvxAdjust::Left     },
     { nullptr,                            (SvxAdjust)0        }
 };
 
@@ -274,7 +274,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
 #ifdef DBG_UTIL
     m_nContinue( 0 ),
 #endif
-    m_eParaAdjust( SVX_ADJUST_END ),
+    m_eParaAdjust( SvxAdjust::End ),
     m_bDocInitalized( false ),
     m_bSetModEnabled( false ),
     m_bInFloatingFrame( false ),
@@ -1669,7 +1669,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_TABLE_ON:
         if( m_pPendStack )
-            BuildTable( SVX_ADJUST_END );
+            BuildTable( SvxAdjust::End );
         else
         {
             if( m_nOpenParaToken )
@@ -1686,7 +1686,7 @@ void SwHTMLParser::NextToken( int nToken )
                 SvxAdjust eAdjust = m_aAttrTab.pAdjust
                     ? static_cast<const SvxAdjustItem&>(m_aAttrTab.pAdjust->GetItem()).
                                              GetAdjust()
-                    : SVX_ADJUST_END;
+                    : SvxAdjust::End;
                 BuildTable( eAdjust );
             }
             else
@@ -3853,7 +3853,7 @@ void SwHTMLParser::NewPara()
     else
         AddParSpace();
 
-    m_eParaAdjust = SVX_ADJUST_END;
+    m_eParaAdjust = SvxAdjust::End;
     OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -3905,7 +3905,7 @@ void SwHTMLParser::NewPara()
         }
     }
 
-    if( SVX_ADJUST_END != m_eParaAdjust )
+    if( SvxAdjust::End != m_eParaAdjust )
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
     // und auf den Stack packen
@@ -3971,7 +3971,7 @@ void SwHTMLParser::EndPara( bool bReal )
 
 void SwHTMLParser::NewHeading( int nToken )
 {
-    m_eParaAdjust = SVX_ADJUST_END;
+    m_eParaAdjust = SvxAdjust::End;
 
     OUString aId, aStyle, aClass, aLang, aDir;
 
@@ -4039,7 +4039,7 @@ void SwHTMLParser::NewHeading( int nToken )
         }
     }
 
-    if( SVX_ADJUST_END != m_eParaAdjust )
+    if( SvxAdjust::End != m_eParaAdjust )
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
     // udn auf den Stack packen
@@ -5181,7 +5181,7 @@ void SwHTMLParser::InsertHorzRule()
     sal_uInt16 nSize = 0;
     sal_uInt16 nWidth = 0;
 
-    SvxAdjust eAdjust = SVX_ADJUST_END;
+    SvxAdjust eAdjust = SvxAdjust::End;
 
     bool bPrcWidth = false;
     bool bNoShade = false;
@@ -5303,13 +5303,13 @@ void SwHTMLParser::InsertHorzRule()
 
                 switch( eAdjust )
                 {
-                case SVX_ADJUST_RIGHT:
+                case SvxAdjust::Right:
                     aLRItem.SetTextLeft( (sal_uInt16)nDist );
                     break;
-                case SVX_ADJUST_LEFT:
+                case SvxAdjust::Left:
                     aLRItem.SetRight( (sal_uInt16)nDist );
                     break;
-                case SVX_ADJUST_CENTER:
+                case SvxAdjust::Center:
                 default:
                     nDist /= 2;
                     aLRItem.SetTextLeft( (sal_uInt16)nDist );

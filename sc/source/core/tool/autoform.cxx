@@ -188,7 +188,7 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
     rStream.WriteUInt16( SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxBrushItem(ATTR_BACKGROUND).GetVersion(fileVersion) );
 
-    rStream.WriteUInt16( SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxAdjustItem(SvxAdjust::Left, 0).GetVersion(fileVersion) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         WriteAutoFormatSwBlob( rStream, swVersions );
 
@@ -229,7 +229,7 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aTLBR( ATTR_BORDER_TLBR ),
     aBLTR( ATTR_BORDER_BLTR ),
     aBackground( ATTR_BACKGROUND ),
-    aAdjust( SVX_ADJUST_LEFT, 0 ),
+    aAdjust( SvxAdjust::Left, 0 ),
     aHorJustify( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY ),
     aVerJustify( SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY ),
     aMargin( ATTR_MARGIN ),

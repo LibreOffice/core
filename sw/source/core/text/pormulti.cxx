@@ -1924,8 +1924,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 // kashida justification is accomplished by elongating characters at certain chosen points.
                 // Kashida justification can be combined with white-space justification to various extents.
                 // The default value of bSkipKashida (the 4th parameter passed to 'CalcNewBlock') is false.
-                // Only when Adjust is SVX_ADJUST_BLOCK ( alignment is justify ), multiportion will be showed in justification in new code.
-                CalcNewBlock( pLine, nullptr, rMulti.Width(), GetAdjust() != SVX_ADJUST_BLOCK );
+                // Only when Adjust is SvxAdjust::Block ( alignment is justify ), multiportion will be showed in justification in new code.
+                CalcNewBlock( pLine, nullptr, rMulti.Width(), GetAdjust() != SvxAdjust::Block );
 
                 GetInfo().SetMulti( false );
             }

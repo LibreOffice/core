@@ -481,16 +481,16 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         SvxAdjust eAdj = static_cast<const SvxAdjustItem&>( aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
         {
-            case SVX_ADJUST_LEFT:
+            case SvxAdjust::Left:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
             break;
-            case SVX_ADJUST_CENTER:
+            case SvxAdjust::Center:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
             break;
-            case SVX_ADJUST_RIGHT:
+            case SvxAdjust::Right:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
             break;
-            case SVX_ADJUST_BLOCK:
+            case SvxAdjust::Block:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
             break;
             default:
