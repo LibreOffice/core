@@ -16,6 +16,24 @@
       "revId": "980037862070c197ea87f28e418f7c7c3e3a0c1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_239a4b15",
+        "filename": "sc/qa/unit/data/functions/financial/fods/nper.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-03-07T16:13:58Z",
+      "side": 1,
+      "message": "Ahh, well, I can\u0027t get the settings Raal uses, so I use vim to make the change...\nIt\u0027s a simple yank \u0026 paste from the huge diff into the original fods file (when I use Calc to add a row) plus removal of 3 lines.\nSometimes I don\u0027t use Calc at all and just do it in vim plus test the result in Calc.\nNow you know my secret ;-)",
+      "parentUuid": "9a57fde8_43410f0b",
+      "revId": "980037862070c197ea87f28e418f7c7c3e3a0c1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
