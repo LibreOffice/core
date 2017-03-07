@@ -386,7 +386,7 @@ struct ExtraPortionInfo
 class TextPortion
 {
 private:
-    ExtraPortionInfo*   pExtraInfos;
+    std::unique_ptr<ExtraPortionInfo> xExtraInfos;
     sal_Int32           nLen;
     Size                aOutSz;
     PortionKind         nKind;
@@ -396,8 +396,7 @@ private:
 
 public:
                 TextPortion( sal_Int32 nL )
-                : pExtraInfos( nullptr )
-                , nLen( nL )
+                : nLen( nL )
                 , aOutSz( -1, -1 )
                 , nKind( PortionKind::TEXT )
                 , nRightToLeftLevel( 0 )
@@ -406,8 +405,7 @@ public:
                 }
 
                 TextPortion( const TextPortion& r )
-                : pExtraInfos( nullptr )
-                , nLen( r.nLen )
+                : nLen( r.nLen )
                 , aOutSz( r.aOutSz )
                 , nKind( r.nKind )
                 , nRightToLeftLevel( r.nRightToLeftLevel )
@@ -434,8 +432,8 @@ public:
 
     bool           HasValidSize() const        { return aOutSz.Width() != (-1); }
 
-    ExtraPortionInfo*   GetExtraInfos() const { return pExtraInfos; }
-    void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
+    ExtraPortionInfo*   GetExtraInfos() const { return xExtraInfos.get(); }
+    void                SetExtraInfos( ExtraPortionInfo* p ) { xExtraInfos.reset(p); }
 };
 
 
