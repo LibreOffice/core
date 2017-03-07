@@ -120,14 +120,7 @@ LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
     StartListening( *GetTextEngine() );
 }
 
-VCL_BUILDER_DECL_FACTORY(LicenseView)
-{
-    WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<LicenseView>::Create(pParent, nWinStyle | WB_VSCROLL);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(LicenseView, WB_CLIPCHILDREN|WB_LEFT|WB_VSCROLL)
 
 LicenseView::~LicenseView()
 {

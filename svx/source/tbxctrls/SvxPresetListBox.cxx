@@ -37,16 +37,8 @@ SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     SetExtraSpacing(4);
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxPresetListBox)
-{
-    WinBits nWinBits = WB_TABSTOP;
 
-    OString sBorder = VclBuilder::extractCustomProperty(rMap);
-    if(!sBorder.isEmpty())
-        nWinBits |= WB_BORDER;
-    nWinBits |= (WB_ITEMBORDER| WB_3DLOOK|WB_OWNERDRAWDECORATION);
-    rRet = VclPtr<SvxPresetListBox>::Create(pParent, nWinBits);
-}
+VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxPresetListBox, WB_ITEMBORDER| WB_3DLOOK|WB_OWNERDRAWDECORATION|WB_TABSTOP)
 
 void SvxPresetListBox::Resize()
 {
