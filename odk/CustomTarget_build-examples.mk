@@ -97,7 +97,7 @@ $(call gb_CustomTarget_get_target,odk/build-examples): \
             UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,odk/build-examples)/user) \
         $(foreach my_dir,$(my_example_dirs), \
             && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
-                && printf 'yes\n' | make))) \
+                && printf 'yes\n' | LC_ALL=C make))) \
             >$(call gb_CustomTarget_get_workdir,odk/build-examples)/log 2>&1 \
         || (RET=$$? \
             && cat $(call gb_CustomTarget_get_workdir,odk/build-examples)/log \
