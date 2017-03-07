@@ -6399,10 +6399,7 @@ PPTPortionObj* PPTParagraphObj::Next()
 
 PPTFieldEntry::~PPTFieldEntry()
 {
-    delete pField1;
-    delete pField2;
-    delete pString;
-};
+}
 
 void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateFormat, SvxTimeFormat& eTimeFormat )
 {
@@ -6453,14 +6450,14 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     SvxTimeFormat eTimeFormat;
     GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
-        pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD );
+        xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD));
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
-        SvxFieldItem* pFieldItem = new SvxFieldItem( SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD );
-        if ( pField1 )
-            pField2 = pFieldItem;
+        std::unique_ptr<SvxFieldItem> xFieldItem(new SvxFieldItem(SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD));
+        if (xField1)
+            xField2 = std::move(xFieldItem);
         else
-            pField1 = pFieldItem;
+            xField1 = std::move(xFieldItem);
     }
 }
 
@@ -6763,7 +6760,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         xEntry.reset(new PPTFieldEntry);
                                         rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->pField1 = new SvxFieldItem( SvxFooterField(), EE_FEATURE_FIELD );
+                                        xEntry->xField1.reset(new SvxFieldItem(SvxFooterField(), EE_FEATURE_FIELD));
                                     }
                                     break;
 
@@ -6771,7 +6768,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         xEntry.reset(new PPTFieldEntry);
                                         rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->pField1 = new SvxFieldItem( SvxHeaderField(), EE_FEATURE_FIELD );
+                                        xEntry->xField1.reset(new SvxFieldItem(SvxHeaderField(), EE_FEATURE_FIELD));
                                     }
                                     break;
 
@@ -6779,13 +6776,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     {
                                         xEntry.reset(new PPTFieldEntry);
                                         rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->pField1 = new SvxFieldItem( SvxDateTimeField(), EE_FEATURE_FIELD );
+                                        xEntry->xField1.reset(new SvxFieldItem(SvxDateTimeField(), EE_FEATURE_FIELD));
                                         if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
                                         {                                       // that there is no HeaderFooterEntry available
                                             if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
                                                 xEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
                                             else
-                                                xEntry->pString = new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
+                                                xEntry->xString.reset(new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] ));
                                         }
                                     }
                                     break;
@@ -6804,7 +6801,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             switch( aTextHd.nRecType )
                                             {
                                                 case PPT_PST_SlideNumberMCAtom:
-                                                    xEntry->pField1 = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                                                    xEntry->xField1.reset(new SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD));
                                                 break;
 
                                                 case PPT_PST_RTFDateTimeMCAtom:
@@ -6837,7 +6834,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             else if (!n)
                                                             {
                                                                 // End of format string
-                                                                xEntry->pString = new OUString( aStr );
+                                                                xEntry->xString.reset(new OUString( aStr ));
                                                                 break;
                                                             }
                                                             else if (!inquote)
@@ -6853,10 +6850,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                         }
                                                     }
-                                                    if (!xEntry->pString)
+                                                    if (!xEntry->xString)
                                                     {
                                                         // Handle as previously
-                                                        xEntry->pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                                                        xEntry->xField1.reset(new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD ));
                                                     }
                                                 }
                                             }
@@ -6898,7 +6895,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 aTarget += "#";
                                                                 aTarget += pHyperlink->aConvSubString;
                                                             }
-                                                            xEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+                                                            xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ));
                                                         }
                                                     }
                                                     break;
@@ -6962,11 +6959,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     pNewCPS->maString = aString.copy( nCount + 1, nBehind );
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
                                                 }
-                                                if ( (*FE)->pField2 )
+                                                if ( (*FE)->xField2 )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->mpFieldItem.reset( (*FE)->pField2 );
-                                                    (*FE)->pField2 = nullptr;
+                                                    pNewCPS->mpFieldItem = std::move((*FE)->xField2);
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
 
                                                     pNewCPS = new PPTCharPropSet( *pSet );
@@ -6979,13 +6975,12 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     pNewCPS->maString = aString.copy( 0, nCount );
                                                     aCharPropList.insert( aCharPropList.begin() + n++, pNewCPS );
                                                 }
-                                                if ( (*FE)->pField1 )
+                                                if ( (*FE)->xField1 )
                                                 {
-                                                    pSet->mpFieldItem.reset( (*FE)->pField1 );
-                                                    (*FE)->pField1 = nullptr;
+                                                    pSet->mpFieldItem = std::move((*FE)->xField1);
                                                 }
-                                                else if ( (*FE)->pString )
-                                                    pSet->maString = *(*FE)->pString;
+                                                else if ( (*FE)->xString )
+                                                    pSet->maString = *(*FE)->xString;
                                             }
                                             else
                                             {
@@ -7011,11 +7006,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             PPTCharPropSet* pCurrent = aCharPropList[ nIdx ];
                                                             sal_Int32       nNextStringLen = pCurrent->maString.getLength();
 
-                                                            DBG_ASSERT( (*FE)->pField1, "missing field!" );
-                                                            if (!(*FE)->pField1)
+                                                            DBG_ASSERT( (*FE)->xField1, "missing field!" );
+                                                            if (!(*FE)->xField1)
                                                                 break;
 
-                                                            const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->pField1->GetField());
+                                                            const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->xField1->GetField());
 
                                                             pCurrent->mbIsHyperlink = true;
                                                             pCurrent->mnHylinkOrigColor = pCurrent->mpImplPPTCharPropSet->mnColor;
@@ -7061,8 +7056,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             nIdx++;
                                                         }
-                                                        delete (*FE)->pField1;
-                                                        (*FE)->pField1 = nullptr;
+                                                        (*FE)->xField1.reset();
 
                                                         if ( pBefCPS )
                                                         {

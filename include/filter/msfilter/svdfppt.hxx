@@ -473,11 +473,16 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
 {
     sal_uInt16          nPos;
     sal_uInt16          nTextRangeEnd;
-    SvxFieldItem*       pField1;
-    SvxFieldItem*       pField2;
-    OUString*           pString;
+    std::unique_ptr<SvxFieldItem> xField1;
+    std::unique_ptr<SvxFieldItem> xField2;
+    std::unique_ptr<OUString> xString;
 
-    PPTFieldEntry() : nPos( 0 ), nTextRangeEnd( 0 ), pField1( nullptr ), pField2( nullptr ), pString( nullptr ) {};
+    PPTFieldEntry()
+        : nPos(0)
+        , nTextRangeEnd(0)
+    {
+    }
+
     ~PPTFieldEntry();
 
     void                SetDateTime( sal_uInt32 nType );
