@@ -237,7 +237,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
     }
 
 
-    pProfile = calloc(1, sizeof(osl_TProfileImpl));
+    pProfile = (osl_TProfileImpl*)calloc(1, sizeof(osl_TProfileImpl));
 
     if ( pProfile == NULL )
     {
@@ -691,7 +691,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
         return (sal_False);
     }
 
-    Line = malloc(strlen(pszEntry)+strlen(pszString)+48);
+    Line = (sal_Char*)malloc(strlen(pszEntry)+strlen(pszString)+48);
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
@@ -1219,7 +1219,7 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption ProfileFlags )
 {
     int        Flags;
-    osl_TFile* pFile = calloc(1, sizeof(osl_TFile));
+    osl_TFile* pFile = (osl_TFile*)calloc(1, sizeof(osl_TFile));
     sal_Bool bWriteable = sal_False;
 
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
@@ -1461,7 +1461,7 @@ static sal_Bool OslProfile_putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
     if ( pFile->m_pWriteBuf == NULL )
     {
-        pFile->m_pWriteBuf = malloc(Len+3);
+        pFile->m_pWriteBuf = (sal_Char*)malloc(Len+3);
         pFile->m_nWriteBufLen = Len+3;
         pFile->m_nWriteBufFree = Len+3;
     }
@@ -1471,7 +1471,7 @@ static sal_Bool OslProfile_putLine(osl_TFile* pFile, const sal_Char *pszLine)
         {
             sal_Char* pTmp;
 
-            pTmp= realloc(pFile->m_pWriteBuf,( ( pFile->m_nWriteBufLen + Len ) * 2) );
+            pTmp = (sal_Char*)realloc(pFile->m_pWriteBuf,( ( pFile->m_nWriteBufLen + Len ) * 2) );
             if ( pTmp == NULL )
             {
                 return sal_False;
@@ -1526,7 +1526,7 @@ static sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
         if (pProfile->m_Lines == NULL)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = calloc(pProfile->m_MaxLines, sizeof(sal_Char *));
+            pProfile->m_Lines = (sal_Char **)calloc(pProfile->m_MaxLines, sizeof(sal_Char *));
         }
         else
         {
@@ -1534,7 +1534,7 @@ static sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
             unsigned int oldmax=pProfile->m_MaxLines;
 
             pProfile->m_MaxLines += LINES_ADD;
-            pProfile->m_Lines = realloc(pProfile->m_Lines,
+            pProfile->m_Lines = (sal_Char **)realloc(pProfile->m_Lines,
                                                  pProfile->m_MaxLines * sizeof(sal_Char *));
             for ( idx = oldmax ; idx < pProfile->m_MaxLines ; ++idx )
             {
@@ -1567,12 +1567,12 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
         if (pProfile->m_Lines == NULL)
         {
             pProfile->m_MaxLines = LINES_INI;
-            pProfile->m_Lines = calloc(pProfile->m_MaxLines, sizeof(sal_Char *));
+            pProfile->m_Lines = (sal_Char **)calloc(pProfile->m_MaxLines, sizeof(sal_Char *));
         }
         else
         {
             pProfile->m_MaxLines += LINES_ADD;
-            pProfile->m_Lines = realloc(pProfile->m_Lines,
+            pProfile->m_Lines = (sal_Char **)realloc(pProfile->m_Lines,
                                                  pProfile->m_MaxLines * sizeof(sal_Char *));
 
             memset(&pProfile->m_Lines[pProfile->m_NoLines],
@@ -1684,13 +1684,13 @@ static sal_Bool addEntry(osl_TProfileImpl* pProfile, osl_TProfileSection *pSecti
             if (pSection->m_Entries == NULL)
             {
                 pSection->m_MaxEntries = ENTRIES_INI;
-                pSection->m_Entries = malloc(
+                pSection->m_Entries = (osl_TProfileEntry *)malloc(
                                 pSection->m_MaxEntries * sizeof(osl_TProfileEntry));
             }
             else
             {
                 pSection->m_MaxEntries += ENTRIES_ADD;
-                pSection->m_Entries = realloc(pSection->m_Entries,
+                pSection->m_Entries = (osl_TProfileEntry *)realloc(pSection->m_Entries,
                                 pSection->m_MaxEntries * sizeof(osl_TProfileEntry));
             }
 
@@ -1741,7 +1741,7 @@ static sal_Bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char*
         if (pProfile->m_Sections == NULL)
         {
             pProfile->m_MaxSections = SECTIONS_INI;
-            pProfile->m_Sections = calloc(pProfile->m_MaxSections, sizeof(osl_TProfileSection));
+            pProfile->m_Sections = (osl_TProfileSection *)calloc(pProfile->m_MaxSections, sizeof(osl_TProfileSection));
         }
         else
         {
@@ -1749,7 +1749,7 @@ static sal_Bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char*
             unsigned int oldmax=pProfile->m_MaxSections;
 
             pProfile->m_MaxSections += SECTIONS_ADD;
-            pProfile->m_Sections = realloc(pProfile->m_Sections,
+            pProfile->m_Sections = (osl_TProfileSection *)realloc(pProfile->m_Sections,
                                           pProfile->m_MaxSections * sizeof(osl_TProfileSection));
             for ( idx = oldmax ; idx < pProfile->m_MaxSections ; ++idx )
             {
