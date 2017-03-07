@@ -34,6 +34,24 @@
       "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e32cc3ad",
+        "filename": "editeng/source/editeng/eerdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-07T13:02:13Z",
+      "side": 1,
+      "message": "Then surely DeInitVCL() is too low down in the stack and we  need to tie into something higher up to destroy GlobalEditData?\nNote that there is nice stack-trace-dumping logging now which works on Windows and Linux, if you need to figure out where the call to the dtor is coming from - see SAL_DEBUG_BACKTRACE",
+      "parentUuid": "9a57fde8_a322bbb7",
+      "revId": "dc50e7e1cf1e5702542b0b96f12c0facaaa0fbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
