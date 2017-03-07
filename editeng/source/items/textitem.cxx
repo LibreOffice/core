@@ -513,7 +513,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (bool)GetBoolValue();
             break;
         case MID_POSTURE:
-            rVal <<= (awt::FontSlant)GetValue();    // values from awt::FontSlant and FontItalic are equal
+            rVal <<= VCLUnoHelper::ConvertFontSlant(GetValue());
             break;
     }
     return true;
@@ -538,24 +538,21 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 eSlant = (awt::FontSlant)nValue;
             }
-            SetValue((FontItalic)eSlant);
+            SetValue(VCLUnoHelper::ConvertFontSlant(eSlant));
         }
     }
     return true;
 }
-
 
 bool SvxPostureItem::HasBoolValue() const
 {
     return true;
 }
 
-
 bool SvxPostureItem::GetBoolValue() const
 {
     return ( GetValue() >= ITALIC_OBLIQUE );
 }
-
 
 void SvxPostureItem::SetBoolValue( bool bVal )
 {
