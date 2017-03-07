@@ -982,13 +982,15 @@ void SmParser::DoAlign()
         }
     }
 
-    DoExpression();
+    std::unique_ptr<SmNode> pNode(DoExpression());
 
     if (pSNode)
     {
-        pSNode->SetSubNode(0, popOrZero(m_aNodeStack));
+        pSNode->SetSubNode(0, pNode.release());
         m_aNodeStack.push_front(std::move(pSNode));
     }
+    else
+        m_aNodeStack.push_front(std::move(pNode));
 }
 
 void SmParser::DoLine()
@@ -1005,10 +1007,7 @@ void SmParser::DoLine()
     }
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-    {
-        DoExpression();
-        ExpressionArray.push_back(popOrZero(m_aNodeStack));
-    }
+        ExpressionArray.push_back(DoExpression());
 
     //If there's no expression, add an empty one.
     //this is to avoid a formula tree without any caret
@@ -1025,7 +1024,7 @@ void SmParser::DoLine()
     m_aNodeStack.push_front(std::move(pSNode));
 }
 
-void SmParser::DoExpression()
+SmNode *SmParser::DoExpression()
 {
     bool bUseExtraSpaces = true;
     if (!m_aNodeStack.empty())
@@ -1053,12 +1052,12 @@ void SmParser::DoExpression()
         std::unique_ptr<SmExpressionNode> pSNode(new SmExpressionNode(m_aCurToken));
         pSNode->SetSubNodes(RelationArray);
         pSNode->SetUseExtraSpaces(bUseExtraSpaces);
-        m_aNodeStack.push_front(std::move(pSNode));
+        return pSNode.release();
     }
     else
     {
         // This expression has only one node so just push this node.
-        m_aNodeStack.push_front(std::unique_ptr<SmNode>(RelationArray[0]));
+        return RelationArray[0];
     }
 }
 
@@ -2326,10 +2325,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
     m_aNodeStack.clear();
 
     NextToken();
-    DoExpression();
-
-    SmNode* result = popOrZero(m_aNodeStack);
-    return result;
+    return DoExpression();
 }
 
 
