@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlexport8, \
     test \
     unotest \
     utl \
+    sfx \
     sw \
     tl \
     vcl \

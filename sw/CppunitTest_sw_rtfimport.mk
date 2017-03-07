@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfimport, \
     cppu \
     cppuhelper \
     sal \
+    sfx \
 	i18nlangtag \
 	sw \
     test \

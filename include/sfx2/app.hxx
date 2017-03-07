@@ -246,7 +246,7 @@ public:
 
 inline SfxApplication* SfxGetpApp()
 {
-    return SfxApplication::GetOrCreate();
+    return SfxApplication::Get();
 }
 
 #endif

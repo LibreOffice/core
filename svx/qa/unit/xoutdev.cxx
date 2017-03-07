@@ -15,6 +15,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/types.h>
+#include <sfx2/app.hxx>
 #include <tools/stream.hxx>
 #include <unotest/directories.hxx>
 #include <unotools/tempfile.hxx>
@@ -26,6 +27,12 @@ class XOutdevTest : public CppUnit::TestFixture
 {
 public:
     void testPdfGraphicExport();
+
+    virtual void setUp() override
+    {
+        CppUnit::TestFixture::setUp();
+        SfxApplication::GetOrCreate();
+    }
 
     CPPUNIT_TEST_SUITE(XOutdevTest);
     CPPUNIT_TEST(testPdfGraphicExport);
