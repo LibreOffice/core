@@ -33,10 +33,10 @@
 #define CHART_WIZARD_PAGEWIDTH  250
 #define CHART_WIZARD_PAGEHEIGHT 170
 
+using namespace css;
+
 namespace chart
 {
-using namespace ::com::sun::star;
-
 #define PATH_FULL   1
 #define STATE_FIRST        0
 #define STATE_CHARTTYPE    STATE_FIRST
@@ -45,41 +45,45 @@ using namespace ::com::sun::star;
 #define STATE_OBJECTS      3
 #define STATE_LAST         STATE_OBJECTS
 
-CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< frame::XModel >& xChartModel
-                               , const uno::Reference< uno::XComponentContext >& xContext )
-                : svt::RoadmapWizard( pParent )
+CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame::XModel>& xChartModel,
+                               const uno::Reference<uno::XComponentContext>& xContext)
+                : svt::RoadmapWizard(pParent)
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
-                , m_xCC( xContext )
+                , m_xComponentContext(xContext)
                 , m_pTemplateProvider(nullptr)
                 , m_nLastState(STATE_LAST)
-                , m_aTimerTriggeredControllerLock( xChartModel )
-                , m_bCanTravel( true )
+                , m_aTimerTriggeredControllerLock(xChartModel)
+                , m_bCanTravel(true)
 {
-    m_pDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
-    defaultButton( WizardButtonFlags::FINISH );
+    m_pDialogModel.reset(new DialogModel(m_xChartModel, m_xComponentContext));
+    defaultButton(WizardButtonFlags::FINISH);
 
     this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
 
-    declarePath( PATH_FULL
-        , {STATE_CHARTTYPE
-        , STATE_SIMPLE_RANGE
-        , STATE_DATA_SERIES
-        , STATE_OBJECTS}
-    );
-    this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
-    this->SetRoadmapInteractive( true );
-    Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MapUnit::MapAppFont ) );
+    WizardPath aPath = {
+        STATE_CHARTTYPE,
+        STATE_SIMPLE_RANGE,
+        STATE_DATA_SERIES,
+        STATE_OBJECTS
+    };
+
+    declarePath(PATH_FULL, aPath);
+
+    this->SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
+    this->SetRoadmapInteractive(true);
+
+    Size aAdditionalRoadmapSize(LogicToPixel(Size(85, 0), MapUnit::MapAppFont));
     Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MapUnit::MapAppFont));
     aSize.Width() += aAdditionalRoadmapSize.Width();
-    this->SetSizePixel( aSize );
+    this->SetSizePixel(aSize);
 
-    uno::Reference< chart2::XChartDocument > xChartDoc( m_xChartModel, uno::UNO_QUERY );
+    uno::Reference<chart2::XChartDocument> xChartDoc(m_xChartModel, uno::UNO_QUERY);
     bool bHasOwnData = (xChartDoc.is() && xChartDoc->hasInternalDataProvider());
 
-    if( bHasOwnData )
+    if(bHasOwnData)
     {
-        this->enableState( STATE_SIMPLE_RANGE, false );
-        this->enableState( STATE_DATA_SERIES, false );
+        enableState(STATE_SIMPLE_RANGE, false);
+        enableState(STATE_DATA_SERIES, false);
     }
 
     // Call ActivatePage, to create and activate the first page
@@ -117,15 +121,17 @@ VclPtr<TabPage> CreationWizard::createPage(WizardState nState)
         break;
     case STATE_OBJECTS:
         {
-        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(this,m_xChartModel,m_xCC);
+        pRet  = VclPtr<TitlesAndObjectsTabPage>::Create(this,m_xChartModel, m_xComponentContext);
         m_aTimerTriggeredControllerLock.startTimer();
         }
         break;
     default:
         break;
     }
-    if(pRet)
-        pRet->SetText(OUString());//remove title of pages to not get them in the wizard title
+
+    if (pRet)
+        pRet->SetText(OUString()); //remove title of pages to not get them in the wizard title
+
     return pRet;
 }
 
