@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_be556ec7",
+        "filename": "sc/inc/docsh.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-07T18:22:25Z",
+      "side": 1,
+      "message": "Please do NOT move this docsh.hxx to the Calc global sc/inc/ directory. Only UI code should use it, if the filter alsready does so bad enough (and actually that should be changed somehow), but moving it to the global level is an invitation for others to use it all across the module, which is a no-no.",
+      "revId": "7f6e446055165441695e5f9f894319ab826eb9c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
