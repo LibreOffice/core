@@ -33,6 +33,7 @@
 #include <tools/urlobj.hxx>
 
 #include <rtl/math.hxx>
+#include <rtl/uuid.h>
 #include <svl/zformat.hxx>
 #include "formulacell.hxx"
 #include "drwlayer.hxx"
@@ -458,8 +459,26 @@ void XclObj::Save( XclExpStream& rStrm )
     SaveTextRecs( rStrm );
 }
 
-void XclObj::WriteSubRecs( XclExpStream& /*rStrm*/ )
+void XclObj::WriteSubRecs( XclExpStream& rStrm )
 {
+    if( mnObjType == EXC_OBJTYPE_NOTE )
+    {
+        // FtNts subrecord
+        AddRecSize( 26 );
+        // ft, cb
+        rStrm << EXC_ID_OBJNTS << sal_uInt16(0x0016);
+        sal_uInt8 aGUID[16];
+        rtl_createUuid( aGUID, nullptr, false );
+        // guid
+        rStrm.SetSliceSize( 16 );
+        for( int i = 0; i < 16; i++ )
+            rStrm << aGUID[i];
+        rStrm.SetSliceSize( 0 );
+        // fSharedNote
+        rStrm << sal_uInt16(0);
+        // unused
+        rStrm.WriteZeroBytes( 4 );
+    }
 }
 
 void XclObj::SaveTextRecs( XclExpStream& rStrm )
