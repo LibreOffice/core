@@ -57,12 +57,44 @@ public:
 
     virtual void PopupModeEnd() override
     {
+        hideSeparators(false);
         for (int i = 0; i < m_pBox->GetChildCount(); i++)
         {
             m_pBox->GetChild(i)->Hide();
             m_pBox->GetChild(i)->SetParent(m_pParent);
         }
         FloatingWindow::PopupModeEnd();
+    }
+
+    void hideSeparators(bool bHide = true)
+    {
+        // separator on the beginning
+        Window* pWindow = m_pBox->GetChild(0);
+        while (pWindow && pWindow->GetType() == WindowType::CONTAINER)
+        {
+            pWindow = pWindow->GetChild(0);
+        }
+        if (pWindow && pWindow->GetType() == WindowType::FIXEDLINE)
+        {
+            if (bHide)
+                pWindow->Hide();
+            else
+                pWindow->Show();
+        }
+
+        // separator on the end
+        pWindow = m_pBox->GetChild(m_pBox->GetChildCount() - 1);
+        while (pWindow && pWindow->GetType() == WindowType::CONTAINER)
+        {
+            pWindow = pWindow->GetChild(pWindow->GetChildCount() - 1);
+        }
+        if (pWindow && pWindow->GetType() == WindowType::FIXEDLINE)
+        {
+            if (bHide)
+                pWindow->Hide();
+            else
+                pWindow->Show();
+        }
     }
 
     void dispose() override
@@ -149,6 +181,8 @@ IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
             pChild->SetParent(m_pPopup->getBox());
         }
     }
+
+    m_pPopup->hideSeparators(true);
 
     m_pPopup->getBox()->set_height_request(GetSizePixel().Height());
 
