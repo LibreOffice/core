@@ -2738,6 +2738,14 @@ DECLARE_RTFIMPORT_TEST(testTdf104744, "tdf104744.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf104287, "tdf104287.rtf")
+{
+    uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    // This failed, the bitmap had no valid anchor.
+    CPPUNIT_ASSERT(xShape->getAnchor().is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
