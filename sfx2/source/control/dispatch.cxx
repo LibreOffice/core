@@ -1223,7 +1223,6 @@ void SfxDispatcher::Update_Impl( bool bForce )
     if ( !xImp->pFrame )
         return;
 
-    SfxGetpApp();  // -Wall is this required???
     SfxDispatcher *pDisp = this;
     bool bUpdate = bForce;
     while ( pDisp && pDisp->xImp->pFrame )
@@ -1329,7 +1328,6 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
 void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
-    SfxGetpApp();
     SfxWorkWindow *pWorkWin = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
     bool bIsActive = false;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();

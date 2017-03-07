@@ -1044,7 +1044,6 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
     DBG_ASSERT( m_pImpl->aData.size(), "no Pages registered" );
-    SfxGetpApp();
 
     // Tab Page schon da?
     VclPtr<SfxTabPage> pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
@@ -1142,7 +1141,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
-    SfxGetpApp();
     SfxTabPage *pPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     DBG_ASSERT( pPage, "no active Page" );
     if (!pPage)

@@ -1162,9 +1162,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
             p->Lock();
     }
 
-    // you realize what is needed often (saves Code and execution time)
-    SfxGetpApp();
-
     Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< css::frame::XLayoutManager > xLayoutManager;
 

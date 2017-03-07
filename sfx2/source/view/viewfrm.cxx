@@ -1074,13 +1074,11 @@ bool SfxViewFrame::Close()
 
 void SfxViewFrame::DoActivate( bool bUI )
 {
-    SfxGetpApp();
     m_pDispatcher->DoActivate_Impl( bUI );
 }
 
 void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
 {
-    SfxGetpApp();
     m_pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
 }
 
