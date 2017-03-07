@@ -1112,10 +1112,9 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
         BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
         if ( pAcc )
         {
-            sal_Int32 nX, nY;
-            for ( nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
+            for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
             {
-                for ( nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
+                for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
                 {
                     double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
                     double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();

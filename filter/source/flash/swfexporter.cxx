@@ -166,14 +166,13 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
 
     // #i56084# nPageCount is 1 when exporting selection
     const sal_Int32 nPageCount = mbExportSelection ? 1 : xDrawPages->getCount();
-    sal_uInt16 nPage;
 
     if ( xStatusIndicator.is() )
     {
         xStatusIndicator->start("Macromedia Flash (SWF)", nPageCount);
     }
 
-    for( nPage = 0; nPage < nPageCount; nPage++)
+    for( sal_Int32 nPage = 0; nPage < nPageCount; nPage++)
     {
         // #i56084# keep PageNumber? We could determine the PageNumber of the single to-be-exported page
         // when exporting the selection, but this is only used for swf internal, so no need to do so (AFAIK)

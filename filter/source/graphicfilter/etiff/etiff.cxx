@@ -314,23 +314,22 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
 void TIFFWriter::ImplWritePalette()
 {
-    sal_uInt16 i;
     sal_uLong nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
     m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );  // to the palette colors
     m_rOStm.Seek( nCurrentPos );
 
-    for ( i = 0; i < mnColors; i++ )
+    for ( sal_uInt32 i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
         m_rOStm.WriteUInt16( rColor.GetRed() << 8 );
     }
-    for ( i = 0; i < mnColors; i++ )
+    for ( sal_uInt32 i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
         m_rOStm.WriteUInt16( rColor.GetGreen() << 8 );
     }
-    for ( i = 0; i < mnColors; i++ )
+    for ( sal_uInt32 i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
         m_rOStm.WriteUInt16( rColor.GetBlue() << 8 );

@@ -500,13 +500,13 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                 nLines++;
             nLines *= aSizeBitmap.Height();
             ImplWriteLong( nLines );
-            sal_Int32 nX, nY, nCount2, nCount = 4;
+            sal_Int32 nCount2, nCount = 4;
             const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            for ( nY = 0; nY < aSizeBitmap.Height(); nY++ )
+            for ( long nY = 0; nY < aSizeBitmap.Height(); nY++ )
             {
                 nCount2 = 0;
                 char nVal = 0;
-                for ( nX = 0; nX < aSizeBitmap.Width(); nX++ )
+                for ( long nX = 0; nX < aSizeBitmap.Width(); nX++ )
                 {
                     if ( !nCount2 )
                     {

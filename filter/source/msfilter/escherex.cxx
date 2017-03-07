@@ -3504,7 +3504,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             sal_uInt16 nElements = (sal_uInt16)aHandlesPropSeq.getLength();
                             if ( nElements )
                             {
-                                sal_uInt16 k, j, nElementSize = 36;
+                                sal_uInt16 k, nElementSize = 36;
                                 sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                 SvMemoryStream aOut( nStreamSize );
                                 aOut.WriteUInt16( nElements )
@@ -3524,10 +3524,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     sal_Int32 nYRangeMax = 0x7fffffff;
 
                                     const uno::Sequence< beans::PropertyValue >& rPropSeq = aHandlesPropSeq[ k ];
-                                    for ( j = 0; j < rPropSeq.getLength(); j++ )
+                                    for ( const beans::PropertyValue& rPropVal: rPropSeq )
                                     {
-                                        const beans::PropertyValue& rPropVal = rPropSeq[ j ];
-
                                         const OUString sPosition           ( "Position"  );
                                         const OUString sMirroredX          ( "MirroredX"  );
                                         const OUString sMirroredY          ( "MirroredY"  );

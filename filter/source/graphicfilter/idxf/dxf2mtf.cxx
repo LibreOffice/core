@@ -74,9 +74,8 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
         aDXFLineInfo.eStyle = LineStyle::Solid;
     }
     else {
-        sal_Int32 i;
         aDXFLineInfo.eStyle = LineStyle::Dash;
-        for (i=0; i < (pLT->nDashCount); i++) {
+        for (long i=0; i < (pLT->nDashCount); i++) {
             const double x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
             if ( x >= 0.0 ) {
                 if ( aDXFLineInfo.nDotCount == 0 ) {
@@ -584,8 +583,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
             }
             else
             {
-                sal_uInt32 i;
-                for ( i = 0; i < rPathData.aEdges.size(); i++ )
+                for ( std::deque<DXFEdgeType*>::size_type i = 0; i < rPathData.aEdges.size(); i++ )
                 {
                     const DXFEdgeType* pEdge = rPathData.aEdges[ i ];
                     switch( pEdge->nEdgeType )

@@ -2028,7 +2028,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                     {
                                         SvStorageInfoList aList;
                                         xSource->FillInfoList( &aList );
-                                        sal_uInt32 i;
+                                        SvStorageInfoList::size_type i;
 
                                         bool bCopied = true;
                                         for ( i = 0; i < aList.size(); i++ )    // copy all entries
@@ -6686,7 +6686,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
                                         &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
-                                    sal_uInt32  nI = 0;
+                                    PPTCharPropSetList::size_type nI = 0;
                                     for (PPTTextSpecInfo* pSpecInfo : aTextSpecInfoAtomInterpreter.aList)
                                     {
                                         sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;

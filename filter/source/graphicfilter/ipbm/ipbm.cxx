@@ -66,8 +66,6 @@ PBMReader::PBMReader(SvStream & rPBM)
 
 bool PBMReader::ReadPBM(Graphic & rGraphic )
 {
-    sal_uInt16 i;
-
     if ( mrPBM.GetError() )
         return false;
 
@@ -116,7 +114,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
                 mnCol = 256;
 
             mpAcc->SetPaletteEntryCount( 256 );
-            for ( i = 0; i < mnCol; i++ )
+            for ( sal_uLong i = 0; i < mnCol; i++ )
             {
                 sal_uLong nCount = 255 * i / mnCol;
                 mpAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
