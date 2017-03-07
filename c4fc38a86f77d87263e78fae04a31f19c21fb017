@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_43b66f8b",
+        "filename": "external/lcms2/ExternalProject_lcms2.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-03-07T12:15:07Z",
+      "side": 0,
+      "message": "FWIW, the suspicious hardcoded:\n\n Projects/VC2013/lcms2_DLL\n\nin line 27/line 28 is suspicious, now that we are on VS2015 ...",
+      "revId": "c4fc38a86f77d87263e78fae04a31f19c21fb017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
