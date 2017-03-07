@@ -1058,9 +1058,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
 
     // create the caption object
     ScCaptionCreator aCreator( rDoc, rPos, bTailFront );
-    // The caption object returned is completely unmanaged and stored
-    // elsewhere.
-    SdrCaptionObj* pCaption = aCreator.GetCaption().release();
+    SdrCaptionObj* pCaption = aCreator.GetCaption().get();  // just for ease of use
 
     // insert caption into page (needed to set caption text)
     rDrawPage.InsertObject( pCaption );
@@ -1091,7 +1089,10 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
 
     // move caption into visible area
     aCreator.AutoPlaceCaption( &aVisRect );
-    return pCaption;
+
+    // The caption object returned is completely unmanaged and stored elsewhere.
+    // XXX Note it is already inserted to the draw page.
+    return aCreator.GetCaption().release();
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromCaption(
