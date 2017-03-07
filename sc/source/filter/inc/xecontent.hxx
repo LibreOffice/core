@@ -232,7 +232,8 @@ public:
     virtual             ~XclExpCondfmt();
 
     /** Returns true, if this conditional format contains at least one cell range and CF record. */
-    bool                IsValid() const;
+    bool                IsValidForBinary() const;
+    bool                IsValidForXml() const;
 
     /** Writes the CONDFMT record with following CF records, if there is valid data. */
     virtual void        Save( XclExpStream& rStrm ) override;
