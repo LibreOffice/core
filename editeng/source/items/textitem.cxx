@@ -115,7 +115,7 @@ SfxPoolItem* SvxContourItem::CreateDefault() {return new SvxContourItem(false, 0
 SfxPoolItem* SvxColorItem::CreateDefault() {return new SvxColorItem(0);}
 SfxPoolItem* SvxBackgroundColorItem::CreateDefault() {return new SvxBackgroundColorItem(0);}
 SfxPoolItem* SvxKerningItem::CreateDefault() {return new SvxKerningItem(0, 0);}
-SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, 0);}
+SfxPoolItem* SvxCaseMapItem::CreateDefault() {return new SvxCaseMapItem(SvxCaseMap::NotMapped, 0);}
 SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0);}
 SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
 SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
@@ -2079,7 +2079,7 @@ SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
 
 sal_uInt16 SvxCaseMapItem::GetValueCount() const
 {
-    return SVX_CASEMAP_END; // SVX_CASEMAP_KAPITAELCHEN + 1
+    return (sal_uInt16)SvxCaseMap::End; // SvxCaseMap::SmallCaps + 1
 }
 
 
@@ -2091,7 +2091,7 @@ SfxPoolItem* SvxCaseMapItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCaseMapItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( GetValue() );
+    rStrm.WriteUChar( (sal_uInt8)GetValue() );
     return rStrm;
 }
 
@@ -2112,14 +2112,14 @@ bool SvxCaseMapItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = GetValueTextByPos( GetValue() );
+    rText = GetValueTextByPos( (sal_uInt16)GetValue() );
     return true;
 }
 
 
 OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < (sal_uInt16)SVX_CASEMAP_END, "enum overflow!" );
+    DBG_ASSERT( nPos < (sal_uInt16)SvxCaseMap::End, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_CASEMAP_BEGIN + nPos);
 }
 
@@ -2128,10 +2128,10 @@ bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
     sal_Int16 nRet = style::CaseMap::NONE;
     switch( GetValue() )
     {
-        case SVX_CASEMAP_VERSALIEN   :      nRet = style::CaseMap::UPPERCASE; break;
-        case SVX_CASEMAP_GEMEINE     :      nRet = style::CaseMap::LOWERCASE; break;
-        case SVX_CASEMAP_TITEL       :      nRet = style::CaseMap::TITLE    ; break;
-        case SVX_CASEMAP_KAPITAELCHEN:      nRet = style::CaseMap::SMALLCAPS; break;
+        case SvxCaseMap::Uppercase   :      nRet = style::CaseMap::UPPERCASE; break;
+        case SvxCaseMap::Lowercase     :      nRet = style::CaseMap::LOWERCASE; break;
+        case SvxCaseMap::Capitalize       :      nRet = style::CaseMap::TITLE    ; break;
+        case SvxCaseMap::SmallCaps:      nRet = style::CaseMap::SMALLCAPS; break;
         default: break;
     }
     rVal <<= (sal_Int16)(nRet);
@@ -2144,15 +2144,17 @@ bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     if(!(rVal >>= nVal))
         return false;
 
+    SvxCaseMap eVal;
     switch( nVal )
     {
-    case style::CaseMap::NONE    :  nVal = SVX_CASEMAP_NOT_MAPPED  ; break;
-    case style::CaseMap::UPPERCASE:  nVal = SVX_CASEMAP_VERSALIEN   ; break;
-    case style::CaseMap::LOWERCASE:  nVal = SVX_CASEMAP_GEMEINE     ; break;
-    case style::CaseMap::TITLE    :  nVal = SVX_CASEMAP_TITEL       ; break;
-    case style::CaseMap::SMALLCAPS:  nVal = SVX_CASEMAP_KAPITAELCHEN; break;
+    case style::CaseMap::NONE    :   eVal = SvxCaseMap::NotMapped; break;
+    case style::CaseMap::UPPERCASE:  eVal = SvxCaseMap::Uppercase;  break;
+    case style::CaseMap::LOWERCASE:  eVal = SvxCaseMap::Lowercase; break;
+    case style::CaseMap::TITLE    :  eVal = SvxCaseMap::Capitalize; break;
+    case style::CaseMap::SMALLCAPS:  eVal = SvxCaseMap::SmallCaps; break;
+    default: return false;
     }
-    SetValue((SvxCaseMap)nVal);
+    SetValue(eVal);
     return true;
 }
 

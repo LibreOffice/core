@@ -1148,16 +1148,16 @@ void WW8AttributeOutput::CharCrossedOut( const SvxCrossedOutItem& rCrossed )
 
 void WW8AttributeOutput::CharCaseMap( const SvxCaseMapItem& rCaseMap )
 {
-    sal_uInt16 eSt = rCaseMap.GetValue();
+    SvxCaseMap eSt = rCaseMap.GetValue();
     switch ( eSt )
     {
-        case SVX_CASEMAP_KAPITAELCHEN:
+        case SvxCaseMap::SmallCaps:
             OutputWW8Attribute( 5, true );
             return;
-        case SVX_CASEMAP_VERSALIEN:
+        case SvxCaseMap::Uppercase:
             OutputWW8Attribute( 6, true );
             return;
-        case SVX_CASEMAP_TITEL:
+        case SvxCaseMap::Capitalize:
             // no such feature in word
             break;
         default:

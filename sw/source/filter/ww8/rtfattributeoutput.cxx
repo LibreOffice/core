@@ -2164,10 +2164,10 @@ void RtfAttributeOutput::CharCaseMap(const SvxCaseMapItem& rCaseMap)
 {
     switch (rCaseMap.GetValue())
     {
-    case SVX_CASEMAP_KAPITAELCHEN:
+    case SvxCaseMap::SmallCaps:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SCAPS);
         break;
-    case SVX_CASEMAP_VERSALIEN:
+    case SvxCaseMap::Uppercase:
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CAPS);
         break;
     default: // Something that rtf does not support

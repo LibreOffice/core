@@ -159,7 +159,7 @@ std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()
         rDefItems[45] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         rDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
         rDefItems[47] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );
-        rDefItems[48] = new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP );
+        rDefItems[48] = new SvxCaseMapItem( SvxCaseMap::NotMapped, EE_CHAR_CASEMAP );
         rDefItems[49] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
         rDefItems[50] = new SvxBackgroundColorItem( Color( COL_AUTO ), EE_CHAR_BKGCOLOR );
         // Features

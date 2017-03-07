@@ -2403,7 +2403,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         {
             const OUString aSnippet(rInf.GetText().copy(rInf.GetIdx(), nLn));
             aTmpText = m_aSub[m_nActual].CalcCaseMap( aSnippet );
-            const bool bTitle = SVX_CASEMAP_TITEL == m_aSub[m_nActual].GetCaseMap() &&
+            const bool bTitle = SvxCaseMap::Capitalize == m_aSub[m_nActual].GetCaseMap() &&
                                 g_pBreakIt->GetBreakIter().is();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results

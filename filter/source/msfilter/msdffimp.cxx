@@ -2585,7 +2585,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( nFontAttributes & 0x40 )
         rSet.Put( SvxShadowedItem( (nFontAttributes & 0x40) != 0, EE_CHAR_SHADOW ) );
 //    if ( nFontAttributes & 0x02 )
-//        rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
+//        rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SvxCaseMap::SmallCaps : SvxCaseMap::NotMapped ) );
     if ( nFontAttributes & 0x01 )
         rSet.Put( SvxCrossedOutItem( (nFontAttributes & 0x01) ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
     if ( IsProperty( DFF_Prop_fillColor ) )

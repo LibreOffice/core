@@ -1522,16 +1522,16 @@ struct CharAttr
 // Edit corresponds to Paste-attributes
 static CharAttr aRedlineAttr[] =
 {
-    { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
+    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::NotMapped },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },
     { SID_ATTR_CHAR_POSTURE,        ITALIC_NORMAL },
     { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_SINGLE },
     { SID_ATTR_CHAR_UNDERLINE,      LINESTYLE_DOUBLE },
     { SID_ATTR_CHAR_STRIKEOUT,      STRIKEOUT_SINGLE },
-    { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_VERSALIEN },
-    { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_GEMEINE },
-    { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_KAPITAELCHEN },
-    { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_TITEL },
+    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Uppercase },
+    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Lowercase },
+    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::SmallCaps },
+    { SID_ATTR_CHAR_CASEMAP,        (sal_uInt16)SvxCaseMap::Capitalize },
     { SID_ATTR_BRUSH,               0 }
 };
 // Items from aRedlineAttr relevant for InsertAttr: strikethrough is
@@ -1968,8 +1968,8 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
     rCJKFont.SetUnderline(LINESTYLE_NONE);
     rFont.SetStrikeout(STRIKEOUT_NONE);
     rCJKFont.SetStrikeout(STRIKEOUT_NONE);
-    rFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
-    rCJKFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
+    rFont.SetCaseMap(SvxCaseMap::NotMapped);
+    rCJKFont.SetCaseMap(SvxCaseMap::NotMapped);
 
     Color aColor = pColorLB->GetSelectEntryColor();
 

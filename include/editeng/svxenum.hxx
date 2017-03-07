@@ -21,14 +21,14 @@
 
 #include <com/sun/star/style/NumberingType.hpp>
 
-enum SvxCaseMap
+enum class SvxCaseMap
 {
-    SVX_CASEMAP_NOT_MAPPED,
-    SVX_CASEMAP_VERSALIEN,
-    SVX_CASEMAP_GEMEINE,
-    SVX_CASEMAP_TITEL,
-    SVX_CASEMAP_KAPITAELCHEN,
-    SVX_CASEMAP_END
+    NotMapped,
+    Uppercase,
+    Lowercase,
+    Capitalize,
+    SmallCaps,
+    End
 };
 
 enum class SvxEscapement

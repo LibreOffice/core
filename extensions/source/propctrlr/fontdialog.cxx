@@ -505,7 +505,7 @@ namespace pcr
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_CJK_POSTURE);
         *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_CJK_LANGUAGE);
 
-        *pCounter++ = new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, CFID_CASEMAP);
+        *pCounter++ = new SvxCaseMapItem(SvxCaseMap::NotMapped, CFID_CASEMAP);
         *pCounter++ = new SvxContourItem(false, CFID_CONTOUR);
         *pCounter++ = new SvxShadowedItem(false, CFID_SHADOWED);
 
