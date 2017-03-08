@@ -164,7 +164,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     std::unordered_map< int, OString >          m_aAtomToDir;
     int                                         m_nNextDirAtom;
 
-    OString getFontFile( PrintFont* pFont ) const;
+    OString getFontFile(const PrintFont* pFont) const;
 
     bool analyzeFontFile( int nDirID, const OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=nullptr ) const;
     static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code

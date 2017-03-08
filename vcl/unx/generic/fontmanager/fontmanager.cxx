@@ -945,7 +945,7 @@ FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
     return FAMILY_DONTKNOW;
 }
 
-OString PrintFontManager::getFontFile( PrintFont* pFont ) const
+OString PrintFontManager::getFontFile(const PrintFont* pFont) const
 {
     OString aPath;
 
