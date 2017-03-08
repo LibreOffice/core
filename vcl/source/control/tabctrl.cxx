@@ -2211,7 +2211,7 @@ NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
-    Bitmap aBitmap(VclResId(SV_RESID_BITMAP_NOTEBOOKBAR));
+    BitmapEx aBitmap(VclResId(SV_RESID_BITMAP_NOTEBOOKBAR), Color());
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
 }
