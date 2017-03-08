@@ -461,7 +461,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
                 { rc.left, rc.top,          0xff00, 0xff00, 0xff00, 0xff00 },
                 { rc.right, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
             };
-            GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+            GdiGradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
         }
 
         // gradient at the bottom
@@ -469,7 +469,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             { rc.left, gradient_break,   0xfa00, 0xfa00, 0xfa00, 0xff00 },
             { rc.right, gradient_bottom, 0xf000, 0xf000, 0xf000, 0xff00 }
         };
-        GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+        GdiGradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
         // and a darker horizontal line under that
         HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
