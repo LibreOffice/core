@@ -35,41 +35,31 @@ public:
     virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
         const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment
-    ) throw (css::xml::crypto::XMLSignatureException,
-                css::uno::SecurityException,
-                css::uno::RuntimeException, std::exception) override;
+    ) override;
 
     virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
         const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
         const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext
-    ) throw(css::uno::RuntimeException,
-            css::uno::SecurityException,
-            css::xml::crypto::XMLSignatureException, std::exception) override;
+    ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // Helper for XServiceInfo
     static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-    /// @throws css::uno::RuntimeException
-    static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
+    static OUString impl_getImplementationName();
 
     //Helper for registry
-    /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager )
-        throw( css::uno::RuntimeException ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 
     static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_GPG_XMLSIGNATURE_HXX
