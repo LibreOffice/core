@@ -206,16 +206,6 @@ String RID_ERR_COLOREXPECTED
     Text [ en-US ] = "Color required" ;
 };
 
-String RID_ERR_LPARENTEXPECTED
-{
-    Text [ en-US ] = "Left limit expected" ;
-};
-
-String RID_ERR_RPARENTEXPECTED
-{
-    Text [ en-US ] = "Right limit expected" ;
-};
-
 String RID_ERR_RIGHTEXPECTED
 {
     Text [ en-US ] = "'RIGHT' expected" ;
