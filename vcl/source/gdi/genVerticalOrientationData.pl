@@ -14,6 +14,8 @@
 #
 #     We require the latest data file for UTR50, currently revision-17:
 #        http://www.unicode.org/Public/vertical/revision-17/VerticalOrientation-17.txt
+#     Please change vertical orientation of fullwidth colon(0xff1a)
+#     and semi-colon(0xff1b) from Tr to Tu manually to meet user habits.
 #
 #
 # (2) Run this tool using a command line of the form
