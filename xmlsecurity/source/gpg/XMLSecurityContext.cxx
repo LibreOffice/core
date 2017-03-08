@@ -27,7 +27,6 @@ XMLSecurityContextGpg::~XMLSecurityContextGpg()
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
     const Reference< XSecurityEnvironment >& aSecurityEnvironment)
-    throw (css::security::SecurityInfrastructureException, RuntimeException, std::exception)
 {
     if(!aSecurityEnvironment.is())
         throw RuntimeException("Invalid SecurityEnvironment given!");
@@ -38,13 +37,11 @@ sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
 
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentNumber()
-    throw (RuntimeException, std::exception)
 {
     return m_vSecurityEnvironments.size();
 }
 
 Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironmentByIndex(sal_Int32 index)
-    throw (RuntimeException, std::exception)
 {
     if (index < 0 || index >= ( sal_Int32 )m_vSecurityEnvironments.size())
         throw RuntimeException("Invalid index");
@@ -53,7 +50,6 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnv
 }
 
 Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnvironment()
-    throw (RuntimeException, std::exception)
 {
     if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= (sal_Int32) m_vSecurityEnvironments.size())
         throw RuntimeException("Invalid index");
@@ -62,34 +58,29 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContextGpg::getSecurityEnv
 }
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::getDefaultSecurityEnvironmentIndex()
-    throw (RuntimeException, std::exception)
 {
     return m_nDefaultEnvIndex ;
 }
 
 void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int32 nDefaultEnvIndex)
-    throw (RuntimeException, std::exception)
 {
     m_nDefaultEnvIndex = nDefaultEnvIndex;
 }
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContextGpg::getImplementationName()
-    throw( RuntimeException, std::exception )
 {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService( const OUString& serviceName)
-    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames()
-    throw( RuntimeException, std::exception )
 {
     return impl_getSupportedServiceNames() ;
 }
@@ -101,14 +92,12 @@ Sequence< OUString > XMLSecurityContextGpg::impl_getSupportedServiceNames()
 }
 
 OUString XMLSecurityContextGpg::impl_getImplementationName()
-    throw( RuntimeException )
 {
     return OUString("com.sun.star.xml.security.XMLSecurityContext_Gpg");
 }
 
 //Helper for registry
 Reference< XInterface > SAL_CALL XMLSecurityContextGpg::impl_createInstance( const Reference< XMultiServiceFactory >& )
-    throw( RuntimeException )
 {
     return Reference< XInterface >( *new XMLSecurityContextGpg ) ;
 }

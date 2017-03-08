@@ -14,17 +14,13 @@ using namespace css::uno;
 using namespace css::lang;
 
 Sequence< sal_Int8 > SAL_CALL CipherContext::convertWithCipherContext( const Sequence< sal_Int8 >& /*aData*/ )
-    throw ( IllegalArgumentException, DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8> seq(0);
-    return seq;
+    return Sequence<sal_Int8>();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL CipherContext::finalizeCipherContextAndDispose()
-    throw (DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8> seq(0);
-    return seq;
+    return Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

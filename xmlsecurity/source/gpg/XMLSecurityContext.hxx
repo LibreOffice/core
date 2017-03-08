@@ -40,47 +40,38 @@ public:
 
     // XXMLSecurityContext
     virtual sal_Int32 SAL_CALL addSecurityEnvironment(
-        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
-        ) throw (css::security::SecurityInfrastructureException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment override;
 
-    virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber() override;
 
-    virtual css::uno::Reference<css::xml::crypto::XSecurityEnvironment > SAL_CALL getSecurityEnvironmentByIndex(sal_Int32 index)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::xml::crypto::XSecurityEnvironment > SAL_CALL getSecurityEnvironmentByIndex(sal_Int32 index) override;
 
-    virtual css::uno::Reference<css::xml::crypto::XSecurityEnvironment > SAL_CALL getSecurityEnvironment()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::xml::crypto::XSecurityEnvironment > SAL_CALL getSecurityEnvironment() override;
 
-    virtual sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex() override;
 
-    virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XServiceInfo
-    static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+    static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
     /// @throws css::uno::RuntimeException
-    static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
+    static OUString impl_getImplementationName();
 
     //Helper for registry
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager )
-        throw( css::uno::RuntimeException ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 
     static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSECURITYCONTEXT_HXX
