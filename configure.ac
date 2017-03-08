@@ -3127,11 +3127,7 @@ else
     LIBO_SHARE_JAVA_FOLDER=program/classes
     LIBO_SHARE_PRESETS_FOLDER=presets
     LIBO_SHARE_READMES_FOLDER=readmes
-    if test "$enable_fuzzers" != yes; then
-        LIBO_SHARE_RESOURCE_FOLDER=program/resource
-    else
-        LIBO_SHARE_RESOURCE_FOLDER=resource
-    fi
+    LIBO_SHARE_RESOURCE_FOLDER=program/resource
     LIBO_SHARE_SHELL_FOLDER=program/shell
     LIBO_URE_BIN_FOLDER=program
     LIBO_URE_ETC_FOLDER=program
