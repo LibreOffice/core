@@ -3708,12 +3708,6 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([not found])
             AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
         fi
-        if test "$BUILD_X64" = TRUE; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
-        fi
     fi
     AC_SUBST(BUILD_X64)
 
