@@ -405,7 +405,7 @@ void ViewTabBar::AddTabBarButton (
     const css::drawing::framework::TabBarButton& rButton,
     const css::drawing::framework::TabBarButton& rAnchor)
 {
-    sal_uInt32 nIndex;
+    TabBarButtonList::size_type nIndex;
 
     if ( ! rAnchor.ResourceId.is()
         || (rAnchor.ResourceId->getResourceURL().isEmpty()
@@ -453,8 +453,7 @@ void ViewTabBar::AddTabBarButton (
 void ViewTabBar::RemoveTabBarButton (
     const css::drawing::framework::TabBarButton& rButton)
 {
-    sal_uInt16 nIndex;
-    for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    for (TabBarButtonList::size_type nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
         if (IsEqual(maTabBarButtons[nIndex], rButton))
         {

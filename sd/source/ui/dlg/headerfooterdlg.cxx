@@ -518,8 +518,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
     mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
-    sal_uInt16 nPos;
-    for( nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
+    for( sal_Int32 nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
     {
         int nFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetEntryData( nPos ));
         if( nFormat == rSettings.meDateTimeFormat )

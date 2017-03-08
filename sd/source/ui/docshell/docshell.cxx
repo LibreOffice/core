@@ -334,7 +334,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
 
     if( bActive )
     {
-        for( sal_uInt32 i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
+        for( std::vector<FrameView*>::size_type i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
         {
             // determine the number of FrameViews
             SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();

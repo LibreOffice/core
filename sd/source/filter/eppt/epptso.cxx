@@ -2032,11 +2032,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 if ( !aControlName.isEmpty() )
                 {
-                    sal_uInt16 i, nBufSize;
+                    sal_uInt16 nBufSize;
                     nBufSize = ( aControlName.getLength() + 1 ) << 1;
                     sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
                     sal_uInt8* pTmp = pBuf;
-                    for ( i = 0; i < aControlName.getLength(); i++ )
+                    for ( sal_Int32 i = 0; i < aControlName.getLength(); i++ )
                     {
                         sal_Unicode nUnicode = *(aControlName.getStr() + i);
                         *pTmp++ = (sal_uInt8)nUnicode;

@@ -96,8 +96,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
     // Create a set of names of the master pages used by the document.
     MasterPageObserver::MasterPageNameSet aCurrentNames;
     sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PageKind::Standard);
-    sal_uInt16 nIndex;
-    for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PageKind::Standard);
         if (pMasterPage != nullptr)
@@ -107,7 +106,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
     // Insert the recently used master pages that are currently not used.
     RecentlyUsedMasterPages& rInstance (RecentlyUsedMasterPages::Instance());
     int nPageCount = rInstance.GetMasterPageCount();
-    for (nIndex=0; nIndex<nPageCount; nIndex++)
+    for (int nIndex=0; nIndex<nPageCount; nIndex++)
     {
         // Add an entry when a) the page is already known to the
         // MasterPageContainer, b) the style name is empty, i.e. it has not yet

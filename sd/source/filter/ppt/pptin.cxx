@@ -726,8 +726,7 @@ bool ImplSdPPTImport::Import()
             }
         }
     }
-    sal_uInt16 i;
-    for (i = 0; i < mpDoc->GetMasterPageCount(); ++i)
+    for (sal_uInt16 i = 0; i < mpDoc->GetMasterPageCount(); ++i)
     {
         SdPage *const pMPage(static_cast<SdPage*>(mpDoc->GetMasterPage(i)));
         if (pMPage == nullptr)
@@ -1083,7 +1082,7 @@ bool ImplSdPPTImport::Import()
     bOk = mpDoc->CreateMissingNotesAndHandoutPages();
     if ( bOk )
     {
-        for ( i = 0; i < mpDoc->GetSdPageCount( PageKind::Standard ); i++ )
+        for ( sal_uInt16 i = 0; i < mpDoc->GetSdPageCount( PageKind::Standard ); i++ )
         {
 
             // set AutoLayout
@@ -1211,7 +1210,7 @@ bool ImplSdPPTImport::Import()
     }
 
     sal_uInt32 nSlideCount = GetPageCount();
-    for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.size() ); i++ )
+    for ( sal_uInt32 i = 0; ( i < nSlideCount) && ( i < maSlideNameList.size() ); i++ )
     {
         SdPage* pPage = mpDoc->GetSdPage( i, PageKind::Standard );
         OUString &aName = maSlideNameList[ i ];

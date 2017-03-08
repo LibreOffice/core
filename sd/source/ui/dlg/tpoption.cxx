@@ -240,9 +240,8 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
 
     // fill ListBox with metrics
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
-    sal_uInt16 i;
 
-    for ( i = 0; i < aMetricArr.Count(); ++i )
+    for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         OUString sMetric = aMetricArr.GetStringByPos( i );
         sal_IntPtr nFieldUnit = aMetricArr.GetValue( i );
@@ -275,9 +274,9 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
     sal_uInt16 aTable[ TABLE_COUNT ] =
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
-    for( i = 0; i < TABLE_COUNT; i++ )
+    for( sal_uInt16 i = 0; i < TABLE_COUNT; i++ )
         m_pCbScale->InsertEntry( GetScale( 1, aTable[i] ) );
-    for( i = 1; i < TABLE_COUNT; i++ )
+    for( sal_uInt16 i = 1; i < TABLE_COUNT; i++ )
         m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
 }
 

@@ -1641,7 +1641,7 @@ private:
             pOutliner->SetFirstPageNumber(aPages[nIndex]+1);
 
             Paragraph* pPara = nullptr;
-            sal_Int32 nH (0);
+            long nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
                 SdPage* pPage = GetFilteredPage(aPages[nIndex], PageKind::Standard);
