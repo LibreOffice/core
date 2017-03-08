@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MMOZILLABOOTSTRAP_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MMOZILLABOOTSTRAP_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
