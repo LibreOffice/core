@@ -32,36 +32,25 @@ public:
 
     /* XSEInitializer */
     virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
-        SAL_CALL createSecurityContext( const OUString& )
-        throw (css::uno::RuntimeException, std::exception) override;
+        SAL_CALL createSecurityContext( const OUString& ) override;
 
     virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
-        css::xml::crypto::XXMLSecurityContext >& securityContext )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::xml::crypto::XXMLSecurityContext >& securityContext ) override;
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-/// @throws css::uno::RuntimeException
-OUString SEInitializer_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString SEInitializer_getImplementationName();
 
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames()
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames();
 
-/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL SEInitializer_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF)
-    throw ( css::uno::Exception );
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
 
 #endif
 

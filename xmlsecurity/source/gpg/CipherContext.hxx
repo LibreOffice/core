@@ -22,10 +22,8 @@ private:
 
 public:
     // XCipherContext
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext(const css::uno::Sequence< ::sal_Int8 >& aData)
-        throw (css::lang::IllegalArgumentException, css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose()
-        throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext(const css::uno::Sequence< ::sal_Int8 >& aData) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose() override;
 };
 
 #endif
