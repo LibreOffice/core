@@ -146,6 +146,7 @@ class Parser
     typedef std::unordered_map< sal_Int64,
                            FontAttributes > FontMapType;
 
+    ScopedVclPtr<VirtualDevice> m_xDev;
     const uno::Reference<uno::XComponentContext> m_xContext;
     const ContentSinkSharedPtr                   m_pSink;
     const oslFileHandle                          m_pErr;
@@ -668,13 +669,12 @@ void Parser::readFont()
 
     }
 
-    static vcl::DeleteOnDeinit< VclPtr<VirtualDevice> > vDev( new VclPtr<VirtualDevice> );
-    if (!vDev.get()->get())
-        (*vDev.get()) = VclPtr<VirtualDevice>::Create();
+    if (!m_xDev)
+        m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
 
     vcl::Font font(aResult.familyName, Size(0, 1000));
-    (*vDev.get())->SetFont(font);
-    FontMetric metric((*vDev.get())->GetFontMetric());
+    m_xDev->SetFont(font);
+    FontMetric metric(m_xDev->GetFontMetric());
     aResult.ascent = metric.GetAscent() / 1000.0;
 
     m_aFontMap[nFontID] = aResult;
