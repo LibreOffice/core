@@ -943,7 +943,7 @@ ScOrcusStyles::xf::xf():
     mnNumberFormatId(0),
     mnStyleXf(0),
     mbAlignment(false),
-    meHor_alignment(SVX_HOR_JUSTIFY_RIGHT),
+    meHor_alignment(SvxCellHorJustify::Right),
     meVer_alignment(SVX_VER_JUSTIFY_BOTTOM)
 {
 }
@@ -1493,16 +1493,16 @@ void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignmen
     switch (align)
     {
         case os::hor_alignment_t::left:
-            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_LEFT;
+            maCurrentXF.meHor_alignment = SvxCellHorJustify::Left;
         break;
         case os::hor_alignment_t::right:
-            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_RIGHT;
+            maCurrentXF.meHor_alignment = SvxCellHorJustify::Right;
         break;
         case os::hor_alignment_t::center:
-            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_CENTER;
+            maCurrentXF.meHor_alignment = SvxCellHorJustify::Center;
         break;
         case os::hor_alignment_t::justified:
-            maCurrentXF.meHor_alignment = SVX_HOR_JUSTIFY_STANDARD;
+            maCurrentXF.meHor_alignment = SvxCellHorJustify::Standard;
         break;
         default:
             ;

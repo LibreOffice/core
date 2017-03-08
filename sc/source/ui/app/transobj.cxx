@@ -827,9 +827,9 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             {
                 if ( static_cast<const SvxHorJustifyItem*>(pDestDoc->GetAttr(
                         nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==
-                        SVX_HOR_JUSTIFY_STANDARD )
+                        SvxCellHorJustify::Standard )
                     pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
-                            SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY) );
+                            SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY) );
 
                 ScSetStringParam aParam;
                 aParam.setTextInput();

@@ -316,13 +316,13 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
             {
                 const OUString& rOptVal = rOption.GetString();
                 if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ))
-                    eVal = SVX_HOR_JUSTIFY_RIGHT;
+                    eVal = SvxCellHorJustify::Right;
                 else if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ))
-                    eVal = SVX_HOR_JUSTIFY_CENTER;
+                    eVal = SvxCellHorJustify::Center;
                 else if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ))
-                    eVal = SVX_HOR_JUSTIFY_LEFT;
+                    eVal = SvxCellHorJustify::Left;
                 else
-                    eVal = SVX_HOR_JUSTIFY_STANDARD;
+                    eVal = SvxCellHorJustify::Standard;
             }
             break;
             case HTML_O_WIDTH:
@@ -449,7 +449,7 @@ bool OHTMLReader::CreateTable(int nToken)
                     aColumnName.clear();
                     m_sCurrent.clear();
 
-                    eVal = SVX_HOR_JUSTIFY_STANDARD;
+                    eVal = SvxCellHorJustify::Standard;
                     bTableHeader = false;
                 }
                 break;

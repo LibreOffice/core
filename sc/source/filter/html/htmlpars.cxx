@@ -976,14 +976,14 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
                 SvxCellHorJustify eVal;
                 const OUString& rOptVal = rOption.GetString();
                 if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right )  )
-                    eVal = SVX_HOR_JUSTIFY_RIGHT;
+                    eVal = SvxCellHorJustify::Right;
                 else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ) )
-                    eVal = SVX_HOR_JUSTIFY_CENTER;
+                    eVal = SvxCellHorJustify::Center;
                 else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
-                    eVal = SVX_HOR_JUSTIFY_LEFT;
+                    eVal = SvxCellHorJustify::Left;
                 else
-                    eVal = SVX_HOR_JUSTIFY_STANDARD;
-                if ( eVal != SVX_HOR_JUSTIFY_STANDARD )
+                    eVal = SvxCellHorJustify::Standard;
+                if ( eVal != SvxCellHorJustify::Standard )
                     pActEntry->aItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
             }
             break;
@@ -1033,7 +1033,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
 
     if ( bHorJustifyCenterTH )
         pActEntry->aItemSet.Put(
-            SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY) );
+            SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY) );
 }
 
 void ScHTMLLayoutParser::TableRowOn( ImportInfo* pInfo )
@@ -2542,7 +2542,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
     if( rInfo.nToken == HTML_TABLEHEADER_ON )
     {
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-        rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+        rItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
     }
 
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
@@ -2553,15 +2553,15 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
         {
             case HTML_O_ALIGN:
             {
-                SvxCellHorJustify eVal = SVX_HOR_JUSTIFY_STANDARD;
+                SvxCellHorJustify eVal = SvxCellHorJustify::Standard;
                 const OUString& rOptVal = itr->GetString();
                 if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
-                    eVal = SVX_HOR_JUSTIFY_RIGHT;
+                    eVal = SvxCellHorJustify::Right;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ) )
-                    eVal = SVX_HOR_JUSTIFY_CENTER;
+                    eVal = SvxCellHorJustify::Center;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
-                    eVal = SVX_HOR_JUSTIFY_LEFT;
-                if( eVal != SVX_HOR_JUSTIFY_STANDARD )
+                    eVal = SvxCellHorJustify::Left;
+                if( eVal != SvxCellHorJustify::Standard )
                     rItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY ) );
             }
             break;

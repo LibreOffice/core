@@ -33,7 +33,7 @@ public:
     explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
     SvxHorJustifyItem(
-        const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
+        const SvxCellHorJustify eJustify /*= SvxCellHorJustify::Standard*/,
         const sal_uInt16 nId );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,

@@ -34,11 +34,11 @@ bool MemNew(LotusContext &rContext)
 
     // for tool.cxx::PutFormString()
     rContext.pAttrUnprot = new ScProtectionAttr( true );
-    rContext.pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
-    rContext.pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
-    rContext.pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
-    rContext.pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
-    rContext.pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
+    rContext.pAttrRight = new SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY );
+    rContext.pAttrLeft = new SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY );
+    rContext.pAttrCenter = new SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY );
+    rContext.pAttrRepeat = new SvxHorJustifyItem( SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY );
+    rContext.pAttrStandard = new SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY );
 
     return true;
 }

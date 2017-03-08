@@ -360,6 +360,12 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
+std::ostream& operator<<(std::ostream& rStrm, const SvxCellHorJustify& rCode)
+{
+    rStrm << static_cast<int>(rCode);
+    return rStrm;
+}
+
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
@@ -3029,7 +3035,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
         pStyleSheet->GetItemSet().HasItem(ATTR_HOR_JUSTIFY, &pItem));
 
     const SvxHorJustifyItem* pHorJustify = static_cast<const SvxHorJustifyItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with hor justify", SVX_HOR_JUSTIFY_RIGHT, pHorJustify->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with hor justify", SvxCellHorJustify::Right, pHorJustify->GetValue());
 
     pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute ver justify, but it should have.",
@@ -3706,8 +3712,7 @@ void ScFiltersTest::testColumnStyle2XLSX()
     {
         const SfxPoolItem& rItem = pAttr->GetItem(ATTR_HOR_JUSTIFY);
         const SvxHorJustifyItem& rJustify = static_cast<const SvxHorJustifyItem&>(rItem);
-        sal_uInt16 nVal = rJustify.GetValue();
-        CPPUNIT_ASSERT_EQUAL((sal_uInt16)SVX_HOR_JUSTIFY_CENTER, nVal);
+        CPPUNIT_ASSERT_EQUAL(SvxCellHorJustify::Center, rJustify.GetValue());
     }
 
     {

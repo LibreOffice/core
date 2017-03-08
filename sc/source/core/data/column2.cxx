@@ -149,7 +149,7 @@ long ScColumn::GetNeededSize(
         eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                         pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
     bool bBreak;
-    if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
+    if ( eHorJust == SvxCellHorJustify::Block )
         bBreak = true;
     else if ( pCondSet &&
                 pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SfxItemState::SET)
@@ -222,7 +222,7 @@ long ScColumn::GetNeededSize(
         }
     }
 
-    if ( eHorJust == SVX_HOR_JUSTIFY_REPEAT )
+    if ( eHorJust == SvxCellHorJustify::Repeat )
     {
         // ignore orientation/rotation if "repeat" is active
         eOrient = SVX_ORIENTATION_STANDARD;
@@ -237,7 +237,7 @@ long ScColumn::GetNeededSize(
     else
         pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
     sal_uInt16 nIndent = 0;
-    if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
+    if ( eHorJust == SvxCellHorJustify::Left )
     {
         if (pCondSet &&
                 pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SfxItemState::SET)
@@ -817,7 +817,7 @@ void ScColumn::GetOptimalHeight(
                 bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
                                 ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                                     GetItem( ATTR_HOR_JUSTIFY )).GetValue() ==
-                                    SVX_HOR_JUSTIFY_BLOCK);
+                                    SvxCellHorJustify::Block);
                 bStdOnly = !bBreak;
 
                 // conditional formatting: loop all cells

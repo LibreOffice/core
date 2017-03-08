@@ -4802,7 +4802,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
 
         if (rOption.mbCenter)
         {
-            rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+            rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
             rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
         }
 

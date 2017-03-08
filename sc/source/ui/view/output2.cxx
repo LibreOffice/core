@@ -185,7 +185,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     pCondSet    ( nullptr ),
     nAscentPixel(0),
     eAttrOrient ( SVX_ORIENTATION_STANDARD ),
-    eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
+    eAttrHorJust( SvxCellHorJustify::Standard ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
     eAttrHorJustMethod( SvxCellJustifyMethod::Auto ),
     eAttrVerJustMethod( SvxCellJustifyMethod::Auto ),
@@ -342,7 +342,7 @@ void ScDrawStringsVars::SetPattern(
 
     //  handle "repeat" alignment
 
-    bRepeat = ( eAttrHorJust == SVX_HOR_JUSTIFY_REPEAT );
+    bRepeat = ( eAttrHorJust == SvxCellHorJustify::Repeat );
     if ( bRepeat )
     {
         // "repeat" disables rotation (before constructing the font)
@@ -350,7 +350,7 @@ void ScDrawStringsVars::SetPattern(
 
         // #i31843# "repeat" with "line breaks" is treated as default alignment (but rotation is still disabled)
         if ( bLineBreak )
-            eAttrHorJust = SVX_HOR_JUSTIFY_STANDARD;
+            eAttrHorJust = SvxCellHorJustify::Standard;
     }
 
     short nRot;
@@ -419,7 +419,7 @@ void ScDrawStringsVars::SetPattern(
 
     // margins
     pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
-    if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT || eAttrHorJust == SVX_HOR_JUSTIFY_RIGHT )
+    if ( eAttrHorJust == SvxCellHorJustify::Left || eAttrHorJust == SvxCellHorJustify::Right )
         nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
@@ -465,7 +465,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
     pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
 
-    if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT )
+    if ( eAttrHorJust == SvxCellHorJustify::Left )
         nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
@@ -1257,13 +1257,13 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         long nRightMissing = 0;
         switch ( eHorJust )
         {
-            case SVX_HOR_JUSTIFY_LEFT:
+            case SvxCellHorJustify::Left:
                 nRightMissing = nMissing;
                 break;
-            case SVX_HOR_JUSTIFY_RIGHT:
+            case SvxCellHorJustify::Right:
                 nLeftMissing = nMissing;
                 break;
-            case SVX_HOR_JUSTIFY_CENTER:
+            case SvxCellHorJustify::Center:
                 nLeftMissing = nMissing / 2;
                 nRightMissing = nMissing - nLeftMissing;
                 break;
@@ -1400,39 +1400,39 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
 {
     SvxCellHorJustify eHorJustContext = eInHorJust;
     bool bUseWritingDirection = false;
-    if (eInHorJust == SVX_HOR_JUSTIFY_STANDARD)
+    if (eInHorJust == SvxCellHorJustify::Standard)
     {
         // fdo#32530: Default alignment depends on value vs
         // string, and the direction of the 1st letter.
         if (beginsWithRTLCharacter( rText)) //If language is RTL
         {
             if (bCellIsValue)
-               eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+               eHorJustContext = bNumberFormatIsText ? SvxCellHorJustify::Right : SvxCellHorJustify::Left;
             else
-                eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+                eHorJustContext = SvxCellHorJustify::Right;
         }
         else if (bCellIsValue) //If language is not RTL
-            eHorJustContext = bNumberFormatIsText ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
+            eHorJustContext = bNumberFormatIsText ? SvxCellHorJustify::Left : SvxCellHorJustify::Right;
         else
             bUseWritingDirection = true;
     }
 
     if (bUseWritingDirection ||
-            eInHorJust == SVX_HOR_JUSTIFY_BLOCK || eInHorJust == SVX_HOR_JUSTIFY_REPEAT)
+            eInHorJust == SvxCellHorJustify::Block || eInHorJust == SvxCellHorJustify::Repeat)
     {
         sal_uInt16 nDirection = lcl_GetValue<SvxFrameDirectionItem, sal_uInt16>( rPattern, ATTR_WRITINGDIR, pCondSet);
         if (nDirection == FRMDIR_HORI_LEFT_TOP || nDirection == FRMDIR_VERT_TOP_LEFT)
-            eHorJustContext = SVX_HOR_JUSTIFY_LEFT;
+            eHorJustContext = SvxCellHorJustify::Left;
         else if (nDirection == FRMDIR_ENVIRONMENT)
         {
             SAL_WARN_IF( !pDoc, "sc.ui", "getAlignmentFromContext - pDoc==NULL");
             // fdo#73588: The content of the cell must also
             // begin with a RTL character to be right
             // aligned; otherwise, it should be left aligned.
-            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(nTab) && (beginsWithRTLCharacter( rText))) ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(nTab) && (beginsWithRTLCharacter( rText))) ? SvxCellHorJustify::Right : SvxCellHorJustify::Left;
         }
         else
-            eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+            eHorJustContext = SvxCellHorJustify::Right;
     }
     return eHorJustContext;
 }
@@ -1692,7 +1692,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
                 long nTotalMargin = 0;
-                SvxCellHorJustify eOutHorJust = SVX_HOR_JUSTIFY_STANDARD;
+                SvxCellHorJustify eOutHorJust = SvxCellHorJustify::Standard;
                 if (bDoCell && !bNeedEdit)
                 {
                     CellType eCellType = aCell.meType;
@@ -1707,7 +1707,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, aVars.GetString(),
                             *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText );
 
-                    bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
+                    bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SvxCellHorJustify::Block );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
                     if (bBreak && bCellIsValue && (aVars.GetResultValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                         bBreak = false;
@@ -1811,7 +1811,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                     if (!bNeedEdit)
                     {
                         bNeedEdit =
-                            aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK &&
+                            aVars.GetHorJust() == SvxCellHorJustify::Block &&
                             aVars.GetHorJustMethod() == SvxCellJustifyMethod::Distribute;
                     }
                 }
@@ -1889,15 +1889,15 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         bool bRightAdjusted = false;        // to correct text width calculation later
                         switch (eOutHorJust)
                         {
-                            case SVX_HOR_JUSTIFY_LEFT:
+                            case SvxCellHorJustify::Left:
                                 nJustPosX += (long) ( aVars.GetLeftTotal() * mnPPTX );
                                 break;
-                            case SVX_HOR_JUSTIFY_RIGHT:
+                            case SvxCellHorJustify::Right:
                                 nJustPosX += nAvailWidth - aVars.GetTextSize().Width() -
                                             (long) ( aVars.GetRightTotal() * mnPPTX );
                                 bRightAdjusted = true;
                                 break;
-                            case SVX_HOR_JUSTIFY_CENTER:
+                            case SvxCellHorJustify::Center:
                                 nJustPosX += ( nAvailWidth - aVars.GetTextSize().Width() +
                                             (long) ( aVars.GetLeftTotal() * mnPPTX ) -
                                             (long) ( aVars.GetMargin()->GetRightMargin() * mnPPTX ) ) / 2;
@@ -2039,7 +2039,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                 double fVisibleRatio = 1.0;
                                 double fTextWidth = aVars.GetTextSize().Width();
                                 sal_Int32 nTextLen = aString.getLength();
-                                if (eOutHorJust == SVX_HOR_JUSTIFY_LEFT && aAreaParam.mnRightClipLength > 0)
+                                if (eOutHorJust == SvxCellHorJustify::Left && aAreaParam.mnRightClipLength > 0)
                                 {
                                     fVisibleRatio = (fTextWidth - aAreaParam.mnRightClipLength) / fTextWidth;
                                     if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
@@ -2049,7 +2049,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                         aShort = aShort.copy(0, nShortLen);
                                     }
                                 }
-                                else if (eOutHorJust == SVX_HOR_JUSTIFY_RIGHT && aAreaParam.mnLeftClipLength > 0)
+                                else if (eOutHorJust == SvxCellHorJustify::Right && aAreaParam.mnLeftClipLength > 0)
                                 {
                                     fVisibleRatio = (fTextWidth - aAreaParam.mnLeftClipLength) / fTextWidth;
                                     if (0.0 < fVisibleRatio && fVisibleRatio < 1.0)
@@ -2340,7 +2340,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mnArrY(0),
     mnX(0), mnY(0), mnCellX(0), mnCellY(0), mnTab(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
-    mbBreak( (meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
+    mbBreak( (meHorJustAttr == SvxCellHorJustify::Block) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
     mbCellIsValue(bCellIsValue),
     mbAsianVertical(false),
     mbPixelToLogic(false),
@@ -2472,14 +2472,14 @@ void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& r
         static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
 
     sal_uInt16 nIndent = 0;
-    if (meHorJustAttr == SVX_HOR_JUSTIFY_LEFT || meHorJustAttr == SVX_HOR_JUSTIFY_RIGHT)
+    if (meHorJustAttr == SvxCellHorJustify::Left || meHorJustAttr == SvxCellHorJustify::Right)
         nIndent = lcl_GetValue<SfxUInt16Item, sal_uInt16>(*mpPattern, ATTR_INDENT, mpCondSet);
 
     rLeftM   = static_cast<long>(((rMargin.GetLeftMargin() + nIndent) * nPPTX));
     rTopM    = static_cast<long>((rMargin.GetTopMargin() * nPPTY));
     rRightM  = static_cast<long>((rMargin.GetRightMargin() * nPPTX));
     rBottomM = static_cast<long>((rMargin.GetBottomMargin() * nPPTY));
-    if(meHorJustAttr == SVX_HOR_JUSTIFY_RIGHT)
+    if(meHorJustAttr == SvxCellHorJustify::Right)
     {
         rLeftM   = static_cast<long>((rMargin.GetLeftMargin()  * nPPTX));
         rRightM  = static_cast<long>(((rMargin.GetRightMargin() + nIndent) * nPPTX));
@@ -2571,10 +2571,10 @@ void ScOutputData::DrawEditParam::calcStartPosForVertical(
 
         switch (meHorJustResult)
         {
-            case SVX_HOR_JUSTIFY_CENTER:
+            case SvxCellHorJustify::Center:
                 rLogicStart.X() += (nCellWidth - nEngineWidth) / 2;
             break;
-            case SVX_HOR_JUSTIFY_RIGHT:
+            case SvxCellHorJustify::Right:
                 rLogicStart.X() += nCellWidth - nEngineWidth;
             break;
             default:
@@ -2610,7 +2610,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         mpEngine->SetDefaultItem( SvxAdjustItem(eSvxAdjust, EE_PARA_JUST) );
         mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
 
-        if (meHorJustResult == SVX_HOR_JUSTIFY_BLOCK)
+        if (meHorJustResult == SvxCellHorJustify::Block)
             mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
     }
     else
@@ -2627,20 +2627,20 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
             if (meOrient == SVX_ORIENTATION_STANDARD)
                 switch (meHorJustResult)
                 {
-                    case SVX_HOR_JUSTIFY_REPEAT:            // repeat is not yet implemented
-                    case SVX_HOR_JUSTIFY_STANDARD:
+                    case SvxCellHorJustify::Repeat:            // repeat is not yet implemented
+                    case SvxCellHorJustify::Standard:
                         SAL_WARN("sc.ui","meHorJustResult does not match getAlignmentFromContext()");
                         SAL_FALLTHROUGH;
-                    case SVX_HOR_JUSTIFY_LEFT:
+                    case SvxCellHorJustify::Left:
                         eSvxAdjust = SvxAdjust::Left;
                         break;
-                    case SVX_HOR_JUSTIFY_CENTER:
+                    case SvxCellHorJustify::Center:
                         eSvxAdjust = SvxAdjust::Center;
                         break;
-                    case SVX_HOR_JUSTIFY_RIGHT:
+                    case SvxCellHorJustify::Right:
                         eSvxAdjust = SvxAdjust::Right;
                         break;
-                    case SVX_HOR_JUSTIFY_BLOCK:
+                    case SvxCellHorJustify::Block:
                         eSvxAdjust = SvxAdjust::Block;
                         break;
                 }
@@ -2668,7 +2668,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         if (mbAsianVertical)
         {
             mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
-            if (meHorJustResult == SVX_HOR_JUSTIFY_BLOCK)
+            if (meHorJustResult == SvxCellHorJustify::Block)
                 mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
         }
         else
@@ -2693,9 +2693,9 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
 
 bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
 {
-    if (meHorJustResult == SVX_HOR_JUSTIFY_RIGHT || meHorJustResult == SVX_HOR_JUSTIFY_CENTER)
+    if (meHorJustResult == SvxCellHorJustify::Right || meHorJustResult == SvxCellHorJustify::Center)
     {
-        SvxAdjust eEditAdjust = (meHorJustResult == SVX_HOR_JUSTIFY_CENTER) ?
+        SvxAdjust eEditAdjust = (meHorJustResult == SvxCellHorJustify::Center) ?
             SvxAdjust::Center : SvxAdjust::Right;
 
         pEngine->SetUpdateMode(false);
@@ -2758,11 +2758,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
     bool bHidden = false;
-    bool bRepeat = (rParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
     long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
-    if ( rParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT )
+    if ( rParam.meHorJustAttr == SvxCellHorJustify::Repeat )
     {
         // ignore orientation/rotation if "repeat" is active
         rParam.meOrient = SVX_ORIENTATION_STANDARD;
@@ -2771,7 +2771,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         // #i31843# "repeat" with "line breaks" is treated as default alignment
         // (but rotation is still disabled).
         // Default again leads to context dependent alignment instead of
-        // SVX_HOR_JUSTIFY_STANDARD.
+        // SvxCellHorJustify::Standard.
         if ( rParam.mbBreak )
             rParam.meHorJustResult = rParam.meHorJustContext;
     }
@@ -2942,7 +2942,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
 
-        if (eOutHorJust != SVX_HOR_JUSTIFY_LEFT)
+        if (eOutHorJust != SvxCellHorJustify::Left)
         {
             aPaperSize.Width() = nNeededPixel + 1;
             if (rParam.mbPixelToLogic)
@@ -2968,9 +2968,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
     else
     {
-        if ( eOutHorJust == SVX_HOR_JUSTIFY_RIGHT )
+        if ( eOutHorJust == SvxCellHorJustify::Right )
             nStartX -= nNeededPixel - nCellWidth + nRightM + 1;
-        else if ( eOutHorJust == SVX_HOR_JUSTIFY_CENTER )
+        else if ( eOutHorJust == SvxCellHorJustify::Center )
             nStartX -= ( nNeededPixel - nCellWidth + nRightM + 1 - nLeftM ) / 2;
         else
             nStartX += nLeftM;
@@ -3276,9 +3276,9 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SVX_HOR_JUSTIFY_REPEAT);
+    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
-    const bool bRepeat = (rParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    const bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
     SvxCellHorJustify eOutHorJust = rParam.meHorJustContext;
@@ -3440,9 +3440,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     }
     else
     {
-        if ( eOutHorJust == SVX_HOR_JUSTIFY_RIGHT )
+        if ( eOutHorJust == SvxCellHorJustify::Right )
             nStartX -= nNeededPixel - nCellWidth + nRightM + 1;
-        else if ( eOutHorJust == SVX_HOR_JUSTIFY_CENTER )
+        else if ( eOutHorJust == SvxCellHorJustify::Center )
             nStartX -= ( nNeededPixel - nCellWidth + nRightM + 1 - nLeftM ) / 2;
         else
             nStartX += nLeftM;
@@ -3464,7 +3464,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    if (rParam.meHorJustResult == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
+    if (rParam.meHorJustResult == SvxCellHorJustify::Block || rParam.mbBreak)
     {
         Size aPSize = rParam.mpEngine->GetPaperSize();
         aPSize.Width() = aCellSize.Height();
@@ -3537,9 +3537,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SVX_HOR_JUSTIFY_REPEAT);
+    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
-    const bool bRepeat = (rParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    const bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
     SvxCellHorJustify eOutHorJust = rParam.meHorJustContext;
@@ -3698,14 +3698,14 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         //  is always left-aligned
 
         nStartX += nLeftM;
-        if (rParam.meHorJustResult == SVX_HOR_JUSTIFY_BLOCK)
+        if (rParam.meHorJustResult == SvxCellHorJustify::Block)
             nStartX += aPaperSize.Height();
     }
     else
     {
-        if ( eOutHorJust == SVX_HOR_JUSTIFY_RIGHT )
+        if ( eOutHorJust == SvxCellHorJustify::Right )
             nStartX -= nNeededPixel - nCellWidth + nRightM + 1;
-        else if ( eOutHorJust == SVX_HOR_JUSTIFY_CENTER )
+        else if ( eOutHorJust == SvxCellHorJustify::Center )
             nStartX -= ( nNeededPixel - nCellWidth + nRightM + 1 - nLeftM ) / 2;
         else
             nStartX += nLeftM;
@@ -3727,7 +3727,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    if (rParam.meHorJustResult != SVX_HOR_JUSTIFY_BLOCK)
+    if (rParam.meHorJustResult != SvxCellHorJustify::Block)
     {
         aLogicStart.X() += nEngineWidth;
         if (!rParam.mbBreak)
@@ -3792,10 +3792,10 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SVX_HOR_JUSTIFY_REPEAT);
+    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
-    bool bRepeat = (rParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
     rParam.mbAsianVertical =
@@ -3917,7 +3917,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
 
-        if ( eOutHorJust != SVX_HOR_JUSTIFY_LEFT )
+        if ( eOutHorJust != SvxCellHorJustify::Left )
         {
             aPaperSize.Width() = nNeededPixel + 1;
             if (rParam.mbPixelToLogic)
@@ -3943,9 +3943,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     }
     else
     {
-        if ( eOutHorJust == SVX_HOR_JUSTIFY_RIGHT )
+        if ( eOutHorJust == SvxCellHorJustify::Right )
             nStartX -= nNeededPixel - nCellWidth + nRightM + 1;
-        else if ( eOutHorJust == SVX_HOR_JUSTIFY_CENTER )
+        else if ( eOutHorJust == SvxCellHorJustify::Center )
             nStartX -= ( nNeededPixel - nCellWidth + nRightM + 1 - nLeftM ) / 2;
         else
             nStartX += nLeftM;
@@ -4138,7 +4138,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     // and the asian vertical boolean is true.
     OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD);
     OSL_ASSERT(rParam.mbAsianVertical);
-    OSL_ASSERT(rParam.meHorJustAttr != SVX_HOR_JUSTIFY_REPEAT);
+    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
@@ -4155,10 +4155,10 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     // default alignment for asian vertical mode is top-right
     /* TODO: is setting meHorJustContext and meHorJustResult unconditionally to
-     * SVX_HOR_JUSTIFY_RIGHT really wanted? Seems this was done all the time,
+     * SvxCellHorJustify::Right really wanted? Seems this was done all the time,
      * also before context was introduced and everything was attr only. */
-    if ( rParam.meHorJustAttr == SVX_HOR_JUSTIFY_STANDARD )
-        rParam.meHorJustResult = rParam.meHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+    if ( rParam.meHorJustAttr == SvxCellHorJustify::Standard )
+        rParam.meHorJustResult = rParam.meHorJustContext = SvxCellHorJustify::Right;
 
     if (bHidden)
         return;
@@ -4276,7 +4276,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         //  No clip marks if "###" doesn't fit (same as in DrawStrings)
     }
 
-    if (eOutHorJust != SVX_HOR_JUSTIFY_LEFT)
+    if (eOutHorJust != SvxCellHorJustify::Left)
     {
         aPaperSize.Width() = nNeededPixel + 1;
         if (rParam.mbPixelToLogic)
@@ -4418,9 +4418,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     //  horizontal alignment
 
-    if (rParam.meHorJustResult==SVX_HOR_JUSTIFY_RIGHT)
+    if (rParam.meHorJustResult==SvxCellHorJustify::Right)
         aLogicStart.X() += nAvailWidth - nEngineWidth;
-    else if (rParam.meHorJustResult==SVX_HOR_JUSTIFY_CENTER)
+    else if (rParam.meHorJustResult==SvxCellHorJustify::Center)
         aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
 
     // paper size is subtracted below
@@ -4585,8 +4585,8 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, nTab );
                         aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
                                 aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab, bNumberFormatIsText);
-                        aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ?
-                                SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
+                        aParam.meHorJustResult = (aParam.meHorJustAttr == SvxCellHorJustify::Block) ?
+                                SvxCellHorJustify::Block : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
                         aParam.mpEngine = pEngine.get();
@@ -4608,7 +4608,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         if (mpSpellCheckCxt)
                             aParam.mpMisspellRanges = mpSpellCheckCxt->getMisspellRanges(nCellX, nCellY);
 
-                        if (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_REPEAT)
+                        if (aParam.meHorJustAttr == SvxCellHorJustify::Repeat)
                         {
                             // ignore orientation/rotation if "repeat" is active
                             aParam.meOrient = SVX_ORIENTATION_STANDARD;
@@ -4733,9 +4733,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                         SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
-                        bool bBreak = ( eHorJust == SVX_HOR_JUSTIFY_BLOCK ) ||
+                        bool bBreak = ( eHorJust == SvxCellHorJustify::Block ) ||
                                     static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
-                        bool bRepeat = ( eHorJust == SVX_HOR_JUSTIFY_REPEAT && !bBreak );
+                        bool bRepeat = ( eHorJust == SvxCellHorJustify::Repeat && !bBreak );
                         bool bShrink = !bBreak && !bRepeat && static_cast<const SfxBoolItem&>
                                         (pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
                         SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
@@ -4830,7 +4830,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(
                                                     &pPattern->GetItem(ATTR_MARGIN, pCondSet));
                             sal_uInt16 nIndent = 0;
-                            if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
+                            if ( eHorJust == SvxCellHorJustify::Left )
                                 nIndent = static_cast<const SfxUInt16Item&>(pPattern->
                                                     GetItem(ATTR_INDENT, pCondSet)).GetValue();
 
@@ -5037,7 +5037,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 SCROW nCellY = nY;
                                 SvxCellHorJustify eOutHorJust = eHorJust;
                                 if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
-                                    eOutHorJust = bNegative ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+                                    eOutHorJust = bNegative ? SvxCellHorJustify::Right : SvxCellHorJustify::Left;
                                 long nNeededWidth = nGridWidth;     // in pixel for GetOutputArea
                                 if ( bPixelToLogic )
                                     nNeededWidth =  mpRefDevice->LogicToPixel(Size(nNeededWidth,0)).Width();
@@ -5153,13 +5153,13 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                     if (eOrient==SVX_ORIENTATION_STANDARD && !nAttrRotate)
                                     {
-                                        if (eHorJust==SVX_HOR_JUSTIFY_RIGHT ||
-                                            eHorJust==SVX_HOR_JUSTIFY_CENTER)
+                                        if (eHorJust==SvxCellHorJustify::Right ||
+                                            eHorJust==SvxCellHorJustify::Center)
                                         {
                                             pEngine->SetUpdateMode( false );
 
                                             SvxAdjust eSvxAdjust =
-                                                (eHorJust==SVX_HOR_JUSTIFY_RIGHT) ?
+                                                (eHorJust==SvxCellHorJustify::Right) ?
                                                     SvxAdjust::Right : SvxAdjust::Center;
                                             pEngine->SetDefaultItem(
                                                 SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
@@ -5176,10 +5176,10 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     else
                                     {
                                         // rotated text is centered by default
-                                        if (eHorJust==SVX_HOR_JUSTIFY_RIGHT)
+                                        if (eHorJust==SvxCellHorJustify::Right)
                                             aLogicStart.X() += nAvailWidth - nEngineWidth;
-                                        else if (eHorJust==SVX_HOR_JUSTIFY_CENTER ||
-                                                 eHorJust==SVX_HOR_JUSTIFY_STANDARD)
+                                        else if (eHorJust==SvxCellHorJustify::Center ||
+                                                 eHorJust==SvxCellHorJustify::Standard)
                                             aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
                                     }
                                 }

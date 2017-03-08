@@ -688,7 +688,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
             {
                 rDoc.ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
                                  aRange.aStart.Tab(),
-                                 SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+                                 SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
                 rDoc.ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
                                  aRange.aStart.Tab(),
                                  SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );

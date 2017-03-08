@@ -96,14 +96,14 @@ enum class SvxBreak
     End
 };
 
-enum SvxCellHorJustify
+enum class SvxCellHorJustify
 {
-    SVX_HOR_JUSTIFY_STANDARD,
-    SVX_HOR_JUSTIFY_LEFT,
-    SVX_HOR_JUSTIFY_CENTER,
-    SVX_HOR_JUSTIFY_RIGHT,
-    SVX_HOR_JUSTIFY_BLOCK,
-    SVX_HOR_JUSTIFY_REPEAT
+    Standard,
+    Left,
+    Center,
+    Right,
+    Block,
+    Repeat
 };
 
 enum class SvxCellJustifyMethod

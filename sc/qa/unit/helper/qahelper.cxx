@@ -71,6 +71,12 @@ std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
     return rStrm;
 }
 
+std::ostream& operator<<(std::ostream& rStrm, const SvxCellHorJustify& rCode)
+{
+    rStrm << static_cast<int>(rCode);
+    return rStrm;
+}
+
 const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
@@ -227,15 +233,15 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("background color should be green", Color(COL_LIGHTGREEN), aColor);
     pPattern = pDoc->GetPattern(2,0,1);
-    SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+    SvxCellHorJustify eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
     //test alignment
     pPattern = pDoc->GetPattern(2,1,1);
-    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SVX_HOR_JUSTIFY_RIGHT, eHorJustify);
+    eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SvxCellHorJustify::Right, eHorJustify);
     pPattern = pDoc->GetPattern(2,2,1);
-    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
+    eHorJustify = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SvxCellHorJustify::Block, eHorJustify);
 
     //test Sheet3 only for ods and xlsx
     if ( nFormat == FORMAT_ODS || nFormat == FORMAT_XLSX )
@@ -253,8 +259,8 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
             CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
             // check  align of style
             SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
-            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue() );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+            eHorJustify = static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
             // check date format ( should be just month e.g. 29 )
             sResult =pDoc->GetString( 1,1,3 );
             sExpected = "29";
@@ -262,8 +268,8 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
 
             // check actual align applied to cell, should be the same as
             // the style
-            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue() );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+            eHorJustify = static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SvxCellHorJustify::Center, eHorJustify);
         }
     }
 

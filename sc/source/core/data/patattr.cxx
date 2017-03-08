@@ -915,27 +915,27 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
             case SvxAdjust::Left:
                 // EditEngine Default is always set in the GetAttribs() ItemSet !
                 // whether left or right, is decided in text / number
-                eVal = SVX_HOR_JUSTIFY_STANDARD;
+                eVal = SvxCellHorJustify::Standard;
                 break;
             case SvxAdjust::Right:
-                eVal = SVX_HOR_JUSTIFY_RIGHT;
+                eVal = SvxCellHorJustify::Right;
                 break;
             case SvxAdjust::Block:
-                eVal = SVX_HOR_JUSTIFY_BLOCK;
+                eVal = SvxCellHorJustify::Block;
                 break;
             case SvxAdjust::Center:
-                eVal = SVX_HOR_JUSTIFY_CENTER;
+                eVal = SvxCellHorJustify::Center;
                 break;
             case SvxAdjust::BlockLine:
-                eVal = SVX_HOR_JUSTIFY_BLOCK;
+                eVal = SvxCellHorJustify::Block;
                 break;
             case SvxAdjust::End:
-                eVal = SVX_HOR_JUSTIFY_RIGHT;
+                eVal = SvxCellHorJustify::Right;
                 break;
             default:
-                eVal = SVX_HOR_JUSTIFY_STANDARD;
+                eVal = SvxCellHorJustify::Standard;
         }
-        if ( eVal != SVX_HOR_JUSTIFY_STANDARD )
+        if ( eVal != SvxCellHorJustify::Standard )
             rDestSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
     }
 }
@@ -959,9 +959,9 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
     SvxAdjust eSvxAdjust;
     switch (eHorJust)
     {
-        case SVX_HOR_JUSTIFY_RIGHT:  eSvxAdjust = SvxAdjust::Right;  break;
-        case SVX_HOR_JUSTIFY_CENTER: eSvxAdjust = SvxAdjust::Center; break;
-        case SVX_HOR_JUSTIFY_BLOCK:  eSvxAdjust = SvxAdjust::Block;  break;
+        case SvxCellHorJustify::Right:  eSvxAdjust = SvxAdjust::Right;  break;
+        case SvxCellHorJustify::Center: eSvxAdjust = SvxAdjust::Center; break;
+        case SvxCellHorJustify::Block:  eSvxAdjust = SvxAdjust::Block;  break;
         default:                     eSvxAdjust = SvxAdjust::Left;   break;
     }
     pEditSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
@@ -1374,7 +1374,7 @@ long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
     if ( GetCellOrientation() == SVX_ORIENTATION_STANDARD )
     {
         bool bRepeat = ( static_cast<const SvxHorJustifyItem&>(GetItem(ATTR_HOR_JUSTIFY, pCondSet)).
-                            GetValue() == SVX_HOR_JUSTIFY_REPEAT );
+                            GetValue() == SvxCellHorJustify::Repeat );
         // ignore orientation/rotation if "repeat" is active
         if ( !bRepeat )
             nAttrRotate = static_cast<const SfxInt32Item&>(GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();

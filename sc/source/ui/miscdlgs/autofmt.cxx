@@ -260,9 +260,9 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         // Justification:
 
-        eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
+        eJustification  = mbRTL ? SvxCellHorJustify::Right : bJustify ?
             (SvxCellHorJustify) (static_cast<const SvxHorJustifyItem*>(pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY))->GetValue()) :
-            SVX_HOR_JUSTIFY_STANDARD;
+            SvxCellHorJustify::Standard;
 
         if (pCurData->GetIncludeFont())
         {
@@ -288,7 +288,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             }
             while((theMaxStrSize.Width() <= aStrSize.Width()) && (cellString.getLength() > 1))
             {
-                if( eJustification == SVX_HOR_JUSTIFY_RIGHT )
+                if( eJustification == SvxCellHorJustify::Right )
                     cellString = cellString.copy(1);
                 else
                     cellString = cellString.copy(0, cellString.getLength() - 1 );
@@ -312,25 +312,25 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         // horizontal
 
-        if (eJustification != SVX_HOR_JUSTIFY_STANDARD)
+        if (eJustification != SvxCellHorJustify::Standard)
         {
             sal_uInt16 nHorPos = sal_uInt16((cellRect.GetWidth()-aStrSize.Width()) / 2);
 
             switch (eJustification)
             {
-                case SVX_HOR_JUSTIFY_LEFT:
+                case SvxCellHorJustify::Left:
                     aPos.X() += FRAME_OFFSET;
                     break;
-                case SVX_HOR_JUSTIFY_RIGHT:
+                case SvxCellHorJustify::Right:
                     aPos.X() += nRightX;
                     break;
-                case SVX_HOR_JUSTIFY_BLOCK:
-                case SVX_HOR_JUSTIFY_REPEAT:
-                case SVX_HOR_JUSTIFY_CENTER:
+                case SvxCellHorJustify::Block:
+                case SvxCellHorJustify::Repeat:
+                case SvxCellHorJustify::Center:
                     aPos.X() += nHorPos;
                     break;
                 // coverity[dead_error_line] - following conditions exist to avoid compiler warning
-                case SVX_HOR_JUSTIFY_STANDARD:
+                case SvxCellHorJustify::Standard:
                 default:
                     // Standard is not handled here
                     break;

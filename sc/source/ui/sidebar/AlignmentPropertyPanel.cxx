@@ -270,14 +270,14 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     {
     case SID_H_ALIGNCELL:
         {
-            SvxCellHorJustify meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
+            SvxCellHorJustify meHorAlignState = SvxCellHorJustify::Standard;
             if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SvxHorJustifyItem*>( pState) !=  nullptr )
             {
                 const SvxHorJustifyItem* pItem = static_cast<const SvxHorJustifyItem*>(pState);
                 meHorAlignState = (SvxCellHorJustify)pItem->GetValue();
             }
 
-            if( meHorAlignState == SVX_HOR_JUSTIFY_REPEAT )
+            if( meHorAlignState == SvxCellHorJustify::Repeat )
             {
                 mpFtRotate->Disable();
                 mpMtrAngle->Disable();
@@ -288,8 +288,8 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
                 mpMtrAngle->Enable(!mbMultiDisable);
             }
 
-            mpFTLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
-            mpMFLeftIndent->Enable( meHorAlignState == SVX_HOR_JUSTIFY_LEFT );
+            mpFTLeftIndent->Enable( meHorAlignState == SvxCellHorJustify::Left );
+            mpMFLeftIndent->Enable( meHorAlignState == SvxCellHorJustify::Left );
         }
         break;
     case SID_ATTR_ALIGN_INDENT:

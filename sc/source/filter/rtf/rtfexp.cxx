@@ -200,14 +200,14 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     switch( rHorJustifyItem.GetValue() )
     {
-        case SVX_HOR_JUSTIFY_STANDARD:
+        case SvxCellHorJustify::Standard:
             pChar = (bValueData ? OOO_STRING_SVTOOLS_RTF_QR : OOO_STRING_SVTOOLS_RTF_QL);
             break;
-        case SVX_HOR_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
-        case SVX_HOR_JUSTIFY_BLOCK:     pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
-        case SVX_HOR_JUSTIFY_RIGHT:     pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
-        case SVX_HOR_JUSTIFY_LEFT:
-        case SVX_HOR_JUSTIFY_REPEAT:
+        case SvxCellHorJustify::Center:    pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+        case SvxCellHorJustify::Block:     pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
+        case SvxCellHorJustify::Right:     pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
+        case SvxCellHorJustify::Left:
+        case SvxCellHorJustify::Repeat:
         default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
     rStrm.WriteCharPtr( pChar );

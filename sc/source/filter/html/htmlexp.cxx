@@ -1015,14 +1015,14 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     switch( rHorJustifyItem.GetValue() )
     {
-        case SVX_HOR_JUSTIFY_STANDARD:
+        case SvxCellHorJustify::Standard:
             pChar = (bValueData ? OOO_STRING_SVTOOLS_HTML_AL_right : OOO_STRING_SVTOOLS_HTML_AL_left);
             break;
-        case SVX_HOR_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_HTML_AL_center;  break;
-        case SVX_HOR_JUSTIFY_BLOCK:     pChar = OOO_STRING_SVTOOLS_HTML_AL_justify; break;
-        case SVX_HOR_JUSTIFY_RIGHT:     pChar = OOO_STRING_SVTOOLS_HTML_AL_right;   break;
-        case SVX_HOR_JUSTIFY_LEFT:
-        case SVX_HOR_JUSTIFY_REPEAT:
+        case SvxCellHorJustify::Center:    pChar = OOO_STRING_SVTOOLS_HTML_AL_center;  break;
+        case SvxCellHorJustify::Block:     pChar = OOO_STRING_SVTOOLS_HTML_AL_justify; break;
+        case SvxCellHorJustify::Right:     pChar = OOO_STRING_SVTOOLS_HTML_AL_right;   break;
+        case SvxCellHorJustify::Left:
+        case SvxCellHorJustify::Repeat:
         default:                        pChar = OOO_STRING_SVTOOLS_HTML_AL_left;    break;
     }
 

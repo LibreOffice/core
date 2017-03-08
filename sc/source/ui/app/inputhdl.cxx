@@ -629,7 +629,7 @@ ScInputHandler::ScInputHandler()
         bLastIsSymbol( false ),
         mbDocumentDisposing(false),
         nValidation( 0 ),
-        eAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
+        eAttrAdjust( SvxCellHorJustify::Standard ),
         aScaleX( 1,1 ),
         aScaleY( 1,1 ),
         pRefViewSh( nullptr ),
@@ -1943,7 +1943,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     SvxAdjust eSvxAdjust;
     switch (eAttrAdjust)
     {
-        case SVX_HOR_JUSTIFY_STANDARD:
+        case SvxCellHorJustify::Standard:
             {
                 bool bNumber = false;
                 if (cTyped)                                     // Restarted
@@ -1956,16 +1956,16 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
                 eSvxAdjust = bNumber ? SvxAdjust::Right : SvxAdjust::Left;
             }
             break;
-        case SVX_HOR_JUSTIFY_BLOCK:
+        case SvxCellHorJustify::Block:
             eSvxAdjust = SvxAdjust::Block;
             break;
-        case SVX_HOR_JUSTIFY_CENTER:
+        case SvxCellHorJustify::Center:
             eSvxAdjust = SvxAdjust::Center;
             break;
-        case SVX_HOR_JUSTIFY_RIGHT:
+        case SvxCellHorJustify::Right:
             eSvxAdjust = SvxAdjust::Right;
             break;
-        default:    // SVX_HOR_JUSTIFY_LEFT
+        default:    // SvxCellHorJustify::Left
             eSvxAdjust = SvxAdjust::Left;
             break;
     }
@@ -2133,11 +2133,11 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 // Adjustment
                 eAttrAdjust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                                 GetItem(ATTR_HOR_JUSTIFY)).GetValue();
-                if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
+                if ( eAttrAdjust == SvxCellHorJustify::Repeat &&
                      static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
                 {
                     // #i31843# "repeat" with "line breaks" is treated as default alignment
-                    eAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
+                    eAttrAdjust = SvxCellHorJustify::Standard;
                 }
             }
 
