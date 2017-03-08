@@ -183,14 +183,13 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
     if( aFontIds.empty() )
     {
-        ::std::list< PrintFont* > aNewFonts;
-        if( analyzeFontFile( nDirID, aName, aNewFonts ) )
+        std::list<std::unique_ptr<PrintFont>> aNewFonts;
+        if (analyzeFontFile(nDirID, aName, aNewFonts))
         {
-            for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin();
-                 it != aNewFonts.end(); ++it )
+            for (auto it = aNewFonts.begin(); it != aNewFonts.end(); ++it)
             {
                 fontID nFontId = m_nNextFontID++;
-                m_aFonts[nFontId] = *it;
+                m_aFonts[nFontId] = it->release();
                 m_aFontFileToFontID[ aName ].insert( nFontId );
                 aFontIds.push_back(nFontId);
             }
@@ -204,7 +203,7 @@ enum fontFormat
     UNKNOWN, TRUETYPE, CFF
 };
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
+bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, std::list<std::unique_ptr<PrintFontManager::PrintFont>>& rNewFonts, const char *pFormat ) const
 {
     rNewFonts.clear();
 
@@ -275,34 +274,24 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 
             for( int i = 0; i < nLength; i++ )
             {
-                PrintFont* pFont     = new PrintFont();
-                pFont->m_nDirectory         = nDirID;
-                pFont->m_aFontFile          = rFontFile;
-                pFont->m_nCollectionEntry   = i;
-                if (!analyzeSfntFile(pFont))
-                {
-                    delete pFont;
-                    pFont = nullptr;
-                }
-                else
-                    rNewFonts.push_back( pFont );
+                std::unique_ptr<PrintFont> xFont(new PrintFont);
+                xFont->m_nDirectory         = nDirID;
+                xFont->m_aFontFile          = rFontFile;
+                xFont->m_nCollectionEntry   = i;
+                if (analyzeSfntFile(xFont.get()))
+                    rNewFonts.push_back(std::move(xFont));
             }
         }
         else
         {
-            PrintFont* pFont     = new PrintFont();
-            pFont->m_nDirectory         = nDirID;
-            pFont->m_aFontFile          = rFontFile;
-            pFont->m_nCollectionEntry   = 0;
+            std::unique_ptr<PrintFont> xFont(new PrintFont);
+            xFont->m_nDirectory         = nDirID;
+            xFont->m_aFontFile          = rFontFile;
+            xFont->m_nCollectionEntry   = 0;
 
             // need to read the font anyway to get aliases inside the font file
-            if (!analyzeSfntFile(pFont))
-            {
-                delete pFont;
-                pFont = nullptr;
-            }
-            else
-                rNewFonts.push_back( pFont );
+            if (analyzeSfntFile(xFont.get()))
+                rNewFonts.push_back(std::move(xFont));
         }
     }
     return ! rNewFonts.empty();

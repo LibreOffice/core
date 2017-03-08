@@ -545,7 +545,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             // see if this font is already cached
             // update attributes
-            std::list< PrintFont* > aFonts;
+            std::list<std::unique_ptr<PrintFont>> aFonts;
             OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
             splitPath( aOrgPath, aDir, aBase );
 
@@ -560,13 +560,11 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
             if (eFormatRes != FcResultMatch)
                 format = nullptr;
             analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
+            if(aFonts.empty())
+            {
 #if OSL_DEBUG_LEVEL > 1
-            if( aFonts.empty() )
                 fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
 #endif
-
-            if( aFonts.empty() )
-            {
                 //remove font, reuse index
                 //we want to remove unusable fonts here, in case there is a usable font
                 //which duplicates the properties of the unusable one
@@ -577,63 +575,65 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 continue;
             }
 
-            OUString aFamilyName = OStringToOUString(OString(reinterpret_cast<char*>(family)), RTL_TEXTENCODING_UTF8);
-            PrintFont* pUpdate = aFonts.front();
-            std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
+            std::unique_ptr<PrintFont> xUpdate;
+
+            auto second_font = aFonts.begin();
             ++second_font;
-            if( second_font != aFonts.end() ) // more than one font
+            if (second_font == aFonts.end()) // one font
+                xUpdate = std::move(aFonts.front());
+            else // more than one font
             {
                 // a collection entry, get the correct index
                 if( eIndexRes == FcResultMatch && nCollectionEntry != -1 )
                 {
-                    for( std::list< PrintFont* >::iterator it = aFonts.begin(); it != aFonts.end(); ++it )
+                    for (auto it = aFonts.begin(); it != aFonts.end(); ++it)
                     {
                         if( (*it)->m_nCollectionEntry == nCollectionEntry )
                         {
-                            pUpdate = *it;
+                            xUpdate = std::move(*it);
                             break;
                         }
                     }
+                }
+
+                if (xUpdate)
+                {
                     // update collection entry
                     // additional entries will be created in the cache
                     // if this is a new index (that is if the loop above
                     // ran to the end of the list)
-                    pUpdate->m_nCollectionEntry = nCollectionEntry;
+                    xUpdate->m_nCollectionEntry = nCollectionEntry;
                 }
+#if OSL_DEBUG_LEVEL > 1
                 else
                 {
-#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "multiple fonts for file, but no index in fontconfig pattern ! (index res = %d collection entry = %d\nfile will not be used\n", eIndexRes, nCollectionEntry );
-#endif
                     // we have found more than one font in this file
                     // but fontconfig will not tell us which index is meant
                     // -> something is in disorder, do not use this font
-                    pUpdate = nullptr;
                 }
+#endif
             }
 
-            if( pUpdate )
+            if (xUpdate)
             {
                 // set family name
-                if( pUpdate->m_aFamilyName != aFamilyName )
-                {
-                }
                 if( eWeightRes == FcResultMatch )
-                    pUpdate->m_eWeight = convertWeight(weight);
+                    xUpdate->m_eWeight = convertWeight(weight);
                 if( eWidthRes == FcResultMatch )
-                    pUpdate->m_eWidth = convertWidth(width);
+                    xUpdate->m_eWidth = convertWidth(width);
                 if( eSpacRes == FcResultMatch )
-                    pUpdate->m_ePitch = convertSpacing(spacing);
+                    xUpdate->m_ePitch = convertSpacing(spacing);
                 if( eSlantRes == FcResultMatch )
-                    pUpdate->m_eItalic = convertSlant(slant);
+                    xUpdate->m_eItalic = convertSlant(slant);
                 if( eStyleRes == FcResultMatch )
                 {
-                    pUpdate->m_aStyleName = OStringToOUString( OString( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
+                    xUpdate->m_aStyleName = OStringToOUString( OString( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
                 }
 
                 // sort into known fonts
                 fontID aFont = m_nNextFontID++;
-                m_aFonts[ aFont ] = pUpdate;
+                m_aFonts[ aFont ] = xUpdate.release();
                 m_aFontFileToFontID[ aBase ].insert( aFont );
 #if OSL_DEBUG_LEVEL > 1
                 nFonts++;
