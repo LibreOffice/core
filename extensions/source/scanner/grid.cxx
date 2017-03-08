@@ -29,6 +29,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include <algorithm>
+#include <limits>
 #include <memory>
 
 class GridWindow : public vcl::Window
@@ -87,8 +88,10 @@ class GridWindow : public vcl::Window
     bool            m_bCutValues;
 
     // stuff for handles
-    std::vector< impHandle >    m_aHandles;
-    sal_uInt32                  m_nDragIndex;
+    using Handles = std::vector<impHandle>;
+    static constexpr auto npos = std::numeric_limits<Handles::size_type>::max();
+    Handles m_aHandles;
+    Handles::size_type m_nDragIndex;
 
     BitmapEx        m_aMarkerBitmap;
 
@@ -151,7 +154,7 @@ GridWindow::GridWindow(vcl::Window* pParent)
     , m_BmOffY(0)
     , m_bCutValues(false)
     , m_aHandles()
-    , m_nDragIndex(0xffffffff)
+    , m_nDragIndex(npos)
 {
     SetMapMode(MapMode(MapUnit::MapPixel));
 }
@@ -536,11 +539,11 @@ void GridWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
 void GridWindow::MouseMove( const MouseEvent& rEvt )
 {
-    if( rEvt.GetButtons() == MOUSE_LEFT && m_nDragIndex != 0xffffffff )
+    if( rEvt.GetButtons() == MOUSE_LEFT && m_nDragIndex != npos )
     {
         Point aPoint( rEvt.GetPosPixel() );
 
-        if( m_nDragIndex == 0L || m_nDragIndex == m_aHandles.size() - 1L)
+        if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1L)
         {
             aPoint.X() = m_aHandles[m_nDragIndex].maPos.X();
         }
@@ -571,9 +574,9 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 {
     if( rEvt.GetButtons() == MOUSE_LEFT )
     {
-        if( m_nDragIndex != 0xffffffff )
+        if( m_nDragIndex != npos )
         {
-            m_nDragIndex = 0xffffffff;
+            m_nDragIndex = npos;
             computeNew();
             Invalidate(m_aGridArea);
         }
@@ -585,9 +588,9 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
     Point aPoint( rEvt.GetPosPixel() );
-    sal_uInt32 nMarkerIndex = 0xffffffff;
+    Handles::size_type nMarkerIndex = npos;
 
-    for(sal_uInt32 a(0L); nMarkerIndex == 0xffffffff && a < m_aHandles.size(); a++)
+    for(Handles::size_type a(0L); nMarkerIndex == npos && a < m_aHandles.size(); a++)
     {
         if(m_aHandles[a].isHit(*this, aPoint))
         {
@@ -598,7 +601,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     if( rEvt.GetButtons() == MOUSE_LEFT )
     {
         // user wants to drag a button
-        if( nMarkerIndex != 0xffffffff )
+        if( nMarkerIndex != npos )
         {
             m_nDragIndex = nMarkerIndex;
         }
@@ -606,13 +609,13 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     else if( rEvt.GetButtons() == MOUSE_RIGHT )
     {
         // user wants to add/delete a button
-        if( nMarkerIndex != 0xffffffff )
+        if( nMarkerIndex != npos )
         {
             if( nMarkerIndex != 0L && nMarkerIndex != m_aHandles.size() - 1L)
             {
                 // delete marker under mouse
                 if( m_nDragIndex == nMarkerIndex )
-                    m_nDragIndex = 0xffffffff;
+                    m_nDragIndex = npos;
 
                 m_aHandles.erase(m_aHandles.begin() + nMarkerIndex);
             }
