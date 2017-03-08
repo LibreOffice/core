@@ -26,6 +26,7 @@
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 
 #include <svl/solar.hrc>
 #include <editeng/eerdll.hxx>
@@ -76,12 +77,20 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    class theEditDLL : public rtl::Static<EditDLL, theEditDLL> {};
+    class EditDLLHolder : public comphelper::unique_disposing_ptr<EditDLL>
+    {
+    public:
+        EditDLLHolder() : comphelper::unique_disposing_ptr<EditDLL>((css::uno::Reference<css::lang::XComponent>(::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW)), new EditDLL)
+        {
+        }
+    };
+
+    class theEditDLL : public rtl::Static<EditDLLHolder, theEditDLL> {};
 }
 
 EditDLL& EditDLL::Get()
 {
-    return theEditDLL::get();
+    return *theEditDLL::get().get();
 }
 
 GlobalEditData::GlobalEditData() :
@@ -97,6 +106,7 @@ GlobalEditData::~GlobalEditData()
     // Or simply keep them, since at end of execution?!
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, true );
+    mpVirDev.disposeAndClear();
 }
 
 std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()
