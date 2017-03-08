@@ -48,7 +48,6 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     bLeft( bLeftEdge ),
     bByKeyboard( bKeyboard ),
     pModel( nullptr ),
-    pObject( nullptr ),
     bVisible( false )
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
@@ -94,11 +93,11 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
 
         if( SdrPage* pPage = pModel->AllocPage( false ) )
         {
-            pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
-            if( pObject )
+            mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
+            if( mxObject )
             {
-                pObject->SetGridOffset( aGridOff );
-                aRect = pObject->GetCurrentBoundRect();
+                mxObject->SetGridOffset( aGridOff );
+                aRect = mxObject->GetCurrentBoundRect();
             }
 
             // Insert page so that the model recognise it and also deleted
@@ -141,21 +140,21 @@ static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 
 void ScNoteMarker::Draw()
 {
-    if ( pObject && bVisible )
+    if ( mxObject && bVisible )
     {
-        lcl_DrawWin( pObject, pWindow, aMapMode );
+        lcl_DrawWin( mxObject.get(), pWindow, aMapMode );
 
         if ( pRightWin || pBottomWin )
         {
             Size aWinSize = pWindow->PixelToLogic( pWindow->GetOutputSizePixel(), aMapMode );
             if ( pRightWin )
-                lcl_DrawWin( pObject, pRightWin,
+                lcl_DrawWin( mxObject.get(), pRightWin,
                                 lcl_MoveMapMode( aMapMode, Size( aWinSize.Width(), 0 ) ) );
             if ( pBottomWin )
-                lcl_DrawWin( pObject, pBottomWin,
+                lcl_DrawWin( mxObject.get(), pBottomWin,
                                 lcl_MoveMapMode( aMapMode, Size( 0, aWinSize.Height() ) ) );
             if ( pDiagWin )
-                lcl_DrawWin( pObject, pDiagWin, lcl_MoveMapMode( aMapMode, aWinSize ) );
+                lcl_DrawWin( mxObject.get(), pDiagWin, lcl_MoveMapMode( aMapMode, aWinSize ) );
         }
     }
 }
