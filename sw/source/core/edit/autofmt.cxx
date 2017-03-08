@@ -1541,7 +1541,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 else
                 {
                     sal_uInt16 nSpaceSteps = nLvl ? sal_uInt16(nLeftTextPos / nLvl) : 0;
-                    sal_uInt8 n;
+                    sal_uInt16 n;
                     for( n = 0; n <= nLvl; ++n )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );

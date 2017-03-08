@@ -97,7 +97,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     std::set<sal_uInt16> aDelArr;
     aDelArr.insert( RES_TXTATR_CJK_RUBY );
 
-    sal_uInt16 nListEntry = 0;
+    SwRubyList::size_type nListEntry = 0;
 
     const SwPaM *_pStartCursor = rPam.GetNext(),
                 *_pStartCursor2 = _pStartCursor;

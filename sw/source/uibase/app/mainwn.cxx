@@ -89,7 +89,7 @@ void EndProgress( SwDocShell *pDocShell )
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = nullptr;
-        sal_uInt16 i;
+        std::vector<SwProgress *>::size_type i;
         for ( i = 0; i < pProgressContainer->size(); ++i )
         {
             SwProgress *pTmp = (*pProgressContainer)[i];

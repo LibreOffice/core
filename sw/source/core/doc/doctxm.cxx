@@ -1855,9 +1855,9 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
     }
 
     // find position and insert
-    short i;
+    long i;
 
-    for( i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
+    for( i = aRange.Min(); i < aRange.Max(); ++i)
     {   // Only check for same level
         SwTOXSortTabBase* pOld = aSortArr[i];
         if(*pOld == *pNew)

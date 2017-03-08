@@ -1996,7 +1996,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         {
             sal_uInt32 nIdx = aPos.nNode.GetIndex();
 
-            sal_uInt32 nIns=0;
+            decltype(m_aOutlineMarkPoss)::size_type nIns=0;
             while( nIns < m_aOutlineMarkPoss.size() &&
                    m_aOutlineMarkPoss[nIns] < nIdx )
                 nIns++;

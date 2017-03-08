@@ -114,8 +114,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
-            sal_uInt16 i;
-            for ( i = 0; i < aObjList.size(); i++ )
+            for ( std::vector<OUString>::size_type i = 0; i < aObjList.size(); i++ )
             {
                 if ( aObjList[ i ].equalsIgnoreAsciiCase( aCustomShape ) )
                 {

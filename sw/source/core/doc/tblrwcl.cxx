@@ -3396,7 +3396,6 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         bLeft = nsTableChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
                 nsTableChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff ),
         bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
-    sal_uInt16 n;
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
     // Get the current Box's edge
@@ -3478,10 +3477,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             else
             {
                 bRet = true;
-                for( n = 0; n < m_aLines.size(); ++n )
+                for( auto const & n: m_aLines )
                 {
                     aParam.LoopClear();
-                    if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
+                    if( !(*fnSelBox)( n, aParam, nDistStt, true ))
                     {
                         bRet = false;
                         break;
@@ -3585,7 +3584,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
                 UnlockModify();
 
-                for( n = m_aLines.size(); n; )
+                for( sal_uInt16 n = m_aLines.size(); n; )
                 {
                     --n;
                     aParam.LoopClear();
@@ -3615,10 +3614,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             {
                 if( aParam.bBigger )
                 {
-                    for( n = 0; n < m_aLines.size(); ++n )
+                    for( auto const & n: m_aLines )
                     {
                         aParam.LoopClear();
-                        if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
+                        if( !(*fnSelBox)( n, aParam, nDistStt, true ))
                         {
                             bRet = false;
                             break;
@@ -3630,10 +3629,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     bRet = bLeft ? nDist != 0 : ( rSz.GetWidth() - nDist ) > COLFUZZY;
                     if( bRet )
                     {
-                        for( n = 0; n < m_aLines.size(); ++n )
+                        for( auto const & n: m_aLines )
                         {
                             aParam.LoopClear();
-                            if( !(*fnOtherBox)( m_aLines[ n ], aParam, 0, true ))
+                            if( !(*fnOtherBox)( n, aParam, 0, true ))
                             {
                                 bRet = false;
                                 break;
@@ -3652,10 +3651,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         // We also need to test this!
                         bRet = true;
 
-                        for( n = 0; n < m_aLines.size(); ++n )
+                        for( auto const & n: m_aLines )
                         {
                             aParam.LoopClear();
-                            if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
+                            if( !(*fnSelBox)( n, aParam, nDistStt, true ))
                             {
                                 bRet = false;
                                 break;
@@ -3666,10 +3665,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
             else if( aParam.bBigger )
             {
-                for( n = 0; n < m_aLines.size(); ++n )
+                for( auto const & n: m_aLines )
                 {
                     aParam.LoopClear();
-                    if( !(*fnOtherBox)( m_aLines[ n ], aParam, 0, true ))
+                    if( !(*fnOtherBox)( n, aParam, 0, true ))
                     {
                         bRet = false;
                         break;
@@ -3678,10 +3677,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
             else
             {
-                for( n = 0; n < m_aLines.size(); ++n )
+                for( auto const & n: m_aLines )
                 {
                     aParam.LoopClear();
-                    if( !(*fnSelBox)( m_aLines[ n ], aParam, nDistStt, true ))
+                    if( !(*fnSelBox)( n, aParam, nDistStt, true ))
                     {
                         bRet = false;
                         break;
@@ -3709,7 +3708,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     ? ( TBLFIX_CHGABS == m_eTableChgMode ? (bBigger && bLeft) : bLeft )
                     : ( TBLFIX_CHGABS != m_eTableChgMode && bLeft ) )
                 {
-                    for( n = m_aLines.size(); n; )
+                    for( sal_uInt16 n = m_aLines.size(); n; )
                     {
                         --n;
                         aParam.LoopClear();
@@ -3720,7 +3719,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 }
                 else
                 {
-                    for( n = m_aLines.size(); n; )
+                    for( sal_uInt16 n = m_aLines.size(); n; )
                     {
                         --n;
                         aParam.LoopClear();

@@ -1237,8 +1237,8 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt16 nColumn = 0;
-                    nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+            for(sal_uInt32 nColumn = 0;
+                    nColumn < rHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
                 if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
@@ -1296,8 +1296,8 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt16 nColumn = 0;
-                    nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
+            for(sal_uInt32 nColumn = 0;
+                    nColumn < rHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
                 if (rHeaders.GetString(nColumn).equals(aItem.sText) &&

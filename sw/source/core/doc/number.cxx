@@ -620,7 +620,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 {
     OUString aStr;
 
-    unsigned int nLevel = rNumVector.size() - 1;
+    SwNumberTree::tNumberVector::size_type nLevel = rNumVector.size() - 1;
 
     if ( pExtremities )
         pExtremities->nPrefixChars = pExtremities->nSuffixChars = 0;
@@ -635,7 +635,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         const SwNumFormat& rMyNFormat = Get( static_cast<sal_uInt16>(nLevel) );
 
         {
-            sal_uInt8 i = static_cast<sal_uInt8>(nLevel);
+            SwNumberTree::tNumberVector::size_type i = nLevel;
 
             if( !IsContinusNum() &&
                 // - do not include upper levels, if level isn't numbered.

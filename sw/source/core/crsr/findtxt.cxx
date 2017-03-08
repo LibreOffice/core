@@ -410,7 +410,7 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                 // now we have to split
                 sal_Int32 nStartInside = 0;
                 sal_Int32 nEndInside = 0;
-                sal_Int16 aLoop= bSrchForward ? aStart : aNumberPostits;
+                sal_Int32 aLoop= bSrchForward ? aStart : aNumberPostits;
 
                 while ( (aLoop>=0) && (aLoop<=aNumberPostits))
                 {

@@ -2244,11 +2244,8 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         }
     }
 
-    const SwNumRule* pNumRule;
-    sal_uInt16 n;
-
-    for( n = 0; n < mpNumRuleTable->size(); ++n )
-        if( nullptr != ( pNumRule = (*mpNumRuleTable)[ n ] ) )
+    for( auto const & pNumRule: *mpNumRuleTable )
+        if( nullptr != pNumRule )
         {
             const OUString sNm = pNumRule->GetName();
             if( sNm.startsWith( aName ) )
@@ -2266,7 +2263,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     {
         // All Numbers have been flagged accordingly, so identify the right Number
         nNum = mpNumRuleTable->size();
-        for( n = 0; n < nFlagSize; ++n )
+        for( sal_uInt16 n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {
                 // identify the Number

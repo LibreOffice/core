@@ -1100,7 +1100,7 @@ void SwHTMLWriter::OutBookmarks()
             pBookmark = (pMarkAccess->getAllMarksBegin() + m_nBkmkTabPos)->get();
     }
 
-    sal_uInt32 nPos;
+    decltype(m_aOutlineMarkPoss)::size_type nPos;
     for( nPos = 0; nPos < m_aOutlineMarkPoss.size() &&
                    m_aOutlineMarkPoss[nPos] < nNode; nPos++ )
         ;

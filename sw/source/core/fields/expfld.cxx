@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <limits>
+
 #include <UndoTable.hxx>
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
@@ -568,8 +570,8 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     }
 
     // flagged all numbers, so determine the right number
-    sal_uInt16 n = aArr.size();
-    OSL_ENSURE( n == aArr.size(), "Array is too big for using a sal_uInt16 index" );
+    std::vector<sal_uInt16>::size_type n = aArr.size();
+    OSL_ENSURE( n <= std::numeric_limits<sal_uInt16>::max(), "Array is too big for using a sal_uInt16 index" );
 
     if ( n > 0 && aArr[ n-1 ] != n-1 )
     {

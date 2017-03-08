@@ -493,8 +493,8 @@ OUString SwAddressPreview::FillData(
 
             //find the appropriate assignment
             OUString sConvertedColumn = aItem.sText;
-            for(sal_uInt16 nColumn = 0;
-                    nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
+            for(sal_uInt32 nColumn = 0;
+                    nColumn < rDefHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
                 if (rDefHeaders.GetString(nColumn).equals(aItem.sText) &&

@@ -453,7 +453,6 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     bool bValidChartSel;
     // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    sal_uInt16 i = 0;
 
     do {
         bool bTableIsValid = true;
@@ -628,7 +627,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
         // otherwise quickly "calculate" table layout and start over
         SwTabFrame *pTable = aUnions.front().GetTable();
-        for( i = 0; i < aUnions.size(); ++i )
+        for( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
         {
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
@@ -691,10 +690,9 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
     ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTableSearchType::TBLSEARCH_COL );
 
     bool bTstRow = true, bFound = false;
-    sal_uInt16 i;
 
     // 1. check if box above contains value/formula
-    for( i = 0; i < aUnions.size(); ++i )
+    for( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
     {
         SwSelUnion *pUnion = &aUnions[i];
         const SwTabFrame *pTable = pUnion->GetTable();
@@ -763,7 +761,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
         aUnions.clear();
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTableSearchType::TBLSEARCH_ROW );
 
-        for( i = 0; i < aUnions.size(); ++i )
+        for( SwSelUnions::size_type i = 0; i < aUnions.size(); ++i )
         {
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrame *pTable = pUnion->GetTable();

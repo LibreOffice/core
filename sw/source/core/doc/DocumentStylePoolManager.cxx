@@ -2124,7 +2124,7 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( sal_uInt16 nId ) const
 
     SwTextFormatColl* pNewColl = nullptr;
     bool bFnd = false;
-    for( sal_uInt16 n = 0; !bFnd && n < m_rDoc.GetTextFormatColls()->size(); ++n )
+    for( SwTextFormatColls::size_type n = 0; !bFnd && n < m_rDoc.GetTextFormatColls()->size(); ++n )
     {
         pNewColl = (*m_rDoc.GetTextFormatColls())[ n ];
         if( nId == pNewColl->GetPoolFormatId() )
