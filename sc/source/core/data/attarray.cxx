@@ -1334,7 +1334,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
         {
             const SvxShadowItem* pShadow =
                     static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
-            if ( pShadow->GetLocation() != SVX_SHADOW_NONE )
+            if ( pShadow->GetLocation() != SvxShadowLocation::NONE )
                 bFound = true;
         }
         if ( nMask & HasAttrFlags::Conditional )
@@ -1418,10 +1418,10 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
                     static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
             SvxShadowLocation eLoc = pShadow->GetLocation();
             if ( nMask & HasAttrFlags::ShadowRight )
-                if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
+                if ( eLoc == SvxShadowLocation::TopRight || eLoc == SvxShadowLocation::BottomRight )
                     bFound = true;
             if ( nMask & HasAttrFlags::ShadowDown )
-                if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
+                if ( eLoc == SvxShadowLocation::BottomLeft || eLoc == SvxShadowLocation::BottomRight )
                     bFound = true;
         }
         if ( nMask & HasAttrFlags::RightOrCenter )

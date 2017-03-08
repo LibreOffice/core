@@ -1230,10 +1230,10 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                                 //  so the attribute's location value is mirrored here and in FillInfo.
                                 switch (eLoc)
                                 {
-                                    case SVX_SHADOW_BOTTOMRIGHT: eLoc = SVX_SHADOW_BOTTOMLEFT;  break;
-                                    case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
-                                    case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_TOPLEFT;     break;
-                                    case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+                                    case SvxShadowLocation::BottomRight: eLoc = SvxShadowLocation::BottomLeft;  break;
+                                    case SvxShadowLocation::BottomLeft:  eLoc = SvxShadowLocation::BottomRight; break;
+                                    case SvxShadowLocation::TopRight:    eLoc = SvxShadowLocation::TopLeft;     break;
+                                    case SvxShadowLocation::TopLeft:     eLoc = SvxShadowLocation::TopRight;    break;
                                     default:
                                     {
                                         // added to avoid warnings
@@ -1244,7 +1244,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             if (ePart == SC_SHADOW_HORIZ || ePart == SC_SHADOW_HSTART ||
                                 ePart == SC_SHADOW_CORNER)
                             {
-                                if (eLoc == SVX_SHADOW_TOPLEFT || eLoc == SVX_SHADOW_TOPRIGHT)
+                                if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::TopRight)
                                     aRect.Top() = aRect.Bottom() - nSizeY;
                                 else
                                     aRect.Bottom() = aRect.Top() + nSizeY;
@@ -1252,21 +1252,21 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             if (ePart == SC_SHADOW_VERT || ePart == SC_SHADOW_VSTART ||
                                 ePart == SC_SHADOW_CORNER)
                             {
-                                if (eLoc == SVX_SHADOW_TOPLEFT || eLoc == SVX_SHADOW_BOTTOMLEFT)
+                                if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::BottomLeft)
                                     aRect.Left() = aRect.Right() - nSizeX;
                                 else
                                     aRect.Right() = aRect.Left() + nSizeX;
                             }
                             if (ePart == SC_SHADOW_HSTART)
                             {
-                                if (eLoc == SVX_SHADOW_TOPLEFT || eLoc == SVX_SHADOW_BOTTOMLEFT)
+                                if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::BottomLeft)
                                     aRect.Right() -= nSizeX;
                                 else
                                     aRect.Left() += nSizeX;
                             }
                             if (ePart == SC_SHADOW_VSTART)
                             {
-                                if (eLoc == SVX_SHADOW_TOPLEFT || eLoc == SVX_SHADOW_TOPRIGHT)
+                                if (eLoc == SvxShadowLocation::TopLeft || eLoc == SvxShadowLocation::TopRight)
                                     aRect.Bottom() -= nSizeY;
                                 else
                                     aRect.Top() += nSizeY;

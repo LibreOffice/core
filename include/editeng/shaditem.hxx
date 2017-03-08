@@ -43,7 +43,7 @@ public:
 
     explicit SvxShadowItem( const sal_uInt16 nId ,
                  const Color *pColor = nullptr, const sal_uInt16 nWidth = 100 /*5pt*/,
-                 const SvxShadowLocation eLoc = SVX_SHADOW_NONE );
+                 const SvxShadowLocation eLoc = SvxShadowLocation::NONE );
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 

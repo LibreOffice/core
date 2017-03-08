@@ -224,7 +224,7 @@ SwFont::GetAbsRightBorder( const bool bVertLayout ) const
 
 SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
 {
-    SvxShadowLocation aLocation = SVX_SHADOW_NONE;
+    SvxShadowLocation aLocation = SvxShadowLocation::NONE;
     switch( GetOrientation( bVertLayout ) )
     {
         case 0:
@@ -234,20 +234,20 @@ SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
         case 900:
             switch ( m_aShadowLocation )
             {
-                case SVX_SHADOW_TOPLEFT:
-                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                case SvxShadowLocation::TopLeft:
+                    aLocation = SvxShadowLocation::BottomLeft;
                     break;
-                case SVX_SHADOW_TOPRIGHT:
-                    aLocation = SVX_SHADOW_TOPLEFT;
+                case SvxShadowLocation::TopRight:
+                    aLocation = SvxShadowLocation::TopLeft;
                     break;
-                case SVX_SHADOW_BOTTOMLEFT:
-                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                case SvxShadowLocation::BottomLeft:
+                    aLocation = SvxShadowLocation::BottomRight;
                     break;
-                case SVX_SHADOW_BOTTOMRIGHT:
-                    aLocation = SVX_SHADOW_TOPRIGHT;
+                case SvxShadowLocation::BottomRight:
+                    aLocation = SvxShadowLocation::TopRight;
                     break;
-                case SVX_SHADOW_NONE:
-                case SVX_SHADOW_END:
+                case SvxShadowLocation::NONE:
+                case SvxShadowLocation::End:
                     aLocation = m_aShadowLocation;
                     break;
             }
@@ -256,20 +256,20 @@ SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
         case 1800:
             switch ( m_aShadowLocation )
             {
-                case SVX_SHADOW_TOPLEFT:
-                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                case SvxShadowLocation::TopLeft:
+                    aLocation = SvxShadowLocation::BottomRight;
                     break;
-                case SVX_SHADOW_TOPRIGHT:
-                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                case SvxShadowLocation::TopRight:
+                    aLocation = SvxShadowLocation::BottomLeft;
                     break;
-                case SVX_SHADOW_BOTTOMLEFT:
-                    aLocation = SVX_SHADOW_TOPRIGHT;
+                case SvxShadowLocation::BottomLeft:
+                    aLocation = SvxShadowLocation::TopRight;
                     break;
-                case SVX_SHADOW_BOTTOMRIGHT:
-                    aLocation = SVX_SHADOW_TOPLEFT;
+                case SvxShadowLocation::BottomRight:
+                    aLocation = SvxShadowLocation::TopLeft;
                     break;
-                case SVX_SHADOW_NONE:
-                case SVX_SHADOW_END:
+                case SvxShadowLocation::NONE:
+                case SvxShadowLocation::End:
                     aLocation = m_aShadowLocation;
                     break;
             }
@@ -278,20 +278,20 @@ SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
         case 2700:
             switch ( m_aShadowLocation )
             {
-                case SVX_SHADOW_TOPLEFT:
-                    aLocation = SVX_SHADOW_TOPRIGHT;
+                case SvxShadowLocation::TopLeft:
+                    aLocation = SvxShadowLocation::TopRight;
                     break;
-                case SVX_SHADOW_TOPRIGHT:
-                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                case SvxShadowLocation::TopRight:
+                    aLocation = SvxShadowLocation::BottomRight;
                     break;
-                case SVX_SHADOW_BOTTOMLEFT:
-                    aLocation = SVX_SHADOW_TOPLEFT;
+                case SvxShadowLocation::BottomLeft:
+                    aLocation = SvxShadowLocation::TopLeft;
                     break;
-                case SVX_SHADOW_BOTTOMRIGHT:
-                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                case SvxShadowLocation::BottomRight:
+                    aLocation = SvxShadowLocation::BottomLeft;
                     break;
-                case SVX_SHADOW_NONE:
-                case SVX_SHADOW_END:
+                case SvxShadowLocation::NONE:
+                case SvxShadowLocation::End:
                     aLocation = m_aShadowLocation;
                     break;
             }
@@ -314,8 +314,8 @@ sal_uInt16 SwFont::CalcShadowSpace(
     switch( nShadow )
     {
         case SvxShadowItemSide::TOP:
-            if(( aLoc == SVX_SHADOW_TOPLEFT ||
-               aLoc == SVX_SHADOW_TOPRIGHT ) &&
+            if(( aLoc == SvxShadowLocation::TopLeft ||
+               aLoc == SvxShadowLocation::TopRight ) &&
                ( nOrient == 0 || nOrient == 1800 ||
                ( nOrient == 900 && !bSkipRight ) ||
                ( nOrient == 2700 && !bSkipLeft )))
@@ -325,8 +325,8 @@ sal_uInt16 SwFont::CalcShadowSpace(
             break;
 
         case SvxShadowItemSide::BOTTOM:
-            if(( aLoc == SVX_SHADOW_BOTTOMLEFT ||
-               aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
+            if(( aLoc == SvxShadowLocation::BottomLeft ||
+               aLoc == SvxShadowLocation::BottomRight ) &&
                ( nOrient == 0 || nOrient == 1800 ||
                ( nOrient == 900 && !bSkipLeft ) ||
                ( nOrient == 2700 && !bSkipRight )))
@@ -336,8 +336,8 @@ sal_uInt16 SwFont::CalcShadowSpace(
             break;
 
         case SvxShadowItemSide::LEFT:
-            if(( aLoc == SVX_SHADOW_TOPLEFT ||
-               aLoc == SVX_SHADOW_BOTTOMLEFT ) &&
+            if(( aLoc == SvxShadowLocation::TopLeft ||
+               aLoc == SvxShadowLocation::BottomLeft ) &&
                ( nOrient == 900 || nOrient == 2700 ||
                ( nOrient == 0 && !bSkipLeft ) ||
                ( nOrient == 1800 && !bSkipRight )))
@@ -347,8 +347,8 @@ sal_uInt16 SwFont::CalcShadowSpace(
             break;
 
          case SvxShadowItemSide::RIGHT:
-            if(( aLoc == SVX_SHADOW_TOPRIGHT ||
-               aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
+            if(( aLoc == SvxShadowLocation::TopRight ||
+               aLoc == SvxShadowLocation::BottomRight ) &&
                ( nOrient == 900 || nOrient == 2700 ||
                ( nOrient == 0 && !bSkipRight ) ||
                ( nOrient == 1800 && !bSkipLeft )))
@@ -878,7 +878,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     {
         SetShadowColor(COL_TRANSPARENT);
         SetShadowWidth(0);
-        SetShadowLocation(SVX_SHADOW_NONE);
+        SetShadowLocation(SvxShadowLocation::NONE);
     }
 
     const SvxTwoLinesItem& rTwoLinesItem = pAttrSet->Get2Lines();

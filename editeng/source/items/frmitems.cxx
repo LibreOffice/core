@@ -1308,10 +1308,10 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     table::ShadowLocation eSet = table::ShadowLocation_NONE;
     switch( eLocation )
     {
-        case SVX_SHADOW_TOPLEFT    : eSet = table::ShadowLocation_TOP_LEFT    ; break;
-        case SVX_SHADOW_TOPRIGHT   : eSet = table::ShadowLocation_TOP_RIGHT   ; break;
-        case SVX_SHADOW_BOTTOMLEFT : eSet = table::ShadowLocation_BOTTOM_LEFT ; break;
-        case SVX_SHADOW_BOTTOMRIGHT: eSet = table::ShadowLocation_BOTTOM_RIGHT; break;
+        case SvxShadowLocation::TopLeft    : eSet = table::ShadowLocation_TOP_LEFT    ; break;
+        case SvxShadowLocation::TopRight   : eSet = table::ShadowLocation_TOP_RIGHT   ; break;
+        case SvxShadowLocation::BottomLeft : eSet = table::ShadowLocation_BOTTOM_LEFT ; break;
+        case SvxShadowLocation::BottomRight: eSet = table::ShadowLocation_BOTTOM_RIGHT; break;
         default: ; // prevent warning
     }
     aShadow.Location = eSet;
@@ -1378,13 +1378,13 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
     if ( bRet )
     {
-//      SvxShadowLocation eSet = SVX_SHADOW_NONE;
+//      SvxShadowLocation eSet = SvxShadowLocation::NONE;
         switch( aShadow.Location )
         {
-            case table::ShadowLocation_TOP_LEFT    : eLocation = SVX_SHADOW_TOPLEFT; break;
-            case table::ShadowLocation_TOP_RIGHT   : eLocation = SVX_SHADOW_TOPRIGHT; break;
-            case table::ShadowLocation_BOTTOM_LEFT : eLocation = SVX_SHADOW_BOTTOMLEFT ; break;
-            case table::ShadowLocation_BOTTOM_RIGHT: eLocation = SVX_SHADOW_BOTTOMRIGHT; break;
+            case table::ShadowLocation_TOP_LEFT    : eLocation = SvxShadowLocation::TopLeft; break;
+            case table::ShadowLocation_TOP_RIGHT   : eLocation = SvxShadowLocation::TopRight; break;
+            case table::ShadowLocation_BOTTOM_LEFT : eLocation = SvxShadowLocation::BottomLeft ; break;
+            case table::ShadowLocation_BOTTOM_RIGHT: eLocation = SvxShadowLocation::BottomRight; break;
             default: ; // prevent warning
         }
 
@@ -1421,26 +1421,26 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
     switch ( nShadow )
     {
         case SvxShadowItemSide::TOP:
-            if ( eLocation == SVX_SHADOW_TOPLEFT ||
-                 eLocation == SVX_SHADOW_TOPRIGHT  )
+            if ( eLocation == SvxShadowLocation::TopLeft ||
+                 eLocation == SvxShadowLocation::TopRight  )
                 nSpace = nWidth;
             break;
 
         case SvxShadowItemSide::BOTTOM:
-            if ( eLocation == SVX_SHADOW_BOTTOMLEFT ||
-                 eLocation == SVX_SHADOW_BOTTOMRIGHT  )
+            if ( eLocation == SvxShadowLocation::BottomLeft ||
+                 eLocation == SvxShadowLocation::BottomRight  )
                 nSpace = nWidth;
             break;
 
         case SvxShadowItemSide::LEFT:
-            if ( eLocation == SVX_SHADOW_TOPLEFT ||
-                 eLocation == SVX_SHADOW_BOTTOMLEFT )
+            if ( eLocation == SvxShadowLocation::TopLeft ||
+                 eLocation == SvxShadowLocation::BottomLeft )
                 nSpace = nWidth;
             break;
 
         case SvxShadowItemSide::RIGHT:
-            if ( eLocation == SVX_SHADOW_TOPRIGHT ||
-                 eLocation == SVX_SHADOW_BOTTOMRIGHT )
+            if ( eLocation == SvxShadowLocation::TopRight ||
+                 eLocation == SvxShadowLocation::BottomRight )
                 nSpace = nWidth;
             break;
 
@@ -1473,7 +1473,7 @@ bool SvxShadowItem::GetPresentation
                     OUString(cpDelim) +
                     GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl ) +
                     OUString(cpDelim) +
-                    EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation);
+                    EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + (int)eLocation);
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -1491,7 +1491,7 @@ bool SvxShadowItem::GetPresentation
                     GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl ) +
                     " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                     OUString(cpDelim) +
-                    EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation);
+                    EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + (int)eLocation);
             return true;
         }
         default: ; // prevent warning
@@ -1502,7 +1502,7 @@ bool SvxShadowItem::GetPresentation
 
 SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar( GetLocation() )
+    rStrm.WriteSChar( (sal_uInt8)GetLocation() )
          .WriteUInt16( GetWidth() )
          .WriteBool( aShadowColor.GetTransparency() > 0 );
     WriteColor( rStrm, GetColor() );
@@ -1543,13 +1543,13 @@ SfxPoolItem* SvxShadowItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 sal_uInt16 SvxShadowItem::GetValueCount() const
 {
-    return SVX_SHADOW_END;  // SVX_SHADOW_BOTTOMRIGHT + 1
+    return (sal_uInt16)SvxShadowLocation::End;  // SvxShadowLocation::BottomRight + 1
 }
 
 
 OUString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < SVX_SHADOW_END, "enum overflow!" );
+    DBG_ASSERT( nPos < (sal_uInt16)SvxShadowLocation::End, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + nPos );
 }
 
@@ -1571,8 +1571,8 @@ void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number(eLocation).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation).toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number((int)eLocation).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + (int)eLocation).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 

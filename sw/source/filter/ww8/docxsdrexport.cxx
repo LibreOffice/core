@@ -298,25 +298,25 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // Count effectExtent values, their value is needed before dist{T,B,L,R} is written.
     SvxShadowItem aShadowItem = pFrameFormat->GetShadow();
     sal_Int32 nLeftExt = 0, nRightExt = 0, nTopExt = 0, nBottomExt = 0;
-    if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
+    if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
     {
         sal_Int32 nShadowWidth(TwipsToEMU(aShadowItem.GetWidth()));
         switch (aShadowItem.GetLocation())
         {
-        case SVX_SHADOW_TOPLEFT:
+        case SvxShadowLocation::TopLeft:
             nTopExt = nLeftExt = nShadowWidth;
             break;
-        case SVX_SHADOW_TOPRIGHT:
+        case SvxShadowLocation::TopRight:
             nTopExt = nRightExt = nShadowWidth;
             break;
-        case SVX_SHADOW_BOTTOMLEFT:
+        case SvxShadowLocation::BottomLeft:
             nBottomExt = nLeftExt = nShadowWidth;
             break;
-        case SVX_SHADOW_BOTTOMRIGHT:
+        case SvxShadowLocation::BottomRight:
             nBottomExt = nRightExt = nShadowWidth;
             break;
-        case SVX_SHADOW_NONE:
-        case SVX_SHADOW_END:
+        case SvxShadowLocation::NONE:
+        case SvxShadowLocation::End:
             break;
         }
     }
@@ -882,27 +882,27 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
 void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
 {
     const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
-    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
+    if (aShadowItem.GetLocation() == SvxShadowLocation::NONE)
         return;
 
     OString aShadowWidth(OString::number(double(aShadowItem.GetWidth()) / 20) + "pt");
     OString aOffset;
     switch (aShadowItem.GetLocation())
     {
-    case SVX_SHADOW_TOPLEFT:
+    case SvxShadowLocation::TopLeft:
         aOffset = "-" + aShadowWidth + ",-" + aShadowWidth;
         break;
-    case SVX_SHADOW_TOPRIGHT:
+    case SvxShadowLocation::TopRight:
         aOffset = aShadowWidth + ",-" + aShadowWidth;
         break;
-    case SVX_SHADOW_BOTTOMLEFT:
+    case SvxShadowLocation::BottomLeft:
         aOffset = "-" + aShadowWidth + "," + aShadowWidth;
         break;
-    case SVX_SHADOW_BOTTOMRIGHT:
+    case SvxShadowLocation::BottomRight:
         aOffset = aShadowWidth + "," + aShadowWidth;
         break;
-    case SVX_SHADOW_NONE:
-    case SVX_SHADOW_END:
+    case SvxShadowLocation::NONE:
+    case SvxShadowLocation::End:
         break;
     }
     if (aOffset.isEmpty())
@@ -985,7 +985,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
     const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
 
     // Output effects
-    if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
+    if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
     {
         // Distance is measured diagonally from corner
         double nShadowDist = sqrt((double)aShadowItem.GetWidth()*aShadowItem.GetWidth()*2.0);
@@ -995,20 +995,20 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
         sal_uInt32 nShadowDir = 0;
         switch (aShadowItem.GetLocation())
         {
-        case SVX_SHADOW_TOPLEFT:
+        case SvxShadowLocation::TopLeft:
             nShadowDir = 13500000;
             break;
-        case SVX_SHADOW_TOPRIGHT:
+        case SvxShadowLocation::TopRight:
             nShadowDir = 18900000;
             break;
-        case SVX_SHADOW_BOTTOMLEFT:
+        case SvxShadowLocation::BottomLeft:
             nShadowDir = 8100000;
             break;
-        case SVX_SHADOW_BOTTOMRIGHT:
+        case SvxShadowLocation::BottomRight:
             nShadowDir = 2700000;
             break;
-        case SVX_SHADOW_NONE:
-        case SVX_SHADOW_END:
+        case SvxShadowLocation::NONE:
+        case SvxShadowLocation::End:
             break;
         }
         OString aShadowDir(OString::number(nShadowDir));

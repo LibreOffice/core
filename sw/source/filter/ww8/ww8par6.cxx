@@ -1436,7 +1436,7 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
         if (nVal < 0x10)
             nVal = 0x10;
         rShadow.SetWidth(nVal);
-        rShadow.SetLocation(SVX_SHADOW_BOTTOMRIGHT);
+        rShadow.SetLocation(SvxShadowLocation::BottomRight);
         bRet = true;
     }
     return bRet;

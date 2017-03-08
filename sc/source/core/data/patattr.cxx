@@ -1181,7 +1181,7 @@ bool ScPatternAttr::IsVisible() const
 
     eState = rSet.GetItemState( ATTR_SHADOW, true, &pItem );
     if ( eState == SfxItemState::SET )
-        if ( static_cast<const SvxShadowItem*>(pItem)->GetLocation() != SVX_SHADOW_NONE )
+        if ( static_cast<const SvxShadowItem*>(pItem)->GetLocation() != SvxShadowLocation::NONE )
             return true;
 
     return false;

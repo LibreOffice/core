@@ -4121,7 +4121,7 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
         if ( pItem )
         {
             const SvxShadowItem* p = static_cast<const SvxShadowItem*>(pItem);
-            bShadow = ( p->GetLocation() != SVX_SHADOW_NONE )
+            bShadow = ( p->GetLocation() != SvxShadowLocation::NONE )
                       && ( p->GetWidth() != 0 );
         }
 
@@ -5116,7 +5116,7 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
         const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
         const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
         const bool bShadow =
-            pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE &&
+            pShadowItem && pShadowItem->GetLocation() != SvxShadowLocation::NONE &&
             pShadowItem->GetWidth() > 0;
 
         CharBorder( pBorderLine, nDist, bShadow );

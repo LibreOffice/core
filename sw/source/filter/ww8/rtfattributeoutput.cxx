@@ -164,13 +164,13 @@ static OString OutTBLBorderLine(RtfExport& rExport, const editeng::SvxBorderLine
 }
 
 static OString OutBorderLine(RtfExport& rExport, const editeng::SvxBorderLine* pLine,
-                             const sal_Char* pStr, sal_uInt16 nDist, SvxShadowLocation eShadowLocation = SVX_SHADOW_NONE)
+                             const sal_Char* pStr, sal_uInt16 nDist, SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE)
 {
     OStringBuffer aRet;
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
     aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
     aRet.append((sal_Int32)nDist);
-    if (eShadowLocation == SVX_SHADOW_BOTTOMRIGHT)
+    if (eShadowLocation == SvxShadowLocation::BottomRight)
         aRet.append(LO_STRING_SVTOOLS_RTF_BRDRSH);
     return aRet.makeStringAndClear();
 }
@@ -1685,7 +1685,7 @@ namespace
 void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrameFormat& rFrameFormat)
 {
     const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
-    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
+    if (aShadowItem.GetLocation() == SvxShadowLocation::NONE)
         return;
 
     rFlyProperties.push_back(std::make_pair<OString, OString>("fShadow", OString::number(1)));
@@ -1700,24 +1700,24 @@ void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyPropert
     OString aOffsetY;
     switch (aShadowItem.GetLocation())
     {
-    case SVX_SHADOW_TOPLEFT:
+    case SvxShadowLocation::TopLeft:
         aOffsetX = "-" + aShadowWidth;
         aOffsetY = "-" + aShadowWidth;
         break;
-    case SVX_SHADOW_TOPRIGHT:
+    case SvxShadowLocation::TopRight:
         aOffsetX = aShadowWidth;
         aOffsetY = "-" + aShadowWidth;
         break;
-    case SVX_SHADOW_BOTTOMLEFT:
+    case SvxShadowLocation::BottomLeft:
         aOffsetX = "-" + aShadowWidth;
         aOffsetY = aShadowWidth;
         break;
-    case SVX_SHADOW_BOTTOMRIGHT:
+    case SvxShadowLocation::BottomRight:
         aOffsetX = aShadowWidth;
         aOffsetY = aShadowWidth;
         break;
-    case SVX_SHADOW_NONE:
-    case SVX_SHADOW_END:
+    case SvxShadowLocation::NONE:
+    case SvxShadowLocation::End:
         break;
     }
     if (!aOffsetX.isEmpty())
@@ -2606,7 +2606,7 @@ void RtfAttributeOutput::CharHidden(const SvxCharHiddenItem& rHidden)
 
 void RtfAttributeOutput::CharBorder(const editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow)
 {
-    m_aStyles.append(OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist, bShadow ? SVX_SHADOW_BOTTOMRIGHT : SVX_SHADOW_NONE));
+    m_aStyles.append(OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist, bShadow ? SvxShadowLocation::BottomRight : SvxShadowLocation::NONE));
 }
 
 void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
@@ -3302,7 +3302,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         m_aSectionBreaks.append(OutBorderLine(m_rExport, rBox.GetTop(), OOO_STRING_SVTOOLS_RTF_BOX, nDist));
     else
     {
-        SvxShadowLocation eShadowLocation = SVX_SHADOW_NONE;
+        SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE;
         if (const SfxPoolItem* pItem = GetExport().HasItem(RES_SHADOW))
             eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
 

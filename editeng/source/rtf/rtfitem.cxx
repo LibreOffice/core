@@ -1514,7 +1514,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
 
         case RTF_BRDRSH:        // Shadowed border
                 rSet.Put( SvxShadowItem( aPardMap.nShadow, nullptr, 60 /*3pt*/,
-                                        SVX_SHADOW_BOTTOMRIGHT ) );
+                                        SvxShadowLocation::BottomRight ) );
                 break;
 
         case RTF_BRSP:          // Spacing to content in twip

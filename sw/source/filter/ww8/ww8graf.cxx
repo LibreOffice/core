@@ -1758,16 +1758,16 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         if( 0 <= nShdDistX )
         {
             if( 0 <= nShdDistY )
-                eShdPosi = SVX_SHADOW_BOTTOMRIGHT;
+                eShdPosi = SvxShadowLocation::BottomRight;
             else
-                eShdPosi = SVX_SHADOW_TOPRIGHT;
+                eShdPosi = SvxShadowLocation::TopRight;
         }
         else
         {
             if( 0 <= nShdDistY )
-                eShdPosi = SVX_SHADOW_BOTTOMLEFT;
+                eShdPosi = SvxShadowLocation::BottomLeft;
             else
-                eShdPosi = SVX_SHADOW_TOPLEFT;
+                eShdPosi = SvxShadowLocation::TopLeft;
         }
         aShadow.SetLocation( eShdPosi );
 
