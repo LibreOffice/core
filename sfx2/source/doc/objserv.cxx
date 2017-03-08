@@ -1279,7 +1279,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 else
                 {
                     // Not ZIP-based, e.g. PDF.
-                    SvStream* pStream = utl::UcbStreamHelper::CreateStream(GetMedium()->GetName(), StreamMode::READ);
+                    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetMedium()->GetName(), StreamMode::READ));
                     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
                     uno::Reference<io::XInputStream> xInputStream(xStream, uno::UNO_QUERY);
                     aResult = xLocSigner->verifyDocumentContentSignatures(uno::Reference<embed::XStorage>(), xInputStream);
