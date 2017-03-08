@@ -24,9 +24,9 @@
 #include <vcl/timer.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "postit.hxx"
 
 class SdrModel;
-class SdrObject;
 
 class ScNoteMarker
 {
@@ -46,7 +46,7 @@ private:
 
     Rectangle       aRect;
     SdrModel*       pModel;
-    SdrObject*      pObject;
+    ScCaptionPtr    mxObject;
     bool            bVisible;
     Point           aGridOff;
     DECL_LINK( TimeHdl, Timer*, void );

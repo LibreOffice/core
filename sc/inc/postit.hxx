@@ -247,7 +247,7 @@ class SC_DLLPUBLIC ScNoteUtil
 public:
 
     /** Creates and returns a caption object for a temporary caption. */
-    static SdrCaptionObj* CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
+    static ScCaptionPtr CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
                             SdrPage& rDrawPage, const OUString& rUserText,
                             const Rectangle& rVisRect, bool bTailFront );
 

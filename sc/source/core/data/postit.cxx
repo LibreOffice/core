@@ -1078,7 +1078,7 @@ void ScPostIt::RemoveCaption()
     maNoteData.mxCaption.reset(nullptr);
 }
 
-SdrCaptionObj* ScNoteUtil::CreateTempCaption(
+ScCaptionPtr ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         const OUString& rUserText, const Rectangle& rVisRect, bool bTailFront )
 {
@@ -1095,7 +1095,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
 
     // create a caption if any text exists
     if( !pNoteCaption && aBuffer.isEmpty() )
-        return nullptr;
+        return ScCaptionPtr();
 
     // prepare visible rectangle (add default distance to all borders)
     Rectangle aVisRect(
@@ -1138,9 +1138,8 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     // move caption into visible area
     aCreator.AutoPlaceCaption( &aVisRect );
 
-    // The caption object returned is completely unmanaged and stored elsewhere.
     // XXX Note it is already inserted to the draw page.
-    return aCreator.GetCaption().release();
+    return aCreator.GetCaption();
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromCaption(
