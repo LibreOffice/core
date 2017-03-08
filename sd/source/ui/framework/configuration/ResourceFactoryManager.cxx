@@ -50,6 +50,16 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
 
 ResourceFactoryManager::~ResourceFactoryManager()
 {
+    for (auto iXInterfaceResource = maFactoryMap.begin();
+         iXInterfaceResource != maFactoryMap.end();
+         ++iXInterfaceResource)
+    {
+        Reference<lang::XComponent> xComponent (iXInterfaceResource->second, UNO_QUERY);
+        iXInterfaceResource->second = nullptr;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
     Reference<lang::XComponent> xComponent (mxURLTransformer, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
