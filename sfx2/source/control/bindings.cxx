@@ -779,8 +779,7 @@ void SfxBindings::Invalidate
 
 bool SfxBindings::IsBound( sal_uInt16 nSlotId )
 {
-    sal_uInt16 nStartSearchAt = 0;
-    return GetStateCache(nSlotId, &nStartSearchAt ) != nullptr;
+    return GetStateCache(nSlotId) != nullptr;
 }
 
 
