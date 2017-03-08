@@ -173,12 +173,16 @@ namespace slideshow
                 return false;
             }
 
+            const ::std::size_t nNumFrames(maTimeouts.size());
+
             // mnNumLoops == 0 means infinite looping
             if( mnNumLoops != 0 &&
                 mnLoopCount >= mnNumLoops )
             {
-                // #i55294# After finishing the loops, display the first frame
-                pDrawShape->setIntrinsicAnimationFrame( 0 );
+                // #i55294# After finishing the loops, display the last frame
+                // powerpoint 2013 and firefox etc show the last frame when
+                // the animation ends
+                pDrawShape->setIntrinsicAnimationFrame(nNumFrames - 1);
                 maContext.mpSubsettableShapeManager->notifyShapeUpdate( pDrawShape );
 
                 end();
@@ -187,7 +191,6 @@ namespace slideshow
             }
 
             ::std::size_t       nNewIndex = 0;
-            const ::std::size_t nNumFrames(maTimeouts.size());
 
             pDrawShape->setIntrinsicAnimationFrame( mnCurrIndex );
 
