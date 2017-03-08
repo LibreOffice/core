@@ -199,7 +199,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
         // sort by DataChangeTimeStamp so that the oldest get removed first
         std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
 
-        for(sal_uInt32 a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
+        for(decltype(aCandidates)::size_type a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
         {
             // swap out until we have no more or the goal to use less than nMaxCacheSize
             // is reached
@@ -332,12 +332,12 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     double fRevScaleY;
 
     bool scaleByAveraging = false;
-    int x,y;
 
     if(aBitmapWidth > 1 && aUnrotatedWidth > 1)
     {
         fRevScaleX = (double) ( aBitmapWidth  - 1 ) / (double)( aUnrotatedWidth  - 1 );
         // create horizontal mapping table
+        long x;
         for( x = 0, nTmpX = aBitmapWidth - 1L, nTmp = aBitmapWidth - 2L >= 0 ? aBitmapWidth -2L : 0L; x < aUnrotatedWidth; x++ )
         {
             fTmp = x * fRevScaleX;
@@ -355,7 +355,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         if(aBitmapWidth == 1)
         {
             fRevScaleX = 1.0 / (double)( aUnrotatedWidth );
-            for ( x = 0; x < aUnrotatedWidth ; x++)
+            for ( long x = 0; x < aUnrotatedWidth ; x++)
             {
                 pMapIX[x] = 0;
                 pMapFX[x] = 0;
@@ -376,6 +376,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     {
         fRevScaleY = (double) ( aBitmapHeight  - 1 ) / (double)( aUnrotatedHeight - 1 );
         // create vertical mapping table
+        long y;
         for( y = 0, nTmpY = aBitmapHeight - 1L, nTmp = aBitmapHeight - 2L >= 0 ? aBitmapHeight - 2L : 0L; y < aUnrotatedHeight; y++ )
         {
             fTmp = y * fRevScaleY;
@@ -393,7 +394,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         if(aBitmapHeight == 1)
         {
             fRevScaleY = 1.0 / (double)( aUnrotatedHeight);
-            for (y = 0; y < aUnrotatedHeight; ++y)
+            for (long y = 0; y < aUnrotatedHeight; ++y)
             {
                 pMapIY[y] = 0;
                 pMapFY[y] = 0;
@@ -433,6 +434,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     Rectangle           aNewBound( aPoly.GetBoundRect() );
 
     // create horizontal mapping table
+    long x;
     for( x = 0, nTmpX = aNewBound.Left() + nStartX; x < aTargetWidth; x++ )
     {
         pCosX[ x ] = FRound( fCosAngle * ( fTmp = nTmpX++ << 8 ) );
@@ -440,6 +442,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     }
 
     // create vertical mapping table
+    long y;
     for( y = 0, nTmpY = aNewBound.Top() + nStartY; y < aTargetHeight; y++ )
     {
         pCosY[ y ] = FRound( fCosAngle * ( fTmp = nTmpY++ << 8 ) );
