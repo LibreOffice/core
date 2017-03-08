@@ -1831,8 +1831,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
 
-    sal_uInt16 i;
-    for( i = 0; i <= aSects.size(); i++ )
+    for( decltype(aSects)::size_type i = 0; i <= aSects.size(); i++ )
     {
         sal_uInt32 nP = aCps[i];
         rWrt.pTableStrm->WriteUInt32(nP);
@@ -2153,7 +2152,6 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     std::vector<std::pair<OUString,OUString> > aStrArr;
     typedef std::vector<std::pair<OUString,OUString> >::iterator myiter;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-th CP-Pos according to the manual
-    sal_uInt16 i;
     bool bWriteCP = true;
 
     switch ( nTTyp )
@@ -2167,7 +2165,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 std::map<int, int> aStartEndMap; // Maps from start index to end index.
                 // then write first the GrpXstAtnOwners
                 int nIdx = 0;
-                for ( i = 0; i < nLen; ++i )
+                for ( sal_uInt16 i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
                     aStrArr.push_back(std::pair<OUString,OUString>(rAtn.msOwner,rAtn.m_sInitials));
@@ -2190,16 +2188,16 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 // reference the end index in the start table, so build a map
                 // that knows what index to reference, after sorting.
                 std::sort(aRangeStartPos.begin(), aRangeStartPos.end(), &lcl_PosComp);
-                for (i = 0; i < aRangeStartPos.size(); ++i)
+                for (decltype(aRangeStartPos)::size_type i = 0; i < aRangeStartPos.size(); ++i)
                 {
                     aAtnStartMap[aRangeStartPos[i].second] = i;
                     aStartAtnMap[i] = aRangeStartPos[i].second;
                 }
                 std::sort(aRangeEndPos.begin(), aRangeEndPos.end(), &lcl_PosComp);
-                for (i = 0; i < aRangeEndPos.size(); ++i)
+                for (decltype(aRangeEndPos)::size_type i = 0; i < aRangeEndPos.size(); ++i)
                     aStartEndMap[aAtnStartMap[ aRangeEndPos[i].second ]] = i;
 
-                for ( i = 0; i < aStrArr.size(); ++i )
+                for ( decltype(aStrArr)::size_type i = 0; i < aStrArr.size(); ++i )
                 {
                     const OUString& sAuthor = aStrArr[i].first;
                     SwWW8Writer::WriteShort(*rWrt.pTableStrm, sAuthor.getLength());
@@ -2216,14 +2214,14 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     // Commented text ranges starting positions (Plcfbkf.aCP)
                     rFib.m_fcPlcfAtnbkf = nFcStart;
-                    for ( i = 0; i < aRangeStartPos.size(); ++i )
+                    for ( decltype(aRangeStartPos)::size_type i = 0; i < aRangeStartPos.size(); ++i )
                     {
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i].first );
                     }
                     SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.m_ccpText + 1);
 
                     // Commented text ranges additional information (Plcfbkf.aFBKF)
-                    for ( i = 0; i < aRangeStartPos.size(); ++i )
+                    for ( decltype(aRangeStartPos)::size_type i = 0; i < aRangeStartPos.size(); ++i )
                     {
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, aStartEndMap[i] ); // FBKF.ibkl
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
@@ -2234,7 +2232,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                     // Commented text ranges ending positions (PlcfBkl.aCP)
                     rFib.m_fcPlcfAtnbkl = nFcStart;
-                    for ( i = 0; i < aRangeEndPos.size(); ++i )
+                    for ( decltype(aRangeEndPos)::size_type i = 0; i < aRangeEndPos.size(); ++i )
                     {
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i].first );
                     }
@@ -2249,7 +2247,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
 
-                    for ( i = 0; i < aRangeStartPos.size(); ++i )
+                    for ( decltype(aRangeStartPos)::size_type i = 0; i < aRangeStartPos.size(); ++i )
                     {
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );         // SttbfAtnBkmk.cchData
                         // One ATNBE structure for all text ranges
@@ -2263,7 +2261,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
 
                 // Write the extended >= Word XP ATRD records
-                for( i = 0; i < nLen; ++i )
+                for( sal_uInt16 i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
 
@@ -2290,7 +2288,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 const std::vector<sal_uInt32>* pShapeIds = GetShapeIdArr();
                 OSL_ENSURE( pShapeIds, "Where are the ShapeIds?" );
 
-                for ( i = 0; i < nLen; ++i )
+                for ( sal_uInt16 i = 0; i < nLen; ++i )
                 {
                     // write textbox story - FTXBXS
                     // is it an writer or sdr - textbox?
@@ -2349,7 +2347,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     if ( bWriteCP )
     {
         // write CP Positions
-        for ( i = 0; i < nLen; i++ )
+        for ( sal_uInt16 i = 0; i < nLen; i++ )
             SwWW8Writer::WriteLong( *rWrt.pTableStrm, aCps[ i ] );
 
         // n+1-th CP-Pos according to the manual
@@ -2360,7 +2358,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
         if ( TXT_ATN == nTTyp )
         {
             sal_uInt16 nlTag = 0;
-            for ( i = 0; i < nLen; ++i )
+            for ( sal_uInt16 i = 0; i < nLen; ++i )
             {
                 const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
 
@@ -2409,7 +2407,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
         else
         {
             sal_uInt16 nNo = 0;
-            for ( i = 0; i < nLen; ++i )             // write Flags
+            for ( sal_uInt16 i = 0; i < nLen; ++i )             // write Flags
             {
                 const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(aContent[ i ]);
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm,
@@ -2427,7 +2425,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     {
         case TXT_TXTBOX:
         case TXT_HFTXTBOX:
-            for ( i = 0; i < nLen; ++i )
+            for ( sal_uInt16 i = 0; i < nLen; ++i )
             {
                 // write break descriptor (BKD)
                 // short itxbxs

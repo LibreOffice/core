@@ -850,7 +850,7 @@ void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
 
 void WW8_WrPlc1::Write( SvStream& rStrm )
 {
-    sal_uInt32 i;
+    decltype(aPos)::size_type i;
     for( i = 0; i < aPos.size(); ++i )
         SwWW8Writer::WriteLong( rStrm, aPos[i] );
     if( i )
@@ -1064,7 +1064,7 @@ void WW8_WrPlcPn::WriteFkps()
 void WW8_WrPlcPn::WritePlc()
 {
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
-    sal_uInt16 i;
+    decltype(m_Fkps)::size_type i;
 
     for (i = 0; i < m_Fkps.size(); ++i)
     {

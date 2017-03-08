@@ -532,8 +532,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = sal_uInt8(true);
     if( aBits1 & 0x40 ) aLVL.bV6        = sal_uInt8(true);
     bool bLVLOkB = true;
-    sal_uInt8 nLevelB = 0;
-    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
         rSt.ReadUChar( aLVL.aOfsNumsXCH[ nLevelB ] );
         if( 0 != rSt.GetError() )
@@ -793,11 +792,11 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     typedef std::vector<sal_uInt8>::iterator myIter;
     aOfsNumsXCH.reserve(nMaxLevel);
 
-    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
         aOfsNumsXCH.push_back(aLVL.aOfsNumsXCH[nLevelB]);
 
     // nLevelB is an index in the aOfsNumsXCH array.
-    for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
+    for(sal_uInt16 nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
         // nPos is a one-based character offset to a level placeholder in
         // sNumString.
@@ -831,7 +830,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     }
 
     sal_uInt8 nUpperLevel = 0;  // akt. Anzeigetiefe fuer den Writer
-    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
         if (!nUpperLevel && !aOfsNumsXCH[nLevelB])
             nUpperLevel = nLevelB;
