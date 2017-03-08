@@ -805,10 +805,9 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         // #105641# Also crop animations
         if( aTransGraphic.IsAnimated() )
         {
-            sal_uInt16 nFrame;
             Animation aAnim( aTransGraphic.GetAnimation() );
 
-            for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+            for( size_t nFrame=0; nFrame<aAnim.Count(); ++nFrame )
             {
                 AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
@@ -852,7 +851,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 Point aPosOffset( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0,
                                   aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
 
-                for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+                for( size_t nFrame=0; nFrame<aAnim.Count(); ++nFrame )
                 {
                     AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 

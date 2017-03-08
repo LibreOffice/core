@@ -1331,7 +1331,7 @@ void SvImpLBox::FillView()
     {
         sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
         sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
-        sal_uInt16 nCurDispEntries = nLast-nThumb+1;
+        sal_uLong nCurDispEntries = nLast-nThumb+1;
         if( nCurDispEntries <  nVisibleCount )
         {
             ShowCursor( false );

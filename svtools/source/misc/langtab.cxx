@@ -82,7 +82,7 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     // Thus we can avoid to check every character of the text.
     bool bFound     = false;
     bool bIsRtlText = false;
-    for (sal_uInt16 i = 0;  i < nLen && !bFound;  ++i)
+    for (sal_Int32 i = 0;  i < nLen && !bFound;  ++i)
     {
         sal_Int16 nDirection = rCharClass.getCharacterDirection( rText, i );
         switch (nDirection)
