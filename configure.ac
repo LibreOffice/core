@@ -5358,7 +5358,11 @@ find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     if test "$VCVER" = 150; then
-        msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
+        if test $vcbuildnumber = 14.10.25017; then
+            msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/onecore/x64/Microsoft.VC${VCVER}.CRT"
+        else
+            msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
+        fi
     fi
     # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
     # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
