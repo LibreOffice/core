@@ -3327,7 +3327,6 @@ find_ucrt()
         # Rest if not exist
         if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
           UCRTSDKDIR=
-          AC_MSG_RESULT([UCRT: give up registry detection and retrieve from IDE env file])
         fi
     fi
     if test -z "$UCRTSDKDIR"; then
@@ -3453,20 +3452,18 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for UCRT location])
     find_ucrt
-    if test -n "$UCRTSDKDIR"; then
-        AC_MSG_RESULT([found])
-        PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
-        ucrtincpath_formatted=$formatted_path
-        # SOLARINC is used for external modules and must be set too.
-        # And no, it's not sufficient to set SOLARINC only, as configure
-        # itself doesn't honour it.
-        SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
-        CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
-        CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
-        CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
-    else
-        AC_MSG_ERROR([not found])
-    fi
+    # find_ucrt errors out if it doesn't find it
+    AC_MSG_RESULT([found])
+    PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
+    ucrtincpath_formatted=$formatted_path
+    # SOLARINC is used for external modules and must be set too.
+    # And no, it's not sufficient to set SOLARINC only, as configure
+    # itself doesn't honour it.
+    SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
+    CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
+    CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
+    CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
+
     AC_SUBST(UCRTSDKDIR)
     AC_SUBST(UCRTVERSION)
 
