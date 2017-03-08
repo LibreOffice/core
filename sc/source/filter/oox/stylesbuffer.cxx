@@ -1217,27 +1217,27 @@ void Alignment::finalizeImport()
 
 ::SvxCellHorJustify Alignment::GetScHorAlign() const
 {
-    ::SvxCellHorJustify nHori = ::SVX_HOR_JUSTIFY_STANDARD;
+    ::SvxCellHorJustify nHori = ::SvxCellHorJustify::Standard;
     switch( maApiData.meHorJustify )
     {
         case css::table::CellHoriJustify_LEFT:
-            nHori = ::SVX_HOR_JUSTIFY_LEFT;
+            nHori = ::SvxCellHorJustify::Left;
             break;
         case css::table::CellHoriJustify_CENTER:
-            nHori = ::SVX_HOR_JUSTIFY_CENTER;
+            nHori = ::SvxCellHorJustify::Center;
             break;
         case css::table::CellHoriJustify_RIGHT:
-            nHori = ::SVX_HOR_JUSTIFY_RIGHT;
+            nHori = ::SvxCellHorJustify::Right;
             break;
         case css::table::CellHoriJustify_BLOCK:
-            nHori = ::SVX_HOR_JUSTIFY_BLOCK;
+            nHori = ::SvxCellHorJustify::Block;
             break;
         case css::table::CellHoriJustify_REPEAT:
-            nHori = ::SVX_HOR_JUSTIFY_REPEAT;
+            nHori = ::SvxCellHorJustify::Repeat;
             break;
         case css::table::CellHoriJustify_STANDARD:
         default:
-            nHori = ::SVX_HOR_JUSTIFY_STANDARD;
+            nHori = ::SvxCellHorJustify::Standard;
             break;
     }
     return nHori;

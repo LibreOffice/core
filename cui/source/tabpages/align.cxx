@@ -54,14 +54,14 @@ typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
 
 static const HorJustConnection::MapEntryType s_pHorJustMap[] =
 {
-    { ALIGNDLG_HORALIGN_STD,    SVX_HOR_JUSTIFY_STANDARD    },
-    { ALIGNDLG_HORALIGN_LEFT,   SVX_HOR_JUSTIFY_LEFT        },
-    { ALIGNDLG_HORALIGN_CENTER, SVX_HOR_JUSTIFY_CENTER      },
-    { ALIGNDLG_HORALIGN_RIGHT,  SVX_HOR_JUSTIFY_RIGHT       },
-    { ALIGNDLG_HORALIGN_BLOCK,  SVX_HOR_JUSTIFY_BLOCK       },
-    { ALIGNDLG_HORALIGN_FILL,   SVX_HOR_JUSTIFY_REPEAT      },
-    { ALIGNDLG_HORALIGN_DISTRIBUTED, SVX_HOR_JUSTIFY_BLOCK  },
-    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
+    { ALIGNDLG_HORALIGN_STD,    SvxCellHorJustify::Standard    },
+    { ALIGNDLG_HORALIGN_LEFT,   SvxCellHorJustify::Left        },
+    { ALIGNDLG_HORALIGN_CENTER, SvxCellHorJustify::Center      },
+    { ALIGNDLG_HORALIGN_RIGHT,  SvxCellHorJustify::Right       },
+    { ALIGNDLG_HORALIGN_BLOCK,  SvxCellHorJustify::Block       },
+    { ALIGNDLG_HORALIGN_FILL,   SvxCellHorJustify::Repeat      },
+    { ALIGNDLG_HORALIGN_DISTRIBUTED, SvxCellHorJustify::Block  },
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   SvxCellHorJustify::Standard    }
 };
 
 // vertical alignment ---------------------------------------------------------
@@ -309,7 +309,7 @@ void AlignmentTabPage::Reset( const SfxItemSet* rCoreAttrs )
     lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
         *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, *rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD),
-        SVX_HOR_JUSTIFY_BLOCK);
+        SvxCellHorJustify::Block);
 
     lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
         *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *rCoreAttrs,

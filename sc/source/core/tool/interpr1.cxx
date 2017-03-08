@@ -2265,12 +2265,12 @@ void ScInterpreter::ScCell()
                         pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ));
                     switch( pJustAttr->GetValue() )
                     {
-                        case SVX_HOR_JUSTIFY_STANDARD:
-                        case SVX_HOR_JUSTIFY_LEFT:
-                        case SVX_HOR_JUSTIFY_BLOCK:     c = '\''; break;
-                        case SVX_HOR_JUSTIFY_CENTER:    c = '^';  break;
-                        case SVX_HOR_JUSTIFY_RIGHT:     c = '"';  break;
-                        case SVX_HOR_JUSTIFY_REPEAT:    c = '\\'; break;
+                        case SvxCellHorJustify::Standard:
+                        case SvxCellHorJustify::Left:
+                        case SvxCellHorJustify::Block:     c = '\''; break;
+                        case SvxCellHorJustify::Center:    c = '^';  break;
+                        case SvxCellHorJustify::Right:     c = '"';  break;
+                        case SvxCellHorJustify::Repeat:    c = '\\'; break;
                     }
                 }
                 PushString( OUString(c) );

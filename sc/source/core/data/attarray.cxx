@@ -1404,7 +1404,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
             else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
                 bFound = true;
             else if ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK)
+                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block)
                 bFound = true;
 
             else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
@@ -1429,7 +1429,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
             //  called only if the sheet is LTR, so physical=logical alignment can be assumed
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
                     static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-            if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
+            if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
                 bFound = true;
         }
     }
@@ -1741,8 +1741,8 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         const SfxPoolItem* pItem;
 
         bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SfxItemState::SET
-                           || (static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT &&
-                               static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
+                           || (static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Left &&
+                               static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SvxCellHorJustify::Right ));
         sal_uInt16 nOldValue = static_cast<const SfxUInt16Item&>(rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
@@ -1774,7 +1774,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
             aNewPattern.GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, nNewValue ) );
             if ( bNeedJust )
                 aNewPattern.GetItemSet().Put(
-                                SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
+                                SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
             SetPatternArea( nThisStart, nAttrRow, &aNewPattern, true );
 
             nThisStart = nThisEnd + 1;

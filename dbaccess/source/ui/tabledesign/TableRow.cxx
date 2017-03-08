@@ -128,7 +128,7 @@ namespace dbaui
             _rStr.WriteInt32( pFieldDesc->GetScale() );
             _rStr.WriteInt32( pFieldDesc->GetIsNullable() );
             _rStr.WriteInt32( pFieldDesc->GetFormatKey() );
-            _rStr.WriteInt32( pFieldDesc->GetHorJustify() );
+            _rStr.WriteInt32( (sal_Int32)pFieldDesc->GetHorJustify() );
             _rStr.WriteInt32( pFieldDesc->IsAutoIncrement() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsPrimaryKey() ? 1 : 0 );
             _rStr.WriteInt32( pFieldDesc->IsCurrency() ? 1 : 0 );

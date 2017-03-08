@@ -461,22 +461,22 @@ void OP_HorAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItem
     switch (nAlignPattern)
     {
         case 1:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
             break;
           case 2:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY ) );
             break;
         case 3:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY) );
             break;
         case 4:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY ) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY ) );
             break;
         case 6:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_BLOCK, ATTR_HOR_JUSTIFY ) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Block, ATTR_HOR_JUSTIFY ) );
             break;
         default:
-            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY ) );
+            rPatternItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY ) );
             break;
       }
 }

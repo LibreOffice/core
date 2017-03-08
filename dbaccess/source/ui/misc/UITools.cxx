@@ -723,10 +723,10 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     sal_Int32 nAlignment = css::awt::TextAlign::LEFT;
     switch (_eAlignment)
     {
-        case SVX_HOR_JUSTIFY_STANDARD:
-        case SVX_HOR_JUSTIFY_LEFT:      nAlignment = css::awt::TextAlign::LEFT;    break;
-        case SVX_HOR_JUSTIFY_CENTER:    nAlignment = css::awt::TextAlign::CENTER;  break;
-        case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = css::awt::TextAlign::RIGHT;   break;
+        case SvxCellHorJustify::Standard:
+        case SvxCellHorJustify::Left:      nAlignment = css::awt::TextAlign::LEFT;    break;
+        case SvxCellHorJustify::Center:    nAlignment = css::awt::TextAlign::CENTER;  break;
+        case SvxCellHorJustify::Right:     nAlignment = css::awt::TextAlign::RIGHT;   break;
         default:
             SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
@@ -735,12 +735,12 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
 
 SvxCellHorJustify mapTextJustify(sal_Int32 _nAlignment)
 {
-    SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
+    SvxCellHorJustify eJustify = SvxCellHorJustify::Left;
     switch (_nAlignment)
     {
-        case css::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-        case css::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-        case css::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+        case css::awt::TextAlign::LEFT     : eJustify = SvxCellHorJustify::Left; break;
+        case css::awt::TextAlign::CENTER   : eJustify = SvxCellHorJustify::Center; break;
+        case css::awt::TextAlign::RIGHT    : eJustify = SvxCellHorJustify::Right; break;
         default:
             SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
@@ -760,7 +760,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
             bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
             sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
 
-            SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
+            SvxCellHorJustify eJustify(SvxCellHorJustify::Standard);
             Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
             if (aAlignment.hasValue())
                 eJustify = dbaui::mapTextJustify(::comphelper::getINT16(aAlignment));
@@ -813,7 +813,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     {
         new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
         new SfxUInt32Item(SBA_DEF_FMTVALUE),
-        new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+        new SvxHorJustifyItem(SvxCellHorJustify::Standard, SBA_ATTR_ALIGN_HOR_JUSTIFY),
         new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false),
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };

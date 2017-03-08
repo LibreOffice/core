@@ -1553,17 +1553,17 @@ XclCellAlign::XclCellAlign() :
 
 SvxCellHorJustify XclCellAlign::GetScHorAlign() const
 {
-    SvxCellHorJustify eHorJust = SVX_HOR_JUSTIFY_STANDARD;
+    SvxCellHorJustify eHorJust = SvxCellHorJustify::Standard;
     switch( mnHorAlign )
     {
-        case EXC_XF_HOR_GENERAL:    eHorJust = SVX_HOR_JUSTIFY_STANDARD;    break;
-        case EXC_XF_HOR_LEFT:       eHorJust = SVX_HOR_JUSTIFY_LEFT;        break;
+        case EXC_XF_HOR_GENERAL:    eHorJust = SvxCellHorJustify::Standard;    break;
+        case EXC_XF_HOR_LEFT:       eHorJust = SvxCellHorJustify::Left;        break;
         case EXC_XF_HOR_CENTER_AS:
-        case EXC_XF_HOR_CENTER:     eHorJust = SVX_HOR_JUSTIFY_CENTER;      break;
-        case EXC_XF_HOR_RIGHT:      eHorJust = SVX_HOR_JUSTIFY_RIGHT;       break;
-        case EXC_XF_HOR_FILL:       eHorJust = SVX_HOR_JUSTIFY_REPEAT;      break;
+        case EXC_XF_HOR_CENTER:     eHorJust = SvxCellHorJustify::Center;      break;
+        case EXC_XF_HOR_RIGHT:      eHorJust = SvxCellHorJustify::Right;       break;
+        case EXC_XF_HOR_FILL:       eHorJust = SvxCellHorJustify::Repeat;      break;
         case EXC_XF_HOR_JUSTIFY:
-        case EXC_XF_HOR_DISTRIB:    eHorJust = SVX_HOR_JUSTIFY_BLOCK;       break;
+        case EXC_XF_HOR_DISTRIB:    eHorJust = SvxCellHorJustify::Block;       break;
         default:    OSL_FAIL( "XclCellAlign::GetScHorAlign - unknown horizontal alignment" );
     }
     return eHorJust;
@@ -1611,12 +1611,12 @@ void XclCellAlign::SetScHorAlign( SvxCellHorJustify eHorJust )
 {
     switch( eHorJust )
     {
-        case SVX_HOR_JUSTIFY_STANDARD:  mnHorAlign = EXC_XF_HOR_GENERAL;    break;
-        case SVX_HOR_JUSTIFY_LEFT:      mnHorAlign = EXC_XF_HOR_LEFT;       break;
-        case SVX_HOR_JUSTIFY_CENTER:    mnHorAlign = EXC_XF_HOR_CENTER;     break;
-        case SVX_HOR_JUSTIFY_RIGHT:     mnHorAlign = EXC_XF_HOR_RIGHT;      break;
-        case SVX_HOR_JUSTIFY_BLOCK:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
-        case SVX_HOR_JUSTIFY_REPEAT:    mnHorAlign = EXC_XF_HOR_FILL;       break;
+        case SvxCellHorJustify::Standard:  mnHorAlign = EXC_XF_HOR_GENERAL;    break;
+        case SvxCellHorJustify::Left:      mnHorAlign = EXC_XF_HOR_LEFT;       break;
+        case SvxCellHorJustify::Center:    mnHorAlign = EXC_XF_HOR_CENTER;     break;
+        case SvxCellHorJustify::Right:     mnHorAlign = EXC_XF_HOR_RIGHT;      break;
+        case SvxCellHorJustify::Block:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
+        case SvxCellHorJustify::Repeat:    mnHorAlign = EXC_XF_HOR_FILL;       break;
         default:                        mnHorAlign = EXC_XF_HOR_GENERAL;
             OSL_FAIL( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
     }

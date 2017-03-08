@@ -1176,13 +1176,13 @@ void Sc10Import::LoadPatternCollection()
                     switch( HorJustify )
                     {
                         case hjLeft:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY ) );
+                            rItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
                             break;
                         case hjCenter:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+                            rItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
                             break;
                         case hjRight:
-                            rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY ) );
+                            rItemSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY ) );
                             break;
                     }
                 if( VerJustify != 0 )
@@ -1815,13 +1815,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             switch (HorJustify)
             {
                 case hjLeft:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
                     break;
                 case hjCenter:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY));
                     break;
                 case hjRight:
-                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY));
                     break;
             }
 
