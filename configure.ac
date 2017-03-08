@@ -3356,10 +3356,7 @@ find_msvc()
 
     vs_versions_to_check "$1"
 
-    AC_MSG_CHECKING([whether vs inst is $vsversions])
-
     for ver in $vsversions; do
-        AC_MSG_CHECKING([ver is now: $ver])
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
@@ -3551,7 +3548,6 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
-        AC_MSG_CHECKING([real MSVC])
         if test "$BITNESS_OVERRIDE" = ""; then
             if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
                 MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
@@ -3568,7 +3564,6 @@ if test "$_os" = "WINNT"; then
             fi
         fi
 
-        AC_MSG_RESULT([$MSVC_CXX])
         # This gives us a posix path with 8.3 filename restrictions
         MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
     fi
@@ -3605,7 +3600,6 @@ if test "$_os" = "WINNT"; then
         fi
 
         export INCLUDE=`cygpath -d "$COMPATH\Include"`
-        AC_MSG_RESULT([INCLUDE is: ($INCLUDE)])
 
         PathFormat "$COMPATH"
         COMPATH="$formatted_path"
