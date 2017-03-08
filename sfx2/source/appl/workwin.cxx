@@ -441,7 +441,7 @@ void SfxWorkWindow::Sort_Impl()
         SfxChild_Impl *pCli = aChildren[i];
         if (pCli)
         {
-            sal_uInt16 k;
+            decltype(aSortedList)::size_type k;
             for (k=0; k<aSortedList.size(); k++)
                 if (ChildAlignValue( aChildren[aSortedList[k]]->eAlign ) >
                     ChildAlignValue(pCli->eAlign))
@@ -884,7 +884,7 @@ void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 {
 
     SfxChild_Impl *pChild = nullptr;
-    sal_uInt16 nPos;
+    decltype(aChildren)::size_type nPos;
     for ( nPos = 0; nPos < aChildren.size(); ++nPos )
     {
         pChild = aChildren[nPos];
@@ -980,12 +980,11 @@ void SfxWorkWindow::HideChildren_Impl()
 
 void SfxWorkWindow::ResetObjectBars_Impl()
 {
-    sal_uInt16 n;
-    for ( n = 0; n < aObjBarList.size(); n++ )
-        aObjBarList[n].bDestroy = true;
+    for ( auto & n: aObjBarList )
+        n.bDestroy = true;
 
-    for ( n = 0; n < aChildWins.size(); ++n )
-        aChildWins[n]->nId = 0;
+    for ( auto & n: aChildWins )
+        n->nId = 0;
 }
 
 void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId,
@@ -1154,8 +1153,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 {
     // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
-    sal_uInt16 n;
-    for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         VclPtr<SfxSplitWindow> const & p = pSplit[n];
         if (p->GetWindowCount())
@@ -1186,13 +1184,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
     // Iterate over all Toolboxes
     xLayoutManager->lock();
-    for ( n = 0; n < aObjBarList.size(); ++n )
+    for ( auto const & n: aObjBarList )
     {
-        sal_uInt16      nId      = aObjBarList[n].nId;
-        bool    bDestroy = aObjBarList[n].bDestroy;
+        sal_uInt16      nId      = n.nId;
+        bool    bDestroy = n.bDestroy;
 
         // Determine the valid mode for the ToolBox
-        SfxVisibilityFlags nTbxMode = aObjBarList[n].nMode;
+        SfxVisibilityFlags nTbxMode = n.nMode;
         bool bFullScreenTbx( nTbxMode & SfxVisibilityFlags::FullScreen );
         nTbxMode &= ~SfxVisibilityFlags::FullScreen;
         nTbxMode &= ~SfxVisibilityFlags::Viewer;
@@ -1202,14 +1200,14 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         if ( bDestroy )
         {
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            aTbxId += GetResourceURLFromResId( nId );
             xLayoutManager->destroyElement( aTbxId );
         }
         else if ( nId != 0 && ( ( bModesMatching && !bIsFullScreen ) ||
                                 ( bIsFullScreen && bFullScreenTbx ) ) )
         {
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            aTbxId += GetResourceURLFromResId( nId );
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
                 xLayoutManager->destroyElement( aTbxId );
             else
@@ -1223,7 +1221,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         {
             // Delete the Toolbox at this Position if possible
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            aTbxId += GetResourceURLFromResId( nId );
             xLayoutManager->destroyElement( aTbxId );
         }
     }
@@ -1236,7 +1234,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
     UpdateChildWindows_Impl();
 
     // Unlock the SplitWindows again
-    for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
+    for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         VclPtr<SfxSplitWindow> const & p = pSplit[n];
         if (p->GetWindowCount())
@@ -1584,7 +1582,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         // windows may have been registered and released without an update until now
         Sort_Impl();
 
-    sal_uInt16 n;
+    decltype(aSortedList)::size_type n;
     for ( n=0; n<aSortedList.size(); ++n )
     {
         SfxChild_Impl *pChild = aChildren[aSortedList[n]];

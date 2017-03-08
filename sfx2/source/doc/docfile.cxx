@@ -3228,9 +3228,9 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
             aLongs.insert( aLongs.begin()+n, nVer );
         }
 
-        sal_uInt16 nKey;
+        std::vector<sal_uInt32>::size_type nKey;
         for ( nKey=0; nKey<aLongs.size(); ++nKey )
-            if ( aLongs[nKey] > ( sal_uIntPtr ) nKey+1 )
+            if ( aLongs[nKey] > nKey+1 )
                 break;
 
         OUString aRevName = "Version" + OUString::number( nKey + 1 );

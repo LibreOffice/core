@@ -1319,7 +1319,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     // Create a Set from the ranges
     std::unique_ptr<sal_uInt16[]> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
     int j = 0;
-    sal_uInt16 i = 0;
+    size_t i = 0;
     while ( i < rFound.size() )
     {
         pRanges[j++] = rFound[i].nWhichId;

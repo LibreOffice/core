@@ -490,7 +490,7 @@ SfxObjectShell* SfxObjectShell::GetNext
     SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // refind the specified predecessor
-    sal_uInt16 nPos;
+    size_t nPos;
     for ( nPos = 0; nPos < rDocs.size(); ++nPos )
         if ( rDocs[nPos] == &rPrev )
             break;

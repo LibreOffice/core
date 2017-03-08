@@ -285,12 +285,13 @@ SfxInterface* SfxSlotPool::FirstInterface()
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )
 {
     const SfxSlot *pSlot = nullptr;
-    for (sal_uInt16 nInterface = 0; _pInterfaces && nInterface < _pInterfaces->size(); ++nInterface)
-    {
-        pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
-        if ( pSlot )
-            break;
-    }
+    if (_pInterfaces)
+        for (auto const & nInterface: *_pInterfaces)
+        {
+            pSlot = nInterface->GetSlot( rName );
+            if ( pSlot )
+                break;
+        }
 
     if ( !pSlot && _pParentPool )
         pSlot = _pParentPool->GetUnoSlot( rName );

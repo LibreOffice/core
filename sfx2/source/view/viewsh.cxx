@@ -1365,7 +1365,7 @@ SfxViewShell* SfxViewShell::GetNext
 {
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
-    sal_uInt16 nPos;
+    size_t nPos;
     for ( nPos = 0; nPos < rShells.size(); ++nPos )
         if ( rShells[nPos] == &rPrev )
             break;

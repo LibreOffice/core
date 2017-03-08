@@ -1506,7 +1506,7 @@ SfxViewFrame* SfxViewFrame::GetNext
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // refind the specified predecessor
-    sal_uInt16 nPos;
+    size_t nPos;
     for ( nPos = 0; nPos < rFrames.size(); ++nPos )
         if ( rFrames[nPos] == &rPrev )
             break;

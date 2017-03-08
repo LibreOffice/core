@@ -311,25 +311,22 @@ void SfxSplitWindow::SaveConfig_Impl()
     aWinData.append(',');
 
     sal_uInt16 nCount = 0;
-    sal_uInt16 n;
-    for ( n=0; n<pDockArr->size(); n++ )
+    for ( auto const & rDock: *pDockArr )
     {
-        const SfxDock_Impl& rDock = *(*pDockArr)[n].get();
-        if ( rDock.bHide || rDock.pWin )
+        if ( rDock->bHide || rDock->pWin )
             nCount++;
     }
 
     aWinData.append(static_cast<sal_Int32>(nCount));
 
-    for ( n=0; n<pDockArr->size(); n++ )
+    for ( auto const & rDock: *pDockArr )
     {
-        const SfxDock_Impl& rDock = *(*pDockArr)[n].get();
-        if ( !rDock.bHide && !rDock.pWin )
+        if ( !rDock->bHide && !rDock->pWin )
             continue;
-        if ( rDock.bNewLine )
+        if ( rDock->bNewLine )
             aWinData.append(",0");
         aWinData.append(',');
-        aWinData.append(static_cast<sal_Int32>(rDock.nType));
+        aWinData.append(static_cast<sal_Int32>(rDock->nType));
     }
 
     OUString aWindowId("SplitWindow");
