@@ -58,6 +58,9 @@ public:
     /// Test hyperlinks
     void testHyperlinkSearch();
 
+    /// Test Copy/Paste with Bold/Italic text using Legacy Format
+    void testBoldItalicCopyPaste();
+
     void testSectionAttributes();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -66,6 +69,7 @@ public:
     CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
+    CPPUNIT_TEST(testBoldItalicCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -513,6 +517,194 @@ bool hasItalic(const editeng::Section& rSecAttr)
         return true;
     }
     return false;
+}
+
+void Test::testBoldItalicCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // New instance must be empty - no initial text
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Get corresponding ItemSet for inserting Bold/Italic text
+    std::unique_ptr<SfxItemSet> pSet( new SfxItemSet(aEditEngine.GetEmptyItemSet()) );
+    SvxWeightItem aBold( WEIGHT_BOLD, EE_CHAR_WEIGHT );
+    SvxPostureItem aItalic( ITALIC_NORMAL, EE_CHAR_ITALIC );
+
+    // Insert initial text
+    OUString aParaText = "boldeditengineitalic";
+    // Positions Ref      ..*2....*8...*13.*17
+    // Bold Ref           ..[   BOLD   ]......
+    // Italic Ref         ........[ ITALIC ]..
+    sal_Int32 aTextLen = aParaText.getLength();
+    aEditEngine.SetText( aParaText );
+
+    // Assert changes - text insertion
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Apply Bold to appropriate selection
+    pSet->Put(aBold);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1), pSet->Count() );
+    aEditEngine.QuickSetAttribs( *pSet, ESelection(0,2,0,14) );
+
+    // Assert changes
+    std::unique_ptr<EditTextObject> pEditText1( aEditEngine.CreateTextObject() );
+    std::vector<editeng::Section> aAttrs1;
+    pEditText1->GetAllSections( aAttrs1 );
+    // There should be 3 sections - woBold - wBold - woBold (w - with, wo - without)
+    size_t nSecCountCheck1 = 3;
+    CPPUNIT_ASSERT_EQUAL( nSecCountCheck1, aAttrs1.size() );
+
+    const editeng::Section* pSecAttr = &aAttrs1[0];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs1[1];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold.", hasBold(*pSecAttr) );
+
+    pSecAttr = &aAttrs1[2];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 20, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    // Apply Italic to appropriate selection
+    pSet.reset( new SfxItemSet(aEditEngine.GetEmptyItemSet()) );
+    pSet->Put(aItalic);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1), pSet->Count() );
+    aEditEngine.QuickSetAttribs( *pSet, ESelection(0,8,0,18) );
+
+    // Assert changes
+    std::unique_ptr<EditTextObject> pEditText2( aEditEngine.CreateTextObject() );
+    std::vector<editeng::Section> aAttrs2;
+    pEditText2->GetAllSections( aAttrs2 );
+    // There should be 5 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic (w - with, wo - without)
+    size_t nSecCountCheck2 = 5;
+    CPPUNIT_ASSERT_EQUAL( nSecCountCheck2, aAttrs2.size() );
+
+    pSecAttr = &aAttrs2[0];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs2[1];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 8, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold.", hasBold(*pSecAttr) );
+
+    pSecAttr = &aAttrs2[2];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 8, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs2[3];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be italic.", hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs2[4];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 20, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    // Copy text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,1,0,aTextLen-1) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen - 2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(aParaText + "oldeditengineitali" ), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Check updated text for appropriate Bold/Italics
+    std::unique_ptr<EditTextObject> pEditText3( aEditEngine.CreateTextObject() );
+    std::vector<editeng::Section> aAttrs3;
+    pEditText3->GetAllSections( aAttrs3 );
+    // There should be 9 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic - wBold&woItalic
+    // - wBold&wItalic - woBold&wItalic - woBold&woItalic(w - with, wo - without)
+    size_t nSecCountCheck3 = 9;
+    CPPUNIT_ASSERT_EQUAL( nSecCountCheck3, aAttrs3.size() );
+
+    pSecAttr = &aAttrs3[0];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs3[1];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 8, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold.", hasBold(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[2];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 8, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[3];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 14, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be italic.", hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[4];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 21, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs3[5];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 21, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 27, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold.", hasBold(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[6];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 27, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 33, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[7];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 33, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 37, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be italic.", hasItalic(*pSecAttr) );
+
+    pSecAttr = &aAttrs3[8];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 37, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 38, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
 }
 
 void Test::testSectionAttributes()
