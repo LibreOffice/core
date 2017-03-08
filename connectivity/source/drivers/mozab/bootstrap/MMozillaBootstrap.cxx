@@ -48,8 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance
 }
 
 MozillaBootstrap::MozillaBootstrap()
-    : OMozillaBootstrap_BASE(m_aMutex),
-      m_ProfileAccess(nullptr)
+    : OMozillaBootstrap_BASE(m_aMutex)
 {
 }
 
@@ -59,10 +58,9 @@ MozillaBootstrap::~MozillaBootstrap()
 
 void MozillaBootstrap::Init()
 {
-    m_ProfileAccess = new ProfileAccess();
+    m_ProfileAccess.reset(new ProfileAccess);
     bootupProfile(css::mozilla::MozillaProductType_Mozilla,OUString());
 }
-
 
 void MozillaBootstrap::disposing()
 {

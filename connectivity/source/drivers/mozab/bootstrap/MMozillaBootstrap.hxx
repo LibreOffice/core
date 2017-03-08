@@ -40,7 +40,7 @@ namespace connectivity
         private:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
             virtual ~MozillaBootstrap() override;
-            ProfileAccess * m_ProfileAccess;
+            std::unique_ptr<ProfileAccess> m_ProfileAccess;
         public:
 
             void Init();
