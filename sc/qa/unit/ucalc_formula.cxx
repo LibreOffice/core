@@ -1572,47 +1572,42 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->InsertRow( ScRange( 0, aPos.Row(), 1, MAXCOL, aPos.Row()+1, 1));
 
     // A3:A18 must not result in #REF! anywhere.
-    bool bCheck = true;
     aPos.Set(0,2,1);
-    bCheck &= checkFormula(*m_pDoc, aPos, "B2:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B2:B1048576", "Wrong reference in A3 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B2:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B2:B$1048576", "Wrong reference in A4 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B2:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B2:$B1048576", "Wrong reference in A5 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B2:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B2:$B$1048576", "Wrong reference in A6 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$2:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$2:B1048576", "Wrong reference in A7 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$2:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$2:B$1048576", "Wrong reference in A8 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$2:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$2:$B1048576", "Wrong reference in A9 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$2:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$2:$B$1048576", "Wrong reference in A10 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B2:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B2:B1048576", "Wrong reference in A11 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B2:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B2:B$1048576", "Wrong reference in A12 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B2:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B2:$B1048576", "Wrong reference in A13 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B2:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B2:$B$1048576", "Wrong reference in A14 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$2:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$2:B1048576", "Wrong reference in A15 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$2:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$2:B$1048576", "Wrong reference in A16 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$2:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$2:$B1048576", "Wrong reference in A17 after insertion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$2:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$2:$B$1048576", "Wrong reference in A18 after insertion.");
     aPos.IncRow();
-    if (!bCheck)
-        CPPUNIT_FAIL("Wrong reference in A3:A18 after insertion.");
 
     // A19 reference to one row shifted out should be #REF!
-    bCheck &= checkFormula(*m_pDoc, aPos, "B#REF!:C#REF!");
-    if (!bCheck)
-        CPPUNIT_FAIL("Wrong reference in A19 after insertion.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B#REF!:C#REF!", "Wrong reference in A19 after insertion.");
     // A19 enter reference to last row.
     m_pDoc->SetString( aPos, "=B1048576:C1048576");
     aPos.IncRow();
@@ -1622,47 +1617,42 @@ void Test::testFormulaRefUpdateRange()
 
     // Check sticky bottom references and display of entire column references,
     // now in A2:A17.
-    bCheck = true;
     aPos.Set(0,1,1);
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:B", "Wrong reference in A2 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B1:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B1:B$1048576", "Wrong reference in A3 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:$B", "Wrong reference in A4 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B1:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B1:$B$1048576", "Wrong reference in A5 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$1:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$1:B1048576", "Wrong reference in A6 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:B", "Wrong reference in A7 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$1:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$1:$B1048576", "Wrong reference in A8 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:$B", "Wrong reference in A9 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:B", "Wrong reference in A10 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B1:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B1:B$1048576", "Wrong reference in A11 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:$B", "Wrong reference in A12 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B1:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B1:$B$1048576", "Wrong reference in A13 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$1:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$1:B1048576", "Wrong reference in A14 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:B", "Wrong reference in A15 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$1:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$1:$B1048576", "Wrong reference in A16 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:$B", "Wrong reference in A17 after deletion.");
     aPos.IncRow();
-    if (!bCheck)
-        CPPUNIT_FAIL("Wrong reference in A2:A17 after deletion.");
 
     // A18 reference to one last row should be shifted up.
-    bCheck &= checkFormula(*m_pDoc, aPos, "B1048575:C1048575");
-    if (!bCheck)
-        CPPUNIT_FAIL("Wrong reference in A18 after deletion.");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B1048575:C1048575", "Wrong reference in A18 after deletion.");
     aPos.IncRow();
 
     // Insert 4 rows in the middle.
@@ -1671,42 +1661,39 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->DeleteRow( ScRange( 0, aPos.Row(), 1, MAXCOL, aPos.Row()+1, 1));
 
     // References in A2:A17 must still be the same.
-    bCheck = true;
     aPos.Set(0,1,1);
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:B", "Wrong reference in A2 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B1:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B1:B$1048576", "Wrong reference in A3 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:$B", "Wrong reference in A4 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B1:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B1:$B$1048576", "Wrong reference in A5 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$1:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$1:B1048576", "Wrong reference in A6 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:B", "Wrong reference in A7 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B$1:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B$1:$B1048576", "Wrong reference in A8 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "B:$B", "Wrong reference in A9 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:B", "Wrong reference in A10 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B1:B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B1:B$1048576", "Wrong reference in A11 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:$B", "Wrong reference in A12 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B1:$B$1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B1:$B$1048576", "Wrong reference in A13 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$1:B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$1:B1048576", "Wrong reference in A14 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:B", "Wrong reference in A15 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B$1:$B1048576");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B$1:$B1048576", "Wrong reference in A16 after deletion.");
     aPos.IncRow();
-    bCheck &= checkFormula(*m_pDoc, aPos, "$B:$B");
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:$B", "Wrong reference in A17 after deletion.");
     aPos.IncRow();
-    if (!bCheck)
-        CPPUNIT_FAIL("Wrong reference in A2:A17 after deletion.");
 
     m_pDoc->DeleteTab(1);
 
