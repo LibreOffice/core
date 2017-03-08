@@ -51,7 +51,7 @@ namespace connectivity
                           const OUString &aProfilePath);
             const OUString& getProfileName(){ return profileName;}
             const OUString& getProfilePath();
-        protected:
+        private:
             MozillaProductType product;
             OUString profileName;
             OUString profilePath;
