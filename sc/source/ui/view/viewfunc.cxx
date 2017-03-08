@@ -2203,7 +2203,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                             static_cast<const SvxMarginItem&>(pPattern->GetItem(ATTR_MARGIN));
                     sal_uInt16 nMargin = rMItem.GetLeftMargin() + rMItem.GetRightMargin();
                     if ( static_cast<const SvxHorJustifyItem&>( pPattern->
-                            GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_LEFT )
+                            GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Left )
                         nMargin = sal::static_int_cast<sal_uInt16>(
                             nMargin + static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue() );
 
@@ -2256,7 +2256,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
             bool bNeedHeight =
                     static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue() ||
                     static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK;
+                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block;
             if (bNeedHeight)
                 AdjustRowHeight( nRow, nRow );
         }

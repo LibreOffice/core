@@ -141,7 +141,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     if( rAttr.nBack & 0x80 )
     {
-        SvxHorJustifyItem   aHorJustify(SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
+        SvxHorJustifyItem   aHorJustify(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY );
         rItemSet.Put( aHorJustify );
     }
 

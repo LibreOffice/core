@@ -713,8 +713,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         long nIndent = 0;
         const SvxHorJustifyItem* pHorJustifyItem = static_cast< const SvxHorJustifyItem* >(
             rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ) );
-        SvxCellHorJustify eHorJust = ( pHorJustifyItem ? static_cast< SvxCellHorJustify >( pHorJustifyItem->GetValue() ) : SVX_HOR_JUSTIFY_STANDARD );
-        if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
+        SvxCellHorJustify eHorJust = pHorJustifyItem ? pHorJustifyItem->GetValue() : SvxCellHorJustify::Standard;
+        if ( eHorJust == SvxCellHorJustify::Left )
         {
             const SfxUInt16Item* pIndentItem = static_cast< const SfxUInt16Item* >(
                 rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_INDENT ) );
@@ -777,7 +777,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         pEditEngine->SetPaperSize( aSize );
 
         // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
-        if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD && rDoc.HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
+        if ( eHorJust == SvxCellHorJustify::Standard && rDoc.HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
             pEditEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
         }
@@ -796,12 +796,12 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         {
             switch ( eHorJust )
             {
-                case SVX_HOR_JUSTIFY_RIGHT:
+                case SvxCellHorJustify::Right:
                     {
                         nOffsetX -= nDiffX;
                     }
                     break;
-                case SVX_HOR_JUSTIFY_CENTER:
+                case SvxCellHorJustify::Center:
                     {
                         nOffsetX -= nDiffX / 2;
                     }

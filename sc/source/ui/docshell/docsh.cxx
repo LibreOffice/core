@@ -1771,19 +1771,19 @@ void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
     }
     if ( nLen > aString.getLength() )
     {
-        if ( bValue && eHorJust == SVX_HOR_JUSTIFY_STANDARD )
-            eHorJust = SVX_HOR_JUSTIFY_RIGHT;
+        if ( bValue && eHorJust == SvxCellHorJustify::Standard )
+            eHorJust = SvxCellHorJustify::Right;
         sal_Int32 nBlanks = nLen - aString.getLength();
         switch ( eHorJust )
         {
-            case SVX_HOR_JUSTIFY_RIGHT:
+            case SvxCellHorJustify::Right:
             {
                 OUStringBuffer aTmp;
                 aTmp = comphelper::string::padToLength( aTmp, nBlanks, ' ' );
                 aString = aTmp.append(aString).makeStringAndClear();
             }
             break;
-            case SVX_HOR_JUSTIFY_CENTER:
+            case SvxCellHorJustify::Center:
             {
                 sal_Int32 nLeftPad = nBlanks / 2;
                 OUStringBuffer aTmp;
@@ -1809,7 +1809,7 @@ void lcl_ScDocShell_WriteEmptyFixedWidthString( SvStream& rStream,
 {
     OUString aString;
     lcl_ScDocShell_GetFixedWidthString( aString, rDoc, nTab, nCol, false,
-            SVX_HOR_JUSTIFY_STANDARD );
+            SvxCellHorJustify::Standard );
     rStream.WriteUnicodeOrByteText( aString );
 }
 

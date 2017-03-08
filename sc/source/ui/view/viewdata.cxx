@@ -1041,7 +1041,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
 
-    bool bBreak = ( eJust == SVX_HOR_JUSTIFY_BLOCK ) ||
+    bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
                     static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
@@ -1078,8 +1078,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         //  For growing use only the alignment value from the attribute, numbers
         //  (existing or started) with default alignment extend to the right.
-        bool bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
-        bool bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
+        bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
+        bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
         if ( bAsianVertical )
             bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
 
@@ -1246,8 +1246,8 @@ void ScViewData::EditGrowX()
     const ScPatternAttr* pPattern = pLocalDoc->GetPattern( nEditCol, nEditRow, nTabNo );
     SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-    bool bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
-    bool bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
+    bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
+    bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
     bool bGrowBackwards = bGrowToLeft;                          // logical left
     if ( bLayoutRTL )
         bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet

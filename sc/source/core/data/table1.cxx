@@ -1905,12 +1905,12 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
 
         SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                         pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
-        if ( eHorJust == SVX_HOR_JUSTIFY_CENTER )
+        if ( eHorJust == SvxCellHorJustify::Center )
             nMissing /= 2;                          // distributed into both directions
         else
         {
             // STANDARD is LEFT (only text is handled here)
-            bool bRight = ( eHorJust == SVX_HOR_JUSTIFY_RIGHT );
+            bool bRight = ( eHorJust == SvxCellHorJustify::Right );
             if ( IsLayoutRTL() )
                 bRight = !bRight;
             if ( bRight )

@@ -4975,24 +4975,23 @@ namespace {
 SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
 {
     SvxCellHorJustify eHorJust =
-        static_cast<SvxCellHorJustify>(
-            static_cast<const SvxHorJustifyItem&>(rPat.GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+            static_cast<const SvxHorJustifyItem&>(rPat.GetItem(ATTR_HOR_JUSTIFY)).GetValue();
 
     SvxAdjust eSvxAdjust = SvxAdjust::Left;
     switch (eHorJust)
     {
-        case SVX_HOR_JUSTIFY_LEFT:
-        case SVX_HOR_JUSTIFY_REPEAT:            // not implemented
-        case SVX_HOR_JUSTIFY_STANDARD:          // always Text if an EditCell type
+        case SvxCellHorJustify::Left:
+        case SvxCellHorJustify::Repeat:            // not implemented
+        case SvxCellHorJustify::Standard:          // always Text if an EditCell type
                 eSvxAdjust = SvxAdjust::Left;
                 break;
-        case SVX_HOR_JUSTIFY_RIGHT:
+        case SvxCellHorJustify::Right:
                 eSvxAdjust = SvxAdjust::Right;
                 break;
-        case SVX_HOR_JUSTIFY_CENTER:
+        case SvxCellHorJustify::Center:
                 eSvxAdjust = SvxAdjust::Center;
                 break;
-        case SVX_HOR_JUSTIFY_BLOCK:
+        case SvxCellHorJustify::Block:
                 eSvxAdjust = SvxAdjust::Block;
                 break;
     }
@@ -5077,7 +5076,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
                     ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
-                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK);
+                        GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block);
     SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem(ATTR_HOR_JUSTIFY)).GetValue();
 
@@ -5127,9 +5126,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     long nTextHeight = pEngine->GetTextHeight();
     if ( nTextWidth < nThisColLogic )
     {
-        if (eHorJust == SVX_HOR_JUSTIFY_RIGHT)
+        if (eHorJust == SvxCellHorJustify::Right)
             nStartX += nThisColLogic - nTextWidth;
-        else if (eHorJust == SVX_HOR_JUSTIFY_CENTER)
+        else if (eHorJust == SvxCellHorJustify::Center)
             nStartX += (nThisColLogic - nTextWidth) / 2;
     }
 
@@ -5141,7 +5140,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     // the cell content is NUMERIC. This defaults to right aligned and
     // we need to adjust accordingly.
     if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsValue() &&
-        eHorJust == SVX_HOR_JUSTIFY_STANDARD)
+        eHorJust == SvxCellHorJustify::Standard)
     {
         aLogicEdit.Right() = aLogicEdit.Left() + nThisColLogic - 1;
         aLogicEdit.Left() =  aLogicEdit.Right() - nTextWidth;

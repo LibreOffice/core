@@ -47,7 +47,7 @@ OFieldDescription::OFieldDescription()
     ,m_nScale(0)
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nFormatKey(0)
-    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
+    ,m_eHorJustify(SvxCellHorJustify::Standard)
     ,m_bIsAutoIncrement(false)
     ,m_bIsPrimaryKey(false)
     ,m_bIsCurrency(false)
@@ -91,7 +91,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_nScale(0)
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nFormatKey(0)
-    ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
+    ,m_eHorJustify(SvxCellHorJustify::Standard)
     ,m_bIsAutoIncrement(false)
     ,m_bIsPrimaryKey(false)
     ,m_bIsCurrency(false)
@@ -628,7 +628,7 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
 
         if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
             _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
-        if ( GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
+        if ( GetHorJustify() != SvxCellHorJustify::Standard && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
             _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
         if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
             _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));

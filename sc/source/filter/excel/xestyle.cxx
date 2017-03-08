@@ -1470,7 +1470,7 @@ bool XclExpCellAlign::FillFromItemSet(
         const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
 {
     bool bUsed = false;
-    SvxCellHorJustify eHorAlign = GETITEMVALUE( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY, SvxCellHorJustify );
+    SvxCellHorJustify eHorAlign = GETITEM( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY ).GetValue();
     SvxCellVerJustify eVerAlign = GETITEMVALUE( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY, SvxCellVerJustify );
 
     switch( eBiff )
@@ -1543,7 +1543,7 @@ bool XclExpCellAlign::FillFromItemSet(
     if (eBiff == EXC_BIFF8)
     {
         // Adjust for distributed alignments.
-        if (eHorAlign == SVX_HOR_JUSTIFY_BLOCK)
+        if (eHorAlign == SvxCellHorJustify::Block)
         {
             SvxCellJustifyMethod eHorJustMethod =
                 rItemSet.GetItem<SvxJustifyMethodItem>(ATTR_HOR_JUSTIFY_METHOD)->GetValue();

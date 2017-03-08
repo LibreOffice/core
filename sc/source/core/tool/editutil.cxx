@@ -308,7 +308,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
     sal_uInt16 nIndent = 0;
     if ( static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
-                SVX_HOR_JUSTIFY_LEFT )
+                SvxCellHorJustify::Left )
         nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue();
     long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
     aStartPos.X()   += nPixDifX * nLayoutSign;
