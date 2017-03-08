@@ -148,11 +148,9 @@ IMPL_LINK_NOARG( SmFontPickListBox, SelectHdl, ListBox&, void )
 
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
-    sal_uInt16 nPos;
-
     *static_cast<SmFontPickList *>(this) = rList;
 
-    for (nPos = 0; nPos < aFontVec.size(); nPos++)
+    for (decltype(aFontVec)::size_type nPos = 0; nPos < aFontVec.size(); nPos++)
         InsertEntry(lcl_GetStringItem(aFontVec[nPos]), nPos);
 
     if (aFontVec.size() > 0)
