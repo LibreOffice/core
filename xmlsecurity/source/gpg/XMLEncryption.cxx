@@ -25,7 +25,6 @@ XMLEncryptionGpg::~XMLEncryptionGpg() {
 /* XXMLEncryption */
 Reference< XXMLEncryptionTemplate > SAL_CALL XMLEncryptionGpg::encrypt(const Reference< XXMLEncryptionTemplate >& /*aTemplate*/,
                                                                     const Reference< XSecurityEnvironment >& /*aEnvironment*/)
-    throw (XMLEncryptionException, SecurityException, RuntimeException, std::exception)
 {
     return nullptr;
 }
@@ -33,28 +32,24 @@ Reference< XXMLEncryptionTemplate > SAL_CALL XMLEncryptionGpg::encrypt(const Ref
 /* XXMLEncryption */
 Reference< XXMLEncryptionTemplate > SAL_CALL XMLEncryptionGpg::decrypt(const Reference< XXMLEncryptionTemplate >& /*aTemplate*/,
                                                                     const Reference< XXMLSecurityContext >& /*aSecurityCtx*/)
-    throw (XMLEncryptionException, SecurityException, RuntimeException, std::exception)
 {
     return nullptr;
 }
 
 /* XServiceInfo */
 OUString SAL_CALL XMLEncryptionGpg::getImplementationName()
-    throw( RuntimeException, std::exception )
 {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLEncryptionGpg::supportsService( const OUString& serviceName)
-    throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL XMLEncryptionGpg::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLEncryptionGpg::getSupportedServiceNames()
-    throw( RuntimeException, std::exception )
 {
     return impl_getSupportedServiceNames() ;
 }
@@ -73,7 +68,6 @@ OUString XMLEncryptionGpg::impl_getImplementationName()
 
 //Helper for registry
 Reference< XInterface > SAL_CALL XMLEncryptionGpg::impl_createInstance( const Reference< XMultiServiceFactory >&  )
-    throw( RuntimeException )
 {
     return Reference< XInterface >(*new XMLEncryptionGpg);
 }

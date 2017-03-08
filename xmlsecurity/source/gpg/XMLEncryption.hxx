@@ -33,31 +33,22 @@ public:
 
     // XXMLEncryption
     virtual css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate > SAL_CALL encrypt(
-        const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& aTemplate ,
-        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment)
-        // ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-        throw (css::xml::crypto::XMLEncryptionException ,
-                css::uno::SecurityException,
-                css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& aTemplate,
+        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment) override;
 
     virtual css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate > SAL_CALL decrypt(
-        const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& aTemplate ,
-        const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext
-    ) throw (css::xml::crypto::XMLEncryptionException ,
-                css::uno::SecurityException,
-                css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& aTemplate,
+        const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // Helper for XServiceInfo
-    static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+    static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
     /// @throws css::uno::RuntimeException
     static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
@@ -65,11 +56,10 @@ public:
     // Helper for registry
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager )
-        throw( css::uno::RuntimeException ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 
     static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLENCRYPTION_HXX
