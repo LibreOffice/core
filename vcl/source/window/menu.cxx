@@ -2477,6 +2477,13 @@ void MenuBar::ShowButtons( bool bClose, bool bFloat, bool bHide )
     }
 }
 
+void MenuBar::LayoutChanged()
+{
+    MenuBarWindow* pMenuWin = getMenuBarWindow();
+    if (pMenuWin)
+        pMenuWin->LayoutChanged();
+}
+
 void MenuBar::SetDisplayable( bool bDisplayable )
 {
     if( bDisplayable != mbDisplayable )
@@ -2485,9 +2492,7 @@ void MenuBar::SetDisplayable( bool bDisplayable )
             ImplGetSalMenu()->ShowMenuBar( bDisplayable );
 
         mbDisplayable = bDisplayable;
-        MenuBarWindow* pMenuWin = getMenuBarWindow();
-        if (pMenuWin)
-            pMenuWin->LayoutChanged();
+        LayoutChanged();
     }
 }
 

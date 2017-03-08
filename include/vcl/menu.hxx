@@ -474,6 +474,7 @@ public:
     // if the menubar is unattached an empty rectangle is returned
     Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
     void RemoveMenuBarButton( sal_uInt16 nId );
+    void LayoutChanged();
 };
 
 inline MenuBar& MenuBar::operator=( const MenuBar& rMenu )
