@@ -709,7 +709,7 @@ void WinMtfOutput::CreateObject( std::unique_ptr<GDIObj> pObject )
             pLineStyle->aLineInfo.SetWidth(aSize.Width());
         }
     }
-    sal_uInt32 nIndex;
+    std::vector<std::unique_ptr<GDIObj>>::size_type nIndex;
     for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
     {
         if ( !vGDIObj[ nIndex ] )

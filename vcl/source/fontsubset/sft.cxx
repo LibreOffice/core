@@ -2050,7 +2050,7 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
     GlyphOffsets* res = static_cast<GlyphOffsets*>(smalloc(sizeof(GlyphOffsets)));
     sal_uInt8 *loca = nullptr;
-    sal_uInt16 i, numTables = GetUInt16(sfntP, 4);
+    sal_uInt16 numTables = GetUInt16(sfntP, 4);
     sal_uInt32 locaLen = 0;
     sal_Int16 indexToLocFormat = 0;
 
@@ -2062,7 +2062,7 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
         numTables = nMaxPossibleTables;
     }
 
-    for (i = 0; i < numTables; i++) {
+    for (sal_uInt16 i = 0; i < numTables; i++) {
         sal_uInt32 nLargestFixedOffsetPos = 12 + 16 * i + 12;
         sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
         if (nMinSize > sfntLen)
@@ -2088,7 +2088,7 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     assert(res->nGlyphs != 0);
     res->offs = static_cast<sal_uInt32*>(scalloc(res->nGlyphs, sizeof(sal_uInt32)));
 
-    for (i = 0; i < res->nGlyphs; i++) {
+    for (sal_uInt32 i = 0; i < res->nGlyphs; i++) {
         if (indexToLocFormat == 1) {
             res->offs[i] = GetUInt32(loca, i * 4);
         } else {

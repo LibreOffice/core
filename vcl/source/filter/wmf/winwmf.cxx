@@ -568,7 +568,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                     if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
-                        sal_uInt16 i; // needed just outside the for
+                        sal_Int32 i; // needed just outside the for
                         pDXAry.reset(new long[ nNewTextLen ]);
                         if ( nOptions & ETO_PDY )
                         {

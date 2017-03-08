@@ -510,7 +510,7 @@ tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoi
         return tools::Polygon();
 
     tools::Polygon aPolygon(nPoints);
-    for (sal_uInt16 i = nStartIndex ; i < nPoints && pWMF->good(); i++ )
+    for (sal_uInt32 i = nStartIndex ; i < nPoints && pWMF->good(); i++ )
     {
         T nX, nY;
         *pWMF >> nX >> nY;

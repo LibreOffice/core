@@ -1184,9 +1184,13 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
         Atom nSelectedType = None;
         for( type_it = aTypes.begin(); type_it != aTypes.end() && nSelectedType == None; ++type_it )
         {
-            for( unsigned int i = 0; i < rNativeTypes.size() && nSelectedType == None; i++ )
-                if( rNativeTypes[i] == *type_it )
+            for( auto const & i: rNativeTypes )
+                if( i == *type_it )
+                {
                     nSelectedType = *type_it;
+                    if (nSelectedType != None)
+                        break;
+                }
         }
         if( nSelectedType != None )
             bSuccess = getPasteData( selection, nSelectedType, rData );

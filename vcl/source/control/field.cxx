@@ -271,7 +271,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     if( nValue == 0 )
     {
         // check if string is equivalent to zero
-        sal_Int16 nIndex = bNegative ? 1 : 0;
+        sal_Int32 nIndex = bNegative ? 1 : 0;
         while (nIndex < aStr.getLength() && aStr[nIndex] == '0')
             ++nIndex;
         if( nIndex < aStr.getLength() )

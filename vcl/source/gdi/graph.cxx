@@ -119,8 +119,8 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 
                 if ( nTextWidth <= nWidth || aSz.Height() <= nThreshold )
                 {
-                    sal_uInt16 nStart = 0;
-                    sal_uInt16 nLen = 0;
+                    sal_Int32 nStart = 0;
+                    sal_Int32 nLen = 0;
 
                     while( nStart < pText->getLength() && (*pText)[nStart] == ' ' )
                         nStart++;
@@ -128,7 +128,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                         nLen++;
                     while( nStart < pText->getLength() && nLines-- )
                     {
-                        sal_uInt16 nNext = nLen;
+                        sal_Int32 nNext = nLen;
                         do
                         {
                             while ( nStart+nNext < pText->getLength() && (*pText)[nStart+nNext] == ' ' )
@@ -142,7 +142,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                         }
                         while ( nStart+nNext < pText->getLength() );
 
-                        sal_uInt16 n = nLen;
+                        sal_Int32 n = nLen;
                         nTextWidth = pOutDev->GetTextWidth( *pText, nStart, n );
                         while( nTextWidth > aSize.Width() )
                             nTextWidth = pOutDev->GetTextWidth( *pText, nStart, --n );

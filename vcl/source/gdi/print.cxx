@@ -1715,7 +1715,7 @@ void Printer::updatePrinters()
         pSVData->mpDefInst->GetPrinterQueueInfo( pNewList );
 
         bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
-        for( unsigned int i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
+        for( decltype(pPrnList->m_aQueueInfos)::size_type i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
         {
             ImplPrnQueueData& rInfo     = pPrnList->m_aQueueInfos[i];
             ImplPrnQueueData& rNewInfo  = pNewList->m_aQueueInfos[i];

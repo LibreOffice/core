@@ -582,7 +582,7 @@ void ImpVclMEdit::SetSelection( const Selection& rSelection )
     TextSelection aTextSel;
     sal_uInt32 nPara = 0;
     sal_Int32 nChar = 0;
-    sal_uInt16 x = 0;
+    long x = 0;
     while ( x <= nEnd )
     {
         if ( x == aNewSelection.Min() )

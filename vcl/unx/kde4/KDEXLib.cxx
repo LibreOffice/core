@@ -120,13 +120,12 @@ void KDEXLib::Init()
             "bischoff@kde.org" );
 
     m_nFakeCmdLineArgs = 2;
-    sal_uInt16 nIdx;
 
-    int nParams = osl_getCommandArgCount();
+    sal_uInt32 nParams = osl_getCommandArgCount();
     OString aDisplay;
     OUString aParam, aBin;
 
-    for ( nIdx = 0; nIdx < nParams; ++nIdx )
+    for ( sal_uInt32 nIdx = 0; nIdx < nParams; ++nIdx )
     {
         osl_getCommandArg( nIdx, &aParam.pData );
         if ( !m_pFreeCmdLineArgs && aParam == "-display" && nIdx + 1 < nParams )
