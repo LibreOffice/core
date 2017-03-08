@@ -3177,28 +3177,32 @@ dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
 
-# Get a value from the 32-bit side of the Registry
-reg_get_value_32()
+reg_get_value()
 {
     # Return value: $regvalue
     unset regvalue
-    _regvalue=`cat "/proc/registry32/$1" 2> /dev/null`
 
-    if test $? -eq 0; then
-        regvalue=$_regvalue
+    local _regentry="/proc/registry${1}/${2}"
+    if test -f "$_regentry"; then
+        # Stop bash complaining about \0 bytes in input, as it can't handle them.
+        # Registry keys read via /proc/registry* are always \0 terminated!
+        local _regvalue=$(tr -d '\0' < "$_regentry")
+        if test $? -eq 0; then
+            regvalue=$_regvalue
+        fi
     fi
+}
+
+# Get a value from the 32-bit side of the Registry
+reg_get_value_32()
+{
+    reg_get_value "32" "$1"
 }
 
 # Get a value from the 64-bit side of the Registry
 reg_get_value_64()
 {
-    # Return value: $regvalue
-    unset regvalue
-    _regvalue=`cat "/proc/registry64/$1" 2> /dev/null`
-
-    if test $? -eq 0; then
-        regvalue=$_regvalue
-    fi
+    reg_get_value "64" "$1"
 }
 
 if test "$_os" = "WINNT"; then
@@ -6670,7 +6674,7 @@ if test "$ENABLE_JAVA" != ""; then
 
         if test -z "$with_jdk_home"; then
             for ver in 1.8 1.7 1.6; do
-                reg_get_value_$bitness "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+                reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
                 if test -n "$regvalue"; then
                     _jdk_home=$regvalue
                     break
