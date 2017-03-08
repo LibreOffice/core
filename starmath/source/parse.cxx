@@ -2340,17 +2340,23 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
     sal_uInt16  nRID;
     switch (Type)
     {
-        case SmParseError::UnexpectedChar: nRID = RID_ERR_UNEXPECTEDCHARACTER; break;
-        case SmParseError::LgroupExpected: nRID = RID_ERR_LGROUPEXPECTED;      break;
-        case SmParseError::RgroupExpected: nRID = RID_ERR_RGROUPEXPECTED;      break;
-        case SmParseError::LbraceExpected: nRID = RID_ERR_LBRACEEXPECTED;      break;
-        case SmParseError::RbraceExpected: nRID = RID_ERR_RBRACEEXPECTED;      break;
-        case SmParseError::PoundExpected:  nRID = RID_ERR_POUNDEXPECTED;       break;
-        case SmParseError::ColorExpected:  nRID = RID_ERR_COLOREXPECTED;       break;
-        case SmParseError::RightExpected:  nRID = RID_ERR_RIGHTEXPECTED;       break;
-
+        case SmParseError::UnexpectedChar:     nRID = RID_ERR_UNEXPECTEDCHARACTER; break;
+        case SmParseError::UnexpectedToken:    nRID = RID_ERR_UNEXPECTEDTOKEN;     break;
+        case SmParseError::PoundExpected:      nRID = RID_ERR_POUNDEXPECTED;       break;
+        case SmParseError::ColorExpected:      nRID = RID_ERR_COLOREXPECTED;       break;
+        case SmParseError::LgroupExpected:     nRID = RID_ERR_LGROUPEXPECTED;      break;
+        case SmParseError::RgroupExpected:     nRID = RID_ERR_RGROUPEXPECTED;      break;
+        case SmParseError::LbraceExpected:     nRID = RID_ERR_LBRACEEXPECTED;      break;
+        case SmParseError::RbraceExpected:     nRID = RID_ERR_RBRACEEXPECTED;      break;
+        case SmParseError::ParentMismatch:     nRID = RID_ERR_PARENTMISMATCH;      break;
+        case SmParseError::RightExpected:      nRID = RID_ERR_RIGHTEXPECTED;       break;
+        case SmParseError::FontExpected:       nRID = RID_ERR_FONTEXPECTED;        break;
+        case SmParseError::SizeExpected:       nRID = RID_ERR_SIZEEXPECTED;        break;
+        case SmParseError::DoubleAlign:        nRID = RID_ERR_DOUBLEALIGN;         break;
+        case SmParseError::DoubleSubsupscript: nRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
         default:
-            nRID = RID_ERR_UNKNOWN;
+            assert(false);
+            return;
     }
     pErrDesc->m_aText += SM_RESSTR(nRID);
 
