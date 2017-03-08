@@ -37,10 +37,9 @@ namespace connectivity
         class ProfileManager;
         class MozillaBootstrap : public OMozillaBootstrap_BASE
         {
-        protected:
+        private:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
             virtual ~MozillaBootstrap() override;
-        protected:
             ProfileAccess * m_ProfileAccess;
         public:
 
