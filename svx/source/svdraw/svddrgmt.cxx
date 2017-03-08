@@ -245,11 +245,10 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
     if(!maPositions.empty())
     {
         basegfx::B2DPolygon aPolygon;
-        sal_uInt32 a(0);
 
-        for(a = 0; a < maPositions.size(); a++)
+        for(auto const & a: maPositions)
         {
-            aPolygon.append(maPositions[a]);
+            aPolygon.append(a);
         }
 
         basegfx::B2DPolyPolygon aPolyPolygon(aPolygon);
@@ -261,7 +260,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
 
         aTransformedPositions.reserve(aTransformed.count());
 
-        for(a = 0; a < aTransformed.count(); a++)
+        for(sal_uInt32 a = 0; a < aTransformed.count(); a++)
         {
             aTransformedPositions.push_back(aTransformed.getB2DPoint(a));
         }
@@ -689,13 +688,12 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         // and evtl. remember if it was an edge
         SdrObjectAndCloneMap aOriginalAndClones;
         std::vector< SdrEdgeObj* > aEdges;
-        sal_uInt32 a;
 
         // #i54102# execute prepareCurrentState for all SdrDragEntrySdrObject, register pair of original and
         // clone, remember edges
-        for(a = 0; a < maSdrDragEntries.size(); a++)
+        for(auto const & a: maSdrDragEntries)
         {
-            SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(maSdrDragEntries[a]);
+            SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(a);
 
             if(pSdrDragEntrySdrObject)
             {
@@ -718,9 +716,8 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         // #i54102# if there are edges, reconnect their ends to the corresponding clones (if found)
         if(aEdges.size())
         {
-            for(a = 0; a < aEdges.size(); a++)
+            for(SdrEdgeObj* pSdrEdgeObj: aEdges)
             {
-                SdrEdgeObj* pSdrEdgeObj = aEdges[a];
                 SdrObject* pConnectedTo = pSdrEdgeObj->GetConnectedNode(true);
 
                 if(pConnectedTo)
@@ -751,10 +748,8 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         drawinglayer::primitive2d::Primitive2DContainer aResult;
         drawinglayer::primitive2d::Primitive2DContainer aResultTransparent;
 
-        for(a = 0; a < maSdrDragEntries.size(); a++)
+        for(SdrDragEntry* pCandidate: maSdrDragEntries)
         {
-            SdrDragEntry* pCandidate = maSdrDragEntries[a];
-
             if(pCandidate)
             {
                 const drawinglayer::primitive2d::Primitive2DContainer aCandidateResult(pCandidate->createPrimitive2DSequenceInCurrentState(*this));

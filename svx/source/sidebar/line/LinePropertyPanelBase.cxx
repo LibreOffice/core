@@ -807,7 +807,7 @@ void LinePropertyPanelBase::SelectLineStyle()
             if(mpDashItem && mxLineStyleList.is())
             {
                 const XDash& rDash = mpDashItem->GetDashValue();
-                for(sal_Int32 a(0);!bSelected &&  a < mxLineStyleList->Count(); a++)
+                for(long a(0);!bSelected &&  a < mxLineStyleList->Count(); a++)
                 {
                     const XDashEntry* pEntry = mxLineStyleList->GetDash(a);
                     const XDash& rEntry = pEntry->GetDash();
@@ -843,7 +843,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
         if (mpStartItem && mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
-            for(sal_Int32 a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
+            for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
             {
                 const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
@@ -872,7 +872,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
         if (mpEndItem && mxLineEndList.is())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
-            for(sal_Int32 a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
+            for(long a(0);!bSelected &&  a < mxLineEndList->Count(); a++)
             {
                 const XLineEndEntry* pEntry = mxLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();

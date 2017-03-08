@@ -1150,7 +1150,7 @@ using namespace ::com::sun::star::util;
     {
         const Sequence< URL>& aSupportedURLs = getSupportedURLs();
         const URL* pSupportedURLs = aSupportedURLs.getConstArray();
-        for ( sal_uInt16 i=0; i < ( aSupportedURLs.getLength() ) && !bKnownSender; ++i, ++pSupportedURLs )
+        for ( sal_Int32 i=0; i < ( aSupportedURLs.getLength() ) && !bKnownSender; ++i, ++pSupportedURLs )
         {
             if ( m_pDispatchers[i] == e.Source )
             {
@@ -2571,7 +2571,7 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event)
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    sal_uInt16 i;
+    sal_Int32 i;
     for (i=0; i<aUrls.getLength(); ++i, ++pUrls)
     {
         if (pUrls->Main == Event.FeatureURL.Main)
@@ -2681,16 +2681,15 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
         };
         aSupported.realloc(SAL_N_ELEMENTS(sSupported));
         css::util::URL* pSupported = aSupported.getArray();
-        sal_uInt16 i;
 
-        for ( i = 0; i < aSupported.getLength(); ++i, ++pSupported)
+        for ( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pSupported)
             pSupported->Complete = OUString::createFromAscii(sSupported[i]);
 
         // let an css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(
             util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         pSupported = aSupported.getArray();
-        for (i=0; i<aSupported.getLength(); ++i)
+        for (sal_Int32 i=0; i<aSupported.getLength(); ++i)
             xTransformer->parseStrict(pSupported[i]);
     }
 

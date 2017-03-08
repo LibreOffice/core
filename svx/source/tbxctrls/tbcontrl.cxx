@@ -2445,9 +2445,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
             pBox->Clear();
 
             {
-                sal_uInt16  _i;
-                sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
-
                 pStyle = pStyleSheetPool->First();
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
@@ -2457,9 +2454,9 @@ void SvxStyleToolBoxControl::FillStyleBox()
                         // sort out default styles
                         bool bInsert = true;
                         OUString aName( pStyle->GetName() );
-                        for( _i = 0 ; _i < nCnt ; ++_i )
+                        for( auto const & _i: pImpl->aDefaultStyles )
                         {
-                            if( pImpl->aDefaultStyles[_i] == aName )
+                            if( _i == aName )
                             {
                                 bInsert = false;
                                 break;
@@ -2489,12 +2486,10 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 pBox->SetStyle( nWinBits );
 
                 // insert default styles
-                sal_uInt16  _i;
-                sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
                 sal_uInt16 nPos = 1;
-                for( _i = 0 ; _i < nCnt ; ++_i )
+                for( auto const & _i: pImpl->aDefaultStyles )
                 {
-                    pBox->InsertEntry( pImpl->aDefaultStyles[_i], nPos );
+                    pBox->InsertEntry( _i, nPos );
                     ++nPos;
                 }
 
@@ -3161,7 +3156,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
         aStr += ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString(
                                         rCurrencyTable[i].GetLanguage() ) );
 
-        sal_uInt16 j = nStart;
+        std::vector<OUString>::size_type j = nStart;
         for( ; j < rList.size(); ++j )
             if ( aCollator.compareString( aStr, rList[j] ) < 0 )
                 break;  // insert before first greater than
@@ -3173,14 +3168,14 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
     // Append ISO codes to symbol list.
     // XXX If this is to be changed, various other places would had to be
     // adapted that assume this order!
-    sal_uInt16 nCont = rList.size();
+    std::vector<OUString>::size_type nCont = rList.size();
 
     for ( sal_uInt16 i = 1; i < nCount; ++i )
     {
         bool bInsert = true;
         OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol() ) );
 
-        sal_uInt16 j = nCont;
+        std::vector<OUString>::size_type j = nCont;
         for ( ; j < rList.size() && bInsert; ++j )
         {
             if( rList[j] == aStr )
@@ -3252,7 +3247,7 @@ void SvxColorListBox::LockWidthRequest()
     NamedColor aLongestColor;
     long nMaxStandardColorTextWidth = 0;
     XColorListRef const xColorTable = XColorList::CreateStdColorList();
-    for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
+    for (long i = 0; i != xColorTable->Count(); ++i)
     {
         XColorEntry& rEntry = *xColorTable->GetColor(i);
         long nColorTextWidth = GetTextWidth(rEntry.GetName());

@@ -1732,7 +1732,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     sal_uInt16 nNewViewPos = GetViewColumnPos(nId);
 
     // from that we can compute the new model pos
-    sal_uInt16 nNewModelPos;
+    DbGridColumns::size_type nNewModelPos;
     for (nNewModelPos = 0; nNewModelPos < m_aColumns.size(); ++nNewModelPos)
     {
         if (!m_aColumns[ nNewModelPos ]->IsHidden())

@@ -2065,10 +2065,9 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
         case mso_sptAccentCallout90 :
         case mso_sptAccentBorderCallout90 :
         {
-            sal_uInt32 i, nLine = 0;
-            for ( i = 0; i < vObjectList.size(); i++ )
+            sal_uInt32 nLine = 0;
+            for ( SdrPathObj* pObj: vObjectList )
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
                 if(pObj->IsLine())
                 {
                     nLine++;
@@ -2090,10 +2089,9 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
         case mso_sptCallout2 :
         case mso_sptBorderCallout2 :
         {
-            sal_uInt32 i, nLine = 0;
-            for ( i = 0; i < vObjectList.size(); i++ )
+            sal_uInt32 nLine = 0;
+            for ( SdrPathObj* pObj: vObjectList )
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
                 if(pObj->IsLine())
                 {
                     nLine++;
@@ -2116,10 +2114,9 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
         case mso_sptCallout3 :
         case mso_sptBorderCallout3 :
         {
-            sal_uInt32 i, nLine = 0;
-            for ( i = 0; i < vObjectList.size(); i++ )
+            sal_uInt32 nLine = 0;
+            for ( SdrPathObj* pObj: vObjectList )
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
                 if(pObj->IsLine())
                 {
                     if ( nLine )

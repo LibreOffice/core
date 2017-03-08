@@ -918,7 +918,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             {   // it was a "show column/<colname>" command (there are at most 16 such items)
                 // search the nExecutionResult'th hidden col
                 Reference< css::beans::XPropertySet >  xCurCol;
-                for (sal_uInt16 i=0; i<xCols->getCount() && nExecutionResult; ++i)
+                for (sal_Int32 i=0; i<xCols->getCount() && nExecutionResult; ++i)
                 {
                     xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
                     Any aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);

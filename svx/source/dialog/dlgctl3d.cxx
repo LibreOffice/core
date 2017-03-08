@@ -473,11 +473,12 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
             // the hits. It's invisible, but for HitTest, it's included
             const E3dCompoundObject* pResult = nullptr;
 
-            for(sal_uInt32 b(0); !pResult && b < aResult.size(); b++)
+            for(auto const & b: aResult)
             {
-                if(aResult[b] && aResult[b] != mpExpansionObject)
+                if(b && b != mpExpansionObject)
                 {
-                    pResult = aResult[b];
+                    pResult = b;
+                    break;
                 }
             }
 

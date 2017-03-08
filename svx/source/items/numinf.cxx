@@ -133,7 +133,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
             {
                 bEqual = true;
 
-                for ( sal_uInt16 i = 0; i < nDelCount && bEqual; ++i )
+                for ( sal_uInt32 i = 0; i < nDelCount && bEqual; ++i )
                     bEqual = ( pDelFormatArr[i] == rOther.pDelFormatArr[i] );
             }
         }

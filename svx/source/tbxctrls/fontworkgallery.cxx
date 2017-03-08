@@ -106,7 +106,7 @@ void FontWorkGalleryDialog::dispose()
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
     // Ueber die Gallery werden die Favoriten eingelesen
-    sal_uIntPtr nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
+    sal_uInt32 nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
 
     // Gallery thema locken
     GalleryExplorer::BeginLocking(nThemeId);
@@ -167,12 +167,11 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 
     mpCtlFavorites->Clear();
 
-    sal_uInt32 nFavorite;
-    for( nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
+    for( std::vector<Bitmap *>::size_type nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
         OUString aStr(SVX_RESSTR(RID_SVXFLOAT3D_FAVORITE));
         aStr += " ";
-        aStr += OUString::number((sal_Int32)nFavorite);
+        aStr += OUString::number(nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
         mpCtlFavorites->InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
     }

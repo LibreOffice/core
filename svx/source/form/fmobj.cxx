@@ -483,7 +483,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
 
         // calc the number of (source) form siblings with the same DSS
         Reference< XPropertySet >  xCurrentSourceForm, xCurrentDestForm;
-        sal_Int16 nCurrentSourceIndex = 0, nCurrentDestIndex = 0;
+        sal_Int16 nCurrentSourceIndex = 0;
+        sal_Int32 nCurrentDestIndex = 0;
         while (nCurrentSourceIndex <= nIndex)
         {
             bool bEqualDSS = false;

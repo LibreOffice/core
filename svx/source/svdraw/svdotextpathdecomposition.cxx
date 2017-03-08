@@ -332,9 +332,9 @@ namespace
             }
 
             // handle text portions for this paragraph
-            for(sal_uInt32 a(0L); a < rTextPortions.size() && fPolyStart < fPolyEnd; a++)
+            for(auto a = rTextPortions.begin(); a != rTextPortions.end() && fPolyStart < fPolyEnd; ++a)
             {
-                const impPathTextPortion* pCandidate = rTextPortions[a];
+                const impPathTextPortion* pCandidate = *a;
                 basegfx::B2DVector aFontScaling;
 
                 if(pCandidate && pCandidate->getTextLength())
