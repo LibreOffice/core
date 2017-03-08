@@ -688,9 +688,8 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
     long    n2;
     long    nTemp1;
     long    nTemp2;
-    sal_uInt32  i;
 
-    for (i = 0; i < mpData->pBorders.size(); i++)
+    for (std::vector<RulerBorder>::size_type i = 0; i < mpData->pBorders.size(); i++)
     {
         if (mpData->pBorders[i].nStyle & RulerBorderStyle::Invisible)
             continue;
@@ -793,14 +792,13 @@ void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Poly
 
 void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long nMax, long nVirTop, long nVirBottom)
 {
-    sal_uInt32  j;
     long n;
     long nIndentHeight = (mnVirHeight / 2) - 1;
     long nIndentWidth2 = nIndentHeight-3;
 
     tools::Polygon aPoly(5);
 
-    for (j = 0; j < mpData->pIndents.size(); j++)
+    for (std::vector<RulerIndent>::size_type j = 0; j < mpData->pIndents.size(); j++)
     {
         if (mpData->pIndents[j].bInvisible)
             continue;
