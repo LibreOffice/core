@@ -732,7 +732,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
     glu32 \
 	imm32 \
 	mpr \
-	msimg32 \
     opengl32 \
 	ole32 \
 	shell32 \
