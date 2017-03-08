@@ -166,14 +166,14 @@ String RID_ERR_IDENT
     Text [ en-US ] = "ERROR : " ;
 };
 
-String RID_ERR_UNKNOWN
-{
-    Text [ en-US ] = "Unknown error occurred" ;
-};
-
 String RID_ERR_UNEXPECTEDCHARACTER
 {
     Text [ en-US ] = "Unexpected character" ;
+};
+
+String RID_ERR_UNEXPECTEDTOKEN
+{
+    Text [ en-US ] = "Unexpected token" ;
 };
 
 String RID_ERR_LGROUPEXPECTED
@@ -194,6 +194,31 @@ String RID_ERR_LBRACEEXPECTED
 String RID_ERR_RBRACEEXPECTED
 {
     Text [ en-US ] = "')' expected" ;
+};
+
+String RID_ERR_PARENTMISMATCH
+{
+    Text [ en-US ] = "Left and right symbols mismatched" ;
+};
+
+String RID_ERR_FONTEXPECTED
+{
+    Text [ en-US ] = "'fixed', 'sans', or 'serif' expected" ;
+};
+
+String RID_ERR_SIZEEXPECTED
+{
+    Text [ en-US ] = "'size' followed by an unexpected token" ;
+};
+
+String RID_ERR_DOUBLEALIGN
+{
+    Text [ en-US ] = "Double aligning is not allowed" ;
+};
+
+String RID_ERR_DOUBLESUBSUPSCRIPT
+{
+    Text [ en-US ] = "Double sub/superscripts is not allowed" ;
 };
 
 String RID_ERR_POUNDEXPECTED
