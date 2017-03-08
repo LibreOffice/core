@@ -211,9 +211,9 @@ void TEParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /*nEnd*/ )
     mbSimple = false;
 }
 
-sal_uInt16 TEParaPortion::GetLineNumber( sal_Int32 nChar, bool bInclEnd )
+std::vector<TextLine>::size_type TEParaPortion::GetLineNumber( sal_Int32 nChar, bool bInclEnd )
 {
-    for ( size_t nLine = 0; nLine < maLines.size(); nLine++ )
+    for ( std::vector<TextLine>::size_type nLine = 0; nLine < maLines.size(); nLine++ )
     {
         TextLine& rLine = maLines[ nLine ];
         if ( ( bInclEnd && ( rLine.GetEnd() >= nChar ) ) ||

@@ -355,15 +355,15 @@ void TextView::ImpHighlight( const TextSelection& rSel )
             if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
             {
                 TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
-                sal_uInt16 nStartLine = 0;
-                sal_uInt16 nEndLine = pTEParaPortion->GetLines().size() -1;
+                std::vector<TextLine>::size_type nStartLine = 0;
+                std::vector<TextLine>::size_type nEndLine = pTEParaPortion->GetLines().size() -1;
                 if ( nPara == nStartPara )
                     nStartLine = pTEParaPortion->GetLineNumber( aSel.GetStart().GetIndex(), false );
                 if ( nPara == nEndPara )
                     nEndLine = pTEParaPortion->GetLineNumber( aSel.GetEnd().GetIndex(), true );
 
                 // iterate over all lines
-                for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
+                for ( std::vector<TextLine>::size_type nLine = nStartLine; nLine <= nEndLine; nLine++ )
                 {
                     TextLine& rLine = pTEParaPortion->GetLines()[ nLine ];
                     sal_Int32 nStartIndex = rLine.GetStart();
@@ -947,7 +947,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                 mpImpl->mpTextEngine->FormatDoc();
 
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
-            sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex(), true );
+            std::vector<TextLine>::size_type nLine = pParaPortion->GetLineNumber( aPaM.GetIndex(), true );
             TextLine& rLine = pParaPortion->GetLines()[ nLine ];
             if ( nInputEnd > rLine.GetEnd() )
                 nInputEnd = rLine.GetEnd();
@@ -1441,7 +1441,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
         nX = mpImpl->mnTravelXPos;
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
-    sal_uInt16 nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
+    std::vector<TextLine>::size_type nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
     if ( nLine )    // same paragraph
     {
         aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine-1, nX );
@@ -1456,7 +1456,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
     {
         aPaM.GetPara()--;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
-        sal_uInt16 nL = pPPortion->GetLines().size() - 1;
+        std::vector<TextLine>::size_type nL = pPPortion->GetLines().size() - 1;
         aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( aPaM.GetPara(), nL, nX+1 );
     }
 
@@ -1477,7 +1477,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
         nX = mpImpl->mnTravelXPos;
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
-    sal_uInt16 nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
+    std::vector<TextLine>::size_type nLine = pPPortion->GetLineNumber( rPaM.GetIndex(), false );
     if ( nLine < ( pPPortion->GetLines().size() - 1 ) )
     {
         aPaM.GetIndex() = mpImpl->mpTextEngine->GetCharPos( rPaM.GetPara(), nLine+1, nX );
@@ -1505,7 +1505,7 @@ TextPaM TextView::CursorStartOfLine( const TextPaM& rPaM )
     TextPaM aPaM( rPaM );
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
-    sal_uInt16 nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), false );
+    std::vector<TextLine>::size_type nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), false );
     TextLine& rLine = pPPortion->GetLines()[ nLine ];
     aPaM.GetIndex() = rLine.GetStart();
 
@@ -1517,7 +1517,7 @@ TextPaM TextView::CursorEndOfLine( const TextPaM& rPaM )
     TextPaM aPaM( rPaM );
 
     TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( rPaM.GetPara() );
-    sal_uInt16 nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), false );
+    std::vector<TextLine>::size_type nLine = pPPortion->GetLineNumber( aPaM.GetIndex(), false );
     TextLine& rLine = pPPortion->GetLines()[ nLine ];
     aPaM.GetIndex() = rLine.GetEnd();
 
@@ -2153,6 +2153,7 @@ sal_Int32 TextView::GetLineNumberOfCursorInSelection() const
         TextPaM aPaM = GetSelection().GetEnd();
         TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
         nLineNo = pPPortion->GetLineNumber( aPaM.GetIndex(), false );
+            //TODO: std::vector<TextLine>::size_type -> sal_Int32!
         if( mpImpl->mbCursorAtEndOfLine )
             --nLineNo;
     }

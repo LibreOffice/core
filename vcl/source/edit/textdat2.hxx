@@ -205,7 +205,7 @@ public:
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
     std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
-    sal_uInt16          GetLineNumber( sal_Int32 nIndex, bool bInclEnd );
+    std::vector<TextLine>::size_type GetLineNumber( sal_Int32 nIndex, bool bInclEnd );
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
 

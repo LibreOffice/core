@@ -1064,7 +1064,7 @@ sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara
 
     long nY = 0;
     TextLine* pLine = nullptr;
-    sal_uInt16 nLine;
+    std::vector<TextLine>::size_type nLine;
     for ( nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
     {
         TextLine& rmpLine = pPortion->GetLines()[ nLine ];
@@ -1090,7 +1090,7 @@ sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara
     return nCurIndex;
 }
 
-sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, sal_uInt16 nLine, long nXPos, bool )
+sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, std::vector<TextLine>::size_type nLine, long nXPos, bool )
 {
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );

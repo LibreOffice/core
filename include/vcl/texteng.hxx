@@ -189,7 +189,7 @@ protected:
 
     bool                IsFormatted() const { return mbFormatted; }
 
-    sal_Int32           GetCharPos( sal_uInt32 nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
+    sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, long nDocPosX, bool bSmart = false );
     Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
     sal_Int32           ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uInt16 nTextPortion );
