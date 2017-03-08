@@ -3322,6 +3322,7 @@ win_get_env_from_vsvars32bat()
 
 find_ucrt()
 {
+    AC_MSG_CHECKING([UCRT values in Windows registry])
     reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
     if test -n "$regvalue"; then
         PathFormat "$regvalue"
@@ -3330,23 +3331,26 @@ find_ucrt()
         UCRTVERSION=$regvalue
         # Rest if not exist
         if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
-          UCRTSDKDIR=
-          AC_MSG_RESULT([UCRT: give up registry detection and retrieve from IDE env file])
+            UCRTSDKDIR=
+            AC_MSG_RESULT([invalid entry])
         fi
+    else
+        AC_MSG_RESULT([not found])
     fi
     if test -z "$UCRTSDKDIR"; then
+        AC_MSG_CHECKING([UCRT values in IDE env file])
         ide_env_dir="$VC_PRODUCT_DIR/../Common7/Tools/"
         if test "$vcnum" = "150"; then
-          ide_env_file="${ide_env_dir}VsDevCmd.bat"
+            ide_env_file="${ide_env_dir}VsDevCmd.bat"
         else
-          ide_env_file="${ide_env_dir}/vsvars32.bat"
+            ide_env_file="${ide_env_dir}/vsvars32.bat"
         fi
         if test -f "$ide_env_file"; then
             PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
             UCRTSDKDIR=$formatted_path
             UCRTVERSION=`win_get_env_from_vsvars32bat "UCRTVersion"`
         else
-          AC_MSG_ERROR([No UCRT found])
+            AC_MSG_RESULT([not found])
         fi
     fi
 }
@@ -3361,10 +3365,8 @@ find_msvc()
 
     vs_versions_to_check "$1"
 
-    AC_MSG_CHECKING([whether vs inst is $vsversions])
-
     for ver in $vsversions; do
-        AC_MSG_CHECKING([ver is now: $ver])
+        AC_MSG_CHECKING([whether VS inst is $ver])
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
@@ -3378,13 +3380,14 @@ find_msvc()
         # As always MSVC 15.0 is special here
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver
         if test -n "$regvalue"; then
-            AC_MSG_RESULT([found: $regvalue])
             PathFormat "$regvalue"
             vctest=$formatted_path
             break
         fi
+        AC_MSG_RESULT([no])
     done
     if test -n "$vctest"; then
+        AC_MSG_RESULT([yes ($vctest)])
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
         14.0)
@@ -3409,7 +3412,7 @@ SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
-    AC_MSG_CHECKING([Visual C++])
+    AC_MSG_NOTICE([Verifying Visual C++ installation])
 
     find_msvc "$with_visual_studio"
     if test -z "$vctest"; then
@@ -3443,9 +3446,8 @@ if test "$_os" = "WINNT"; then
     fi
 
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
-    AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
-    AC_MSG_CHECKING([Is Visual C++ Express])
+    AC_MSG_CHECKING([whether Visual C++ is Express edition])
     if test "$vcexpress" = "Express" ; then
         AC_MSG_RESULT([Yes])
     else
@@ -3455,12 +3457,11 @@ if test "$_os" = "WINNT"; then
     UCRTSDKDIR=
     UCRTVERSION=
 
-    AC_MSG_CHECKING([for UCRT location])
     find_ucrt
     if test -n "$UCRTSDKDIR"; then
-        AC_MSG_RESULT([found])
         PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
         ucrtincpath_formatted=$formatted_path
+        AC_MSG_RESULT([found $ucrtincpath_formatted])
         # SOLARINC is used for external modules and must be set too.
         # And no, it's not sufficient to set SOLARINC only, as configure
         # itself doesn't honour it.
@@ -3469,16 +3470,15 @@ if test "$_os" = "WINNT"; then
         CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
         CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
     else
-        AC_MSG_ERROR([not found])
+        AC_MSG_ERROR([cannot continue without an UCRT location])
     fi
     AC_SUBST(UCRTSDKDIR)
     AC_SUBST(UCRTVERSION)
 
-    AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
+    AC_MSG_CHECKING([for MSBuild.exe location])
     # Find the proper version of MSBuild.exe to use based on the VS version
     reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
     if test -n "$regvalue" ; then
-        AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
     else
         if test $vcnum = "150"; then
@@ -3491,8 +3491,8 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
-	AC_MSG_RESULT([$regvalue])
     fi
+    AC_MSG_RESULT([$regvalue])
 
     # Find the version of devenv.exe
     DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
@@ -3548,8 +3548,6 @@ if test "$_os" = "WINNT"; then
     dnl The path needs to be added before cl is called
     PATH="$MSPDB_PATH:$PATH"
 
-    AC_MSG_CHECKING([cl.exe])
-
     # Is there really ever a need to pass CC explicitly? Surely we can hope to get all the
     # automagical niceness to work OK? If somebody has some unsupported compiler in some weird
     # location, isn't it likely that lots of other things needs changes, too, and just setting CC
@@ -3558,7 +3556,7 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
-        AC_MSG_CHECKING([real MSVC])
+        AC_MSG_CHECKING([MSVC cl.exe])
         if test "$BITNESS_OVERRIDE" = ""; then
             if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
                 MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
@@ -3590,7 +3588,7 @@ if test "$_os" = "WINNT"; then
 
     if test -n "$CC"; then
         # Remove /cl.exe from CC case insensitive
-        AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
+        AC_MSG_NOTICE([using Visual C++ $vcyear $vcexpress])
         if test "$BITNESS_OVERRIDE" = ""; then
            if test "$vcnum" = "150"; then
                COMPATH="$VC_PRODUCT_DIR"
@@ -3612,7 +3610,7 @@ if test "$_os" = "WINNT"; then
         fi
 
         export INCLUDE=`cygpath -d "$COMPATH\Include"`
-        AC_MSG_RESULT([INCLUDE is: ($INCLUDE)])
+        AC_MSG_NOTICE([INCLUDE path is: $INCLUDE])
 
         PathFormat "$COMPATH"
         COMPATH="$formatted_path"
@@ -3705,12 +3703,6 @@ if test "$_os" = "WINNT"; then
                 CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
                 LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
             fi
-        fi
-        if test "$BUILD_X64" = TRUE; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
         fi
         if test "$BUILD_X64" = TRUE; then
             AC_MSG_RESULT([found])
@@ -5446,21 +5438,22 @@ if test "$build_os" = "cygwin"; then
     AL_PATH=`win_short_path_for_make "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
-    AC_MSG_CHECKING(.NET Framework find_dotnetsdk)
+    AC_MSG_CHECKING([for .NET Framework in .NET sdk])
     find_dotnetsdk
     if test -f "$frametest/lib/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
-        AC_MSG_CHECKING(.NET Framework find_winsdk)
+        AC_MSG_RESULT([missing])
+        AC_MSG_CHECKING([for .NET Framework in Windows SDK])
         find_winsdk
         if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
         else
-            AC_MSG_CHECKING(.NET Framework find_dotnetsdk46)
+            AC_MSG_RESULT([missing])
+            AC_MSG_CHECKING([for .NET Framework 4.6 SDK])
             find_dotnetsdk46
             PathFormat "$frametest"
             frametest="$formatted_path"
-            AC_MSG_CHECKING(found: $frametest/um/$WINDOWS_SDK_ARCH/mscoree.lib)
             if test -f "$frametest/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
                  DOTNET_FRAMEWORK_HOME="$frametest"
             fi
