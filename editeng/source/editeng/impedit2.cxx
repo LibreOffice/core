@@ -35,6 +35,7 @@
 #include <eeobj.hxx>
 #include <editeng/txtrange.hxx>
 #include <svl/urlbmk.hxx>
+#include <sfx2/app.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -163,6 +164,17 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted = true;
 
     aEditDoc.SetModifyHdl( LINK( this, ImpEditEngine, DocModified ) );
+    StartListening(*SfxGetpApp());
+}
+
+void ImpEditEngine::Dispose()
+{
+    SolarMutexGuard g;
+    auto pApp = SfxApplication::Get();
+    if(pApp)
+        EndListening(*pApp);
+    pVirtDev.disposeAndClear();
+    mpOwnDev.disposeAndClear();
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -177,8 +189,7 @@ ImpEditEngine::~ImpEditEngine()
     bDowning = true;
     SetUpdateMode( false );
 
-    mpOwnDev.disposeAndClear();
-    pVirtDev.disposeAndClear();
+    Dispose();
     delete pEmptyItemSet;
     delete pUndoManager;
     delete pTextRanger;
