@@ -33,7 +33,6 @@ SEInitializerGpg::~SEInitializerGpg()
 
 /* XSEInitializer */
 Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContext( const OUString& )
-    throw (RuntimeException, std::exception)
 {
     try
     {
@@ -55,43 +54,36 @@ Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContex
 }
 
 void SAL_CALL SEInitializerGpg::freeSecurityContext( const uno::Reference< XXMLSecurityContext >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 OUString SEInitializer_getImplementationName()
-    throw (uno::RuntimeException)
 {
     return OUString("com.sun.star.xml.security.SEInitializer_Gpg");
 }
 
-uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames()
 {
     return {"com.sun.star.xml.crypto.gpg.GpgSEInitializer"};
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SEInitializer_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
-    throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SEInitializerGpg(comphelper::getComponentContext(rxMSF)));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializerGpg::getImplementationName()
-    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_getImplementationName();
 }
 
 sal_Bool SAL_CALL SEInitializerGpg::supportsService( const OUString& rServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SEInitializerGpg::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_getSupportedServiceNames();
 }

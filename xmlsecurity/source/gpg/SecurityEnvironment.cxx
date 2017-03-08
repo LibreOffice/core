@@ -34,21 +34,18 @@ SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironmentGpg::getImplementationName()
-    throw( RuntimeException, std::exception )
 {
     return impl_getImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironmentGpg::supportsService( const OUString& serviceName)
-    throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SecurityEnvironmentGpg::supportsService(const OUString& serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SecurityEnvironmentGpg::getSupportedServiceNames()
-    throw( RuntimeException, std::exception )
 {
     return impl_getSupportedServiceNames() ;
 }
@@ -60,14 +57,12 @@ Sequence< OUString > SecurityEnvironmentGpg::impl_getSupportedServiceNames()
 }
 
 OUString SecurityEnvironmentGpg::impl_getImplementationName()
-    throw( RuntimeException )
 {
     return OUString("com.sun.star.xml.security.SecurityEnvironment_Gpg");
 }
 
 //Helper for registry
 Reference< XInterface > SAL_CALL SecurityEnvironmentGpg::impl_createInstance( const Reference< XMultiServiceFactory >& )
-    throw( RuntimeException )
 {
     return Reference< XInterface >( *new SecurityEnvironmentGpg ) ;
 }
@@ -78,7 +73,6 @@ Reference< XSingleServiceFactory > SecurityEnvironmentGpg::impl_createFactory( c
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )
-    throw( RuntimeException, std::exception )
 {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
@@ -98,13 +92,11 @@ const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
 }
 
 OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
-    throw( RuntimeException, std::exception )
 {
     return OUString("");
 }
 
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()
-    throw( SecurityException , RuntimeException, std::exception )
 {
     GpgME::initializeLibrary();
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
@@ -142,39 +134,33 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
 }
 
 Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& /*issuerName*/, const Sequence< sal_Int8 >& /*serialNumber*/ )
-    throw( SecurityException , RuntimeException, std::exception )
 {
     return nullptr;
 }
 
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::buildCertificatePath( const Reference< XCertificate >& /*begin*/ )
-    throw( SecurityException , RuntimeException, std::exception )
 {
     return Sequence< Reference < XCertificate > >();
 }
 
 Reference< XCertificate > SecurityEnvironmentGpg::createCertificateFromRaw( const Sequence< sal_Int8 >& /*rawCertificate*/ )
-    throw( SecurityException , RuntimeException, std::exception )
 {
     return nullptr;
 }
 
 Reference< XCertificate > SecurityEnvironmentGpg::createCertificateFromAscii( const OUString& /*asciiCertificate*/ )
-    throw( SecurityException , RuntimeException, std::exception )
 {
     return nullptr;
 }
 
 sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertificate >& /*aCert*/,
                                                   const Sequence< Reference< XCertificate > >&  /*intermediateCerts*/ )
-    throw( SecurityException, RuntimeException, std::exception )
 {
     return 0;
 }
 
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
     const Reference< XCertificate >& /*aCert*/)
-    throw( SecurityException, RuntimeException, std::exception )
 {
 //     const CertificateImpl* xCert;
 //     const GpgME::Key* key;

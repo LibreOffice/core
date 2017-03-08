@@ -15,16 +15,13 @@ using namespace css::uno;
 using namespace css::lang;
 
 
-void SAL_CALL DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& /*aData*/ )
-    throw (DisposedException, RuntimeException, std::exception)
+void SAL_CALL DigestContext::updateDigest(const Sequence< sal_Int8 >& /*aData*/)
 {
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL DigestContext::finalizeDigestAndDispose()
-    throw (DisposedException, RuntimeException, std::exception)
 {
-    Sequence<sal_Int8> seq(0);
-    return seq;
+    return Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
