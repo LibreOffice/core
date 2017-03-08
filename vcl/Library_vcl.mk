@@ -708,7 +708,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	gdiplus \
 	imm32 \
 	mpr \
-	msimg32 \
 	ole32 \
 	shell32 \
 	usp10 \

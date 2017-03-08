@@ -166,7 +166,6 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,vcl_wmf_test,\
     gdiplus \
     imm32 \
     mpr \
-    msimg32 \
     ole32 \
     shell32 \
     usp10 \
