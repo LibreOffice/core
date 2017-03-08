@@ -811,9 +811,9 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
 
     // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
     // that to dest hdc
-    bool bRet = AlphaBlend( mrParent.getHDC(), nX, nY, nWidth, nHeight,
-                            hMemDC, 0,0,1,1,
-                            aFunc ) == TRUE;
+    bool bRet = GdiAlphaBlend(mrParent.getHDC(), nX, nY, nWidth, nHeight,
+                              hMemDC, 0,0,1,1,
+                              aFunc ) == TRUE;
 
     ImplReleaseCachedDC( CACHED_HDC_1 );
 
