@@ -59,4 +59,9 @@ String ST_FINISH
     Text [ en-US ] = "~Finish";
 };
 
+String ST_MMWTITLE
+{
+    Text [ en-US ] = "Mail Merge Wizard";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
