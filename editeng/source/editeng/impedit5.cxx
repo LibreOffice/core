@@ -26,6 +26,7 @@
 #include <editdbg.hxx>
 #include <svl/hint.hxx>
 #include <editeng/lrspitem.hxx>
+#include <sfx2/app.hxx>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
@@ -173,6 +174,8 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
+    if(dynamic_cast<const SfxApplication*>(&rBC) != nullptr && rHint.GetId() == SfxHintId::Dying)
+        Dispose();
 }
 
 EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet )
