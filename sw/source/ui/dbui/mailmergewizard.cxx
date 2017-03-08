@@ -55,6 +55,8 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
     defaultButton(WizardButtonFlags::NEXT);
     enableButtons(WizardButtonFlags::FINISH, false);
 
+    setTitleBase(SW_RESSTR( ST_MMWTITLE ) );
+
     m_pFinish->SetText(m_sFinish);
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
     m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);

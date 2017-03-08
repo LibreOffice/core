@@ -85,6 +85,7 @@
 #define RID_BMP_FORMULA_CALC    (RC_DBUI_BEGIN + 60)
 #define RID_BMP_FORMULA_APPLY   (RC_DBUI_BEGIN + 61)
 #define RID_BMP_FORMULA_CANCEL  (RC_DBUI_BEGIN + 62)
+#define ST_MMWTITLE             (RC_DBUI_BEGIN + 63)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0
