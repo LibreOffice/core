@@ -500,19 +500,19 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 sal_Int32 nX = 1, nY = 1;
                 switch( pShadow->GetLocation() )
                 {
-                    case SVX_SHADOW_TOPLEFT:
+                    case SvxShadowLocation::TopLeft:
                         nX = -1;
                         nY = -1;
                         break;
-                    case SVX_SHADOW_TOPRIGHT:
+                    case SvxShadowLocation::TopRight:
                         nY = -1;
                         break;
-                    case SVX_SHADOW_BOTTOMLEFT:
+                    case SvxShadowLocation::BottomLeft:
                         nX = -1;
                         break;
-                    case SVX_SHADOW_BOTTOMRIGHT:
+                    case SvxShadowLocation::BottomRight:
                         break;
-                    case SVX_SHADOW_NONE:
+                    case SvxShadowLocation::NONE:
                     default:
                         rValue = GetXMLToken(XML_NONE);
                         return true;

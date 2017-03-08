@@ -360,14 +360,14 @@ bool SvXMLImportItemMapper::PutXMLValue(
             SvXMLTokenEnumerator aTokenEnum( rValue );
 
             Color aColor( 128,128, 128 );
-            rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
+            rShadow.SetLocation( SvxShadowLocation::BottomRight );
 
             OUString aToken;
             while( aTokenEnum.getNextToken( aToken ) )
             {
                 if( IsXMLToken( aToken, XML_NONE ) )
                 {
-                    rShadow.SetLocation( SVX_SHADOW_NONE );
+                    rShadow.SetLocation( SvxShadowLocation::NONE );
                     bOk = true;
                 }
                 else if( !bColorFound && aToken.startsWith("#") )
@@ -394,22 +394,22 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             if( nY < 0 )
                             {
-                                rShadow.SetLocation( SVX_SHADOW_TOPLEFT );
+                                rShadow.SetLocation( SvxShadowLocation::TopLeft );
                             }
                             else
                             {
-                                rShadow.SetLocation( SVX_SHADOW_BOTTOMLEFT );
+                                rShadow.SetLocation( SvxShadowLocation::BottomLeft );
                             }
                         }
                         else
                         {
                             if( nY < 0 )
                             {
-                                rShadow.SetLocation( SVX_SHADOW_TOPRIGHT );
+                                rShadow.SetLocation( SvxShadowLocation::TopRight );
                             }
                             else
                             {
-                                rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
+                                rShadow.SetLocation( SvxShadowLocation::BottomRight );
                             }
                         }
 

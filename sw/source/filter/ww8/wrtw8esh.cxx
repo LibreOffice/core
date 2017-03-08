@@ -2085,27 +2085,27 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                 sal_uInt32  nShadow = nShadowType;
 
                 SvxShadowLocation eLocation = pSI->GetLocation();
-                if( (eLocation!=SVX_SHADOW_NONE) && (pSI->GetWidth()!=0) )
+                if( (eLocation!=SvxShadowLocation::NONE) && (pSI->GetWidth()!=0) )
                 {
                     switch( eLocation )
                     {
-                    case SVX_SHADOW_TOPLEFT:
+                    case SvxShadowLocation::TopLeft:
                         {
                             nOffX = -nOffX;
                             nOffY = -nOffY;
                         }
                         break;
-                    case SVX_SHADOW_TOPRIGHT:
+                    case SvxShadowLocation::TopRight:
                         {
                             nOffY = -nOffY;
                         }
                         break;
-                    case SVX_SHADOW_BOTTOMLEFT:
+                    case SvxShadowLocation::BottomLeft:
                         {
                             nOffX = -nOffX;
                         }
                         break;
-                    case SVX_SHADOW_BOTTOMRIGHT:
+                    case SvxShadowLocation::BottomRight:
                         break;
                     default:
                         break;

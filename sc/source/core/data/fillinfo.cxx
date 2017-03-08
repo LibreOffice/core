@@ -831,8 +831,8 @@ void ScDocument::FillInfo(
 
                 CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
                 const SvxShadowItem* pThisAttr = pInfo->pShadowAttr;
-                SvxShadowLocation eLoc = pThisAttr ? pThisAttr->GetLocation() : SVX_SHADOW_NONE;
-                if (eLoc != SVX_SHADOW_NONE)
+                SvxShadowLocation eLoc = pThisAttr ? pThisAttr->GetLocation() : SvxShadowLocation::NONE;
+                if (eLoc != SvxShadowLocation::NONE)
                 {
                     //  or test on != eLoc
 
@@ -845,22 +845,22 @@ void ScDocument::FillInfo(
                         --nDxNeg;
 
                     bool bLeftDiff = !bLeft &&
-                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxNeg].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxNeg].pShadowAttr->GetLocation() == SvxShadowLocation::NONE;
                     bool bRightDiff = !bRight &&
-                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxPos].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxPos].pShadowAttr->GetLocation() == SvxShadowLocation::NONE;
                     bool bTopDiff = !bTop &&
-                            pRowInfo[nArrRow-1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow-1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SvxShadowLocation::NONE;
                     bool bBottomDiff = !bBottom &&
-                            pRowInfo[nArrRow+1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow+1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SvxShadowLocation::NONE;
 
                     if ( bLayoutRTL )
                     {
                         switch (eLoc)
                         {
-                            case SVX_SHADOW_BOTTOMRIGHT: eLoc = SVX_SHADOW_BOTTOMLEFT;  break;
-                            case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
-                            case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_TOPLEFT;     break;
-                            case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+                            case SvxShadowLocation::BottomRight: eLoc = SvxShadowLocation::BottomLeft;  break;
+                            case SvxShadowLocation::BottomLeft:  eLoc = SvxShadowLocation::BottomRight; break;
+                            case SvxShadowLocation::TopRight:    eLoc = SvxShadowLocation::TopLeft;     break;
+                            case SvxShadowLocation::TopLeft:     eLoc = SvxShadowLocation::TopRight;    break;
                             default:
                             {
                                 // added to avoid warnings
@@ -870,7 +870,7 @@ void ScDocument::FillInfo(
 
                     switch (eLoc)
                     {
-                        case SVX_SHADOW_BOTTOMRIGHT:
+                        case SvxShadowLocation::BottomRight:
                             if (bBottomDiff)
                             {
                                 pRowInfo[nArrRow+1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
@@ -890,7 +890,7 @@ void ScDocument::FillInfo(
                             }
                             break;
 
-                        case SVX_SHADOW_BOTTOMLEFT:
+                        case SvxShadowLocation::BottomLeft:
                             if (bBottomDiff)
                             {
                                 pRowInfo[nArrRow+1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
@@ -910,7 +910,7 @@ void ScDocument::FillInfo(
                             }
                             break;
 
-                        case SVX_SHADOW_TOPRIGHT:
+                        case SvxShadowLocation::TopRight:
                             if (bTopDiff)
                             {
                                 pRowInfo[nArrRow-1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
@@ -930,7 +930,7 @@ void ScDocument::FillInfo(
                             }
                             break;
 
-                        case SVX_SHADOW_TOPLEFT:
+                        case SvxShadowLocation::TopLeft:
                             if (bTopDiff)
                             {
                                 pRowInfo[nArrRow-1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;

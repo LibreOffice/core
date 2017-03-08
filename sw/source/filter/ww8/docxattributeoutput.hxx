@@ -87,7 +87,7 @@ struct OutputBorderOptions
     SvxShadowLocation   aShadowLocation;
     bool                bCheckDistanceSize;
 
-    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false), aShadowLocation(SVX_SHADOW_NONE), bCheckDistanceSize(false) {}
+    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false), aShadowLocation(SvxShadowLocation::NONE), bCheckDistanceSize(false) {}
 };
 
 /**

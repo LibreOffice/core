@@ -2748,7 +2748,7 @@ static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
-    rOptions.aShadowLocation = SVX_SHADOW_NONE;
+    rOptions.aShadowLocation = SvxShadowLocation::NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -2763,7 +2763,7 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
-    rOptions.aShadowLocation = SVX_SHADOW_NONE;
+    rOptions.aShadowLocation = SvxShadowLocation::NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -2778,7 +2778,7 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.bWriteTag = false;
     rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = true;
-    rOptions.aShadowLocation = SVX_SHADOW_NONE;
+    rOptions.aShadowLocation = SvxShadowLocation::NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -2838,11 +2838,11 @@ static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBo
         }
 
         bool bWriteShadow = false;
-        if (rOptions.aShadowLocation == SVX_SHADOW_NONE)
+        if (rOptions.aShadowLocation == SvxShadowLocation::NONE)
         {
             // The border has no shadow
         }
-        else if (rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT)
+        else if (rOptions.aShadowLocation == SvxShadowLocation::BottomRight)
         {
             // Special case of 'Bottom-Right' shadow:
             // If the shadow location is 'Bottom-Right' - then turn on the shadow
@@ -2857,10 +2857,10 @@ static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBo
             // If there is a shadow, and it's not the regular 'Bottom-Right',
             // then write only the 'shadowed' sides of the border
             if  (
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT      )    &&  *pBrd == SvxBoxItemLine::TOP   )  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT    )    &&  *pBrd == SvxBoxItemLine::LEFT  )  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT  || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == SvxBoxItemLine::BOTTOM)  ||
-                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT    || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == SvxBoxItemLine::RIGHT )
+                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopLeft     || rOptions.aShadowLocation == SvxShadowLocation::TopRight      )    &&  *pBrd == SvxBoxItemLine::TOP   )  ||
+                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopLeft     || rOptions.aShadowLocation == SvxShadowLocation::BottomLeft    )    &&  *pBrd == SvxBoxItemLine::LEFT  )  ||
+                    ( ( rOptions.aShadowLocation == SvxShadowLocation::BottomLeft  || rOptions.aShadowLocation == SvxShadowLocation::BottomRight   )    &&  *pBrd == SvxBoxItemLine::BOTTOM)  ||
+                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopRight    || rOptions.aShadowLocation == SvxShadowLocation::BottomRight   )    &&  *pBrd == SvxBoxItemLine::RIGHT )
                 )
             {
                 bWriteShadow = true;

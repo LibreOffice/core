@@ -439,7 +439,7 @@ PosT PosValueMapper< PosT, ValueT >::GetPosFromValue( ValueT nValue ) const
             ++pEntry;
         nPos = pEntry->mnPos;
     }
-    else if( nValue >= 0 )
+    else if( nValue >= static_cast< ValueT >(0) )
         nPos = static_cast< PosT >( nValue );
     return nPos;
 }

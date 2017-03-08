@@ -677,7 +677,7 @@ const SwRect SwFrame::UnionFrame( bool bBorder ) const
             nAdd += rBox.CalcLineSpace( SvxBoxItemLine::RIGHT );
         else if ( rAttrs.IsBorderDist() )
             nAdd += rBox.GetDistance( SvxBoxItemLine::RIGHT ) + 1;
-        if( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
+        if( rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
         {
             const SvxShadowItem &rShadow = rAttrs.GetShadow();
             nLeft -= rShadow.CalcShadowSpace( SvxShadowItemSide::LEFT );

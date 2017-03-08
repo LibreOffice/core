@@ -39,14 +39,14 @@ enum class SvxEscapement
     End
 };
 
-enum SvxShadowLocation
+enum class SvxShadowLocation
 {
-    SVX_SHADOW_NONE,
-    SVX_SHADOW_TOPLEFT,
-    SVX_SHADOW_TOPRIGHT,
-    SVX_SHADOW_BOTTOMLEFT,
-    SVX_SHADOW_BOTTOMRIGHT,
-    SVX_SHADOW_END
+    NONE,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+    End
 };
 
 enum class SvxTabAdjust

@@ -529,7 +529,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
             bool bShadow = false;               // Shadow ?
             if (const SvxShadowItem* pSI = rAttrSet.GetItem<SvxShadowItem>(RES_SHADOW))
             {
-                bShadow = (pSI->GetLocation() != SVX_SHADOW_NONE) &&
+                bShadow = (pSI->GetLocation() != SvxShadowLocation::NONE) &&
                     (pSI->GetWidth() != 0);
             }
 

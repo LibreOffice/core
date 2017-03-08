@@ -1439,7 +1439,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         rRect.Pos() += pFrame->Frame().Pos();
 
         if ( rAttrs.IsLine() || rAttrs.IsBorderDist() ||
-             (bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE) )
+             (bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE) )
         {
             SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
@@ -1492,7 +1492,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
                  // Increase of distance by one twip is incorrect.
                 (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
 
-            if ( bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
+            if ( bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
             {
                 const SvxShadowItem &rShadow = rAttrs.GetShadow();
                 if ( bTop )
@@ -4361,7 +4361,7 @@ void SwTabFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
             const SwBorderAttrs &rAttrs = *aAccess.Get();
 
             // paint shadow
-            if ( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
+            if ( rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
             {
                 SwRect aRect;
                 ::lcl_CalcBorderRect( aRect, this, rAttrs, true, gProp );
@@ -4414,7 +4414,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     switch ( rShadow.GetLocation() )
     {
-        case SVX_SHADOW_BOTTOMRIGHT:
+        case SvxShadowLocation::BottomRight:
             {
                 if ( bDrawFullShadowRectangle )
                 {
@@ -4451,7 +4451,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     rOutRect.Bottom( rOutRect.Bottom()- nHeight );
             }
             break;
-        case SVX_SHADOW_TOPLEFT:
+        case SvxShadowLocation::TopLeft:
             {
                 if ( bDrawFullShadowRectangle )
                 {
@@ -4488,7 +4488,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     rOutRect.Top( rOutRect.Top() + nHeight );
             }
             break;
-        case SVX_SHADOW_TOPRIGHT:
+        case SvxShadowLocation::TopRight:
             {
                 if ( bDrawFullShadowRectangle )
                 {
@@ -4525,7 +4525,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     rOutRect.Top( rOutRect.Top() + nHeight );
             }
             break;
-        case SVX_SHADOW_BOTTOMLEFT:
+        case SvxShadowLocation::BottomLeft:
             {
                 if ( bDrawFullShadowRectangle )
                 {
@@ -4622,10 +4622,10 @@ void SwFrame::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     {
         switch( rShadow.GetLocation() )
         {
-            case SVX_SHADOW_BOTTOMRIGHT: rShadow.SetLocation(SVX_SHADOW_BOTTOMLEFT);  break;
-            case SVX_SHADOW_TOPLEFT:     rShadow.SetLocation(SVX_SHADOW_TOPRIGHT);    break;
-            case SVX_SHADOW_TOPRIGHT:    rShadow.SetLocation(SVX_SHADOW_BOTTOMRIGHT); break;
-            case SVX_SHADOW_BOTTOMLEFT:  rShadow.SetLocation(SVX_SHADOW_TOPLEFT);     break;
+            case SvxShadowLocation::BottomRight: rShadow.SetLocation(SvxShadowLocation::BottomLeft);  break;
+            case SvxShadowLocation::TopLeft:     rShadow.SetLocation(SvxShadowLocation::TopRight);    break;
+            case SvxShadowLocation::TopRight:    rShadow.SetLocation(SvxShadowLocation::BottomRight); break;
+            case SvxShadowLocation::BottomLeft:  rShadow.SetLocation(SvxShadowLocation::TopLeft);     break;
             default: break;
         }
     }
@@ -5090,7 +5090,7 @@ void PaintCharacterBorder(
             0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
             rFont.GetAbsShadowLocation(bVerticalLayout));
 
-        if( aShadow.GetLocation() != SVX_SHADOW_NONE )
+        if( aShadow.GetLocation() != SvxShadowLocation::NONE )
         {
             lcl_PaintShadow( SwRect(aAlignedRect), aAlignedRect, aShadow,
                              false, bTop, bBottom, bLeft, bRight, gProp);
@@ -5423,7 +5423,7 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
     }
 
     const bool bLine = rAttrs.IsLine();
-    const bool bShadow = rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE;
+    const bool bShadow = rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE;
 
     // - flag to control,
     //-hack has to be used.
