@@ -39,7 +39,7 @@ namespace connectivity
         class ProfileStruct;
     }
 }
-typedef std::map < OUString, ::connectivity::mozab::ProfileStruct* > ProfileList;
+typedef std::map<OUString, ::connectivity::mozab::ProfileStruct> ProfileList;
 namespace connectivity
 {
     namespace mozab
@@ -47,10 +47,10 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
-                          const OUString &aProfilePath);
-            const OUString& getProfileName(){ return profileName;}
-            const OUString& getProfilePath();
+            ProfileStruct();
+            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName, const OUString &aProfilePath);
+            const OUString& getProfileName() const { return profileName;}
+            const OUString& getProfilePath() const;
         private:
             MozillaProductType product;
             OUString profileName;

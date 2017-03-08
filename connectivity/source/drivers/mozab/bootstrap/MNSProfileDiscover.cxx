@@ -26,15 +26,21 @@ namespace connectivity
 {
     namespace mozab
     {
-        ProfileStruct::ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
-            const OUString& aProfilePath
-          )
+        ProfileStruct::ProfileStruct()
+            : product(css::mozilla::MozillaProductType_Default)
         {
-            product=aProduct;
-            profileName = aProfileName;
-            profilePath = aProfilePath;
         }
-        const OUString& ProfileStruct::getProfilePath()
+
+        ProfileStruct::ProfileStruct(MozillaProductType aProduct,
+                                     const OUString& aProfileName,
+                                     const OUString& aProfilePath)
+            : product(aProduct)
+            , profileName(aProfileName)
+            , profilePath(aProfilePath)
+        {
+        }
+
+        const OUString& ProfileStruct::getProfilePath() const
         {
             return profilePath;
         }
@@ -42,6 +48,7 @@ namespace connectivity
         ProfileAccess::~ProfileAccess()
         {
         }
+
         ProfileAccess::ProfileAccess()
         {
             LoadProductsInfo();
@@ -121,10 +128,7 @@ namespace connectivity
                         fullProfilePath = profilePath;
                     }
 
-                    ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
-                            fullProfilePath
-                        );
-                    rProduct.mProfileList[profileName] = profileItem;
+                    rProduct.mProfileList[profileName] = ProfileStruct(product,profileName,fullProfilePath);
 
                     sal_Int32 isDefault = 0;
                     if (!sIsDefault.isEmpty())
@@ -149,7 +153,7 @@ namespace connectivity
                 return OUString();
             }
             else
-                return rProduct.mProfileList[profileName]->getProfilePath();
+                return rProduct.mProfileList[profileName].getProfilePath();
         }
 
         ::sal_Int32 ProfileAccess::getProfileCount( css::mozilla::MozillaProductType product)
@@ -168,8 +172,8 @@ namespace connectivity
                 itor != rProduct.mProfileList.end();
                 ++itor)
             {
-                ProfileStruct * aProfile = (*itor).second;
-                list[i] = aProfile->getProfileName();
+                const ProfileStruct& rProfile = (*itor).second;
+                list[i] = rProfile.getProfileName();
                 i++;
             }
 
@@ -190,8 +194,8 @@ namespace connectivity
                 //there are not any profiles
                 return OUString();
             }
-            ProfileStruct * aProfile = (*rProduct.mProfileList.begin()).second;
-            return aProfile->getProfileName();
+            const ProfileStruct& rProfile = (*rProduct.mProfileList.begin()).second;
+            return rProfile.getProfileName();
         }
         bool ProfileAccess::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
