@@ -505,7 +505,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
 
 }
 
-static void lcl_StripFields(OUString &rString, long &rNewStartCp)
+static void lcl_StripFields(OUString &rString, WW8_CP &rNewStartCp)
 {
     sal_Int32 nStartPos = 0;
     for (;;)
@@ -561,7 +561,7 @@ public:
 
 // InsertAttrsAsDrawingAttrs() sets attributes between StartCp and EndCp.
 // Style attributes are set as hard, paragraph and character attributes.
-void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
+void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     ManTypes eType, bool bONLYnPicLocFc)
 {
     /*
@@ -735,7 +735,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             aIter->GetEndPos()-nStartCp));
         OUString aString(m_pDrawEditEngine->GetText(aSel));
         const sal_Int32 nOrigLen = aString.getLength();
-        long nDummy(0);
+        WW8_CP nDummy(0);
         lcl_StripFields(aString, nDummy);
 
         sal_Int32 nChanged;
@@ -964,7 +964,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         m_pDrawEditEngine->SetParaAttribs(0, m_pDrawEditEngine->GetEmptyItemSet());
 
         // Strip out fields, leaving the result
-        long nDummy(0);
+        WW8_CP nDummy(0);
         lcl_StripFields(rString, nDummy);
         // Strip out word's special characters for the simple string
         rString = rString.replaceAll("\x01", "");
@@ -1006,7 +1006,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     const OUString aOrigString(aString);
     if( bTextWasRead )
     {
-        long nNewStartCp = nStartCp;
+        WW8_CP nNewStartCp = nStartCp;
         lcl_StripFields(aString, nNewStartCp);
 
         if (aString.getLength()!=1)

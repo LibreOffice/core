@@ -1557,7 +1557,7 @@ private:
     SdrObject *ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
     SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
-    void InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
+    void InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
     bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, sal_uInt16 nTxBxS,
         sal_uInt16 nSequence);
