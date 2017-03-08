@@ -1486,7 +1486,8 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtL
                         itr != pCondFmtList->end(); ++itr)
         {
             XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **itr, xExtLst, nIndex ));
-            maCondfmtList.AppendRecord( xCondfmtRec );
+            if( xCondfmtRec->IsValidForXml() )
+                maCondfmtList.AppendRecord( xCondfmtRec );
         }
     }
 }
