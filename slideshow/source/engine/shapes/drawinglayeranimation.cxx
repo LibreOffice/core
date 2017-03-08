@@ -530,9 +530,8 @@ ScrollTextAnimNode* ActivityImpl::ImpGetScrollTextAnimNode(
     {
         rRelativeTime = nTime;
 
-        for(sal_uInt32 a(0L); !pRetval && a < maVector.size(); a++)
+        for(ScrollTextAnimNode & rNode: maVector)
         {
-            ScrollTextAnimNode & rNode = maVector[a];
             if(!rNode.GetRepeat())
             {
                 // endless loop, use it
