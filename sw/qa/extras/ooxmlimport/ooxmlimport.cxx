@@ -671,23 +671,6 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeSdt, "groupshape-sdt.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx")
-{
-    // First problem: the first two paragraphs did not have their own text section, so the whole document had two columns.
-    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First."), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-
-    // Second problem: the page style had two columns, while it shouldn't have any.
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
-    // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
-    bool bValue = getProperty< bool >(xTextColumns, "SeparatorLineIsOn");
-    CPPUNIT_ASSERT(!bValue) ;
-}
-
 void lcl_countTextFrames(css::uno::Reference< lang::XComponent >& xComponent,
    sal_Int32 nExpected )
 {
@@ -762,17 +745,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", sal_Int32(0), xDraws->getCount() );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
-}
-
-DECLARE_OOXMLIMPORT_TEST(testMultiColumnSeparator, "multi-column-separator-with-line.docx")
-{
-    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First data."), "TextSection");
-    CPPUNIT_ASSERT(xTextSection.is());
-    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
-    // Check for the Column Separator value.It should be TRUE as the document contains separator line.
-    bool  bValue = getProperty< bool >(xTextColumns, "SeparatorLineIsOn");
-    CPPUNIT_ASSERT(bValue);
 }
 
 DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
@@ -937,14 +909,6 @@ DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
 
     CPPUNIT_ASSERT_EQUAL(double(16988), aPolygon.getB2DPoint(3).getX());
     CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(3).getY());
-}
-
-DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
-{
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
-    // This was false, last section was balanced, but it's unbalanced in Word.
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.docx")

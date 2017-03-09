@@ -1195,8 +1195,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // depending on the break type no page styles should be created
     // If the section type is missing, but we have columns without new style info, then this should be
     // handled as a continuous section break.
-    const bool bTreatAsContinuous = m_nBreakType == -1
+    const bool bTreatAsContinuous = (m_nBreakType == -1 || m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage)
                                     && m_nColumnCount > 0
+                                    && !HasHeader(m_bTitlePage) && !HasFooter(m_bTitlePage)
                                     && (m_bIsFirstSection || m_sFollowPageStyleName.isEmpty() || (m_sFirstPageStyleName.isEmpty() && m_bTitlePage));
     if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || bTreatAsContinuous)
     {
