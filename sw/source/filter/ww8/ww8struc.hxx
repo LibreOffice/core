@@ -24,6 +24,7 @@
 
 #include <osl/endian.h>
 #include <rtl/ustring.hxx>
+#include <o3tl/strong_int.hxx>
 
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
@@ -144,7 +145,8 @@ struct Word2CHPX
     }
 };
 
-typedef sal_Int16 WW8_PN;
+struct WW8_PN_Tag {};
+typedef o3tl::strong_int<sal_Int16,WW8_PN_Tag>  WW8_PN;
 typedef sal_Int32 WW8_FC;
 typedef sal_Int32 WW8_CP;
 

@@ -241,7 +241,7 @@ sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
     if ( rFib.m_fDot ) // it's a template
     {
         if ( rFib.m_pnNext  )
-            nGlossaryFibOffset = ( rFib.m_pnNext * 512 );
+            nGlossaryFibOffset = (sal_Int16)rFib.m_pnNext * 512;
     }
     return nGlossaryFibOffset;
 }

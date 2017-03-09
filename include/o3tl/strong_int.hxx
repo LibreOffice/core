@@ -44,6 +44,7 @@ public:
     strong_int() : m_value(0) {}
 
     explicit operator UNDERLYING_TYPE() const { return m_value; }
+    explicit operator UNDERLYING_TYPE&() { return m_value; }
     explicit operator bool() const { return m_value != 0; }
     UNDERLYING_TYPE get() const { return m_value; }
 
