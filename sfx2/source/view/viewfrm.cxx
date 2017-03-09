@@ -135,7 +135,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include "workwin.hxx"
 #include "helper.hxx"
 #include <sfx2/minfitem.hxx>
-#include "../appl/app.hrc"
+#include "app.hrc"
 #include "impviewframe.hxx"
 
 #define SfxViewFrame
