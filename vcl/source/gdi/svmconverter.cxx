@@ -855,19 +855,20 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 vcl::Font   aFont;
                 char        aName[ 32 ];
-                sal_Int32   nWidth, nHeight;
-                sal_Int16   nCharSet, nFamily, nPitch, nAlign, nWeight, nUnderline, nStrikeout;
-                sal_Int16   nCharOrient, nLineOrient;
-                bool    bItalic, bOutline, bShadow, bTransparent;
 
                 ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                 ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                 rIStm.ReadBytes( aName, 32 );
                 aFont.SetFamilyName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
-                rIStm.ReadInt32( nWidth ).ReadInt32( nHeight );
-                rIStm.ReadInt16( nCharOrient ).ReadInt16( nLineOrient );
-                rIStm.ReadInt16( nCharSet ).ReadInt16( nFamily ).ReadInt16( nPitch ).ReadInt16( nAlign ).ReadInt16( nWeight ).ReadInt16( nUnderline ).ReadInt16( nStrikeout );
-                rIStm.ReadCharAsBool( bItalic ).ReadCharAsBool( bOutline ).ReadCharAsBool( bShadow ).ReadCharAsBool( bTransparent );
+
+                sal_Int32 nWidth(0), nHeight(0);
+                rIStm.ReadInt32(nWidth).ReadInt32(nHeight);
+                sal_Int16 nCharOrient(0), nLineOrient(0);
+                rIStm.ReadInt16(nCharOrient).ReadInt16(nLineOrient);
+                sal_Int16 nCharSet(0), nFamily(0), nPitch(0), nAlign(0), nWeight(0), nUnderline(0), nStrikeout(0);
+                rIStm.ReadInt16(nCharSet).ReadInt16(nFamily).ReadInt16(nPitch).ReadInt16(nAlign).ReadInt16(nWeight).ReadInt16(nUnderline).ReadInt16(nStrikeout);
+                bool bItalic(false), bOutline(false), bShadow(false), bTransparent(false);
+                rIStm.ReadCharAsBool(bItalic).ReadCharAsBool(bOutline).ReadCharAsBool(bShadow).ReadCharAsBool(bTransparent);
 
                 aFont.SetFontSize( Size( nWidth, nHeight ) );
                 aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
