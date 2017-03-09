@@ -63,6 +63,11 @@ public:
      */
     void insertToDrawPage( SdrPage& rDrawPage );
 
+    /** Remove from draw page. The caption object is not owned anymore by the
+        draw page then.
+     */
+    void removeFromDrawPage( SdrPage& rDrawPage );
+
     /** Release all management of the SdrCaptionObj* in all instances of this
         list and dissolve. The SdrCaptionObj pointer returned is ready to be
         managed elsewhere.
