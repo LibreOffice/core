@@ -710,6 +710,20 @@ void ScCaptionPtr::insertToDrawPage( SdrPage& rDrawPage )
     mpHead->mbInDrawPage = true;
 }
 
+void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
+{
+    assert(mpHead && mpCaption);
+    SAL_WARN_IF(!mpHead->mbInDrawPage,"sc.core","ScCaptionPtr::removeFromDrawPage - not in draw page");
+    /* FIXME: that should assert, but currently fails in
+     * Test::testCopyToDocument() probably due to CopyStaticToDocument()
+     * lacking something. */
+    //assert(mpHead->mbInDrawPage);   // did we lose track anywhere?
+
+    SdrObject* pObj = rDrawPage.RemoveObject( mpCaption->GetOrdNum() );
+    assert(pObj == mpCaption); (void)pObj;
+    mpHead->mbInDrawPage = false;
+}
+
 SdrCaptionObj* ScCaptionPtr::release()
 {
     SdrCaptionObj* pTmp = mpCaption;
@@ -1081,10 +1095,10 @@ void ScPostIt::RemoveCaption()
             if( bRecording )
                 pDrawLayer->AddCalcUndo( new SdrUndoDelObj( *maNoteData.mxCaption.get() ) );
             // remove the object from the drawing page, delete if undo is disabled
-            SdrObject* pObj = pDrawPage->RemoveObject( maNoteData.mxCaption->GetOrdNum() );
+            maNoteData.mxCaption.removeFromDrawPage( *pDrawPage );
             if( !bRecording )
             {
-                maNoteData.mxCaption.release();
+                SdrObject* pObj = maNoteData.mxCaption.release();
                 SdrObject::Free( pObj );
             }
         }
