@@ -62,12 +62,14 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     OUString sVendorProperty("java.vendor");
     OUString sVersionProperty("java.version");
     OUString sHomeProperty("java.home");
+    OUString sArchProperty("os.arch");
     OUString sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;
     bool bHome = false;
     bool bAccess = false;
+    bool bArch = false;
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     for (it_prop i = props.begin(); i != props.end(); ++i)
@@ -103,6 +105,14 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
            bHome = true;
 #endif
         }
+        else if (!bArch && sArchProperty.equals(i->first))
+        {
+            if (!i->second.isEmpty())
+            {
+                m_sArch = i->second;
+                bArch = true;
+            }
+        }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
             if (!i->second.isEmpty())
@@ -115,7 +125,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         //must search through all properties.
 
     }
-    if (!bVersion || !bVendor || !bHome)
+    if (!bVersion || !bVendor || !bHome || !bArch)
         return false;
 
     // init m_sRuntimeLibrary
@@ -201,6 +211,18 @@ const OUString & VendorBase::getRuntimeLibrary() const
 {
     return m_sRuntimeLibrary;
 }
+
+bool VendorBase::isValidArch() const
+{
+#if defined _WIN32
+    return m_sArch == "x86";
+#elif defined _WIN64
+    return m_sArch == "amd64";
+#else
+    return true;
+#endif
+}
+
 bool VendorBase::supportsAccessibility() const
 {
     return m_bAccessibility;
