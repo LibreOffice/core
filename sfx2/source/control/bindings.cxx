@@ -64,8 +64,11 @@
 #include <sfx2/msgpool.hxx>
 
 #include <com/sun/star/frame/XModuleManager.hpp>
+
+#include <cstddef>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -132,9 +135,9 @@ public:
     SfxBindings*            pSubBindings;
     SfxBindings*            pSuperBindings;
     std::vector<SfxStateCache *> pCaches;   // One chache for each binding
-    sal_uInt16              nCachedFunc1;   // index for the last one called
-    sal_uInt16              nCachedFunc2;   // index for the second last called
-    sal_uInt16              nMsgPos;        // Message-Position relative the one to be updated
+    std::size_t             nCachedFunc1;   // index for the last one called
+    std::size_t             nCachedFunc2;   // index for the second last called
+    std::size_t             nMsgPos;        // Message-Position relative the one to be updated
     SfxPopupAction          ePopupAction;   // Checked in DeleteFloatinWindow()
     bool                    bContextChanged;
     bool                    bMsgDirty;      // Has a MessageServer been invalidated?
@@ -214,8 +217,8 @@ SfxBindings::~SfxBindings()
 void SfxBindings::DeleteControllers_Impl()
 {
     // in the first round delete SfxPopupWindows
-    sal_uInt16 nCount = pImpl->pCaches.size();
-    sal_uInt16 nCache;
+    std::size_t nCount = pImpl->pCaches.size();
+    std::size_t nCache;
     for ( nCache = 0; nCache < nCount; ++nCache )
     {
         // Remember were you are
@@ -223,7 +226,7 @@ void SfxBindings::DeleteControllers_Impl()
         sal_uInt16 nSlotId = pCache->GetId();
 
         // Re-align, because the cache may have been reduced
-        sal_uInt16 nNewCount = pImpl->pCaches.size();
+        std::size_t nNewCount = pImpl->pCaches.size();
         if ( nNewCount < nCount )
         {
             nCache = GetSlotPos(nSlotId);
@@ -253,7 +256,7 @@ void SfxBindings::DeleteControllers_Impl()
             pCache->GetInternalController()->UnBind();
 
         // Delete Cache
-        if( nCache-1 < (sal_uInt16) pImpl->pCaches.size() )
+        if( nCache-1 < pImpl->pCaches.size() )
             delete pImpl->pCaches[nCache-1];
         pImpl->pCaches.erase(pImpl->pCaches.begin()+ nCache - 1);
     }
@@ -544,15 +547,15 @@ SfxStateCache* SfxBindings::GetStateCache
 SfxStateCache* SfxBindings::GetStateCache
 (
     sal_uInt16   nId,   /*  Slot-Id, which SfxStatusCache is to be found */
-    sal_uInt16*  pPos   /*  NULL for instance the position from which the
+    std::size_t * pPos  /*  NULL for instance the position from which the
                            bindings are to be searched binary. Returns the
                            position back for where the nId was found,
                            or where it was inserted. */
 )
 {
     // is the specified function bound?
-    const sal_uInt16 nStart = ( pPos ? *pPos : 0 );
-    const sal_uInt16 nPos = GetSlotPos( nId, nStart );
+    const std::size_t nStart = ( pPos ? *pPos : 0 );
+    const std::size_t nPos = GetSlotPos( nId, nStart );
 
     if ( nPos < pImpl->pCaches.size() &&
          pImpl->pCaches[nPos]->GetId() == nId )
@@ -626,7 +629,7 @@ void SfxBindings::Invalidate
         return;
 
     // Search binary in always smaller areas
-    for ( sal_uInt16 n = GetSlotPos(*pIds);
+    for ( std::size_t n = GetSlotPos(*pIds);
           *pIds && n < pImpl->pCaches.size();
           n = GetSlotPos(*pIds, n) )
     {
@@ -783,7 +786,7 @@ bool SfxBindings::IsBound( sal_uInt16 nSlotId )
 }
 
 
-sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
+std::size_t SfxBindings::GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt )
 {
     // answer immediately if a function-seek comes repeated
     if ( pImpl->nCachedFunc1 < pImpl->pCaches.size() &&
@@ -795,9 +798,7 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
          pImpl->pCaches[pImpl->nCachedFunc2]->GetId() == nId )
     {
         // swap the caches
-        sal_uInt16 nTemp = pImpl->nCachedFunc1;
-        pImpl->nCachedFunc1 = pImpl->nCachedFunc2;
-        pImpl->nCachedFunc2 = nTemp;
+        std::swap(pImpl->nCachedFunc1, pImpl->nCachedFunc2);
         return pImpl->nCachedFunc1;
     }
 
@@ -806,13 +807,13 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
     {
         return 0;
     }
-    if ( (sal_uInt16) pImpl->pCaches.size() == (nStartSearchAt+1) )
+    if ( pImpl->pCaches.size() == (nStartSearchAt+1) )
     {
         return pImpl->pCaches[nStartSearchAt]->GetId() >= nId ? 0 : 1;
     }
-    sal_uInt16 nLow = nStartSearchAt;
-    sal_uInt16 nMid = 0;
-    sal_uInt16 nHigh = 0;
+    std::size_t nLow = nStartSearchAt;
+    std::size_t nMid = 0;
+    std::size_t nHigh = 0;
     bool bFound = false;
     nHigh = pImpl->pCaches.size() - 1;
     while ( !bFound && nLow <= nHigh )
@@ -833,13 +834,13 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
         else
             bFound = true;
     }
-    sal_uInt16 nPos = bFound ? nMid : nLow;
+    std::size_t nPos = bFound ? nMid : nLow;
     DBG_ASSERT( nPos <= pImpl->pCaches.size(), "" );
     DBG_ASSERT( nPos == pImpl->pCaches.size() ||
                 nId <= pImpl->pCaches[nPos]->GetId(), "" );
     DBG_ASSERT( nPos == nStartSearchAt ||
                 nId > pImpl->pCaches[nPos-1]->GetId(), "" );
-    DBG_ASSERT( ( (nPos+1) >= (sal_uInt16) pImpl->pCaches.size() ) ||
+    DBG_ASSERT( ( (nPos+1) >= pImpl->pCaches.size() ) ||
                 nId < pImpl->pCaches[nPos+1]->GetId(), "" );
     pImpl->nCachedFunc2 = pImpl->nCachedFunc1;
     pImpl->nCachedFunc1 = nPos;
@@ -864,7 +865,7 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
 
     // insert new cache if it does not already exist
     sal_uInt16 nId = rItem.GetId();
-    sal_uInt16 nPos = GetSlotPos(nId);
+    std::size_t nPos = GetSlotPos(nId);
     if ( nPos >= pImpl->pCaches.size() ||
          pImpl->pCaches[nPos]->GetId() != nId )
     {
@@ -899,7 +900,7 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 
     // find the bound function
     sal_uInt16 nId = rItem.GetId();
-    sal_uInt16 nPos = GetSlotPos(nId);
+    std::size_t nPos = GetSlotPos(nId);
     SfxStateCache* pCache = (nPos < pImpl->pCaches.size()) ? pImpl->pCaches[nPos] : nullptr;
     if ( pCache && pCache->GetId() == nId )
     {
@@ -1229,7 +1230,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     // Search through the bindings for slots served by the same function. This ,    // will only affect slots which are present in the found interface.
 
     // The position of the  Statecaches in StateCache-Array
-    sal_uInt16 nCachePos = pImpl->nMsgPos;
+    std::size_t nCachePos = pImpl->nMsgPos;
     const SfxSlot *pSibling = pRealSlot->GetNextSlot();
 
     // the Slots ODF a interfaces ar linked in a circle
@@ -1267,7 +1268,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
                 DBG_ASSERT(pSlaveSlot->GetLinkedSlot() == pSibling,
                     "Wrong Master/Slave relationship!");
 
-                sal_uInt16 nCurMsgPos = pImpl->nMsgPos;
+                std::size_t nCurMsgPos = pImpl->nMsgPos;
                 const SfxStateCache *pSlaveCache =
                     GetStateCache( pSlaveSlot->GetSlotId(), &nCurMsgPos );
 
@@ -1458,7 +1459,7 @@ bool SfxBindings::NextJob_Impl(Timer * pTimer)
     bool bPreEmptive = pTimer && !pSfxApp->Get_Impl()->nInReschedule;
     sal_uInt16 nLoops = 10;
     pImpl->bInNextJob = true;
-    const sal_uInt16 nCount = pImpl->pCaches.size();
+    const std::size_t nCount = pImpl->pCaches.size();
     while ( pImpl->nMsgPos < nCount )
     {
         // iterate through the bound functions

@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <memory>
 
 #include <o3tl/typed_flags_set.hxx>
@@ -104,14 +105,14 @@ private:
                                     const SfxSlot* &pRealSlot,
                                     const SfxSlotServer**,
                                     SfxFoundCacheArr_Impl& );
-    SAL_DLLPRIVATE sal_uInt16 GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt = 0 );
+    SAL_DLLPRIVATE std::size_t GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt = 0 );
     SAL_DLLPRIVATE void Update_Impl( SfxStateCache* pCache );
     SAL_DLLPRIVATE void UpdateControllers_Impl(
                             const SfxInterface* pIF,
                             const SfxFoundCache_Impl& rFound,
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );
-    SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos);
+    SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, std::size_t * pPos);
     DECL_DLLPRIVATE_LINK( NextJob, Timer *, void );
     SAL_DLLPRIVATE bool NextJob_Impl(Timer * pTimer);
 
