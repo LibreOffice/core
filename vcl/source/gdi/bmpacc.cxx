@@ -56,6 +56,7 @@ void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
     {
         if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetImpBitmap() )
         {
+            xImpBmp.reset();
             rBitmap.ImplMakeUnique();
             xImpBmp = rBitmap.ImplGetImpBitmap();
         }
