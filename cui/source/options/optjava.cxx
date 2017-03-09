@@ -1148,5 +1148,3 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-
