@@ -3437,11 +3437,11 @@ if test "$_os" = "WINNT"; then
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
     AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
-    AC_MSG_CHECKING([Is Visual C++ Express])
+    AC_MSG_CHECKING([whether it is Visual C++ Express])
     if test "$vcexpress" = "Express" ; then
-        AC_MSG_RESULT([Yes])
+        AC_MSG_RESULT([yes])
     else
-        AC_MSG_RESULT([No])
+        AC_MSG_RESULT([no])
     fi
 
     UCRTSDKDIR=
