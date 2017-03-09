@@ -738,22 +738,29 @@ void Test::testCopyToDocument()
 
     // Copy statically to another document.
 
-    ScDocument aDestDoc(SCDOCMODE_DOCUMENT);
-    aDestDoc.InsertTab(0, "src");
-    m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, &aDestDoc); // Copy A2:A4
-    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0, &aDestDoc); // Copy A1
-    m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, &aDestDoc); // Copy A5:A8
+    ScDocShellRef xDocSh2;
+    getNewDocShell(xDocSh2);
+    ScDocument* pDestDoc = &xDocSh2->GetDocument();
+    pDestDoc->InsertTab(0, "src");
+    pDestDoc->InitDrawLayer(xDocSh2.get());     // for note caption objects
 
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), aDestDoc.GetString(0,0,0));
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,1,0), aDestDoc.GetString(0,1,0));
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,2,0), aDestDoc.GetString(0,2,0));
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,3,0), aDestDoc.GetString(0,3,0));
-    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,4,0), aDestDoc.GetString(0,4,0));
+    m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, pDestDoc); // Copy A2:A4
+    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0,     pDestDoc); // Copy A1
+    m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, pDestDoc); // Copy A5:A8
+
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), pDestDoc->GetString(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,1,0), pDestDoc->GetString(0,1,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,2,0), pDestDoc->GetString(0,2,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,3,0), pDestDoc->GetString(0,3,0));
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,4,0), pDestDoc->GetString(0,4,0));
 
     // verify note
-    CPPUNIT_ASSERT_MESSAGE("There should be a note in A1 destDocument", aDestDoc.HasNote(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note in A1 destDocument", pDestDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The notes content should be the same on both documents",
-            m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(), aDestDoc.GetNote(ScAddress(0, 0, 0))->GetText());
+            m_pDoc->GetNote(ScAddress(0, 0, 0))->GetText(), pDestDoc->GetNote(ScAddress(0, 0, 0))->GetText());
+
+    pDestDoc->DeleteTab(0);
+    closeDocShell(xDocSh2);
 
     m_pDoc->DeleteTab(0);
 }
@@ -3041,6 +3048,10 @@ void Test::testCopyPaste()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
     //test copy&paste + ScUndoPaste
     //copy local and global range names in formulas
     //string cells and value cells
@@ -3255,6 +3266,9 @@ void Test::testCopyPasteTranspose()
 {
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     m_pDoc->SetValue(0, 0, 0, 1);
     m_pDoc->SetString(1, 0, 0, "=A1+1");
@@ -3843,6 +3857,9 @@ void Test::testUndoCut()
 void Test::testMoveBlock()
 {
     m_pDoc->InsertTab(0, "SheetNotes");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     m_pDoc->SetValue(0, 0, 0, 1);
     m_pDoc->SetString(1, 0, 0, "=A1+1");
@@ -4835,6 +4852,9 @@ void Test::testShiftCells()
 {
     m_pDoc->InsertTab(0, "foo");
 
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
     OUString aTestVal("Some Text");
 
     // Text into cell E5.
@@ -4871,6 +4891,9 @@ void Test::testShiftCells()
 void Test::testNoteBasic()
 {
     m_pDoc->InsertTab(0, "PostIts");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     CPPUNIT_ASSERT(!m_pDoc->HasNotes());
 

@@ -31,6 +31,9 @@ void Test::testSort()
 {
     m_pDoc->InsertTab(0, "test1");
 
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
     ScRange aDataRange;
     ScAddress aPos(0,0,0);
     {
