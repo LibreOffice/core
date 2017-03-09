@@ -31,6 +31,7 @@ class EditTextObject;
 class OutlinerParaObject;
 class SdrCaptionObj;
 class SdrPage;
+
 class SfxItemSet;
 class ScDocument;
 class Rectangle;
@@ -58,6 +59,10 @@ public:
     // Does not default to nullptr to make it visually obvious where such is used.
     void reset( SdrCaptionObj* p );
 
+    /** Insert to draw page. The caption object is owned by the draw page then.
+     */
+    void insertToDrawPage( SdrPage& rDrawPage );
+
     /** Release all management of the SdrCaptionObj* in all instances of this
         list and dissolve. The SdrCaptionObj pointer returned is ready to be
         managed elsewhere.
@@ -77,8 +82,12 @@ private:
 
     struct Head
     {
-        ScCaptionPtr*       mpFirst;    ///< first in list
-        oslInterlockedCount mnRefs;     ///< use count
+        ScCaptionPtr*       mpFirst;        ///< first in list
+        oslInterlockedCount mnRefs;         ///< use count
+        bool                mbInDrawPage;   ///< caption object is owned by draw page
+
+        Head() = delete;
+        explicit Head( ScCaptionPtr* );
     };
 
     Head*                 mpHead;       ///< points to the "master" entry
