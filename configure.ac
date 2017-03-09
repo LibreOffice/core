@@ -3225,7 +3225,7 @@ AC_SUBST(CROSS_COMPILING)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
+    AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
     bsymbolic_functions_ldflags_save=$LDFLAGS
     LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([
@@ -5007,7 +5007,7 @@ fi
 
 HAVE_LD_HASH_STYLE=FALSE
 WITH_LINKER_HASH_STYLE=
-AC_MSG_CHECKING( for --hash-style gcc linker support )
+AC_MSG_CHECKING([for --hash-style gcc linker support])
 if test "$GCC" = "yes"; then
     if test -z "$with_linker_hash_style" -o "$with_linker_hash_style" = "yes"; then
         hash_styles="gnu sysv"
