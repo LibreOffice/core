@@ -63,7 +63,10 @@ void VBATest::testMiscVBAFunctions()
         "cbool.vb",
         "cdate.vb",
         "cdbl.vb",
+<<<<<<< 609b13037036dfbca952a018403950d7046a3027
         "choose.vb",
+        "cos.vb",
+>>>>>>> add VBA COS function test case
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
