@@ -1,4 +1,9 @@
-#!/bin/bash -eu
+#!/bin/bash -e
+
+if [ -z "${OUT}" ] || [ -z "${SRC}" ] || [ -z "${WORK}" ]; then
+    echo "OUT, SRC or WORK not set - script expects to be called inside oss-fuzz build env"
+    exit 1
+fi
 
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
