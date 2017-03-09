@@ -484,13 +484,13 @@ private:
     bool                mbFinalTrackFormulas    : 1;
 
 public:
-    bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
-    void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
-    bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
-    void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
-    SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
-    SC_DLLPUBLIC sal_uLong          GetFormulaGroupCount() const;       // all cells
-    sal_uLong           GetCodeCount() const;       // RPN-Code in formulas
+    bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
+    void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
+    bool                     IsUsingEmbededFonts() { return mbUseEmbedFonts; }
+    void                     SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
+    SC_DLLPUBLIC sal_uLong   GetCellCount() const;       // all cells
+    SC_DLLPUBLIC sal_uLong   GetFormulaGroupCount() const;       // all cells
+    sal_uLong                GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16, Color* );
                                                                 // number formatter
 public:
@@ -498,55 +498,55 @@ public:
                                 SfxObjectShell* pDocShell = nullptr );
     SC_DLLPUBLIC                ~ScDocument();
 
-    void            SetName( const OUString& r ) { aDocName = r; }
+    void              SetName( const OUString& r ) { aDocName = r; }
     const OUString&   GetCodeName() const { return aDocCodeName; }
-    void                SetCodeName( const OUString& r ) { aDocCodeName = r; }
-    const OUString& GetFileURL() const { return maFileURL; }
+    void              SetCodeName( const OUString& r ) { aDocCodeName = r; }
+    const OUString&   GetFileURL() const { return maFileURL; }
 
-    void            GetDocStat( ScDocStat& rDocStat );
+    void              GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
 
-    SC_DLLPUBLIC sfx2::LinkManager* GetLinkManager();
+    SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
 
-    sc::DocumentLinkManager& GetDocLinkManager();
+    sc::DocumentLinkManager&       GetDocLinkManager();
     const sc::DocumentLinkManager& GetDocLinkManager() const;
 
-    SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;
+    SC_DLLPUBLIC const ScDocOptions&    GetDocOptions() const;
     SC_DLLPUBLIC void                   SetDocOptions( const ScDocOptions& rOpt );
     SC_DLLPUBLIC const ScViewOptions&   GetViewOptions() const;
     SC_DLLPUBLIC void                   SetViewOptions( const ScViewOptions& rOpt );
-    void                    SetPrintOptions();
+    void                                SetPrintOptions();
 
-    ScExtDocOptions*        GetExtDocOptions()  { return pExtDocOptions; }
-    SC_DLLPUBLIC void                   SetExtDocOptions( ScExtDocOptions* pNewOptions );
+    ScExtDocOptions*            GetExtDocOptions()  { return pExtDocOptions; }
+    SC_DLLPUBLIC void           SetExtDocOptions( ScExtDocOptions* pNewOptions );
 
-    ScClipOptions*          GetClipOptions()    { return mpClipOptions.get(); }
-    void                    SetClipOptions(const ScClipOptions& rClipOptions);
+    ScClipOptions*              GetClipOptions()    { return mpClipOptions.get(); }
+    void                        SetClipOptions(const ScClipOptions& rClipOptions);
 
-    SC_DLLPUBLIC void       GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
-    void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
+    SC_DLLPUBLIC void           GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
+    void                        SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
 
     void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
 
-    void            Clear( bool bFromDestructor = false );
+    void                        Clear( bool bFromDestructor = false );
 
-    ScFieldEditEngine*  CreateFieldEditEngine();
-    void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
+    ScFieldEditEngine*          CreateFieldEditEngine();
+    void                        DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
     /**
      * Get all range names that are local to each table.  It only returns
      * non-empty range name set.
      */
-    SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    SC_DLLPUBLIC void SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
-    SC_DLLPUBLIC void GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
-    SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;
-    SC_DLLPUBLIC ScRangeName* GetRangeName() const;
-    void SetRangeName(SCTAB nTab, ScRangeName* pNew);
-    void SetRangeName( ScRangeName* pNewRangeName );
+    SC_DLLPUBLIC void          GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
+    SC_DLLPUBLIC void          SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
+    SC_DLLPUBLIC void          GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
+    SC_DLLPUBLIC ScRangeName*  GetRangeName(SCTAB nTab) const;
+    SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
+    void                       SetRangeName(SCTAB nTab, ScRangeName* pNew);
+    void                       SetRangeName( ScRangeName* pNewRangeName );
 
     /** Find a named expression / range name in either global or a local scope.
         @param  nTab
@@ -685,59 +685,59 @@ public:
      */
     bool InsertNewRangeName( SCTAB nTab, const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
 
-    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
+    SCTAB GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
 
     ScRangePairList*    GetColNameRanges() { return xColNameRanges.get(); }
     ScRangePairList*    GetRowNameRanges() { return xRowNameRanges.get(); }
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
-    SC_DLLPUBLIC ScDBCollection*    GetDBCollection() const { return pDBCollection;}
-    void            SetDBCollection( ScDBCollection* pNewDBCollection,
-                                        bool bRemoveAutoFilter = false );
-    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
-    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
-    const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-    ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-    void RefreshDirtyTableColumnNames();
+    SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection;}
+    void                         SetDBCollection( ScDBCollection* pNewDBCollection,
+                                                  bool bRemoveAutoFilter = false );
+    const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
+    const ScDBData*              GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    ScDBData*                    GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void                         RefreshDirtyTableColumnNames();
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const;
 
-    SC_DLLPUBLIC bool HasPivotTable() const;
+    SC_DLLPUBLIC bool                  HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
     SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
-    SC_DLLPUBLIC ScDPObject* GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-    ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
+    SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    ScDPObject*                        GetDPAtBlock( const ScRange& rBlock ) const;
 
-    SC_DLLPUBLIC ScChartCollection* GetChartCollection() const { return pChartCollection;}
+    SC_DLLPUBLIC ScChartCollection*    GetChartCollection() const { return pChartCollection;}
 
-    void                StopTemporaryChartLock();
+    void                               StopTemporaryChartLock();
 
-    void            EnsureGraphicNames();
+    void                               EnsureGraphicNames();
 
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName );
 
     css::uno::Reference< css::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
 
-    SC_DLLPUBLIC void            GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
-    void            SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
+    SC_DLLPUBLIC void GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
+    void              SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
 
-    void            UpdateChartArea( const OUString& rChartName, const ScRange& rNewArea,
-                                        bool bColHeaders, bool bRowHeaders, bool bAdd );
-    void            UpdateChartArea( const OUString& rChartName,
-                                    const ScRangeListRef& rNewList,
-                                    bool bColHeaders, bool bRowHeaders, bool bAdd );
-    void            GetOldChartParameters( const OUString& rName,
-                                    ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
+    void              UpdateChartArea( const OUString& rChartName, const ScRange& rNewArea,
+                                       bool bColHeaders, bool bRowHeaders, bool bAdd );
+    void              UpdateChartArea( const OUString& rChartName,
+                                       const ScRangeListRef& rNewList,
+                                       bool bColHeaders, bool bRowHeaders, bool bAdd );
+    void              GetOldChartParameters( const OUString& rName,
+                                             ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
     css::uno::Reference<
             css::embed::XEmbeddedObject >
                     FindOleObjectByName( const OUString& rName );
 
-    SC_DLLPUBLIC void           MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
+    SC_DLLPUBLIC void MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
 
-    SCTAB           GetVisibleTab() const       { return nVisibleTab; }
-    SC_DLLPUBLIC void           SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
+    SCTAB             GetVisibleTab() const       { return nVisibleTab; }
+    SC_DLLPUBLIC void SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
 
     SC_DLLPUBLIC bool HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC bool GetHashCode( SCTAB nTab, sal_Int64& rHashCode) const;
@@ -748,41 +748,41 @@ public:
 
     SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 
-    OUString   GetCopyTabName(SCTAB nTab) const;
+    OUString GetCopyTabName(SCTAB nTab) const;
 
-    SC_DLLPUBLIC void SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
+    SC_DLLPUBLIC void      SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);
 
     /** One document global anonymous database range for temporary operations,
         used if the corresponding sheet-local anonymous database range is
         already used with AutoFilter and range differs. Not stored in document
         files. */
-    SC_DLLPUBLIC void SetAnonymousDBData(ScDBData* pDBData);
-    SC_DLLPUBLIC ScDBData* GetAnonymousDBData();
+    SC_DLLPUBLIC void             SetAnonymousDBData(ScDBData* pDBData);
+    SC_DLLPUBLIC ScDBData*        GetAnonymousDBData();
 
-    SC_DLLPUBLIC SCTAB GetTableCount() const;
-    SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
+    SC_DLLPUBLIC SCTAB            GetTableCount() const;
+    SvNumberFormatterIndexTable*  GetFormatExchangeList() const { return pFormatExchangeList; }
 
-    SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;
-    SC_DLLPUBLIC void           SetDocProtection(const ScDocProtection* pProtect);
-    SC_DLLPUBLIC bool           IsDocProtected() const;
-    bool            IsDocEditable() const;
-    SC_DLLPUBLIC bool           IsTabProtected( SCTAB nTab ) const;
+    SC_DLLPUBLIC ScDocProtection*      GetDocProtection() const;
+    SC_DLLPUBLIC void                  SetDocProtection(const ScDocProtection* pProtect);
+    SC_DLLPUBLIC bool                  IsDocProtected() const;
+    bool                               IsDocEditable() const;
+    SC_DLLPUBLIC bool                  IsTabProtected( SCTAB nTab ) const;
     SC_DLLPUBLIC    ScTableProtection* GetTabProtection( SCTAB nTab ) const;
-    SC_DLLPUBLIC void SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect);
-    void            CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest);
+    SC_DLLPUBLIC void                  SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect);
+    void                               CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest);
 
     void            LockTable(SCTAB nTab);
     void            UnlockTable(SCTAB nTab);
 
     bool            IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow,
-                                        bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
+                                     SCCOL nEndCol, SCROW nEndRow,
+                                     bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
     bool            IsSelectionEditable( const ScMarkData& rMark,
-                                        bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
+                                         bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
     bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            const ScMarkData& rMark ) const;
+                                                    SCCOL nEndCol, SCROW nEndRow,
+                                                    const ScMarkData& rMark ) const;
 
     SC_DLLPUBLIC bool GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
@@ -803,31 +803,31 @@ public:
     void SetTabNameOnLoad(SCTAB nTab, const OUString& rName);
     void InvalidateStreamOnSave();
 
-    SC_DLLPUBLIC bool InsertTab(
-        SCTAB nPos, const OUString& rName, bool bExternalDocument = false, bool bUndoDeleteTab = false );
+    SC_DLLPUBLIC bool InsertTab( SCTAB nPos, const OUString& rName,
+                                 bool bExternalDocument = false, bool bUndoDeleteTab = false );
 
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                                             bool bNamesValid = false );
-    SC_DLLPUBLIC bool DeleteTabs( SCTAB nTab, SCTAB nSheets );
-    SC_DLLPUBLIC bool DeleteTab( SCTAB nTab );
+    SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets );
+    SC_DLLPUBLIC bool           DeleteTab( SCTAB nTab );
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
-                                bool bUpdateRef = true,
-                                bool bExternalDocument = false );
+                                           bool bUpdateRef = true,
+                                           bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
     bool                        CopyTab( SCTAB nOldPos, SCTAB nNewPos,
-                                const ScMarkData* pOnlyMarked = nullptr );
-    SC_DLLPUBLIC sal_uLong          TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
-                                    bool bInsertNew = true,
-                                    bool bResultsOnly = false );
+                                         const ScMarkData* pOnlyMarked = nullptr );
+    SC_DLLPUBLIC sal_uLong      TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
+                                            bool bInsertNew = true,
+                                            bool bResultsOnly = false );
     SC_DLLPUBLIC void           TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
     SC_DLLPUBLIC void           SetVisible( SCTAB nTab, bool bVisible );
     SC_DLLPUBLIC bool           IsVisible( SCTAB nTab ) const;
-    bool            IsStreamValid( SCTAB nTab ) const;
-    void            SetStreamValid( SCTAB nTab, bool bSet, bool bIgnoreLock = false );
-    void            LockStreamValid( bool bLock );
-    bool            IsStreamValidLocked() const                         { return mbStreamValidLocked; }
-    bool            IsPendingRowHeights( SCTAB nTab ) const;
-    void            SetPendingRowHeights( SCTAB nTab, bool bSet );
+    bool                        IsStreamValid( SCTAB nTab ) const;
+    void                        SetStreamValid( SCTAB nTab, bool bSet, bool bIgnoreLock = false );
+    void                        LockStreamValid( bool bLock );
+    bool                        IsStreamValidLocked() const { return mbStreamValidLocked; }
+    bool                        IsPendingRowHeights( SCTAB nTab ) const;
+    void                        SetPendingRowHeights( SCTAB nTab, bool bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, bool bRTL );
     SC_DLLPUBLIC bool           IsLayoutRTL( SCTAB nTab ) const;
     SC_DLLPUBLIC bool           IsNegativePage( SCTAB nTab ) const;
@@ -836,37 +836,37 @@ public:
     SC_DLLPUBLIC void           GetScenarioData(SCTAB nTab, OUString& rComment,
                                                 Color& rColor, ScScenarioFlags &rFlags) const;
     SC_DLLPUBLIC void           SetScenarioData(SCTAB nTab, const OUString& rComment,
-                                          const Color& rColor, ScScenarioFlags nFlags);
-    SC_DLLPUBLIC Color GetTabBgColor( SCTAB nTab ) const;
-    SC_DLLPUBLIC void SetTabBgColor( SCTAB nTab, const Color& rColor );
-    SC_DLLPUBLIC bool IsDefaultTabBgColor( SCTAB nTab ) const;
+                                                const Color& rColor, ScScenarioFlags nFlags);
+    SC_DLLPUBLIC Color          GetTabBgColor( SCTAB nTab ) const;
+    SC_DLLPUBLIC void           SetTabBgColor( SCTAB nTab, const Color& rColor );
+    SC_DLLPUBLIC bool           IsDefaultTabBgColor( SCTAB nTab ) const;
     void                        GetScenarioFlags(SCTAB nTab, ScScenarioFlags &rFlags) const;
     SC_DLLPUBLIC bool           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, bool bActive );      // only for Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
-    SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const { return eGrammar;}
-    SC_DLLPUBLIC void SetGrammar( formula::FormulaGrammar::Grammar eGram );
-    SC_DLLPUBLIC ScLinkMode GetLinkMode( SCTAB nTab ) const;
-    bool             IsLinked( SCTAB nTab ) const;
-    SC_DLLPUBLIC const OUString  GetLinkDoc( SCTAB nTab ) const;
-    const OUString   GetLinkFlt( SCTAB nTab ) const;
-    const OUString   GetLinkOpt( SCTAB nTab ) const;
-    SC_DLLPUBLIC const OUString  GetLinkTab( SCTAB nTab ) const;
-    sal_uLong       GetLinkRefreshDelay( SCTAB nTab ) const;
-    void            SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
-                            const OUString& rFilter, const OUString& rOptions,
-                            const OUString& rTabName, sal_uLong nRefreshDelay );
-    bool            HasLink( const OUString& rDoc,
-                            const OUString& rFilter, const OUString& rOptions ) const;
-    SC_DLLPUBLIC bool LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,
-                                    const OUString& aFileName,
-                                    const OUString& aTabName );
+    SC_DLLPUBLIC formula::FormulaGrammar::Grammar           GetGrammar() const { return eGrammar;}
+    SC_DLLPUBLIC void                                       SetGrammar( formula::FormulaGrammar::Grammar eGram );
+    SC_DLLPUBLIC ScLinkMode                                 GetLinkMode( SCTAB nTab ) const;
+    bool                                                    IsLinked( SCTAB nTab ) const;
+    SC_DLLPUBLIC const OUString                             GetLinkDoc( SCTAB nTab ) const;
+    const OUString                                          GetLinkFlt( SCTAB nTab ) const;
+    const OUString                                          GetLinkOpt( SCTAB nTab ) const;
+    SC_DLLPUBLIC const OUString                             GetLinkTab( SCTAB nTab ) const;
+    sal_uLong                                               GetLinkRefreshDelay( SCTAB nTab ) const;
+    void                                                    SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
+                                                                     const OUString& rFilter, const OUString& rOptions,
+                                                                     const OUString& rTabName, sal_uLong nRefreshDelay );
+    bool                                                    HasLink( const OUString& rDoc,
+                                                                     const OUString& rFilter, const OUString& rOptions ) const;
+    SC_DLLPUBLIC bool                                       LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,
+                                                                             const OUString& aFileName,
+                                                                             const OUString& aTabName );
 
-    bool            HasExternalRefManager() const { return pExternalRefMgr.get(); }
+    bool                               HasExternalRefManager() const { return pExternalRefMgr.get(); }
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
-    bool            IsInExternalReferenceMarking() const;
-    void            MarkUsedExternalReferences();
-    bool            MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
+    bool                               IsInExternalReferenceMarking() const;
+    void                               MarkUsedExternalReferences();
+    bool                               MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
 
     /** Returns the pool containing external formula parsers. Creates the pool
         on first call. */
@@ -881,13 +881,13 @@ public:
     void            DecInDdeLinkUpdate() { if ( nInDdeLinkUpdate ) --nInDdeLinkUpdate; }
     bool            IsInDdeLinkUpdate() const   { return nInDdeLinkUpdate != 0; }
 
-    SC_DLLPUBLIC void           CopyDdeLinks( ScDocument* pDestDoc ) const;
+    SC_DLLPUBLIC void CopyDdeLinks( ScDocument* pDestDoc ) const;
 
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
         @return  true = DDE link found, rnDdePos valid. */
-    SC_DLLPUBLIC bool            FindDdeLink( const OUString& rAppl, const OUString& rTopic,
-            const OUString& rItem, sal_uInt8 nMode, size_t& rnDdePos );
+    SC_DLLPUBLIC bool FindDdeLink( const OUString& rAppl, const OUString& rTopic,
+                                   const OUString& rItem, sal_uInt8 nMode, size_t& rnDdePos );
 
     /** Returns the connection data of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
@@ -916,12 +916,12 @@ public:
         @return  true = DDE link found and matrix set. */
     bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
-    SfxBindings*    GetViewBindings();
-    SfxObjectShell* GetDocumentShell() const    { return pShell; }
-    SC_DLLPUBLIC ScDrawLayer* GetDrawLayer() { return pDrawLayer;  }
+    SfxBindings*                    GetViewBindings();
+    SfxObjectShell*                 GetDocumentShell() const    { return pShell; }
+    SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return pDrawLayer;  }
     SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return pDrawLayer;  }
-    SfxBroadcaster* GetDrawBroadcaster();       // to avoid header
-    void            BeginDrawUndo();
+    SfxBroadcaster*                 GetDrawBroadcaster();       // to avoid header
+    void                            BeginDrawUndo();
 
     void            BeginUnoRefUndo();
     bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != nullptr ); }
@@ -931,14 +931,14 @@ public:
 
     static bool IsChart( const SdrObject* pObject );
 
-    SC_DLLPUBLIC void           UpdateAllCharts();
-    void            UpdateChartRef( UpdateRefMode eUpdateRefMode,
+    SC_DLLPUBLIC void UpdateAllCharts();
+    void              UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
                     //! only assigns the new RangeList, no ChartListener or the like
     void            SetChartRangeList( const OUString& rChartName,
-                        const ScRangeListRef& rNewRangeListRef );
+                                       const ScRangeListRef& rNewRangeListRef );
 
     void            StartAnimations( SCTAB nTab, vcl::Window* pWin );
 
@@ -946,9 +946,9 @@ public:
     bool            HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const;
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
-    void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
-    bool            HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;
-    bool            HasAnySheetEventScript( ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
+    void                 SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
+    bool                 HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;
+    bool                 HasAnySheetEventScript( ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
     bool            HasAnyCalcNotification() const;
     bool            HasCalcNotification( SCTAB nTab ) const;
@@ -956,10 +956,10 @@ public:
     void            ResetCalcNotifications();
 
     SC_DLLPUBLIC ScOutlineTable*    GetOutlineTable( SCTAB nTab, bool bCreate = false );
-    bool            SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline );
+    bool                            SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline );
 
-    void            DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
+    void                            DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
+                                                   SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
 
     bool            DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     void            RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
@@ -969,10 +969,10 @@ public:
     SC_DLLPUBLIC void EnsureTable( SCTAB nTab );
 
                     //  return TRUE = number format is set
-    SC_DLLPUBLIC bool SetString(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-        ScSetStringParam* pParam = nullptr );
-    SC_DLLPUBLIC bool SetString( const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam = nullptr );
+    SC_DLLPUBLIC bool SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
+                                 ScSetStringParam* pParam = nullptr );
+    SC_DLLPUBLIC bool SetString( const ScAddress& rPos, const OUString& rString,
+                                 ScSetStringParam* pParam = nullptr );
 
     /**
      * This method manages the lifecycle of the passed edit text object. When
@@ -983,12 +983,9 @@ public:
      * SfxItemPool instance returned from ScDocument::GetEditPool()</i>.
      * This is very important.</p>
      */
-    SC_DLLPUBLIC bool SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
-
-    void SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
-
-    SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, const OUString& rStr );
-
+    SC_DLLPUBLIC bool  SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
+    void               SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
+    SC_DLLPUBLIC void  SetEditText( const ScAddress& rPos, const OUString& rStr );
     SC_DLLPUBLIC SCROW GetFirstEditTextRow( const ScRange& rRange ) const;
 
     /**
@@ -996,22 +993,14 @@ public:
      * simple text.
      */
     SC_DLLPUBLIC void SetTextCell( const ScAddress& rPos, const OUString& rStr );
-
-    void SetEmptyCell( const ScAddress& rPos );
-
+    void              SetEmptyCell( const ScAddress& rPos );
     SC_DLLPUBLIC void SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
-
-    void SetValues( const ScAddress& rPos, const std::vector<double>& rVals );
-
-    void SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const FormulaError nError);
-
-    SC_DLLPUBLIC void SetFormula(
-        const ScAddress& rPos, const ScTokenArray& rArray );
-
-    SC_DLLPUBLIC void SetFormula(
-        const ScAddress& rPos, const OUString& rFormula,
-        formula::FormulaGrammar::Grammar eGram );
+    void              SetValues( const ScAddress& rPos, const std::vector<double>& rVals );
+    void              SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const FormulaError nError);
+    SC_DLLPUBLIC void SetFormula( const ScAddress& rPos, const ScTokenArray& rArray );
+    SC_DLLPUBLIC void SetFormula( const ScAddress& rPos, const OUString& rFormula,
+                                  formula::FormulaGrammar::Grammar eGram );
 
     /**
      * Set formula cell, and transfer its ownership to the document. This call
@@ -1021,15 +1010,13 @@ public:
      * @return pCell if it was successfully inserted, NULL otherwise. pCell
      *         is deleted automatically on failure to insert.
      */
-    SC_DLLPUBLIC ScFormulaCell* SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
-
-    bool SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells );
+    SC_DLLPUBLIC ScFormulaCell*  SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
+    bool                         SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells );
 
     /**
      * Check if there is at least one formula cell in specified range.
      */
-    bool HasFormulaCell( const ScRange& rRange ) const;
-
+    bool              HasFormulaCell( const ScRange& rRange ) const;
     SC_DLLPUBLIC void InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,
@@ -1037,8 +1024,8 @@ public:
                                         const ScTokenArray* p = nullptr,
                                         const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC void InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
-                                  SCCOL nCol1, SCROW nRow1,
-                                  SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
+                                    SCCOL nCol1, SCROW nRow1,
+                                    SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
     SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC OUString GetString( const ScAddress& rPos ) const;
@@ -1053,39 +1040,39 @@ public:
      */
     double* GetValueCell( const ScAddress& rPos );
 
-    SC_DLLPUBLIC svl::SharedStringPool& GetSharedStringPool();
-    const svl::SharedStringPool& GetSharedStringPool() const;
+    SC_DLLPUBLIC svl::SharedStringPool&       GetSharedStringPool();
+    const svl::SharedStringPool&              GetSharedStringPool() const;
 
-    svl::SharedString GetSharedString( const ScAddress& rPos ) const;
+    svl::SharedString                         GetSharedString( const ScAddress& rPos ) const;
 
     std::shared_ptr<sc::FormulaGroupContext>& GetFormulaGroupContext();
 
-    SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
-    FormulaError GetStringForFormula( const ScAddress& rPos, OUString& rString );
-    SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
-    SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
-    void RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
-    SC_DLLPUBLIC double RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const;
-    SC_DLLPUBLIC void GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                     sal_uInt32& rFormat ) const;
-    sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;
-    SC_DLLPUBLIC sal_uInt32 GetNumberFormat( const ScAddress& ) const;
-    void SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
+    SC_DLLPUBLIC void                         GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
+    FormulaError                              GetStringForFormula( const ScAddress& rPos, OUString& rString );
+    SC_DLLPUBLIC double                       GetValue( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC double                       GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC void                         GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
+    SC_DLLPUBLIC const EditTextObject*        GetEditText( const ScAddress& rPos ) const;
+    void                                      RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC double                       RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const;
+    SC_DLLPUBLIC void                         GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                                               sal_uInt32& rFormat ) const;
+    sal_uInt32                                GetNumberFormat( const ScRange& rRange ) const;
+    SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScAddress& ) const;
+    void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
-    void GetNumberFormatInfo( short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
-    SC_DLLPUBLIC const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC ScFormulaCell* GetFormulaCell( const ScAddress& rPos );
-    SC_DLLPUBLIC void           GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
-    SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
-    SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
+    void                                      GetNumberFormatInfo( short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC ScFormulaCell*               GetFormulaCell( const ScAddress& rPos );
+    SC_DLLPUBLIC void                         GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
+    SC_DLLPUBLIC void                         GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
+    SC_DLLPUBLIC CellType                     GetCellType( const ScAddress& rPos ) const;
 
-    SC_DLLPUBLIC bool           HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    SC_DLLPUBLIC bool           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC bool           HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC bool HasValueData( const ScAddress& rPos ) const;
-    bool            HasStringCells( const ScRange& rRange ) const;
+    SC_DLLPUBLIC bool                         HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    SC_DLLPUBLIC bool                         HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC bool                         HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC bool                         HasValueData( const ScAddress& rPos ) const;
+    bool                                      HasStringCells( const ScRange& rRange ) const;
 
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1095,66 +1082,66 @@ public:
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
     void                         SetNote(const ScAddress& rPos, ScPostIt* pNote);
     void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote);
-    SC_DLLPUBLIC bool HasNote(const ScAddress& rPos) const;
-    bool HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-    SC_DLLPUBLIC bool HasColNotes(SCCOL nCol, SCTAB nTab) const;
-    SC_DLLPUBLIC bool HasTabNotes(SCTAB nTab) const;
-    bool HasNotes() const;
+    SC_DLLPUBLIC bool            HasNote(const ScAddress& rPos) const;
+    bool                         HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab) const;
+    SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab) const;
+    bool                         HasNotes() const;
     SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
-    size_t GetNoteCount( SCTAB nTab, SCCOL nCol ) const;
+    size_t                       GetNoteCount( SCTAB nTab, SCCOL nCol ) const;
 
     /**
      * Ensure that all note objects have an associated sdr object.  The export
      * code uses sdr objects to export note data.
      */
-    void CreateAllNoteCaptions();
-    void ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
+    void      CreateAllNoteCaptions();
+    void      ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
 
     ScAddress GetNotePosition( size_t nIndex ) const;
     ScAddress GetNotePosition( size_t nIndex, SCTAB nTab ) const;
-    SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
+    SCROW     GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
 
     SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
-    void GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
-    bool ContainsNotesInRange( const ScRangeList& rRange ) const;
+    void              GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
+    bool              ContainsNotesInRange( const ScRangeList& rRange ) const;
 
-    SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
+    SC_DLLPUBLIC void SetDrawPageSize(SCTAB nTab);
 
-    bool IsMerged( const ScAddress& rPos ) const;
+    bool              IsMerged( const ScAddress& rPos ) const;
 
-    void            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
-                                bool bRefresh = false );
-    SC_DLLPUBLIC bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
-                                bool bRefresh = false );
-    bool            ExtendMerge( ScRange& rRange, bool bRefresh = false );
-    void            ExtendTotalMerge( ScRange& rRange ) const;
-    SC_DLLPUBLIC void           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC void           ExtendOverlapped( ScRange& rRange ) const;
+    void              ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
+                                      SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
+                                      bool bRefresh = false );
+    SC_DLLPUBLIC bool ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+                                   SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
+                                   bool bRefresh = false );
+    bool              ExtendMerge( ScRange& rRange, bool bRefresh = false );
+    void              ExtendTotalMerge( ScRange& rRange ) const;
+    SC_DLLPUBLIC void ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
+                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC void ExtendOverlapped( ScRange& rRange ) const;
 
-    bool            RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
+    bool              RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
+                                         SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
 
-    SC_DLLPUBLIC void           DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow );
-    SC_DLLPUBLIC void           DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+    SC_DLLPUBLIC void DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                       SCCOL nEndCol, SCROW nEndRow );
+    SC_DLLPUBLIC void DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow );
                     //  without checking:
-    SC_DLLPUBLIC void           DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
-    void            RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    SC_DLLPUBLIC void DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                               SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
+    void              RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    bool            IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                                SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes = false ) const;
-    bool            IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                                SCCOL nEndCol, SCROW nEndRow,
-                                                bool bLeftIsEmpty = false,
-                                                ScRange* pLastRange = nullptr,
-                                                Rectangle* pLastMM = nullptr ) const;
+    bool              IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes = false ) const;
+    bool              IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow,
+                                    bool bLeftIsEmpty = false,
+                                    ScRange* pLastRange = nullptr,
+                                    Rectangle* pLastMM = nullptr ) const;
 
     void            SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const;
     bool            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1170,17 +1157,17 @@ public:
                                     const ::editeng::SvxBorderLine** ppRight,
                                     const ::editeng::SvxBorderLine** ppBottom ) const;
 
-    void            ResetChanged( const ScRange& rRange );
+    void              ResetChanged( const ScRange& rRange );
 
-    void CheckVectorizationState();
-    void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
-    void            SetDirty( const ScRange&, bool bIncludeEmptyCells );
-    void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
-    void            InterpretDirtyCells( const ScRangeList& rRanges );
+    void              CheckVectorizationState();
+    void              SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
+    void              SetDirty( const ScRange&, bool bIncludeEmptyCells );
+    void              SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
+    void              InterpretDirtyCells( const ScRangeList& rRanges );
     SC_DLLPUBLIC void CalcAll();
     SC_DLLPUBLIC void CalcAfterLoad( bool bStartListening = true );
-    void            CompileAll();
-    void            CompileXML();
+    void              CompileAll();
+    void              CompileXML();
 
     /**
      * Re-compile formula cells with error.
@@ -1194,16 +1181,16 @@ public:
      */
     bool CompileErrorCells(FormulaError nErrCode);
 
-    ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
-    void             SetPreviewFont( SfxItemSet* pFontSet );
-    SfxItemSet*      GetPreviewFont() { return pPreviewFont; }
-    SfxItemSet*      GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    const ScMarkData& GetPreviewSelection() const { return maPreviewSelection; }
-    void             SetPreviewSelection( ScMarkData& rSel );
-    ScStyleSheet*    GetPreviewCellStyle() { return pPreviewCellStyle; }
-    ScStyleSheet*    GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void             SetPreviewCellStyle( ScStyleSheet* pStyle ) { pPreviewCellStyle = pStyle; }
-    SC_DLLPUBLIC  void             SetAutoNameCache(  ScAutoNameCache* pCache );
+    ScAutoNameCache*     GetAutoNameCache()     { return pAutoNameCache; }
+    void                 SetPreviewFont( SfxItemSet* pFontSet );
+    SfxItemSet*          GetPreviewFont() { return pPreviewFont; }
+    SfxItemSet*          GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    const ScMarkData&    GetPreviewSelection() const { return maPreviewSelection; }
+    void                 SetPreviewSelection( ScMarkData& rSel );
+    ScStyleSheet*        GetPreviewCellStyle() { return pPreviewCellStyle; }
+    ScStyleSheet*        GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void                 SetPreviewCellStyle( ScStyleSheet* pStyle ) { pPreviewCellStyle = pStyle; }
+    SC_DLLPUBLIC  void   SetAutoNameCache(  ScAutoNameCache* pCache );
 
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */
@@ -1289,19 +1276,19 @@ public:
      *                  downward direction i.e. only modify the end row
      *                  position.
      */
-    SC_DLLPUBLIC void GetDataArea(
-        SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-        bool bIncludeOld, bool bOnlyDown ) const;
+    SC_DLLPUBLIC void           GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                             SCCOL& rEndCol, SCROW& rEndRow,
+                                             bool bIncludeOld, bool bOnlyDown ) const;
 
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
-                                    bool bNotes = true ) const;
+                                              bool bNotes = true ) const;
     SC_DLLPUBLIC bool           GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
-                                        SCCOL& rEndCol, bool bNotes ) const;
+                                                 SCCOL& rEndCol, bool bNotes ) const;
     SC_DLLPUBLIC bool           GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
-                                        SCROW& rEndRow, bool bNotes ) const;
-    void            InvalidateTableArea();
+                                                 SCROW& rEndRow, bool bNotes ) const;
+    void                        InvalidateTableArea();
 
     /// Return the number of columns / rows that should be visible for the tiled rendering.
     SC_DLLPUBLIC void           GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const;
@@ -1313,96 +1300,95 @@ public:
      * specified row range.  The final column position must be equal or less
      * than the initial value of rEndCol.
      */
-    void            ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
-                                    SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL& rEndCol, SCROW nEndRow ) const;
+    void                        ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
+                                                 SCCOL nStartCol, SCROW nStartRow,
+                                                 SCCOL& rEndCol, SCROW nEndRow ) const;
     SC_DLLPUBLIC SCSIZE         GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
-                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
-                                            ScDirection eDir );
+                                                      SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
+                                                      ScDirection eDir );
 
-    void           FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
-    SC_DLLPUBLIC void           GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
+    void               FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
+    SC_DLLPUBLIC void  GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
+                                   bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
-    bool            GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
-                                        const ScMarkData& rMark );
+    bool               GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
+                                          const ScMarkData& rMark );
 
-    void            LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                                    SCCOL& rEndCol, SCROW& rEndRow );
-    void            LimitChartIfAll( ScRangeListRef& rRangeList );
+    void               LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                       SCCOL& rEndCol, SCROW& rEndRow );
+    void               LimitChartIfAll( ScRangeListRef& rRangeList );
 
-    bool            InsertRow( SCCOL nStartCol, SCTAB nStartTab,
-                               SCCOL nEndCol,   SCTAB nEndTab,
-                               SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
-                               const ScMarkData* pTabMark = nullptr );
-    SC_DLLPUBLIC bool           InsertRow( const ScRange& rRange );
-    void            DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
-                               SCCOL nEndCol,   SCTAB nEndTab,
-                               SCROW nStartRow, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
-                               const ScMarkData* pTabMark = nullptr );
-    SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange );
-    bool            InsertCol( SCROW nStartRow, SCTAB nStartTab,
-                               SCROW nEndRow,   SCTAB nEndTab,
-                               SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
-                               const ScMarkData* pTabMark = nullptr );
-    SC_DLLPUBLIC bool           InsertCol( const ScRange& rRange );
-    void            DeleteCol( SCROW nStartRow, SCTAB nStartTab,
-                               SCROW nEndRow, SCTAB nEndTab,
-                               SCCOL nStartCol, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
-                               const ScMarkData* pTabMark = nullptr );
-    void            DeleteCol( const ScRange& rRange );
+    bool               InsertRow( SCCOL nStartCol, SCTAB nStartTab,
+                                  SCCOL nEndCol,   SCTAB nEndTab,
+                                  SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
+                                  const ScMarkData* pTabMark = nullptr );
+    SC_DLLPUBLIC bool  InsertRow( const ScRange& rRange );
+    void               DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
+                                  SCCOL nEndCol,   SCTAB nEndTab,
+                                  SCROW nStartRow, SCSIZE nSize,
+                                  ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
+                                  const ScMarkData* pTabMark = nullptr );
+    SC_DLLPUBLIC void  DeleteRow( const ScRange& rRange );
+    bool               InsertCol( SCROW nStartRow, SCTAB nStartTab,
+                                  SCROW nEndRow,   SCTAB nEndTab,
+                                  SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
+                                  const ScMarkData* pTabMark = nullptr );
+    SC_DLLPUBLIC bool  InsertCol( const ScRange& rRange );
+    void               DeleteCol( SCROW nStartRow, SCTAB nStartTab,
+                                  SCROW nEndRow, SCTAB nEndTab,
+                                  SCCOL nStartCol, SCSIZE nSize,
+                                  ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
+                                  const ScMarkData* pTabMark = nullptr );
+    void               DeleteCol( const ScRange& rRange );
 
-    bool            CanInsertRow( const ScRange& rRange ) const;
-    bool            CanInsertCol( const ScRange& rRange ) const;
+    bool               CanInsertRow( const ScRange& rRange ) const;
+    bool               CanInsertCol( const ScRange& rRange ) const;
 
-    void            FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear = true );
-    bool            CanFitBlock( const ScRange& rOld, const ScRange& rNew );
+    void               FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear = true );
+    bool               CanFitBlock( const ScRange& rOld, const ScRange& rNew );
 
-    bool            IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
-    bool            IsUndo() const                              { return bIsUndo; }
-    bool            IsClipboard() const                         { return bIsClip; }
-    bool            IsUndoEnabled() const                       { return mbUndoEnabled; }
-    SC_DLLPUBLIC void EnableUndo( bool bVal );
+    bool               IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
+    bool               IsUndo() const                              { return bIsUndo; }
+    bool               IsClipboard() const                         { return bIsClip; }
+    bool               IsUndoEnabled() const                       { return mbUndoEnabled; }
+    SC_DLLPUBLIC void  EnableUndo( bool bVal );
 
-    bool            IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
-    void            EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
-    bool            IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
-    void            EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
-    bool            IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }
-    void            EnableChangeReadOnly( bool bVal )           { mbChangeReadOnlyEnabled = bVal; }
-    SC_DLLPUBLIC bool IsUserInteractionEnabled() const { return mbUserInteractionEnabled;}
-    SC_DLLPUBLIC void EnableUserInteraction( bool bVal );
+    bool                         IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
+    void                         EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
+    bool                         IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
+    void                         EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
+    bool                         IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }
+    void                         EnableChangeReadOnly( bool bVal )           { mbChangeReadOnlyEnabled = bVal; }
+    SC_DLLPUBLIC bool            IsUserInteractionEnabled() const { return mbUserInteractionEnabled;}
+    SC_DLLPUBLIC void            EnableUserInteraction( bool bVal );
     SC_DLLPUBLIC sal_Int16       GetNamedRangesLockCount() const             { return mnNamedRangesLockCount; }
-    void            SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
-    SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
-    SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
-    void            SetCutMode( bool bCut );
-    bool            IsCutMode();
-    void            SetClipArea( const ScRange& rArea, bool bCut = false );
+    void                         SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
+    SC_DLLPUBLIC void            ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
+    SC_DLLPUBLIC void            ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
+    void                         SetCutMode( bool bCut );
+    bool                         IsCutMode();
+    void                         SetClipArea( const ScRange& rArea, bool bCut = false );
 
-    SC_DLLPUBLIC bool           IsDocVisible() const                        { return bIsVisible; }
-    void            SetDocVisible( bool bSet );
+    SC_DLLPUBLIC bool            IsDocVisible() const                        { return bIsVisible; }
+    void                         SetDocVisible( bool bSet );
 
-    bool            HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = nullptr );
+    bool                         HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = nullptr );
 
-    void            DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                        const ScMarkData& rMark );
-    void            DeleteObjectsInSelection( const ScMarkData& rMark );
+    void                         DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                                      const ScMarkData& rMark );
+    void                         DeleteObjectsInSelection( const ScMarkData& rMark );
 
-    void DeleteArea(
-        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
-        InsertDeleteFlags nDelFlag, bool bBroadcast = true,
-        sc::ColumnSpanSet* pBroadcastSpans = nullptr );
+    void                         DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+                                             InsertDeleteFlags nDelFlag, bool bBroadcast = true,
+                                             sc::ColumnSpanSet* pBroadcastSpans = nullptr );
 
-    SC_DLLPUBLIC void DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, InsertDeleteFlags nDelFlag);
-    void            DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
+    SC_DLLPUBLIC void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                               SCTAB nTab, InsertDeleteFlags nDelFlag);
+    void                         DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
-    void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
-                               const ScMarkData* pMarks, bool bKeepScenarioFlags,
-                               bool bIncludeObjects );
+    void                         CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
+                                             const ScMarkData* pMarks, bool bKeepScenarioFlags,
+                                             bool bIncludeObjects );
 
     /**
      * Copy only raw cell values to another document.  Formula cells are
@@ -1424,60 +1410,60 @@ public:
      */
     void CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& rDestPos, ScDocument& rDestDoc );
 
-    void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, ScDocument* pClipDoc);
+    void CopyTabToClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                        SCTAB nTab, ScDocument* pClipDoc);
 
     bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCTAB nTab, SCCOL nCol );
 
-    void DeleteBeforeCopyFromClip(
-        sc::CopyFromClipContext& rCxt, const ScMarkData& rMark, sc::ColumnSpanSet& rBroadcastSpans );
+    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScMarkData& rMark,
+                                   sc::ColumnSpanSet& rBroadcastSpans );
 
-    bool CopyOneCellFromClip(
-        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void CopyBlockFromClip(
-        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );
-    void CopyNonFilteredFromClip(
-        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow );
+    bool CopyOneCellFromClip(sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
+                             SCCOL nCol2, SCROW nRow2 );
+    void CopyBlockFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
+                            SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+                            SCsCOL nDx, SCsROW nDy );
+    void CopyNonFilteredFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1,
+                                  SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                  const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow );
 
-    void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
-                                        SCCOL nCol2, SCROW nRow2,
-                                        const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
+    void StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
+                                 SCCOL nCol2, SCROW nRow2,
+                                 const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
 
-    void SetDirtyFromClip(
-        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
-        InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans );
+    void SetDirtyFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                           const ScMarkData& rMark,  InsertDeleteFlags nInsFlag,
+                           sc::ColumnSpanSet& rBroadcastSpans );
 
     /** If pDestRanges is given it overrides rDestRange, rDestRange in this
         case is the overall encompassing range. */
-    void            CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                    InsertDeleteFlags nInsFlag,
-                                    ScDocument* pRefUndoDoc,
-                                    ScDocument* pClipDoc,
-                                    bool bResetCut = true,
-                                    bool bAsLink = false,
-                                    bool bIncludeFiltered = true,
-                                    bool bSkipAttrForEmpty = false,
-                                    const ScRangeList * pDestRanges = nullptr );
+    void                CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
+                                        InsertDeleteFlags nInsFlag,
+                                        ScDocument* pRefUndoDoc,
+                                        ScDocument* pClipDoc,
+                                        bool bResetCut = true,
+                                        bool bAsLink = false,
+                                        bool bIncludeFiltered = true,
+                                        bool bSkipAttrForEmpty = false,
+                                        const ScRangeList * pDestRanges = nullptr );
 
-    void            CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
-                                           InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
-                                           bool bResetCut = true, bool bAsLink = false,
-                                           bool bIncludeFiltered = true,
-                                           bool bSkipAttrForEmpty = false);
+    void                CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
+                                               InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
+                                               bool bResetCut = true, bool bAsLink = false,
+                                               bool bIncludeFiltered = true,
+                                               bool bSkipAttrForEmpty = false);
 
-    void            GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered);
-    void            GetClipStart(SCCOL& nClipX, SCROW& nClipY);
+    void                GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered);
+    void                GetClipStart(SCCOL& nClipX, SCROW& nClipY);
 
-    bool            HasClipFilteredRows();
+    bool                HasClipFilteredRows();
 
-    bool            IsClipboardSource() const;
+    bool                IsClipboardSource() const;
 
-    SC_DLLPUBLIC void           TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
+    SC_DLLPUBLIC void   TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
 
-    ScClipParam&    GetClipParam();
-    void            SetClipParam(const ScClipParam& rParam);
+    ScClipParam&        GetClipParam();
+    void                SetClipParam(const ScClipParam& rParam);
 
     /** To be called at the clipboard document when closing a document that is
         the current clipboard source to decouple things from the originating
@@ -1528,53 +1514,52 @@ public:
     bool            HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const;
     SC_DLLPUBLIC const ScRangeList* GetScenarioRanges( SCTAB nTab ) const;
 
-    SC_DLLPUBLIC void           CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc );
+    SC_DLLPUBLIC void  CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc );
 
-    void UpdateReference(
-        sc::RefUpdateContext& rCxt,  ScDocument* pUndoDoc = nullptr, bool bIncludeDraw = true,
-        bool bUpdateNoteCaptionPos = true );
+    void               UpdateReference( sc::RefUpdateContext& rCxt,  ScDocument*
+                                        pUndoDoc = nullptr, bool bIncludeDraw = true,
+                                        bool bUpdateNoteCaptionPos = true );
 
-    SC_DLLPUBLIC void           UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
+    SC_DLLPUBLIC void  UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc );
 
-    void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
+    void               UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    SC_DLLPUBLIC void Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            ScProgress* pProgress, const ScMarkData& rMark,
-                            sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
-                            FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
-                            double nStepValue = 1.0, double nMaxValue = 1E307 );
-    OUString          GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
+    SC_DLLPUBLIC void   Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                ScProgress* pProgress, const ScMarkData& rMark,
+                                sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
+                                FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
+                                double nStepValue = 1.0, double nMaxValue = 1E307 );
+    OUString            GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
-    bool            GetSelectionFunction( ScSubTotalFunc eFunc,
-                                            const ScAddress& rCursor, const ScMarkData& rMark,
-                                            double& rResult );
+    bool                GetSelectionFunction( ScSubTotalFunc eFunc,
+                                              const ScAddress& rCursor, const ScMarkData& rMark,
+                                              double& rResult );
 
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
-    SC_DLLPUBLIC const SfxPoolItem* GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
-    SC_DLLPUBLIC const ScPatternAttr*   GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC const ScPatternAttr* GetPattern( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
-    const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark );
-    ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
-    SC_DLLPUBLIC void AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
-    void RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
+    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
+    SC_DLLPUBLIC const ScPatternAttr*       GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC const ScPatternAttr*       GetPattern( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC const ScPatternAttr*       GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
+    const ScPatternAttr*                    GetSelectionPattern( const ScMarkData& rMark );
+    ScPatternAttr*                          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
+    SC_DLLPUBLIC void                       AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
+    void                                    RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
-    SC_DLLPUBLIC ScConditionalFormat* GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    SC_DLLPUBLIC const SfxItemSet*  GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    const SfxItemSet* GetCondResult(
-        ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
-        const std::vector<sal_uInt32>& rIndex ) const;
-    const SfxPoolItem*  GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
+    SC_DLLPUBLIC ScConditionalFormat*       GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC const SfxItemSet*          GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    const SfxItemSet*                       GetCondResult( ScRefCellValue& rCell, const ScAddress& rPos,
+                                                           const ScConditionalFormatList& rList,
+                                                           const std::vector<sal_uInt32>& rIndex ) const;
+    const SfxPoolItem*                      GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
 
     SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
-    bool            HasStringWeakCharacters( const OUString& rString );
+    bool                        HasStringWeakCharacters( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
     SC_DLLPUBLIC SvtScriptType  GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    SvtScriptType   GetRangeScriptType(
-        sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
-    SvtScriptType   GetRangeScriptType( const ScRangeList& rRanges );
+    SvtScriptType               GetRangeScriptType( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
+    SvtScriptType               GetRangeScriptType( const ScRangeList& rRanges );
 
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );
@@ -1591,111 +1576,110 @@ public:
                                          const SvxBoxItem* pLineOuter,
                                          const SvxBoxInfoItem* pLineInner );
     void            ApplyFrameAreaTab( const ScRange& rRange,
-                                         const SvxBoxItem* pLineOuter,
-                                         const SvxBoxInfoItem* pLineInner );
+                                       const SvxBoxItem* pLineOuter,
+                                       const SvxBoxInfoItem* pLineInner );
 
     void            ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    SC_DLLPUBLIC sal_uLong AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
-    void DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
+    SC_DLLPUBLIC sal_uLong  AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
+    void                    DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
 
-    void SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
-
-    SC_DLLPUBLIC sal_uLong          AddValidationEntry( const ScValidationData& rNew );
-
+    void                                    SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
+    SC_DLLPUBLIC sal_uLong                  AddValidationEntry( const ScValidationData& rNew );
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
 
-    SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
+    SC_DLLPUBLIC ScConditionalFormatList*   GetCondFormList( SCTAB nTab ) const;
 
-    const ScValidationDataList* GetValidationList() const { return pValidationList;}
-    ScValidationDataList* GetValidationList() { return pValidationList;}
+    const ScValidationDataList*             GetValidationList() const { return pValidationList;}
+    ScValidationDataList*                   GetValidationList() { return pValidationList;}
 
     SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                const SfxPoolItem& rAttr );
+                                           const SfxPoolItem& rAttr );
     SC_DLLPUBLIC void           ApplyPattern( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    const ScPatternAttr& rAttr );
+                                              const ScPatternAttr& rAttr );
     SC_DLLPUBLIC void           ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow,
-                                        const ScMarkData& rMark, const ScPatternAttr& rAttr,
-                                        ScEditDataArray* pDataArray = nullptr );
+                                                  SCCOL nEndCol, SCROW nEndRow,
+                                                  const ScMarkData& rMark, const ScPatternAttr& rAttr,
+                                                  ScEditDataArray* pDataArray = nullptr );
     SC_DLLPUBLIC void           ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
-                                            const ScPatternAttr& rAttr );
+                                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
+                                                     const ScPatternAttr& rAttr );
 
-    SC_DLLPUBLIC void           ApplyPatternIfNumberformatIncompatible(
-                            const ScRange& rRange, const ScMarkData& rMark,
-                            const ScPatternAttr& rPattern, short nNewType );
+    SC_DLLPUBLIC void           ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
+                                                                        const ScMarkData& rMark,
+                                                                        const ScPatternAttr& rPattern,
+                                                                        short nNewType );
 
-    void            ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                const ScStyleSheet& rStyle);
-    void            ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow,
-                                    const ScMarkData& rMark, const ScStyleSheet& rStyle);
-    SC_DLLPUBLIC void           ApplyStyleAreaTab( SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
-                                        const ScStyleSheet& rStyle);
+    void               ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                   const ScStyleSheet& rStyle);
+    void               ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,
+                                       SCCOL nEndCol, SCROW nEndRow,
+                                       const ScMarkData& rMark, const ScStyleSheet& rStyle);
+    SC_DLLPUBLIC void  ApplyStyleAreaTab( SCCOL nStartCol, SCROW nStartRow,
+                                          SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
+                                          const ScStyleSheet& rStyle);
 
-    SC_DLLPUBLIC void            ApplySelectionStyle( const ScStyleSheet& rStyle, const ScMarkData& rMark );
-    void            ApplySelectionLineStyle( const ScMarkData& rMark,
-                                            const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
+    SC_DLLPUBLIC void  ApplySelectionStyle( const ScStyleSheet& rStyle, const ScMarkData& rMark );
+    void               ApplySelectionLineStyle( const ScMarkData& rMark,
+                                                const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark ) const;
 
-    void            StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
-                                        OutputDevice* pDev,
-                                        double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY );
+    void                StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
+                                           OutputDevice* pDev,
+                                           double nPPTX, double nPPTY,
+                                           const Fraction& rZoomX, const Fraction& rZoomY );
 
-    bool            IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
+    bool                 IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
-    SC_DLLPUBLIC bool           ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            SCTAB nTab, ScMF nFlags );
-    SC_DLLPUBLIC bool           RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                                            SCCOL nEndCol, SCROW nEndRow,
-                                            SCTAB nTab, ScMF nFlags );
+    SC_DLLPUBLIC bool    ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
+                                        SCCOL nEndCol, SCROW nEndRow,
+                                        SCTAB nTab, ScMF nFlags );
+    SC_DLLPUBLIC bool    RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
+                                         SCCOL nEndCol, SCROW nEndRow,
+                                         SCTAB nTab, ScMF nFlags );
 
-    SC_DLLPUBLIC void           SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
-    SC_DLLPUBLIC void           SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC void    SetPattern( const ScAddress&, const ScPatternAttr& rAttr );
+    SC_DLLPUBLIC void    SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr );
 
-    void            AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    sal_uInt16 nFormatNo, const ScMarkData& rMark );
-    void            GetAutoFormatData( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                        ScAutoFormatData& rData );
-    bool            SearchAndReplace( const SvxSearchItem& rSearchItem,
-                                      SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
-                                      const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-                                      OUString& rUndoStr, ScDocument* pUndoDoc = nullptr );
+    void                 AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                     sal_uInt16 nFormatNo, const ScMarkData& rMark );
+    void                 GetAutoFormatData( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                            ScAutoFormatData& rData );
+    bool                 SearchAndReplace( const SvxSearchItem& rSearchItem,
+                                           SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
+                                           const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+                                           OUString& rUndoStr, ScDocument* pUndoDoc = nullptr );
 
                     // determine Col/Row of subsequent calls
                     // (e.g. not found from the beginning, or subsequent tables)
                     // meaning of explanation in "()" was already unclear in German
     static void     GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
-                        SCCOL& rCol, SCROW& rRow );
+                                              SCCOL& rCol, SCROW& rRow );
 
-    bool            Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
+    bool            Solver( SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                             SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                             const OUString& sValStr, double& nX);
 
-    SC_DLLPUBLIC void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
-                                           ScEditDataArray* pDataArray = nullptr );
-    void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
-    void DeleteSelectionTab( SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark );
+    SC_DLLPUBLIC void           ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
+                                                       ScEditDataArray* pDataArray = nullptr );
+    void                        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    void                        DeleteSelectionTab( SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark );
 
     SC_DLLPUBLIC void           SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
     SC_DLLPUBLIC void           SetColWidthOnly( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
     SC_DLLPUBLIC void           SetRowHeight( SCROW nRow, SCTAB nTab, sal_uInt16 nNewHeight );
     SC_DLLPUBLIC void           SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab,
-                                            sal_uInt16 nNewHeight );
+                                                   sal_uInt16 nNewHeight );
 
     SC_DLLPUBLIC void           SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab,
                                                   sal_uInt16 nNewHeight );
     SC_DLLPUBLIC void           SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bManual );
 
     SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uLong          GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const;
     SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
@@ -1706,34 +1690,34 @@ public:
      * specified height.
      */
     SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
-    sal_uLong                       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
-    SC_DLLPUBLIC sal_uLong          GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uLong          GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    sal_uLong                   GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
+    SC_DLLPUBLIC sal_uLong      GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uLong      GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 
-    SC_DLLPUBLIC sal_uInt16         GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
-    SC_DLLPUBLIC sal_uInt16         GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uInt16     GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC sal_uInt16     GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
 
-    sal_uInt16          GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const;
+    sal_uInt16                  GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const;
 
-    SCROW           GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const;
+    SCROW                       GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const;
 
-    sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
-                                        double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                        bool bFormula,
-                                        const ScMarkData* pMarkData = nullptr,
-                                        const ScColWidthParam* pParam = nullptr );
+    sal_uInt16                  GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
+                                                    double nPPTX, double nPPTY,
+                                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                                    bool bFormula,
+                                                    const ScMarkData* pMarkData = nullptr,
+                                                    const ScColWidthParam* pParam = nullptr );
 
-    SC_DLLPUBLIC bool SetOptimalHeight(
-        sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+    SC_DLLPUBLIC bool           SetOptimalHeight( sc::RowHeightContext& rCxt, SCROW nStartRow,
+                                                   SCROW nEndRow, SCTAB nTab );
 
-    void UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
+    void                        UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
 
-    long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    OutputDevice* pDev,
-                                    double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bWidth, bool bTotalSize = false );
+    long                        GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                               OutputDevice* pDev,
+                                               double nPPTX, double nPPTY,
+                                               const Fraction& rZoomX, const Fraction& rZoomY,
+                                               bool bWidth, bool bTotalSize = false );
 
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, bool bShow);
     SC_DLLPUBLIC void           ShowRow(SCROW nRow, SCTAB nTab, bool bShow);
@@ -1772,9 +1756,9 @@ public:
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
 
-    SC_DLLPUBLIC bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC bool           IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
 
-    bool HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) const;
+    bool                        HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) const;
 
     /**
      * Write all column row flags to table's flag data, because not all column
@@ -1811,7 +1795,7 @@ public:
 
     // PageStyle:
     SC_DLLPUBLIC const OUString  GetPageStyle( SCTAB nTab ) const;
-    SC_DLLPUBLIC void           SetPageStyle( SCTAB nTab, const OUString& rName );
+    SC_DLLPUBLIC void            SetPageStyle( SCTAB nTab, const OUString& rName );
     Size            GetPageSize( SCTAB nTab ) const;
     void            SetPageSize( SCTAB nTab, const Size& rSize );
     void            SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
@@ -1832,12 +1816,12 @@ public:
 
     // Was stored in PageStyle previously. Now it exists for every table:
     SC_DLLPUBLIC bool           HasPrintRange();
-    SC_DLLPUBLIC sal_uInt16         GetPrintRangeCount( SCTAB nTab );
+    SC_DLLPUBLIC sal_uInt16     GetPrintRangeCount( SCTAB nTab );
     SC_DLLPUBLIC const ScRange* GetPrintRange( SCTAB nTab, sal_uInt16 nPos );
     SC_DLLPUBLIC const ScRange* GetRepeatColRange( SCTAB nTab );
     SC_DLLPUBLIC const ScRange* GetRepeatRowRange( SCTAB nTab );
     /** Returns true, if the specified sheet is always printed. */
-    bool            IsPrintEntireSheet( SCTAB nTab ) const;
+    bool                        IsPrintEntireSheet( SCTAB nTab ) const;
 
     /** Removes all print ranges. */
     SC_DLLPUBLIC void            ClearPrintRanges( SCTAB nTab );
@@ -1845,42 +1829,42 @@ public:
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
-    SC_DLLPUBLIC void           SetRepeatColRange( SCTAB nTab, const ScRange* pNew );
-    SC_DLLPUBLIC void           SetRepeatRowRange( SCTAB nTab, const ScRange* pNew );
-    ScPrintRangeSaver* CreatePrintRangeSaver() const;
-    void            RestorePrintRanges( const ScPrintRangeSaver& rSaver );
+    SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, const ScRange* pNew );
+    SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, const ScRange* pNew );
+    ScPrintRangeSaver*           CreatePrintRangeSaver() const;
+    void                         RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 
-    SC_DLLPUBLIC Rectangle      GetMMRect( SCCOL nStartCol, SCROW nStartRow,
-                                           SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC Rectangle       GetMMRect( SCCOL nStartCol, SCROW nStartRow,
+                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC ScRange         GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
 
-    void            UpdStlShtPtrsFrmNms();
-    void            StylesToNames();
+    void                         UpdStlShtPtrsFrmNms();
+    void                         StylesToNames();
 
-    SC_DLLPUBLIC void           CopyStdStylesFrom( ScDocument* pSrcDoc );
+    SC_DLLPUBLIC void            CopyStdStylesFrom( ScDocument* pSrcDoc );
 
-    sal_uLong           GetSrcVersion() const   { return nSrcVer; }
+    sal_uLong                    GetSrcVersion() const   { return nSrcVer; }
 
-    void            SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
-    void            UpdateFontCharSet();
+    void                         SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
+    void                         UpdateFontCharSet();
 
-    void FillInfo(
-        ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCTAB nTab, double fColScale, double fRowScale, bool bPageMode, bool bFormulaMode,
-        const ScMarkData* pMarkData = nullptr );
+    void                         FillInfo( ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1,
+                                           SCCOL nCol2, SCROW nRow2, SCTAB nTab, double fColScale,
+                                           double fRowScale, bool bPageMode, bool bFormulaMode,
+                                           const ScMarkData* pMarkData = nullptr );
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
 
     /** Sort a range of data. */
-    void Sort(
-        SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
-        ScProgress* pProgress, sc::ReorderParam* pUndo );
+    void               Sort( SCTAB nTab, const ScSortParam& rSortParam,
+                             bool bKeepQuery, bool bUpdateRefs,
+                             ScProgress* pProgress, sc::ReorderParam* pUndo );
 
-    void Reorder( const sc::ReorderParam& rParam );
+    void               Reorder( const sc::ReorderParam& rParam );
 
-    SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
-    SC_DLLPUBLIC bool CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
-    void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr);
+    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
+    SC_DLLPUBLIC bool  CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
+    void               GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr);
 
     /**
      * Get a list of unique strings to use in filtering criteria.  The string
@@ -1888,37 +1872,37 @@ public:
      * data range to use to populate the filter entries is inferred from the
      * database range that contains the specified cell position.
      */
-    void GetFilterEntries(
-        SCCOL nCol, SCROW nRow, SCTAB nTab, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+    void              GetFilterEntries( SCCOL nCol, SCROW nRow,
+                                        SCTAB nTab, std::vector<ScTypedStrData>& rStrings,
+                                        bool& rHasDates);
 
-    SC_DLLPUBLIC void GetFilterEntriesArea(
-        SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
-        std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+    SC_DLLPUBLIC void GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                                            SCTAB nTab, bool bCaseSens,
+                                            std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
 
-    void GetDataEntries(
-        SCCOL nCol, SCROW nRow, SCTAB nTab,
-        std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
-    void GetFormulaEntries( ScTypedCaseStrSet& rStrings );
+    void              GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                      std::vector<ScTypedStrData>& rStrings, bool bLimit = false );
+    void              GetFormulaEntries( ScTypedCaseStrSet& rStrings );
 
-    bool HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& nSelected, SCSIZE& nTotal );
+    bool               HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void               GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& nSelected, SCSIZE& nTotal );
 
-    SC_DLLPUBLIC bool           HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    SCTAB nTab );
-    SC_DLLPUBLIC bool           HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    SCTAB nTab );
+    SC_DLLPUBLIC bool  HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                     SCTAB nTab );
+    SC_DLLPUBLIC bool  HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                     SCTAB nTab );
 
-    SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
-    void            SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter );
-    VirtualDevice*  GetVirtualDevice_100th_mm();
+    SfxPrinter*                 GetPrinter( bool bCreateIfNotExist = true );
+    void                        SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter );
+    VirtualDevice*              GetVirtualDevice_100th_mm();
     SC_DLLPUBLIC OutputDevice*  GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
-    bool            GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
-                                        bool bInSel, const ScMarkData& rMark) const;
+    bool            GetNextSpellingCell( SCCOL& nCol, SCROW& nRow, SCTAB nTab,
+                                         bool bInSel, const ScMarkData& rMark) const;
 
-    void            ReplaceStyle(const SvxSearchItem& rSearchItem,
-                                 SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                 ScMarkData& rMark);
+    void            ReplaceStyle( const SvxSearchItem& rSearchItem,
+                                  SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                  ScMarkData& rMark);
 
     void            InvalidateTextWidth( const OUString& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
@@ -1929,8 +1913,8 @@ public:
     void            RepaintRange( const ScRange& rRange );
     void            RepaintRange( const ScRangeList& rRange );
 
-    bool IsIdleEnabled() const { return mbIdleEnabled; }
-    void EnableIdle(bool bDo) { mbIdleEnabled = bDo; }
+    bool            IsIdleEnabled() const { return mbIdleEnabled; }
+    void            EnableIdle(bool bDo) { mbIdleEnabled = bDo; }
 
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
@@ -1954,26 +1938,24 @@ public:
     ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
 
     SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const { return pChartListenerCollection;}
-    void            SetChartListenerCollection( ScChartListenerCollection*,
-                        bool bSetChartRangeLists );
-    void            UpdateChart( const OUString& rName );
-    void            RestoreChartListener( const OUString& rName );
-    SC_DLLPUBLIC void           UpdateChartListenerCollection();
-    bool            IsChartListenerCollectionNeedsUpdate() const
-                        { return bChartListenerCollectionNeedsUpdate; }
-    void            SetChartListenerCollectionNeedsUpdate( bool bFlg )
-                        { bChartListenerCollectionNeedsUpdate = bFlg; }
-    void            AddOLEObjectToCollection(const OUString& rName);
+    void                  SetChartListenerCollection( ScChartListenerCollection*,
+                                                       bool bSetChartRangeLists );
+    void                  UpdateChart( const OUString& rName );
+    void                  RestoreChartListener( const OUString& rName );
+    SC_DLLPUBLIC void     UpdateChartListenerCollection();
+    bool                  IsChartListenerCollectionNeedsUpdate() const { return bChartListenerCollectionNeedsUpdate; }
+    void                  SetChartListenerCollectionNeedsUpdate( bool bFlg ) { bChartListenerCollectionNeedsUpdate = bFlg; }
+    void                  AddOLEObjectToCollection(const OUString& rName);
 
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
-    SC_DLLPUBLIC void               SetChangeViewSettings(const ScChangeViewSettings& rNew);
+    SC_DLLPUBLIC void     SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
     const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
     void            SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew);
 
     CharCompressType GetAsianCompression() const;
-    bool            IsValidAsianCompression() const;
-    void            SetAsianCompression(CharCompressType nNew);
+    bool             IsValidAsianCompression() const;
+    void             SetAsianCompression(CharCompressType nNew);
 
     bool            GetAsianKerning() const;
     bool            IsValidAsianKerning() const;
@@ -1983,11 +1965,13 @@ public:
     sal_uInt8       GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
-    void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
+    void                            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
 
-    SC_DLLPUBLIC ScMacroManager* GetMacroManager();
+    SC_DLLPUBLIC ScMacroManager*    GetMacroManager();
 
-    void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool = nullptr) const;
+    void                            FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1,
+                                                SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                                svl::SharedStringPool* pPool = nullptr) const;
 
     /**
      * Set an array of numerical formula results to a group of contiguous
@@ -1998,7 +1982,6 @@ public:
      * @param nLen length of numeric results.
      */
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
-
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
     /**
@@ -2007,24 +1990,22 @@ public:
      * transfer.
      */
     void TransferCellValuesTo( const ScAddress& rTopPos, size_t nLen, sc::CellValues& rDest );
-
     void CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc );
 
-    std::set<Color> GetDocColors();
-
+    std::set<Color>       GetDocColors();
     sc::IconSetBitmapMap& GetIconSetBitmapMap();
 
 private:
     ScDocument(const ScDocument& r) = delete;
 
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
-                                        SCCOL nX1, SCCOL nX2 ) const;
+                                       SCCOL nX1, SCCOL nX2 ) const;
 
-    sal_uInt16              RowDifferences( SCROW nThisRow, SCTAB nThisTab,
+    sal_uInt16          RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                                         ScDocument& rOtherDoc,
                                         SCROW nOtherRow, SCTAB nOtherTab,
                                         SCCOL nMaxCol, SCCOLROW* pOtherCols );
-    sal_uInt16              ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
+    sal_uInt16          ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                         ScDocument& rOtherDoc,
                                         SCCOL nOtherCol, SCTAB nOtherTab,
                                         SCROW nMaxRow, SCCOLROW* pOtherRows );
@@ -2087,8 +2068,7 @@ public:
      *                     that are marked dirty prior to this call get
      *                     recalculated.
      */
-    SC_DLLPUBLIC void CalcFormulaTree(
-       bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
+    SC_DLLPUBLIC void   CalcFormulaTree( bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
@@ -2171,8 +2151,8 @@ public:
 
     void                StartTrackTimer();
 
-    void            CompileDBFormula();
-    void            CompileColRowNameFormula();
+    void                CompileDBFormula();
+    void                CompileColRowNameFormula();
 
     /** Maximum string length of a column, e.g. for dBase export.
         @return String length in octets (!) of the destination encoding. In
@@ -2188,28 +2168,28 @@ public:
                                            SCTAB nTab, SCCOL nCol,
                                            SCROW nRowStart, SCROW nRowEnd ) const;
 
-    void    KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
+    void            KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
 
-    ScChangeTrack*      GetChangeTrack() const { return pChangeTrack; }
+    ScChangeTrack*  GetChangeTrack() const { return pChangeTrack; }
 
     //! only for import filter, deletes any existing ChangeTrack via
     //! EndChangeTracking() and takes ownership of new ChangeTrack pTrack
-    SC_DLLPUBLIC void           SetChangeTrack( ScChangeTrack* pTrack );
+    SC_DLLPUBLIC void  SetChangeTrack( ScChangeTrack* pTrack );
 
-    void            StartChangeTracking();
-    void            EndChangeTracking();
+    void               StartChangeTracking();
+    void               EndChangeTracking();
 
-    SC_DLLPUBLIC void           CompareDocument( ScDocument& rOtherDoc );
+    SC_DLLPUBLIC void  CompareDocument( ScDocument& rOtherDoc );
 
-    void            AddUnoObject( SfxListener& rObject );
-    void            RemoveUnoObject( SfxListener& rObject );
-    void            BroadcastUno( const SfxHint &rHint );
-    void            AddUnoListenerCall( const css::uno::Reference<
-                                            css::util::XModifyListener >& rListener,
-                                        const css::lang::EventObject& rEvent );
+    void               AddUnoObject( SfxListener& rObject );
+    void               RemoveUnoObject( SfxListener& rObject );
+    void               BroadcastUno( const SfxHint &rHint );
+    void               AddUnoListenerCall( const css::uno::Reference<
+                                           css::util::XModifyListener >& rListener,
+                                           const css::lang::EventObject& rEvent );
 
-    void            SetInLinkUpdate(bool bSet);             // TableLink or AreaLink
-    bool            IsInLinkUpdate() const;                 // including DdeLink
+    void                           SetInLinkUpdate(bool bSet);             // TableLink or AreaLink
+    bool                           IsInLinkUpdate() const;                 // including DdeLink
 
     SC_DLLPUBLIC SfxItemPool*       GetEditPool() const;
     SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
@@ -2217,46 +2197,43 @@ public:
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 
     ScRefreshTimerControl * const & GetRefreshTimerControlAddress() const
-        { return pRefreshTimerControl; }
+                                       { return pRefreshTimerControl; }
 
-    void            SetPastingDrawFromOtherDoc( bool bVal )
-                        { bPastingDrawFromOtherDoc = bVal; }
-    bool            PastingDrawFromOtherDoc() const
-                        { return bPastingDrawFromOtherDoc; }
+    void              SetPastingDrawFromOtherDoc( bool bVal )
+                          { bPastingDrawFromOtherDoc = bVal; }
+    bool              PastingDrawFromOtherDoc() const
+                          { return bPastingDrawFromOtherDoc; }
 
-                    /// an ID unique to each document instance
-    sal_uInt32      GetDocumentID() const;
+                      /// an ID unique to each document instance
+    sal_uInt32        GetDocumentID() const;
 
-    void            InvalidateStyleSheetUsage()
-                        { bStyleSheetUsageInvalid = true; }
+    void              InvalidateStyleSheetUsage() { bStyleSheetUsageInvalid = true; }
     void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SC_DLLPUBLIC SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
-    void     SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
+    void SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
-    const css::uno::Reference< css::script::vba::XVBAEventProcessor >&
-                    GetVbaEventProcessor() const { return mxVbaEvents; }
+    const css::uno::Reference< css::script::vba::XVBAEventProcessor >& GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
-    void                SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );
-    formula::FormulaGrammar::Grammar  GetStorageGrammar() const
-                            { return eStorageGrammar; }
+    void                              SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );
+    formula::FormulaGrammar::Grammar  GetStorageGrammar() const { return eStorageGrammar; }
 
     SC_DLLPUBLIC SfxUndoManager* GetUndoManager();
-    bool IsInVBAMode() const;
-    ScRowBreakIterator* GetRowBreakIterator(SCTAB nTab) const;
+    bool                         IsInVBAMode() const;
+    ScRowBreakIterator*          GetRowBreakIterator(SCTAB nTab) const;
 
-    void AddSubTotalCell(ScFormulaCell* pCell);
-    void RemoveSubTotalCell(ScFormulaCell* pCell);
-    void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
+    void                         AddSubTotalCell(ScFormulaCell* pCell);
+    void                         RemoveSubTotalCell(ScFormulaCell* pCell);
+    void                         SetSubTotalCellsDirty(const ScRange& rDirtyRange);
 
-    sal_uInt16 GetTextWidth( const ScAddress& rPos ) const;
+    sal_uInt16                   GetTextWidth( const ScAddress& rPos ) const;
 
-    SvtScriptType GetScriptType( const ScAddress& rPos ) const;
-    void SetScriptType( const ScAddress& rPos, SvtScriptType nType );
-    void UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
+    SvtScriptType                GetScriptType( const ScAddress& rPos ) const;
+    void                         SetScriptType( const ScAddress& rPos, SvtScriptType nType );
+    void                         UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
-    size_t GetFormulaHash( const ScAddress& rPos ) const;
+    size_t                       GetFormulaHash( const ScAddress& rPos ) const;
 
     /**
      * Make specified formula cells non-grouped.
@@ -2284,9 +2261,9 @@ public:
      */
     void PrepareFormulaCalc();
 
-    SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
-    const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
-    void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
+    SvtBroadcaster*         GetBroadcaster( const ScAddress& rPos );
+    const SvtBroadcaster*   GetBroadcaster( const ScAddress& rPos ) const;
+    void                    DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
 #if DUMP_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const;
@@ -2296,14 +2273,11 @@ public:
     SC_DLLPUBLIC void DumpAreaBroadcasters() const;
 #endif
 
-    SC_DLLPUBLIC void SetCalcConfig( const ScCalcConfig& rConfig );
+    SC_DLLPUBLIC void   SetCalcConfig( const ScCalcConfig& rConfig );
     const ScCalcConfig& GetCalcConfig() const { return maCalcConfig; }
-
-    void ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
-
-    void SwapNonEmpty( sc::TableValues& rValues );
-
-    void finalizeOutlineImport();
+    void                ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
+    void                SwapNonEmpty( sc::TableValues& rValues );
+    void                finalizeOutlineImport();
 
 private:
 
