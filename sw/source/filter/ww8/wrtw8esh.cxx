@@ -1743,7 +1743,7 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
     EscherPropertyContainer& rPropOpt)
 {
     const SfxPoolItem* pItem;
-    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
+    GraphicDrawMode nMode = GraphicDrawMode::Standard;
     sal_Int32 nContrast = 0;
     sal_Int16 nBrightness = 0;
 
@@ -1762,8 +1762,8 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
         true, &pItem))
     {
-        nMode = static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
-        if (nMode == GRAPHICDRAWMODE_WATERMARK)
+        nMode = (GraphicDrawMode)static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
+        if (nMode == GraphicDrawMode::Watermark)
         {
             /*
             There is no real watermark mode in word, we must use standard
@@ -1778,17 +1778,18 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
             nContrast -= 70;
             if (nContrast < -100)
                 nContrast = -100;
-            nMode = GRAPHICDRAWMODE_STANDARD;
+            nMode = GraphicDrawMode::Standard;
         }
     }
 
-    if (nMode == GRAPHICDRAWMODE_GREYS)
-        nMode = 0x40004;
-    else if (nMode == GRAPHICDRAWMODE_MONO)
-        nMode = 0x60006;
+    sal_uInt32 nPictureMode;
+    if (nMode == GraphicDrawMode::Greys)
+        nPictureMode = 0x40004;
+    else if (nMode == GraphicDrawMode::Mono)
+        nPictureMode = 0x60006;
     else
-        nMode = 0;
-    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nMode );
+        nPictureMode = 0;
+    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nPictureMode );
 
     if (nContrast != 0)
     {

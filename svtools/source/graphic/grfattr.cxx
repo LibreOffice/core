@@ -37,7 +37,7 @@ GraphicAttr::GraphicAttr() :
     mnBPercent      ( 0 ),
     mbInvert        ( false ),
     mcTransparency  ( 0 ),
-    meDrawMode      ( GRAPHICDRAWMODE_STANDARD )
+    meDrawMode      ( GraphicDrawMode::Standard )
 {
 }
 

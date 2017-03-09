@@ -600,7 +600,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_ATTR_GRAF_MODE:
             if( pItem )
                 aGrfSet.Put( SwDrawModeGrf(
-                            static_cast<const SfxUInt16Item*>(pItem)->GetValue() ));
+                            (GraphicDrawMode)static_cast<const SfxUInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_COLOR_SETTINGS:
@@ -777,8 +777,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_MODE:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt16Item( nWhich, static_cast<const SwDrawModeGrf&>(
-                        aCoreSet.Get(RES_GRFATR_DRAWMODE)).GetValue() ));
+                rSet.Put( SfxUInt16Item( nWhich, (sal_uInt16)static_cast<const SwDrawModeGrf&>(
+                              aCoreSet.Get(RES_GRFATR_DRAWMODE)).GetValue() ));
             break;
 
         case SID_GRFFILTER:

@@ -80,7 +80,7 @@ namespace drawinglayer
             Graphic aTransformedGraphic(rGraphicObject.GetGraphic());
             const bool isBitmap(GraphicType::Bitmap == aTransformedGraphic.GetType() && !aTransformedGraphic.getSvgData().get());
             const bool isAdjusted(getGraphicAttr().IsAdjusted());
-            const bool isDrawMode(GRAPHICDRAWMODE_STANDARD != getGraphicAttr().GetDrawMode());
+            const bool isDrawMode(GraphicDrawMode::Standard != getGraphicAttr().GetDrawMode());
 
             if(isBitmap && (isAdjusted || isDrawMode))
             {

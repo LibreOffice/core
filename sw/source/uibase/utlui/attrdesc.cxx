@@ -815,9 +815,9 @@ bool SwDrawModeGrf::GetPresentation(
         switch ( GetValue() )
         {
 
-        case GRAPHICDRAWMODE_GREYS:     nId = STR_DRAWMODE_GREY; break;
-        case GRAPHICDRAWMODE_MONO:      nId = STR_DRAWMODE_BLACKWHITE; break;
-        case GRAPHICDRAWMODE_WATERMARK: nId = STR_DRAWMODE_WATERMARK; break;
+        case GraphicDrawMode::Greys:     nId = STR_DRAWMODE_GREY; break;
+        case GraphicDrawMode::Mono:      nId = STR_DRAWMODE_BLACKWHITE; break;
+        case GraphicDrawMode::Watermark: nId = STR_DRAWMODE_WATERMARK; break;
         default:                        nId = STR_DRAWMODE_STD; break;
         }
         rText = SW_RESSTR( STR_DRAWMODE ) + SW_RESSTR( nId );

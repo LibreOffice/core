@@ -577,22 +577,22 @@ namespace drawinglayer
             // embeddings from here
             aRetval = rChildren;
 
-            if(GRAPHICDRAWMODE_WATERMARK == aGraphicDrawMode)
+            if(GraphicDrawMode::Watermark == aGraphicDrawMode)
             {
                 // this is solved by applying fixed values additionally to luminance
-                // and contrast, do it here and reset DrawMode to GRAPHICDRAWMODE_STANDARD
+                // and contrast, do it here and reset DrawMode to GraphicDrawMode::Standard
                 // original in svtools uses:
                 // #define WATERMARK_LUM_OFFSET        50
                 // #define WATERMARK_CON_OFFSET        -70
                 fLuminance = basegfx::clamp(fLuminance + 0.5, -1.0, 1.0);
                 fContrast = basegfx::clamp(fContrast - 0.7, -1.0, 1.0);
-                aGraphicDrawMode = GRAPHICDRAWMODE_STANDARD;
+                aGraphicDrawMode = GraphicDrawMode::Standard;
             }
 
-            // DrawMode (GRAPHICDRAWMODE_WATERMARK already handled)
+            // DrawMode (GraphicDrawMode::Watermark already handled)
             switch(aGraphicDrawMode)
             {
-                case GRAPHICDRAWMODE_GREYS:
+                case GraphicDrawMode::Greys:
                 {
                     // convert to grey
                     const Primitive2DReference aPrimitiveGrey(
@@ -604,7 +604,7 @@ namespace drawinglayer
                     aRetval = Primitive2DContainer { aPrimitiveGrey };
                     break;
                 }
-                case GRAPHICDRAWMODE_MONO:
+                case GraphicDrawMode::Mono:
                 {
                     // convert to mono (black/white with threshold 0.5)
                     const Primitive2DReference aPrimitiveBlackAndWhite(
@@ -616,11 +616,11 @@ namespace drawinglayer
                     aRetval = Primitive2DContainer { aPrimitiveBlackAndWhite };
                     break;
                 }
-                default: // case GRAPHICDRAWMODE_STANDARD:
+                default: // case GraphicDrawMode::Standard:
                 {
                     assert(
-                        aGraphicDrawMode != GRAPHICDRAWMODE_WATERMARK
-                        && "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
+                        aGraphicDrawMode != GraphicDrawMode::Watermark
+                        && "OOps, GraphicDrawMode::Watermark should already be handled (see above)");
                     // nothing to do
                     break;
                 }

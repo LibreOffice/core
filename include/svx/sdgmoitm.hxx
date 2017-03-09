@@ -26,13 +26,10 @@
 #include <svx/svxdllapi.h>
 
 
-// SdrGrafModeItem -
-
-
 class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem<GraphicDrawMode>
 {
 public:
-                            SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, eMode ) {}
+                            SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SfxEnumItem( SDRATTR_GRAFMODE, eMode ) {}
                             SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;

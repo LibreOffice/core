@@ -4367,16 +4367,16 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             FSEND );
 
     pItem = nullptr;
-    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
+    GraphicDrawMode nMode = GraphicDrawMode::Standard;
 
     if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
     {
-        nMode = static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
-        if (nMode == GRAPHICDRAWMODE_GREYS)
+        nMode = (GraphicDrawMode)static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
+        if (nMode == GraphicDrawMode::Greys)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl, FSEND);
-        else if (nMode == GRAPHICDRAWMODE_MONO) //black/white has a 0,5 threshold in LibreOffice
+        else if (nMode == GraphicDrawMode::Mono) //black/white has a 0,5 threshold in LibreOffice
             m_pSerializer->singleElementNS (XML_a, XML_biLevel, XML_thresh, OString::number(50000), FSEND);
-        else if (nMode == GRAPHICDRAWMODE_WATERMARK) //watermark has a brightness/luminance of 0,5 and contrast of -0.7 in LibreOffice
+        else if (nMode == GraphicDrawMode::Watermark) //watermark has a brightness/luminance of 0,5 and contrast of -0.7 in LibreOffice
             m_pSerializer->singleElementNS( XML_a, XML_lum, XML_bright, OString::number(70000), XML_contrast, OString::number(-70000), FSEND );
     }
     m_pSerializer->endElementNS( XML_a, XML_blip );

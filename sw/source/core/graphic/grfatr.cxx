@@ -288,7 +288,7 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 
 sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {
-    return GRAPHICDRAWMODE_WATERMARK + 1;
+    return (sal_uInt16)GraphicDrawMode::Watermark + 1;
 }
 
 bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
@@ -303,7 +303,7 @@ bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
                                 sal_uInt8 )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
-    if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
+    if(eVal >= 0 && eVal <= (sal_uInt16)GraphicDrawMode::Watermark)
     {
         SetEnumValue((sal_uInt16)eVal);
         return true;

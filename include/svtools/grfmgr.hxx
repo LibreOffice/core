@@ -63,12 +63,12 @@ namespace o3tl
     template<> struct typed_flags<GraphicAdjustmentFlags> : is_typed_flags<GraphicAdjustmentFlags, 0x1f> {};
 }
 
-enum GraphicDrawMode
+enum class GraphicDrawMode
 {
-    GRAPHICDRAWMODE_STANDARD = 0,
-    GRAPHICDRAWMODE_GREYS = 1,
-    GRAPHICDRAWMODE_MONO = 2,
-    GRAPHICDRAWMODE_WATERMARK = 3
+    Standard = 0,
+    Greys = 1,
+    Mono = 2,
+    Watermark = 3
 };
 
 class GraphicManager;
@@ -149,7 +149,7 @@ public:
     void            SetTransparency( sal_uInt8 cTransparency ) { mcTransparency = cTransparency; }
     sal_uInt8       GetTransparency() const { return mcTransparency; }
 
-    bool            IsSpecialDrawMode() const { return( meDrawMode != GRAPHICDRAWMODE_STANDARD ); }
+    bool            IsSpecialDrawMode() const { return( meDrawMode != GraphicDrawMode::Standard ); }
     bool            IsMirrored() const { return mnMirrFlags != BmpMirrorFlags::NONE; }
     bool            IsCropped() const
                     {
