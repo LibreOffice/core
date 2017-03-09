@@ -43,7 +43,7 @@ XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp)
 {
 }
 
-SvXMLEnumMapEntry const aLineNumberPositionMap[] =
+SvXMLEnumMapEntry<sal_uInt16> const aLineNumberPositionMap[] =
 {
     { XML_LEFT,     style::LineNumberPosition::LEFT },
     { XML_RIGHT,    style::LineNumberPosition::RIGHT },
@@ -140,7 +140,7 @@ void XMLLineNumberingExport::Export()
 
             // number position
             aAny = xLineNumbering->getPropertyValue("NumberPosition");
-            sal_Int16 nPosition = 0;
+            sal_uInt16 nPosition = 0;
             aAny >>= nPosition;
             if (SvXMLUnitConverter::convertEnum(sNumPosBuf, nPosition,
                                                 aLineNumberPositionMap))

@@ -77,7 +77,7 @@ void XMLFootnoteSeparatorImport::StartElement(
     sal_Int16 nLineWeight = 0;
     sal_Int32 nLineColor = 0;
     sal_Int8 nLineRelWidth = 0;
-    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; // enum text::HorizontalAdjust
+    text::HorizontalAdjust eLineAdjust = text::HorizontalAdjust_LEFT;
     sal_Int32 nLineTextDistance = 0;
     sal_Int32 nLineDistance = 0;
     sal_Int8 nLineStyle = 0;
@@ -117,18 +117,16 @@ void XMLFootnoteSeparatorImport::StartElement(
             }
             else if (IsXMLToken( sLocalName, XML_ADJUSTMENT ))
             {
-                sal_uInt16 nTmpU;
-                static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
+                static const SvXMLEnumMapEntry<text::HorizontalAdjust> aXML_HorizontalAdjust_Enum[] =
                 {
                     { XML_LEFT,     text::HorizontalAdjust_LEFT },
                     { XML_CENTER,   text::HorizontalAdjust_CENTER },
                     { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-                    { XML_TOKEN_INVALID, 0 }
+                    { XML_TOKEN_INVALID, (text::HorizontalAdjust)0 }
                 };
 
-                if (SvXMLUnitConverter::convertEnum(
-                            nTmpU, sAttrValue, aXML_HorizontalAdjust_Enum))
-                    eLineAdjust = (sal_Int16)nTmpU;
+                SvXMLUnitConverter::convertEnum(
+                            eLineAdjust, sAttrValue, aXML_HorizontalAdjust_Enum);
             }
             else if (IsXMLToken( sLocalName, XML_REL_WIDTH ))
             {
@@ -144,8 +142,7 @@ void XMLFootnoteSeparatorImport::StartElement(
             }
             else if (IsXMLToken( sLocalName, XML_LINE_STYLE ))
             {
-                sal_uInt16 nTmpU;
-                static const SvXMLEnumMapEntry aXML_LineStyle_Enum[] =
+                static const SvXMLEnumMapEntry<sal_Int8> aXML_LineStyle_Enum[] =
                 {
                     { XML_NONE,     0 },
                     { XML_SOLID,    1 },
@@ -154,10 +151,7 @@ void XMLFootnoteSeparatorImport::StartElement(
                     { XML_TOKEN_INVALID, 0 }
                 };
 
-                if (SvXMLUnitConverter::convertEnum(
-                            nTmpU, sAttrValue, aXML_LineStyle_Enum))
-                    nLineStyle = (sal_Int8)nTmpU;
-
+                SvXMLUnitConverter::convertEnum(nLineStyle, sAttrValue, aXML_LineStyle_Enum);
             }
         }
     }

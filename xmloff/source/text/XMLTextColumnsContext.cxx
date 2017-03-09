@@ -74,7 +74,7 @@ static const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLEnumMapEntry const pXML_Sep_Style_Enum[] =
+static SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
 {
     { XML_NONE,          0 },
     { XML_SOLID,         1 },
@@ -83,12 +83,12 @@ static SvXMLEnumMapEntry const pXML_Sep_Style_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const pXML_Sep_Align_Enum[] =
+static SvXMLEnumMapEntry<VerticalAlignment> const pXML_Sep_Align_Enum[] =
 {
-    { XML_TOP,          VerticalAlignment_TOP   },
-    { XML_MIDDLE,       VerticalAlignment_MIDDLE },
-    { XML_BOTTOM,       VerticalAlignment_BOTTOM },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOP,           VerticalAlignment_TOP   },
+    { XML_MIDDLE,        VerticalAlignment_MIDDLE },
+    { XML_BOTTOM,        VerticalAlignment_BOTTOM },
+    { XML_TOKEN_INVALID, (VerticalAlignment)0 }
 };
 
 class XMLTextColumnContext_Impl: public SvXMLImportContext
@@ -222,25 +222,15 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
                 nHeight = (sal_Int8)nVal;
             break;
         case XML_TOK_COLUMN_SEP_COLOR:
-            {
-                ::sax::Converter::convertColor( nColor, rValue );
-            }
+            ::sax::Converter::convertColor( nColor, rValue );
             break;
         case XML_TOK_COLUMN_SEP_ALIGN:
-            {
-                sal_uInt16 nAlign;
-                if( SvXMLUnitConverter::convertEnum( nAlign, rValue,
-                                                       pXML_Sep_Align_Enum ) )
-                    eVertAlign = (VerticalAlignment)nAlign;
-            }
+            SvXMLUnitConverter::convertEnum( eVertAlign, rValue,
+                                             pXML_Sep_Align_Enum );
             break;
         case XML_TOK_COLUMN_SEP_STYLE:
-            {
-                sal_uInt16 nStyleVal;
-                if( SvXMLUnitConverter::convertEnum( nStyleVal, rValue,
-                                                       pXML_Sep_Style_Enum ) )
-                    nStyle = (sal_Int8)nStyleVal;
-            }
+            SvXMLUnitConverter::convertEnum( nStyle, rValue,
+                                             pXML_Sep_Style_Enum );
             break;
         }
     }

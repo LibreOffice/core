@@ -156,7 +156,7 @@ static sal_Char const FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char const FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 static sal_Char const FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
-SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
+SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_AUTHOR, FIELD_ID_AUTHOR ),
@@ -244,7 +244,7 @@ SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TABLE_FORMULA, FIELD_ID_TABLE_FORMULA ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DROP_DOWN, FIELD_ID_DROP_DOWN ),
 
-    ENUM_STRING_MAP_END()
+    { nullptr, 0, (FieldIdEnum)0 }
 };
 
 
@@ -441,23 +441,11 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
     if (!sFieldName.isEmpty())
     {
         // map name to prelim. ID
-        sal_uInt16 nTmp;
         bool bRet = SvXMLUnitConverter::convertEnum(
-            nTmp, sFieldName, aFieldServiceNameMapping);
+            nToken, sFieldName, aFieldServiceNameMapping);
 
         // check return
         DBG_ASSERT(bRet, "Unknown field service name encountered!");
-        if (! bRet)
-        {
-            nToken = FIELD_ID_UNKNOWN;
-        }
-        else
-        {
-            nToken = (enum FieldIdEnum)nTmp;
-        }
-    } else {
-        // invalid service name
-        nToken = FIELD_ID_UNKNOWN;
     }
 
     // b) map prelim. to final FIELD_IDs
@@ -2674,7 +2662,7 @@ void XMLTextFieldExport::ProcessTimeOrDateTime(enum XMLTokenEnum eName,
 }
 
 
-SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry<sal_Int16> const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },
