@@ -295,7 +295,9 @@ if test "$build_os" = "cygwin"; then
     x_Cygwin=
     AC_MSG_CHECKING(for explicit COMSPEC)
     if test -z "$COMSPEC"; then
-        AC_MSG_ERROR([COMSPEC not set in Environment, please set it an rerun])
+        AC_MSG_ERROR([COMSPEC not set in environment, please set it and rerun])
+    else
+        AC_MSG_RESULT([found: $COMSPEC])
     fi
 fi
 
