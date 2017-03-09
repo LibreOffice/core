@@ -2306,6 +2306,26 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                          rReq.Ignore();
                 }
+
+            }
+            break;
+
+        case FID_SHOW_ALL_NOTES:
+        case FID_HIDE_ALL_NOTES:
+            {
+                 bool bShowNote     = nSlot == FID_SHOW_ALL_NOTES;
+                 ScViewData* pData  = GetViewData();
+                 ScDocument* pDoc   = pData->GetDocument();
+
+                 std::vector<sc::NoteEntry> aNotes;
+                 pDoc->GetAllNoteEntries(aNotes);
+
+                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 {
+                     const ScAddress& rAdr = itr->maPos;
+                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                 }
             }
             break;
 

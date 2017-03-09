@@ -1042,6 +1042,17 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case FID_SHOW_ALL_NOTES:
+            case FID_HIDE_ALL_NOTES:
+                {
+                    std::vector<sc::NoteEntry> aNotes;
+                    pDoc->GetAllNoteEntries(aNotes);
+
+                    if (aNotes.size()==0)
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
             case SID_DELETE_NOTE:
                 {
                     bool bEnable = false;

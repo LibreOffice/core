@@ -662,6 +662,8 @@
 
 #define FID_SHOW_NOTE           (SID_NEW_SLOTS+100)
 #define FID_HIDE_NOTE           (SID_NEW_SLOTS+101)
+#define FID_SHOW_ALL_NOTES      (SID_NEW_SLOTS+102)
+#define FID_HIDE_ALL_NOTES      (SID_NEW_SLOTS+103)
 
 // idl parameter
 

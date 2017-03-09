@@ -3725,6 +3725,41 @@ SfxBoolItem HideNote FID_HIDE_NOTE
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem ShowAllNotes FID_SHOW_ALL_NOTES
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+SfxVoidItem HideAllNotes FID_HIDE_ALL_NOTES
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
 
 SfxVoidItem DeleteNote SID_DELETE_NOTE
 ()
