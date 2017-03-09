@@ -232,6 +232,8 @@
 #define STR_UNDO_SHOWNOTE           176
 #define STR_UNDO_HIDENOTE           177
 #define STR_UNDO_DRAGDROP           178
+#define STR_UNDO_SHOWALLNOTES       179
+#define STR_UNDO_HIDEALLNOTES       180
 
 #define STR_IMPORT_LOTUS            182
 #define STR_IMPORT_DBF              183

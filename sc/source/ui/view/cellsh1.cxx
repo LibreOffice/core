@@ -2324,6 +2324,39 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                          rReq.Ignore();
                 }
+
+            }
+            break;
+
+        case FID_SHOW_ALL_NOTES:
+        case FID_HIDE_ALL_NOTES:
+            {
+                 bool bShowNote     = nSlot == FID_SHOW_ALL_NOTES;
+                 ScViewData* pData  = GetViewData();
+                 ScMarkData& rMark  = pData->GetMarkData();
+                 ScDocument* pDoc   = pData->GetDocument();
+                 std::vector<sc::NoteEntry> aNotes;
+
+                 OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
+                 pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
+
+                 SCTAB nFirstSelected = rMark.GetFirstSelected();
+                 SCTAB nLastSelected = rMark.GetLastSelected();
+
+                 for( SCTAB aTab = nFirstSelected; aTab<=nLastSelected; aTab++ )
+                 {
+                     if (rMark.GetTableSelect(aTab))
+                         pDoc->GetAllNoteEntries(aTab, aNotes);
+                 }
+
+                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 {
+                     const ScAddress& rAdr = itr->maPos;
+                     pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                 }
+
+                 pData->GetDocShell()->GetUndoManager()->LeaveListAction();
             }
             break;
 
