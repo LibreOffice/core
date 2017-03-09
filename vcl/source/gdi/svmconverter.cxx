@@ -490,6 +490,8 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConver
     }
 }
 
+#define LF_FACESIZE             32
+
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
     const sal_uLong         nPos = rIStm.Tell();
@@ -854,7 +856,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_FONT_ACTION:
             {
                 vcl::Font   aFont;
-                char        aName[ 32 ];
+                char        aName[LF_FACESIZE+1];
                 sal_Int32   nWidth, nHeight;
                 sal_Int16   nCharSet, nFamily, nPitch, nAlign, nWeight, nUnderline, nStrikeout;
                 sal_Int16   nCharOrient, nLineOrient;
@@ -862,7 +864,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                 ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
-                rIStm.ReadBytes( aName, 32 );
+                size_t nRet = rIStm.ReadBytes(aName, LF_FACESIZE);
+                aName[nRet] = 0;
                 aFont.SetFamilyName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
                 rIStm.ReadInt32( nWidth ).ReadInt32( nHeight );
                 rIStm.ReadInt16( nCharOrient ).ReadInt16( nLineOrient );
