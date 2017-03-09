@@ -64,8 +64,12 @@ enum class SfxCallMode : sal_uInt16
     MODAL     = 0x10     // despite ModalMode
 };
 
-template<> struct o3tl::typed_flags<SfxCallMode>:
-    o3tl::is_typed_flags<SfxCallMode, 0x1F> {};
+namespace o3tl {
+
+template<> struct typed_flags<SfxCallMode>: is_typed_flags<SfxCallMode, 0x1F>
+{};
+
+}
 
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
