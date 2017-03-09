@@ -5336,6 +5336,12 @@ find_msms()
         my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/MergeModules/"
         if test -e "$my_msm_dir/$my_msm_file"; then
             msmdir=$my_msm_dir
+        else
+            # got everything in 14.10.15017 except the MSMS in 25008... huh?
+            my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/14.10.25008/MergeModules/"
+            if test -e "$my_msm_dir/$my_msm_file"; then
+                msmdir=$my_msm_dir
+            fi
         fi
     fi
 
@@ -5347,6 +5353,7 @@ find_msms()
             AC_MSG_ERROR([not found])
         else
             AC_MSG_WARN([not found])
+            add_warning "MSM $my_msm_file not found"
         fi
     fi
 }
