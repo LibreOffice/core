@@ -534,12 +534,15 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
     return *this;
 }
 
+ScCaptionPtr::Head::Head( ScCaptionPtr* p ) :
+    mpFirst(p), mnRefs(1), mbInDrawPage(false)
+{
+}
+
 void ScCaptionPtr::newHead()
 {
     assert(!mpHead);
-    mpHead = new Head;
-    mpHead->mpFirst = this;
-    mpHead->mnRefs = 1;
+    mpHead = new Head(this);
 }
 
 void ScCaptionPtr::replaceInList( ScCaptionPtr* pNew )
@@ -690,6 +693,15 @@ void ScCaptionPtr::decRefAndDestroy()
         delete mpHead;
         mpHead = nullptr;
     }
+}
+
+void ScCaptionPtr::insertToDrawPage( SdrPage& rDrawPage )
+{
+    assert(mpHead && mpCaption);
+    assert(!mpHead->mbInDrawPage);  // multiple assignments not possible
+
+    rDrawPage.InsertObject( mpCaption );
+    mpHead->mbInDrawPage = true;
 }
 
 SdrCaptionObj* ScCaptionPtr::release()
