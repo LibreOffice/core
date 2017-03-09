@@ -67,7 +67,7 @@ XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImpo
 {
 }
 
-const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
+const SvXMLEnumMapEntry<sal_uInt16> aXML_GluePointEnumMap[] =
 {
     { XML_NONE,         0 },
     { XML_SEGMENTS,     1 },
@@ -123,17 +123,17 @@ void GetString( std::vector< css::beans::PropertyValue >& rDest,
     rDest.push_back( aProp );
 }
 
+template<typename EnumT>
 void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
-                        const SvXMLEnumMapEntry& rMap )
+                        const SvXMLEnumMapEntry<EnumT>& rMap )
 {
-    sal_uInt16 eKind;
+    EnumT eKind;
     if( SvXMLUnitConverter::convertEnum( eKind, rValue, &rMap ) )
     {
-        sal_Int16 nEnum = (sal_Int16)eKind;
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
-        aProp.Value <<= nEnum;
+        aProp.Value <<= static_cast<sal_Int16>(eKind);
         rDest.push_back( aProp );
     }
 }

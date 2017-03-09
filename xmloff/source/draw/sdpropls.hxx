@@ -21,6 +21,8 @@
 #define INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -41,8 +43,8 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 // enum maps for attributes
 
-extern SvXMLEnumMapEntry const aXML_ConnectionKind_EnumMap[];
-extern SvXMLEnumMapEntry const aXML_CircleKind_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::ConnectorType> const aXML_ConnectionKind_EnumMap[];
+extern SvXMLEnumMapEntry<css::drawing::CircleKind> const aXML_CircleKind_EnumMap[];
 
 /** contains the attribute to property mapping for a drawing layer table */
 extern const XMLPropertyMapEntry aXMLTableShapeAttributes[];

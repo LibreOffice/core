@@ -185,15 +185,15 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
 /** convert string to enum using given enum map, if the enum is
     not found in the map, this method will return false
 */
-bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
+bool SvXMLUnitConverter::convertEnumImpl( sal_uInt16& rEnum,
                                       const OUString& rValue,
-                                      const SvXMLEnumStringMapEntry *pMap )
+                                      const SvXMLEnumStringMapEntry<sal_uInt16> *pMap )
 {
-    while( pMap->pName )
+    while( pMap->GetName() )
     {
-        if( rValue.equalsAsciiL( pMap->pName, pMap->nNameLength ) )
+        if( rValue.equalsAsciiL( pMap->GetName(), pMap->GetNameLength() ) )
         {
-            rEnum = pMap->nValue;
+            rEnum = pMap->GetValue();
             return true;
         }
         ++pMap;
@@ -204,16 +204,16 @@ bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
 
 /** convert string to enum using given token map, if the enum is
     not found in the map, this method will return false */
-bool SvXMLUnitConverter::convertEnum(
+bool SvXMLUnitConverter::convertEnumImpl(
     sal_uInt16& rEnum,
     const OUString& rValue,
-    const SvXMLEnumMapEntry *pMap )
+    const SvXMLEnumMapEntry<sal_uInt16> *pMap )
 {
-    while( pMap->eToken != XML_TOKEN_INVALID )
+    while( pMap->GetToken() != XML_TOKEN_INVALID )
     {
-        if( IsXMLToken( rValue, pMap->eToken ) )
+        if( IsXMLToken( rValue, pMap->GetToken() ) )
         {
-            rEnum = pMap->nValue;
+            rEnum = pMap->GetValue();
             return true;
         }
         ++pMap;
@@ -225,19 +225,19 @@ bool SvXMLUnitConverter::convertEnum(
     default token. If the enum is not found in the map,
     this method will either use the given default or return
     false if no default is set */
-bool SvXMLUnitConverter::convertEnum(
+bool SvXMLUnitConverter::convertEnumImpl(
     OUStringBuffer& rBuffer,
-    unsigned int nValue,
-    const SvXMLEnumMapEntry *pMap,
+    sal_uInt16 nValue,
+    const SvXMLEnumMapEntry<sal_uInt16> *pMap,
     enum XMLTokenEnum eDefault)
 {
     enum XMLTokenEnum eTok = eDefault;
 
-    while( pMap->eToken != XML_TOKEN_INVALID )
+    while( pMap->GetToken() != XML_TOKEN_INVALID )
     {
-        if( pMap->nValue == nValue )
+        if( pMap->GetValue() == nValue )
         {
-            eTok = pMap->eToken;
+            eTok = pMap->GetToken();
             break;
         }
         ++pMap;

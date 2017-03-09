@@ -63,16 +63,16 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 {
 
-    { XML_TEXT,                 ReferenceFieldPart::TEXT },
-    { XML_CATEGORY_AND_VALUE,   ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { XML_CAPTION,              ReferenceFieldPart::ONLY_CAPTION },
+    { XML_TEXT,                 (sal_uInt16)ReferenceFieldPart::TEXT },
+    { XML_CATEGORY_AND_VALUE,   (sal_uInt16)ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_CAPTION,              (sal_uInt16)ReferenceFieldPart::ONLY_CAPTION },
 
     // wrong values that previous versions wrote:
-    { XML_CHAPTER,              ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { XML_PAGE,                 ReferenceFieldPart::ONLY_CAPTION },
+    { XML_CHAPTER,              (sal_uInt16)ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_PAGE,                 (sal_uInt16)ReferenceFieldPart::ONLY_CAPTION },
 
     { XML_TOKEN_INVALID,        0 }
 };
