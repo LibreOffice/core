@@ -30,75 +30,75 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const pXML_UnderlineType_Enum[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_UnderlineType_Enum[] =
 {
-    { XML_NONE,                         awt::FontUnderline::NONE },
-    { XML_SINGLE,               awt::FontUnderline::SINGLE },
-    { XML_DOUBLE,                       awt::FontUnderline::DOUBLE },
-    { XML_SINGLE,               awt::FontUnderline::DOTTED },
-    { XML_SINGLE,               awt::FontUnderline::DASH },
-    { XML_SINGLE,               awt::FontUnderline::LONGDASH },
-    { XML_SINGLE,               awt::FontUnderline::DASHDOT },
-    { XML_SINGLE,               awt::FontUnderline::DASHDOTDOT },
-    { XML_SINGLE,               awt::FontUnderline::WAVE },
-    { XML_SINGLE,               awt::FontUnderline::BOLD },
-    { XML_SINGLE,               awt::FontUnderline::BOLDDOTTED },
-    { XML_SINGLE,               awt::FontUnderline::BOLDDASH },
-    { XML_SINGLE,               awt::FontUnderline::BOLDLONGDASH },
-    { XML_SINGLE,               awt::FontUnderline::BOLDDASHDOT },
-    { XML_SINGLE,           awt::FontUnderline::BOLDDASHDOTDOT },
-    { XML_SINGLE,               awt::FontUnderline::BOLDWAVE },
-    { XML_DOUBLE,                       awt::FontUnderline::DOUBLEWAVE },
-    { XML_SINGLE,               awt::FontUnderline::SMALLWAVE },
-    { XML_TOKEN_INVALID,                0 }
+    { XML_NONE,                 (sal_uInt16)awt::FontUnderline::NONE },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::SINGLE },
+    { XML_DOUBLE,               (sal_uInt16)awt::FontUnderline::DOUBLE },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::DOTTED },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::DASH },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::LONGDASH },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::DASHDOT },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::DASHDOTDOT },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::WAVE },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLD },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDDOTTED },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDDASH },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDLONGDASH },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDDASHDOT },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::BOLDWAVE },
+    { XML_DOUBLE,               (sal_uInt16)awt::FontUnderline::DOUBLEWAVE },
+    { XML_SINGLE,               (sal_uInt16)awt::FontUnderline::SMALLWAVE },
+    { XML_TOKEN_INVALID,        0 }
 };
 
-SvXMLEnumMapEntry const pXML_UnderlineStyle_Enum[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_UnderlineStyle_Enum[] =
 {
-    { XML_NONE,                         awt::FontUnderline::NONE },
-    { XML_SOLID,                        awt::FontUnderline::SINGLE },
-    { XML_SOLID,                        awt::FontUnderline::DOUBLE },
-    { XML_DOTTED,               awt::FontUnderline::DOTTED },
-    { XML_DASH,             awt::FontUnderline::DASH },
-    { XML_LONG_DASH,            awt::FontUnderline::LONGDASH },
-    { XML_DOT_DASH,         awt::FontUnderline::DASHDOT },
-    { XML_DOT_DOT_DASH,     awt::FontUnderline::DASHDOTDOT },
-    { XML_WAVE,             awt::FontUnderline::WAVE },
-    { XML_SOLID,                        awt::FontUnderline::BOLD },
-    { XML_DOTTED,               awt::FontUnderline::BOLDDOTTED },
-    { XML_DASH,             awt::FontUnderline::BOLDDASH },
-    { XML_LONG_DASH,            awt::FontUnderline::BOLDLONGDASH },
-    { XML_DOT_DASH,         awt::FontUnderline::BOLDDASHDOT },
-    { XML_DOT_DOT_DASH,         awt::FontUnderline::BOLDDASHDOTDOT },
-    { XML_WAVE,             awt::FontUnderline::BOLDWAVE },
-    { XML_WAVE,                 awt::FontUnderline::DOUBLEWAVE },
-    { XML_SMALL_WAVE,           awt::FontUnderline::SMALLWAVE },
-    { XML_TOKEN_INVALID,                0 }
+    { XML_NONE,                 (sal_uInt16)awt::FontUnderline::NONE },
+    { XML_SOLID,                (sal_uInt16)awt::FontUnderline::SINGLE },
+    { XML_SOLID,                (sal_uInt16)awt::FontUnderline::DOUBLE },
+    { XML_DOTTED,               (sal_uInt16)awt::FontUnderline::DOTTED },
+    { XML_DASH,                 (sal_uInt16)awt::FontUnderline::DASH },
+    { XML_LONG_DASH,            (sal_uInt16)awt::FontUnderline::LONGDASH },
+    { XML_DOT_DASH,             (sal_uInt16)awt::FontUnderline::DASHDOT },
+    { XML_DOT_DOT_DASH,         (sal_uInt16)awt::FontUnderline::DASHDOTDOT },
+    { XML_WAVE,                 (sal_uInt16)awt::FontUnderline::WAVE },
+    { XML_SOLID,                (sal_uInt16)awt::FontUnderline::BOLD },
+    { XML_DOTTED,               (sal_uInt16)awt::FontUnderline::BOLDDOTTED },
+    { XML_DASH,                 (sal_uInt16)awt::FontUnderline::BOLDDASH },
+    { XML_LONG_DASH,            (sal_uInt16)awt::FontUnderline::BOLDLONGDASH },
+    { XML_DOT_DASH,             (sal_uInt16)awt::FontUnderline::BOLDDASHDOT },
+    { XML_DOT_DOT_DASH,         (sal_uInt16)awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_WAVE,                 (sal_uInt16)awt::FontUnderline::BOLDWAVE },
+    { XML_WAVE,                 (sal_uInt16)awt::FontUnderline::DOUBLEWAVE },
+    { XML_SMALL_WAVE,           (sal_uInt16)awt::FontUnderline::SMALLWAVE },
+    { XML_TOKEN_INVALID,        0 }
 };
 
-SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
+SvXMLEnumMapEntry<sal_uInt16> const pXML_UnderlineWidth_Enum[] =
 {
-    { XML_AUTO,                         awt::FontUnderline::NONE },
-    { XML_AUTO,                         awt::FontUnderline::SINGLE },
-    { XML_AUTO,                         awt::FontUnderline::DOUBLE },
-    { XML_AUTO,                         awt::FontUnderline::DOTTED },
-    { XML_AUTO,                         awt::FontUnderline::DASH },
-    { XML_AUTO,                         awt::FontUnderline::LONGDASH },
-    { XML_AUTO,                         awt::FontUnderline::DASHDOT },
-    { XML_AUTO,                         awt::FontUnderline::DASHDOTDOT },
-    { XML_AUTO,                         awt::FontUnderline::WAVE },
-    { XML_BOLD,             awt::FontUnderline::BOLD },
-    { XML_BOLD,             awt::FontUnderline::BOLDDOTTED },
-    { XML_BOLD,             awt::FontUnderline::BOLDDASH },
-    { XML_BOLD,             awt::FontUnderline::BOLDLONGDASH },
-    { XML_BOLD,             awt::FontUnderline::BOLDDASHDOT },
-    { XML_BOLD,                 awt::FontUnderline::BOLDDASHDOTDOT },
-    { XML_BOLD,             awt::FontUnderline::BOLDWAVE },
-    { XML_AUTO,                         awt::FontUnderline::DOUBLEWAVE },
-    { XML_THIN,                         awt::FontUnderline::NONE },
-    { XML_MEDIUM,                       awt::FontUnderline::NONE },
-    { XML_THICK,                        awt::FontUnderline::BOLD},
-    { XML_TOKEN_INVALID,                0 }
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::NONE },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::SINGLE },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DOUBLE },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DOTTED },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DASH },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::LONGDASH },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DASHDOT },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DASHDOTDOT },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::WAVE },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLD },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDDOTTED },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDDASH },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDLONGDASH },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDDASHDOT },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_BOLD,             (sal_uInt16)awt::FontUnderline::BOLDWAVE },
+    { XML_AUTO,             (sal_uInt16)awt::FontUnderline::DOUBLEWAVE },
+    { XML_THIN,             (sal_uInt16)awt::FontUnderline::NONE },
+    { XML_MEDIUM,           (sal_uInt16)awt::FontUnderline::NONE },
+    { XML_THICK,            (sal_uInt16)awt::FontUnderline::BOLD},
+    { XML_TOKEN_INVALID,    0 }
 };
 
 
@@ -167,7 +167,7 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
 bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    sal_Int16 nValue = sal_Int16();
+    sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) &&
@@ -175,7 +175,7 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
          awt::FontUnderline::DOUBLEWAVE == nValue) )
     {
         bRet = SvXMLUnitConverter::convertEnum(
-            aOut, (sal_uInt16)nValue, pXML_UnderlineType_Enum );
+            aOut, nValue, pXML_UnderlineType_Enum );
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
@@ -259,13 +259,13 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
 bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    sal_Int16 nValue = sal_Int16();
+    sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 
     if( rValue >>= nValue )
     {
         bRet = SvXMLUnitConverter::convertEnum(
-            aOut, (sal_uInt16)nValue, pXML_UnderlineStyle_Enum );
+            aOut, nValue, pXML_UnderlineStyle_Enum );
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
@@ -350,13 +350,13 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    sal_Int16 nValue = sal_Int16();
+    sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && (awt::FontUnderline::NONE != nValue) )
     {
         bRet = SvXMLUnitConverter::convertEnum(
-            aOut, (sal_uInt16)nValue, pXML_UnderlineWidth_Enum );
+            aOut, nValue, pXML_UnderlineWidth_Enum );
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
