@@ -3305,17 +3305,15 @@ win_get_env_from_vsvars32bat()
     if test $vcnum = "150"; then
       # Also seems to be located in another directory under the same name: vsvars32.bat
       # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
-      echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/VsDevCmd.bat\" /no_logo\r\n" >> $WRAPPERBATCHFILEPATH
+      printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     else
-      echo -e "@call \"`cygpath -w $VC_PRODUCT_DIR`/../Common7/Tools/vsvars32.bat\"\r\n" >> $WRAPPERBATCHFILEPATH
+      printf '@call "%s/../Common7/Tools/vsvars32.bat"\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     fi
-    echo -e "@setlocal\r\n" >> $WRAPPERBATCHFILEPATH
-    echo -e "@echo %$1%\r\n" >> $WRAPPERBATCHFILEPATH
-    echo -e "@endlocal\r\n" >> $WRAPPERBATCHFILEPATH
+    printf '@setlocal\r\n@echo %%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
-    _win_get_env_from_vsvars32bat=$($WRAPPERBATCHFILEPATH | tr -d "\r")
+    _win_get_env_from_vsvars32bat=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
     rm -f $WRAPPERBATCHFILEPATH
-    echo $_win_get_env_from_vsvars32bat
+    printf '%s' "$_win_get_env_from_vsvars32bat"
 }
 
 find_ucrt()
@@ -3339,9 +3337,9 @@ find_ucrt()
           ide_env_file="${ide_env_dir}/vsvars32.bat"
         fi
         if test -f "$ide_env_file"; then
-            PathFormat "`win_get_env_from_vsvars32bat "UniversalCRTSdkDir"`"
+            PathFormat "$(win_get_env_from_vsvars32bat UniversalCRTSdkDir)"
             UCRTSDKDIR=$formatted_path
-            UCRTVERSION=`win_get_env_from_vsvars32bat "UCRTVersion"`
+            UCRTVERSION=$(win_get_env_from_vsvars32bat UCRTVersion)
         else
           AC_MSG_ERROR([No UCRT found])
         fi
