@@ -419,7 +419,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
             // store note position in user data of caption object
             ScCaptionUtil::SetCaptionUserData( *rNoteData.mxCaption, rPos );
             // insert object into draw page
-            pDrawPage->InsertObject( rNoteData.mxCaption.get() );
+            rNoteData.mxCaption.insertToDrawPage( *pDrawPage );
         }
     }
 }
@@ -1117,10 +1117,11 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
 
     // create the caption object
     ScCaptionCreator aCreator( rDoc, rPos, bTailFront );
-    SdrCaptionObj* pCaption = aCreator.GetCaption().get();  // just for ease of use
 
     // insert caption into page (needed to set caption text)
-    rDrawPage.InsertObject( pCaption );
+    aCreator.GetCaption().insertToDrawPage( rDrawPage );
+
+    SdrCaptionObj* pCaption = aCreator.GetCaption().get();  // just for ease of use
 
     // clone the edit text object, unless user text is present, then set this text
     if( pNoteCaption && rUserText.isEmpty() )
