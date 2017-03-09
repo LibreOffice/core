@@ -27,6 +27,19 @@
 class SfxPoolItem;
 class VirtualDevice;
 
+namespace editeng
+{
+    class SharedVclResources
+    {
+        private:
+            VclPtr<VirtualDevice> m_pVirDev;
+        public:
+            SharedVclResources();
+            ~SharedVclResources();
+            VclPtr<VirtualDevice> GetVirtualDevice();
+    };
+}
+
 class GlobalEditData
 {
 private:
@@ -34,7 +47,6 @@ private:
     std::vector<SfxPoolItem*>*   ppDefItems;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
-    VclPtr<VirtualDevice> mpVirDev;
 
 public:
                     GlobalEditData();
@@ -45,8 +57,6 @@ public:
     rtl::Reference<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
-
-    VclPtr<VirtualDevice> GetStdVirtualDevice();
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERDLL2_HXX

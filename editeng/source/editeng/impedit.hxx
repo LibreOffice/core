@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
 
+#include <eerdll2.hxx>
 #include <editdoc.hxx>
 #include <editsel.hxx>
 #include <editundo.hxx>
@@ -397,6 +398,7 @@ class ImpEditEngine : public SfxListener
     typedef EditEngine::ViewsType ViewsType;
 
 private:
+    std::shared_ptr<editeng::SharedVclResources> pSharedVCL;
 
 
     // Data ...
