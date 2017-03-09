@@ -780,19 +780,20 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 
     int nCIDIndex = 0;
     awt::Size aSize(2000, 700);
-
+    int y = 100;
     for (OUString const & sColumnField : aColumnFields)
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
-        awt::Point aNewPosition = awt::Point(100, 100);
+        awt::Point aNewPosition = awt::Point(100, y);
         pButton->setLabel(sColumnField);
         pButton->setCID("RowFieldButton." + OUString::number(nCIDIndex));
         pButton->createShapes(aNewPosition, aSize, xModelPage);
         nCIDIndex += 1;
+        y += aSize.Height + 100;;
     }
-    nUsedHeight += aSize.Height + 100;
+    nUsedHeight += y + 100;
 
     return aButtons;
 }
