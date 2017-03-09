@@ -3313,9 +3313,9 @@ win_get_env_from_vsvars32bat()
     echo -e "@echo %$1%\r\n" >> $WRAPPERBATCHFILEPATH
     echo -e "@endlocal\r\n" >> $WRAPPERBATCHFILEPATH
     chmod +x $WRAPPERBATCHFILEPATH
-    _win_get_env_from_vsvars32bat=$($WRAPPERBATCHFILEPATH | tr -d "\n\r\0")
+    _win_get_env_from_vsvars32bat=$($WRAPPERBATCHFILEPATH | tr -d "\r")
     rm -f $WRAPPERBATCHFILEPATH
-    echo -n $_win_get_env_from_vsvars32bat
+    echo $_win_get_env_from_vsvars32bat
 }
 
 find_ucrt()
