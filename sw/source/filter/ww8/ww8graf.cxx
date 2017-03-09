@@ -1607,7 +1607,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     return nOutsideThick;
 }
 
-#define WW8ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
+#define WW8ITEMVALUE(ItemSet,Id,Cast)  ItemSet.GetItem<Cast>(Id)->GetValue()
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
@@ -2122,10 +2122,10 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
             }
 
             // drawmode
-            if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFMODE, SdrGrafModeItem))
+            auto nGrafMode = rOldSet.GetItem<SdrGrafModeItem>(SDRATTR_GRAFMODE)->GetValue();
+            if ( nGrafMode != GraphicDrawMode::Standard)
             {
-                SwDrawModeGrf aDrawMode( static_cast< sal_uInt16 >(WW8ITEMVALUE(rOldSet,
-                    SDRATTR_GRAFMODE, SdrGrafModeItem)) );
+                SwDrawModeGrf aDrawMode( nGrafMode );
                 pGrfNd->SetAttr( aDrawMode );
             }
         }

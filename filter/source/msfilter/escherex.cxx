@@ -3984,7 +3984,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                                     || pGraphicAttr->IsAdjusted() )
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt.WriteUInt16( pGraphicAttr->GetDrawMode() )
+                aSt.WriteUInt16( (sal_uInt16)pGraphicAttr->GetDrawMode() )
                    .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
                    .WriteInt32( pGraphicAttr->GetLeftCrop() )
                    .WriteInt32( pGraphicAttr->GetTopCrop() )

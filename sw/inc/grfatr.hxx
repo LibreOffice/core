@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
 #include <swatrset.hxx>
@@ -260,10 +261,10 @@ public:
                                         sal_uInt8 nMemberId ) override;
 };
 
-class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem<sal_uInt16>
+class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem<GraphicDrawMode>
 {
 public:
-    SwDrawModeGrf( sal_uInt16 nMode = 0 )
+    SwDrawModeGrf( GraphicDrawMode nMode = GraphicDrawMode::Standard )
         : SfxEnumItem( RES_GRFATR_DRAWMODE, nMode )
     {}
 

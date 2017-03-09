@@ -3859,11 +3859,11 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             }
             sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
             sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
-            GraphicDrawMode eDrawMode   = GRAPHICDRAWMODE_STANDARD;
+            GraphicDrawMode eDrawMode   = GraphicDrawMode::Standard;
             switch ( GetPropertyValue( DFF_Prop_pictureActive, 0 ) & 6 )
             {
-                case 4 : eDrawMode = GRAPHICDRAWMODE_GREYS; break;
-                case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
+                case 4 : eDrawMode = GraphicDrawMode::Greys; break;
+                case 6 : eDrawMode = GraphicDrawMode::Mono; break;
                 case 0 :
                 {
                     //office considers the converted values of (in OOo) 70 to be the
@@ -3873,13 +3873,13 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     {
                         nContrast = 0;
                         nBrightness = 0;
-                        eDrawMode = GRAPHICDRAWMODE_WATERMARK;
+                        eDrawMode = GraphicDrawMode::Watermark;
                     };
                 }
                 break;
             }
 
-            if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GRAPHICDRAWMODE_STANDARD ) )
+            if ( nContrast || nBrightness || ( nGamma != 0x10000 ) || ( eDrawMode != GraphicDrawMode::Standard ) )
             {
                 // MSO uses a different algorithm for contrast+brightness, LO applies contrast before brightness,
                 // while MSO apparently applies half of brightness before contrast and half after. So if only
@@ -3894,16 +3894,16 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         rSet.Put( SdrGrafContrastItem( (sal_Int16)nContrast ) );
                     if ( nGamma != 0x10000 )
                         rSet.Put( SdrGrafGamma100Item( nGamma / 655 ) );
-                    if ( eDrawMode != GRAPHICDRAWMODE_STANDARD )
+                    if ( eDrawMode != GraphicDrawMode::Standard )
                         rSet.Put( SdrGrafModeItem( eDrawMode ) );
                 }
                 else
                 {
-                    if ( eDrawMode == GRAPHICDRAWMODE_WATERMARK )
+                    if ( eDrawMode == GraphicDrawMode::Watermark )
                     {
                         nContrast = 60;
                         nBrightness = 70;
-                        eDrawMode = GRAPHICDRAWMODE_STANDARD;
+                        eDrawMode = GraphicDrawMode::Standard;
                     }
                     switch ( aGraf.GetType() )
                     {
@@ -3912,9 +3912,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                             BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
                                 aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
-                            if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
+                            if ( eDrawMode == GraphicDrawMode::Greys )
                                 aBitmapEx.Convert( BmpConversion::N8BitGreys );
-                            else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
+                            else if ( eDrawMode == GraphicDrawMode::Mono )
                                 aBitmapEx.Convert( BmpConversion::N1BitThreshold );
                             aGraf = aBitmapEx;
 
@@ -3926,9 +3926,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                             GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
                                 aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
-                            if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
+                            if ( eDrawMode == GraphicDrawMode::Greys )
                                 aGdiMetaFile.Convert( MtfConversion::N8BitGreys );
-                            else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
+                            else if ( eDrawMode == GraphicDrawMode::Mono )
                                 aGdiMetaFile.Convert( MtfConversion::N1BitThreshold );
                             aGraf = aGdiMetaFile;
                         }
