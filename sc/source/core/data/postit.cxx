@@ -485,8 +485,7 @@ ScCaptionPtr::ScCaptionPtr( ScCaptionPtr&& r ) :
 
 ScCaptionPtr& ScCaptionPtr::operator=( ScCaptionPtr&& r )
 {
-    if (this == &r)
-        return *this;
+    assert(this != &r);
 
     mpHead = r.mpHead;
     mpNext = r.mpNext;
