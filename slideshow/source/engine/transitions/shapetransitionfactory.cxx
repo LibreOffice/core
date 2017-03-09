@@ -110,12 +110,9 @@ ClippingAnimation::~ClippingAnimation()
     {
         end_();
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception&)
     {
-        OSL_FAIL( OUStringToOString(
-                        comphelper::anyToString(
-                            cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
     }
 }
 
@@ -354,9 +351,6 @@ AnimationActivitySharedPtr createShapeTransitionByType(
         SAL_WARN("slideshow",
             "createShapeTransitionByType(): Unknown type/subtype combination encountered: "
             << xTransition->getTransition() << " " << xTransition->getSubtype() );
-        OSL_FAIL(
-            "createShapeTransitionByType(): Unknown type/subtype "
-            "combination encountered" );
     }
 
     return pGeneratedActivity;

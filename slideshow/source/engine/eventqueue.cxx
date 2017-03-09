@@ -73,12 +73,9 @@ namespace slideshow
                 {
                     maEvents.top().pEvent->dispose();
                 }
-                catch (uno::Exception &)
+                catch (const uno::Exception&)
                 {
-                    OSL_FAIL( OUStringToOString(
-                                    comphelper::anyToString(
-                                        cppu::getCaughtException() ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                    SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
                 }
                 maEvents.pop();
             }

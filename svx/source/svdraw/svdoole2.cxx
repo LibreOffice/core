@@ -945,14 +945,11 @@ void SdrOle2Obj::CheckFileLink_Impl()
                 }
             }
         }
-        catch( css::uno::Exception& )
+        catch (const css::uno::Exception&)
         {
-            OSL_FAIL(
-                OString(OString("SdrOle2Obj::CheckFileLink_Impl(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "svx", "SdrOle2Obj::CheckFileLink_Impl(),"
+                        "exception caught: "
+                 << comphelper::anyToString(cppu::getCaughtException() ) );
         }
     }
 }

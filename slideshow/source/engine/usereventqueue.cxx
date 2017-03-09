@@ -558,11 +558,9 @@ UserEventQueue::~UserEventQueue()
         // unregister all handlers
         clear();
     }
-    catch (uno::Exception &) {
-        OSL_FAIL( OUStringToOString(
-                        comphelper::anyToString(
-                            cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+    catch (const uno::Exception&)
+    {
+        SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
     }
 }
 
