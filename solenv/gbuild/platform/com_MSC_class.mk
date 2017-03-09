@@ -175,7 +175,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION))) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(LIBRARY_X64)), \
-			-LIBPATH:$(COMPATH)/lib/amd64 \
+			-LIBPATH:$(COMPATH)/lib/$(if $(filter 140,$(VCVER)),amd64,x64) \
 			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
 		    $(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x64) \
 		    $(if $(filter-out 120,$(VCVER)),-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x64)) \
