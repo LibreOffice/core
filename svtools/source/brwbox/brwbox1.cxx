@@ -63,7 +63,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     pColSel = nullptr;
     pVScroll = nullptr;
     pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
-    pCols = new BrowserColumns;
     m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
     aGridLineColor = Color( COL_LIGHTGRAY );
@@ -140,10 +139,9 @@ void BrowseBox::dispose()
     aHScroll.disposeAndClear();
 
     // free columns-space
-    for (BrowserColumn* pCol : *pCols)
+    for (BrowserColumn* pCol : pCols)
         delete pCol;
-    pCols->clear();
-    delete pCols;
+    pCols.clear();
     delete pColSel;
     if ( bMultiSelection )
         delete uRow.pSel;
@@ -220,17 +218,17 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 {
 
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( ColCount() == 0 || (*pCols)[0]->GetId() != HandleColumnId , "BrowseBox::InsertHandleColumn: there is already a handle column" );
+    OSL_ENSURE( ColCount() == 0 || pCols[0]->GetId() != HandleColumnId , "BrowseBox::InsertHandleColumn: there is already a handle column" );
     {
-        BrowserColumns::iterator iCol = pCols->begin();
-        const BrowserColumns::iterator colsEnd = pCols->end();
+        BrowserColumns::iterator iCol = pCols.begin();
+        const BrowserColumns::iterator colsEnd = pCols.end();
         if ( iCol != colsEnd )
             for (++iCol; iCol != colsEnd; ++iCol)
                 OSL_ENSURE( (*iCol)->GetId() != HandleColumnId, "BrowseBox::InsertHandleColumn: there is a non-Handle column with handle ID" );
     }
 #endif
 
-    pCols->insert( pCols->begin(), new BrowserColumn( 0, OUString(), nWidth, GetZoom() ) );
+    pCols.insert( pCols.begin(), new BrowserColumn( 0, OUString(), nWidth, GetZoom() ) );
     FreezeColumn( 0 );
 
     // adjust headerbar
@@ -255,21 +253,21 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
 
 #if OSL_DEBUG_LEVEL > 0
     {
-        const BrowserColumns::iterator colsEnd = pCols->end();
-        for (BrowserColumns::iterator iCol = pCols->begin(); iCol != colsEnd; ++iCol)
+        const BrowserColumns::iterator colsEnd = pCols.end();
+        for (BrowserColumns::iterator iCol = pCols.begin(); iCol != colsEnd; ++iCol)
             OSL_ENSURE( (*iCol)->GetId() != nItemId, "BrowseBox::InsertDataColumn: duplicate column Id" );
     }
 #endif
 
-    if ( nPos < pCols->size() )
+    if ( nPos < pCols.size() )
     {
-        BrowserColumns::iterator it = pCols->begin();
+        BrowserColumns::iterator it = pCols.begin();
         ::std::advance( it, nPos );
-        pCols->insert( it, new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
+        pCols.insert( it, new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
     }
     else
     {
-        pCols->push_back( new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
+        pCols.push_back( new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
     }
     if ( nCurColId == 0 )
         nCurColId = nItemId;
@@ -295,7 +293,7 @@ sal_uInt16 BrowseBox::ToggleSelectedColumn()
         ToggleSelection();
         long nSelected = pColSel->FirstSelected();
         if (nSelected != static_cast<long>(SFX_ENDOFSELECTION))
-            nSelectedColId = (*pCols)[nSelected]->GetId();
+            nSelectedColId = pCols[nSelected]->GetId();
         pColSel->SelectAll(false);
     }
     return nSelectedColId;
@@ -316,30 +314,30 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId )
 {
     // get the position in the current array
     size_t nItemPos = GetColumnPos( nItemId );
-    if ( nItemPos >= pCols->size() )
+    if ( nItemPos >= pCols.size() )
         // not available!
         return;
 
     // doesn't the state change?
-    if ( (*pCols)[ nItemPos ]->IsFrozen() )
+    if ( pCols[ nItemPos ]->IsFrozen() )
         return;
 
     // remark the column selection
     sal_uInt16 nSelectedColId = ToggleSelectedColumn();
 
     // to be moved?
-    if ( nItemPos != 0 && !(*pCols)[ nItemPos-1 ]->IsFrozen() )
+    if ( nItemPos != 0 && !pCols[ nItemPos-1 ]->IsFrozen() )
     {
         // move to the right of the last frozen column
         sal_uInt16 nFirstScrollable = FrozenColCount();
-        BrowserColumn *pColumn = (*pCols)[ nItemPos ];
-        BrowserColumns::iterator it = pCols->begin();
+        BrowserColumn *pColumn = pCols[ nItemPos ];
+        BrowserColumns::iterator it = pCols.begin();
         ::std::advance( it, nItemPos );
-        pCols->erase( it );
+        pCols.erase( it );
         nItemPos = nFirstScrollable;
-        it = pCols->begin();
+        it = pCols.begin();
         ::std::advance( it, nItemPos );
-        pCols->insert( it, pColumn );
+        pCols.insert( it, pColumn );
     }
 
     // adjust the number of the first scrollable and visible column
@@ -347,7 +345,7 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId )
         nFirstCol = nItemPos + 1;
 
     // toggle the freeze-state of the column
-    (*pCols)[ nItemPos ]->Freeze();
+    pCols[ nItemPos ]->Freeze();
 
     // align the scrollbar-range
     UpdateScrollbars();
@@ -369,7 +367,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 
     // get the position in the current array
     sal_uInt16 nOldPos = GetColumnPos( nColumnId );
-    if ( nOldPos >= pCols->size() )
+    if ( nOldPos >= pCols.size() )
         // not available!
         return;
 
@@ -391,18 +389,18 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         if ( nOldPos > nPos )
             nNextPos = nOldPos - 1;
 
-        BrowserColumn *pNextCol = (*pCols)[ nNextPos ];
+        BrowserColumn *pNextCol = pCols[ nNextPos ];
         Rectangle aNextRect(GetFieldRect( pNextCol->GetId() ));
 
         // move column internally
         {
-            BrowserColumns::iterator it = pCols->begin();
+            BrowserColumns::iterator it = pCols.begin();
             ::std::advance( it, nOldPos );
             BrowserColumn* pTemp = *it;
-            pCols->erase( it );
-            it = pCols->begin();
+            pCols.erase( it );
+            it = pCols.begin();
             ::std::advance( it, nPos );
-            pCols->insert( it, pTemp );
+            pCols.insert( it, pTemp );
         }
 
         // determine new column area
@@ -488,12 +486,12 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 
     // get the position in the current array
     sal_uInt16 nItemPos = GetColumnPos( nItemId );
-    if ( nItemPos >= pCols->size() )
+    if ( nItemPos >= pCols.size() )
         // not available!
         return;
 
     // does the state change?
-    BrowserColumn *pCol = (*pCols)[ nItemPos ];
+    BrowserColumn *pCol = pCols[ nItemPos ];
     if ( pCol->Title() != rTitle )
     {
         OUString sOld(pCol->Title());
@@ -527,17 +525,17 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 
     // get the position in the current array
     size_t nItemPos = GetColumnPos( nItemId );
-    if ( nItemPos >= pCols->size() )
+    if ( nItemPos >= pCols.size() )
         return;
 
     // does the state change?
     nWidth = QueryColumnResize( nItemId, nWidth );
-    if ( nWidth >= LONG_MAX || (*pCols)[ nItemPos ]->Width() != nWidth )
+    if ( nWidth >= LONG_MAX || pCols[ nItemPos ]->Width() != nWidth )
     {
-        long nOldWidth = (*pCols)[ nItemPos ]->Width();
+        long nOldWidth = pCols[ nItemPos ]->Width();
 
         // adjust last column, if necessary
-        if ( IsVisible() && nItemPos == pCols->size() - 1 )
+        if ( IsVisible() && nItemPos == pCols.size() - 1 )
         {
             long nMaxWidth = pDataWin->GetSizePixel().Width();
             nMaxWidth -= pDataWin->bAutoSizeLastCol
@@ -558,7 +556,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 
         // do we want to display the change immediately?
         bool bUpdate = GetUpdateMode() &&
-                       ( (*pCols)[ nItemPos ]->IsFrozen() || nItemPos >= nFirstCol );
+                       ( pCols[ nItemPos ]->IsFrozen() || nItemPos >= nFirstCol );
 
         if ( bUpdate )
         {
@@ -570,7 +568,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         }
 
         // set width
-        (*pCols)[ nItemPos ]->SetWidth(nWidth, GetZoom());
+        pCols[ nItemPos ]->SetWidth(nWidth, GetZoom());
 
         // scroll and invalidate
         if ( bUpdate )
@@ -579,7 +577,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             long nX = 0;
             for ( size_t nCol = 0; nCol < nItemPos; ++nCol )
             {
-                BrowserColumn *pCol = (*pCols)[ nCol ];
+                BrowserColumn *pCol = pCols[ nCol ];
                 if ( pCol->IsFrozen() || nCol >= nFirstCol )
                     nX += pCol->Width();
             }
@@ -622,7 +620,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
                     nItemId ? nItemId : USHRT_MAX - 1, nWidth );
 
         // adjust last column
-        if ( nItemPos != pCols->size() - 1 )
+        if ( nItemPos != pCols.size() - 1 )
             AutoSizeLastColumn();
 
     }
@@ -634,7 +632,7 @@ void BrowseBox::AutoSizeLastColumn()
     if ( pDataWin->bAutoSizeLastCol &&
          pDataWin->GetUpdateMode() )
     {
-        sal_uInt16 nId = GetColumnId( (sal_uInt16)pCols->size() - 1 );
+        sal_uInt16 nId = GetColumnId( (sal_uInt16)pCols.size() - 1 );
         SetColumnWidth( nId, LONG_MAX );
         ColumnResized( nId );
     }
@@ -659,10 +657,10 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
         nCurColId = 0;
 
     // delete column
-    BrowserColumns::iterator it = pCols->begin();
+    BrowserColumns::iterator it = pCols.begin();
     ::std::advance( it, nPos );
     delete *it;
-    pCols->erase( it );
+    pCols.erase( it );
     if ( nFirstCol >= nPos && nFirstCol > FrozenColCount() )
     {
         OSL_ENSURE(nFirstCol > 0,"FirstCol must be greater zero!");
@@ -725,12 +723,12 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 
 void BrowseBox::RemoveColumns()
 {
-    size_t nOldCount = pCols->size();
+    size_t nOldCount = pCols.size();
 
     // remove all columns
     for ( size_t i = 0; i < nOldCount; ++i )
-        delete (*pCols)[ i ];
-    pCols->clear();
+        delete pCols[ i ];
+    pCols.clear();
 
     // correct column selection
     if ( pColSel )
@@ -758,7 +756,7 @@ void BrowseBox::RemoveColumns()
 
     if ( isAccessibleAlive() )
     {
-        if ( pCols->size() != nOldCount )
+        if ( pCols.size() != nOldCount )
         {
             // all columns should be removed, so we remove the column header bar and append it again
             // to avoid to notify every column remove
@@ -796,9 +794,9 @@ OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 {
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
-    if ( nItemPos >= pCols->size() )
+    if ( nItemPos >= pCols.size() )
         return OUString();
-    return (*pCols)[ nItemPos ]->Title();
+    return pCols[ nItemPos ]->Title();
 }
 
 
@@ -811,7 +809,7 @@ long BrowseBox::GetRowCount() const
 sal_uInt16 BrowseBox::ColCount() const
 {
 
-    return (sal_uInt16) pCols->size();
+    return (sal_uInt16) pCols.size();
 }
 
 
@@ -846,7 +844,7 @@ long BrowseBox::ScrollColumns( long nCols )
 {
 
     if ( nFirstCol + nCols < 0 ||
-         nFirstCol + nCols >= (long)pCols->size() )
+         nFirstCol + nCols >= (long)pCols.size() )
         return 0;
 
     // implicitly hides cursor while scrolling
@@ -868,7 +866,7 @@ long BrowseBox::ScrollColumns( long nCols )
         }
         else
         {
-            long nDelta = (*pCols)[ nFirstCol-1 ]->Width();
+            long nDelta = pCols[ nFirstCol-1 ]->Width();
             long nFrozenWidth = GetFrozenWidth();
 
             Rectangle aScrollRect(  Point( nFrozenWidth + nDelta, 0 ),
@@ -914,7 +912,7 @@ long BrowseBox::ScrollColumns( long nCols )
         }
         else
         {
-            long nDelta = (*pCols)[ nFirstCol ]->Width();
+            long nDelta = pCols[ nFirstCol ]->Width();
             long nFrozenWidth = GetFrozenWidth();
 
             Rectangle aScrollRect(  Point(  nFrozenWidth, 0 ),
@@ -954,12 +952,12 @@ long BrowseBox::ScrollColumns( long nCols )
     {
         long nWidth = 0;
         for ( size_t nCol = 0;
-              nCol < pCols->size() && nCol < nFirstCol;
+              nCol < pCols.size() && nCol < nFirstCol;
               ++nCol )
         {
             // not the handle column
-            if ( (*pCols)[ nCol ]->GetId() )
-                nWidth += (*pCols)[ nCol ]->Width();
+            if ( pCols[ nCol ]->GetId() )
+                nWidth += pCols[ nCol ]->Width();
         }
 
         pDataWin->pHeaderBar->SetOffset( nWidth );
@@ -1509,7 +1507,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
     if ( nColId != nCurColId || (bMakeVisible && !IsFieldVisible(nCurRow, nColId, true)))
     {
         sal_uInt16 nNewPos = GetColumnPos(nColId);
-        BrowserColumn* pColumn = (nNewPos < pCols->size()) ? (*pCols)[ nNewPos ] : nullptr;
+        BrowserColumn* pColumn = (nNewPos < pCols.size()) ? pCols[ nNewPos ] : nullptr;
         DBG_ASSERT( pColumn, "no column object - invalid id?" );
         if ( !pColumn )
             return false;
@@ -1640,7 +1638,7 @@ void BrowseBox::SelectAll()
     uRow.pSel->SelectAll();
 
     // don't highlight handle column
-    BrowserColumn *pFirstCol = (*pCols)[ 0 ];
+    BrowserColumn *pFirstCol = pCols[ 0 ];
     long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
     // highlight the row selection
@@ -1727,7 +1725,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
             )
     {
         // don't highlight handle column
-        BrowserColumn *pFirstCol = (*pCols)[ 0 ];
+        BrowserColumn *pFirstCol = pCols[ 0 ];
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
         // highlight only newly selected part
@@ -1779,12 +1777,12 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
     if ( !bMultiSelection )
     {
         if ( _bSelect )
-            GoToColumnId( (*pCols)[ nNewColPos ]->GetId(), bMakeVisible );
+            GoToColumnId( pCols[ nNewColPos ]->GetId(), bMakeVisible );
         return;
     }
     else
     {
-        if ( !GoToColumnId( (*pCols)[ nNewColPos ]->GetId(), bMakeVisible ) )
+        if ( !GoToColumnId( pCols[ nNewColPos ]->GetId(), bMakeVisible ) )
             return;
     }
 
@@ -1805,7 +1803,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
         Rectangle aFieldRectPix( GetFieldRectPixel( nCurRow, nCurColId, false ) );
         Rectangle aRect(
             Point( aFieldRectPix.Left() - MIN_COLUMNWIDTH, 0 ),
-            Size( (*pCols)[ nNewColPos ]->Width(),
+            Size( pCols[ nNewColPos ]->Width(),
                   pDataWin->GetOutputSizePixel().Height() ) );
         pDataWin->Invalidate( aRect );
         if ( !bSelecting )
@@ -2027,12 +2025,12 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
     sal_uInt16 nFrozenCols = FrozenColCount();
     size_t nCol;
     for ( nCol = 0;
-          nCol < pCols->size() && (*pCols)[ nCol ]->GetId() != nColumnId;
+          nCol < pCols.size() && pCols[ nCol ]->GetId() != nColumnId;
           ++nCol )
-        if ( (*pCols)[ nCol ]->IsFrozen() || nCol >= nFirstCol )
-            nColX += (*pCols)[ nCol ]->Width();
+        if ( pCols[ nCol ]->IsFrozen() || nCol >= nFirstCol )
+            nColX += pCols[ nCol ]->Width();
 
-    if ( nCol >= pCols->size() || ( nCol >= nFrozenCols && nCol < nFirstCol ) )
+    if ( nCol >= pCols.size() || ( nCol >= nFrozenCols && nCol < nFirstCol ) )
         return Rectangle();
 
     // compute the Y-coordinate relative to DataWin
@@ -2043,7 +2041,7 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
     // assemble the Rectangle relative to DataWin
     return Rectangle(
         Point( nColX + MIN_COLUMNWIDTH, nRowY ),
-        Size( (*pCols)[ nCol ]->Width() - 2*MIN_COLUMNWIDTH,
+        Size( pCols[ nCol ]->Width() - 2*MIN_COLUMNWIDTH,
               GetDataRowHeight() - 1 ) );
 }
 
@@ -2079,9 +2077,9 @@ sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
 
     // accumulate the widths of the visible columns
     long nColX = 0;
-    for ( size_t nCol = 0; nCol < pCols->size(); ++nCol )
+    for ( size_t nCol = 0; nCol < pCols.size(); ++nCol )
     {
-        BrowserColumn *pCol = (*pCols)[ nCol ];
+        BrowserColumn *pCol = pCols[ nCol ];
         if ( pCol->IsFrozen() || nCol >= nFirstCol )
             nColX += pCol->Width();
 
@@ -2198,7 +2196,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     if ( bColumnCursor )
     {
         pColSel = pOldColSel ? pOldColSel : new MultiSelection;
-        pColSel->SetTotalRange( Range( 0, pCols->size()-1 ) );
+        pColSel->SetTotalRange( Range( 0, pCols.size()-1 ) );
     }
     else
     {

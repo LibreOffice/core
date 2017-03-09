@@ -240,7 +240,7 @@ private:
     TriState        bHideCursor;    // hide cursor (frame)
     Range           aSelRange;      // for selection expansion
 
-    BrowserColumns* pCols;          // array of column-descriptions
+    BrowserColumns pCols;           // array of column-descriptions
     union
     {
         MultiSelection* pSel;       // selected rows for multi-selection
