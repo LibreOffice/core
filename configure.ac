@@ -3436,6 +3436,7 @@ if test "$_os" = "WINNT"; then
         fi
     fi
 
+    AC_MSG_CHECKING([for short pathname of VC product directory])
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
     AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
