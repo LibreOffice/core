@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_d41a136e",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-09T18:43:41Z",
+      "side": 1,
+      "message": "Would be nice to use the actual cell address (A3,A4,A5,...) in each check instead of the vague range A3:A18, in case it failed. Either by manually adapting each row (probably easiest in this case), or you can use aPos.Format(...) or some other means of converting the row number to string.",
+      "range": {
+        "startLine": 1575,
+        "startChar": 75,
+        "endLine": 1575,
+        "endChar": 81
+      },
+      "revId": "8b8a6845cafa8b489b5e12f0838a790952a307ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f42557ae",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-09T18:43:41Z",
+      "side": 1,
+      "message": "Ditto, A2,A3,A4,...",
+      "revId": "8b8a6845cafa8b489b5e12f0838a790952a307ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_142bbb83",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-09T18:43:41Z",
+      "side": 1,
+      "message": "A2,A3,A4,...",
+      "revId": "8b8a6845cafa8b489b5e12f0838a790952a307ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
