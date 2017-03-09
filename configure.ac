@@ -4793,10 +4793,10 @@ AC_SUBST(TARFILE_LOCATION)
 AC_MSG_CHECKING([whether we want to fetch tarballs])
 if test "$enable_fetch_external" != "no"; then
     if test "$with_all_tarballs" = "yes"; then
-        AC_MSG_RESULT(["yes, all of them"])
+        AC_MSG_RESULT([yes, all of them])
         DO_FETCH_TARBALLS="ALL"
     else
-        AC_MSG_RESULT(["yes, if we use them"])
+        AC_MSG_RESULT([yes, if we use them])
         DO_FETCH_TARBALLS="TRUE"
     fi
 else
