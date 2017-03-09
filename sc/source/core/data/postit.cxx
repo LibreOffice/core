@@ -683,13 +683,19 @@ void ScCaptionPtr::decRefAndDestroy()
 {
     if (decRef())
     {
-        /* FIXME: this should eventually remove the caption from drawing layer
-         * foo and call SdrObject::Free(), likely with mpHead->mpCaption, see
-         * ScPostIt::RemoveCaption(). Further work needed to be able to do so.
-         * */
         assert(mpHead->mpFirst == this);    // this must be one and only one
-        mpCaption = nullptr;
         assert(!mpNext);                    // this must be one and only one
+        assert(mpCaption);
+        if (mpHead->mbInDrawPage)
+        {
+            /* FIXME: this should eventually remove the caption from drawing layer
+             * foo and call SdrObject::Free(), likely with mpCaption, see
+             * ScPostIt::RemoveCaption(). Further work needed to be able to do so.
+             * */
+        }
+        /* FIXME: once we got ownership right */
+        //SdrObject::Free( mpCaption );
+        mpCaption = nullptr;
         delete mpHead;
         mpHead = nullptr;
     }
