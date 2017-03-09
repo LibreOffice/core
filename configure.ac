@@ -1132,16 +1132,12 @@ libo_FUZZ_ARG_ENABLE(directx,
 
 libo_FUZZ_ARG_ENABLE(activex,
     AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for a Windows build.
-        This switch is mandatory when using an Express edition of Visual Studio.])
-)
+        [Disable the use of ActiveX for a Windows build.])
+,)
 
 libo_FUZZ_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
         [Disable the use of ATL for a Windows build.])
-    [
-        This switch is mandatory when using an Express edition of Visual Studio.
-    ],
 ,)
 
 libo_FUZZ_ARG_ENABLE(avahi,
@@ -3354,17 +3350,12 @@ find_msvc()
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
 
-    unset vctest vcnum vcnumwithdot vcexpress vcbuildnumber
+    unset vctest vcnum vcnumwithdot vcbuildnumber
 
     vs_versions_to_check "$1"
 
     for ver in $vsversions; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
-        if test -n "$regvalue"; then
-            vctest=$regvalue
-            break
-        fi
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
             break
@@ -3391,10 +3382,6 @@ find_msvc()
             vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
             ;;
         esac
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$vcnumwithdot/Setup/VC/ProductDir
-        if test -n "$regvalue" -a "$regvalue" = "$vctest" ; then
-            vcexpress=Express
-        fi
     fi
 }
 
@@ -3428,24 +3415,13 @@ if test "$_os" = "WINNT"; then
         elif test -f "$vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe"; then
             VC_PRODUCT_DIR=$vctest/VC
         else
-            if test -f "$vctest/bin/x86_amd64/cl.exe" -a "$vcexpress" = "Express"; then
-                VC_PRODUCT_DIR=$vctest
-            else
-                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe or $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
-            fi
+            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/VC/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64/cl.exe or $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
         fi
     fi
 
     AC_MSG_CHECKING([for short pathname of VC product directory])
     VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
     AC_MSG_RESULT([$VC_PRODUCT_DIR])
-
-    AC_MSG_CHECKING([whether it is Visual C++ Express])
-    if test "$vcexpress" = "Express" ; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
 
     UCRTSDKDIR=
     UCRTVERSION=
@@ -3510,17 +3486,12 @@ if test "$_os" = "WINNT"; then
             CL_DIR=bin
         fi
     else
-        if test "$vcexpress" = "Express"; then
-            MSPDB_PATH="$VC_PRODUCT_DIR/bin"
-            CL_DIR=bin
+        if test "$vcnum" = "150"; then
+            MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
+            CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
         else
-            if test "$vcnum" = "150"; then
-                MSPDB_PATH="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX64/x64"
-                CL_DIR=Tools/MSVC/$vcbuildnumber/bin/HostX64/x64
-            else
-                MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
-                CL_DIR=bin/amd64
-            fi
+            MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+            CL_DIR=bin/amd64
         fi
     fi
 
@@ -3556,14 +3527,8 @@ if test "$_os" = "WINNT"; then
                 MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
             fi
         else
-            if test "$vcexpress" = "Express"; then
-               if test -f "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"; then
-                    MSVC_CXX="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
-               fi
-            else
-               if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
-                    MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
-               fi
+            if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
+                MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
             fi
         fi
 
@@ -3581,7 +3546,7 @@ if test "$_os" = "WINNT"; then
 
     if test -n "$CC"; then
         # Remove /cl.exe from CC case insensitive
-        AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
+        AC_MSG_RESULT([found Visual C++ $vcyear ($CC)])
         if test "$BITNESS_OVERRIDE" = ""; then
            if test "$vcnum" = "150"; then
                COMPATH="$VC_PRODUCT_DIR"
@@ -3733,7 +3698,7 @@ if test "$_os" = "WINNT"; then
     fi
 
     AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = "" -a "$vcexpress" != Express; then
+    if test "$enable_activex" = "yes" -o "$enable_activex" = ""; then
         DISABLE_ACTIVEX=""
         AC_MSG_RESULT([yes])
     else
@@ -3742,7 +3707,7 @@ if test "$_os" = "WINNT"; then
     fi
 
     AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = "" -a "$vcexpress" != Express; then
+    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
         DISABLE_ATL=""
         AC_DEFINE(HAVE_FEATURE_ATL, 1)
         AC_MSG_RESULT([yes])
@@ -9779,13 +9744,8 @@ if test "$_os" = "WINNT"; then
         assembler=ml.exe
         assembler_bin=$CL_DIR
     else
-        if test "$vcexpress" = "Express"; then
-            assembler=ml64.exe
-            assembler_bin=bin/x86_amd64
-        else
-            assembler=ml64.exe
-            assembler_bin=$CL_DIR
-        fi
+        assembler=ml64.exe
+        assembler_bin=$CL_DIR
     fi
 
     AC_MSG_CHECKING([$VC_PRODUCT_DIR/$assembler_bin/$assembler])
@@ -12638,13 +12598,8 @@ else
             pathmunge "$MSBUILD_PATH" "before"
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
-            if test "$vcexpress" = "Express"; then
-                pathmunge "$COMPATH/bin/x86_amd64" "before"
-                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
-            else
-                pathmunge "$COMPATH/bin/amd64" "before"
-                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
-            fi
+            pathmunge "$COMPATH/bin/amd64" "before"
+            pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
             pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
