@@ -618,13 +618,14 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             SAL_INFO( "vcl.gdi", "preview size " << aPreviewSize.Width() << " " << aPreviewSize.Height() );
 
             for( int i = 1; i < 5; ++i )
-                {
-                    if( (maTargetSize.Width() >> i) < aPreviewSize.Width() )
-                        break;
-                    if( (maTargetSize.Height() >> i) < aPreviewSize.Height() )
-                        break;
-                    mnPreviewShift = i;
-                }
+            {
+                if( (maTargetSize.Width() >> i) < aPreviewSize.Width() )
+                    break;
+                if( (maTargetSize.Height() >> i) < aPreviewSize.Height() )
+                    break;
+                mnPreviewShift = i;
+            }
+
             mnPreviewMask = (1 << mnPreviewShift) - 1;
         }
     }
