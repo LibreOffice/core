@@ -22,6 +22,8 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
+
+#include <cstddef>
 #include <vector>
 
 class SfxAllEnumValueArr;
@@ -44,7 +46,7 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
     std::vector<sal_uInt16>* pDisabledValues;
 
     sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
-    sal_uInt16              GetPosByValue_( sal_uInt16 nValue ) const;
+    std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;
 
 public:
     static SfxPoolItem*     CreateDefault();

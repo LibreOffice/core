@@ -20,6 +20,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
 
+#include <cstddef>
 #include <vector>
 
 SfxPoolItem* SfxAllEnumItem::CreateDefault() { return new SfxAllEnumItem; }
@@ -117,13 +118,13 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
  * In contrast to @see GetPosByValue(sal_uInt16) const
  * this internal method returns the position the value would be for non-present values.
  */
-sal_uInt16 SfxAllEnumItem::GetPosByValue_( sal_uInt16 nVal ) const
+std::size_t SfxAllEnumItem::GetPosByValue_( sal_uInt16 nVal ) const
 {
     if ( !pValues )
         return 0;
 
     //FIXME: Optimisation: use binary search or SortArray
-    sal_uInt16 nPos;
+    std::size_t nPos;
     for ( nPos = 0; nPos < pValues->size(); ++nPos )
         if ( (*pValues)[nPos].nValue >= nVal )
             return nPos;
