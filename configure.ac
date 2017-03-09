@@ -5446,21 +5446,18 @@ if test "$build_os" = "cygwin"; then
     AL_PATH=`win_short_path_for_make "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
-    AC_MSG_CHECKING(.NET Framework find_dotnetsdk)
+    AC_MSG_CHECKING(.NET Framework)
     find_dotnetsdk
     if test -f "$frametest/lib/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
-        AC_MSG_CHECKING(.NET Framework find_winsdk)
         find_winsdk
         if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
         else
-            AC_MSG_CHECKING(.NET Framework find_dotnetsdk46)
             find_dotnetsdk46
             PathFormat "$frametest"
             frametest="$formatted_path"
-            AC_MSG_CHECKING(found: $frametest/um/$WINDOWS_SDK_ARCH/mscoree.lib)
             if test -f "$frametest/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
                  DOTNET_FRAMEWORK_HOME="$frametest"
             fi
@@ -5470,7 +5467,7 @@ if test "$build_os" = "cygwin"; then
     if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
         AC_MSG_ERROR([mscoree.lib not found])
     fi
-    AC_MSG_RESULT(found)
+    AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
 
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
