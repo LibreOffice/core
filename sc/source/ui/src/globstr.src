@@ -299,6 +299,14 @@ String STR_UNDO_HIDENOTE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Hide Comment" ;
 };
+String STR_UNDO_SHOWALLNOTES+RID_GLOBSTR_OFFSET
+{
+    Text [ en-US ] = "Show All Comments" ;
+};
+String STR_UNDO_HIDEALLNOTES+RID_GLOBSTR_OFFSET
+{
+    Text [ en-US ] = "Hide All Comments" ;
+};
 String STR_UNDO_EDITNOTE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Edit Comment" ;

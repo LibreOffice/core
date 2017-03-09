@@ -6577,6 +6577,15 @@ void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
     }
 }
 
+void ScDocument::GetAllNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNotes ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    return pTab->GetAllNoteEntries( rNotes );
+}
+
 void ScDocument::GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const
 {
     for( size_t i = 0; i < rRange.size(); ++i)

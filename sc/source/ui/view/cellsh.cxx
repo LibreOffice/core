@@ -1044,6 +1044,33 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case FID_SHOW_ALL_NOTES:
+            case FID_HIDE_ALL_NOTES:
+                {
+                    bool bHasNotes = false;
+                    SCTAB nFirstSelected = rMark.GetFirstSelected();
+                    SCTAB nLastSelected = rMark.GetLastSelected();
+
+                    for( SCTAB aTab = nFirstSelected; aTab<=nLastSelected; aTab++ )
+                    {
+                        if (rMark.GetTableSelect(aTab) )
+                        {
+                            if (pDoc->HasTabNotes( aTab ))
+                            {
+                                bHasNotes = true;
+                                break;
+                            }
+                        }
+
+                        if( bHasNotes ) //for break nested loop
+                            break;
+                    }
+
+                    if ( !bHasNotes )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
             case SID_DELETE_NOTE:
                 {
                     bool bEnable = false;

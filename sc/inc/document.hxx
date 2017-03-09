@@ -1104,6 +1104,7 @@ public:
     SCROW     GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
 
     SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
+    SC_DLLPUBLIC void GetAllNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNotes ) const;
     void              GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
     bool              ContainsNotesInRange( const ScRangeList& rRange ) const;
 
