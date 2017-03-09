@@ -327,14 +327,15 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
     rIStm.Seek( nOld );
 }
 
-void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
+void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
 {
     sal_Int32 nActionSize;
     sal_Int16 nType;
-
-    for( sal_uLong i = 0UL; i < nSkipCount; i++ )
+    for (sal_uLong i = 0UL; i < nSkipCount; ++i)
     {
         rIStm.ReadInt16( nType ).ReadInt32( nActionSize );
+        if (!rIStm.good())
+            break;
         rIStm.SeekRel( nActionSize - 4 );
     }
 }
@@ -1350,14 +1351,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_TEXTLINE_COMMENT:
             {
                 Point   aStartPt;
-                sal_Int32  nWidth;
-                sal_uInt32 nStrikeout;
-                sal_uInt32 nUnderline;
-                sal_Int32   nFollowingActionCount;
+                sal_Int32  nWidth(0);
+                sal_uInt32 nStrikeout(0);
+                sal_uInt32 nUnderline(0);
+                sal_Int32  nFollowingActionCount(0);
 
                 ReadPair( rIStm, aStartPt );
-                rIStm.ReadInt32( nWidth ).ReadUInt32( nStrikeout ).ReadUInt32( nUnderline ).ReadInt32( nFollowingActionCount );
-                ImplSkipActions( rIStm, nFollowingActionCount );
+                rIStm.ReadInt32(nWidth ).ReadUInt32(nStrikeout).ReadUInt32(nUnderline).ReadInt32(nFollowingActionCount);
+                ImplSkipActions(rIStm, nFollowingActionCount);
                 rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
                                                         (FontStrikeout) nStrikeout,
                                                         (FontLineStyle) nUnderline,
