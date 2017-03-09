@@ -102,7 +102,6 @@ sal_uInt16 BitmapInfoAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColo
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             BitmapInfoAccess( rBitmap, nMode ),
-            mpScanBuf       ( nullptr ),
             mFncGetPixel    ( nullptr ),
             mFncSetPixel    ( nullptr )
 {
@@ -111,7 +110,6 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             BitmapInfoAccess( rBitmap, BitmapAccessMode::Read ),
-            mpScanBuf       ( nullptr ),
             mFncGetPixel    ( nullptr ),
             mFncSetPixel    ( nullptr )
 {
@@ -120,7 +118,6 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
 
 BitmapReadAccess::~BitmapReadAccess()
 {
-    ImplClearScanBuffer();
 }
 
 void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
@@ -134,43 +131,13 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
 
     maColorMask = mpBuffer->maColorMask;
 
-    bool bOk(true);
-    const long nHeight = mpBuffer->mnHeight;
-    Scanline pTmpLine = mpBuffer->mpBits;
-    try
-    {
-        mpScanBuf = new Scanline[ nHeight ];
-        if( mpBuffer->mnFormat & ScanlineFormat::TopDown )
-        {
-            for( long nY = 0; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
-                mpScanBuf[ nY ] = pTmpLine;
-        }
-        else
-        {
-            for( long nY = nHeight - 1; nY >= 0; nY--, pTmpLine += mpBuffer->mnScanlineSize )
-                mpScanBuf[ nY ] = pTmpLine;
-        }
-        bOk = ImplSetAccessPointers(RemoveScanline(mpBuffer->mnFormat));
-    }
-    catch (const std::bad_alloc&)
-    {
-        bOk = false;
-    }
+    bool bOk = ImplSetAccessPointers(RemoveScanline(mpBuffer->mnFormat));
 
     if (!bOk)
     {
-        delete[] mpScanBuf;
-        mpScanBuf = nullptr;
-
         xImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
         mpBuffer = nullptr;
     }
-}
-
-void BitmapReadAccess::ImplClearScanBuffer()
-{
-    delete[] mpScanBuf;
-    mpScanBuf = nullptr;
 }
 
 bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
@@ -405,7 +372,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() >= rReadAcc.GetScanlineSize() ) )
     {
-        memcpy( mpScanBuf[ nY ], rReadAcc.GetScanline( nY ), rReadAcc.GetScanlineSize() );
+        memcpy(GetScanline(nY), rReadAcc.GetScanline(nY), rReadAcc.GetScanlineSize());
     }
     else
         // TODO: use fastbmp infrastructure
@@ -428,7 +395,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
     if( nCount )
     {
         if( GetScanlineFormat() == RemoveScanline( nSrcScanlineFormat ) )
-            memcpy( mpScanBuf[ nY ], aSrcScanline, nCount );
+            memcpy(GetScanline(nY), aSrcScanline, nCount);
         else
         {
             DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
