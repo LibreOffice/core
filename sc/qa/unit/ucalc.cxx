@@ -724,6 +724,9 @@ void Test::testCopyToDocument()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));
 
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
     m_pDoc->SetString(0, 0, 0, "Header");
     m_pDoc->SetString(0, 1, 0, "1");
     m_pDoc->SetString(0, 2, 0, "2");
@@ -1933,6 +1936,9 @@ void Test::testSheetCopy()
     m_pDoc->InsertTab(0, "TestTab");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.",
                                static_cast<SCTAB>(1), m_pDoc->GetTableCount());
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     // Insert text in A1.
     m_pDoc->SetString(ScAddress(0,0,0), "copy me");
@@ -5062,6 +5068,9 @@ void Test::testNoteDeleteCol()
     ScDocument& rDoc = getDocShell().GetDocument();
     rDoc.InsertTab(0, "Sheet1");
 
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
+
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, "Hello");
@@ -5226,6 +5235,9 @@ void Test::testAreasWithNotes()
 {
     ScDocument& rDoc = getDocShell().GetDocument();
     rDoc.InsertTab(0, "Sheet1");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     ScAddress rAddr(1, 5, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
@@ -6025,6 +6037,9 @@ void Test::testFormulaWizardSubformula()
 void Test::testSetStringAndNote()
 {
     m_pDoc->InsertTab(0, "Test");
+
+    // We need a drawing layer in order to create caption objects.
+    m_pDoc->InitDrawLayer(&getDocShell());
 
     //note on A1
     ScAddress aAdrA1 (0, 0, 0);
