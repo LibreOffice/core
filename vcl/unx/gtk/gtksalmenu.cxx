@@ -846,13 +846,11 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
 
     g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
 
-#if GTK_CHECK_VERSION(3,0,0)
     if (!bUnityMode && static_cast<MenuBar*>(mpVCLMenu.get())->IsDisplayable())
     {
         DestroyMenuBarWidget();
         CreateMenuBarWidget();
     }
-#endif
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
