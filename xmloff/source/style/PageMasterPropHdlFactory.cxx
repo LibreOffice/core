@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 //UUUU
 using namespace ::com::sun::star::drawing;
 
-static SvXMLEnumMapEntry const aXML_TextGridMode_ConstantMap[] =
+static SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
 {
     { XML_NONE,         text::TextGridMode::NONE },
     { XML_LINE,         text::TextGridMode::LINES },
@@ -134,7 +134,7 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
 
             //UUUU
             case XML_SW_TYPE_FILLSTYLE:
-                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, cppu::UnoType<FillStyle>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap );
                 break;
             case XML_SW_TYPE_FILLBITMAPSIZE:
                 pHdl = new XMLFillBitmapSizePropertyHandler();
@@ -143,10 +143,10 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLBitmapLogicalSizePropertyHandler();
                 break;
             case XML_SW_TYPE_BITMAP_REFPOINT:
-                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, cppu::UnoType<RectanglePoint>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap );
                 break;
             case XML_SW_TYPE_BITMAP_MODE:
-                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, cppu::UnoType<BitmapMode>::get() );
+                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap );
                 break;
             case XML_SW_TYPE_BITMAPREPOFFSETX:
             case XML_SW_TYPE_BITMAPREPOFFSETY:

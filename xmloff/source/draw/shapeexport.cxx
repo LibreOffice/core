@@ -2120,7 +2120,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             const double dEndAngle = nEndAngle / 100.0;
 
             // export circle kind
-            SvXMLUnitConverter::convertEnum( sStringBuffer, (sal_uInt16)eKind, aXML_CircleKind_EnumMap );
+            SvXMLUnitConverter::convertEnum( sStringBuffer, eKind, aXML_CircleKind_EnumMap );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
 
             // export start angle
@@ -2447,7 +2447,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     if( eType != drawing::ConnectorType_STANDARD )
     {
-        SvXMLUnitConverter::convertEnum( sStringBuffer, (sal_uInt16)eType, aXML_ConnectionKind_EnumMap );
+        SvXMLUnitConverter::convertEnum( sStringBuffer, eType, aXML_ConnectionKind_EnumMap );
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TYPE, aStr);
     }

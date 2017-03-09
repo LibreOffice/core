@@ -260,7 +260,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
 // maps for enums to XML attributes
 
-const SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
+const SvXMLEnumMapEntry<css::chart::ChartAxisLabelPosition> aXMLChartAxisLabelPositionEnumMap[] =
 {
     { ::xmloff::token::XML_NEAR_AXIS,               css::chart::ChartAxisLabelPosition_NEAR_AXIS },
     { ::xmloff::token::XML_NEAR_AXIS_OTHER_SIDE,    css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
@@ -268,26 +268,26 @@ const SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
     { ::xmloff::token::XML_OUTSIDE_END,             css::chart::ChartAxisLabelPosition_OUTSIDE_END },
     { ::xmloff::token::XML_OUTSIDE_MINIMUM,         css::chart::ChartAxisLabelPosition_OUTSIDE_START },//#i114142#
     { ::xmloff::token::XML_OUTSIDE_MAXIMUM,         css::chart::ChartAxisLabelPosition_OUTSIDE_END },//#i114142#
-    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+    { ::xmloff::token::XML_TOKEN_INVALID, (css::chart::ChartAxisLabelPosition)0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartAxisMarkPositionEnumMap[] =
+const SvXMLEnumMapEntry<css::chart::ChartAxisMarkPosition> aXMLChartAxisMarkPositionEnumMap[] =
 {
     { ::xmloff::token::XML_AT_LABELS,           css::chart::ChartAxisMarkPosition_AT_LABELS },
     { ::xmloff::token::XML_AT_AXIS,             css::chart::ChartAxisMarkPosition_AT_AXIS },
     { ::xmloff::token::XML_AT_LABELS_AND_AXIS,  css::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS },
-    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+    { ::xmloff::token::XML_TOKEN_INVALID, (css::chart::ChartAxisMarkPosition)0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
+const SvXMLEnumMapEntry<css::chart::ChartAxisArrangeOrderType> aXMLChartAxisArrangementEnumMap[] =
 {
-    { ::xmloff::token::XML_SIDE_BY_SIDE,        css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
-    { ::xmloff::token::XML_STAGGER_EVEN,        css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
-    { ::xmloff::token::XML_STAGGER_ODD,     css::chart::ChartAxisArrangeOrderType_STAGGER_ODD },
-    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+    { ::xmloff::token::XML_SIDE_BY_SIDE,  css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
+    { ::xmloff::token::XML_STAGGER_EVEN,  css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
+    { ::xmloff::token::XML_STAGGER_ODD,   css::chart::ChartAxisArrangeOrderType_STAGGER_ODD },
+    { ::xmloff::token::XML_TOKEN_INVALID, (css::chart::ChartAxisArrangeOrderType)0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aXMLChartErrorBarStyleEnumMap[] =
 {
     { ::xmloff::token::XML_NONE,                css::chart::ErrorBarStyle::NONE },
     { ::xmloff::token::XML_VARIANCE,            css::chart::ErrorBarStyle::VARIANCE },
@@ -300,23 +300,23 @@ const SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aXMLChartSolidTypeEnumMap[] =
 {
     { ::xmloff::token::XML_CUBOID,      css::chart::ChartSolidType::RECTANGULAR_SOLID },
     { ::xmloff::token::XML_CYLINDER,    css::chart::ChartSolidType::CYLINDER },
-    { ::xmloff::token::XML_CONE,            css::chart::ChartSolidType::CONE },
+    { ::xmloff::token::XML_CONE,        css::chart::ChartSolidType::CONE },
     { ::xmloff::token::XML_PYRAMID,     css::chart::ChartSolidType::PYRAMID },
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
+const SvXMLEnumMapEntry<css::chart::ChartDataRowSource> aXMLChartDataRowSourceTypeEnumMap[] =
 {
     { ::xmloff::token::XML_COLUMNS,     css::chart::ChartDataRowSource_COLUMNS },
     { ::xmloff::token::XML_ROWS,        css::chart::ChartDataRowSource_ROWS },
-    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+    { ::xmloff::token::XML_TOKEN_INVALID, (css::chart::ChartDataRowSource)0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aXMLChartInterpolationTypeEnumMap[] =
 {
     // this is neither an enum nor a constants group, but just a
     // documented long property
@@ -336,7 +336,7 @@ const SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID,      0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aXMLChartDataLabelPlacementEnumMap[] =
 {
     { ::xmloff::token::XML_AVOID_OVERLAP,   css::chart::DataLabelPlacement::AVOID_OVERLAP },
     { ::xmloff::token::XML_CENTER,          css::chart::DataLabelPlacement::CENTER },
@@ -354,7 +354,7 @@ const SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-const SvXMLEnumMapEntry aXMLChartMissingValueTreatmentEnumMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aXMLChartMissingValueTreatmentEnumMap[] =
 {
     { ::xmloff::token::XML_LEAVE_GAP,    css::chart::MissingValueTreatment::LEAVE_GAP },
     { ::xmloff::token::XML_USE_ZERO,     css::chart::MissingValueTreatment::USE_ZERO },

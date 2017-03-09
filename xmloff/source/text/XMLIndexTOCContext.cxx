@@ -80,7 +80,7 @@ static const XMLTokenEnum aIndexSourceElementMap[] =
     XML_ILLUSTRATION_INDEX_SOURCE
 };
 
-SvXMLEnumMapEntry const aIndexTypeMap[] =
+SvXMLEnumMapEntry<IndexTypeEnum> const aIndexTypeMap[] =
 {
     { XML_TABLE_OF_CONTENT,     TEXT_INDEX_TOC },
     { XML_ALPHABETICAL_INDEX,   TEXT_INDEX_ALPHABETICAL },
@@ -89,7 +89,7 @@ SvXMLEnumMapEntry const aIndexTypeMap[] =
     { XML_BIBLIOGRAPHY,         TEXT_INDEX_BIBLIOGRAPHY },
     { XML_USER_INDEX,           TEXT_INDEX_USER },
     { XML_ILLUSTRATION_INDEX,   TEXT_INDEX_ILLUSTRATION },
-    { XML_TOKEN_INVALID,        0 }
+    { XML_TOKEN_INVALID,        (IndexTypeEnum)0 }
 };
 
 
@@ -101,16 +101,13 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
-        sal_uInt16 nTmp;
-        if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
+        if (SvXMLUnitConverter::convertEnum(eIndexType, rLocalName, aIndexTypeMap))
         {
             // check for array index:
-            OSL_ENSURE(nTmp < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
+            OSL_ENSURE(eIndexType < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
             OSL_ENSURE(SAL_N_ELEMENTS(aIndexServiceMap) ==
                        SAL_N_ELEMENTS(aIndexSourceElementMap),
                        "service and source element maps must be same size");
-
-            eIndexType = static_cast<IndexTypeEnum>(nTmp);
             bValid = true;
         }
     }

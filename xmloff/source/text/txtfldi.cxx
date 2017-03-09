@@ -720,12 +720,12 @@ void XMLAuthorFieldImportContext::PrepareField(
 // page continuation string
 
 
-static SvXMLEnumMapEntry const lcl_aSelectPageAttrMap[] =
+static SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
 {
-    { XML_PREVIOUS,     PageNumberType_PREV },
-    { XML_CURRENT,      PageNumberType_CURRENT },
-    { XML_NEXT,         PageNumberType_NEXT },
-    { XML_TOKEN_INVALID, 0 },
+    { XML_PREVIOUS,      PageNumberType_PREV },
+    { XML_CURRENT,       PageNumberType_CURRENT },
+    { XML_NEXT,          PageNumberType_NEXT },
+    { XML_TOKEN_INVALID, (PageNumberType)0 },
 };
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
@@ -748,12 +748,12 @@ void XMLPageContinuationImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_SELECT_PAGE:
         {
-            sal_uInt16 nTmp;
+            PageNumberType nTmp;
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
                                                 lcl_aSelectPageAttrMap)
                 && (PageNumberType_CURRENT != nTmp) )
             {
-                eSelectPage = (PageNumberType)nTmp;
+                eSelectPage = nTmp;
             }
             break;
         }
@@ -811,15 +811,9 @@ void XMLPageNumberImportContext::ProcessAttribute(
             sNumberSync = sAttrValue;
             break;
         case XML_TOK_TEXTFIELD_SELECT_PAGE:
-        {
-            sal_uInt16 nTmp;
-            if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
-                                                lcl_aSelectPageAttrMap))
-            {
-                eSelectPage = (PageNumberType)nTmp;
-            }
+            SvXMLUnitConverter::convertEnum(eSelectPage, sAttrValue,
+                                                lcl_aSelectPageAttrMap);
             break;
-        }
         case XML_TOK_TEXTFIELD_PAGE_ADJUST:
         {
             sal_Int32 nTmp;
@@ -2017,7 +2011,7 @@ void XMLHiddenTextImportContext::PrepareField(
 // file name fields
 
 
-static const SvXMLEnumMapEntry aFilenameDisplayMap[] =
+static const SvXMLEnumMapEntry<sal_uInt16> aFilenameDisplayMap[] =
 {
     { XML_PATH,                 FilenameDisplayFormat::PATH },
     { XML_NAME,                 FilenameDisplayFormat::NAME },
@@ -2099,7 +2093,7 @@ void XMLFileNameImportContext::PrepareField(
 // template name field
 
 
-static const SvXMLEnumMapEntry aTemplateDisplayMap[] =
+static const SvXMLEnumMapEntry<sal_uInt16> aTemplateDisplayMap[] =
 {
     { XML_FULL,                 TemplateDisplayFormat::FULL },
     { XML_PATH,                 TemplateDisplayFormat::PATH },
@@ -2154,7 +2148,7 @@ void XMLTemplateNameImportContext::PrepareField(
 // import chapter fields
 
 
-static const SvXMLEnumMapEntry aChapterDisplayMap[] =
+static const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 {
     { XML_NAME,                     ChapterFormat::NAME },
     { XML_NUMBER,                   ChapterFormat::NUMBER },
@@ -2560,7 +2554,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 {
 }
 
-static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 {
     { XML_PAGE,         ReferenceFieldPart::PAGE},
     { XML_CHAPTER,      ReferenceFieldPart::CHAPTER },
@@ -3040,7 +3034,7 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 }
 
 // TODO: this is the same map as is used in the text field export
-static SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
+static SvXMLEnumMapEntry<sal_uInt16> const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },

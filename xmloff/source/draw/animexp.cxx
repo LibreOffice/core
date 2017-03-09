@@ -179,7 +179,7 @@ void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDir
         eEffect = AnimationEffect_NONE;
     }
 
-    const Effect& rEffect = AnimationEffectMap[eEffect];
+    const Effect& rEffect = AnimationEffectMap[(int)eEffect];
     eKind = rEffect.meKind;
     eDirection = rEffect.meDirection;
     nStartScale = rEffect.mnStartScale;

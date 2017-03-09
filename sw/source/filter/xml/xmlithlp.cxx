@@ -58,28 +58,28 @@ using namespace ::com::sun::star;
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
 #define SVX_XML_BORDER_WIDTH_THICK 2
 
-const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
+const struct SvXMLEnumMapEntry<sal_uInt16> psXML_BorderStyles[] =
 {
-    { XML_NONE,       API_LINE_NONE },
-    { XML_HIDDEN,     API_LINE_NONE },
-    { XML_SOLID,      API_LINE_SOLID },
-    { XML_DOUBLE,     API_LINE_DOUBLE },
-    { XML_DOUBLE_THIN, API_LINE_DOUBLE_THIN },
-    { XML_DOTTED,     API_LINE_DOTTED },
-    { XML_DASHED,     API_LINE_DASHED },
-    { XML_FINE_DASHED, API_LINE_FINE_DASHED },
+    { XML_NONE,         API_LINE_NONE },
+    { XML_HIDDEN,       API_LINE_NONE },
+    { XML_SOLID,        API_LINE_SOLID },
+    { XML_DOUBLE,       API_LINE_DOUBLE },
+    { XML_DOUBLE_THIN,  API_LINE_DOUBLE_THIN },
+    { XML_DOTTED,       API_LINE_DOTTED },
+    { XML_DASHED,       API_LINE_DASHED },
+    { XML_FINE_DASHED,  API_LINE_FINE_DASHED },
     { XML_DASH_DOT,     API_LINE_DASH_DOT },
     { XML_DASH_DOT_DOT, API_LINE_DASH_DOT_DOT },
-    { XML_GROOVE, API_LINE_ENGRAVED },
-    { XML_RIDGE,      API_LINE_EMBOSSED },
-    { XML_INSET,      API_LINE_INSET },
-    { XML_OUTSET,     API_LINE_OUTSET },
+    { XML_GROOVE,       API_LINE_ENGRAVED },
+    { XML_RIDGE,        API_LINE_EMBOSSED },
+    { XML_INSET,        API_LINE_INSET },
+    { XML_OUTSET,       API_LINE_OUTSET },
     { XML_TOKEN_INVALID, 0 }
 };
 
-const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
+const struct SvXMLEnumMapEntry<sal_uInt16> psXML_NamedBorderWidths[] =
 {
-        { XML_THIN,         SVX_XML_BORDER_WIDTH_THIN   },
+        { XML_THIN,     SVX_XML_BORDER_WIDTH_THIN   },
         { XML_MIDDLE,   SVX_XML_BORDER_WIDTH_MIDDLE     },
         { XML_THICK,    SVX_XML_BORDER_WIDTH_THICK      },
         { XML_TOKEN_INVALID, 0 }
@@ -237,26 +237,26 @@ void sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                 nOutWidth, nInWidth, nDistance);
 }
 
-const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =
+const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushRepeat[] =
 {
     { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
     { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
     { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
 };
 
-const struct SvXMLEnumMapEntry psXML_BrushHoriPos[] =
+const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GPOS_LM },
     { XML_RIGHT,        GPOS_RM },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
 };
 
-const struct SvXMLEnumMapEntry psXML_BrushVertPos[] =
+const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushVertPos[] =
 {
     { XML_TOP,          GPOS_MT },
     { XML_BOTTOM,       GPOS_MB },
-    { XML_TOKEN_INVALID, 0 }
+    { XML_TOKEN_INVALID, (SvxGraphicPosition)0 }
 };
 
 void sw_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
@@ -319,7 +319,7 @@ void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
     }
 }
 
-const struct SvXMLEnumMapEntry psXML_BreakType[] =
+const struct SvXMLEnumMapEntry<sal_uInt16> psXML_BreakType[] =
 {
         { XML_AUTO,         0 },
         { XML_COLUMN,       1 },
@@ -329,7 +329,7 @@ const struct SvXMLEnumMapEntry psXML_BreakType[] =
         { XML_TOKEN_INVALID, 0}
 };
 
-const struct  SvXMLEnumMapEntry aXMLTableAlignMap[] =
+const struct SvXMLEnumMapEntry<sal_Int16> aXMLTableAlignMap[] =
 {
     { XML_LEFT,             text::HoriOrientation::LEFT           },
     { XML_LEFT,             text::HoriOrientation::LEFT_AND_WIDTH },
@@ -340,7 +340,7 @@ const struct  SvXMLEnumMapEntry aXMLTableAlignMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const struct  SvXMLEnumMapEntry aXMLTableVAlignMap[] =
+const struct SvXMLEnumMapEntry<sal_Int16> aXMLTableVAlignMap[] =
 {
     { XML_TOP,                  text::VertOrientation::TOP        },
     { XML_MIDDLE,               text::VertOrientation::CENTER     },
@@ -348,7 +348,7 @@ const struct  SvXMLEnumMapEntry aXMLTableVAlignMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const struct SvXMLEnumMapEntry aXML_KeepTogetherType[] =
+const struct SvXMLEnumMapEntry<sal_uInt16> aXML_KeepTogetherType[] =
 {
         { XML_ALWAYS,       0 },
         { XML_AUTO,         1 },
