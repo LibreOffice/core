@@ -86,7 +86,7 @@
 #include <rtl/ref.hxx>
 #include <framework/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include "../appl/app.hrc"
+#include "app.hrc"
 
 #include <memory>
 
