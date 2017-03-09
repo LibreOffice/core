@@ -5701,11 +5701,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                rParam.FillInExcelSyntax(aString, 0);
-                sal_uInt32 nIndex = 0;
-                bool bNumber = pFormatter->IsNumberFormat(
-                        rItem.maString, nIndex, rItem.mfVal);
-                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                rParam.FillInExcelSyntax(aString, 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.bRegExp = MayBeRegExp(rItem.maString, pDok);
             }
@@ -6004,11 +6000,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(aString, 0);
-                    sal_uInt32 nIndex = 0;
-                    bool bNumber = pFormatter->IsNumberFormat(
-                            rItem.maString, nIndex, rItem.mfVal);
-                    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                    rParam.FillInExcelSyntax(aString, 0, pFormatter);
                     if (rItem.meType == ScQueryEntry::ByString)
                         rParam.bRegExp = MayBeRegExp(rItem.maString, pDok);
                 }
@@ -6256,11 +6248,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(aString, 0);
-                    sal_uInt32 nIndex = 0;
-                    bool bNumber = pFormatter->IsNumberFormat(
-                            rItem.maString, nIndex, rItem.mfVal);
-                    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                    rParam.FillInExcelSyntax(aString, 0, pFormatter);
                     if (rItem.meType == ScQueryEntry::ByString)
                         rParam.bRegExp = MayBeRegExp(rItem.maString, pDok);
                 }
