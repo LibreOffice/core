@@ -499,6 +499,7 @@ bool getJavaProps(const OUString & exePath,
 
     //Use this thread to read output stream
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
+    JFW_TRACE2("Properties found:");
     while (true)
     {
         OString aLine;
@@ -508,7 +509,7 @@ bool getJavaProps(const OUString & exePath,
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
-        JFW_TRACE2(" \"" << sLine << " \"");
+        JFW_TRACE2("  \"" << sLine << "\"");
         sLine = sLine.trim();
         if (sLine.isEmpty())
             continue;
