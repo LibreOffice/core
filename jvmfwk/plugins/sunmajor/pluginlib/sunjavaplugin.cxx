@@ -227,6 +227,10 @@ javaPluginError checkJavaVersionRequirements(
     rtl_uString * * arExcludeList,
     sal_Int32  nLenList)
 {
+    if (!aVendorInfo->isValidArch())
+    {
+        return javaPluginError::WrongArch;
+    }
     if (!sMinVersion.isEmpty())
     {
         try
@@ -334,7 +338,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         javaPluginError err = checkJavaVersionRequirements(
             cur, sMinVersion, sMaxVersion, arExcludeList, nLenList);
 
-        if (err == javaPluginError::FailedVersion)
+        if (err == javaPluginError::FailedVersion || err == javaPluginError::WrongArch)
             continue;
         else if (err == javaPluginError::WrongVersionFormat)
             return err;
