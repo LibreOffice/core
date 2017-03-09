@@ -115,7 +115,6 @@ protected:
     FncSetPixel mFncSetPixel;
 
     SAL_DLLPRIVATE void ImplInitScanBuffer( Bitmap& rBitmap );
-    SAL_DLLPRIVATE void ImplClearScanBuffer();
     SAL_DLLPRIVATE bool ImplSetAccessPointers( ScanlineFormat nFormat );
 
 public:
@@ -305,12 +304,10 @@ inline const BitmapColor& BitmapInfoAccess::GetPaletteColor( sal_uInt16 nColor )
     return mpBuffer->maPalette[nColor];
 }
 
-
 inline const BitmapColor& BitmapInfoAccess::GetBestPaletteColor(const BitmapColor& rBitmapColor) const
 {
     return GetPaletteColor(GetBestPaletteIndex(rBitmapColor));
 }
-
 
 inline ColorMask& BitmapInfoAccess::GetColorMask() const
 {
@@ -319,7 +316,6 @@ inline ColorMask& BitmapInfoAccess::GetColorMask() const
     return mpBuffer->maColorMask;
 }
 
-
 inline Scanline BitmapReadAccess::GetBuffer() const
 {
     assert(mpBuffer && "Access is not valid!");
@@ -327,31 +323,31 @@ inline Scanline BitmapReadAccess::GetBuffer() const
     return mpBuffer ? mpBuffer->mpBits : nullptr;
 }
 
-
 inline Scanline BitmapReadAccess::GetScanline(long nY) const
 {
-    assert(mpBuffer && mpScanBuf && "Access is not valid!");
+    assert(mpBuffer && "Access is not valid!");
     assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-    return mpScanBuf[nY];
+    if (mpBuffer->mnFormat & ScanlineFormat::TopDown)
+    {
+        return mpBuffer->mpBits + (nY * mpBuffer->mnScanlineSize);
+    }
+    return mpBuffer->mpBits + ((mpBuffer->mnHeight - 1 - nY) * mpBuffer->mnScanlineSize);
 }
-
 
 inline BitmapColor BitmapReadAccess::GetPixel(long nY, long nX) const
 {
-    assert(mpBuffer && mpScanBuf && "Access is not valid!");
+    assert(mpBuffer && "Access is not valid!");
     assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
     assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-    return mFncGetPixel(mpScanBuf[nY], nX, maColorMask );
+    return mFncGetPixel(GetScanline(nY), nX, maColorMask );
 }
-
 
 inline sal_uInt8 BitmapReadAccess::GetPixelIndex(long nY, long nX) const
 {
     return GetPixel(nY, nX).GetBlueOrIndex();
 }
-
 
 inline BitmapColor BitmapReadAccess::GetPixelFromData(const sal_uInt8* pData, long nX) const
 {
@@ -359,7 +355,6 @@ inline BitmapColor BitmapReadAccess::GetPixelFromData(const sal_uInt8* pData, lo
 
     return mFncGetPixel( pData, nX, maColorMask );
 }
-
 
 inline void BitmapReadAccess::SetPixelOnData(sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor)
 {
@@ -415,7 +410,7 @@ inline void BitmapWriteAccess::SetPixel(long nY, long nX, const BitmapColor& rBi
     assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
     assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-    mFncSetPixel(mpScanBuf[nY], nX, rBitmapColor, maColorMask);
+    mFncSetPixel(GetScanline(nY), nX, rBitmapColor, maColorMask);
 }
 
 
