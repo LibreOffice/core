@@ -1262,7 +1262,8 @@ bool OResultSet::OpenImpl()
                          i < m_aColMapping.size(); ++i)
                     {
                         if (std::find(m_aOrderbyColumnNumber.begin(),
-                                        m_aOrderbyColumnNumber.end(), i)
+                                        m_aOrderbyColumnNumber.end(),
+                                        sal::static_int_cast<sal_Int32>(i))
                                 == m_aOrderbyColumnNumber.end())
                         {
                             m_aOrderbyColumnNumber.push_back(i);
