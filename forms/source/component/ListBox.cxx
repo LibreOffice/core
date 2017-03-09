@@ -421,8 +421,8 @@ namespace frm
             Any _rCurrentValue = getCurrentSingleValue();
             if (_rCurrentValue != _rValue)
             {
-                _rOldValue = _rValue;
-                _rConvertedValue = _rCurrentValue;
+                _rOldValue = _rCurrentValue;
+                _rConvertedValue = _rValue;
                 bModified = true;
             }
             break;
