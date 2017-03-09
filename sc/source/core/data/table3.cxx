@@ -2041,7 +2041,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
                     if (nIndex < nNewEntries)
                     {
                         rQueryParam.GetEntry(nIndex).nField = pFields[nCol - nCol1];
-                        rQueryParam.FillInExcelSyntax(aCellStr, nIndex);
+                        rQueryParam.FillInExcelSyntax(aCellStr, nIndex, NULL);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             rQueryParam.GetEntry(nIndex).eConnect = SC_AND;

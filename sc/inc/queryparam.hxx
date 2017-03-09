@@ -25,6 +25,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+class SvNumberFormatter;
+
 struct ScDBQueryParamInternal;
 struct ScQueryEntry;
 
@@ -49,7 +51,8 @@ struct ScQueryParamBase
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
     SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
-    void FillInExcelSyntax(const OUString& aCellStr, SCSIZE nIndex);
+    void FillInExcelSyntax(const OUString& aCellStr, SCSIZE nIndex,
+                           SvNumberFormatter* pFormatter);
 
 protected:
     typedef boost::ptr_vector<ScQueryEntry> EntriesType;
