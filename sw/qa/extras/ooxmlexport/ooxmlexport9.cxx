@@ -235,14 +235,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106001_2, "tdf106001-2.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w","val","600");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf103931, "tdf103931.docx")
-{
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
-    // This was 2, the last (empty) section of the document was lost on import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
 {
     CPPUNIT_ASSERT(getShape(1)->getSize().Width > 0);
