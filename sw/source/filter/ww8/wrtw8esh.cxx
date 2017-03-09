@@ -1743,7 +1743,7 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
     EscherPropertyContainer& rPropOpt)
 {
     const SfxPoolItem* pItem;
-    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
+    sal_uInt32 nMode = GraphicDrawMode::Standard;
     sal_Int32 nContrast = 0;
     sal_Int16 nBrightness = 0;
 
@@ -1763,7 +1763,7 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
         true, &pItem))
     {
         nMode = static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
-        if (nMode == GRAPHICDRAWMODE_WATERMARK)
+        if (nMode == GraphicDrawMode::Watermark)
         {
             /*
             There is no real watermark mode in word, we must use standard
@@ -1778,13 +1778,13 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
             nContrast -= 70;
             if (nContrast < -100)
                 nContrast = -100;
-            nMode = GRAPHICDRAWMODE_STANDARD;
+            nMode = GraphicDrawMode::Standard;
         }
     }
 
-    if (nMode == GRAPHICDRAWMODE_GREYS)
+    if (nMode == GraphicDrawMode::Greys)
         nMode = 0x40004;
-    else if (nMode == GRAPHICDRAWMODE_MONO)
+    else if (nMode == GraphicDrawMode::Mono)
         nMode = 0x60006;
     else
         nMode = 0;
