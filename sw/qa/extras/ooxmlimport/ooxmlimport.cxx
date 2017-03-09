@@ -131,6 +131,15 @@ DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", nullptr,
     CPPUNIT_ASSERT(!mxComponent.is());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf103931, "tdf103931.docx")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was 2, the last (empty) section of the document was lost on import.
+    // (import test only: Columns/Sections do not round-trip well)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf103975_notPageBreakB, "tdf103975_notPageBreakB.docx")
 {
     // turn on View Formatting Marks to see these documents.
