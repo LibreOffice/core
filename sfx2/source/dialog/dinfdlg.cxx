@@ -67,7 +67,7 @@
 #include "documentfontsdialog.hxx"
 #include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
-#include "../appl/app.hrc"
+#include "app.hrc"
 #include "sfxlocal.hrc"
 #include <dialog.hrc>
 #include <vcl/help.hxx>

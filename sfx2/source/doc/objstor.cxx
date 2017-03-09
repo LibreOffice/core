@@ -129,7 +129,7 @@
 #include "appdata.hxx"
 #include <objstor.hxx>
 
-#include "../appl/app.hrc"
+#include "app.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;

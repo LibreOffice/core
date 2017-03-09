@@ -91,7 +91,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>
 
-#include "../appl/app.hrc"
+#include "app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>

@@ -118,7 +118,7 @@
 #include "doc.hrc"
 #include "workwin.hxx"
 #include "helpid.hrc"
-#include "../appl/app.hrc"
+#include "app.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
 #include <openflag.hxx>
