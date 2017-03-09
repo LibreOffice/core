@@ -84,6 +84,7 @@ static sal_uInt16 lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rL
 }
 
 ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
+    pSharedVCL(EditDLL::Get().GetSharedVclResources()),
     aPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aMinAutoPaperSize( 0x0, 0x0 ),
     aMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
@@ -175,6 +176,7 @@ void ImpEditEngine::Dispose()
         EndListening(*pApp);
     pVirtDev.disposeAndClear();
     mpOwnDev.disposeAndClear();
+    pSharedVCL.reset();
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -204,7 +206,7 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     if (pRef)
         pRefDev = pRef;
     else
-        pRefDev = EditDLL::Get().GetGlobalData()->GetStdVirtualDevice();
+        pRefDev = pSharedVCL->GetVirtualDevice();
 
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
 

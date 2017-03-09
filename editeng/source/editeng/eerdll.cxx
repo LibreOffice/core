@@ -85,11 +85,8 @@ EditDLL& EditDLL::Get()
 }
 
 GlobalEditData::GlobalEditData() :
-    ppDefItems(nullptr),
-    mpVirDev(VclPtr<VirtualDevice>::Create())
-{
-    mpVirDev->SetMapMode(MapUnit::MapTwip);
-}
+    ppDefItems(nullptr)
+{ }
 
 GlobalEditData::~GlobalEditData()
 {
@@ -197,11 +194,6 @@ uno::Reference< linguistic2::XLanguageGuessing > const & GlobalEditData::GetLang
     return xLanguageGuesser;
 }
 
-VclPtr<VirtualDevice> GlobalEditData::GetStdVirtualDevice()
-{
-    return mpVirDev;
-}
-
 EditResId::EditResId(sal_uInt16 nId)
     : ResId(nId, *EditDLL::GetResMgr())
 {
@@ -223,6 +215,28 @@ ResMgr* EditDLL::GetResMgr()
     if (!pResMgr)
         pResMgr = ResMgr::CreateResMgr("editeng", Application::GetSettings().GetUILanguageTag());
     return pResMgr;
+}
+
+
+editeng::SharedVclResources::SharedVclResources()
+    : m_pVirDev(VclPtr<VirtualDevice>::Create())
+{
+    m_pVirDev->SetMapMode(MapUnit::MapTwip);
+}
+
+editeng::SharedVclResources::~SharedVclResources()
+    { m_pVirDev.disposeAndClear(); }
+
+VclPtr<VirtualDevice> editeng::SharedVclResources::GetVirtualDevice()
+    { return m_pVirDev; }
+
+std::shared_ptr<editeng::SharedVclResources> EditDLL::GetSharedVclResources()
+{
+    SolarMutexGuard g;
+    auto pLocked(pSharedVcl.lock());
+    if(!pLocked)
+        pSharedVcl = pLocked = std::shared_ptr<editeng::SharedVclResources>(new editeng::SharedVclResources());
+    return pLocked;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

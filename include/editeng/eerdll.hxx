@@ -21,8 +21,14 @@
 #define INCLUDED_EDITENG_EERDLL_HXX
 
 class GlobalEditData;
+namespace editeng
+{
+    class SharedVclResources;
+}
 
 #include <tools/resid.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>
 
@@ -35,6 +41,7 @@ public:
 class EditDLL
 {
     std::unique_ptr<GlobalEditData> pGlobalData;
+    std::weak_ptr<editeng::SharedVclResources> pSharedVcl;
 
 public:
     EditDLL();
@@ -42,6 +49,7 @@ public:
 
     static ResMgr* GetResMgr();
     GlobalEditData* GetGlobalData() const   { return pGlobalData.get(); }
+    std::shared_ptr<editeng::SharedVclResources> GetSharedVclResources();
     static EditDLL& Get();
 };
 
