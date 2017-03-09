@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
@@ -61,30 +62,9 @@ enum class SfxCallMode : sal_uInt16
     API       = 0x08,    // API call (silent)
     MODAL     = 0x10     // despite ModalMode
 };
-// make combining these type-safe
-inline SfxCallMode operator| (SfxCallMode lhs, SfxCallMode rhs)
-{
-    return static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-}
-inline SfxCallMode operator& (SfxCallMode lhs, SfxCallMode rhs)
-{
-    return static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-}
-inline SfxCallMode operator~ (SfxCallMode rhs)
-{
-    return static_cast<SfxCallMode>(0x1f & ~(static_cast<sal_uInt16>(rhs)));
-}
-inline SfxCallMode& operator|= (SfxCallMode& lhs, SfxCallMode rhs)
-{
-    lhs = static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
-    return lhs;
-}
-inline SfxCallMode& operator&= (SfxCallMode& lhs, SfxCallMode rhs)
-{
-    lhs = static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
-    return lhs;
-}
 
+template<> struct o3tl::typed_flags<SfxCallMode>:
+    o3tl::is_typed_flags<SfxCallMode, 0x1F> {};
 
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
