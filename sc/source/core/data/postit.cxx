@@ -959,7 +959,9 @@ void ScPostIt::UpdateCaptionPos( const ScAddress& rPos )
 
 void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
 {
-    OSL_ENSURE( maNoteData.mxCaption || maNoteData.mxInitData.get(), "ScPostIt::CreateCaptionFromInitData - need caption object or initial caption data" );
+    // Captions are not created in Undo documents and only rarely in Clipboard,
+    // but otherwise we need caption or initial data.
+    assert((maNoteData.mxCaption || maNoteData.mxInitData.get()) || mrDoc.IsUndo() || mrDoc.IsClipboard());
     if( maNoteData.mxInitData.get() )
     {
         /*  This function is called from ScPostIt::Clone() when copying cells
