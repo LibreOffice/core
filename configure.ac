@@ -5237,7 +5237,7 @@ find_winsdk_version()
 
     unset winsdktest winsdklibsubdir
 
-    # Why we look for them in this particular order I don't know. But OTOH I
+    # Why we look for them in this particular order I don't know.
     case "$1" in
     7.*)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
