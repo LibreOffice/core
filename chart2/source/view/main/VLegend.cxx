@@ -788,7 +788,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
         pButton->init(xLegendContainer, xShapeFactory);
         awt::Point aNewPosition = awt::Point(100, y);
         pButton->setLabel(sColumnField);
-        pButton->setCID("RowFieldButton." + OUString::number(nCIDIndex));
+        pButton->setCID("FieldButton.Row." + OUString::number(nCIDIndex));
         pButton->createShapes(aNewPosition, aSize, xModelPage);
         nCIDIndex += 1;
         y += aSize.Height + 100;;
