@@ -5509,7 +5509,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 
     // read FIB
     rSt.ReadInt16( m_lid );
-    rSt.ReadInt16( m_pnNext );
+    rSt.ReadInt16( (sal_Int16&)m_pnNext );
     rSt.ReadUChar( aBits1 );
     rSt.ReadUChar( aBits2 );
     rSt.ReadUInt16( m_nFibBack );
@@ -5935,7 +5935,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, m_nFib );
     Set_UInt16( pData, m_nProduct );
     Set_UInt16( pData, m_lid );
-    Set_UInt16( pData, m_pnNext );
+    Set_UInt16( pData, (sal_Int16)m_pnNext );
 
     sal_uInt16 nBits16 = 0;
     if( m_fDot )          nBits16 |= 0x0001;
