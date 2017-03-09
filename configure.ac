@@ -5237,7 +5237,6 @@ find_winsdk_version()
 
     unset winsdktest winsdklibsubdir
 
-    # Why we look for them in this particular order I don't know.
     case "$1" in
     7.*)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
@@ -5247,19 +5246,19 @@ find_winsdk_version()
             return
         fi
         ;;
-    8.1|8.1A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=winv6.3
-            return
-        fi
-        ;;
     8.0|8.0A)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=win8
+            return
+        fi
+        ;;
+    8.1|8.1A)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=winv6.3
             return
         fi
         ;;
