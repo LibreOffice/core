@@ -55,6 +55,7 @@ enum class javaPluginError
     FailedVersion,
     NoJre,
     WrongVendor,
+    WrongArch,
     VmCreationFailed
 };
 
