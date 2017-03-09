@@ -3613,11 +3613,11 @@ if test "$_os" = "WINNT"; then
         case $vcnum in
         140)
             COMEX=19
-            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
             ;;
         150)
             COMEX=19
-            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0 7.1A"
             ;;
         esac
 
