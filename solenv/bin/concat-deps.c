@@ -870,7 +870,7 @@ char const * src;
 char* dest;
 char* last_dot = NULL;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
-    for(dest = phony_content_buffer+work_dir_len, src = phony_target; *src != 0; ++src, ++dest)
+    for(dest = phony_content_buffer+work_dir_len+1, src = phony_target; *src != 0; ++src, ++dest)
     {
         *dest = *src;
         if(*dest == '.')
@@ -1033,47 +1033,47 @@ off_t size;
                 // cases ordered by frequency
                 if(strncmp(src_relative, "CxxObject/", 10) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+10, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(fn+work_dir_len+5, "SrsPartTarget/", 14) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+14, "");
+                    created_line = generate_phony_line(src_relative, "");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "GenCxxObject/", 13) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+13, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "CObject/", 8) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+8, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "GenCObject/", 11) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+11, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "SdiObject/", 10) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+10, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "AsmObject/", 10) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+10, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "ObjCxxObject/", 13) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+13, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else if(strncmp(src_relative, "ObjCObject/", 11) == 0)
                 {
-                    created_line = generate_phony_line(src_relative+11, "o");
+                    created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
                 else
