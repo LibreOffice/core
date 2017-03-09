@@ -5073,11 +5073,11 @@ if test "$PERL"; then
     ${PERL} -e "exit($]);"
     _perl_version=$?
     if test "$_perl_version" -lt 5; then
-        AC_MSG_ERROR([found Perl version "$_perl_version", use version 5 of Perl])
+        AC_MSG_ERROR([found Perl $_perl_version, use Perl 5])
     fi
-    AC_MSG_RESULT([checked (perl $_perl_version)])
+    AC_MSG_RESULT([Perl $_perl_version])
 else
-    AC_MSG_ERROR([Perl not found, install version 5 of Perl])
+    AC_MSG_ERROR([Perl not found, install Perl 5])
 fi
 
 dnl ===================================================================
