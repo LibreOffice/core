@@ -40,6 +40,7 @@ BEGIN {
 }
 
 {
+    sub(/\r$/, "")
     sub(/^ */, "")
     if (index($0, showincludes_prefix) == 1) {
         $0 = substr($0, length(showincludes_prefix) + 1)
