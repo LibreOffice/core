@@ -89,7 +89,12 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
 
 ThreadPool::~ThreadPool()
 {
-    shutdown();
+    // note: calling shutdown from global variable dtor blocks forever on Win7
+    // note2: there isn't enough MSVCRT left on exit to call assert() properly
+    // so these asserts just print something to stderr but exit status is
+    // still 0, but hopefully they will be more helpful on non-WNT platforms
+    assert(mbTerminate);
+    assert(maTasks.empty());
 }
 
 struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
@@ -127,6 +132,7 @@ sal_Int32 ThreadPool::getPreferredConcurrency()
     return ThreadCount;
 }
 
+// FIXME: what does "this" refer to in the following?
 // FIXME: there should be no need for this as/when our baseline
 // is >VS2015 and drop WinXP; the sorry details are here:
 // https://connect.microsoft.com/VisualStudio/feedback/details/1282596
