@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_94c7ab44",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-10T09:08:28Z",
+      "side": 1,
+      "message": "why filter out the empty string here?  maybe that can even be a valid value for the os.arch property?",
+      "revId": "8616abfe28dfdba038d294400efd38db1c2026df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
