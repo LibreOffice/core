@@ -42,7 +42,7 @@ GType                          lok_doc_view_get_type               (void) G_GNUC
 
 /**
  * lok_doc_view_new:
- * @pPath: (nullable): (allow-none): LibreOffice install path. Pass null to set it to default
+ * @pPath: (nullable) (allow-none): LibreOffice install path. Pass null to set it to default
  * path which in most cases would be $libdir/libreoffice/program
  * @cancellable: The cancellable object that you can use to cancel this
  * operation.
@@ -56,9 +56,9 @@ GtkWidget*                     lok_doc_view_new                    (const gchar*
 
 /**
  * lok_doc_view_new_from_user_profile:
- * @pPath: (nullable): (allow-none): LibreOffice install path. Pass null to set it to default
+ * @pPath: (nullable) (allow-none): LibreOffice install path. Pass null to set it to default
  * path which in most cases would be $libdir/libreoffice/program
- * @pUserProfile: (nullable): (allow-none): User profile URL. Must be either a file URL or a
+ * @pUserProfile: (nullable) (allow-none): User profile URL. Must be either a file URL or a
  * special vnd.sun.star.pathname URL. Pass non-null to be able to use this
  * widget and LibreOffice itself in parallel.
  * @cancellable: The cancellable object that you can use to cancel this
@@ -75,7 +75,7 @@ GtkWidget*                     lok_doc_view_new_from_user_profile  (const gchar*
 /**
  * lok_doc_view_new_from_widget:
  * @pDocView: The #LOKDocView instance
- * @pRenderingArguments: (nullable): (allow-none): lok::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): lok::Document::initializeForRendering() arguments.
  *
  * Returns: (transfer none): The #LOKDocView widget instance.
  */
@@ -86,7 +86,7 @@ GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* 
  * lok_doc_view_open_document:
  * @pDocView: The #LOKDocView instance
  * @pPath: (transfer full): The path of the document that #LOKDocView widget should try to open
- * @pRenderingArguments: (nullable): (allow-none): lok::Document::initializeForRendering() arguments.
+ * @pRenderingArguments: (nullable) (allow-none): lok::Document::initializeForRendering() arguments.
  * @cancellable:
  * @callback:
  * @userdata:
@@ -309,7 +309,7 @@ gboolean                        lok_doc_view_paste                 (LOKDocView* 
  * lok_doc_view_set_document_password:
  * @pDocView: The #LOKDocView instance
  * @pUrl: the URL of the document to set password for, as sent with signal `password-required`
- * @pPassword: (nullable): (allow-none): the password, NULL for no password
+ * @pPassword: (nullable) (allow-none): the password, NULL for no password
  *
  * Set the password for password protected documents
  */
