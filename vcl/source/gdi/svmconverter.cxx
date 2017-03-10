@@ -333,10 +333,10 @@ void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
     sal_Int16 nType;
     for (sal_uLong i = 0UL; i < nSkipCount; ++i)
     {
-        rIStm.ReadInt16( nType ).ReadInt32( nActionSize );
-        if (!rIStm.good())
+        rIStm.ReadInt16(nType).ReadInt32(nActionSize);
+        if (!rIStm.good() || nActionSize < 4)
             break;
-        rIStm.SeekRel( nActionSize - 4 );
+        rIStm.SeekRel(nActionSize - 4);
     }
 }
 
@@ -1430,12 +1430,18 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 nUnicodeCommentActionNumber = i + 1;
                 nUnicodeCommentStreamPos = rIStm.Tell() - 6;
-                rIStm.SeekRel( nActionSize - 4 );
+                if (nActionSize < 4)
+                    rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+                else
+                    rIStm.SeekRel(nActionSize - 4);
             }
             break;
 
             default:
-                rIStm.SeekRel( nActionSize - 4 );
+                if (nActionSize < 4)
+                    rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+                else
+                    rIStm.SeekRel(nActionSize - 4);
             break;
         }
     }
