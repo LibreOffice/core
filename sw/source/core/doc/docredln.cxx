@@ -327,14 +327,14 @@ static void lcl_RedlineNotification(RedlineNotification nType, SwRedlineTable::s
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     if (pView && pContentNd)
     {
-        std::unique_ptr<SwShellCursor> pCursor(new SwShellCursor(pView->GetWrtShell(), *pStartPos));
-        pCursor->SetMark();
-        pCursor->GetMark()->nNode = *pContentNd;
-        pCursor->GetMark()->nContent.Assign(pContentNd, pEndPos->nContent.GetIndex());
+        SwShellCursor aCursor(pView->GetWrtShell(), *pStartPos);
+        aCursor.SetMark();
+        aCursor.GetMark()->nNode = *pContentNd;
+        aCursor.GetMark()->nContent.Assign(pContentNd, pEndPos->nContent.GetIndex());
 
-        pCursor->FillRects();
+        aCursor.FillRects();
 
-        SwRects* pRects(pCursor.get());
+        SwRects* pRects(&aCursor);
         std::vector<OString> aRects;
         for(SwRect& rNextRect : *pRects)
             aRects.push_back(rNextRect.SVRect().toString());

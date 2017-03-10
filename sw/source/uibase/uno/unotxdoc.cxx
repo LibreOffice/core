@@ -3199,14 +3199,14 @@ OUString SwXTextDocument::getTrackedChanges()
         SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
         if (pView && pContentNd)
         {
-            std::unique_ptr<SwShellCursor> pCursor(new SwShellCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()) ));
-            pCursor->SetMark();
-            pCursor->GetMark()->nNode = *pContentNd;
-            pCursor->GetMark()->nContent.Assign(pContentNd, rRedlineTable[i]->End()->nContent.GetIndex());
+            SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
+            aCursor.SetMark();
+            aCursor.GetMark()->nNode = *pContentNd;
+            aCursor.GetMark()->nContent.Assign(pContentNd, rRedlineTable[i]->End()->nContent.GetIndex());
 
-            pCursor->FillRects();
+            aCursor.FillRects();
 
-            SwRects* pRects(pCursor.get());
+            SwRects* pRects(&aCursor);
             std::vector<OString> aRects;
             for(SwRect& rNextRect : *pRects)
                 aRects.push_back(rNextRect.SVRect().toString());
