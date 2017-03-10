@@ -583,7 +583,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             // preference. The coretext_aat shaper is available only on macOS,
             // but there is no harm in always including it, HarfBuzz will
             // ignore unavailable shapers.
-            const char* pHbShapers[] = { "coretext_aat", "graphite2", "ot", "fallback", nullptr };
+            const char* pHbShapers[] = { "graphite2", "coretext_aat", "ot", "fallback", nullptr };
             hb_segment_properties_t aHbProps;
             hb_buffer_get_segment_properties(pHbBuffer, &aHbProps);
             hb_shape_plan_t* pHbPlan = hb_shape_plan_create_cached(pHbFace, &aHbProps, maFeatures.data(), maFeatures.size(), pHbShapers);
