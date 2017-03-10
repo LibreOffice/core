@@ -69,6 +69,7 @@ struct SfxRequest_Impl: public SfxListener
     SfxViewFrame*   pViewFrame;
 
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    css::uno::Reference< uno::XComponentContext > xContext;
 
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
@@ -83,8 +84,9 @@ struct SfxRequest_Impl: public SfxListener
         , nCallMode( SfxCallMode::SYNCHRON )
         , bAllowRecording( false )
         , pViewFrame(nullptr)
-        {}
-
+        , xContext(comphelper::getProcessComponentContext())
+    {
+    }
 
     void                SetPool( SfxItemPool *pNewPool );
     virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint ) override;
@@ -348,8 +350,6 @@ void SfxRequest_Impl::Record
                 }
             }
         }
-
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
         uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
 
