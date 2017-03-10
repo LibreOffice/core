@@ -47,6 +47,7 @@
 #endif
 
 #include <cstdlib>
+#include <limits>
 #include <string.h>
 #include <vector>
 #include <math.h>
@@ -5336,16 +5337,15 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
     return (it == mpData->m_aItems.end()) ? nullptr : &(*it);
 }
 
-sal_uInt16 ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
+std::vector<ImplToolItem>::size_type ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
 {
     if( pItem )
     {
-        sal_uInt16 nPos;
-        for( nPos = 0; nPos < rList.size(); ++nPos )
+        for( std::vector<ImplToolItem>::size_type nPos = 0; nPos < rList.size(); ++nPos )
             if( &rList[ nPos ] == pItem )
                 return nPos;
     }
-    return TOOLBOX_ITEM_NOTFOUND;
+    return std::numeric_limits<std::vector<ImplToolItem>::size_type>::max();
 }
 
 void ToolBox::ChangeHighlight( sal_uInt16 nPos )
@@ -5387,8 +5387,8 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 
     if( pItem )
     {
-        sal_uInt16 aPos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
-        if( aPos != TOOLBOX_ITEM_NOTFOUND)
+        std::vector<ImplToolItem>::size_type aPos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
+        if( aPos != std::numeric_limits<std::vector<ImplToolItem>::size_type>::max())
         {
             // check for line breaks
             sal_uInt16 nLine = ImplGetItemLine( pItem );
@@ -5411,9 +5411,11 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 
             mnHighItemId = pItem->mnId;
             InvalidateItem(aPos);
+                //TODO: std::vector<ImplToolItem>::size_type -> sal_uInt16!
 
             if( mbSelection )
                 mnCurPos = aPos;
+                    //TODO: std::vector<ImplToolItem>::size_type -> sal_uInt16!
             ImplShowFocus();
 
             if( pItem->mpWindow )
@@ -5538,10 +5540,10 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
 
     if( pToolItem )
     {
-        sal_uLong pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
-        sal_uLong nCount = mpData->m_aItems.size();
+        std::vector<ImplToolItem>::size_type pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
+        std::vector<ImplToolItem>::size_type nCount = mpData->m_aItems.size();
 
-        sal_uLong i=0;
+        std::vector<ImplToolItem>::size_type i=0;
         do
         {
             if( bUp )
