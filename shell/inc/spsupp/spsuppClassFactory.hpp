@@ -40,7 +40,6 @@ public:
     static long GetLockCount() { return m_nLockCount; }
 
 private:
-
     static long m_nObjCount;
     static long m_nLockCount;
 };

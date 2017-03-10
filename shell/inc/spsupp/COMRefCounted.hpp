@@ -34,7 +34,6 @@ public:
     }
 
 private:
-
     long m_nRef = 1; // Created referenced
 };
 
