@@ -1159,14 +1159,19 @@ void GtkSalMenu::EnableUnity(bool bEnable)
     bUnityMode = bEnable;
 
     MenuBar* pMenuBar(static_cast<MenuBar*>(mpVCLMenu.get()));
+    bool bDisplayable(pMenuBar->IsDisplayable());
 
     if (bEnable)
+    {
         DestroyMenuBarWidget();
+        UpdateFull();
+        if (!bDisplayable)
+            ShowMenuBar(false);
+    }
     else
     {
         Update();
-        if (pMenuBar->IsDisplayable())
-            CreateMenuBarWidget();
+        ShowMenuBar(bDisplayable);
     }
 
     pMenuBar->LayoutChanged();
