@@ -1,21 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * This file is part of the LibreOffice project.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*
+* This file incorporates work covered by the following license notice:
+*
+*   Licensed to the Apache Software Foundation (ASF) under one or more
+*   contributor license agreements. See the NOTICE file distributed
+*   with this work for additional information regarding copyright
+*   ownership. The ASF licenses this file to you under the Apache
+*   License, Version 2.0 (the "License"); you may not use this file
+*   except in compliance with the License. You may obtain a copy of
+*   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+*/
 
 #ifndef INCLUDED_HWPFILTER_SOURCE_HBOX_H
 #define INCLUDED_HWPFILTER_SOURCE_HBOX_H
@@ -32,53 +32,50 @@
 #include "hpara.h"
 
 /**
- * The HBox class is the base class for all date classes in hwp document.
- * For example, there are special character, table, image, etc.
- * It has one character. The ascii code value of special characters are smaller than 32. General character is greater than 32.
- *
- * @short Base class for characters
- */
+* The HBox class is the base class for all date classes in hwp document.
+* For example, there are special character, table, image, etc.
+* It has one character. The ascii code value of special characters are smaller than 32. General character is greater than 32.
+*
+* @short Base class for characters
+*/
 struct HBox
 {
-    public:
-        hchar hh;
+public:
+    hchar hh;
 
 /**
- * Construct a HBox object with parameter hch.
- * @param hch 16bit character being able to have Korean character.
- */
-        explicit HBox( hchar hch );
-        virtual ~HBox();
+* Construct a HBox object with parameter hch.
+* @param hch 16bit character being able to have Korean character.
+*/
+    explicit HBox( hchar hch );
+    virtual ~HBox();
 /**
- * @returns The Size of HBox object
- */
-        int           WSize();
+* @returns The Size of HBox object
+*/
+    int           WSize();
 /**
- * Read properties from HIODevice object like stream, file, memory.
- *
- * @param hwpf HWPFile Object having all information for a hwp file.
- * @returns True if reading from stream is successful.
- */
-        virtual bool Read(HWPFile &hwpf);
+* Read properties from HIODevice object like stream, file, memory.
+*
+* @param hwpf HWPFile Object having all information for a hwp file.
+* @returns True if reading from stream is successful.
+*/
+    virtual bool Read(HWPFile &hwpf);
 
-        virtual hchar_string GetString();
-    private:
-        static int boxCount;
+    virtual hchar_string GetString();
+private:
+    static int boxCount;
 };
 
 /**
- * @short Class for saving data to be skipped.
- */
+* @short Class for skipping data.
+*/
 struct SkipData: public HBox
 {
-    uint data_block_len;
-    hchar dummy;
-    char  *data_block;
-
     explicit SkipData(hchar);
     virtual ~SkipData() override;
     virtual bool Read(HWPFile &hwpf) override;
 };
+
 struct DateCode;
 struct FieldCode : public HBox
 {
