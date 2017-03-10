@@ -3313,7 +3313,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         else
             nMaximum = LONG_MAX;
 
-        // #i3317# - reset temporarly consideration
+        // #i3317# - reset temporarily consideration
         // of wrapping style influence
         SwPageFrame* pPageFrame = FindPageFrame();
         SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
@@ -3507,7 +3507,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
 
-                    // #i3317# - reset temporarly consideration
+                    // #i3317# - reset temporarily consideration
                     // of wrapping style influence
                     SwPageFrame* pTmpPageFrame = FindPageFrame();
                     SwSortedObjs* pTmpObjs = pTmpPageFrame ? pTmpPageFrame->GetSortedObjs() : nullptr;

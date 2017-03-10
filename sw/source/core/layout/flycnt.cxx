@@ -370,16 +370,16 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 pFooter = nullptr;
             bool bOsz = false;
             bool bExtra = Lower() && Lower()->IsColumnFrame();
-            // #i3317# - boolean, to apply temporarly the
+            // #i3317# - boolean, to apply temporarily the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
             bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
-            //  #i35911# - boolean, to apply temporarly the
+            //  #i35911# - boolean, to apply temporarily the
             // 'straightforward positioning process' for the frame due to fact
             // that it causes the complete content of its layout environment
             // to move forward.
             // #i40444# - extend usage of this boolean:
-            // apply temporarly the 'straightforward positioning process' for
+            // apply temporarily the 'straightforward positioning process' for
             // the frame due to the fact that the frame clears the area for
             // the anchor frame, thus it has to move forward.
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
@@ -492,7 +492,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                       GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             // #i3317# - instead of attribute change apply
-            // temporarly the 'straightforward positioning process'.
+            // temporarily the 'straightforward positioning process'.
             // #i80924#
             // handle special case during splitting of table rows
             if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&

@@ -803,7 +803,7 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 
 SwDBManager::~SwDBManager()
 {
-    // copy required, m_DataSourceParams can be modifed while disposing components
+    // copy required, m_DataSourceParams can be modified while disposing components
     std::vector<uno::Reference<sdbc::XConnection>> aCopiedConnections;
     for (auto & pParam : m_DataSourceParams)
     {

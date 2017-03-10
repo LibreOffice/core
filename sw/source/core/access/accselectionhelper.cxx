@@ -99,7 +99,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     // no frame shell, or no frame, or no fly frame -> can't select
 }
 
-//When the selected state of the SwFrameOrObj is setted, return true.
+//When the selected state of the SwFrameOrObj is set, return true.
 static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
                                      SwAccessibleMap* pMap)

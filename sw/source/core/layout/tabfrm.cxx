@@ -942,7 +942,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
     }
 
-    //In order to be able to compare the positions of the cells whith CutPos,
+    //In order to be able to compare the positions of the cells with CutPos,
     //they have to be calculated consecutively starting from the table.
     //They can definitely be invalid because of position changes of the table.
     SwRowFrame *pRow = static_cast<SwRowFrame*>(Lower());
@@ -4949,7 +4949,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                         const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
                         // #i43913#
                         // #i52904# - no vertical alignment,
-                        // if object, anchored inside cell, has temporarly
+                        // if object, anchored inside cell, has temporarily
                         // consider its wrapping style on object positioning.
                         // #i58806# - no vertical alignment
                         // if object does not follow the text flow.

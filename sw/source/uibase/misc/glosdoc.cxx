@@ -175,7 +175,7 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
     return GetGlosDoc( rName, bCreate );
 }
 
-// Creates a new document with the group name. temporarly also created as file
+// Creates a new document with the group name. temporarily also created as file
 // so that groups remain there later (without access).
 bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {

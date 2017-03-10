@@ -1092,7 +1092,7 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
         break;
     default:
-        OSL_ENSURE( false, "kein gueltiger FeldTyp" );
+        OSL_ENSURE( false, "No valid field type" );
     }
 
     if( !sFieldName.isEmpty() )

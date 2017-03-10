@@ -98,7 +98,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         bool mbRestartLayoutProcess;
         bool mbClearedEnvironment;
 
-        // i#i3317 - boolean, indicating that temporarly
+        // i#i3317 - boolean, indicating that temporarily
         // the wrapping style influence of the anchored object has to be
         // considered during its positioning.
         // This boolean is used, if compatibility option 'Consider wrapping style
