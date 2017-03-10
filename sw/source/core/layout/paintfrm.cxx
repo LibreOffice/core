@@ -2562,9 +2562,14 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
         rDev.SetDrawMode( DrawModeFlags::Default );
     }
 
-    const SwFrame* pUpper = mrTabFrame.GetUpper();
-    SwRect aUpper( pUpper->Prt() );
-    aUpper.Pos() += pUpper->Frame().Pos();
+    SwRect aUpper( mrTabFrame.PaintArea() );
+    // Cut the table before footer
+    const SwFrame* pPageFrame = mrTabFrame.FindPageFrame();
+    SwRect aPageRect( pPageFrame->Prt() );
+    aPageRect.Pos() += pPageFrame->Frame().Pos();
+    if ( aUpper.Bottom_() > aPageRect.Bottom_() )
+        aUpper.Bottom_( aPageRect.Bottom_() );
+
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
 
@@ -2689,22 +2694,22 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 // The table borders do not use SwAlignRect, but all the other frames do.
                 // Therefore we tweak the outer borders a bit to achieve that the outer
                 // borders match the subsidiary lines of the upper:
-                if (aStart.X() == aUpper.Left())
+                if (aStart.X() <= aUpper.Left())
                     aPaintStart.X() = aUpperAligned.Left();
-                else if (aStart.X() == aUpper.Rigth_())
+                else if (aStart.X() >= aUpper.Rigth_())
                     aPaintStart.X() = aUpperAligned.Rigth_();
                 if (aStart.Y() == aUpper.Top())
                     aPaintStart.Y() = aUpperAligned.Top();
-                else if (aStart.Y() == aUpper.Bottom_())
+                else if (aStart.Y() >= aUpper.Bottom_())
                     aPaintStart.Y() = aUpperAligned.Bottom_();
 
-                if (aEnd.X() == aUpper.Left())
+                if (aEnd.X() <= aUpper.Left())
                     aPaintEnd.X() = aUpperAligned.Left();
-                else if (aEnd.X() == aUpper.Rigth_())
+                else if (aEnd.X() >= aUpper.Rigth_())
                     aPaintEnd.X() = aUpperAligned.Rigth_();
                 if (aEnd.Y() == aUpper.Top())
                     aPaintEnd.Y() = aUpperAligned.Top();
-                else if (aEnd.Y() == aUpper.Bottom_())
+                else if (aEnd.Y() >= aUpper.Bottom_())
                     aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
