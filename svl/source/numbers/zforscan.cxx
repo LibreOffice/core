@@ -836,18 +836,21 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 switch (cToken)
                 {
                 case '/': // AM/PM, A/P
-                    cNext = rStr[nPos];
-                    if ( cNext == 'P' || cNext == 'p' )
+                    if (nPos < rStr.getLength())
                     {
-                        sal_Int32 nLen = sSymbol.getLength();
-                        if ( 1 <= nLen &&
-                             (sSymbol[0] == 'A' || sSymbol[0] == 'a') &&
-                             (nLen == 1 ||
-                              (nLen == 2 && (sSymbol[1] == 'M' || sSymbol[1] == 'm')
-                               && (rStr[nPos + 1] == 'M' || rStr[nPos + 1] == 'm'))))
+                        cNext = rStr[nPos];
+                        if ( cNext == 'P' || cNext == 'p' )
                         {
-                            sSymbol += OUString(cToken);
-                            bDontStop = true;
+                            sal_Int32 nLen = sSymbol.getLength();
+                            if ( 1 <= nLen &&
+                                    (sSymbol[0] == 'A' || sSymbol[0] == 'a') &&
+                                    (nLen == 1 ||
+                                     (nLen == 2 && (sSymbol[1] == 'M' || sSymbol[1] == 'm')
+                                      && (rStr[nPos + 1] == 'M' || rStr[nPos + 1] == 'm'))))
+                            {
+                                sSymbol += OUString(cToken);
+                                bDontStop = true;
+                            }
                         }
                     }
                     break;
