@@ -50,7 +50,7 @@ class XBMReader : public GraphicReader
 
     void            InitTable();
     OString         FindTokenLine( SvStream* pInStm, const char* pTok1, const char* pTok2 );
-    long            ParseDefine( const sal_Char* pDefine );
+    int             ParseDefine( const sal_Char* pDefine );
     bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 
 public:
@@ -145,9 +145,9 @@ OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
     return aRet;
 }
 
-long XBMReader::ParseDefine( const sal_Char* pDefine )
+int XBMReader::ParseDefine( const sal_Char* pDefine )
 {
-    long    nRet = 0;
+    sal_Int32 nRet = 0;
     const char* pTmp = pDefine;
     unsigned char   cTmp;
 
@@ -170,23 +170,11 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     if( ( pTmp[0] == '0' ) && ( ( pTmp[1] == 'X' ) || ( pTmp[1] == 'x' ) ) )
     {
         pTmp += 2;
-        cTmp = *pTmp++;
-
-        while ( pHexTable[ cTmp ] != -1 )
-        {
-            nRet = ( nRet << 4 ) + pHexTable[ cTmp ];
-            cTmp = *pTmp++;
-        }
+        nRet = OString(pTmp, strlen(pTmp)).toInt32(16);
     }
-    // read decimal
-    else
+    else // read decimal
     {
-        cTmp = *pTmp++;
-        while( ( cTmp >= '0' ) && ( cTmp <= '9' ) )
-        {
-            nRet = nRet * 10 + ( cTmp - '0' );
-            cTmp = *pTmp++;
-        }
+        nRet = OString(pTmp, strlen(pTmp)).toInt32();
     }
 
     return nRet;
@@ -286,7 +274,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
         if ( bStatus )
         {
             int nValue;
-            if ( ( nValue = (int) ParseDefine( aLine.getStr() ) ) > 0 )
+            if ( ( nValue = ParseDefine( aLine.getStr() ) ) > 0 )
             {
                 nWidth = nValue;
                 aLine = FindTokenLine( &rIStm, "#define", "_height" );
@@ -304,7 +292,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
             if ( bStatus )
             {
-                if ( ( nValue = (int) ParseDefine( aLine.getStr() ) ) > 0 )
+                if ( ( nValue = ParseDefine( aLine.getStr() ) ) > 0 )
                 {
                     nHeight = nValue;
                     aLine = FindTokenLine( &rIStm, "static", "_bits" );
