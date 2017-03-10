@@ -273,8 +273,6 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
 
 ReadState JPEGReader::Read( Graphic& rGraphic )
 {
-    long        nEndPosition;
-    long        nLines;
     ReadState   eReadState;
     bool        bRet = false;
     sal_uInt8   cDummy;
@@ -283,7 +281,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     // check if the stream's end is already available
     mrStream.Seek( STREAM_SEEK_TO_END );
     mrStream.ReadUChar( cDummy );
-    nEndPosition = mrStream.Tell();
+    long nEndPosition = mrStream.Tell();
 
     // else check if at least JPEG_MIN_READ bytes can be read
     if( mrStream.GetError() == ERRCODE_IO_PENDING )
@@ -300,6 +298,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     mrStream.Seek( mnLastPos );
 
     // read the (partial) image
+    long nLines;
     ReadJPEG( this, &mrStream, &nLines, GetPreviewSize() );
 
     if (!maBitmap.IsEmpty())
