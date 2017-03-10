@@ -161,6 +161,12 @@ void LwpObjectStream::ReleaseBuffer()
         }
     }
 }
+
+sal_uInt16 LwpObjectStream::remainingSize() const
+{
+    return m_nBufSize - m_nReadPos;
+}
+
 /**
  * @descr  read len bytes from object stream to buffer
  */
