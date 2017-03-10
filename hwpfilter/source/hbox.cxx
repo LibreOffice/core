@@ -74,17 +74,12 @@ hchar_string HBox::GetString()
 // skip block
 SkipData::SkipData(hchar hch)
     : HBox(hch)
-    , data_block_len(0)
-    , dummy(0)
-    , data_block(nullptr)
 {
 }
 
 SkipData::~SkipData()
 {
-    delete[]data_block;
 }
-
 
 // FieldCode [5]
 FieldCode::FieldCode()
