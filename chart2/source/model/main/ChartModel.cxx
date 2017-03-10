@@ -919,7 +919,7 @@ Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighli
     return m_xRangeHighlighter;
 }
 
-Reference<chart2::data::XPopupRequest> SAL_CALL ChartModel::getPopupRequest()
+Reference<awt::XRequestCallback> SAL_CALL ChartModel::getPopupRequest()
 {
     if (!m_xPopupRequest.is())
         m_xPopupRequest.set(new PopupRequest);

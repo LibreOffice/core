@@ -45,6 +45,7 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
+#include <com/sun/star/awt/XRequestCallback.hpp>
 
 // public API
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -143,7 +144,7 @@ private:
     css::awt::Size                                     m_aVisualAreaSize;
     css::uno::Reference< css::frame::XModel >          m_xParent;
     css::uno::Reference< css::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
-    css::uno::Reference<css::chart2::data::XPopupRequest> m_xPopupRequest;
+    css::uno::Reference<css::awt::XRequestCallback>    m_xPopupRequest;
     std::vector< GraphicObject >                            m_aGraphicObjectVector;
 
     css::uno::Reference< css::chart2::data::XDataProvider >   m_xDataProvider;
@@ -383,7 +384,7 @@ public:
     virtual void SAL_CALL attachNumberFormatsSupplier( const css::uno::Reference<
         css::util::XNumberFormatsSupplier >& xSupplier ) override;
     virtual css::uno::Reference< css::chart2::data::XRangeHighlighter > SAL_CALL getRangeHighlighter() override;
-    virtual css::uno::Reference< css::chart2::data::XPopupRequest > SAL_CALL getPopupRequest() override;
+    virtual css::uno::Reference<css::awt::XRequestCallback> SAL_CALL getPopupRequest() override;
 
     // ____ XTitled ____
     virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject() override;

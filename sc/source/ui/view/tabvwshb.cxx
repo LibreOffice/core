@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/awt/XRequestCallback.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -232,7 +233,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                                 new ScChartRangeSelectionListener( this ));
                             xRangeHightlighter->addSelectionChangeListener( xListener );
                         }
-                        uno::Reference<chart2::data::XPopupRequest> xPopupRequest(xDataReceiver->getPopupRequest());
+                        uno::Reference<awt::XRequestCallback> xPopupRequest(xDataReceiver->getPopupRequest());
                         if (xPopupRequest.is())
                         {
                             uno::Reference<awt::XCallback> xCallback(new PopupCallback(this, pObj));

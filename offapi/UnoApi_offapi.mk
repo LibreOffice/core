@@ -659,7 +659,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2/data,\
 	DataSequence \
 	DataSink \
 	DataSource \
-	PopupRequest \
 	RangeHighlighter \
 	RangeHighlightListener \
 	TabularDataProviderArguments \
@@ -2060,7 +2059,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2/data,\
 	XLabeledDataSequence2 \
 	XNumericalDataSequence \
 	XPivotChartDataProvider \
-	XPopupRequest \
 	XRangeHighlighter \
 	XRangeXMLConversion \
 	XSheetDataProvider \

@@ -21,7 +21,7 @@ namespace chart
 namespace impl
 {
 
-typedef cppu::WeakComponentImplHelper<css::chart2::data::XPopupRequest> PopupRequest_Base;
+typedef cppu::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
 
 }
 
