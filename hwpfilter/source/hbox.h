@@ -68,18 +68,15 @@ struct HBox
 };
 
 /**
- * @short Class for saving data to be skipped.
+ * @short Class for skipping data.
  */
 struct SkipData: public HBox
 {
-    uint data_block_len;
-    hchar dummy;
-    std::unique_ptr<char[]> data_block;
-
     explicit SkipData(hchar);
     virtual ~SkipData() override;
     virtual bool Read(HWPFile &hwpf) override;
 };
+
 struct DateCode;
 struct FieldCode : public HBox
 {

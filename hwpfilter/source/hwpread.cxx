@@ -45,18 +45,18 @@ bool HBox::Read(HWPFile & )
 
 bool SkipData::Read(HWPFile & hwpf)
 {
+    uint data_block_len;
     hwpf.Read4b(&data_block_len, 1);
+
+    hchar dummy;
     hwpf.Read2b(&dummy, 1);
 
     if (!(IS_SP_SKIP_BLOCK(hh) && (hh == dummy))){
         return hwpf.SetState(HWP_InvalidFileFormat);
-     }
+    }
 
-    data_block.reset(new char[data_block_len]);
-
-    return hwpf.Read1b(data_block.get(), data_block_len);
+    return hwpf.SkipBlock(data_block_len);
 }
-
 
 // Field code(5)
 bool FieldCode::Read(HWPFile & hwpf)
