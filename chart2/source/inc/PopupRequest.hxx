@@ -25,11 +25,16 @@ typedef cppu::WeakComponentImplHelper<css::chart2::data::XPopupRequest> PopupReq
 
 }
 
-class PopupRequest : public MutexContainer, public impl::PopupRequest_Base
+class OOO_DLLPUBLIC_CHARTTOOLS PopupRequest : public MutexContainer, public impl::PopupRequest_Base
 {
 public:
     explicit PopupRequest();
     virtual ~PopupRequest() override;
+
+    css::uno::Reference<css::awt::XCallback> getCallback()
+    {
+        return m_xCallback;
+    }
 
 protected:
     // ____ XRequestCallback ____

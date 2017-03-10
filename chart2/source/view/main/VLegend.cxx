@@ -37,10 +37,11 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
+#include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
 
-#include <com/sun/star/chart2/data/XPivotChartDataProvider.hpp>
 
 #include <vector>
 #include <algorithm>
@@ -769,28 +770,25 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        ChartModel& rModel, long& nUsedHeight)
 {
     uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
-    uno::Sequence<OUString> aColumnFields = xPivotChartDataProvider->getColumnFields();
 
     std::vector<std::shared_ptr<VButton>> aButtons;
 
-    if (!aColumnFields.hasElements())
+    if (!xPivotChartDataProvider->getColumnFields().hasElements())
         return aButtons;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
 
-    int nCIDIndex = 0;
     awt::Size aSize(2000, 700);
     int y = 100;
-    for (OUString const & sColumnField : aColumnFields)
+    for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : xPivotChartDataProvider->getColumnFields())
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
         awt::Point aNewPosition = awt::Point(100, y);
-        pButton->setLabel(sColumnField);
-        pButton->setCID("FieldButton.Row." + OUString::number(nCIDIndex));
+        pButton->setLabel(sColumnFieldEntry.Name);
+        pButton->setCID("FieldButton.Column." + OUString::number(sColumnFieldEntry.DimensionIndex));
         pButton->createShapes(aNewPosition, aSize, xModelPage);
-        nCIDIndex += 1;
         y += aSize.Height + 100;;
     }
     nUsedHeight += y + 100;

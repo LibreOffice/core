@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -111,10 +112,32 @@ public:
     {}
 
     // XCallback
-    virtual void SAL_CALL notify(const css::uno::Any& /*aData*/) override
+    virtual void SAL_CALL notify(const css::uno::Any& aData) override
     {
-        Rectangle aRect = m_pObject->GetLogicRect();
-        m_pViewShell->DoDPFieldPopup(aRect.TopLeft(), aRect.GetSize());
+        uno::Sequence<beans::PropertyValue> aProperties;
+        if (aData >>= aProperties)
+        {
+            awt::Rectangle xRectangle;
+            sal_Int32 dimensionIndex = 0;
+            OUString sPivotTableName("DataPilot1");
+
+            for (beans::PropertyValue const & rProperty : aProperties)
+            {
+                if (rProperty.Name == "Rectangle")
+                    rProperty.Value >>= xRectangle;
+                if (rProperty.Name == "DimensionIndex")
+                    rProperty.Value >>= dimensionIndex;
+                if (rProperty.Name == "PivotTableName")
+                    rProperty.Value >>= sPivotTableName;
+            }
+
+            Rectangle aChartRect = m_pObject->GetLogicRect();
+
+            Point aPoint(xRectangle.X  + aChartRect.Left(), xRectangle.Y + aChartRect.Top());
+            Size aSize(xRectangle.Width, xRectangle.Height);
+
+            m_pViewShell->DoDPFieldPopup(sPivotTableName, dimensionIndex, aPoint, aSize);
+        }
     }
 };
 

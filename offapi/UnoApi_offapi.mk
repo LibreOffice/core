@@ -88,6 +88,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/chart2,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/chart2/data,\
 	DatabaseDataProvider \
     LabeledDataSequence \
+    PivotTableFieldEntry \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/configuration,\
     ReadOnlyAccess \

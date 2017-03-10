@@ -20,6 +20,7 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -79,10 +80,17 @@ public:
     virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
 
     // XPivotChartDataProvider
-    virtual css::uno::Sequence<OUString> SAL_CALL getColumnFields() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getRowFields() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getPageFields() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getDataFields() override;
+    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
+        getColumnFields() override;
+    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
+        getRowFields() override;
+    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
+        getPageFields() override;
+    virtual css::uno::Sequence<css::chart2::data::PivotTableFieldEntry> SAL_CALL
+        getDataFields() override;
+
+    virtual OUString SAL_CALL getPivotTableName() override;
+
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -160,10 +168,10 @@ private:
     std::vector<std::vector<PivotChartItem>> m_aLabels;
     std::vector<std::vector<PivotChartItem>> m_aDataRowVector;
 
-    std::vector<OUString> m_aColumnFields;
-    std::vector<OUString> m_aRowFields;
-    std::vector<OUString> m_aPageFields;
-    std::vector<OUString> m_aDataFields;
+    std::vector<css::chart2::data::PivotTableFieldEntry> m_aColumnFields;
+    std::vector<css::chart2::data::PivotTableFieldEntry> m_aRowFields;
+    std::vector<css::chart2::data::PivotTableFieldEntry> m_aPageFields;
+    std::vector<css::chart2::data::PivotTableFieldEntry> m_aDataFields;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };

@@ -107,9 +107,11 @@ void PivotChartDataProvider::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHin
             OUString sPivotTableName = static_cast<const ScDataPilotModifiedHint&>(rHint).GetName();
             if (sPivotTableName == m_sPivotTableName)
             {
-                for (uno::Reference<util::XModifyListener> & xListener : m_aValueListeners)
+                for (uno::Reference<util::XModifyListener> const & xListener : m_aValueListeners)
                 {
-                    css::chart::ChartDataChangeEvent aEvent(static_cast<cppu::OWeakObject*>(this), css::chart::ChartDataChangeType_ALL, 0, 0, 0, 0);
+                    css::chart::ChartDataChangeEvent aEvent(static_cast<cppu::OWeakObject*>(this),
+                                                            css::chart::ChartDataChangeType_ALL,
+                                                            0, 0, 0, 0);
                     xListener->modified(aEvent);
                 }
             }
@@ -283,11 +285,11 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
     std::vector<OUString> aDataFieldNamesVectors;
 
     std::unordered_map<OUString, OUString, OUStringHash> aDataFieldCaptionNames;
-    std::vector<OUString> aDataFieldNames;
+    std::vector<std::pair<OUString, sal_Int32>> aDataFieldPairs;
 
     sheet::DataPilotFieldOrientation eDataFieldOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
 
-    for (long nDim = 0; nDim < xDims->getCount(); nDim++)
+    for (sal_Int32 nDim = 0; nDim < xDims->getCount(); nDim++)
     {
         uno::Reference<uno::XInterface> xDim = ScUnoHelpFunctions::AnyToInterface(xDims->getByIndex(nDim));
         uno::Reference<beans::XPropertySet> xDimProp(xDim, uno::UNO_QUERY);
@@ -304,44 +306,44 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
         if (eDimOrient == sheet::DataPilotFieldOrientation_HIDDEN)
             continue;
 
-        uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess(xDimSupp->getHierarchies());
-        long nHierarchy = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_USEDHIERARCHY);
-        if (nHierarchy >= xHiers->getCount())
+        uno::Reference<container::XIndexAccess> xHierarchies = new ScNameToIndexAccess(xDimSupp->getHierarchies());
+        sal_Int32 nHierarchy = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_USEDHIERARCHY);
+        if (nHierarchy >= xHierarchies->getCount())
             nHierarchy = 0;
 
-        uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(xHiers->getByIndex(nHierarchy));
+        uno::Reference<uno::XInterface> xHierarchy = ScUnoHelpFunctions::AnyToInterface(xHierarchies->getByIndex(nHierarchy));
 
-        uno::Reference<sheet::XLevelsSupplier> xHierSupp(xHier, uno::UNO_QUERY);
+        uno::Reference<sheet::XLevelsSupplier> xLevelsSupplier(xHierarchy, uno::UNO_QUERY);
 
-        if (!xHierSupp.is())
+        if (!xLevelsSupplier.is())
             continue;
 
-        uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xHierSupp->getLevels());
+        uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xLevelsSupplier->getLevels());
 
         for (long nLev = 0; nLev < xLevels->getCount(); nLev++)
         {
             uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLev));
-            uno::Reference<container::XNamed> xLevName(xLevel, uno::UNO_QUERY);
-            uno::Reference<sheet::XDataPilotMemberResults> xLevRes(xLevel, uno::UNO_QUERY );
+            uno::Reference<container::XNamed> xLevelName(xLevel, uno::UNO_QUERY);
+            uno::Reference<sheet::XDataPilotMemberResults> xLevelResult(xLevel, uno::UNO_QUERY );
 
             bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_ISDATALAYOUT);
             long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
             sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
 
-            if (xLevName.is() && xLevRes.is())
+            if (xLevelName.is() && xLevelResult.is())
             {
                 switch (eDimOrient)
                 {
                     case sheet::DataPilotFieldOrientation_COLUMN:
                     {
-                        m_aColumnFields.push_back(xLevName->getName());
+                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
 
-                        uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
+                        uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         size_t i = 0;
                         OUString sCaption;
                         OUString sName;
-                        m_aLabels.resize(aSeq.getLength());
-                        for (sheet::MemberResult & rMember : aSeq)
+                        m_aLabels.resize(aSequence.getLength());
+                        for (sheet::MemberResult & rMember : aSequence)
                         {
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
                                 rMember.Flags & sheet::MemberResultFlags::CONTINUE)
@@ -372,35 +374,29 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
 
                     case sheet::DataPilotFieldOrientation_ROW:
                     {
-                        m_aRowFields.push_back(xLevName->getName());
+                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
 
-                        uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
-                        m_aCategoriesRowOrientation.resize(aSeq.getLength());
+                        uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
+                        m_aCategoriesRowOrientation.resize(aSequence.getLength());
                         size_t i = 0;
-                        OUString sName;
-                        for (sheet::MemberResult & rMember : aSeq)
+                        for (sheet::MemberResult & rMember : aSequence)
                         {
-                            if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
-                                rMember.Flags & sheet::MemberResultFlags::CONTINUE)
+                            bool bHasContinueFlag = rMember.Flags & sheet::MemberResultFlags::CONTINUE;
+
+                            if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER || bHasContinueFlag)
                             {
                                 std::unique_ptr<PivotChartItem> pItem;
 
                                 double fValue = rMember.Value;
+
                                 if (rtl::math::isNan(fValue))
                                 {
-                                    if (rMember.Flags & sheet::MemberResultFlags::CONTINUE)
-                                    {
-                                        pItem.reset(new PivotChartItem(""));
-                                    }
-                                    else
-                                    {
-                                        sName = rMember.Name;
-                                        pItem.reset(new PivotChartItem(rMember.Caption));
-                                    }
+                                    OUString sStringValue = bHasContinueFlag ? "" : rMember.Caption;
+                                    pItem.reset(new PivotChartItem(sStringValue));
                                 }
                                 else
                                 {
-                                    if (rMember.Flags & sheet::MemberResultFlags::CONTINUE)
+                                    if (bHasContinueFlag)
                                         pItem.reset(new PivotChartItem());
                                     else
                                         pItem.reset(new PivotChartItem(fValue, nNumberFormat));
@@ -417,8 +413,9 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
                                 if (bIsDataLayout)
                                 {
                                     // Remember data fields to determine the number format of data
-                                    aDataFieldNamesVectors.push_back(sName);
+                                    aDataFieldNamesVectors.push_back(rMember.Name);
                                     eDataFieldOrientation = sheet::DataPilotFieldOrientation_ROW;
+
                                     // Remember the caption name
                                     aDataFieldCaptionNames[rMember.Name] = rMember.Caption;
                                 }
@@ -430,14 +427,14 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
 
                     case sheet::DataPilotFieldOrientation_PAGE:
                     {
-                        m_aPageFields.push_back(xLevName->getName());
+                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim});
                     }
                     break;
 
                     case sheet::DataPilotFieldOrientation_DATA:
                     {
-                        aDataFieldNumberFormatMap[xLevName->getName()] = nNumberFormat;
-                        aDataFieldNames.push_back(xLevName->getName());
+                        aDataFieldNumberFormatMap[xLevelName->getName()] = nNumberFormat;
+                        aDataFieldPairs.push_back(std::pair<OUString, sal_Int32>(xLevelName->getName(), nDim));
                     }
                     break;
 
@@ -448,9 +445,12 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
         }
     }
 
-    for (OUString const & rName : aDataFieldNames)
+    // Fill data field entry info
+    for (std::pair<OUString, sal_Int32> & rPair : aDataFieldPairs)
     {
-        m_aDataFields.push_back(aDataFieldCaptionNames[rName]);
+        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{
+                                    aDataFieldCaptionNames[rPair.first],
+                                    rPair.second});
     }
 
     // Apply number format to the data
@@ -575,6 +575,7 @@ sal_Bool SAL_CALL PivotChartDataProvider::createDataSequenceByRangeRepresentatio
 {
     SolarMutexGuard aGuard;
     return false;
+
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL
@@ -603,24 +604,29 @@ uno::Reference<sheet::XRangeSelection> SAL_CALL PivotChartDataProvider::getRange
     return xResult;
 }
 
-uno::Sequence<OUString> PivotChartDataProvider::getColumnFields()
+uno::Sequence<chart2::data::PivotTableFieldEntry> PivotChartDataProvider::getColumnFields()
 {
     return comphelper::containerToSequence(m_aColumnFields);
 }
 
-uno::Sequence<OUString> PivotChartDataProvider::getRowFields()
+uno::Sequence<chart2::data::PivotTableFieldEntry> PivotChartDataProvider::getRowFields()
 {
     return comphelper::containerToSequence(m_aRowFields);
 }
 
-uno::Sequence<OUString> PivotChartDataProvider::getPageFields()
+uno::Sequence<chart2::data::PivotTableFieldEntry> PivotChartDataProvider::getPageFields()
 {
     return comphelper::containerToSequence(m_aPageFields);
 }
 
-uno::Sequence<OUString> PivotChartDataProvider::getDataFields()
+uno::Sequence<chart2::data::PivotTableFieldEntry> PivotChartDataProvider::getDataFields()
 {
     return comphelper::containerToSequence(m_aDataFields);
+}
+
+OUString PivotChartDataProvider::getPivotTableName()
+{
+    return m_sPivotTableName;
 }
 
 // XModifyBroadcaster ========================================================

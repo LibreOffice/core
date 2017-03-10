@@ -11,7 +11,7 @@
 #define com_sun_star_chart2_data_XPivotChartDataProvider_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/chart2/data/XDataSequence.idl>
+#include <com/sun/star/chart2/data/PivotTableFieldEntry.idl>
 
 module com { module sun { module star { module chart2 { module data {
 
@@ -26,25 +26,31 @@ interface XPivotChartDataProvider : com::sun::star::uno::XInterface
      *
      * @since LibreOffice 5.4
      */
-    sequence<string> getColumnFields();
+    sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getColumnFields();
 
     /** names of row fields from the associated pivot table
      *
      * @since LibreOffice 5.4
      */
-    sequence<string> getRowFields();
+    sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getRowFields();
 
     /** names of page fields from the associated pivot table
      *
      * @since LibreOffice 5.4
      */
-    sequence<string> getPageFields();
+    sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getPageFields();
 
     /** names of data fields from the associated pivot table
      *
      * @since LibreOffice 5.4
      */
-    sequence<string> getDataFields();
+    sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getDataFields();
+
+    /** associated pivot table name
+     *
+     * @since LibreOffice 5.4
+     */
+    string getPivotTableName();
 };
 
 };};};};};
