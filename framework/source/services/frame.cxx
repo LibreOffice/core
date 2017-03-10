@@ -2684,7 +2684,7 @@ void SAL_CALL Frame::setActionLocks( sal_Int16 nLock )
     SolarMutexGuard g;
     // Attention: If somewhere called resetActionLocks() before and get e.g. 5 locks ...
     //            and tried to set these 5 ones here after his operations ...
-    //            we can't ignore setted requests during these two calls!
+    //            we can't ignore set requests during these two calls!
     //            So we must add(!) these 5 locks here.
     m_nExternalLockCount = m_nExternalLockCount + nLock;
 }

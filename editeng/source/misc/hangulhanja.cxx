@@ -78,7 +78,7 @@ namespace editeng
 
         // additions for Chinese simplified / traditional conversion
         HHC::ConversionType     m_eConvType;        // conversion type (Hangul/Hanja, simplified/traditional Chinese,...)
-        LanguageType            m_nSourceLang;      // just a 'copy' of m_aSourceLocale in order in order to
+        LanguageType            m_nSourceLang;      // just a 'copy' of m_aSourceLocale in order to
                                                     // save the applications from always converting to this
                                                     // type in their implementations
         LanguageType            m_nTargetLang;      // target language of new replacement text

@@ -255,7 +255,7 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
         minY = rRect.Bottom();
     }
 
-    // AS: Figure out the maximum nubmer of bits required to represent any of the
+    // AS: Figure out the maximum number of bits required to represent any of the
     //  rectangle coordinates.  Since minX or minY could be negative, they could
     //  actually require more bits than maxX or maxY.
     // AS: Christian, can they be negative, or is that a wasted check?

@@ -34,7 +34,7 @@
 
 // Spaltenbreite
 #define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
-// Feldtyp
+// FieldType
 #define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
 // Feldlänge
 #define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item

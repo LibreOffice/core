@@ -73,8 +73,8 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
             xFOptions.set( lContinuations[i], css::uno::UNO_QUERY );
     }
 
-    // differ between abortable interactions (error, unknown filter ...)
-    // and other ones (ambigous but not unknown filter ...)
+    // differ between abortable interactions (error, unknown filter...)
+    // and other ones (ambiguous but not unknown filter...)
     css::task::ErrorCodeRequest          aErrorCodeRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
     css::document::FilterOptionsRequest  aFilterOptionsRequest;

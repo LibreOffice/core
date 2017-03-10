@@ -1323,8 +1323,8 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
             implts_readAutoSaveConfig();
             g.clear();
             implts_updateTimer();
-            // can it happen that might be the listener was stopped ? .-)
-            // make sure it runs always ... even if AutoSave itself was disabled temporarly.
+            // can it happen that might be the listener was stopped? .-)
+            // make sure it runs always... even if AutoSave itself was disabled temporarily.
             implts_startListening();
         }
         else

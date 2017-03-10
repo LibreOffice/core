@@ -140,7 +140,7 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper<
 
             @param  sModuleName
                     identifies the application module, where the
-                    information should be setted on.
+                    information should be set on.
 
             @param  sWindowState
                     contains the information about position and size.

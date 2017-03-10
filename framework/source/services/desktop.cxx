@@ -1217,7 +1217,7 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& )
                 of our own called method.
 
     @attention  a)
-                Normal loop in loadComponentFromURL() breaks on setted member m_eLoadState during callback statusChanged().
+                Normal loop in loadComponentFromURL() breaks on set member m_eLoadState during callback statusChanged().
                 But these interaction feature implements second way to do so! So we must look on different callbacks
                 for same operation ... and live with it.
                 b)
@@ -1266,8 +1266,8 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
             xFilterSelect.set( lContinuations[nStep], css::uno::UNO_QUERY );
     }
 
-    // differ between abortable interactions (error, unknown filter ...)
-    // and other ones (ambigous but not unknown filter ...)
+    // differ between abortable interactions (error, unknown filter...)
+    // and other ones (ambiguous but not unknown filter...)
     css::task::ErrorCodeRequest          aErrorCodeRequest;
     if( aRequest >>= aErrorCodeRequest )
     {
