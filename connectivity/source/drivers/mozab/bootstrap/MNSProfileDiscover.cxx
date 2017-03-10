@@ -186,7 +186,7 @@ namespace connectivity
             ProductStruct &rProduct = m_ProductProfileList[index];
             if (!rProduct.mCurrentProfileName.isEmpty())
             {
-                //default profile setted in mozilla registry
+                //default profile set in mozilla registry
                 return rProduct.mCurrentProfileName;
             }
             if (rProduct.mProfileList.empty())

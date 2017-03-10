@@ -1869,7 +1869,7 @@ namespace comphelper
             // ensure dir and file vectors
             fillDirFileInfo();
 
-            // proccess all files in question recursively
+            // process all files in question recursively
             if (!maDirs.empty() || !maFiles.empty())
             {
                 bDidPush = tryPush_Files(
@@ -1911,7 +1911,7 @@ namespace comphelper
             // ensure dir and file vectors
             fillDirFileInfo();
 
-            // proccess all files in question recursively
+            // process all files in question recursively
             if (!maDirs.empty() || !maFiles.empty())
             {
                 bPopPossible = isPopPossible_files(
@@ -1936,7 +1936,7 @@ namespace comphelper
             // ensure dir and file vectors
             fillDirFileInfo();
 
-            // proccess all files in question recursively
+            // process all files in question recursively
             if (!maDirs.empty() || !maFiles.empty())
             {
                 bDidPop = tryPop_files(
@@ -2258,7 +2258,7 @@ namespace comphelper
         bool bDidPush(false);
         osl::Directory::createPath(rTargetURL);
 
-        // proccess files
+        // process files
         for (const auto& file : rFiles)
         {
             bDidPush |= tryPush_file(
@@ -2268,7 +2268,7 @@ namespace comphelper
                 file.second);
         }
 
-        // proccess dirs
+        // process dirs
         for (const auto& dir : rDirs)
         {
             OUString aNewSourceURL(rSourceURL + "/" + dir);
@@ -2339,7 +2339,7 @@ namespace comphelper
     {
         bool bPopPossible(false);
 
-        // proccess files
+        // process files
         for (const auto& file : rFiles)
         {
             bPopPossible |= isPopPossible_file(
@@ -2349,7 +2349,7 @@ namespace comphelper
                 file.second);
         }
 
-        // proccess dirs
+        // process dirs
         for (const auto& dir : rDirs)
         {
             OUString aNewSourceURL(rSourceURL + "/" + dir);
@@ -2406,7 +2406,7 @@ namespace comphelper
     {
         bool bDidPop(false);
 
-        // proccess files
+        // process files
         for (const auto& file : rFiles)
         {
             bDidPop |= tryPop_file(
@@ -2416,7 +2416,7 @@ namespace comphelper
                 file.second);
         }
 
-        // proccess dirs
+        // process dirs
         for (const auto& dir : rDirs)
         {
             OUString aNewSourceURL(rSourceURL + "/" + dir);

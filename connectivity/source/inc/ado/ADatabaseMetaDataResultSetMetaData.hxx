@@ -74,7 +74,7 @@ namespace connectivity
             }
             ~ODatabaseMetaDataResultSetMetaData() override;
 
-            /// Avoid ambigous cast error from the compiler.
+            /// Avoid ambiguous cast error from the compiler.
             inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
             { return this; }
 

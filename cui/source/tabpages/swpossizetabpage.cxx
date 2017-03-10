@@ -305,7 +305,7 @@ static FrmMap aVCharMap[] =
     // #i22341#
     // introduce mappings for new vertical alignment at top of line <LB::VertLine>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
-    // Note: Because of these adjustments the map becomes ambigous in its values
+    // Note: because of these adjustments the map becomes ambiguous in its values
     //       <eStrId>/<eMirrorStrId> and <nAlign>. These ambiguities are considered
     //       in the methods <SwFrmPage::FillRelLB(..)>, <SwFrmPage::GetAlignment(..)>
     //       and <SwFrmPage::FillPosLB(..)>
@@ -1430,7 +1430,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     short nAlign = 0;
 
     // #i22341# - special handling also for map <aVCharMap>,
-    // because it contains ambigous items for alignment
+    // because it contains ambiguous items for alignment
     if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
             pMap == aVCharMap )
     {
@@ -1739,7 +1739,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
             sal_uInt16 nRelCount = SAL_N_ELEMENTS(aRelationMap);
 
             // #i22341# - special handling for map <aVCharMap>,
-            // because its ambigous in its <eStrId>/<eMirrorStrId>.
+            // because its ambiguous in its <eStrId>/<eMirrorStrId>.
             if ( pMap == aVCharMap )
             {
                 nLBRelations = ::lcl_GetLBRelationsForStrID( pMap,
@@ -1851,7 +1851,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                 _rLB.InsertEntry(sEntry);
             }
             // #i22341# - add condition to handle map <aVCharMap>
-            // that is ambigous in the alignment.
+            // that is ambiguous in the alignment.
             if ( _pMap[i].nAlign == _nAlign &&
                  ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
             {

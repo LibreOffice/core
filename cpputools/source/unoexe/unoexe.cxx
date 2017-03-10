@@ -511,7 +511,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XComponent > xComp( xInstance, UNO_QUERY );
                 if (xComp.is())
                     xComp->dispose();
-                throw RuntimeException( "component does not export interface interface \"com.sun.star.lang.XMain\"!" );
+                throw RuntimeException( "component does not export interface \"com.sun.star.lang.XMain\"!" );
             }
         }
     }

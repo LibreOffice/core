@@ -49,7 +49,7 @@ namespace connectivity
         public:
             MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
 
-            // avoid ambigous cast error from the compiler
+            // avoid ambiguous cast error from the compiler
             operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
                 { return this; }
 

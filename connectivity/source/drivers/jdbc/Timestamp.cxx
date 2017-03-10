@@ -110,7 +110,7 @@ java_sql_Time::java_sql_Time( const css::util::Time& _rOut ): java_util_Date( nu
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Turn off Java-Call for the constructor
-    // intialise temporary variables
+    // initialise temporary variables
     jobject tempObj;
     static jmethodID mID(nullptr);
     if ( !mID )

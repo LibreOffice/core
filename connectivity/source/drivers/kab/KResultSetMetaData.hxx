@@ -45,7 +45,7 @@ namespace connectivity
         public:
             KabResultSetMetaData();
 
-            // avoid ambigous cast error from the compiler
+            // avoid ambiguous cast error from the compiler
             inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
                 { return this; }
 
