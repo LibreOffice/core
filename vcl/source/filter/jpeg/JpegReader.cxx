@@ -168,7 +168,6 @@ JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize
     mbSetLogSize     ( bSetLogSize )
 {
     maUpperName = "SVIJPEG";
-    mnFormerPos = mnLastPos;
 }
 
 JPEGReader::~JPEGReader()
@@ -301,11 +300,10 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     }
 
     // Set status ( Pending has priority )
-    if( mrStream.GetError() == ERRCODE_IO_PENDING )
+    if (mrStream.GetError() == ERRCODE_IO_PENDING)
     {
         eReadState = JPEGREAD_NEED_MORE;
         mrStream.ResetError();
-        mnFormerPos = mrStream.Tell();
     }
     else
     {

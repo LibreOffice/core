@@ -50,7 +50,6 @@ class JPEGReader : public GraphicReader
     Bitmap              maIncompleteAlpha;
 
     long                mnLastPos;
-    long                mnFormerPos;
     long                mnLastLines;
     bool                mbSetLogSize;
 
