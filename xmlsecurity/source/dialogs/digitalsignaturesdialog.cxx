@@ -594,7 +594,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             m_pSignaturesLB->SetEntryText( aDateTimeStr, pEntry, 3 );
             m_pSignaturesLB->SetEntryText(aDescription, pEntry, 4);
             m_pSignaturesLB->SetEntryText(aType, pEntry, 5);
-            pEntry->SetUserData( reinterpret_cast<void*>(n) );     // missuse user data as index
+            pEntry->SetUserData( reinterpret_cast<void*>(n) );     // misuse user data as index
         }
     }
 
