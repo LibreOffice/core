@@ -515,7 +515,11 @@ tools::Polygon EnhWMFReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoi
         T nX, nY;
         *pWMF >> nX >> nY;
         if (!pWMF->good())
+        {
+            SAL_WARN("vcl.emf", "short read on polygon, truncating");
+            aPolygon.SetSize(i);
             break;
+        }
         aPolygon[ i ] = Point( nX, nY );
     }
 
