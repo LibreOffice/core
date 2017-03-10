@@ -530,8 +530,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                 rHeader.nSizeImage = rIStm.remainingSize();
             }
 
-            std::unique_ptr<sal_uInt8[]> pBuffer(
-                new sal_uInt8[rHeader.nSizeImage]);
+            if (rHeader.nSizeImage > rIStm.remainingSize())
+                return false;
+            std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[rHeader.nSizeImage]);
             if (rIStm.ReadBytes(pBuffer.get(), rHeader.nSizeImage)
                 != rHeader.nSizeImage)
             {
