@@ -89,7 +89,7 @@ class SmParser
     void    DoStack();
     void    DoMatrix();
     void    DoSpecial();
-    void    DoGlyphSpecial();
+    SmGlyphSpecialNode *DoGlyphSpecial();
     // end of grammar
 
     void    Error(SmParseError Error);

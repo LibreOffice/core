@@ -1124,9 +1124,7 @@ void SmParser::DoProduct()
                 //Let the glyph node know it's a binary operation
                 m_aCurToken.eType = TBOPER;
                 m_aCurToken.nGroup = TG::Product;
-
-                DoGlyphSpecial();
-                pOper = popOrZero(m_aNodeStack);
+                pOper = DoGlyphSpecial();
                 break;
 
             case TOVERBRACE :
@@ -1660,8 +1658,7 @@ void SmParser::DoUnOper()
             //Let the glyph know what it is...
             m_aCurToken.eType = TUOPER;
             m_aCurToken.nGroup = TG::UnOper;
-            DoGlyphSpecial();
-            pOper = popOrZero(m_aNodeStack);
+            pOper = DoGlyphSpecial();
             break;
 
         case TPLUS :
@@ -2253,10 +2250,11 @@ void SmParser::DoSpecial()
     NextToken();
 }
 
-void SmParser::DoGlyphSpecial()
+SmGlyphSpecialNode *SmParser::DoGlyphSpecial()
 {
-    m_aNodeStack.push_front(o3tl::make_unique<SmGlyphSpecialNode>(m_aCurToken));
+    auto pNode = o3tl::make_unique<SmGlyphSpecialNode>(m_aCurToken);
     NextToken();
+    return pNode.release();
 }
 
 void SmParser::Error(SmParseError eError)
