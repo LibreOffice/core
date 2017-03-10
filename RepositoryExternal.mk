@@ -3427,7 +3427,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,gpgme)/lang/cpp/src/.libs/ -lgpgmepp \
 )
-$(call gb_LinkTarget_use_external_project,$(1),gpgme,full)
+$(call gb_LinkTarget_use_package,$(1),gpgme)
 
 endef
 
