@@ -2695,7 +2695,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aPaintStart.X() = aUpperAligned.Rigth_();
                 if (aStart.Y() == aUpper.Top())
                     aPaintStart.Y() = aUpperAligned.Top();
-                else if (aStart.Y() == aUpper.Bottom_())
+                else if (aStart.Y() >= aUpper.Bottom_())
                     aPaintStart.Y() = aUpperAligned.Bottom_();
 
                 if (aEnd.X() == aUpper.Left())
@@ -2704,7 +2704,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aPaintEnd.X() = aUpperAligned.Rigth_();
                 if (aEnd.Y() == aUpper.Top())
                     aPaintEnd.Y() = aUpperAligned.Top();
-                else if (aEnd.Y() == aUpper.Bottom_())
+                else if (aEnd.Y() >= aUpper.Bottom_())
                     aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
