@@ -334,7 +334,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
             SvTreeListEntry*    pLBEntry = m_pTrustCertLB->InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             m_pTrustCertLB->SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             m_pTrustCertLB->SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( reinterpret_cast<void*>(nEntry) );      // missuse user data as index
+            pLBEntry->SetUserData( reinterpret_cast<void*>(nEntry) );      // misuse user data as index
         }
     }
 }
