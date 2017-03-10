@@ -512,7 +512,7 @@ class CellStoreInitializer
     //
     // The problem with having the attributes in CellStoreInitializer
     // directly is that, as a functor, it might be copied around. In
-    // that case miPos in _copied_ object points ot maAttrs in the
+    // that case miPos in _copied_ object points to maAttrs in the
     // original object, not in the copy. So later, deep in mdds, we end
     // up comparing iterators from different sequences.
     //

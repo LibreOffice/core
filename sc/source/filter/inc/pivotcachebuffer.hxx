@@ -168,7 +168,7 @@ struct PCFieldGroupModel
     bool                mbDateGroup;        /// True = items are grouped by date ranges or by item names.
     bool                mbAutoStart;        /// True = start value for range groups is calculated from source data.
     bool                mbAutoEnd;          /// True = end value for range groups is calculated from source data.
-    OUString            msFinalGroupName ;  /// Finalized group name of this field used in internal pivot table collaction.
+    OUString            msFinalGroupName ;  /// Finalized group name of this field used in internal pivot table collection.
 
 
     explicit            PCFieldGroupModel();

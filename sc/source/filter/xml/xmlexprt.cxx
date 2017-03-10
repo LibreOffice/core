@@ -1858,7 +1858,7 @@ void ScXMLExport::ExportContent_()
         SCTAB nTableCount(0);
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
-        OSL_FAIL("no shared data setted");
+        OSL_FAIL("no shared data set");
         if (!pSharedData)
             return;
     }

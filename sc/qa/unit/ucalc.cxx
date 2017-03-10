@@ -6734,7 +6734,7 @@ void Test::testPrecisionAsShown()
         fExpectedRoundVal = -10.0;
         checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
     }
-    {   // thousand rounding buguous!!!! tdf#106253
+    {   // thousand rounding bogus!!!! tdf#106253
         aCode = "0,,";
         fValue = 4.0e9 / 7.0;
         fExpectedRoundVal = 571e6; // actual is 571428571
@@ -6760,7 +6760,7 @@ void Test::testPrecisionAsShown()
         fValue = 4.0 / 70000.0;
         fExpectedRoundVal = 5.71e-5;
         checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        // engineering rounding bugous!!! tdf#106252
+        // engineering rounding bogus!!! tdf#106252
         aCode = "##0.000E0";
         fValue = 400000.0 / 7.0;
         fExpectedRoundVal = 57143.0; // actual is 57140

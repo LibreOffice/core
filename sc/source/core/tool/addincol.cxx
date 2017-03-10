@@ -466,7 +466,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                         for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
                         {
                             // PropertyValue name is the locale ("convert" from
-                            // string to string to canonicalize)
+                            // string to canonicalize)
                             OUString aLocale( LanguageTag( pConfigArray[nLocale].Name, true).getBcp47( false));
                             // PropertyValue value is the localized value (string in this case)
                             OUString aName;

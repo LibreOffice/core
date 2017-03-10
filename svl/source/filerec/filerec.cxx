@@ -385,7 +385,7 @@ SfxMultiVarRecordWriter::~SfxMultiVarRecordWriter()
 void SfxMultiVarRecordWriter::FlushContent_Impl()
 {
     // record the version and position offset of the current content;
-    // the position offset is relative ot the start position of the
+    // the position offset is relative to the start position of the
     // first content.
     assert(_aContentOfs.size() == static_cast<size_t>(_nContentCount)-1);
     _aContentOfs.resize(_nContentCount-1);

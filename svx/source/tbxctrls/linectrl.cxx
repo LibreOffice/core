@@ -372,7 +372,7 @@ void SvxLineEndWindow::FillValueSet()
         long nCount = mpLineEndList->Count();
 
         // First entry: no line end.
-        // An entry is temporarly added to get the UI bitmap
+        // An entry is temporarily added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
         mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SVX_RESSTR(RID_SVXSTR_NONE)));
         const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
