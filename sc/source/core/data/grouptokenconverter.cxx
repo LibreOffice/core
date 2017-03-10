@@ -169,6 +169,10 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                 ScComplexRefData aRef = *p->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
 
+                // Multiple sheets not handled by vector/matrix.
+                if (aRef.Ref1.Tab() != aRef.Ref2.Tab())
+                    return false;
+
                 // Check for self reference.
                 if (aRef.Ref1.IsRowRel())
                 {
