@@ -12,6 +12,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "sfx2/app.hxx"
 #include "svl/itempool.hxx"
 #include "editeng/eerdll.hxx"
 #include "editeng/eerdll2.hxx"
@@ -80,6 +81,8 @@ void Test::setUp()
     test::BootstrapFixture::setUp();
 
     mpItemPool = new EditEngineItemPool(true);
+
+    SfxApplication::GetOrCreate();
 }
 
 void Test::tearDown()
