@@ -341,7 +341,7 @@ static std::vector< OUString > lookupKeys(
 
                     if( keySupplier.is() )
                     {
-                        // is ambigous, as I don't know postgresql searchpath,
+                        // is ambiguous, as I don't know postgresql searchpath,
                         // I can't continue here, as I may write to a different table
                         keySupplier.clear();
                         if (isLog(pSettings, LogLevel::Info))

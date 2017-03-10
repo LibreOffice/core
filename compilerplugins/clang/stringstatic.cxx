@@ -12,7 +12,7 @@
 #include "check.hxx"
 #include "plugin.hxx"
 
-/** Look for static OUString and OUString[], they can be more effeciently declared as:
+/** Look for static OUString and OUString[], they can be more efficiently declared as:
 
         static const OUStringLiteral our_aLBEntryMap[] = {" ", ", "};
         static const OUStringLiteral sName("name");
@@ -44,7 +44,7 @@ void StringStatic::run()
     // passing around pointers to global OUString
     if (fn.startswith(SRCDIR "/filter/source/svg/"))
          return;
-    // has a mix of literals and and refs to external OUStrings
+    // has a mix of literals and refs to external OUStrings
     if (fn == SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx")
          return;
 

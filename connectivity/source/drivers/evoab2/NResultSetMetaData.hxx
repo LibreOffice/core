@@ -49,7 +49,7 @@ namespace connectivity
                         { return m_aEvoabFields[columnIndex - 1]; }
           sal_Int32 getFieldSize() const
             {return m_aEvoabFields.size();}
-          /// Avoid ambigous cast error from the compiler.
+          /// Avoid ambiguous cast error from the compiler.
           operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
           { return this; }
 
