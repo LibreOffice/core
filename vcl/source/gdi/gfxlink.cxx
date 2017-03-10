@@ -213,14 +213,13 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 {
     Size            aSize;
     MapMode         aMapMode;
-    sal_uInt32      nSize;
-    sal_uInt32      nUserId;
-    sal_uInt16      nType;
     bool            bMapAndSizeValid( false );
     std::unique_ptr<VersionCompat>  pCompat(new VersionCompat( rIStream, StreamMode::READ ));
 
     // Version 1
-    rIStream.ReadUInt16( nType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
+    sal_uInt16 nType(0);
+    sal_uInt32 nSize(0), nUserId(0);
+    rIStream.ReadUInt16(nType).ReadUInt32(nSize).ReadUInt32(nUserId);
 
     if( pCompat->GetVersion() >= 2 )
     {
@@ -230,6 +229,13 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     }
 
     pCompat.reset(); // destructor writes stuff into the header
+
+    auto nRemainingData = rIStream.remainingSize();
+    if (nSize > nRemainingData)
+    {
+        SAL_WARN("vcl", "graphic link stream is smaller than requested size");
+        nSize = nRemainingData;
+    }
 
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSize ]);
     rIStream.ReadBytes( pBuf.get(), nSize );
