@@ -1994,13 +1994,13 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
         for ( auto const & i: pModule->m_aNodeList )
         {
             OUString sNodeId = i->m_sId;
-            for ( VectorOfNodes::size_type j = 0; j < aNodeList.size(); ++j )
+            for ( auto j = aNodeList.begin(); j != aNodeList.end(); ++j )
             {
-                OptionsNode* pNode = aNodeList[j];
+                OptionsNode* pNode = *j;
                 if ( pNode->m_sId == sNodeId )
                 {
                     aOutNodeList.push_back( pNode );
-                    aNodeList.erase( aNodeList.begin() + j );
+                    aNodeList.erase( j );
                     break;
                 }
             }
