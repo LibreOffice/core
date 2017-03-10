@@ -4842,8 +4842,6 @@ StringArray SC_OPCODE_RAWSUBTRACT+RID_SC_FUNC_DESCRIPTIONS_START
         < "Number from which following arguments are subtracted." ; >;
         < "subtrahend " ; >;
         < "Subtrahend 1, subtrahend 2, ... are numerical arguments subtracted from the minuend." ; >;
-        < "" ; >;
-        < "" ; >;
     };
 };
  // -=*# Resource for function ROUNDSIG #*=-
