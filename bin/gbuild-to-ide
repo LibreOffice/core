@@ -18,10 +18,13 @@ import uuid
 import json
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
+import lxml.etree as lxml
+import html
 import traceback
 import collections
 import subprocess
-
+import shutil
+from _hashlib import new
 
 
 class GbuildParser:
@@ -228,7 +231,32 @@ class testVS2013Ide(IdeIntegrationGenerator):
             self.target = target
             self.path = project_path
 
-    def emit(self):
+    def emit(self): #if I want to use old_emit change the name of this to 'new_emit' for example and the 'old_emit' to 'emit'
+        all_projects = []
+        props_path = os.path.join(self.solution_directory, 'PropertySheet.props')
+        self.write_props(props_path)
+        for module in self.gbuildparser.modules:
+            projects = []
+            module_directory = os.path.join(self.solution_directory, module)
+            if module != 'include':  # FIXME
+                new_file = True
+                for target in self.gbuildparser.modules[module]['targets']:
+                    filename = module
+                    project_path = os.path.join(module_directory, '%s.vcxproj' % filename)
+
+                    project_guid = self.ttwrite_project(project_path, target, new_file, filename)
+                    # self.twrite_project(project_path,target)
+                    p = testVS2013Ide.Project(project_guid, target, project_path)
+                    self.write_filters(project_path + '.filters', target, self.gbuildparser.modules[module]['headers'])
+                    projects.append(p)
+                    new_file = False
+                self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
+                all_projects += projects
+
+        self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
+
+
+    def old_emit(self):
         all_projects = []
         props_path=os.path.join(self.solution_directory,'PropertySheet.props')
         self.write_props(props_path)
@@ -417,6 +445,282 @@ class testVS2013Ide(IdeIntegrationGenerator):
 
         return project_guid
 
+    def ttwrite_project(self, project_path, target,new_file, filename):
+        folder = os.path.dirname(project_path)
+        r = 1
+        if not os.path.exists(folder) and new_file: #folder not exist and file not exist: BASE CASE
+            #print('folder not exist...')
+            r = self.allnew(project_path,target, filename) #allnew BASE CASE
+            #print('...created folder and file')
+        elif not os.path.exists(folder) and not new_file:
+            print('new dir and old file: BIG ERROR')
+        elif os.path.exists(folder) and new_file: #folder exist and new file: it means the file arleady exist in past, beacuse new_file is true
+            #print('folder arleady exist: ' + folder)
+            self.delete_folder(folder)
+            #print('folder delteted...')
+            self.allnew(project_path,target, filename) #allnew after deleted old files
+            #print('...new folder created and new file created: ok!')
+        elif os.path.exists(folder) and not new_file: #folder exist and not new_file: it mean the file was created just now, not in past
+            #print('....override file')
+            r = self.allold(project_path,target) #I have to manage the overriding file
+        else:
+            print('ERROR')
+
+        return r
+
+    def delete_folder(self,folder):
+        if not os.path.exists(folder):
+            print ('ERROR: folder not exist in def delete_folder.')
+            return 1
+        else:
+            # will delete a directory and all its contents
+            shutil.rmtree(folder)
+            return 0
+
+    def allnew(self,project_path,target, filename):
+        folder = os.path.dirname(project_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        else:
+            print('ERROR: folder exist in def allnew.')
+            return 1
+        project_guid = str(uuid.uuid4()).upper()
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
+
+        proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns, Label='ProjectConfigurations')
+        platform = 'Win32'
+        for configuration in self.configurations:
+            proj_conf_node = ET.SubElement(proj_confs_node,
+                                           '{%s}ProjectConfiguration' % ns,
+                                           Include='%s|%s' % (configuration, platform))
+            conf_node = ET.SubElement(proj_conf_node, '{%s}Configuration' % ns)
+            conf_node.text = configuration
+            platform_node = ET.SubElement(proj_conf_node, '{%s}Platform' % ns)
+            platform_node.text = platform
+        # globals
+        globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
+        proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
+        proj_guid_node.text = '{%s}' % project_guid
+        proj_root_namespace = ET.SubElement(globals_node, '{%s}RootNamespace' % ns)
+        proj_root_namespace.text = filename
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+        for configuration in self.configurations:
+            property_group_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label="Configuration",
+                                                Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (
+                                                    configuration, platform))
+            conf_type = ET.SubElement(property_group_node, '{%s}ConfigurationType' % ns)
+            conf_type.text = 'Application'
+            use_dbg_lib = ET.SubElement(property_group_node, '{%s}UseDebugLibraries' % ns)
+            use_dbg_lib.text = 'true'
+            platform_toolset_node = ET.SubElement(property_group_node, '{%s}PlatformToolset' % ns)
+            platform_toolset_node.text = self.toolset
+            char_set_node = ET.SubElement(property_group_node, '{%s}CharacterSet' % ns)
+            char_set_node.text = 'MultiByte'
+            # on debug there ist a whole programoptimization
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
+        for configuration in self.configurations:
+            prop_sheets = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='PropertySheets',
+                                        Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration, platform))
+            ET.SubElement(prop_sheets, '{%s}Import' % ns, Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props",
+                          Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                          Label="LocalAppDataPlatform")
+            ET.SubElement(prop_sheets, '{%s}Import' % ns, Project="../PropertySheet.props")
+        ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for configuration in self.configurations:
+            item_def_group = ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns,
+                                           Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (
+                                           configuration, platform))
+            # compiler options
+            cl_compile = ET.SubElement(item_def_group, '{%s}ClCompile' % ns)
+            warn_lvl = ET.SubElement(cl_compile, '{%s}WarningLevel' % ns)
+            warn_lvl.text = 'Level4'
+            opt_node = ET.SubElement(cl_compile, '{%s}Optimization' % ns)
+            opt_node.text = 'Disabled'
+            sdl_check = ET.SubElement(cl_compile, '{%s}SDLCheck' % ns)
+            sdl_check.text = 'true'
+            add_incl_dir = ET.SubElement(cl_compile, '{%s}AdditionalIncludeDirectories' % ns)
+            add_incl_dir.text = self.get_include_dirs(target)
+            add_incl_def_flag = ET.SubElement(cl_compile, '{%s}AdditionalOptions' % ns)
+            add_incl_def_flag.text = self.get_flags_defs(target)
+            dgb_info_form = ET.SubElement(cl_compile, '{%s}DebugInformationFormat' % ns)
+            dgb_info_form.text = 'ProgramDatabase'
+            warn_as_error = ET.SubElement(cl_compile, '{%s}TreatWarningAsError' % ns)
+            warn_as_error.text = 'true'
+            run_libs = ET.SubElement(cl_compile, '{%s}RuntimeLibrary' % ns)
+            run_libs.text = 'MultiThreadedDLL'
+
+            # linker options
+            # linker_node=ET.SubElement(item_def_group,'{%s}Link' % ns)
+
+            # gen_dbg_info=ET.SubElement(linker_node,'{%s}GenerateDebugInformation}' % ns)
+            # gen_dbg_info.text='true'
+            # add_lib_dirs=ET.SubElement(linker_node,'{%s}AdditionalLibraryDirectories}' % ns)
+            # libname=target['ILIBTARGET'].split('/')[-1]
+            # libpath='../' + target['ILIBTARGET'][:-(len(libname)+1)]
+            # add_lib_dirs.text= libpath
+            # add_dep=ET.SubElement(linker_node,'{%s}AdditionalDependencies}' % ns)
+            # add_dep.text= libname +';kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)'
+
+            # proj_ref_node=ET.SubElement(item_def_group,'{%s}ProjectReference' % ns)
+            # use_lib_dep=ET.SubElement(proj_ref_node,'{%s}UseLibraryDependencyInputs}' % ns)
+            # use_lib_dep.text='true'
+
+        # cxx files
+        cxx_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for cxx_elem in target['CXXOBJECTS']:
+            modulename = target['module']
+            cxx_cl_node = ET.SubElement(cxx_node, '{%s}ClCompile' % ns,
+                                        Include=os.path.join('../..', modulename, cxx_elem))
+        # miss headers
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
+        self.write_pretty_xml(proj_node, project_path)
+        return project_guid
+
+    def allold(self,project_path,target): #code used when you not have a new file, but you have to write on a created file
+
+        # I have to find the subelement using ET. (NB: ET is xml.etree.ElementTree imported library)
+        # and then insert the subelement in the right place
+        # see: https://docs.python.org/3.4/library/xml.etree.elementtree.html
+
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
+
+        platform = 'Win32'
+
+        # globals
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+
+        ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for configuration in self.configurations:
+            item_def_group = ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns,
+                                           Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (
+                                               configuration, platform))
+            # compiler options
+            cl_compile = ET.SubElement(item_def_group, '{%s}ClCompile' % ns)
+            warn_lvl = ET.SubElement(cl_compile, '{%s}WarningLevel' % ns)
+            warn_lvl.text = 'Level4'
+            opt_node = ET.SubElement(cl_compile, '{%s}Optimization' % ns)
+            opt_node.text = 'Disabled'
+            sdl_check = ET.SubElement(cl_compile, '{%s}SDLCheck' % ns)
+            sdl_check.text = 'true'
+            add_incl_dir = ET.SubElement(cl_compile, '{%s}AdditionalIncludeDirectories' % ns)
+            #find element
+            dom = minidom.parse(project_path)
+            name = dom.getElementsByTagName('AdditionalIncludeDirectories')
+            old_string = name[0].firstChild.nodeValue
+            #print(old_string)
+            add_incl_dir.text = self.get_include_dirs(target) + old_string
+            #new_include = str(add_incl_dir.text)
+            #if str(old_string).find(new_include.replace(old_string,'')):
+            #    print('elemento duplicato: ' + new_include)
+            #else:
+            #    print('OK!')
+
+            add_incl_def_flag = ET.SubElement(cl_compile, '{%s}AdditionalOptions' % ns)
+            dom = minidom.parse(project_path)
+            name = dom.getElementsByTagName('AdditionalOptions')
+            old_string = name[0].firstChild.nodeValue
+            add_incl_def_flag.text = self.get_flags_defs(target) + old_string
+
+            dgb_info_form = ET.SubElement(cl_compile, '{%s}DebugInformationFormat' % ns)
+            dgb_info_form.text = 'ProgramDatabase'
+            warn_as_error = ET.SubElement(cl_compile, '{%s}TreatWarningAsError' % ns)
+            warn_as_error.text = 'true'
+            run_libs = ET.SubElement(cl_compile, '{%s}RuntimeLibrary' % ns)
+            run_libs.text = 'MultiThreadedDLL'
+
+            # linker options
+            # linker_node=ET.SubElement(item_def_group,'{%s}Link' % ns)
+
+            # gen_dbg_info=ET.SubElement(linker_node,'{%s}GenerateDebugInformation}' % ns)
+            # gen_dbg_info.text='true'
+            # add_lib_dirs=ET.SubElement(linker_node,'{%s}AdditionalLibraryDirectories}' % ns)
+            # libname=target['ILIBTARGET'].split('/')[-1]
+            # libpath='../' + target['ILIBTARGET'][:-(len(libname)+1)]
+            # add_lib_dirs.text= libpath
+            # add_dep=ET.SubElement(linker_node,'{%s}AdditionalDependencies}' % ns)
+            # add_dep.text= libname +';kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)'
+
+            # proj_ref_node=ET.SubElement(item_def_group,'{%s}ProjectReference' % ns)
+            # use_lib_dep=ET.SubElement(proj_ref_node,'{%s}UseLibraryDependencyInputs}' % ns)
+            # use_lib_dep.text='true'
+
+        # cxx files
+        cxx_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+
+        #read the existing file
+        #tree = lxml.parse(project_path)
+
+        #it works bad, but works
+        #tree = minidom.parse(project_path)
+
+        item_group_tag = "ItemGroup"
+        cl_compile_tag = "ClCompile"
+        tree = minidom.parse(project_path)
+        allcont = tree.getElementsByTagName('ItemGroup')
+        allstring = str(allcont[0].toxml())
+        item_group_nodes = tree.getElementsByTagName(item_group_tag)
+        for idx, item_group_node in enumerate(item_group_nodes):
+            #print("{} {} ------------------".format(item_group_tag, idx))
+            cl_compile_nodes = item_group_node.getElementsByTagName(cl_compile_tag)
+            for cl_compile_node in cl_compile_nodes:
+                tt = "\t{}".format(cl_compile_node.toxml())
+                #print(tt)
+                cc = tt.replace('<ClCompile Include="','').replace('>','').replace(' ','').replace('"/','').replace('&quot;','').replace('&amp;','')
+                #print(cc)
+                #for cl_compile_node2 in cl_compile_nodes:
+                #    ttt = "\t{}".format(cl_compile_node2.toxml())
+                #    ccc = ttt.replace('<ClCompile Include="', '').replace('>', '').replace(' ', '').replace('"/',
+                #                                                                                          '').replace(
+                #        '&quot;', '').replace('&amp;', '')
+                #    s1 = str(cc)
+                #    s2 = str(ccc)
+                #    buu = 0
+                #    if s1.find(s2):
+                #        buu += 1
+
+                #if buu < 1:
+                    #print('new node: ' + project_path + cc)
+                #    cxx_cl_node = ET.SubElement(cxx_node, "ClCompile", Include=""+cc)
+                    #print(cc);
+                #else:
+                #    #print('In the file: ' + project_path + '-- duplicated: ' + cc)
+                #    cxx_cl_node = ET.SubElement(cxx_node, "ClCompile", Include="" + cc)
+
+                #simple solution works and not generate duplicates!
+                cxx_cl_node = ET.SubElement(cxx_node, "ClCompile", Include="" + cc)
+
+                #if 'ClCompile Include' in mystring:
+        #    print (html.unescape(mystring))
+        #    for line in mystring[1:]:
+        #        if '<Item' or '</Item' not in line:
+
+
+            #it doesn't work
+        #for itt in it1:
+         #   for node in itt.getiterator():
+          #      print(node.tag)
+
+
+        for cxx_elem in target['CXXOBJECTS']:
+            modulename = target['module']
+            cxx_cl_node = ET.SubElement(cxx_node, '{%s}ClCompile' % ns,
+                                        Include=os.path.join('../..', modulename, cxx_elem))
+        # miss headers
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
+        self.write_pretty_xml(proj_node, project_path)
+        return 0
 
     def twrite_project(self, project_path, target):
         folder = os.path.dirname(project_path)
