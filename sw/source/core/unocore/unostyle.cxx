@@ -2482,7 +2482,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
         const SfxItemSet* pSourceSet = lcl_GetItemsetForProperty(rSet, m_rEntry.m_eFamily, sPropName);
         if(!pSourceSet)
         {
-            // if no SetItem, value is ambigous and we are done
+            // if no SetItem, value is ambiguous and we are done
             pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
             continue;
         }

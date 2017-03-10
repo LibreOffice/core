@@ -152,11 +152,11 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         // format anchor text frame, if wrapping style influence of the object
         // has to be considered and it's <NONE_SUCCESSIVE_POSITIONED>
         // #i3317# - consider also anchored objects, whose
-        // wrapping style influence is temporarly considered.
+        // wrapping style influence is temporarily considered.
         // #i40147# - consider also anchored objects, for
         // whose the check of a moved forward anchor frame is requested.
         // revise decision made for i3317:
-        // anchored objects, whose wrapping style influence is temporarly considered,
+        // anchored objects, whose wrapping style influence is temporarily considered,
         // have to be considered in method <SwObjectFormatterTextFrame::DoFormatObjs()>
         if ( bSuccess &&
              _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
@@ -328,7 +328,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         bSuccess = FormatObjsAtFrame_();
     }
 
-    // consider anchored objects, whose wrapping style influence are temporarly
+    // consider anchored objects, whose wrapping style influence are temporarily
     // considered.
     if ( bSuccess &&
          ( ConsiderWrapOnObjPos() ||
@@ -752,7 +752,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameForCheckMoveFwd()
 }
 
 /** method to determine if at least one anchored object has state
-    <temporarly consider wrapping style influence> set.
+    <temporarily consider wrapping style influence> set.
 */
 bool SwObjectFormatterTextFrame::AtLeastOneObjIsTmpConsiderWrapInfluence()
 {

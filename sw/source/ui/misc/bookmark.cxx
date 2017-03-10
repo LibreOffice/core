@@ -221,7 +221,7 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
 {
     if (!ValidateBookmarks())
         return;
-    // if no entries selected we cant jump anywhere
+    // if no entries selected we can't jump anywhere
     // shouldn't be needed as we disable GoTo button when jump is not possible
     if (m_pBookmarksBox->GetSelectionCount() == 0)
         return;

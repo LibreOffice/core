@@ -420,7 +420,7 @@ class HTMLTable
     bool m_bFillerBottomBorder;       // top or in the bottom
     bool m_bInheritedLeftBorder;
     bool m_bInheritedRightBorder;
-    bool m_bBordersSet;               // the border is setted already
+    bool m_bBordersSet;               // the border is set already
     bool m_bForceFrame;
     bool m_bTableAdjustOfTag;         // comes nTableAdjust from <TABLE>?
     sal_uInt32 m_nHeadlineRepeat;         // repeating rows
@@ -504,7 +504,7 @@ class HTMLTable
     // Set the border with the help of the information from the user
     void SetBorders();
 
-    // is the border already setted?
+    // is the border already set?
     bool BordersSet() const { return m_bBordersSet; }
 
     const SvxBrushItem *GetBGBrush() const { return m_pBackgroundBrush; }
@@ -2586,7 +2586,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         }
         m_pLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
 
-        // Only tables with relative width or without width should be modifed
+        // Only tables with relative width or without width should be modified
         m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
 
         m_pLayoutInfo->SetWidths();

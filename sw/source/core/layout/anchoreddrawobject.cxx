@@ -402,7 +402,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
 
     bool bOscillationDetected = false;
     SwObjPosOscillationControl aObjPosOscCtrl( *this );
-    // --> #i3317# - boolean, to apply temporarly the
+    // --> #i3317# - boolean, to apply temporarily the
     // 'straightforward positioning process' for the frame due to its
     // overlapping with a previous column.
     bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
@@ -450,7 +450,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtPara()
 
     // --> #i3317# - consider a detected oscillation and overlapping
     // with previous column.
-    // temporarly consider the anchored objects wrapping style influence
+    // temporarily consider the anchored objects wrapping style influence
     if ( bOscillationDetected || bConsiderWrapInfluenceDueToOverlapPrevCol )
     {
         SetTmpConsiderWrapInfluence( true );

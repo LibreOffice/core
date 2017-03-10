@@ -152,13 +152,13 @@ class SwFramePage: public SfxTabPage
     DECL_LINK( ModifyHdl, Edit&, void );
 
     void            Init(const SfxItemSet& rSet, bool bReset = false);
-    // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
+    // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambiguous
     //                          in the alignment.
     sal_Int32       FillPosLB( const FrameMap* _pMap,
                                const sal_Int16 _nAlign,
                                const sal_Int16 _nRel,
                                ListBox& _rLB );
-    // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
+    // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambiguous
     //                          in their string entries.
     void            FillRelLB( const FrameMap* _pMap,
                                const sal_uInt16 _nLBSelPos,

@@ -1818,7 +1818,7 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     SwPaM* pOldEnd = m_pOrigPam;
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
-                                    // bOutKF was setted / stored in WriteKF1
+                                    // bOutKF was set / stored in WriteKF1
     SetCurPam(nStart, nEnd);
 
     // clear linked textboxes since old ones can't be linked to frames in this section

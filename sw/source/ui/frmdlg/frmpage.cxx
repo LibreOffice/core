@@ -314,7 +314,7 @@ static FrameMap aVCharMap[] =
 {
     // introduce mappings for new vertical alignment at top of line <LB::VertLine>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
-    // Note: Because of these adjustments the map becomes ambigous in its values
+    // Note: Because of these adjustments the map becomes ambiguous in its values
     //       <eStrId>/<eMirrorStrId> and <nAlign>. These ambiguities are considered
     //       in the methods <SwFramePage::FillRelLB(..)>, <SwFramePage::GetAlignment(..)>
     //       and <SwFramePage::FillPosLB(..)>
@@ -1431,7 +1431,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
                 _rLB.InsertEntry(sEntry);
             }
             // i#22341 - add condition to handle map <aVCharMap>
-            // that is ambigous in the alignment.
+            // that is ambiguous in the alignment.
             if ( _pMap[i].nAlign == _nAlign &&
                  ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
             {
@@ -1522,7 +1522,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
         else
         {
             // special handling for map <aVCharMap>,
-            // because its ambigous in its <eStrId>/<eMirrorStrId>.
+            // because its ambiguous in its <eStrId>/<eMirrorStrId>.
             if ( _pMap == aVCharMap )
             {
                 nLBRelations = ::lcl_GetLBRelationsForStrID( _pMap,
@@ -1652,7 +1652,7 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
         return 0;
 
     // i#22341 special handling also for map <aVCharMap>,
-    // because it contains ambigous items for alignment
+    // because it contains ambiguous items for alignment
     if ( pMap != aVAsCharHtmlMap && pMap != aVAsCharMap && pMap != aVCharMap )
         return pMap[nMapPos].nAlign;
 
