@@ -65,6 +65,8 @@ void VBATest::testMiscVBAFunctions()
         "cdbl.vb",
         "choose.vb",
         "cos.vb",
+        "cint.vb",
+        "clng.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
