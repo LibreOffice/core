@@ -150,20 +150,20 @@ public class _XPropertyAccess extends MultiMethodTest {
             newProps[0] = failedProp;
             oObj.setPropertyValues(newProps);
         } catch (PropertyVetoException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set null value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set null value: " +
                 ex.toString());
             exp = true;
         } catch (WrappedTargetException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set null value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set null value: " +
                 ex.toString());
             exp = true;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("OK: exptected exception was thrown while trying to set null value: " +
+            log.println("OK: expected exception was thrown while trying to set null value: " +
                 ex.toString());
             test = true;
             exp = true;
         } catch (UnknownPropertyException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set null value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set null value: " +
                 ex.toString());
             exp = true;
         }
@@ -191,19 +191,19 @@ public class _XPropertyAccess extends MultiMethodTest {
             oObj.setPropertyValues(newProps);
 
         } catch (WrappedTargetException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set invalid value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set invalid value: " +
                 ex.toString());
             exp = true;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set invalid value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set invalid value: " +
                 ex.toString());
             exp = true;
         } catch (PropertyVetoException ex) {
-            log.println("ERROR: unexptected exception was thrown while trying to set invalid value: " +
+            log.println("ERROR: unexpected exception was thrown while trying to set invalid value: " +
                 ex.toString());
             exp = true;
         } catch (UnknownPropertyException ex) {
-            log.println("OK: Exptected exception was thrown while trying to set invalid value: " +
+            log.println("OK: Expected exception was thrown while trying to set invalid value: " +
                 ex.toString());
             exp = true;
             test = true;
