@@ -83,6 +83,7 @@ DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
       * Table 3 has { 0, 1, 1 }
       ****/
     SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
     SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
