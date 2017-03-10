@@ -113,6 +113,14 @@ void LwpGraphicObject::Read()
     unsigned char *pServerContext = nullptr;
     if (nServerContextSize > 0)
     {
+        sal_uInt16 nMaxPossibleSize = m_pObjStrm->remainingSize();
+
+        if (nServerContextSize > nMaxPossibleSize)
+        {
+            SAL_WARN("lwp", "stream too short for claimed no of records");
+            nServerContextSize = nMaxPossibleSize;
+        }
+
         pServerContext = new unsigned char[nServerContextSize];
         m_pObjStrm->QuickRead(pServerContext, static_cast<sal_uInt16>(nServerContextSize));
         if (nServerContextSize > 44)
