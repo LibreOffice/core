@@ -85,6 +85,7 @@ private:
     LwpSvStream* m_pStrm;
     bool m_bCompressed;
 public:
+    sal_uInt16 remainingSize() const;
     sal_uInt16 QuickRead(void* buf, sal_uInt16 len);
     sal_uInt16 GetPos() { return m_nReadPos; }
     void SeekRel(sal_uInt16 pos);
