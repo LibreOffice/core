@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_d455b31d",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "Where do we write html ?",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f430f709",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "I am surprised these 2 libs are needed ?",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_144f3b93",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "Why do you copy these lines, and leave the old lines in here ?? I as far as I can you have not really made changes.\n\nremark only change in gbuildparser, if you need to change something for ALL generators",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5449c38a",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "old_emit ??? that is the third time I see the same lines.",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_745ec746",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "What does this function do in gbuildparser, that class never writes !",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_945b2b54",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "When do we need to delete folders ???",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b4582f58",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-10T16:22:20Z",
+      "side": 1,
+      "message": "This seems very spefic to the microsoft generator, what does it do in gbuildparser.",
+      "revId": "78562f91ae49e04d91ea310d86e1ec7e1c7803e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
