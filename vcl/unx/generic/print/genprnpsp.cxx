@@ -195,14 +195,13 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
     {
-        sal_uInt16 nPaperBin;
+        int nPaperBin;
         for( nPaperBin = 0;
              pValue != pKey->getValue( nPaperBin ) &&
                  nPaperBin < pKey->countValues();
              nPaperBin++);
-        pJobSetup->SetPaperBin(nPaperBin);
-        if( pJobSetup->GetPaperBin() >= pKey->countValues() )
-            pJobSetup->SetPaperBin( 0 );
+        pJobSetup->SetPaperBin(
+            nPaperBin < 0 || nPaperBin >= pKey->countValues() ? 0 : nPaperBin);
     }
 
     // copy duplex
