@@ -776,7 +776,7 @@ void AccObject::UpdateActionDesc()
                       Role == EDIT_BAR || Role == PASSWORD_TEXT || Role == TEXT))
                 {
                     pXString = m_xAccActionRef->getAccessibleActionDescription( 0 );
-                    //Solution:If string length is more than zero,action will will be set.
+                    //Solution: if string length is more than zero, action is set.
                     if( pXString.getLength() > 0)
                         m_pIMAcc->Put_ActionDescription( pXString.getStr() );
                 }

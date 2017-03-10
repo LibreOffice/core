@@ -3789,7 +3789,7 @@ interface IAccessibleHypertext2 : IAccessibleHypertext
   where cells are direct children of the table.
 
  The range of valid coordinates for this interface are implementation dependent.
-  However, that range includes at least the intervals from the from the first row
+  However, that range includes at least the intervals from the first row
   or column with the index 0 up to the last (but not including) used row or column
   as returned by IAccessibleTable::nRows and IAccessibleTable::nColumns.
 

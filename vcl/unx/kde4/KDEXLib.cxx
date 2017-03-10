@@ -345,7 +345,7 @@ void KDEXLib::StopTimer()
 void KDEXLib::timeoutActivated()
 {
     // HACK? Always process posted events before timer timeouts.
-    // There are places that may watch both both (for example, there's a posted
+    // There are places that may watch both (for example, there's a posted
     // event about change of the current active window and there's a timeout
     // event informing that a document has finished loading). This is of course
     // racy, but both generic and gtk event loops manage to deliver posted events

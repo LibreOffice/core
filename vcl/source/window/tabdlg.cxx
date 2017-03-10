@@ -298,7 +298,7 @@ std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
                         // we have to check for double entries, this may happen e.g.
                         // in the HeaderFooterDialog which has two times the same
                         // tabPage added. Add the PageID as hint to the name, separated
-                        // by a token (using "|" here). Do not do this for 1st ocurrence,
+                        // by a token (using "|" here). Do not do this for 1st occurrence,
                         // that is used for detection and is not necessary.
                         // Use the UIXMLDescription without trailing '.ui', with one trailing '/'
                         bool bAlreadyAdded(false);

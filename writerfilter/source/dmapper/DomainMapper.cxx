@@ -667,7 +667,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //TODO: attributes for break (0x12) are not supported
         break;
         case NS_ooxml::LN_CT_Fonts_hint :
-            /*  assigns script type to ambigous characters, values can be:
+            /*  assigns script type to ambiguous characters, values can be:
                 NS_ooxml::LN_Value_ST_Hint_default
                 NS_ooxml::LN_Value_ST_Hint_eastAsia
                 NS_ooxml::LN_Value_ST_Hint_cs
