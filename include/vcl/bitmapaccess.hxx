@@ -108,8 +108,6 @@ private:
     BitmapReadAccess(const BitmapReadAccess&) = delete;
     BitmapReadAccess& operator=(const BitmapReadAccess&) = delete;
 
-private:
-    Scanline*   mpScanBuf;
 protected:
     FncGetPixel mFncGetPixel;
     FncSetPixel mFncSetPixel;
