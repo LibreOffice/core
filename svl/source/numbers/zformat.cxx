@@ -2838,9 +2838,13 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
     if ( !bHideFraction &&  sDenominatorFormat.getLength() > 0 )
     {
+        sal_Int32 nDenominatorLen = sDenominatorFormat.getLength();
         while ( sDiv[0] == ' ' ) // left align denominator
         {
-            sDiv.insert( sDenominatorFormat.getLength(), " " );
+            if (sDiv.getLength() <= nDenominatorLen)
+                sDiv.append(" ");
+            else
+                sDiv.insert( nDenominatorLen, " " );
             sDiv.remove( 0, 1 );
         }
     }
