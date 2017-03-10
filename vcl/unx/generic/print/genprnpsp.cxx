@@ -201,7 +201,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
                  nPaperBin < pKey->countValues();
              nPaperBin++);
         pJobSetup->SetPaperBin(
-            nPaperBin < 0 || nPaperBin >= pKey->countValues() ? 0 : nPaperBin);
+            nPaperBin == pKey->countValues() ? 0 : nPaperBin);
     }
 
     // copy duplex
