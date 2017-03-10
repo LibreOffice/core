@@ -102,7 +102,7 @@ public:
 
 public:
     /**
-     * @descr   Set layout for the paragraph.When such property was setted, this paragraph will
+     * @descr   Set layout for the paragraph. When such property was set, this paragraph will
      *          start at an new page.
      */
     void    SetMasterPage(const OUString& master);
@@ -111,7 +111,7 @@ public:
 
     /**
      * @descr   set the paragraph default font.
-     * @param   font font object to be setted.Font object are deleted by font-factory,so
+     * @param   font font object to be set. Font object are deleted by font-factory,so
      *          don't delete it in the destructure function of para style.
      */
     void    SetFont(rtl::Reference<XFFont> const & font);
@@ -122,14 +122,14 @@ public:
     const rtl::Reference<XFFont>& GetFont(){ return m_pFont; }
 
     /**
-     * @descr   Set the indent of the paragraph.This is the indent for
+     * @descr   Set the indent of the paragraph. This is the indent for
                 the first line.
      * @param   indent value of the first-line indent.
      */
     void    SetIndent(double indent );
 
     /**
-     * @descr   Set the padding of the paragraph.This is the distance
+     * @descr   Set the padding of the paragraph. This is the distance
                 between the border and the top of the text.
      * @param   indent value of the padding.
      */
@@ -149,7 +149,7 @@ public:
     void    SetAlignType(enumXFAlignType eAlign);
 
     /**
-     * @descr   Set the shadow of the paragraph.there is 4 positions, you
+     * @descr   Set the shadow of the paragraph. There are 4 positions, you
                 can find it in the definition of enumShadowPos.
      * @param   pos
      * @param   offset the distance between the paragraph border and the shadow.
@@ -158,7 +158,7 @@ public:
     void    SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
 
     /**
-     * @descr   The borders is complex,so you have to create one before use.
+     * @descr   The borders is complex, so you have to create one before use.
                 Very few paragraphs will readly have borders property,this way
                 we can save much memory.
      * @param   pBorders borders of the paragraph,please reference the XFBorders.
@@ -202,7 +202,7 @@ public:
     void    AddTabStyle(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter);
 
     /**
-     * @descr   for para style copy operator,sometimes you may need to override tab styles.
+     * @descr   for para style copy operator, sometimes you may need to override tab styles.
      */
     void    ClearTabStyles();
 

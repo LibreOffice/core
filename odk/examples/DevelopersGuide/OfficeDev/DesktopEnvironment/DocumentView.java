@@ -206,7 +206,7 @@ public class DocumentView extends    JFrame
     public void createFrame()
     {
         // create view frame (as a XFrame!) here
-        // Look for right view mode setted by user command line parameter.
+        // Look for right view mode set by user command line parameter.
         // First try to get a new unambigous frame name from our global ViewContainer.
         if(ViewContainer.mbInplace)
         {

@@ -85,7 +85,7 @@ public:
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
-    // resolve some ambigous methods
+    // resolve some ambiguous methods
     virtual css::uno::Reference<css::awt::XWindowPeer> SAL_CALL getPeer() override
         { return UnoDialogControl_Base::ControlContainerBase::getPeer(); }
     virtual void SAL_CALL addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) override
