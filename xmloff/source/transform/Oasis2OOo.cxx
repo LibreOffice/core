@@ -94,7 +94,7 @@ enum XMLUserDefinedTransformerAction
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
 
-// BM: a macro to put two tokens into one sal_Int32 for the action
+// a macro to put two tokens into one sal_Int32 for the action
 // XML_ATACTION_RENAME_ATTRIBUTE
 #define RENAME_ENTRY( f, s ) \
     (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
@@ -369,9 +369,8 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( DRAW, PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
-    /* Conversion of attribute <table:style-name> for <table:table-row> and
-       <table:table-column> (#i40011#, #i40015#)
-    */
+    // Conversion of attribute <table:style-name> for <table:table-row> and
+    // <table:table-column> (#i40011#, #i40015#)
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
@@ -748,7 +747,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
                     XML_NAMESPACE_FORM, XML_ID ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_uInt32(true) ),
 
-    // BM: needed by chart:legend.  The legend needs also the draw actions.  As
+    // needed by chart:legend.  The legend needs also the draw actions.  As
     // there is no merge mechanism, all actions have to be in the same table
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_START, XML_LEFT ),
@@ -1196,7 +1195,7 @@ void XMLTableTransformerContext_Impl::StartElement(
                     }
                     pMutableAttrList->RemoveAttributeByIndex( i );
                 }
-                // OD 2005-07-05 #i50521# - no break here for savety reason.
+                // #i50521# - no break here for safety reason.
             }
             // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )

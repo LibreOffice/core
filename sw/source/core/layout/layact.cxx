@@ -1579,7 +1579,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     if ( IsAgain() )
         return false;
 
-    // for savety reasons:
+    // for safety reasons:
     // check page number before formatting lowers.
     if ( pOldPage->GetPhyPageNum() > (pTab->FindPageFrame()->GetPhyPageNum() + 1) )
         SetNextCycle( true );
@@ -1608,7 +1608,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
 
     while ( pContent && pPage->IsAnLower( pContent ) )
     {
-        // If the Content didn't change, we can use a few shortcuts.
+        // If the content didn't change, we can use a few shortcuts.
         const bool bFull = !pContent->IsValid() || pContent->IsCompletePaint() ||
                            pContent->IsRetouche() || pContent->GetDrawObjs();
         if ( bFull )
@@ -1676,7 +1676,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                 if (  nCurNum < pPage->GetPhyPageNum() )
                     m_nPreInvaPage = nCurNum;
 
-                // If the Frame flowed backwards more than one page, we need to
+                // If the frame flowed backwards more than one page, we need to
                 // start over again from the beginning, so nothing gets left out.
                 if ( !IsCalcLayout() && pPage->GetPhyPageNum() > nCurNum+1 )
                 {
@@ -1688,7 +1688,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                     }
                 }
             }
-            // If the Frame moved forwards to the next page, we re-run through
+            // If the frame moved forwards to the next page, we re-run through
             // the predecessor.
             // This way, we catch predecessors which are now responsible for
             // retouching, but the footers will be touched also.
@@ -1742,7 +1742,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                     m_pImp->GetShell()->AddPaintRect( pContent->Frame() );
             }
 
-            // Do this if the Frame has been formatted before.
+            // Do this if the frame has been formatted before.
             if ( pContent->IsTextFrame() && static_cast<const SwTextFrame*>(pContent)->HasRepaint() &&
                   IsPaint() )
                 PaintContent( pContent, pPage, pContent->Frame(), pContent->Frame().Bottom());
@@ -1811,8 +1811,8 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent,
     }
 }
 
-/// Returns true if all Contents of the Fly have been processed completely.
-/// Returns false if processing has been interrupted prematurely.
+// Returns true if all Contents of the Fly have been processed completely.
+// Returns false if processing has been interrupted prematurely.
 bool SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
 {
     const SwContentFrame *pContent = pFly->ContainsContent();
@@ -1821,10 +1821,8 @@ bool SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
     {
         FormatContent_( pContent, pContent->FindPageFrame() );
 
-        // format floating screen objects
-        // at content text frame
-        // pass correct page frame
-        // to the object formatter.
+        // format floating screen objects at content text frame
+        // pass correct page frame to the object formatter.
         if ( pContent->IsTextFrame() &&
              !SwObjectFormatter::FormatObjsAtFrame(
                                             *(const_cast<SwContentFrame*>(pContent)),
@@ -1851,7 +1849,7 @@ bool SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
         if ( !pFly->IsFlyInContentFrame() )
         {
             CheckIdleEnd();
-            // OD 14.04.2003 #106346# - consider interrupt formatting.
+            // consider interrupt formatting.
             if ( IsInterrupt() && !mbFormatContentOnInterrupt )
                 return false;
         }
@@ -2191,7 +2189,6 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 // If there are accrued paints, it's best to simply invalidate
                 // the whole window. Otherwise there would arise paint problems whose
                 // solution would be disproportionally expensive.
-                //fix(18176):
                 SwViewShellImp *pViewImp = rSh.Imp();
                 bool bUnlock = false;
                 if ( pViewImp->GetRegion() )
