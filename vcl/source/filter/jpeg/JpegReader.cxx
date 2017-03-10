@@ -30,7 +30,6 @@
 #include <tools/fract.hxx>
 #include <memory>
 
-#define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
 
 /*
@@ -275,24 +274,6 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 {
     ReadState   eReadState;
     bool        bRet = false;
-    sal_uInt8   cDummy;
-
-    // TODO: is it possible to get rid of this seek to the end?
-    // check if the stream's end is already available
-    mrStream.Seek( STREAM_SEEK_TO_END );
-    mrStream.ReadUChar( cDummy );
-    long nEndPosition = mrStream.Tell();
-
-    // else check if at least JPEG_MIN_READ bytes can be read
-    if( mrStream.GetError() == ERRCODE_IO_PENDING )
-    {
-        mrStream.ResetError();
-        if( ( nEndPosition  - mnFormerPos ) < JPEG_MIN_READ )
-        {
-            mrStream.Seek( mnLastPos );
-            return JPEGREAD_NEED_MORE;
-        }
-    }
 
     // seek back to the original position
     mrStream.Seek( mnLastPos );
