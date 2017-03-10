@@ -84,6 +84,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
     jpeg_create_decompress( &cinfo );
     jpeg_svstream_src( &cinfo, pInputStream );
+    SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(cinfo.src);
     jpeg_read_header( &cinfo, TRUE );
 
     cinfo.scale_num = 1;
@@ -190,7 +191,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 }
             }
 
-            for (*pLines = 0; *pLines < nHeight; (*pLines)++)
+            for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
             {
                 size_t yIndex = *pLines;
 

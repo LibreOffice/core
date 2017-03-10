@@ -33,15 +33,6 @@
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
 
-/* Expanded data source object for stdio input */
-
-struct SourceManagerStruct {
-    jpeg_source_mgr pub;                /* public fields */
-    SvStream*   stream;                 /* source stream */
-    JOCTET*     buffer;                 /* start of buffer */
-    boolean     start_of_file;          /* have we gotten any data yet? */
-};
-
 /*
  * Initialize source --- called by jpeg_read_header
  * before any data is actually read.
@@ -55,6 +46,7 @@ extern "C" void init_source (j_decompress_ptr cinfo)
      * This is correct behavior for reading a series of images from one source.
      */
     source->start_of_file = TRUE;
+    source->no_data_available = FALSE;
 }
 
 long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
@@ -89,6 +81,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 
     if (!nbytes)
     {
+        source->no_data_available = TRUE;
         if (source->start_of_file)     /* Treat empty input file as fatal error */
         {
             ERREXIT(cinfo, JERR_INPUT_EMPTY);
@@ -158,7 +151,7 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
             (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET)));
     }
 
-    source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
+    source = reinterpret_cast<SourceManagerStruct*>(cinfo->src);
     source->pub.init_source = init_source;
     source->pub.fill_input_buffer = fill_input_buffer;
     source->pub.skip_input_data = skip_input_data;

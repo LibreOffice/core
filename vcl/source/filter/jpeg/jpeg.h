@@ -34,6 +34,7 @@ namespace com { namespace sun { namespace star { namespace task {
 class JPEGReader;
 class JPEGWriter;
 class Size;
+class SvStream;
 
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 
@@ -48,6 +49,16 @@ void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                   Size const & previewSize );
 
 long    Transform( void* pInputStream, void* pOutputStream, long nAngle );
+
+/* Expanded data source object for stdio input */
+
+struct SourceManagerStruct {
+    jpeg_source_mgr pub;                /* public fields */
+    SvStream*   stream;                 /* source stream */
+    JOCTET*     buffer;                 /* start of buffer */
+    boolean     start_of_file;          /* have we gotten any data yet? */
+    boolean     no_data_available;
+};
 
 #endif
 
