@@ -388,7 +388,7 @@ long ScColumn::GetNeededSize(
             SfxItemSet* pFontSet = pDocument->GetPreviewFont( nCol, nRow, nTab );
             pPattern->FillEditItemSet( pSet, pFontSet ? pFontSet : pCondSet );
         }
-//          no longer needed, are setted with the text (is faster)
+//          no longer needed, are set with the text (is faster)
 //          pEngine->SetDefaults( pSet );
 
         if ( static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {

@@ -56,7 +56,7 @@ global const cLogUnknown = 0, cLogFalse = 1, cLogTrue = 2
 Global const cYes = &quot;y&quot;, cNo = &quot;n&quot;
 Global const cStateNo = 0, cStateYes = 1
 
-&apos;Feldtypen
+&apos;FieldTypes
 Global const cFtExtUser = 21, cFtPageNum = 5, cFtStatistic = 8, cFtDateTime = 27, cFtDatabase = 31
 
 &apos;UnoStrings

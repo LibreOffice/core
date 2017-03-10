@@ -1269,7 +1269,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     bool bTest = true;
     bool bRet = false;
     bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid mulitple calculations
+    SetAutoCalc( false );   // avoid multiple calculations
     for ( i = nStartTab; i <= nEndTab && bTest && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= maTabs[i]->TestInsertRow(nStartCol, nEndCol, nStartRow, nSize);
@@ -3758,7 +3758,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 void ScDocument::CheckVectorizationState()
 {
     bool bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = false;      // no mulitple calculations
+    bAutoCalc = false;      // no multiple calculations
 
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
@@ -3771,7 +3771,7 @@ void ScDocument::CheckVectorizationState()
 void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     bool bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = false;      // no mulitple calculations
+    bAutoCalc = false;      // no multiple calculations
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
         TableContainer::iterator it = maTabs.begin();
@@ -3792,7 +3792,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
 {
     bool bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = false;      // no mulitple calculations
+    bAutoCalc = false;      // no multiple calculations
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM(), SfxHintId::ScDataChanged);
         SCTAB nTab2 = rRange.aEnd.Tab();

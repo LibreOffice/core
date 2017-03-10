@@ -312,8 +312,8 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     FileName >>= sFileName;
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
-    // detect if there is no path if there is no path then we need
-    // to use the current current folder
+    // detect if there is no path then we need
+    // to use the current folder
     INetURLObject aURL( sURL );
     sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
     if( sURL.isEmpty() )

@@ -281,7 +281,7 @@ const sal_uInt16 BIFF_ID_PCITEM_STRING      = 0x00CD;
 
 const sal_uInt16 BIFF_ID_UNKNOWN            = SAL_MAX_UINT16;
 
-/* Many of thse constants might be unused, but please keep for documentation. If you notice
+/* Many of these constants might be unused, but please keep for documentation. If you notice
  * hardcoded numbers in the code that actually correspond in meaning in the context (not just value)
  * to one of the named constants, feel free to change it to use the constant instead, of course.
  */

@@ -15,7 +15,7 @@
 		
 		NOTE: This is the schema that users can customise the enumeration lists to meet their
 		exchange requirements. The enumeration values provided are ONLY SAMPLES and 
-		is not complete. It is upto the application to decide what the values should be.  To achieve 
+		is not complete. It is up to the application to decide what the values should be. To achieve
 		interoperability between applications using this specification, it is recommended that an
 		SLA/agreement is in place as to what the enumeration values will be used in this file 
 		</xs:documentation>

@@ -1796,7 +1796,7 @@ public:
     SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const;
 
     // returns whether to export a Default style for this col or not
-    // nDefault is setted to one position in the current row where the Default style is
+    // nDefault is set to one position in the current row where the Default style is
     void            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
 
     bool            UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bShow );

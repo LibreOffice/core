@@ -380,7 +380,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             if(aVEvt.pHdl)
                             {
                                 // force new handle identification, the pointer will be dead here
-                                // since SdrEndTextEdit has resetted (deleted) the handles.
+                                // since SdrEndTextEdit has reset (deleted) the handles.
                                 aVEvt.pHdl = nullptr;
                                 mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
                             }
@@ -830,7 +830,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
                     // Analog to the else case below, for vertical simple click texts
-                    // one of the defaulted setted items from ImpSetAttributesForNewTextObject
+                    // one of the default set items from ImpSetAttributesForNewTextObject
                     // needs to be adapted to non-block mode.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();
                     SvxFrameDirection eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
