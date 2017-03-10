@@ -35,8 +35,8 @@ namespace framework{
     Please use follow public macros only!
 
     1)  DEFINE_XINTERFACE                                                               => use it in header to declare XInterface and his methods
-    2)  DIRECT_INTERFACE( INTERFACE )                                                   => use it as parameter INTERFACEx at 4) if interface not ambigous
-    3)  DERIVED_INTERFACE( BASEINTERFACE, DERIVEDINTERFACE )                            => use it as parameter INTERFACEx at 4) if interface can be ambigous
+    2)  DIRECT_INTERFACE( INTERFACE )                                                   => use it as parameter INTERFACEx at 4) if interface not ambiguous
+    3)  DERIVED_INTERFACE( BASEINTERFACE, DERIVEDINTERFACE )                            => use it as parameter INTERFACEx at 4) if interface can be ambiguous
     4)  DECLARE_XINTERFACE_0( CLASS, BASECLASS )                                        => use it to define implementation of XInterface for 0 additional interface to baseclass
         DECLARE_XINTERFACE_1( CLASS, BASECLASS, INTERFACE1 )                            => use it to define implementation of XInterface for 1 additional interface to baseclass
         ...
@@ -120,7 +120,7 @@ ________________________________________________________________________________
     static_cast< INTERFACE* >( this )
 
 //  Use it as parameter for DEFINE_XINTERFACE_X(), if you CAN'T use an interface directly in queryInterface()!
-//  (zB at ambigous errors!)
+//  (zB at ambiguous errors!)
 #define DERIVED_INTERFACE( BASEINTERFACE, DERIVEDINTERFACE ) \
     static_cast< BASEINTERFACE* >( static_cast< DERIVEDINTERFACE* >( this ) )
 

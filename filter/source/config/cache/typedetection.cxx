@@ -1109,7 +1109,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         // type and return it. (BTW: We must update the media descriptor here ...)
         // The user selected explicitly a filter ... but normaly we are interested on
         // a type here only. But we must be sure, that the selected filter is used
-        // too and no ambigous filter registration disturb us .-)
+        // too and no ambiguous filter registration disturb us .-)
 
         OUString sFilter = aRequest.getFilter();
         if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
