@@ -107,14 +107,14 @@ static bool SkipPrivateBlock(int type)
     {
         if (!hmem->read4b(n))
             return false;
-        if (hmem->state() || hmem->skipBlock(n) != n)
+        if (hmem->state() || hmem->skipBlock(n) != static_cast<size_t>(n))
             return false;
     }
     if (!hmem->read4b(n))
         return false;
     if (hmem->state())
         return false;
-    return hmem->skipBlock(n) == n;
+    return hmem->skipBlock(n) == static_cast<size_t>(n);
 }
 
 static int SizeExpected;
