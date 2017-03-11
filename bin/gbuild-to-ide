@@ -236,14 +236,11 @@ class testVS2013Ide(IdeIntegrationGenerator):
             projects = []
             module_directory = os.path.join(self.solution_directory, module)
             if module != 'include':  # FIXME
+                project_path = os.path.join(module_directory, '%s.vcxproj' % module)
+                project_guid = self.twrite_project(project_path, module)
+                self.write_filters(project_path + '.filters', module, self.gbuildparser.modules[module]['headers'])
                 for target in self.gbuildparser.modules[module]['targets']:
-
-                    project_path = os.path.join(module_directory, '%s.vcxproj' % target['target_name'])
-
-                    project_guid = self.twrite_project(project_path, target)
-                    #self.twrite_project(project_path,target)
-                    p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
-                    self.write_filters(project_path + '.filters',target,self.gbuildparser.modules[module]['headers'])
+                    p = self.Project(project_guid, target, project_path)
                     projects.append(p)
                 self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
                 all_projects += projects
@@ -418,7 +415,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         return project_guid
 
 
-    def twrite_project(self, project_path, target):
+    def twrite_project(self, project_path, module):
         folder = os.path.dirname(project_path)
         if not os.path.exists(folder):
             os.makedirs(folder)
@@ -442,7 +439,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
         proj_guid_node.text = '{%s}' % project_guid
         proj_root_namespace=ET.SubElement(globals_node, '{%s}RootNamespace' % ns)
-        proj_root_namespace.text = target['target_name']
+        proj_root_namespace.text = module
 
 
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
@@ -475,10 +472,12 @@ class testVS2013Ide(IdeIntegrationGenerator):
             opt_node.text='Disabled'
             sdl_check=ET.SubElement(cl_compile,'{%s}SDLCheck' % ns)
             sdl_check.text='true'
-            add_incl_dir=ET.SubElement(cl_compile,'{%s}AdditionalIncludeDirectories' % ns)
-            add_incl_dir.text=self.get_include_dirs(target)
-            add_incl_def_flag=ET.SubElement(cl_compile,'{%s}AdditionalOptions' % ns)
-            add_incl_def_flag.text=self.get_flags_defs(target)
+            for target in self.gbuildparser.modules[module]['targets']:
+                add_incl_dir=ET.SubElement(cl_compile,'{%s}AdditionalIncludeDirectories' % ns)
+                add_incl_dir.text=self.get_include_dirs(target)
+                add_incl_def_flag=ET.SubElement(cl_compile,'{%s}AdditionalOptions' % ns)
+                add_incl_def_flag.text=self.get_flags_defs(target)
+
             dgb_info_form=ET.SubElement(cl_compile,'{%s}DebugInformationFormat' % ns)
             dgb_info_form.text='ProgramDatabase'
             warn_as_error=ET.SubElement(cl_compile,'{%s}TreatWarningAsError' % ns)
@@ -504,9 +503,10 @@ class testVS2013Ide(IdeIntegrationGenerator):
 
         #cxx files
         cxx_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
-        for cxx_elem in target['CXXOBJECTS']:
-            modulename=target['module']
-            cxx_cl_node=ET.SubElement(cxx_node,'{%s}ClCompile' % ns,Include=os.path.join('../..', modulename, cxx_elem))
+        for target in self.gbuildparser.modules[module]['targets']:
+            for cxx_elem in target['CXXOBJECTS']:
+                modulename=target['module']
+                cxx_cl_node=ET.SubElement(cxx_node,'{%s}ClCompile' % ns,Include=os.path.join('../..', modulename, cxx_elem))
         #miss headers
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
@@ -541,7 +541,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         with open(file_path, 'w') as f:
             f.write(pretty_str.decode())
 
-    def write_filters(self,filters_path,target,headers):
+    def write_filters(self,filters_path,module,headers):
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
         proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0')
@@ -555,11 +555,12 @@ class testVS2013Ide(IdeIntegrationGenerator):
             filter_ext_node = ET.SubElement(filter_node,'{%s}Extensions' % ns)
             filter_ext_node.text = '{%s}' % filter_value
         sources_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
-        for cxxfile in target['CXXOBJECTS']:
-            cxx_file_name = cxxfile.split('/')[-1]
-            clinclude_node=ET.SubElement(sources_node,'{%s}ClInclude' % ns, Include='%s' % cxx_file_name)
-            header_filter=ET.SubElement(clinclude_node,'{%s}Filter' % ns)
-            header_filter.text="sources"
+        for target in self.gbuildparser.modules[module]['targets']:
+            for cxxfile in target['CXXOBJECTS']:
+                cxx_file_name = cxxfile.split('/')[-1]
+                clinclude_node=ET.SubElement(sources_node,'{%s}ClInclude' % ns, Include='%s' % cxx_file_name)
+                header_filter=ET.SubElement(clinclude_node,'{%s}Filter' % ns)
+                header_filter.text="sources"
 
         headers_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
         for header in headers:
