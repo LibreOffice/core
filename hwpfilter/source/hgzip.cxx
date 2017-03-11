@@ -154,17 +154,17 @@ local int destroy(gz_stream * s)
    Reads the given number of uncompressed bytes from the compressed file.
    gz_read returns the number of bytes actually read (0 for end of file).
 */
-int gz_read(gz_stream * file, voidp buf, unsigned len)
+size_t gz_read(gz_stream * file, voidp buf, unsigned len)
 {
 //printf("@@ gz_read : len : %d\t",len);
     gz_stream *s = file;
     Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
     if (s == nullptr)
-        return Z_STREAM_ERROR;
+        return 0;
 
     if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO)
-        return -1;
+        return 0;
     if (s->z_err == Z_STREAM_END)
         return 0;                                 /* EOF */
 
@@ -230,7 +230,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
             break;
     }
     s->crc = crc32(s->crc, start, (uInt) (s->stream.next_out - start));
-    return (int) (len - s->stream.avail_out);
+    return len - s->stream.avail_out;
 }
 
 /* ===========================================================================
