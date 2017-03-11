@@ -56,12 +56,12 @@ class DLLEXPORT HIODev
         virtual bool read2b(unsigned short &out) = 0;
         virtual bool read4b(unsigned int &out) = 0;
         virtual bool read4b(int &out) = 0;
-        virtual int readBlock( void *ptr, int size ) = 0;
-        virtual int skipBlock( int size ) = 0;
+        virtual size_t readBlock( void *ptr, size_t size ) = 0;
+        virtual size_t skipBlock( size_t size ) = 0;
 
-        int read1b( void *ptr, int nmemb );
-        int read2b( void *ptr, int nmemb );
-        int read4b( void *ptr, int nmemb );
+        size_t read1b( void *ptr, size_t nmemb );
+        size_t read2b( void *ptr, size_t nmemb );
+        size_t read4b( void *ptr, size_t nmemb );
 };
 
 struct gz_stream;
@@ -117,11 +117,11 @@ class HStreamIODev final: public HIODev
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
-        virtual int readBlock( void *ptr, int size ) override;
+        virtual size_t readBlock( void *ptr, size_t size ) override;
 /**
  * Move current pointer of stream as amount of size
  */
-        virtual int skipBlock( int size ) override;
+        virtual size_t skipBlock( size_t size ) override;
     private:
 /**
  * Initialize this object
@@ -137,9 +137,9 @@ class HStreamIODev final: public HIODev
 class HMemIODev final: public HIODev
 {
     uchar *ptr;
-    int pos, length;
+    size_t pos, length;
     public:
-        HMemIODev(char *s, int len);
+        HMemIODev(char *s, size_t len);
         virtual ~HMemIODev() override;
 
         virtual bool open() override;
@@ -155,8 +155,8 @@ class HMemIODev final: public HIODev
         using HIODev::read4b;
         virtual bool read4b(unsigned int &out) override;
         virtual bool read4b(int &out) override;
-        virtual int readBlock( void *ptr, int size ) override;
-        virtual int skipBlock( int size ) override;
+        virtual size_t readBlock( void *ptr, size_t size ) override;
+        virtual size_t skipBlock( size_t size ) override;
     private:
         virtual void init() override;
 };

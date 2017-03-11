@@ -80,7 +80,7 @@ int     gz_close    ( gz_stream *file );
  * @param len Length of data to be read
  * @returns The number of bytes actually read
  */
-int     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
+size_t     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
 /**
  * Flushes all pending output into the compressed file
  * gz_flush should be called only when strictly necessary because it can
