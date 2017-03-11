@@ -331,7 +331,7 @@ void PPTShape::addShape(
             } else
                 setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, nullptr, bClearText, mpPlaceholder.get() != nullptr, aTransformation, getFillProperties() ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder.get() != nullptr, aTransformation, getFillProperties() ) );
             if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ((sal_Int32)mnSubType == XML_title))
              {
                 try
