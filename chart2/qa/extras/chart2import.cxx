@@ -22,6 +22,7 @@
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <com/sun/star/util/Color.hpp>
 
@@ -60,6 +61,7 @@ public:
     void testFdo54361();
     void testFdo54361_1();
     void testTdf86624(); // manually placed legends
+    void testTdf106217();
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
     void testAxisTextRotationXLSX();
@@ -120,6 +122,7 @@ public:
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
     CPPUNIT_TEST(testTdf86624);
+    CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
@@ -711,6 +714,28 @@ void Chart2ImportTest::testTdf86624()
     awt::Point aPos = xLegend->getPosition();
     CPPUNIT_ASSERT(aPos.X > 5000); // real value for me is above 8000 but before bug fix is below 1000
     CPPUNIT_ASSERT(aPos.Y > 4000); // real value for ms is above 7000
+}
+
+void Chart2ImportTest::testTdf106217()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf106217.pptx");
+    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress(0, 0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xCircle(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCircle.is());
+
+    uno::Reference<container::XNamed> xNamedShape(xCircle, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xNamedShape->getName(), OUString("Oval 1"));
+
+    awt::Point aPosition = xCircle->getPosition();
+    CPPUNIT_ASSERT_EQUAL(aPosition.X, sal_Int32(6870));
+    CPPUNIT_ASSERT_EQUAL(aPosition.Y, sal_Int32(7261));
+    awt::Size aSize = xCircle->getSize();
+    CPPUNIT_ASSERT_EQUAL(aSize.Width, sal_Int32(2701));
+    CPPUNIT_ASSERT_EQUAL(aSize.Height, sal_Int32(2700));
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
