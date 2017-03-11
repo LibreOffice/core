@@ -56,7 +56,7 @@ void  AccListEventListener::notifyEvent( const css::accessibility::AccessibleEve
         break;
     case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
         // Since List items a transient a child events are mostly used
-        // to attach/detach listeners, it is save to ignore it here
+        // to attach/detach listeners, it is safe to ignore it here
         //TODO: investigate again
         break;
     case AccessibleEventId::VALUE_CHANGED:

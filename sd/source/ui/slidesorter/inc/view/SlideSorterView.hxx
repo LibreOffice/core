@@ -168,7 +168,7 @@ public:
 
     /** Remove a listener that is called when the set of visible slides changes.
         @param rListener
-            It is save to pass a listener that was not added or has been
+            It is safe to pass a listener that was not added or has been
             removed previously.  Such calls are ignored.
     */
     void RemoveVisibilityChangeListener (const Link<LinkParamNone*,void>& rListener);

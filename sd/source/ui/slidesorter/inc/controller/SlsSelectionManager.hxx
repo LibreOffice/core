@@ -83,7 +83,7 @@ public:
     /** Remove a listener that was called when the selection of the slide
         sorter changes.
         @param rListener
-            It is save to pass a listener that was not added are has been
+            It is safe to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
     void RemoveSelectionChangeListener (const Link<LinkParamNone*,void>& rListener);

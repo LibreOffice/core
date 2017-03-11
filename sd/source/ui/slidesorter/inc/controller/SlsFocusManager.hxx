@@ -145,7 +145,7 @@ public:
 
     /** Remove a focus change listener.
         @param rListener
-            It is save to pass a listener that was not added are has been
+            It is safe to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
     void RemoveFocusChangeListener (const Link<LinkParamNone*,void>& rListener);

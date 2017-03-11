@@ -329,7 +329,7 @@ published service MailMerge
 
 
 
-    /** determines that the output of the mail merge is save in one single file.
+    /** determines that the output of the mail merge is saved in one single file.
         <p>This property is only evaluated for file output.</p>
 
         @since OOo 2.0
