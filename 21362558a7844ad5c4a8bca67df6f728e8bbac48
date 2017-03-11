@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_cf17deeb",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-03-11T04:37:27Z",
+      "side": 1,
+      "message": "How the heck did I miss this?",
+      "range": {
+        "startLine": 123,
+        "startChar": 38,
+        "endLine": 123,
+        "endChar": 46
+      },
+      "revId": "21362558a7844ad5c4a8bca67df6f728e8bbac48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
