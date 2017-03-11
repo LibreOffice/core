@@ -175,7 +175,6 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
-                            const css::awt::Rectangle* pShapeRect = nullptr,
                             ShapeIdMap* pShapeMap = nullptr );
 
     void                addChildren(
@@ -220,7 +219,6 @@ protected:
                             const OUString& rServiceName,
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            const css::awt::Rectangle* pShapeRect,
                             bool bClearText,
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,

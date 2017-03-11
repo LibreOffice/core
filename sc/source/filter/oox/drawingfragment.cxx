@@ -279,7 +279,7 @@ void DrawingFragment::onEndElement()
                     if ( !bIsShapeVisible)
                         mxShape->setHidden(true);
 
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties(), &aShapeRectEmu32 );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties() );
 
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
