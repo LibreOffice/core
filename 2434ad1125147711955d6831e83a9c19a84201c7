@@ -22,6 +22,29 @@
       "revId": "2434ad1125147711955d6831e83a9c19a84201c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8fff9633",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-11T15:50:27Z",
+      "side": 1,
+      "message": "Also maybe change this to fallback to previous code, like\n\nreturn (TerminateProcess(static_cast\u003coslProcessImpl*\u003e(Process)-\u003em_hProcess, 0) \u003d\u003d FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 33
+      },
+      "revId": "2434ad1125147711955d6831e83a9c19a84201c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
