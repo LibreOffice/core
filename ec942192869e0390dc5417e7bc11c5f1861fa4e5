@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_4f112eac",
+        "filename": "lotuswordpro/source/filter/xfilter/xfparastyle.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-03-11T12:24:47Z",
+      "side": 1,
+      "message": "\"object is\" or \"objects are\" but not \"object are\"",
+      "range": {
+        "startLine": 114,
+        "startChar": 49,
+        "endLine": 114,
+        "endChar": 59
+      },
+      "revId": "ec942192869e0390dc5417e7bc11c5f1861fa4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2f0cea93",
+        "filename": "lotuswordpro/source/filter/xfilter/xfparastyle.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-03-11T12:24:47Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be removed to have twice \"font\"?",
+      "range": {
+        "startLine": 114,
+        "startChar": 21,
+        "endLine": 114,
+        "endChar": 25
+      },
+      "revId": "ec942192869e0390dc5417e7bc11c5f1861fa4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8f231605",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/StatusView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-03-11T12:24:47Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be \"themselves\"? (since it seems we talk about \"created listener instances\"",
+      "range": {
+        "startLine": 223,
+        "startChar": 52,
+        "endLine": 223,
+        "endChar": 59
+      },
+      "revId": "ec942192869e0390dc5417e7bc11c5f1861fa4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_af20daf8",
+        "filename": "odk/examples/DevelopersGuide/OfficeDev/DesktopEnvironment/StatusView.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-03-11T12:24:47Z",
+      "side": 1,
+      "message": "should\u0027nt be \"it\" (since it seems we talk about this frame)?",
+      "range": {
+        "startLine": 224,
+        "startChar": 16,
+        "endLine": 224,
+        "endChar": 19
+      },
+      "revId": "ec942192869e0390dc5417e7bc11c5f1861fa4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
