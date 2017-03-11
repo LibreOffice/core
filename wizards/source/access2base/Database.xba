@@ -898,7 +898,8 @@ Public Function RunSQL(Optional ByVal pvSQL As Variant _
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
-	Utils._SetCalledSub(&quot;RunSQL&quot;)
+Const cstThisSub = &quot;Database.RunSQL&quot;
+	Utils._SetCalledSub(cstThisSub)
 	
 	RunSQL = False
 	If IsMissing(pvSQL) Then Call _TraceArguments()
@@ -914,14 +915,15 @@ Dim oStatement As Object, vResult As Variant
 	Set oStatement = Connection.createStatement()
 	oStatement.EscapeProcessing = Not ( pvOption = dbSQLPassThrough )
 	On Local Error Goto SQL_Error
-	vResult = oStatement.executeUpdate(_ReplaceSquareBrackets(pvSQL))
+	vResult = oStatement.execute(_ReplaceSquareBrackets(pvSQL))
 	On Local Error Goto Error_Function
 	RunSQL = True
 
 Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;RunSQL&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 SQL_Error:
 	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , pvSQL)
