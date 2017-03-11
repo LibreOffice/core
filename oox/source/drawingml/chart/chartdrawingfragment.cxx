@@ -218,8 +218,8 @@ void ChartDrawingFragment::onEndElement()
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
                 // Set the position and size before calling addShape().
-                mxShape->setPosition(awt::Point(aShapeRectEmu.X, aShapeRectEmu.Y));
-                mxShape->setSize(awt::Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
+                mxShape->setPosition(awt::Point(aShapeRectEmu32.X, aShapeRectEmu32.Y));
+                mxShape->setSize(awt::Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
 
                 basegfx::B2DHomMatrix aMatrix;
                 mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties(), &aShapeRectEmu32 );
