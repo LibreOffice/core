@@ -55,7 +55,88 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     if (Process == nullptr)
         return osl_Process_E_Unknown;
 
-    if (TerminateProcess(static_cast<oslProcessImpl*>(Process)->m_hProcess, 0))
+    HANDLE hProcess = static_cast<oslProcessImpl*>(Process)->m_hProcess;
+    DWORD dwPID = GetProcessId(hProcess);
+
+    // cannot be System Process (0x00000000)
+    if (dwPID == 0x0)
+        return osl_Process_E_InvalidError;
+
+    // test to see if we can open the process adapted from:
+    // * https://support.microsoft.com/en-us/help/178893/how-to-terminate-an-application-cleanly-in-win32
+    // * http://www.drdobbs.com/a-safer-alternative-to-terminateprocess/184416547
+    HANDLE hDupProcess = NULL;
+    BOOL bHaveDuplHdl = DuplicateHandle(GetCurrentProcess(),    // handle to process that has handle
+                                    hProcess,                   // handle to be duplicated
+                                    GetCurrentProcess(),        // process that will get the dup handle
+                                    &hDupProcess,               // store duplicate process handle here
+                                    PROCESS_DUP_HANDLE,         // required but ignored options
+                                    FALSE,                      // handle can't be inherited
+                                    DUPLICATE_SAME_ACCESS);     // duplicate handle has the same access
+                                                                // as the source handle
+    if (bHaveDuplHdl)
+        hProcess = hDupProcess;
+
+    if (!hProcess)
+    {
+        DWORD dwProcessError = GetLastError();
+        // we have tried to open the Idle process, one of the client/server
+        // runtime subsystem (CSRSS) processes, or a process we don't have
+        // access to open
+        if (dwProcessError == ERROR_ACCESS_DENIED)
+            return osl_Process_E_NoPermission;
+        else
+            return osl_Process_E_Unknown;
+    }
+
+    DWORD dwProcessStatus = 0;
+    HANDLE hRemoteThread = NULL;
+
+    if (GetExitCodeProcess(hProcess, &dwProcessStatus) && (dwProcessStatus == STILL_ACTIVE))
+    {
+        // We need to get the address of the Win32 procedure ExitProcess, can't call it
+        // directly because we'll be calling the thunk and that will probably lead to an
+        // access violation. Once we have the address, then we need to create a new
+        // thread in the process (which we might need to run in the address space of
+        // another process) and then call on ExitProcess to try to cleanly terminate that
+        // process
+
+        DWORD dwTID = 0;    // dummy variable as we don't need to track the thread ID
+        UINT uExitCode = 0; // dummy variable... ExitProcess has no return value
+
+        // Note: we want to call on ExitProcess() and not TerminateProcess() - this is
+        // because with ExitProcess() Windows notifies all attached dlls that the process
+        // is detaching from the dll, but TerminateProcess() terminates all threads
+        // immediately, doesn't call any termination handlers and doesn't notify any dlls
+        // that it is detaching from them
+
+        HINSTANCE hKernel = GetModuleHandleA("kernel32.dll");
+        FARPROC pfnExitProc = GetProcAddress(hKernel, "ExitProcess");
+        hRemoteThread = CreateRemoteThread(
+                            hProcess,           /* process handle */
+                            NULL,               /* default security descriptor */
+                            0,                  /* initial size of stack in bytes is default
+                                                   size for executable */
+                            (LPTHREAD_START_ROUTINE)pfnExitProc, /* Win32 ExitProcess() */
+                            (PVOID)uExitCode,   /* ExitProcess() dummy return... */
+                            0,                  /* value of 0 tells thread to run immediately
+                                                   after creation */
+                            &dwTID);            /* new remote thread's identifier */
+
+    }
+
+    bool bHasExited = false;
+
+    if (hRemoteThread)
+    {
+        WaitForSingleObject(hProcess, INFINITE); // wait for process to terminate, never stop waiting...
+        CloseHandle(hRemoteThread);              // close the thread handle to allow the process to exit
+        bHasExited = true;
+    }
+
+    CloseHandle(hProcess);  // close the process handle
+
+    if (bHasExited)
         return osl_Process_E_None;
 
     return osl_Process_E_Unknown;
