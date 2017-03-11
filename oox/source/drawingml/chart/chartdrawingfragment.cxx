@@ -222,7 +222,7 @@ void ChartDrawingFragment::onEndElement()
                 mxShape->setSize(awt::Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
 
                 basegfx::B2DHomMatrix aMatrix;
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties(), &aShapeRectEmu32 );
+                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties() );
             }
         }
         mxShape.reset();

@@ -272,20 +272,20 @@ void DrawingFragment::onEndElement()
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
                     // Make sure to set the position and size *before* calling addShape().
-                    mxShape->setPosition(Point(aShapeRectEmu.X, aShapeRectEmu.Y));
-                    mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
+                    mxShape->setPosition(Point(aShapeRectEmu32.X, aShapeRectEmu32.Y));
+                    mxShape->setSize(Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
 
                     basegfx::B2DHomMatrix aTransformation;
                     if ( !bIsShapeVisible)
                         mxShape->setHidden(true);
 
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties(), &aShapeRectEmu32 );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties() );
 
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
                     Rectangle aShapeRectHmm(
-                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
-                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
+                        convertEmuToHmm(aShapeRectEmu32.X ), convertEmuToHmm(aShapeRectEmu32.Y ),
+                        convertEmuToHmm(aShapeRectEmu32.Width ), convertEmuToHmm(aShapeRectEmu32.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
                     // set cell Anchoring
                     if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ABSOLUTE )
