@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0fbba6c5",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-11T09:14:52Z",
+      "side": 1,
+      "message": "Do we need this conversion to ID then to handle?\n\nIf we really need to have a handle with specific access rights, can\u0027t we have it with simpler DuplicateHandle()?",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 82
+      },
+      "revId": "fe25d7f4b5b9bf041211e114f3487afe0b59c5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_efb582d0",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-11T09:14:52Z",
+      "side": 1,
+      "message": "Just a nitpick - I would move it to ln 103 where it\u0027s used, and limit its visibility.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 57
+      },
+      "revId": "fe25d7f4b5b9bf041211e114f3487afe0b59c5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
