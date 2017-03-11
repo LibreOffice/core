@@ -434,15 +434,6 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
     get(m_pOK, "ok");
     m_bIsTabPage = false;
 
-    m_pPersonalizedCB->SetHelpId(   HID_MM_BODY_CB_PERSONALIZED     );
-    m_pFemaleLB->SetHelpId(         HID_MM_BODY_LB_FEMALE           );
-    m_pFemalePB->SetHelpId(         HID_MM_BODY_PB_FEMALE           );
-    m_pMaleLB->SetHelpId(           HID_MM_BODY_LB_MALE             );
-    m_pMalePB->SetHelpId(           HID_MM_BODY_PB_MALE             );
-    m_pFemaleColumnLB->SetHelpId(   HID_MM_BODY_LB_FEMALECOLUMN     );
-    m_pFemaleFieldCB->SetHelpId(    HID_MM_BODY_CB_FEMALEFIELD      );
-    m_pNeutralCB->SetHelpId(        HID_MM_BODY_CB_NEUTRAL          );
-
     m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
     Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
     m_pPersonalizedCB->SetClickHdl(aIndividualLink);
