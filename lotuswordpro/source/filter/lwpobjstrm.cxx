@@ -68,7 +68,8 @@ LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt
     :m_pContentBuf(nullptr), m_nBufSize(size), m_nReadPos(0),
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
-    assert(size<IO_BUFFERSIZE);
+    if (size >= IO_BUFFERSIZE)
+        throw std::range_error("bad Object size");
     // read object data from stream
     if(m_nBufSize == 0)
     {
