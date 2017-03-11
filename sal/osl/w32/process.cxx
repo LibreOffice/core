@@ -55,10 +55,103 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     if (Process == nullptr)
         return osl_Process_E_Unknown;
 
-    if (TerminateProcess(static_cast<oslProcessImpl*>(Process)->m_hProcess, 0))
+    HANDLE hProcess = static_cast<oslProcessImpl*>(Process)->m_hProcess;
+    DWORD dwPID = GetProcessId(hProcess);
+
+    // cannot be System Process (0x00000000)
+    if (dwPID == 0x0)
+        return osl_Process_E_InvalidError;
+
+    // Test to see if we can create a thread in a process... adapted from:
+    // * https://support.microsoft.com/en-us/help/178893/how-to-terminate-an-application-cleanly-in-win32
+    // * http://www.drdobbs.com/a-safer-alternative-to-terminateprocess/184416547
+
+    // TODO: we really should firstly check to see if we have access to create threads and only
+    // duplicate the handle with elevated access if we don't have access... this can be done, but
+    // it's not exactly easy - an example can be found here:
+    // http://windowsitpro.com/site-files/windowsitpro.com/files/archive/windowsitpro.com/content/content/15989/listing_01.txt
+
+    HANDLE hDupProcess = NULL;
+
+
+    // we need to make sure we can create a thread in the remote process, if the handle was created
+    // in something that doesn't give us appropriate levels of access then we will need to give it the
+    // desired level of access - if the process handle was grabbed from OpenProcess it's quite possible
+    // that the handle doesn't have the appropriate level of access...
+
+    // see https://msdn.microsoft.com/en-au/library/windows/desktop/ms684880(v=vs.85).aspx
+    DWORD dwAccessFlags = (PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION
+                                    | PROCESS_VM_WRITE | PROCESS_VM_READ);
+
+    BOOL bHaveDuplHdl = DuplicateHandle(GetCurrentProcess(),    // handle to process that has handle
+                                    hProcess,                   // handle to be duplicated
+                                    GetCurrentProcess(),        // process that will get the dup handle
+                                    &hDupProcess,               // store duplicate process handle here
+                                    dwAccessFlags,              // desired access
+                                    FALSE,                      // handle can't be inherited
+                                    0);                         // zero means no additional action needed
+
+    if (bhaveDuplHdl)
+        hProcess = hDupProcess;     // so we were able to duplicate the handle, all good...
+    else
+        SAL_WARN("sal.osl", "Could not duplicate process handle, let's hope for the best...");
+
+    DWORD dwProcessStatus = 0;
+    HANDLE hRemoteThread = NULL;
+
+    if (GetExitCodeProcess(hProcess, &dwProcessStatus) && (dwProcessStatus == STILL_ACTIVE))
+    {
+        // We need to get the address of the Win32 procedure ExitProcess, can't call it
+        // directly because we'll be calling the thunk and that will probably lead to an
+        // access violation. Once we have the address, then we need to create a new
+        // thread in the process (which we might need to run in the address space of
+        // another process) and then call on ExitProcess to try to cleanly terminate that
+        // process
+
+        DWORD dwTID = 0;    // dummy variable as we don't need to track the thread ID
+        UINT uExitCode = 0; // dummy variable... ExitProcess has no return value
+
+        // Note: we want to call on ExitProcess() and not TerminateProcess() - this is
+        // because with ExitProcess() Windows notifies all attached dlls that the process
+        // is detaching from the dll, but TerminateProcess() terminates all threads
+        // immediately, doesn't call any termination handlers and doesn't notify any dlls
+        // that it is detaching from them
+
+        HINSTANCE hKernel = GetModuleHandleA("kernel32.dll");
+        FARPROC pfnExitProc = GetProcAddress(hKernel, "ExitProcess");
+        hRemoteThread = CreateRemoteThread(
+                            hProcess,           /* process handle */
+                            NULL,               /* default security descriptor */
+                            0,                  /* initial size of stack in bytes is default
+                                                   size for executable */
+                            (LPTHREAD_START_ROUTINE)pfnExitProc, /* Win32 ExitProcess() */
+                            (PVOID)uExitCode,   /* ExitProcess() dummy return... */
+                            0,                  /* value of 0 tells thread to run immediately
+                                                   after creation */
+                            &dwTID);            /* new remote thread's identifier */
+
+    }
+
+    bool bHasExited = false;
+
+    if (hRemoteThread)
+    {
+        WaitForSingleObject(hProcess, INFINITE); // wait for process to terminate, never stop waiting...
+        CloseHandle(hRemoteThread);              // close the thread handle to allow the process to exit
+        bHasExited = true;
+    }
+
+    // need to close this duplicated process handle...
+    if (bhaveDuplHdl)
+        CloseHandle(hProcess);
+
+    if (bHasExited)
         return osl_Process_E_None;
 
-    return osl_Process_E_Unknown;
+    // fallback - given that we we wait for an infinite time on WaitForSingleObject, this should
+    // never occur...
+    SAL_WARN("sal.osl", "TerminateProcess(hProcess, 0) called - we should never get here!");
+    return (TerminateProcess(hProcess, 0) == FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;
 }
 
 /***************************************************************************/
