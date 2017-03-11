@@ -1404,21 +1404,27 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_COMMENT_COMMENT:
             {
-                sal_Int32   nValue;
-                sal_uInt32  nDataSize;
                 std::vector<sal_uInt8> aData;
-                sal_Int32       nFollowingActionCount;
 
                 OString aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
-                rIStm.ReadInt32( nValue ).ReadUInt32( nDataSize );
+                sal_Int32 nValue(0);
+                sal_uInt32 nDataSize(0);
+                rIStm.ReadInt32(nValue).ReadUInt32(nDataSize);
 
                 if (nDataSize)
                 {
+                    const size_t nMaxPossibleData = rIStm.remainingSize();
+                    if (nDataSize > nMaxPossibleActions)
+                    {
+                        SAL_WARN("vcl.gdi", "svm record claims to have: " << nDataSize << " data, but only " << nMaxPossibleData << " possible");
+                        nDataSize = nMaxPossibleActions;
+                    }
                     aData.resize(nDataSize);
                     nDataSize = rIStm.ReadBytes(aData.data(), nDataSize);
                 }
 
-                rIStm.ReadInt32( nFollowingActionCount );
+                sal_Int32 nFollowingActionCount(0);
+                rIStm.ReadInt32(nFollowingActionCount);
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction(new MetaCommentAction(aComment, nValue, aData.data(), nDataSize));
 
