@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0ff3a674",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-11T15:39:32Z",
+      "side": 1,
+      "message": "I suppose, here we need PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ\n\n(see https://msdn.microsoft.com/ru-ru/library/windows/desktop/ms682437(v\u003dvs.85).aspx)?",
+      "range": {
+        "startLine": 75,
+        "startChar": 36,
+        "endLine": 75,
+        "endChar": 57
+      },
+      "revId": "2434ad1125147711955d6831e83a9c19a84201c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
