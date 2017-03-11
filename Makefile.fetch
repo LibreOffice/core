@@ -59,10 +59,7 @@ endef
 define fetch_Download_item
 $(if $(strip $($(2))),,$(error fetch__Download_item: $(2) is empty))
 $(if $(filter undefined,$(origin $(call fetch_Download__subst_var,$(2)))),\
-	$(if $(call fetch_Download__is_checksum,$(firstword $(subst -, ,$($(2))))),\
-		$(call fetch__Download_item,$1,$($2),$(firstword $(subst -, ,$($(2))))),\
-		$(error "fetch_Download_item: no checksum found for $($(2)). Please define $(call fetch_Download__subst_var,$(2)) in download.lst.") \
-	),\
+	$(error "fetch_Download_item: no checksum found for $($(2)). Please define $(call fetch_Download__subst_var,$(2)) in download.lst."),\
 	$(call fetch__Download_item,$(1),$($2),$($(call fetch_Download__subst_var,$(2)))) \
 )
 
