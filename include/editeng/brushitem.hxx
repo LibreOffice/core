@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
+#include <unotools/securityoptions.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>
 
@@ -49,6 +50,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     mutable std::unique_ptr<GraphicObject> xGraphicObject;
     sal_Int8            nGraphicTransparency; //contains a percentage value which is
                                               //copied to the GraphicObject when necessary
+    SvtSecurityOptions  maSecOptions;
     OUString            maStrLink;
     OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;

@@ -45,7 +45,6 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 
 #include <i18nutil/unicode.hxx>
-#include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
@@ -3801,7 +3800,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
     if (bLoadAgain && !maStrLink.isEmpty() && !xGraphicObject)
     // when graphics already loaded, use as a cache
     {
-        if (SvtSecurityOptions().isUntrustedReferer(referer)) {
+        if (maSecOptions.isUntrustedReferer(referer)) {
             return nullptr;
         }
 
