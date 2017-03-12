@@ -1,0 +1,15 @@
+This document describes UNO commands that are (know to be) used with LOK.
+
+Command: ".uno:InsertGraphic"
+
+JSON parameters:
+
+{
+    "FileName" :
+    {
+        "type" : "string",
+        "value" : "<fileURL>"
+    }
+}
+
+where <fileURL> is URL encoded string, e.g. file:///home/user/file.odt
