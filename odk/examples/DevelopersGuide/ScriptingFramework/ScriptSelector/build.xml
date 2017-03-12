@@ -23,7 +23,7 @@
   <property name="macroname" value="ScriptSelector"/>
   <property name="unopkgfile" value="${basedir}/${macroname}.uno.pkg"/>
 
-  <!-- ==================== intialise properties ========================= -->
+  <!-- ==================== initialise properties ========================= -->
   <target name="checksdk">
     <condition property="UsingSDK">
       <available file="${env.OFFICE_PROGRAM_PATH}"/>

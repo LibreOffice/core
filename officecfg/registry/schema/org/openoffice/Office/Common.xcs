@@ -6431,7 +6431,7 @@
             previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
             colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent
             value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will
-            cover the preview object's border completely with one pixel. Values in-between vill be alpha-blended with
+            cover the preview object's border completely with one pixel. Values in-between will be alpha-blended with
             the original preview image.
           </desc>
           <label>Defines the EdgeBlending for Previews in Percent.</label>
