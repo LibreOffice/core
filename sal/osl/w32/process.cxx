@@ -46,16 +46,12 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
-/***************************************************************************
- * Process.
- ***************************************************************************/
-
-oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
+oslProcessError SAL_CALL osl_terminateProcess(oslProcess pProcess)
 {
-    if (Process == nullptr)
+    if (pProcess == nullptr)
         return osl_Process_E_Unknown;
 
-    HANDLE hProcess = static_cast<oslProcessImpl*>(Process)->m_hProcess;
+    HANDLE hProcess = static_cast<oslProcessImpl*>(pProcess)->m_hProcess;
     DWORD dwPID = GetProcessId(hProcess);
 
     // cannot be System Process (0x00000000)
@@ -154,8 +150,6 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     return (TerminateProcess(hProcess, 0) == FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;
 }
 
-/***************************************************************************/
-
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
     oslProcessImpl* pProcImpl;
@@ -169,169 +163,160 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
         pProcImpl->m_IdProcess = Ident;
     }
     else
+    {
         pProcImpl = nullptr;
+    }
 
     return pProcImpl;
 }
 
-/***************************************************************************/
-
-void SAL_CALL osl_freeProcessHandle(oslProcess Process)
+void SAL_CALL osl_freeProcessHandle(oslProcess pProcess)
 {
-    if (Process != nullptr)
+    if (pProcess != nullptr)
     {
-        CloseHandle(static_cast<oslProcessImpl*>(Process)->m_hProcess);
+        CloseHandle(static_cast<oslProcessImpl*>(pProcess)->m_hProcess);
 
-        rtl_freeMemory(Process);
+        rtl_freeMemory(pProcess);
     }
 }
 
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
-                                   oslProcessInfo* pInfo)
+oslProcessError SAL_CALL osl_getProcessInfo(oslProcess pProcess,
+                                            oslProcessData aFields,
+                                            oslProcessInfo* pInfo)
 {
     HANDLE hProcess;
-    DWORD  IdProcess;
+    DWORD  dwIdProcess;
 
-    if (Process == nullptr)
+    if (pProcess == nullptr)
     {
         hProcess  = GetCurrentProcess();
-        IdProcess = GetCurrentProcessId();
+        dwIdProcess = GetCurrentProcessId();
     }
     else
     {
-        hProcess  = static_cast<oslProcessImpl*>(Process)->m_hProcess;
-        IdProcess = static_cast<oslProcessImpl*>(Process)->m_IdProcess;
+        hProcess  = static_cast<oslProcessImpl*>(pProcess)->m_hProcess;
+        dwIdProcess = static_cast<oslProcessImpl*>(pProcess)->m_IdProcess;
     }
 
-    if (! pInfo || (pInfo->Size != sizeof(oslProcessInfo)))
+    if (!pInfo || (pInfo->Size != sizeof(oslProcessInfo)))
         return osl_Process_E_Unknown;
 
     pInfo->Fields = 0;
 
-    if (Fields & osl_Process_IDENTIFIER)
+    if (aFields & osl_Process_IDENTIFIER)
     {
-        pInfo->Ident  = IdProcess;
+        pInfo->Ident  = dwIdProcess;
         pInfo->Fields |= osl_Process_IDENTIFIER;
     }
 
-    if (Fields & osl_Process_EXITCODE)
+    if (aFields & osl_Process_EXITCODE)
     {
         if (GetExitCodeProcess(hProcess, &(pInfo->Code)) && (pInfo->Code != STILL_ACTIVE))
             pInfo->Fields |= osl_Process_EXITCODE;
     }
 
-    if (Fields & osl_Process_HEAPUSAGE)
+    if (aFields & osl_Process_HEAPUSAGE)
     {
-        void*   lpAddress=nullptr;
-        MEMORY_BASIC_INFORMATION Info;
+        void* lpAddress = nullptr;
+        MEMORY_BASIC_INFORMATION aInfo;
 
         pInfo->HeapUsage = 0;
 
         do
         {
-            if (VirtualQueryEx(hProcess, lpAddress, &Info, sizeof(Info)) == 0)
+            if (VirtualQueryEx(hProcess, lpAddress, &aInfo, sizeof(aInfo)) == 0)
                 break;
 
-            if ((Info.State == MEM_COMMIT) && (Info.Type == MEM_PRIVATE))
-                pInfo->HeapUsage += Info.RegionSize;
+            if ((aInfo.State == MEM_COMMIT) && (aInfo.Type == MEM_PRIVATE))
+                pInfo->HeapUsage += aInfo.RegionSize;
 
-            lpAddress = static_cast<LPBYTE>(lpAddress) + Info.RegionSize;
+            lpAddress = static_cast<LPBYTE>(lpAddress) + aInfo.RegionSize;
         }
         while (reinterpret_cast<uintptr_t>(lpAddress) <= (uintptr_t)0x7FFFFFFF); // 2GB address space
 
         pInfo->Fields |= osl_Process_HEAPUSAGE;
     }
 
-    if (Fields & osl_Process_CPUTIMES)
+    if (aFields & osl_Process_CPUTIMES)
     {
-        FILETIME CreationTime, ExitTime, KernelTime, UserTime;
+        FILETIME aCreationTime, aExitTime, aKernelTime, aUserTime;
 
-        if (GetProcessTimes(hProcess, &CreationTime, &ExitTime,
-                                      &KernelTime, &UserTime))
+        if (GetProcessTimes(hProcess, &aCreationTime, &aExitTime,
+                                      &aKernelTime, &aUserTime))
         {
-            __int64 Value;
+            __int64 nValue;
 
-            Value = osl::detail::getFiletime(UserTime);
-            pInfo->UserTime.Seconds   = (unsigned long) (Value / 10000000L);
-            pInfo->UserTime.Nanosec   = (unsigned long)((Value % 10000000L) * 100);
+            nValue = osl::detail::getFiletime(aUserTime);
+            pInfo->UserTime.Seconds   = (unsigned long) (nValue / 10000000L);
+            pInfo->UserTime.Nanosec   = (unsigned long)((nValue % 10000000L) * 100);
 
-            Value = osl::detail::getFiletime(KernelTime);
-            pInfo->SystemTime.Seconds = (unsigned long) (Value / 10000000L);
-            pInfo->SystemTime.Nanosec = (unsigned long)((Value % 10000000L) * 100);
+            nValue = osl::detail::getFiletime(aKernelTime);
+            pInfo->SystemTime.Seconds = (unsigned long) (nValue / 10000000L);
+            pInfo->SystemTime.Nanosec = (unsigned long)((nValue % 10000000L) * 100);
 
             pInfo->Fields |= osl_Process_CPUTIMES;
         }
     }
 
-    return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
+    return (pInfo->Fields == aFields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
+oslProcessError SAL_CALL osl_joinProcess(oslProcess pProcess)
 {
-    return osl_joinProcessWithTimeout(Process, nullptr);
+    return osl_joinProcessWithTimeout(pProcess, nullptr);
 }
 
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
+oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess pProcess, const TimeValue* pTimeout)
 {
-    DWORD           timeout   = INFINITE;
-    oslProcessError osl_error = osl_Process_E_None;
-    DWORD           ret;
+    DWORD           dwTimeout   = INFINITE;
+    oslProcessError eProcessError = osl_Process_E_None;
+    DWORD           dwRet;
 
-    if (nullptr == Process)
+    if (!pProcess)
         return osl_Process_E_Unknown;
 
     if (pTimeout)
-        timeout = pTimeout->Seconds * 1000 + pTimeout->Nanosec / 1000000L;
+        dwTimeout = pTimeout->Seconds * 1000 + pTimeout->Nanosec / 1000000L;
 
-    ret = WaitForSingleObject(static_cast<oslProcessImpl*>(Process)->m_hProcess, timeout);
+    dwRet = WaitForSingleObject(static_cast<oslProcessImpl*>(aProcess)->m_hProcess, dwTimeout);
 
-    if (WAIT_FAILED == ret)
-        osl_error = osl_Process_E_Unknown;
-    else if (WAIT_TIMEOUT == ret)
-        osl_error = osl_Process_E_TimedOut;
+    if (dwRet == WAIT_FAILED)
+        eProcessError = osl_Process_E_Unknown;
+    else if (dwRet == WAIT_TIMEOUT)
+        eProcessError = osl_Process_E_TimedOut;
 
-    return osl_error;
+    return eProcessError;
 }
 
 namespace {
 
 oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
-    oslProcessError result = osl_Process_E_NotFound;
+    oslProcessError eProcessError = osl_Process_E_NotFound;
 
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-    DWORD buflen = 0;
+    DWORD dwBuflen = 0;
 
-    if ((buflen = GetModuleFileNameW (nullptr, ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
+    if ((dwBuflen = GetModuleFileNameW (nullptr, ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
     {
-        rtl_uString * pAbsPath = nullptr;
-        rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, buflen);
+        rtl_uString *pAbsPath = nullptr;
+        rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, dwBuflen);
         if (pAbsPath)
         {
             /* Convert from path to url. */
             if (osl_getFileURLFromSystemPath (pAbsPath, ppFileURL) == osl_File_E_None)
             {
                 /* Success. */
-                result = osl_Process_E_None;
+                eProcessError = osl_Process_E_None;
             }
             rtl_uString_release (pAbsPath);
         }
     }
 
-    return result;
+    return eProcessError;
 }
 
 }
-
-/***************************************************************************
- * Command Line Arguments.
- ***************************************************************************/
 
 struct CommandArgs_Impl
 {
@@ -398,8 +383,6 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 #pragma warning( pop )
 #endif
 
-/***************************************************************************/
-
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
 {
     osl_acquireMutex (*osl_getGlobalMutex());
@@ -415,11 +398,9 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
     return osl_Process_E_None;
 }
 
-/***************************************************************************/
-
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
-    sal_uInt32 result = 0;
+    sal_uInt32 nResult = 0;
 
     osl_acquireMutex (*osl_getGlobalMutex());
     SAL_INFO_IF(
@@ -428,30 +409,28 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     if (g_command_args.m_nCount > 0)
     {
         /* We're not counting argv[0] here. */
-        result = g_command_args.m_nCount - 1;
+        nResult = g_command_args.m_nCount - 1;
     }
     osl_releaseMutex (*osl_getGlobalMutex());
 
-    return result;
+    return nResult;
 }
 
-/***************************************************************************/
-
-oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
+oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **ppustrCommandArg)
 {
-    oslProcessError result = osl_Process_E_NotFound;
+    oslProcessError eProcessError = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
     assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         /* We're not counting argv[0] here. */
-        rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
-        result = osl_Process_E_None;
+        rtl_uString_assign (ppustrCommandArg, g_command_args.m_ppArgs[nArg + 1]);
+        eProcessError = osl_Process_E_None;
     }
     osl_releaseMutex (*osl_getGlobalMutex());
 
-    return result;
+    return eProcessError;
 }
 
 /***************************************************************************/
@@ -478,48 +457,48 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
  ***************************************************************************/
 #define ENV_BUFFER_SIZE (32*1024-1)
 
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
+oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *pustrVar, rtl_uString **ppustrValue)
 {
     WCHAR buff[ENV_BUFFER_SIZE];
 
-    if (GetEnvironmentVariableW(reinterpret_cast<LPCWSTR>(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
+    if (GetEnvironmentVariableW(reinterpret_cast<LPCWSTR>(pustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
     {
-        rtl_uString_newFromStr(ustrValue, reinterpret_cast<const sal_Unicode*>(buff));
+        rtl_uString_newFromStr(ppustrValue, reinterpret_cast<const sal_Unicode*>(buff));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
+oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *pustrVar, rtl_uString *ppustrValue)
 {
     // set Windows environment variable
-    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
-    LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(pustrVar->buffer);
+    LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ppustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
     {
-        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1];
-        wcscpy(buffer, lpName);
-        wcscat(buffer, L"=");
-        wcscat(buffer, lpValue);
-        _wputenv(buffer);
-        delete[] buffer;
+        wchar_t *pBuffer = new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1];
+        wcscpy(pBuffer, lpName);
+        wcscat(pBuffer, L"=");
+        wcscat(pBuffer, lpValue);
+        _wputenv(pBuffer);
+        delete[] pBuffer;
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
 }
 
-oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
+oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *pustrVar)
 {
     // delete the variable from the current process environment
     // by setting SetEnvironmentVariable's second parameter to NULL
-    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(pustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, nullptr))
     {
-        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + 1];
-        wcscpy(buffer, lpName);
-        wcscat(buffer, L"=");
-        _wputenv(buffer);
-        delete[] buffer;
+        wchar_t *pBuffer = new wchar_t[wcslen(lpName) + 1 + 1];
+        wcscpy(pBuffer, lpName);
+        wcscat(pBuffer, L"=");
+        _wputenv(pBuffer);
+        delete[] pBuffer;
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -540,15 +519,15 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
     {
-        oslFileError    eError;
-        rtl_uString     *ustrTemp = nullptr;
+        oslFileError eError;
+        rtl_uString *pustrTemp = nullptr;
 
-        rtl_uString_newFromStr_WithLength( &ustrTemp, aBuffer, dwLen );
-        eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
+        rtl_uString_newFromStr_WithLength( &pustrTemp, aBuffer, dwLen );
+        eError = osl_getFileURLFromSystemPath( pustrTemp, pustrWorkingDir );
 
-        rtl_uString_release( ustrTemp );
+        rtl_uString_release( pustrTemp );
 
-        if ( osl_File_E_None != eError )
+        if ( eError != osl_File_E_None )
             return osl_Process_E_Unknown;
         else
             return osl_Process_E_None;
@@ -570,7 +549,7 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     osl_acquireMutex( *osl_getGlobalMutex() );
 
     /* determine the users default locale */
-    if( nullptr == g_theProcessLocale )
+    if(!g_theProcessLocale)
         imp_getProcessLocale( &g_theProcessLocale );
 
     /* or return the cached value */
@@ -587,7 +566,7 @@ oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
     osl_acquireMutex( *osl_getGlobalMutex() );
 
     /* check if locale is supported */
-    if( RTL_TEXTENCODING_DONTKNOW == osl_getTextEncodingFromLocale( pLocale ) )
+    if( osl_getTextEncodingFromLocale( pLocale ) == RTL_TEXTENCODING_DONTKNOW )
         return osl_Process_E_Unknown;
 
     /* just remember the locale here */
