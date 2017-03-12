@@ -37,7 +37,6 @@
 extern "C" {
 #endif
 
-
 typedef sal_Int32 oslProcessOption;
 #define     osl_Process_WAIT       0x0001    /* wait for completion */
 #define     osl_Process_SEARCHPATH 0x0002    /* search path for executable */
@@ -140,17 +139,10 @@ typedef void* oslProcess;
     [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
-    @return
-    <dl>
-    <dt>osl_Process_E_None</dt>
-    <dd>on success</dd>
-    <dt>osl_Process_E_NotFound</dt>
-    <dd>if the specified executable could not be found</dd>
-    <dt>osl_Process_E_InvalidError</dt>
-    <dd>if invalid parameters will be detected</dd>
-    <dt>osl_Process_E_Unknown</dt>
-    <dd>if arbitrary other errors occur</dd>
-    </dl>
+    @returns
+    osl_Process_E_None on success osl_Process_E_NotFound if the specified executable could not be found.
+    osl_Process_E_InvalidError if invalid parameters will be detected.
+    osl_Process_E_Unknown if arbitrary other errors occur.
 
     @see oslProcessOption
     @see osl_executeProcess_WithRedirectedIO
@@ -226,16 +218,10 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
 
     @return
-    <dl>
-    <dt>osl_Process_E_None</dt>
-    <dd>on success</dd>
-    <dt>osl_Process_E_NotFound</dt>
-    <dd>if the specified executable could not be found</dd>
-    <dt>osl_Process_E_InvalidError</dt>
-    <dd>if invalid parameters will be detected</dd>
-    <dt>osl_Process_E_Unknown</dt>
-    <dd>if arbitrary other errors occur</dd>
-    </dl>
+    osl_Process_E_None on success
+    osl_Process_E_NotFound if the specified executable could not be found
+    osl_Process_E_InvalidError if invalid parameters will be detected
+    osl_Process_E_Unknown if arbitrary other errors occur
 
     @see oslProcessOption
     @see osl_executeProcess
@@ -326,7 +312,9 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
                         of the oslProcessInfo structure.
                         on success the Field member holds the (or'ed)
                         retrieved valid information fields.
-    @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
+    @returns
+    osl_Process_E_None on success.
+    osl_Process_E_Unknown on failure.
  */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
         oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo);
