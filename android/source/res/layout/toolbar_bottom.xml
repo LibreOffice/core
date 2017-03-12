@@ -113,6 +113,34 @@
                     android:src="@drawable/ic_format_align_justify"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageButton
+                    android:id="@+id/button_bullet_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/image_button_background"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp"
+                    android:src="@drawable/ic_format_bullet_list"/>
+
+                <ImageButton
+                    android:id="@+id/button_numbered_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/image_button_background"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp"
+                    android:src="@drawable/ic_format_numbered_list"/>
+
+            </LinearLayout>
+
             <Spinner
                 android:id="@+id/font_name_spinner"
                 android:layout_width="match_parent"

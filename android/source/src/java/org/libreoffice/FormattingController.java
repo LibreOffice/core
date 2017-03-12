@@ -23,6 +23,8 @@ import org.libreoffice.kit.Document;
         mContext.findViewById(R.id.button_align_center).setOnClickListener(this);
         mContext.findViewById(R.id.button_align_right).setOnClickListener(this);
         mContext.findViewById(R.id.button_align_justify).setOnClickListener(this);
+        mContext.findViewById(R.id.button_numbered_list).setOnClickListener(this);
+        mContext.findViewById(R.id.button_bullet_list).setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +62,12 @@ import org.libreoffice.kit.Document;
             case R.id.button_align_justify:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:JustifyPara"));
                 break;
+            case R.id.button_bullet_list:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultBullet"));
+                break;
+            case R.id.button_numbered_list:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultNumbering"));
+                break;
         }
     }
 
@@ -91,6 +99,12 @@ import org.libreoffice.kit.Document;
                         break;
                     case Document.ALIGN_JUSTIFY:
                         buttonId = R.id.button_align_justify;
+                        break;
+                    case Document.BULLET_LIST:
+                        buttonId = R.id.button_bullet_list;
+                        break;
+                    case Document.NUMBERED_LIST:
+                        buttonId = R.id.button_numbered_list;
                         break;
                     default:
                         Log.e(LOGTAG, "Uncaptured state change type: " + type);
