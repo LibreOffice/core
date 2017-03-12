@@ -92,20 +92,21 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         sal_uInt16 nItemCount = pToolBox->GetItemCount();
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
-            OUString sItemCommand = pToolBox->GetItemCommand(i);
+            sal_uInt16 id = pToolBox->GetItemId(i);
+            OUString sItemCommand = pToolBox->GetItemCommand(id);
             if ( sItemCommand == COMMAND_FINDTEXT )
             {
-                vcl::Window* pItemWin = pToolBox->GetItemWindow(i);
+                vcl::Window* pItemWin = pToolBox->GetItemWindow(id);
                 if (pItemWin)
                     sFindText = pItemWin->GetText();
             } else if ( sItemCommand == COMMAND_MATCHCASE )
             {
-                CheckBox* pItemWin = static_cast<CheckBox*>( pToolBox->GetItemWindow(i) );
+                CheckBox* pItemWin = static_cast<CheckBox*>( pToolBox->GetItemWindow(id) );
                 if (pItemWin)
                     aMatchCase = pItemWin->IsChecked();
             } else if ( sItemCommand == COMMAND_SEARCHFORMATTED )
             {
-                CheckBox* pItemWin = static_cast<CheckBox*>( pToolBox->GetItemWindow(i) );
+                CheckBox* pItemWin = static_cast<CheckBox*>( pToolBox->GetItemWindow(id) );
                 if (pItemWin)
                     bSearchFormatted = pItemWin->IsChecked();
             }
@@ -529,10 +530,11 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             OUString sItemCommand = pToolBox->GetItemCommand(i);
+            sal_uInt16 id = pToolBox->GetItemId(i);
             if ( sItemCommand == COMMAND_DOWNSEARCH )
-                m_nDownSearchId = i;
+                m_nDownSearchId = id;
             else if ( sItemCommand == COMMAND_UPSEARCH )
-                m_nUpSearchId = i;
+                m_nUpSearchId = id;
         }
     }
 
@@ -1436,10 +1438,11 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             sal_uInt16 nItemCount = pToolBox->GetItemCount();
             for ( sal_uInt16 i=0; i<nItemCount; ++i )
             {
-                OUString sItemCommand = pToolBox->GetItemCommand(i);
+                sal_uInt16 id = pToolBox->GetItemId(i);
+                OUString sItemCommand = pToolBox->GetItemCommand(id);
                 if ( sItemCommand == COMMAND_FINDTEXT )
                 {
-                    vcl::Window* pItemWin = pToolBox->GetItemWindow( i );
+                    vcl::Window* pItemWin = pToolBox->GetItemWindow( id );
                     if ( pItemWin )
                     {
                         SolarMutexGuard aSolarMutexGuard;
