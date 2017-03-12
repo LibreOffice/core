@@ -106,6 +106,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private ActionBarDrawerToggle drawerToggle;
     private RecyclerView fileRecyclerView;
     private RecyclerView recentRecyclerView;
+    private RecyclerView newDocumentRecyclerView;
 
     private boolean canQuit = false;
 
@@ -141,6 +142,20 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        newDocumentRecyclerView = (RecyclerView) findViewById(R.id.new_documents);
+        final ArrayList<IFile> newFiles = new ArrayList<IFile>();
+
+        try{
+            newFiles.add(documentProvider.createFromUri((new File("/assets/writer.odt").toURI())));
+            newFiles.add(documentProvider.createFromUri((new File("/assets/drawing.odg").toURI())));
+            newFiles.add(documentProvider.createFromUri((new File("/assets/calc.ods").toURI())));
+            newFiles.add(documentProvider.createFromUri((new File("/assets/impress.odp").toURI())));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        newDocumentRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        newDocumentRecyclerView.setAdapter(new CreateNewDocumentAdapter(this,newFiles,documentProvider));
 
         recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
 
