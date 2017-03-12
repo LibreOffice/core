@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0b8e3978",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-12T07:03:25Z",
+      "side": 1,
+      "message": "I\u0027m sorry I seem to confuse you. The DuplicateHandle documentation says that desired access must go to the dwDesiredAccess parameter, while I asked you to put it here (to dwOptions, which should be zero in this case, because we don\u0027t want neither same access, nor close original handle).\n\nAlso, I don\u0027t think we need PROCESS_DUP_HANDLE right, because we don\u0027t duplicate the resulting handle anywhere. It\u0027s original handle that must have this right, so that function succeeds.",
+      "range": {
+        "startLine": 81,
+        "startChar": 36,
+        "endLine": 81,
+        "endChar": 49
+      },
+      "revId": "16ef607b3d70e1d598a5d1eafbc91e4fcad65f4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2be93d1b",
+        "filename": "sal/osl/w32/process.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-03-12T07:03:25Z",
+      "side": 1,
+      "message": "If DuplicateHandle fails, hProcess still has previous value (which is non-null handle taken from static_cast\u003coslProcessImpl*\u003e(Process)-\u003em_hProcess), and will later be closed - but I\u0027m not sure that\u0027s what we need: original code didn\u0027t try to close original handle.\n\nPossibly need a flag if we need to release handle?",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 31
+      },
+      "revId": "16ef607b3d70e1d598a5d1eafbc91e4fcad65f4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
