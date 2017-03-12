@@ -238,7 +238,7 @@ struct PptSlidePersistAtom
     sal_uInt32          nFlags;
     sal_uInt32          nNumberTexts;
     sal_uInt32          nSlideId;
-    sal_uInt32          nReserved;                  // we will use nReserved temporarly to set the offset to SSSlideInfoAtom ( if possible )
+    sal_uInt32          nReserved;                  // we will use nReserved temporarily to set the offset to SSSlideInfoAtom (if possible)
 
 public:
                         PptSlidePersistAtom() { Clear(); }
@@ -314,7 +314,7 @@ struct PptOEPlaceholderAtom
 {
     sal_uInt32          nPlacementId;
     PptPlaceholder      nPlaceholderId;
-    sal_uInt8           nPlaceholderSize; // 0=Full size, 1=Half size, 2=Quarter of Slide
+    sal_uInt8           nPlaceholderSize; // 0=Full size, 1=Half size, 2=Quarter of slide
 
 public:
                         PptOEPlaceholderAtom() { Clear(); }
@@ -923,13 +923,13 @@ struct ImplPPTCharPropSet
 
 struct PPTCharPropSet
 {
-    //when the bullet text has more than two color,next the text following with bullet has been set hyperlink.
-    //now,the bullet color should be set original hyperlink text's color
-    //so  "mbHardHylinkOrigColor" hold the original hyperlink text's color.
+    // when the bullet text has more than two color,next the text following with bullet has been set hyperlink.
+    // now,the bullet color should be set original hyperlink text's color
+    // so  "mbHardHylinkOrigColor" hold the original hyperlink text's color.
     sal_uInt32  mnHylinkOrigColor;
-    //the bullet text weather has a hyperlink.
+    // the bullet text weather has a hyperlink.
     bool        mbIsHyperlink;
-    //the hyperlink text weather has a custom color.
+    // the hyperlink text weather has a custom color.
     bool        mbHardHylinkOrigColor;
 
     sal_uInt32          mnOriginalTextPos;
