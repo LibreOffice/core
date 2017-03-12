@@ -2212,7 +2212,8 @@ OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
         {
-            for( i++; i < nAnz; i++ )
+            while ( ( ++i < nAnz ) && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_STRING );
+            for( ; i < nAnz; i++ )
             {
                 if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT )
                     aDenominatorString.append( rInfo.sStrArray[i] );
