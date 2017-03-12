@@ -34,6 +34,7 @@
     <string name="menu_preferences">Preferences</string>
     <string name="file_icon_desc">fileicon</string>
     <string name="title_recents">Recent files</string>
+    <string name="title_new_document">Create a new document</string>
     <string name="title_browser">All files</string>
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
@@ -117,6 +118,11 @@
     <string name="save_document">SAVE</string>
     <string name="cancel_save_document">CANCEL</string>
     <string name="no_save_document">NO</string>
+
+    <!-- New document creation strings -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_filename">Enter a file name:</string>
 
 
 </resources>

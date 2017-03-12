@@ -48,6 +48,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:id="@+id/new_document"
+                    android:text="@string/title_new_document"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:textStyle="bold"/>
+
+                <!--Recent files-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/new_documents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:id="@+id/header_recents"
                     android:text="@string/title_recents"
                     android:gravity="center_vertical"
