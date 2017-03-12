@@ -114,7 +114,6 @@ private:
     long                mnActivateCount;
     long                mnImagesRotationAngle;
     sal_uInt16          mnLastFocusItemId;
-    sal_uInt16          mnFocusPos;
     sal_uInt16          mnOutStyle;
     sal_uInt16          mnHighItemId;
     sal_uInt16          mnCurItemId;

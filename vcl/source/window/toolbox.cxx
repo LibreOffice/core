@@ -1361,7 +1361,6 @@ void ToolBox::ImplInitToolBoxData()
     mnCurItemId       = 0;
     mnDownItemId      = 0;
     mnCurPos          = TOOLBOX_ITEM_NOTFOUND;
-    mnFocusPos        = TOOLBOX_ITEM_NOTFOUND;    // current position during keyboard access
     mnLines           = 1;
     mnCurLine         = 1;
     mnCurLines        = 1;
