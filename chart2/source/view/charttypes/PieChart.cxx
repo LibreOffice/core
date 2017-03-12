@@ -394,7 +394,7 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     const std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
-    if( rSeriesList.size()<=0 )
+    if(!rSeriesList.size())
         return m_fMaxOffset;
 
     VDataSeries* pSeries = rSeriesList[0];
@@ -552,7 +552,7 @@ void PieChart::createShapes()
         ShapeParam aParam;
 
         std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-        if( pSeriesList->size()<=0 )//there should be only one series in each x slot
+        if(!pSeriesList->size())//there should be only one series in each x slot
             continue;
         VDataSeries* pSeries = (*pSeriesList)[0];
         if(!pSeries)
