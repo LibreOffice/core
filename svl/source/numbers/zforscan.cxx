@@ -1670,7 +1670,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     else if ( sStrArray[i][0] == ' ' )
                         nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
-                    else if ( bFrac )
+                    else if ( bFrac && ( nCounter > 0 ) )
                         bDenomin = true; // following elements are no more part of denominator
                 }
                 else if (nTypeArray[i] == NF_KEY_THAI_T)
@@ -1714,7 +1714,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
                 else
                 {
-                    if ( bFrac )
+                    if ( bFrac && ( nCounter > 0 ) )
                         bDenomin = true;    // next content should be treated as outside denominator
                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 }
@@ -1834,7 +1834,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             else
                             {
                                 nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                                if ( bFrac )
+                                if ( bFrac && (nCounter > 0) )
                                     bDenomin = true; // end of denominator
                             }
                         }
@@ -2002,7 +2002,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 nCntPre = nCounter;
                                 nCounter = 0;
                             }
-                            if ( bFrac )
+                            if ( bFrac && (nCounter > 0) )
                                 bDenomin = true; // next content is not part of denominator
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + sStrArray[i].getLength();
@@ -2010,7 +2010,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         else
                         {
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
-                            if ( bFrac )
+                            if ( bFrac && (nCounter > 0) )
                                 bDenomin = true; // next content is not part of denominator
                             nPos = nPos + rStr.getLength();
                             i++;
