@@ -54,10 +54,10 @@ SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
 SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream )
     : rClassMgr( rMgr )
     , pStm( pStream )
-    , aPUIdx( 1 )
+    , aPUIdx( UniqueIndex<SvPersistBase>::Index(1) )
     , nStartIdx( 1 )
 {
-    DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
+    DBG_ASSERT( nStartIdx != Index(0), "zero index not allowed" );
     m_isWritable = true;
     if( pStm )
     {
@@ -117,7 +117,7 @@ SvPersistStream::Index SvPersistStream::GetIndex( SvPersistBase * pObj ) const
     PersistBaseMap::const_iterator it = aPTable.find( pObj );
     if( it == aPTable.end() )
     {
-        return 0;
+        return Index(0);
     }
     return it->second;
 }
@@ -357,18 +357,18 @@ static void ReadId
     nClassId = 0;
     rStm.ReadUChar( nHdr );
     if( nHdr & P_ID_0 )
-        nId = 0;
+        nId = SvPersistStream::Index(0);
     else
     {
         if( (nHdr & P_VER_MASK) == 0 )
         {
             if( (nHdr & P_DBGUTIL) || !(nHdr & P_OBJ) )
-                nId = SvPersistStream::ReadCompressed( rStm );
+                nId = SvPersistStream::Index(SvPersistStream::ReadCompressed( rStm ));
             else
-                nId = 0;
+                nId = SvPersistStream::Index(0);
         }
         else if( nHdr & P_ID )
-            nId = SvPersistStream::ReadCompressed( rStm );
+            nId = SvPersistStream::Index(SvPersistStream::ReadCompressed( rStm ));
 
         if( (nHdr & P_DBGUTIL) || (nHdr & P_OBJ) )
             nClassId = (sal_uInt16)SvPersistStream::ReadCompressed( rStm );
@@ -429,7 +429,7 @@ void SvPersistStream::ReadObj
 )
 {
     sal_uInt8   nHdr;
-    Index       nId = 0;
+    Index       nId(0);
     sal_uInt16  nClassId;
 
     rpObj = nullptr; // specification: 0 in case of error

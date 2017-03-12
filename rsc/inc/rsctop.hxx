@@ -44,7 +44,7 @@ class RscTop : public RefNode
 {
     RscTop *        pSuperClass;
     RSCINST         aDfltInst;
-    sal_uInt32          nTypId;
+    RESOURCE_TYPE   nTypId;
     RscTop *        pRefClass;
 
 protected:
@@ -59,7 +59,7 @@ public:
             RscTop* GetSuperClass() const
                     { return pSuperClass; }
                     // returns the type identifier
-            sal_uInt32  GetTypId() const
+            RESOURCE_TYPE GetTypId() const
                     { return nTypId; };
                     // returns the super class
             bool    InHierarchy( RscTop * pClass );

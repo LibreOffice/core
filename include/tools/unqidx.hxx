@@ -36,7 +36,7 @@ private:
     Index nUniqIndex;
 
 public:
-    UniqueIndexImpl( Index nStartIndex = 0 )
+    UniqueIndexImpl( Index nStartIndex = Index(0) )
         : maMap(), nUniqIndex(nStartIndex) {}
 
     Index Insert( void* p );
@@ -57,7 +57,7 @@ public:
     using UniqueIndexImpl::Index;
     using UniqueIndexImpl::IndexNotFound;
 
-    UniqueIndex<T>( Index _nStartIndex = 0 ) : UniqueIndexImpl(_nStartIndex) {}
+    UniqueIndex<T>( Index _nStartIndex = Index(0) ) : UniqueIndexImpl(_nStartIndex) {}
 
     Index Insert(T* p) { return UniqueIndexImpl::Insert(p); }
     T*    Get(Index idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }

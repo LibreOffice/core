@@ -467,7 +467,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rSh.SetFrameFormat( pFormat );
         }
 
-        RESOURCE_TYPE nResId = 0;
+        sal_uInt32 nResId(0);
         switch( nError )
         {
             case GRFILTER_OPENERROR:

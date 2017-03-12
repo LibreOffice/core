@@ -40,7 +40,7 @@ template <typename UNDERLYING_TYPE, typename PHANTOM_TYPE>
 struct strong_int
 {
 public:
-    strong_int(UNDERLYING_TYPE value) : m_value(value) {}
+    explicit strong_int(UNDERLYING_TYPE value) : m_value(value) {}
     strong_int() : m_value(0) {}
 
     explicit operator UNDERLYING_TYPE() const { return m_value; }
