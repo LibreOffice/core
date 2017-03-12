@@ -85,7 +85,7 @@ public:
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
-    // resolve some ambigous methods
+    // resolve some ambiguous methods
     virtual css::uno::Reference<css::awt::XWindowPeer> SAL_CALL getPeer() override
         { return UnoDialogControl_Base::ControlContainerBase::getPeer(); }
     virtual void SAL_CALL addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& p1) override
@@ -181,7 +181,7 @@ public:
     // XNamedContainer
     void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
 
-    // Override the method of parent Class
+    // Override the method of parent class
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
 protected:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
@@ -254,7 +254,7 @@ public:
     virtual OUString SAL_CALL getServiceName() override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-    // Override the method of parent Class
+    // Override the method of parent class
     virtual sal_Bool SAL_CALL getGroupControl(  ) override;
 protected:
     virtual css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
