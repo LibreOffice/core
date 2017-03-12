@@ -131,9 +131,10 @@ void SAL_CALL Mapping_uno2cli(
             if(cliI)
             {
                 ptr= sri::GCHandle::ToIntPtr(sri::GCHandle::Alloc(cliI))
-#ifdef _WIN32
+#ifdef _WIN64
+                    .ToInt64();
+#else /* defined(_WIN32) */
                     .ToInt32();
-#else /* defined(_WIN64) */                 .ToInt64();
 #endif
             }
             (*ppOut)= reinterpret_cast<void*>(ptr);
