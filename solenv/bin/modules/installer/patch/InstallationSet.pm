@@ -216,7 +216,7 @@ sub UnpackCab ($$$)
         ++$count;
     }
 
-    # Cleanup.  Remove the temporary directory.  It should be empty by now.
+    # Cleanup. Remove the temporary directory. It should be empty by now.
     rmdir($temporary_destination_path);
 }
 
@@ -227,9 +227,9 @@ sub UnpackCab ($$$)
 
     Unpack the flat file structure of the $cab_filename to $destination_path.
 
-    In order to detect and handle an incomplete (arborted) previous
-    extraction, the cab file is unpacked to a temprorary directory
-    that after successful extraction is renamed to $destination_path.
+    In order to detect and handle an incomplete (aborted) previous
+    extraction, the cab file is unpacked to a temporary directory
+    that, after successful extraction, is renamed to $destination_path.
 
 =cut
 sub UnpackCabFlat ($$$)
@@ -237,7 +237,7 @@ sub UnpackCabFlat ($$$)
     my ($cab_filename, $destination_path, $file_table) = @_;
 
     # Unpack the .cab file to a temporary path (note that
-    # $destination_path may alreay bee a temporary path). Using a
+    # $destination_path may already be a temporary path). Using a
     # second one prevents the lengthy flat unpacking to be repeated
     # when another step fails.
 
@@ -388,7 +388,7 @@ sub Download ($$$)
     my $digest = undef;
     if ( ! defined $checksum_value)
     {
-        # No checksum available.  Skip test.
+        # No checksum available. Skip test.
     }
     elsif ($checksum_type eq "sha256")
     {
@@ -592,7 +592,7 @@ sub ProvideUnpackedExe ($$$$$)
 
     if ($exe_is_unpacked)
     {
-        # Yes, exe has already been unpacked.  There is nothing more to do.
+        # Yes, exe has already been unpacked. There is nothing more to do.
         $installer::logger::Info->printf("downloadable installation set has already been unpacked to\n");
         $installer::logger::Info->printf("    %s\n", $unpacked_exe_path);
         return 1;
