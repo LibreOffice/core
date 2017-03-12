@@ -46,10 +46,6 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
-/***************************************************************************
- * Process.
- ***************************************************************************/
-
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess aProcess)
 {
     if (aProcess == nullptr)
@@ -151,8 +147,6 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess aProcess)
     return (TerminateProcess(hProcess, 0) == FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;
 }
 
-/***************************************************************************/
-
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
     oslProcessImpl* pProcImpl;
@@ -173,8 +167,6 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     return pProcImpl;
 }
 
-/***************************************************************************/
-
 void SAL_CALL osl_freeProcessHandle(oslProcess aProcess)
 {
     if (aProcess != nullptr)
@@ -184,8 +176,6 @@ void SAL_CALL osl_freeProcessHandle(oslProcess aProcess)
         rtl_freeMemory(aProcess);
     }
 }
-
-/***************************************************************************/
 
 oslProcessError SAL_CALL osl_getProcessInfo(oslProcess aProcess,
                                             oslProcessData aFields,
@@ -268,14 +258,10 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess aProcess,
     return (pInfo->Fields == aFields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
-/***************************************************************************/
-
 oslProcessError SAL_CALL osl_joinProcess(oslProcess aProcess)
 {
     return osl_joinProcessWithTimeout(aProcess, nullptr);
 }
-
-/***************************************************************************/
 
 oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess aProcess, const TimeValue* pTimeout)
 {
@@ -328,10 +314,6 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 }
 
 }
-
-/***************************************************************************
- * Command Line Arguments.
- ***************************************************************************/
 
 struct CommandArgs_Impl
 {
@@ -398,8 +380,6 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 #pragma warning( pop )
 #endif
 
-/***************************************************************************/
-
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
 {
     osl_acquireMutex (*osl_getGlobalMutex());
@@ -414,8 +394,6 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
     osl_releaseMutex (*osl_getGlobalMutex());
     return osl_Process_E_None;
 }
-
-/***************************************************************************/
 
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
@@ -435,8 +413,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     return nResult;
 }
 
-/***************************************************************************/
-
 oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **ppustrCommandArg)
 {
     oslProcessError eProcessError = osl_Process_E_NotFound;
@@ -453,8 +429,6 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **ppust
 
     return eProcessError;
 }
-
-/***************************************************************************/
 
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
@@ -473,9 +447,6 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     osl_releaseMutex (*osl_getGlobalMutex());
 }
 
-/***************************************************************************
- * Environment
- ***************************************************************************/
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *pustrVar, rtl_uString **ppustrValue)
@@ -525,10 +496,6 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *pustrVar)
     return osl_Process_E_Unknown;
 }
 
-/***************************************************************************
- * Current Working Directory.
- ***************************************************************************/
-
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
@@ -557,13 +524,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
         return osl_Process_E_Unknown;
 }
 
-/***************************************************************************
- * Process Locale.
- ***************************************************************************/
-
 static rtl_Locale * g_theProcessLocale = nullptr;
-
-/***************************************************************************/
 
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -579,8 +540,6 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     osl_releaseMutex( *osl_getGlobalMutex() );
     return osl_Process_E_None;
 }
-
-/***************************************************************************/
 
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
