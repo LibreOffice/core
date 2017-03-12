@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ab728d7a",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-03-12T11:45:42Z",
+      "side": 1,
+      "message": "is it a good idea to reference \"testVS2013Ide\", that will cause problems when that class is renamed. I would assume using self. would be better",
+      "revId": "d4c95e6deb2fdd23da829f0efb1c36c81446077d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
