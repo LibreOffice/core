@@ -138,7 +138,7 @@ OUString SAL_CALL CWinClipbImpl::getName(  )
 
 sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  )
 {
-    return ( Delayed | Persistant );
+    return ( Delayed | Persistent );
 }
 
 void SAL_CALL CWinClipbImpl::flushClipboard( )

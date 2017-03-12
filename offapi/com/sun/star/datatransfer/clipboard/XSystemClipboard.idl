@@ -46,7 +46,7 @@ published interface XSystemClipboard
     /** Provides the ability to render the complete clipboard content. This
         interface is only available if the method
         com::sun::star::datatransfer::clipboard::XClipboardEx::getRenderingCapabilities()
-        returns Persistant
+        returns Persistent
     */
     [optional] interface XFlushableClipboard;
 
