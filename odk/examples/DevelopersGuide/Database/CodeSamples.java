@@ -112,7 +112,7 @@ public class CodeSamples
         System.exit(0);
     }
 
-    // check if the connection is not null aand dispose it later on.
+    // check if the connection is not null and dispose it later on.
     public static void checkConnection(XConnection con)
     {
         if(con != null)

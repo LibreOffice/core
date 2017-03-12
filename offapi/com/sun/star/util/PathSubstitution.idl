@@ -67,7 +67,7 @@ module com {  module sun {  module star {  module  util {
         The only exceptions are: \$(username), \$(langid) and \$(vlang).
         Therefore the service implementation should only substitute variables which
         are located at the start of a provided path string or are part of a multi-path.
-        This special service is not designed to be a text substiution but shall
+        This special service is not designed to be a text substitution but shall
         provide (a) valid substituted path(s).
     </p>
 

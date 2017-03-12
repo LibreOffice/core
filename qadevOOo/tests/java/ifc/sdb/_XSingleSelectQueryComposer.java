@@ -304,7 +304,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     }
 
     /**
-    * The group which was setted by <code>setGroup</code> must be returned
+    * The group which was set by <code>setGroup</code> must be returned
     * while calling from object relation <code>XQueryAna</code>
     * method <code>getGroup</code>
     */
@@ -322,7 +322,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
 
     /**
-    * The clause which was setted by <code>setHavingClause</code> must be returned
+    * The clause which was set by <code>setHavingClause</code> must be returned
     * while calling from object relation <code>XQueryAna</code>
     * method <code>getHavingClause</code>
     */
@@ -502,7 +502,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * Method <code>getOrder</code> from object relation <code>xQueryAna</code>
-    * checks the order which was setted while calling <code>setOrder</code>
+    * checks the order which was set while calling <code>setOrder</code>
     */
     public void _setOrder() {
         try{

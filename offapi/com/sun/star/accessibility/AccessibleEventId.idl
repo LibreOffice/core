@@ -374,7 +374,7 @@ constants AccessibleEventId
     const short LISTBOX_ENTRY_COLLAPSED = 33;
 
     /** Constant used to determine when the active descendant of a component
-        has been removed but unlike ACTIVE_DECENDANT_CHANGED the decendant
+        has been removed but unlike ACTIVE_DESCENDANT_CHANGED the descendant
         that is to be removed does not have focus. The active descendant
         is used in objects with transient children.
 

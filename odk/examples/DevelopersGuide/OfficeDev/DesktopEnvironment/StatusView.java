@@ -220,8 +220,8 @@ public class StatusView extends    JPanel
             return;
 
         // create some listener on given frame for available status events
-        // Created listener instances will register herself on this frame and
-        // show her received information automatically on setted UI controls.
+        // Created listener instances will register themselves on this frame and
+        // show it received information automatically on set UI controls.
         m_aFontListener      = new StatusListener(m_laFontValue     ,FONT_ON     ,FONT_OFF     ,xFrame, FEATUREURL_FONT     );
         m_aSizeListener      = new StatusListener(m_laSizeValue     ,SIZE_ON     ,SIZE_OFF     ,xFrame, FEATUREURL_SIZE     );
         m_aBoldListener      = new StatusListener(m_laBoldValue     ,BOLD_ON     ,BOLD_OFF     ,xFrame, FEATUREURL_BOLD     );
