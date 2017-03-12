@@ -218,6 +218,12 @@ public:
     /// Count of integer digits
     sal_uInt16 GetFormatIntegerDigits() const { return NumFor[0].Info().nCntPre; }
 
+    /** Count of hidden integer digits with thousands dividor:
+     * formats like "0," to show only thousands
+     */
+    sal_uInt16 GetThousandDivisorPrecision( sal_uInt16 nIx = 0 ) const
+        { return NumFor[nIx].Info().nThousand * 3; }
+
     //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 5000, ... and only by the number formatter!
     sal_uInt16 GetLastInsertKey() const

@@ -672,6 +672,12 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                         nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( -fVal ) ) );
                     break;
                 }
+                case css::util::NumberFormat::NUMBER:
+                case css::util::NumberFormat::CURRENCY:
+                {   // tdf#106253 Thousands dividors for format "0,"
+                    nPrecision -=  pFormat->GetThousandDivisorPrecision( nIdx );
+                    break;
+                }
             }
         }
         else
