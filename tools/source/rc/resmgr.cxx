@@ -671,7 +671,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     aStr.append('\n');
 
     aStr.append("    Class: ");
-    aStr.append(OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
+    aStr.append(OUStringToOString(GetTypeRes_Impl(ResId((sal_uInt32)nRT, *pNewResMgr)),
         RTL_TEXTENCODING_UTF8));
     aStr.append(", Id: ");
     aStr.append(static_cast<sal_Int32>(nId));
@@ -682,7 +682,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     {
         aStr.append(" [ Class: ");
         aStr.append(OUStringToOString(GetTypeRes_Impl(
-            ResId(rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
+            ResId((sal_uInt32)rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
             RTL_TEXTENCODING_UTF8));
         aStr.append(", Id: ");
         aStr.append(static_cast<sal_Int32>(

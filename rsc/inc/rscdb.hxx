@@ -41,18 +41,18 @@ enum class MapUnit;
 
 struct WriteRcContext
 {
-    FILE *              fOutput;
+    FILE *         fOutput;
     OString        aOutputRc;
     OString        aOutputSysList;
-    RscCmdLine*         pCmdLine;
+    RscCmdLine*    pCmdLine;
 };
 
 // table for system dependent resources
 struct RscSysEntry
 {
     sal_uInt32      nKey;
-    sal_uInt32      nRscTyp;
-    OString    aFileName;
+    RESOURCE_TYPE   nRscTyp;
+    OString         aFileName;
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
@@ -129,7 +129,7 @@ public:
     void              SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
-    sal_uInt32        PutSysName( sal_uInt32 nRscTyp, char * pName );
+    sal_uInt32        PutSysName( RESOURCE_TYPE nRscTyp, char * pName );
     void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );
     void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex );

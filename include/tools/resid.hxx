@@ -47,11 +47,11 @@ class SAL_WARN_UNUSED ResId
         release the Resource context after loading this id.
     */
     RSHEADER_TYPE*          m_pResource;
-    mutable RESOURCE_TYPE   m_nResId;      // Resource Identifier
+    mutable sal_uInt32      m_nResId;      // Resource Identifier
     mutable RESOURCE_TYPE   m_nRT;         // type for loading (mutable to be set later)
     mutable ResMgr *        m_pResMgr;     // load from this ResMgr (mutable for setting on demand)
 
-    void ImplInit( RESOURCE_TYPE nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
+    void ImplInit( sal_uInt32 nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
     {
         m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr;
         OSL_ENSURE( m_pResMgr != nullptr, "ResId without ResMgr created" );
@@ -62,7 +62,7 @@ public:
     {
         ImplInit( 0, rMgr, pRc );
     }
-    ResId( RESOURCE_TYPE nId, ResMgr& rMgr )
+    ResId( sal_uInt32 nId, ResMgr& rMgr )
     {
         ImplInit( nId, rMgr, nullptr );
     }
@@ -89,9 +89,9 @@ public:
     ResMgr *        GetResMgr() const { return m_pResMgr; }
     void            ClearResMgr() const { m_pResMgr = nullptr; }
 
-    bool            IsAutoRelease()  const { return !(sal_uInt32(m_nResId) & RSC_DONTRELEASE); }
+    bool            IsAutoRelease()  const { return !(m_nResId & RSC_DONTRELEASE); }
 
-    sal_uInt32      GetId()          const { return sal_uInt32(m_nResId) & ~RSC_DONTRELEASE; }
+    sal_uInt32      GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE*  GetpResource()   const { return m_pResource; }
 
     TOOLS_DLLPUBLIC OUString toString() const;

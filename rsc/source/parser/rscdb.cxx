@@ -200,7 +200,7 @@ void RscTypCont::ClearSysNames()
     aSysLst.clear();
 }
 
-sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
+sal_uInt32 RscTypCont::PutSysName( RESOURCE_TYPE nRscTyp, char * pFileName )
 {
     RscSysEntry *pFoundEntry = nullptr;
 
