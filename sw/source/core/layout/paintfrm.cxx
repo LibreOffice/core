@@ -2568,6 +2568,9 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
 
+    const SwPageFrame* pPageFrame = mrTabFrame.FindPageFrame();
+    SwRect aPageRect( pPageFrame->Frame() );
+
     while ( true )
     {
         if ( bHori && aIter == maHoriLines.end() )
@@ -2689,8 +2692,12 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 // The table borders do not use SwAlignRect, but all the other frames do.
                 // Therefore we tweak the outer borders a bit to achieve that the outer
                 // borders match the subsidiary lines of the upper:
-                if (aStart.X() == aUpper.Left())
+                if (aStart.X() <= aPageRect.Left())
+                    aPaintStart.X() = aPageRect.Left();
+                else if (aStart.X() == aUpper.Left())
                     aPaintStart.X() = aUpperAligned.Left();
+                else if (aStart.X() >= aPageRect.Rigth_())
+                    aPaintStart.X() = aPageRect.Rigth_();
                 else if (aStart.X() == aUpper.Rigth_())
                     aPaintStart.X() = aUpperAligned.Rigth_();
                 if (aStart.Y() == aUpper.Top())
@@ -2698,8 +2705,12 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 else if (aStart.Y() >= aUpper.Bottom_())
                     aPaintStart.Y() = aUpperAligned.Bottom_();
 
-                if (aEnd.X() == aUpper.Left())
+                if (aEnd.X() <= aPageRect.Left())
+                    aPaintEnd.X() = aPageRect.Left();
+                else if (aEnd.X() == aUpper.Left())
                     aPaintEnd.X() = aUpperAligned.Left();
+                else if (aEnd.X() >= aPageRect.Rigth_())
+                    aPaintEnd.X() = aPageRect.Rigth_();
                 else if (aEnd.X() == aUpper.Rigth_())
                     aPaintEnd.X() = aUpperAligned.Rigth_();
                 if (aEnd.Y() == aUpper.Top())
