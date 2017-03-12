@@ -113,6 +113,10 @@ public class InvalidationHandler implements Document.MessageCallback {
             mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_RIGHT, pressed);
         } else if (parts[0].equals(".uno:JustifyPara")) {
             mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_JUSTIFY, pressed);
+        } else if (parts[0].equals(".uno:DefaultBullet")) {
+            mContext.getFormattingController().onToggleStateChanged(Document.BULLET_LIST, pressed);
+        } else if (parts[0].equals(".uno:DefaultNumbering")) {
+            mContext.getFormattingController().onToggleStateChanged(Document.NUMBERED_LIST, pressed);
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }

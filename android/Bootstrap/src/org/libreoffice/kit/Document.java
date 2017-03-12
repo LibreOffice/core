@@ -49,6 +49,8 @@ public class Document {
     public static final int ALIGN_CENTER = 5;
     public static final int ALIGN_RIGHT= 6;
     public static final int ALIGN_JUSTIFY= 7;
+    public static final int BULLET_LIST= 8;
+    public static final int NUMBERED_LIST= 9;
 
     /**
      * Callback message types
