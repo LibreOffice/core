@@ -5184,6 +5184,7 @@ ZIGZAGWIPE_TRANSITION       = 17; // 10
 BARNZIGZAGWIPE_TRANSITION   = 18; // 11
 FANWIPE_TRANSITION          = 19; // 25
 SINGLESWEEPWIPE_TRANSITION  = 20; // 24
+WATERFALLWIPE_TRANSITION    = 21; // 34
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5205,7 +5206,8 @@ aTransitionTypeInMap = {
     'irisWipe'          : IRISWIPE_TRANSITION,
     'veeWipe'           : VEEWIPE_TRANSITION,
     'zigZagWipe'        : ZIGZAGWIPE_TRANSITION,
-    'barnZigZagWipe'    : BARNZIGZAGWIPE_TRANSITION
+    'barnZigZagWipe'    : BARNZIGZAGWIPE_TRANSITION,
+    'waterfallWipe'     : WATERFALLWIPE_TRANSITION
 };
 
 /*
@@ -5277,6 +5279,10 @@ CLOCKWISETOPLEFT_TRANS_SUBTYPE              = 59; // 44
 COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE    = 60; // 45
 CLOCKWISEBOTTOMRIGHT_TRANS_SUBTYPE          = 61; // 46
 COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE      = 62; // 47
+VERTICALLEFT_TRANS_SUBTYPE                  = 63; // 93
+VERTICALRIGHT_TRANS_SUBTYPE                 = 64; // 94
+HORIZONTALLEFT_TRANS_SUBTYPE                = 65; // 95
+HORIZONTALRIGHT_TRANS_SUBTYPE               = 66; // 96
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5341,7 +5347,11 @@ aTransitionSubtypeInMap = {
     'up'                : UP_TRANS_SUBTYPE,
     'right'             : RIGHT_TRANS_SUBTYPE,
     'diagonalBottomLeft': DIAGONALBOTTOMLEFT_TRANS_SUBTYPE,
-    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE
+    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE,
+    'verticalLeft'      : VERTICALLEFT_TRANS_SUBTYPE,
+    'verticalRight'     : VERTICALRIGHT_TRANS_SUBTYPE,
+    'horizontalLeft'    : HORIZONTALLEFT_TRANS_SUBTYPE,
+    'horizontalRight'   : HORIZONTALRIGHT_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5583,6 +5593,48 @@ aTransitionInfoTable[BARWIPE_TRANSITION][TOPTOBOTTOM_TRANS_SUBTYPE] =
     'scaleY' : 1.0,
     'reverseMethod' : REVERSEMETHOD_FLIP_Y,
     'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[WATERFALLWIPE_TRANSITION] = {};
+aTransitionInfoTable[WATERFALLWIPE_TRANSITION][VERTICALLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[WATERFALLWIPE_TRANSITION][VERTICALRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[WATERFALLWIPE_TRANSITION][HORIZONTALLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[WATERFALLWIPE_TRANSITION][HORIZONTALRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
     'scaleIsotropically' : false
 };
 
@@ -9700,6 +9752,10 @@ function createClipPolyPolygon( nType, nSubtype )
                 // flipOnYAxis
                 nSubtype == COUNTERCLOCKWISEBOTTOMLEFT_TRANS_SUBTYPE ||
                 nSubtype == COUNTERCLOCKWISETOPRIGHT_TRANS_SUBTYPE );
+        case WATERFALLWIPE_TRANSITION:
+            return new WaterfallWipePath(128, // flipOnYAxis
+                                              nSubtype == VERTICALRIGHT_TRANS_SUBTYPE ||
+                                              nSubtype == HORIZONTALLEFT_TRANS_SUBTYPE);
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
         case VEEWIPE_TRANSITION:
@@ -10118,6 +10174,51 @@ BarnDoorWipePath.prototype.perform = function( nT ) {
         res.appendPath(aPath);
     }
     return res;
+}
+
+/** Class WaterfallWipe
+  *
+  * @param nElements
+  *     Number of cells to be used
+  * @param bFlipOnYAxis
+  *     Whether to flip on y-axis or not.
+  */
+function WaterfallWipePath(nElements, bFlipOnYAxis) {
+    this.bFlipOnYAxis = bFlipOnYAxis;
+
+    var sqrtElements = Math.floor(Math.sqrt(nElements));
+    var elementEdge = 1.0/sqrtElements;
+
+    var aPath = 'M '+ 0.0 + ' ' + -1.0 + ' ';
+    for(var pos = sqrtElements; pos--; ) {
+        var xPos = sqrtElements - pos - 1;
+        var yPos = pruneScaleValue( ((pos+1) * elementEdge) - 1.0);
+
+        aPath += 'L ' + pruneScaleValue(xPos * elementEdge) + ' ' + yPos + ' ';
+        aPath += 'L ' + pruneScaleValue((xPos+1)*elementEdge) + ' ' + yPos + ' ';
+    }
+    aPath += 'L ' + 1.0 + ' ' + -1.0 + ' ';
+    aPath += 'L ' + 0.0 + ' ' + -1.0 + ' ';
+    this.aBasePath = document.createElementNS( NSS['svg'], 'path');
+    this.aBasePath.setAttribute('d', aPath);
+}
+
+WaterfallWipePath.prototype.perform = function( nT ) {
+    var poly = this.aBasePath.cloneNode(true);
+    var aTransform = SVGIdentityMatrix.translate(0.0, pruneScaleValue(2.0 * nT));
+    poly.matrixTransform(aTransform);
+    var aHead = 'M ' + 0.0 + ' ' + -1.0 + ' ';
+    var aHeadPath= document.createElementNS( NSS['svg'], 'path');
+    aHeadPath.setAttribute('d', aHead);
+
+    var aTail = 'M ' + 1.0 + ' ' + -1.0 + ' ';
+    var aTailPath = document.createElementNS( NSS['svg'], 'path');
+    aTailPath.setAttribute('d', aTail);
+
+    poly.prependPath(aHeadPath);
+    poly.appendPath(aTailPath);
+
+    return this.bFlipOnYAxis ? flipOnYAxis(poly) : poly;
 }
 
 /** Class Iriswipe
