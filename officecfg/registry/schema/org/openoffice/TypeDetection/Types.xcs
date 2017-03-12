@@ -64,7 +64,7 @@
       </prop>
       <prop oor:name="Preferred" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>In case of ambigous registrations (e.g. for extensions doc/txt)
+          <desc>In case of ambiguous registrations (e.g. for extensions doc/txt)
           it specify the preferred type.</desc>
         </info>
         <value>false</value>
