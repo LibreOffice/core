@@ -227,8 +227,8 @@ public:
 
     //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 5000, ... and only by the number formatter!
-    sal_uInt16 GetLastInsertKey() const
-        { return NumFor[0].Info().nThousand; }
+    sal_uInt16 GetLastInsertKey( sal_uInt16 nIx = 0 ) const
+        { return NumFor[nIx].Info().nThousand; }
     void SetLastInsertKey(sal_uInt16 nKey)
         { NumFor[0].Info().nThousand = nKey; }
 
