@@ -388,16 +388,16 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     m_fMaxOffset = 0.0;
-    if( m_aZSlots.size()<=0 )
+    if( m_aZSlots.empty() )
         return m_fMaxOffset;
-    if( m_aZSlots[0].size()<=0 )
-        return m_fMaxOffset;
-
-    const std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
-    if(!rSeriesList.size())
+    if( m_aZSlots.front().empty() )
         return m_fMaxOffset;
 
-    VDataSeries* pSeries = rSeriesList[0];
+    const std::vector< VDataSeries* >& rSeriesList( m_aZSlots.front().front().m_aSeriesVector );
+    if(rSeriesList.empty())
+        return m_fMaxOffset;
+
+    VDataSeries* pSeries = rSeriesList.front();
     uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
     if( !xSeriesProp.is() )
         return m_fMaxOffset;
@@ -430,8 +430,8 @@ double PieChart::getMaxOffset()
 double PieChart::getMaximumX()
 {
     double fMaxOffset = getMaxOffset();
-    if( m_aZSlots.size()>0 && m_bUseRings)
-        return m_aZSlots[0].size()+0.5+fMaxOffset;
+    if( !m_aZSlots.empty() && m_bUseRings)
+        return m_aZSlots.front().size()+0.5+fMaxOffset;
     return 1.5+fMaxOffset;
 }
 double PieChart::getMinimumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
@@ -510,8 +510,8 @@ void PieChart::createShapes()
     ///that the radius axis scale is the one with index 0 and the angle axis
     ///scale is the one with index 1.
 
-    std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots[0].begin();
-    const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots[0].end();
+    std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots.front().begin();
+    const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots.front().end();
 
     ///m_bUseRings == true if chart type is `donut`, == false if chart type is
     ///`pie`; if the chart is of `donut` type we have as many rings as many data
@@ -528,7 +528,7 @@ void PieChart::createShapes()
     ///such a case the `explodeable` ring is the last one.
     std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
     if( m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings )
-        nExplodeableSlot = m_aZSlots[0].size()-1;
+        nExplodeableSlot = m_aZSlots.front().size()-1;
 
     m_aLabelInfoList.clear();
     ::rtl::math::setNan(&m_fMaxOffset);
@@ -552,9 +552,9 @@ void PieChart::createShapes()
         ShapeParam aParam;
 
         std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-        if(!pSeriesList->size())//there should be only one series in each x slot
+        if(pSeriesList->empty())//there should be only one series in each x slot
             continue;
-        VDataSeries* pSeries = (*pSeriesList)[0];
+        VDataSeries* pSeries = pSeriesList->front();
         if(!pSeries)
             continue;
 
