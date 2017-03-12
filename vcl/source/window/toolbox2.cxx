@@ -789,7 +789,7 @@ Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
 sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
 {
     if (!mpData)
-        return TOOLBOX_ITEM_NOTFOUND;
+        return 0;
 
     for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
     {
