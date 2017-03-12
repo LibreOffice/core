@@ -52,6 +52,7 @@ private:
     Bitmap                  aBitmap;
     BitmapWriteAccess*      pAcc;
     sal_uInt16              nDstBitsPerPixel;
+    int                     nLargestPixelIndex;
     std::unique_ptr<AlphaMask>
                             pAlphaMask;
     BitmapWriteAccess*      pMaskAcc;
@@ -121,6 +122,9 @@ private:
         // converts a Scanline to the Windows-BMP format
 
     bool HasAlphaChannel() const;
+
+    void SetPixelIndex(BitmapWriteAccess *pAcc, long nY, long nX, sal_uInt8 cIndex);
+
 public:
 
     TIFFReader()
@@ -128,6 +132,7 @@ public:
         , pTIFF(nullptr)
         , pAcc(nullptr)
         , nDstBitsPerPixel(0)
+        , nLargestPixelIndex(-1)
         , pAlphaMask(nullptr)
         , pMaskAcc(nullptr)
         , nOrigPos(0)
@@ -778,6 +783,11 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
     return nRes;
 }
 
+void TIFFReader::SetPixelIndex(BitmapWriteAccess *pWriteAcc, long nY, long nX, sal_uInt8 cIndex)
+{
+    pWriteAcc->SetPixelIndex(nY, nX, cIndex);
+    nLargestPixelIndex = std::max<int>(nLargestPixelIndex, cIndex);
+}
 
 bool TIFFReader::ConvertScanline(sal_Int32 nY)
 {
@@ -940,7 +950,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += nx == 0 ? BYTESWAP( (sal_uInt8)*pt++ ) : *pt++;
-                                pAcc->SetPixelIndex( nY, nx, nLast );
+                                SetPixelIndex(pAcc, nY, nx, nLast);
                             }
                         }
                         else
@@ -948,7 +958,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 sal_uInt8 nLast = *pt++;
-                                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uLong)nLast) - nMinSampleValue) * nMinMax ) );
+                                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uLong)nLast) - nMinSampleValue) * nMinMax ));
                             }
                         }
                     }
@@ -960,15 +970,14 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += *pt++;
-                                pAcc->SetPixelIndex( nY, nx, nLast );
+                                SetPixelIndex(pAcc, nY, nx, nLast);
                             }
                         }
                         else
                         {
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
-                                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt++ - nMinSampleValue) * nMinMax ) );
-
+                                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt++ - nMinSampleValue) * nMinMax ));
                             }
                         }
                     }
@@ -985,7 +994,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                     {
                         nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
-                        pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>(nVal));
+                        SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>(nVal));
                     }
                 }
                 break;
@@ -1006,28 +1015,28 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         while (nByteCount--)
                         {
                             nByteVal = *pt++;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, nx++, nByteVal );
+                            SetPixelIndex(pAcc, nY, nx++, nByteVal);
                         }
                         if ( nImageWidth & 7 )
                         {
                             nByteVal = *pt++;
                             while ( nx < nImageWidth )
                             {
-                                pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
+                                SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
                                 nByteVal >>= 1;
                             }
                         }
@@ -1038,21 +1047,21 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         while (nByteCount--)
                         {
                             nByteVal = *pt++;
-                            pAcc->SetPixelIndex( nY, nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            pAcc->SetPixelIndex( nY, --nx, nByteVal );
+                            SetPixelIndex(pAcc, nY, --nx, nByteVal);
                             nx += 15;
                         }
                         if ( nImageWidth & 7 )
@@ -1062,7 +1071,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             nShift = 7;
                             while ( nx < nImageWidth )
                             {
-                                pAcc->SetPixelIndex( nY, nx++, ( nByteVal >> nShift ) & 1);
+                                SetPixelIndex(pAcc, nY, nx++, ( nByteVal >> nShift ) & 1);
                             }
                         }
                     }
@@ -1083,7 +1092,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
             sal_uInt8*  pt = pMap[ 0 ];
             for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
-                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt - nMinSampleValue) * nMinMax) );
+                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt - nMinSampleValue) * nMinMax));
             }
         }
     }
@@ -1105,6 +1114,11 @@ void TIFFReader::MakePalCol()
             nNumColors = (sal_uLong)1 << nBitsPerSample;
             if ( nNumColors > 256 )
                 nNumColors = 256;
+            if (nLargestPixelIndex >= static_cast<int>(nNumColors))
+            {
+                SAL_WARN("filter.tiff", "palette has less entries that largest index used. Expanding palette to match");
+                nNumColors = nLargestPixelIndex + 1;
+            }
             pAcc->SetPaletteEntryCount( (sal_uInt16)nNumColors );
             for ( i = 0; i < nNumColors; i++ )
             {
@@ -1334,6 +1348,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 bStatus = false;
             if ( bStatus )
             {
+                nLargestPixelIndex = -1;
                 if ( nMaxSampleValue == 0 )
                 {
                     if ( nBitsPerSample == 32 )         // sj: i93300, compiler bug, 1 << 32 gives 1 one 32bit windows platforms,
