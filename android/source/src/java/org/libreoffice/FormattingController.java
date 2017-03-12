@@ -14,6 +14,10 @@ import org.libreoffice.kit.Document;
     FormattingController(LibreOfficeMainActivity context) {
         mContext = context;
 
+        mContext.findViewById(R.id.button_insertFormatListBullets).setOnClickListener(this);
+
+        mContext.findViewById(R.id.button_insertFormatListNumbering).setOnClickListener(this);
+
         mContext.findViewById(R.id.button_bold).setOnClickListener(this);
         mContext.findViewById(R.id.button_italic).setOnClickListener(this);
         mContext.findViewById(R.id.button_strikethrough).setOnClickListener(this);
@@ -36,6 +40,15 @@ import org.libreoffice.kit.Document;
         }
 
         switch(button.getId()) {
+
+            case R.id.button_insertFormatListBullets:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultBullet"));
+                break;
+
+            case R.id.button_insertFormatListNumbering:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultNumbering"));
+                break;
+
             case R.id.button_bold:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
                 break;
