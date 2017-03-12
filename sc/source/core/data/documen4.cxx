@@ -692,6 +692,14 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                 {
                     return pFormat->GetRoundFractionValue( fVal );
                 }
+                case css::util::NumberFormat::NUMBER:
+                case css::util::NumberFormat::CURRENCY:
+                {   // tdf#106253 Thousands separators for format 0,
+                    sal_uInt16 nThousand = pFormat->GetLastInsertKey( nIdx );
+                    if ( nThousand > 0 )                // TODO: in some specitic l10n,
+                        nPrecision -= 3 * nThousand;    // thousands separator is after 4th digit
+                    break;
+                }
             }
         }
         else
