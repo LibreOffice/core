@@ -6736,14 +6736,17 @@ void Test::testPrecisionAsShown()
         checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
         checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
-    {   // thousand rounding bogus!!!! tdf#106253
+    {   // thousand rounding tdf#106253
         aCode = "0,,";
         fValue = 4.0e9 / 7.0;
-        fExpectedRoundVal = 571e6; // actual is 571428571
-        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
-        fValue = -4.0e8 / 7.0;
-        fExpectedRoundVal = -57e6; // actual is 57142857
-        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fExpectedRoundVal = 571e6;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
+        aCode = "[$k$-409]* #,;[RED]-[$k$-409]* #,";
+        fValue = 4.0e8 / 7.0;
+        fExpectedRoundVal = 57.143e6;
+        checkPrecisionAsShown( aCode,  fValue,  fExpectedRoundVal );
+        checkPrecisionAsShown( aCode, -fValue, -fExpectedRoundVal );
     }
     {   // percent rounding
         aCode = "0.00%";
