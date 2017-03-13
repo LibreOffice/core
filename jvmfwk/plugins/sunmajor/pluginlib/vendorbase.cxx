@@ -59,11 +59,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     //javax.accessibility.assistive_technologies from system properties
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    OUString sVendorProperty("java.vendor");
-    OUString sVersionProperty("java.version");
-    OUString sHomeProperty("java.home");
-    OUString sArchProperty("os.arch");
-    OUString sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;
@@ -74,17 +69,17 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     for (it_prop i = props.begin(); i != props.end(); ++i)
     {
-        if(! bVendor && sVendorProperty.equals(i->first))
+        if(! bVendor && i->first == "java.vendor")
         {
             m_sVendor = i->second;
             bVendor = true;
         }
-        else if (!bVersion && sVersionProperty.equals(i->first))
+        else if (!bVersion && i->first == "java.version")
         {
             m_sVersion = i->second;
             bVersion = true;
         }
-        else if (!bHome && sHomeProperty.equals(i->first))
+        else if (!bHome && i->first == "java.home")
         {
 #ifndef JVM_ONE_PATH_CHECK
            OUString fileURL;
@@ -105,12 +100,13 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
            bHome = true;
 #endif
         }
-        else if (!bArch && sArchProperty.equals(i->first))
+        else if (!bArch && i->first == "os.arch")
         {
             m_sArch = i->second;
             bArch = true;
         }
-        else if (!bAccess && sAccessProperty.equals(i->first))
+        else if (!bAccess
+                 && i->first == "javax.accessibility.assistive_technologies")
         {
             if (!i->second.isEmpty())
             {
