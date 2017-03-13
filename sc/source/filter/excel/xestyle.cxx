@@ -1471,14 +1471,14 @@ bool XclExpCellAlign::FillFromItemSet(
 {
     bool bUsed = false;
     SvxCellHorJustify eHorAlign = GETITEM( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY ).GetValue();
-    SvxCellVerJustify eVerAlign = GETITEMVALUE( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY, SvxCellVerJustify );
+    SvxCellVerJustify eVerAlign = GETITEM( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY ).GetValue();
 
     switch( eBiff )
     {
         case EXC_BIFF8: // attributes new in BIFF8
         {
             // text indent
-            long nTmpIndent = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_INDENT, sal_Int32 );
+            long nTmpIndent = GETITEM( rItemSet, SfxUInt16Item, ATTR_INDENT ).GetValue();
             (nTmpIndent += 100) /= 200; // 1 Excel unit == 10 pt == 200 twips
             mnIndent = limit_cast< sal_uInt8 >( nTmpIndent, 0, 15 );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
@@ -1511,7 +1511,7 @@ bool XclExpCellAlign::FillFromItemSet(
             else
             {
                 // rotation
-                sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
+                sal_Int32 nScRot = GETITEM( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE ).GetValue();
                 mnRotation = XclTools::GetXclRotation( nScRot );
                 bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
             }
@@ -2127,7 +2127,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
 
     // number format
     mnScNumFmt = (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
-        GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) : nForceScNumFmt;
+        GETITEM( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue() : nForceScNumFmt;
     mnXclNumFmt = GetNumFmtBuffer().Insert( mnScNumFmt );
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
     // alignment

@@ -837,7 +837,7 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // current cell number format
         sal_uInt32 nScNumFmt = pPattern ?
-            GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) :
+            GETITEM( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue() :
             rNumFmtBfr.GetStandardFormat();
 
         // alternative number format passed to XF buffer
@@ -2545,7 +2545,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
                 {
-                    sal_uLong nScNumFmt = GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong );
+                    sal_uInt32 nScNumFmt = GETITEM( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT ).GetValue();
                     if( rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL )
                         xCell.reset( new XclExpBooleanCell(
                             GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
@@ -2639,7 +2639,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             // data validation
             if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
             {
-                sal_uLong nScHandle = GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALIDDATA, sal_uLong );
+                sal_uLong nScHandle = GETITEM( rItemSet, SfxUInt32Item, ATTR_VALIDDATA ).GetValue();
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.SetCol( nLastScCol );
                 mxDval->InsertCellRange( aScRange, nScHandle );
