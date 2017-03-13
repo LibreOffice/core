@@ -11866,38 +11866,6 @@ AC_SUBST(WGET)
 AC_SUBST(CURL)
 
 #
-# check for md5sum
-#
-MD5SUM=
-
-for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
-    if test "$i" = "md5"; then
-        eval "$i -x" > /dev/null 2>&1
-    else
-        eval "$i --version" > /dev/null 2>&1
-    fi
-    ret=$?
-    if test $ret -eq 0; then
-        MD5SUM=$i
-        break
-    fi
-done
-
-if test "$MD5SUM" = "md5"; then
-    if md5 -r < /dev/null > /dev/null 2>/dev/null; then
-        MD5SUM="$MD5SUM -r"
-    elif md5 -n < /dev/null > /dev/null 2>/dev/null; then
-        MD5SUM="$MD5SUM -n"
-    fi
-fi
-
-if test -z "$MD5SUM"; then
-    AC_MSG_ERROR([no md5sum found!])
-fi
-
-AC_SUBST(MD5SUM)
-
-#
 # check for sha256sum
 #
 SHA256SUM=
@@ -12693,12 +12661,12 @@ AC_SUBST(LO_PATH)
 
 libo_FUZZ_SUMMARY
 
-# Generate a configuration md5 we can use for deps
+# Generate a configuration sha256 we can use for deps
 if test -f config_host.mk; then
-    config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
+    config_sha256=`$SHA256SUM config_host.mk | sed "s/ .*//"`
 fi
 if test -f config_host_lang.mk; then
-    config_lang_md5=`$MD5SUM config_host_lang.mk | sed "s/ .*//"`
+    config_lang_sha256=`$SHA256SUM config_host_lang.mk | sed "s/ .*//"`
 fi
 
 CFLAGS=$my_original_CFLAGS
@@ -12756,7 +12724,7 @@ fi
 # touch the config timestamp file
 if test ! -f config_host.mk.stamp; then
     echo > config_host.mk.stamp
-elif test "$config_md5" = `$MD5SUM config_host.mk | sed "s/ .*//"`; then
+elif test "$config_sha256" = `$SHA256SUM config_host.mk | sed "s/ .*//"`; then
     echo "Host Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host.mk.stamp
@@ -12765,7 +12733,7 @@ fi
 # touch the config lang timestamp file
 if test ! -f config_host_lang.mk.stamp; then
     echo > config_host_lang.mk.stamp
-elif test "$config_lang_md5" = `$MD5SUM config_host_lang.mk | sed "s/ .*//"`; then
+elif test "$config_lang_sha256" = `$SHA256SUM config_host_lang.mk | sed "s/ .*//"`; then
     echo "Language Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host_lang.mk.stamp

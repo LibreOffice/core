@@ -466,8 +466,10 @@ sub run {
         if (length($loglanguagestring) > $installer::globals::max_lang_length)
         {
             my $number_of_languages = installer::systemactions::get_number_of_langs($loglanguagestring);
-            chomp(my $shorter = `echo $loglanguagestring | $ENV{'MD5SUM'} | sed -e "s/ .*//g"`);
-            my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+            #replace this in the same it was done in installer/windows/directory.pm
+            #chomp(my $shorter = `echo $loglanguagestring | $ENV{'MD5SUM'} | sed -e "s/ .*//g"`);
+            #my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+            my $id = installer::windows::msiglobal::calculate_id($loglanguagestring, 8); # taking only the first 8 digits
             $loglanguagestring = "lang_" . $number_of_languages . "_id_" . $id;
         }
 
