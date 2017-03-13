@@ -245,7 +245,6 @@ public:
     SwUnoCursor&                  GetCursor();
     sw::UnoCursorPointer m_pUnoCursor;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    virtual ~SwXTextTableCursor() override { };
 };
 
 struct SwRangeDescriptor

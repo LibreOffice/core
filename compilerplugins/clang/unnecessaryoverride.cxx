@@ -114,10 +114,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         // operator to change from being an obsolete feature to being a standard
         // feature.  That difference is not taken into account here.
         auto cls = methodDecl->getParent();
-        if (methodDecl->isVirtual() && cls->getNumBases() == 0)
-        {
-            return true;
-        }
         if (methodDecl->getAccess() != AS_public)
         {
             return true;
@@ -131,6 +127,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         // if it's virtual, but it has a base-class with a non-virtual destructor
         if (methodDecl->isVirtual())
         {
+            bool baseWithVirtualDtor = false;
             for (auto baseSpecifier = cls->bases_begin(); baseSpecifier != cls->bases_end(); ++baseSpecifier)
             {
                 const RecordType* baseRecordType = baseSpecifier->getType()->getAs<RecordType>();
@@ -138,15 +135,16 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
                 {
                     const CXXRecordDecl* baseRecordDecl = dyn_cast<CXXRecordDecl>(baseRecordType->getDecl());
                     if (baseRecordDecl && baseRecordDecl->getDestructor()
-                        && !baseRecordDecl->getDestructor()->isVirtual())
+                        && baseRecordDecl->getDestructor()->isVirtual())
                     {
-                        return true;
+                        baseWithVirtualDtor = true;
+                        break;
                     }
                 }
-                else
-                {
-                    return true; // dependent base
-                }
+            }
+            if (!baseWithVirtualDtor)
+            {
+                return true;
             }
         }
         // corner case

@@ -192,9 +192,6 @@ public:
         maTempFile.EnableKillingFile();
     }
 
-    virtual ~SwModelTestBase() override
-    {}
-
     virtual void setUp() override
     {
         test::BootstrapFixture::setUp();
