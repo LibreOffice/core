@@ -928,44 +928,44 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     }
 
 #if OSL_DEBUG_LEVEL > 2
-    const char* s = "DefaultFontType::SANS_UNKNOWN";
+    const char* s = "SANS_UNKNOWN";
     switch ( nType )
     {
-    case DefaultFontType::SANS_UNICODE:  s = "DefaultFontType::SANS_UNICODE"; break;
-    case DefaultFontType::UI_SANS:   s = "DefaultFontType::UI_SANS"; break;
+    case DefaultFontType::SANS_UNICODE: s = "SANS_UNICODE"; break;
+    case DefaultFontType::UI_SANS: s = "UI_SANS"; break;
 
-    case DefaultFontType::SANS:  s = "DefaultFontType::SANS"; break;
-    case DefaultFontType::LATIN_HEADING: s = "DefaultFontType::LATIN_HEADING"; break;
-    case DefaultFontType::LATIN_SPREADSHEET: s = "DefaultFontType::LATIN_SPREADSHEET"; break;
-    case DefaultFontType::LATIN_DISPLAY: s = "DefaultFontType::LATIN_DISPLAY"; break;
+    case DefaultFontType::SANS: s = "SANS"; break;
+    case DefaultFontType::LATIN_HEADING: s = "LATIN_HEADING"; break;
+    case DefaultFontType::LATIN_SPREADSHEET: s = "LATIN_SPREADSHEET"; break;
+    case DefaultFontType::LATIN_DISPLAY: s = "LATIN_DISPLAY"; break;
 
-    case DefaultFontType::SERIF: s = "DefaultFontType::SERIF"; break;
-    case DefaultFontType::LATIN_TEXT:    s = "DefaultFontType::LATIN_TEXT"; break;
-    case DefaultFontType::LATIN_PRESENTATION:    s = "DefaultFontType::LATIN_PRESENTATION"; break;
+    case DefaultFontType::SERIF: s = "SERIF"; break;
+    case DefaultFontType::LATIN_TEXT: s = "LATIN_TEXT"; break;
+    case DefaultFontType::LATIN_PRESENTATION: s = "LATIN_PRESENTATION"; break;
 
-    case DefaultFontType::FIXED: s = "DefaultFontType::FIXED"; break;
-    case DefaultFontType::LATIN_FIXED:   s = "DefaultFontType::LATIN_FIXED"; break;
-    case DefaultFontType::UI_FIXED:  s = "DefaultFontType::UI_FIXED"; break;
+    case DefaultFontType::FIXED: s = "FIXED"; break;
+    case DefaultFontType::LATIN_FIXED: s = "LATIN_FIXED"; break;
+    case DefaultFontType::UI_FIXED: s = "UI_FIXED"; break;
 
-    case DefaultFontType::SYMBOL:    s = "DefaultFontType::SYMBOL"; break;
+    case DefaultFontType::SYMBOL: s = "SYMBOL"; break;
 
-    case DefaultFontType::CJK_TEXT:  s = "DefaultFontType::CJK_TEXT"; break;
-    case DefaultFontType::CJK_PRESENTATION:  s = "DefaultFontType::CJK_PRESENTATION"; break;
-    case DefaultFontType::CJK_SPREADSHEET:   s = "DefaultFontType::CJK_SPREADSHEET"; break;
-    case DefaultFontType::CJK_HEADING:   s = "DefaultFontType::CJK_HEADING"; break;
-    case DefaultFontType::CJK_DISPLAY:   s = "DefaultFontType::CJK_DISPLAY"; break;
+    case DefaultFontType::CJK_TEXT: s = "CJK_TEXT"; break;
+    case DefaultFontType::CJK_PRESENTATION: s = "CJK_PRESENTATION"; break;
+    case DefaultFontType::CJK_SPREADSHEET: s = "CJK_SPREADSHEET"; break;
+    case DefaultFontType::CJK_HEADING: s = "CJK_HEADING"; break;
+    case DefaultFontType::CJK_DISPLAY: s = "CJK_DISPLAY"; break;
 
-    case DefaultFontType::CTL_TEXT:  s = "DefaultFontType::CTL_TEXT"; break;
-    case DefaultFontType::CTL_PRESENTATION:  s = "DefaultFontType::CTL_PRESENTATION"; break;
-    case DefaultFontType::CTL_SPREADSHEET:   s = "DefaultFontType::CTL_SPREADSHEET"; break;
-    case DefaultFontType::CTL_HEADING:   s = "DefaultFontType::CTL_HEADING"; break;
-    case DefaultFontType::CTL_DISPLAY:   s = "DefaultFontType::CTL_DISPLAY"; break;
+    case DefaultFontType::CTL_TEXT: s = "CTL_TEXT"; break;
+    case DefaultFontType::CTL_PRESENTATION: s = "CTL_PRESENTATION"; break;
+    case DefaultFontType::CTL_SPREADSHEET: s = "CTL_SPREADSHEET"; break;
+    case DefaultFontType::CTL_HEADING: s = "CTL_HEADING"; break;
+    case DefaultFontType::CTL_DISPLAY: s = "CTL_DISPLAY"; break;
     }
     SAL_INFO("vcl.gdi",
-             "OutputDevice::GetDefaultFont() Type=\"" << s
-             << "\" lang=" << eLang
+             "OutputDevice::GetDefaultFont() Type=" << s
+             << " lang=" << eLang
              << " flags=" << static_cast<int>(nFlags)
-             << " family=\"" << OUStringToOString( aFont.GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr());
+             << " family=\"" << aFont.GetFamilyName() << "\"");
 #endif
 
     return aFont;
