@@ -1196,6 +1196,19 @@ SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding
     return *this;
 }
 
+void SvStream::FlushBuffer(bool isConsistent)
+{
+    if (m_isDirty && isConsistent) // Does stream require a flush?
+    {
+        SeekPos(m_nBufFilePos);
+        if (m_nCryptMask)
+            CryptAndWriteBuffer(m_pRWBuf, m_nBufActualLen);
+        else if (PutData(m_pRWBuf, m_nBufActualLen) != m_nBufActualLen)
+            SetError(SVSTREAM_WRITE_ERROR);
+        m_isDirty = false;
+    }
+}
+
 std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
 {
     std::size_t nSaveCount = nCount;
@@ -1225,15 +1238,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         }
         else
         {
-            if (m_isDirty) // Does stream require a flush?
-            {
-                SeekPos(m_nBufFilePos);
-                if (m_nCryptMask)
-                    CryptAndWriteBuffer(m_pRWBuf, m_nBufActualLen);
-                else
-                    PutData(m_pRWBuf, m_nBufActualLen);
-                m_isDirty = false;
-            }
+            FlushBuffer(true);
 
             // Does data block fit into buffer?
             if (nCount > m_nBufSize)
@@ -1288,6 +1293,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
 {
     if( !nCount )
         return 0;
+
     if (!m_isWritable)
     {
         SetError( ERRCODE_IO_CANTWRITE );
@@ -1321,16 +1327,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
     }
     else
     {
-        // Does stream require flushing?
-        if (m_isDirty)
-        {
-            SeekPos(m_nBufFilePos);
-            if (m_nCryptMask)
-                CryptAndWriteBuffer( m_pRWBuf, (std::size_t)m_nBufActualLen );
-            else
-                PutData( m_pRWBuf, m_nBufActualLen );
-            m_isDirty = false;
-        }
+        FlushBuffer(true);
 
         // Does data block fit into buffer?
         if (nCount > m_nBufSize)
@@ -1385,15 +1382,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
     }
     else
     {
-        if (m_isDirty && m_isConsistent)
-        {
-            SeekPos(m_nBufFilePos);
-            if (m_nCryptMask)
-                CryptAndWriteBuffer( m_pRWBuf, m_nBufActualLen );
-            else
-                PutData( m_pRWBuf, m_nBufActualLen );
-            m_isDirty = false;
-        }
+        FlushBuffer(m_isConsistent);
         m_nBufActualLen = 0;
         m_nBufActualPos = 0;
         m_pBufPos     = m_pRWBuf;
@@ -1416,31 +1405,14 @@ sal_uInt64 SvStream::remainingSize()
 
 void SvStream::Flush()
 {
-    if (m_isDirty && m_isConsistent)
-    {
-        SeekPos(m_nBufFilePos);
-        if (m_nCryptMask)
-            CryptAndWriteBuffer( m_pRWBuf, (std::size_t)m_nBufActualLen );
-        else
-            if (PutData( m_pRWBuf, m_nBufActualLen ) != m_nBufActualLen)
-                SetError( SVSTREAM_WRITE_ERROR );
-        m_isDirty = false;
-    }
+    FlushBuffer(m_isConsistent);
     if (m_isWritable)
         FlushData();
 }
 
 void SvStream::RefreshBuffer()
 {
-    if (m_isDirty && m_isConsistent)
-    {
-        SeekPos(m_nBufFilePos);
-        if (m_nCryptMask)
-            CryptAndWriteBuffer( m_pRWBuf, (std::size_t)m_nBufActualLen );
-        else
-            PutData( m_pRWBuf, m_nBufActualLen );
-        m_isDirty = false;
-    }
+    FlushBuffer(m_isConsistent);
     SeekPos(m_nBufFilePos);
     m_nBufActualLen = (sal_uInt16)GetData( m_pRWBuf, m_nBufSize );
     if (m_nBufActualLen && m_nError == ERRCODE_IO_PENDING)

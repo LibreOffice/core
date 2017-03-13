@@ -188,6 +188,7 @@ protected:
     virtual void    FlushData();
     virtual void    SetSize(sal_uInt64 nSize);
 
+    void            FlushBuffer(bool isConsistent);
     void            ClearError();
     void            ClearBuffer();
 
