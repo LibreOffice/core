@@ -5180,6 +5180,7 @@ SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 BARNDOORWIPE_TRANSITION     = 15; // 4
 VEEWIPE_TRANSITION          = 16; // 8
+SPIRALWIPE_TRANSITION       = 17; // 31
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5196,6 +5197,7 @@ aTransitionTypeInMap = {
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
+    'spiralWipe'        : SPIRALWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION,
     'veeWipe'           : VEEWIPE_TRANSITION
 };
@@ -5206,106 +5208,122 @@ aTransitionTypeInMap = {
  * C++ implementations.
  */
 // Transition Subtypes
-DEFAULT_TRANS_SUBTYPE               = 0;
-LEFTTORIGHT_TRANS_SUBTYPE           = 1;
-TOPTOBOTTOM_TRANS_SUBTYPE           = 2;
-CORNERSIN_TRANS_SUBTYPE             = 3; // 11
-CORNERSOUT_TRANS_SUBTYPE            = 4;
-VERTICAL_TRANS_SUBTYPE              = 5;
-HORIZONTAL_TRANS_SUBTYPE            = 6; // 14
-DOWN_TRANS_SUBTYPE                  = 7; // 19
-CIRCLE_TRANS_SUBTYPE                = 8; // 27
-CLOCKWISETWELVE_TRANS_SUBTYPE       = 9; // 33
-CLOCKWISETHREE_TRANS_SUBTYPE        = 10;
-CLOCKWISESIX_TRANS_SUBTYPE          = 11;
-CLOCKWISENINE_TRANS_SUBTYPE         = 12;
-TWOBLADEVERTICAL_TRANS_SUBTYPE      = 13;
-TWOBLADEHORIZONTAL_TRANS_SUBTYPE    = 14;
-FOURBLADE_TRANS_SUBTYPE             = 15; // 39
-FROMLEFT_TRANS_SUBTYPE              = 16; // 97
-FROMTOP_TRANS_SUBTYPE               = 17;
-FROMRIGHT_TRANS_SUBTYPE             = 18;
-FROMBOTTOM_TRANS_SUBTYPE            = 19;
-CROSSFADE_TRANS_SUBTYPE             = 20;
-FADETOCOLOR_TRANS_SUBTYPE           = 21;
-FADEFROMCOLOR_TRANS_SUBTYPE         = 22;
-FADEOVERCOLOR_TRANS_SUBTYPE         = 23;
-THREEBLADE_TRANS_SUBTYPE            = 24;
-EIGHTBLADE_TRANS_SUBTYPE            = 25;
-ONEBLADE_TRANS_SUBTYPE              = 26; // 107
-ACROSS_TRANS_SUBTYPE                = 27;
-TOPLEFTVERTICAL_TRANS_SUBTYPE       = 28; // 109
-TOPLEFTHORIZONTAL_TRANS_SUBTYPE     = 29; // 64
-TOPLEFTDIAGONAL_TRANS_SUBTYPE       = 30; // 65
-TOPRIGHTDIAGONAL_TRANS_SUBTYPE      = 31; // 66
-BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE   = 32; // 67
-BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE    = 33; // 68
-RECTANGLE_TRANS_SUBTYPE             = 34; // 101
-DIAMOND_TRANS_SUBTYPE               = 35; // 102
-TOPLEFT_TRANS_SUBTYPE               = 36; // 3
-TOPRIGHT_TRANS_SUBTYPE              = 37; // 4
-BOTTOMRIGHT_TRANS_SUBTYPE           = 38; // 5
-BOTTOMLEFT_TRANS_SUBTYPE            = 39; // 6
-TOPCENTER_TRANS_SUBTYPE             = 40; // 7
-RIGHTCENTER_TRANS_SUBTYPE           = 41; // 8
-BOTTOMCENTER_TRANS_SUBTYPE          = 42; // 9
-LEFTCENTER_TRANS_SUBTYPE            = 43; // 10
-LEFT_TRANS_SUBTYPE                  = 44; // 20
-UP_TRANS_SUBTYPE                    = 45; // 21
-RIGHT_TRANS_SUBTYPE                 = 46; // 22
-DIAGONALBOTTOMLEFT_TRANS_SUBTYPE    = 47; // 15
-DIAGONALTOPLEFT_TRANS_SUBTYPE       = 48; // 16
+DEFAULT_TRANS_SUBTYPE                       = 0;
+LEFTTORIGHT_TRANS_SUBTYPE                   = 1;
+TOPTOBOTTOM_TRANS_SUBTYPE                   = 2;
+CORNERSIN_TRANS_SUBTYPE                     = 3; // 11
+CORNERSOUT_TRANS_SUBTYPE                    = 4;
+VERTICAL_TRANS_SUBTYPE                      = 5;
+HORIZONTAL_TRANS_SUBTYPE                    = 6; // 14
+DOWN_TRANS_SUBTYPE                          = 7; // 19
+CIRCLE_TRANS_SUBTYPE                        = 8; // 27
+CLOCKWISETWELVE_TRANS_SUBTYPE               = 9; // 33
+CLOCKWISETHREE_TRANS_SUBTYPE                = 10;
+CLOCKWISESIX_TRANS_SUBTYPE                  = 11;
+CLOCKWISENINE_TRANS_SUBTYPE                 = 12;
+TWOBLADEVERTICAL_TRANS_SUBTYPE              = 13;
+TWOBLADEHORIZONTAL_TRANS_SUBTYPE            = 14;
+FOURBLADE_TRANS_SUBTYPE                     = 15; // 39
+FROMLEFT_TRANS_SUBTYPE                      = 16; // 97
+FROMTOP_TRANS_SUBTYPE                       = 17;
+FROMRIGHT_TRANS_SUBTYPE                     = 18;
+FROMBOTTOM_TRANS_SUBTYPE                    = 19;
+CROSSFADE_TRANS_SUBTYPE                     = 20;
+FADETOCOLOR_TRANS_SUBTYPE                   = 21;
+FADEFROMCOLOR_TRANS_SUBTYPE                 = 22;
+FADEOVERCOLOR_TRANS_SUBTYPE                 = 23;
+THREEBLADE_TRANS_SUBTYPE                    = 24;
+EIGHTBLADE_TRANS_SUBTYPE                    = 25;
+ONEBLADE_TRANS_SUBTYPE                      = 26; // 107
+ACROSS_TRANS_SUBTYPE                        = 27;
+TOPLEFTVERTICAL_TRANS_SUBTYPE               = 28; // 109
+TOPLEFTHORIZONTAL_TRANS_SUBTYPE             = 29; // 64
+TOPLEFTDIAGONAL_TRANS_SUBTYPE               = 30; // 65
+TOPRIGHTDIAGONAL_TRANS_SUBTYPE              = 31; // 66
+BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE           = 32; // 67
+BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE            = 33; // 68
+RECTANGLE_TRANS_SUBTYPE                     = 34; // 101
+DIAMOND_TRANS_SUBTYPE                       = 35; // 102
+TOPLEFT_TRANS_SUBTYPE                       = 36; // 3
+TOPRIGHT_TRANS_SUBTYPE                      = 37; // 4
+BOTTOMRIGHT_TRANS_SUBTYPE                   = 38; // 5
+BOTTOMLEFT_TRANS_SUBTYPE                    = 39; // 6
+TOPCENTER_TRANS_SUBTYPE                     = 40; // 7
+RIGHTCENTER_TRANS_SUBTYPE                   = 41; // 8
+BOTTOMCENTER_TRANS_SUBTYPE                  = 42; // 9
+LEFTCENTER_TRANS_SUBTYPE                    = 43; // 10
+LEFT_TRANS_SUBTYPE                          = 44; // 20
+UP_TRANS_SUBTYPE                            = 45; // 21
+RIGHT_TRANS_SUBTYPE                         = 46; // 22
+DIAGONALBOTTOMLEFT_TRANS_SUBTYPE            = 47; // 15
+DIAGONALTOPLEFT_TRANS_SUBTYPE               = 48; // 16
+TOPLEFTCLOCKWISE_TRANS_SUBTYPE              = 49; // 69
+TOPRIGHTCLOCKWISE_TRANS_SUBTYPE             = 50; // 70
+BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE          = 51; // 71
+BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE           = 52; // 72
+TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 53; // 73
+TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 54; // 74
+BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 55; // 75
+BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 56; // 76
 
 aTransitionSubtypeInMap = {
-    'default'           : DEFAULT_TRANS_SUBTYPE,
-    'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
-    'topToBottom'       : TOPTOBOTTOM_TRANS_SUBTYPE,
-    'cornersIn'         : CORNERSIN_TRANS_SUBTYPE,
-    'cornersOut'        : CORNERSOUT_TRANS_SUBTYPE,
-    'vertical'          : VERTICAL_TRANS_SUBTYPE,
-    'horizontal'        : HORIZONTAL_TRANS_SUBTYPE,
-    'down'              : DOWN_TRANS_SUBTYPE,
-    'circle'            : CIRCLE_TRANS_SUBTYPE,
-    'clockwiseTwelve'   : CLOCKWISETWELVE_TRANS_SUBTYPE,
-    'clockwiseThree'    : CLOCKWISETHREE_TRANS_SUBTYPE,
-    'clockwiseSix'      : CLOCKWISESIX_TRANS_SUBTYPE,
-    'clockwiseNine'     : CLOCKWISENINE_TRANS_SUBTYPE,
-    'twoBladeVertical'  : TWOBLADEVERTICAL_TRANS_SUBTYPE,
-    'twoBladeHorizontal': TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
-    'fourBlade'         : FOURBLADE_TRANS_SUBTYPE,
-    'fromLeft'          : FROMLEFT_TRANS_SUBTYPE,
-    'fromTop'           : FROMTOP_TRANS_SUBTYPE,
-    'fromRight'         : FROMRIGHT_TRANS_SUBTYPE,
-    'fromBottom'        : FROMBOTTOM_TRANS_SUBTYPE,
-    'crossfade'         : CROSSFADE_TRANS_SUBTYPE,
-    'fadeToColor'       : FADETOCOLOR_TRANS_SUBTYPE,
-    'fadeFromColor'     : FADEFROMCOLOR_TRANS_SUBTYPE,
-    'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE,
-    'threeBlade'        : THREEBLADE_TRANS_SUBTYPE,
-    'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
-    'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
-    'across'            : ACROSS_TRANS_SUBTYPE,
-    'topLeftVertical'   : TOPLEFTVERTICAL_TRANS_SUBTYPE,
-    'topLeftHorizontal' : TOPLEFTHORIZONTAL_TRANS_SUBTYPE,
-    'topLeftDiagonal'   : TOPLEFTDIAGONAL_TRANS_SUBTYPE,
-    'topRightDiagonal'  : TOPRIGHTDIAGONAL_TRANS_SUBTYPE,
-    'bottomRightDiagonal': BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE,
-    'bottomLeftDiagonal': BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE,
-    'rectangle'         : RECTANGLE_TRANS_SUBTYPE,
-    'diamond'           : DIAMOND_TRANS_SUBTYPE,
-    'topLeft'           : TOPLEFT_TRANS_SUBTYPE,
-    'topRight'          : TOPRIGHT_TRANS_SUBTYPE,
-    'bottomRight'       : BOTTOMRIGHT_TRANS_SUBTYPE,
-    'bottomLeft'        : BOTTOMLEFT_TRANS_SUBTYPE,
-    'topCenter'         : TOPCENTER_TRANS_SUBTYPE,
-    'rightCenter'       : RIGHTCENTER_TRANS_SUBTYPE,
-    'bottomCenter'      : BOTTOMCENTER_TRANS_SUBTYPE,
-    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE,
-    'left'              : LEFT_TRANS_SUBTYPE,
-    'up'                : UP_TRANS_SUBTYPE,
-    'right'             : RIGHT_TRANS_SUBTYPE,
-    'diagonalBottomLeft': DIAGONALBOTTOMLEFT_TRANS_SUBTYPE,
-    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE
+    'default'                       : DEFAULT_TRANS_SUBTYPE,
+    'leftToRight'                   : LEFTTORIGHT_TRANS_SUBTYPE,
+    'topToBottom'                   : TOPTOBOTTOM_TRANS_SUBTYPE,
+    'cornersIn'                     : CORNERSIN_TRANS_SUBTYPE,
+    'cornersOut'                    : CORNERSOUT_TRANS_SUBTYPE,
+    'vertical'                      : VERTICAL_TRANS_SUBTYPE,
+    'horizontal'                    : HORIZONTAL_TRANS_SUBTYPE,
+    'down'                          : DOWN_TRANS_SUBTYPE,
+    'circle'                        : CIRCLE_TRANS_SUBTYPE,
+    'clockwiseTwelve'               : CLOCKWISETWELVE_TRANS_SUBTYPE,
+    'clockwiseThree'                : CLOCKWISETHREE_TRANS_SUBTYPE,
+    'clockwiseSix'                  : CLOCKWISESIX_TRANS_SUBTYPE,
+    'clockwiseNine'                 : CLOCKWISENINE_TRANS_SUBTYPE,
+    'twoBladeVertical'              : TWOBLADEVERTICAL_TRANS_SUBTYPE,
+    'twoBladeHorizontal'            : TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
+    'fourBlade'                     : FOURBLADE_TRANS_SUBTYPE,
+    'fromLeft'                      : FROMLEFT_TRANS_SUBTYPE,
+    'fromTop'                       : FROMTOP_TRANS_SUBTYPE,
+    'fromRight'                     : FROMRIGHT_TRANS_SUBTYPE,
+    'fromBottom'                    : FROMBOTTOM_TRANS_SUBTYPE,
+    'crossfade'                     : CROSSFADE_TRANS_SUBTYPE,
+    'fadeToColor'                   : FADETOCOLOR_TRANS_SUBTYPE,
+    'fadeFromColor'                 : FADEFROMCOLOR_TRANS_SUBTYPE,
+    'fadeOverColor'                 : FADEOVERCOLOR_TRANS_SUBTYPE,
+    'threeBlade'                    : THREEBLADE_TRANS_SUBTYPE,
+    'eightBlade'                    : EIGHTBLADE_TRANS_SUBTYPE,
+    'oneBlade'                      : ONEBLADE_TRANS_SUBTYPE,
+    'across'                        : ACROSS_TRANS_SUBTYPE,
+    'topLeftVertical'               : TOPLEFTVERTICAL_TRANS_SUBTYPE,
+    'topLeftHorizontal'             : TOPLEFTHORIZONTAL_TRANS_SUBTYPE,
+    'topLeftDiagonal'               : TOPLEFTDIAGONAL_TRANS_SUBTYPE,
+    'topRightDiagonal'              : TOPRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'bottomRightDiagonal'           : BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'topLeftClockwise'              : TOPLEFTCLOCKWISE_TRANS_SUBTYPE,
+    'topRightClockwise'             : TOPRIGHTCLOCKWISE_TRANS_SUBTYPE,
+    'bottomRightClockwise'          : BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE,
+    'bottomLeftClockwise'           : BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE,
+    'topLeftCounterClockwise'       : TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE,
+    'topRightCounterClockwise'      : TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE,
+    'bottomRightCounterClockwise'   : BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE,
+    'bottomLeftCounterClockwise'    : BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE,
+    'bottomLeftDiagonal'            : BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE,
+    'rectangle'                     : RECTANGLE_TRANS_SUBTYPE,
+    'diamond'                       : DIAMOND_TRANS_SUBTYPE,
+    'topLeft'                       : TOPLEFT_TRANS_SUBTYPE,
+    'topRight'                      : TOPRIGHT_TRANS_SUBTYPE,
+    'bottomRight'                   : BOTTOMRIGHT_TRANS_SUBTYPE,
+    'bottomLeft'                    : BOTTOMLEFT_TRANS_SUBTYPE,
+    'topCenter'                     : TOPCENTER_TRANS_SUBTYPE,
+    'rightCenter'                   : RIGHTCENTER_TRANS_SUBTYPE,
+    'bottomCenter'                  : BOTTOMCENTER_TRANS_SUBTYPE,
+    'leftCenter'                    : LEFTCENTER_TRANS_SUBTYPE,
+    'left'                          : LEFT_TRANS_SUBTYPE,
+    'up'                            : UP_TRANS_SUBTYPE,
+    'right'                         : RIGHT_TRANS_SUBTYPE,
+    'diagonalBottomLeft'            : DIAGONALBOTTOMLEFT_TRANS_SUBTYPE,
+    'diagonalTopLeft'               : DIAGONALTOPLEFT_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5418,6 +5436,88 @@ aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE] =
     'outInvertSweep' : true,
     'scaleIsotropically' : false
 }
+
+aTransitionInfoTable[SPIRALWIPE_TRANSITION] = {};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][TOPLEFTCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][TOPRIGHTCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][BOTTOMRIGHTCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][BOTTOMLEFTCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 270.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 270.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SPIRALWIPE_TRANSITION][BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
 
 aTransitionInfoTable[BARNDOORWIPE_TRANSITION] = {};
 aTransitionInfoTable[BARNDOORWIPE_TRANSITION][VERTICAL_TRANS_SUBTYPE] =
@@ -9468,6 +9568,14 @@ function createClipPolyPolygon( nType, nSubtype )
                                              nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
                                              nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE
                                              );
+        case SPIRALWIPE_TRANSITION:
+            return new SpiralWipePath(
+                8 * 8, // elements
+                nSubtype == TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE     ||
+                nSubtype == TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE    ||
+                nSubtype == BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE ||
+                nSubtype == BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE );
+
     }
 }
 
@@ -10102,6 +10210,67 @@ SnakeWipePath.prototype.perform = function(nT) {
     return this.flipOnYAxis ? flipOnYAxis(res) : res;
 }
 
+/** SpiralWipePath
+ *
+ *  @param nElements
+ *      number of elements in the spiral animation
+ *  @param bFlipOnYAxis
+ *      boolean value indicating whether to flip on y-axis or not.
+ */
+function SpiralWipePath(nElements, bFlipOnYAxis) {
+    this.nElements    = nElements;
+    this.sqrtElements = Math.floor(Math.sqrt(nElements));
+    this.bFlipOnYAxis = bFlipOnYAxis;
+}
+
+SpiralWipePath.prototype.calcNegSpiral = function( nT ) {
+    var area  = nT * this.nElements;
+    var e     = (Math.sqrt(area) / 2.0);
+    var edge  = Math.floor(e) * 2;
+
+    var aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+    var edge_ = pruneScaleValue(edge / this.sqrtElements);
+
+    aTransform.scale(edge_, edge_);
+    aTransform.translate(0.5, 0.5);
+    var poly = createUnitSquarePath();
+    poly.matrixTransform(aTransform);
+    var res = poly;
+
+    if(1.0 - nT != 0) {
+        var edge1 = edge + 1;
+        var len   = Math.floor( (e - edge/2) * edge1 * 4);
+        var w     = Math.PI / 2;
+
+        while(len > 0) {
+            var alen = Math.min(len, edge1);
+            len -= alen;
+            poly = createUnitSquarePath();
+            aTransform = SVGIdentityMatrix.scale(
+                            pruneScaleValue( alen / this.sqrtElements ),
+                            pruneScaleValue( 1.0 / this.sqrtElements ));
+            aTransform.translate(
+                            - pruneScaleValue( (edge / 2) / this.sqrtElements ),
+                            pruneScaleValue( (edge / 2) / this.sqrtElements ));
+            aTransform.rotate( w );
+            w -= Math.PI / 2;
+            aTransform.translate(0.5, 0.5);
+            poly.matrixTransform(aTransform);
+            res.appendPath(poly);
+        }
+    }
+
+    return res;
+}
+
+SpiralWipePath.prototype.perform = function( nT ) {
+    var res         = createUnitSquarePath();
+    var innerSpiral = this.calcNegSpiral( 1.0 - nT );
+    innerSpiral.changeOrientation();
+    res.appendPath(innerSpiral);
+
+    return this.bFlipOnYAxis ? flipOnYAxis(res) : res;
+}
 
 /** perform
  *
