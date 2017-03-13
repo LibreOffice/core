@@ -28,7 +28,6 @@
 #define RID_DIALOG_START                RID_DBP_START
 #define RID_PAGE_START                  RID_DBP_START
 #define RID_STRING_START                RID_DBP_START
-#define RID_ERRORBOX_START              RID_DBP_START
 
 // strings
 
@@ -54,22 +53,12 @@
 // please adjust RID_DIALOG_END (below) when adding new dialogs
 #define RID_DIALOG_END                  ( RID_DIALOG_START +  3 )
 
-// ErrorBox
-
-#define RID_ERR_INVALID_FORM_CONNECTION     ( RID_ERRORBOX_START +  1 )
-
-// please adjust RID_ERRORBOX_END (below) when adding new error boxes
-#define RID_ERRORBOX_END                    RID_ERR_INVALID_FORM_CONNECTION
-
 // range checks
 
 #if RID_STRING_END > RID_DBP_END
     #error "please adjust the resource id ranges!!"
 #endif
 #if RID_DIALOG_END > RID_DBP_END
-    #error "please adjust the resource id ranges!!"
-#endif
-#if RID_ERRORBOX_END > RID_DBP_END
     #error "please adjust the resource id ranges!!"
 #endif
 

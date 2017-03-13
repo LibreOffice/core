@@ -22,7 +22,6 @@
 #include "dbu_resource.hrc"
 
     // FREE                                 RID_STR_BRW_START +  0
-#define RID_STR_DATABROWSER_FILTERED        RID_STR_BRW_START +  1
 #define SBA_BROWSER_SETTING_ORDER           RID_STR_BRW_START +  2
 #define SBA_BROWSER_SETTING_FILTER          RID_STR_BRW_START +  3
 #define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STR_BRW_START +  4

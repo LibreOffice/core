@@ -138,11 +138,6 @@ String RID_STR_VIEWS_HELP_TEXT_DESIGN
     Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
 };
 
-String RID_STR_VIEWS_HELP_TEXT_WIZARD
-{
-    Text [ en-US ] = "Opens the view wizard" ;
-};
-
 String STR_DATABASE
 {
     Text [ en-US ] = "Database" ;

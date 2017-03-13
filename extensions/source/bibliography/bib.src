@@ -18,15 +18,6 @@
  */
 #include "bib.hrc"
 
-String RID_BIB_STR_FIELDSELECTION
-{
-    Text [ en-US ] = "Field selection:";
-};
-
-String RID_BIB_STR_TABWIN_PREFIX
-{
-    Text [ en-US ] = "Table;Query;Sql;Sql [Native]";
-};
 String RID_BIB_STR_FRAME_TITLE
 {
     Text [ en-US ] = "Bibliography Database";

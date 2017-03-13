@@ -33,26 +33,6 @@ String RID_STR_WRONGPASSWORD
 {
     Text [ en-US ] = "Incorrect Password" ;
 };
-String RID_STR_OPEN
-{
-    Text [ en-US ] = "Load" ;
-};
-String RID_STR_SAVE
-{
-    Text [ en-US ] = "Save" ;
-};
-String RID_STR_SOURCETOBIG
-{
-    Text [ en-US ] = "The source text is too large and can be neither compiled nor saved.\nDelete some of the comments or transfer some methods into another module." ;
-};
-String RID_STR_ERROROPENSTORAGE
-{
-    Text [ en-US ] = "Error opening file" ;
-};
-String RID_STR_ERROROPENLIB
-{
-    Text [ en-US ] = "Error loading library" ;
-};
 String RID_STR_NOLIBINSTORAGE
 {
     Text [ en-US ] = "The file does not contain any BASIC libraries" ;
@@ -101,17 +81,9 @@ String RID_STR_SBXNAMEALLREADYUSED2
 {
     Text [ en-US ] = "Object with same name already exists" ;
 };
-String RID_STR_FILEEXISTS
-{
-    Text [ en-US ] = "The 'XX' file already exists" ;
-};
 String RID_STR_CANNOTRUNMACRO
 {
     Text [ en-US ] = "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings." ;
-};
-String RID_STR_RUNTIMEERROR
-{
-    Text [ en-US ] = "Runtime Error: #" ;
 };
 String RID_STR_SEARCHNOTFOUND
 {
@@ -136,14 +108,6 @@ String RID_STR_COULDNTWRITE
 String RID_STR_CANNOTCHANGENAMESTDLIB
 {
     Text [ en-US ] = "The name of the default library cannot be changed." ;
-};
-String RID_STR_CANNOTCHANGENAMEREFLIB
-{
-    Text [ en-US ] = "The name of a referenced library cannot be changed." ;
-};
-String RID_STR_CANNOTUNLOADSTDLIB
-{
-    Text [ en-US ] = "The default library cannot be deactivated" ;
 };
 String RID_STR_GENERATESOURCE
 {
@@ -177,10 +141,6 @@ String RID_STR_QUERYDELMODULE
 {
     Text [ en-US ] = "Do you want to delete the XX module?" ;
 };
-String RID_STR_OBJNOTFOUND
-{
-    Text [ en-US ] = "Object or method not found" ;
-};
 String RID_STR_BASIC
 {
     Text [ en-US ] = "BASIC" ;
@@ -194,10 +154,6 @@ String RID_STR_COLUMN
 {
      // Abkuerzung fuer 'Spalte'
     Text [ en-US ] = "Col" ;
-};
-String RID_STR_DOC
-{
-    Text [ en-US ] = "Document" ;
 };
 String RID_BASICIDE_OBJECTBAR
 {
@@ -235,21 +191,9 @@ String RID_STR_STACKNAME
 {
     Text [ en-US ] = "Call Stack" ;
 };
-String RID_STR_INITIDE
-{
-    Text [ en-US ] = "BASIC Initialization" ;
-};
-String RID_STR_STDMODULENAME
-{
-    Text [ en-US ] = "Module" ;
-};
 String RID_STR_STDDIALOGNAME
 {
     Text [ en-US ] = "Dialog" ;
-};
-String RID_STR_STDLIBNAME
-{
-    Text [ en-US ] = "Library" ;
 };
 String RID_STR_NEWLIB
 {
@@ -270,10 +214,6 @@ String RID_STR_ALL
 String RID_STR_PAGE
 {
     Text [ en-US ] = "Page" ;
-};
-String RID_STR_MACRONAMEREQ
-{
-    Text [ en-US ] = "A name must be entered." ;
 };
 String RID_STR_WILLSTOPPRG
 {

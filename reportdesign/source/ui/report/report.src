@@ -134,16 +134,6 @@ String RID_STR_UNDO_ADD_REPORTHEADERFOOTER
     Text [ en-US ] = "Add report header / report footer";
 };
 
-String RID_STR_UNDO_REMOVE_PAGEHEADERFOOTER
-{
-    Text [ en-US ] = "Remove page header / page footer";
-};
-
-String RID_STR_UNDO_ADD_PAGEHEADERFOOTER
-{
-    Text [ en-US ] = "Add page header / page footer";
-};
-
 String RID_STR_UNDO_PROPERTY
 {
     Text [ en-US ] = "Change property '#'";
@@ -172,21 +162,6 @@ String RID_STR_UNDO_REMOVE_GROUP_FOOTER
 String RID_STR_UNDO_ADDFUNCTION
 {
     Text [ en-US ] = "Add function";
-};
-
-String RID_STR_UNDO_DELETEFUNCTION
-{
-    Text [ en-US ] = "Delete function";
-};
-
-String RID_STR_DESIGN_VIEW
-{
-    Text [ en-US ] = "Design";
-};
-
-String RID_STR_PREVIEW_VIEW
-{
-    Text [ en-US ] = "Preview";
 };
 
 String STR_RPT_TITLE
@@ -238,16 +213,6 @@ String RID_STR_UNDO_DELETE_CONTROL
     Text [ en-US ] = "Delete Control" ;
 };
 
-String RID_STR_UNDO_GROUP
-{
-    Text [ en-US ] = "Insert Group" ;
-};
-
-String RID_STR_UNDO_UNGROUP
-{
-    Text [ en-US ] = "Delete Group" ;
-};
-
 String RID_STR_GROUPHEADER
 {
     Text [ en-US ] = "GroupHeader";
@@ -269,15 +234,6 @@ String RID_STR_FILTER
     Text [ en-US ] = "Filter" ;
 };
 
-String RID_APP_TITLE
-{
-    Text [ en-US ] = " - %PRODUCTNAME Base Report" ;
-};
-
-String RID_APP_NEW_DOC
-{
-    Text [ en-US ] = "Untitled" ;
-};
 String RID_STR_UNDO_ALIGNMENT
 {
     Text [ en-US ] = "Change Alignment" ;
@@ -305,11 +261,6 @@ String RID_STR_FUNCTION
     Text [ en-US ] = "Function" ;
 };
 
-Bitmap RID_BMP_REPORT_TREE_ICON
-{
-    File = "report_16";
-};
-
 String RID_STR_COULD_NOT_CREATE_REPORT
 {
     Text [ en-US ] = "An error occurred while creating the report." ;
@@ -333,14 +284,6 @@ String RID_STR_PAGEHEADERFOOTER_INSERT
 String RID_STR_PAGEHEADERFOOTER_DELETE
 {
     Text [ en-US ] = "Delete Page Header/Footer";
-};
-String RID_STR_COLUMNHEADERFOOTER_INSERT
-{
-    Text [ en-US ] = "Insert Column Header/Footer";
-};
-String RID_STR_COLUMNHEADERFOOTER_DELETE
-{
-    Text [ en-US ] = "Delete Column Header/Footer";
 };
 String RID_STR_REPORTHEADERFOOTER_INSERT
 {

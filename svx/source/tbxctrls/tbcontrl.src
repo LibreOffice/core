@@ -94,11 +94,6 @@ String RID_SVXSTR_TRANSPARENT
     Text [ en-US ] = "Transparent";
 };
 
-String RID_SVXSTR_FILLPATTERN
-{
-    Text [ en-US ] = "Pattern" ;
-};
-
 String RID_SVXSTR_FRAME
 {
     Text [ en-US ] = "Borders" ;

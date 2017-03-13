@@ -46,7 +46,6 @@
 #define STR_DOCTYPENAME_SI                  (RID_SFX_DOC_START+ 73)
 #define STR_DOCTYPENAME_SD                  (RID_SFX_DOC_START+ 74)
 #define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
-#define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
 #define TEMPLATE_LONG_NAMES_ARY             (RID_SFX_DOC_START+ 81)
 #define TEMPLATE_SHORT_NAMES_ARY            (RID_SFX_DOC_START+ 82)

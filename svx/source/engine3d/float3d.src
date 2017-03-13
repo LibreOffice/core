@@ -31,11 +31,6 @@ Bitmap RID_SVXBMP_LAMP_OFF
     File = "light.bmp";
 };
 
-Bitmap RID_SVXBMP_COLORDLG
-{
-    File = "colordlg.bmp";
-};
-
 String RID_SVXFLOAT3D_FAVORITE
 {
     Text [ en-US ] = "Favorite";

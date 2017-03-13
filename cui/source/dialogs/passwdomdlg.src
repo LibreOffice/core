@@ -19,11 +19,6 @@
 
 #include <cuires.hrc>
 
-String RID_SVXSTR_PASSWD_MUST_BE_CONFIRMED
-{
-    Text [ en-US ] = "Password must be confirmed" ;
-};
-
 String RID_SVXSTR_ONE_PASSWORD_MISMATCH
 {
     Text [ en-US ] = "The confirmation password did not match the password. Set the password again by entering the same password in both boxes." ;

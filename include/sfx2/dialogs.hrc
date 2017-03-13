@@ -21,9 +21,6 @@
 
 #include <sfx2/sfxsids.hrc>
 
-#define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)
-#define RID_SVXDLG_CUSTOMIZE            (RID_SVX_START + 291)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
