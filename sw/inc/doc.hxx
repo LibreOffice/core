@@ -246,7 +246,7 @@ class SW_DLLPUBLIC SwDoc :
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objects
+    Idle       maOLEModifiedIdle;        //< Timer for update modified OLE-Objects
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     std::vector<OUString> m_PatternNames; //< Array for names of document-templates
@@ -277,25 +277,24 @@ class SW_DLLPUBLIC SwDoc :
 
     // Pointer
     SwFrameFormat        *mpDfltFrameFormat;       //< Default formats.
-    SwFrameFormat        *mpEmptyPageFormat;     //< Format for the default empty page
-    SwFrameFormat        *mpColumnContFormat;    //< Format for column container
+    SwFrameFormat        *mpEmptyPageFormat;       //< Format for the default empty page
+    SwFrameFormat        *mpColumnContFormat;      //< Format for column container
     SwCharFormat       *mpDfltCharFormat;
-    SwTextFormatColl    *mpDfltTextFormatColl;   //< Defaultformatcollections
+    SwTextFormatColl    *mpDfltTextFormatColl;     //< Defaultformatcollections
     SwGrfFormatColl    *mpDfltGrfFormatColl;
 
-    SwFrameFormats       *mpFrameFormatTable;        //< Format table
+    SwFrameFormats       *mpFrameFormatTable;      //< Format table
     SwCharFormats      *mpCharFormatTable;
     SwFrameFormats       *mpSpzFrameFormatTable;
     SwSectionFormats   *mpSectionFormatTable;
-    SwFrameFormats       *mpTableFrameFormatTable;     //< For tables
+    SwFrameFormats       *mpTableFrameFormatTable; //< For tables
     SwTextFormatColls   *mpTextFormatCollTable;    //< FormatCollections
     SwGrfFormatColls   *mpGrfFormatCollTable;
 
-    SwTOXTypes      *mpTOXTypes;         //< Tables/indices
-    SwDefTOXBase_Impl * mpDefTOXBases;   //< defaults of SwTOXBase's
+    SwTOXTypes      *mpTOXTypes;                   //< Tables/indices
+    SwDefTOXBase_Impl * mpDefTOXBases;             //< defaults of SwTOXBase's
 
-    SwDBManager         *mpDBManager;            /**< Pointer to the DBManager for
-                                         evaluation of DB-fields. */
+    SwDBManager         *mpDBManager;              //< Pointer to the DBManager for evaluation of DB-fields.
 
     SwNumRule       *mpOutlineRule;
     SwFootnoteInfo       *mpFootnoteInfo;
@@ -303,27 +302,27 @@ class SW_DLLPUBLIC SwDoc :
     SwLineNumberInfo*mpLineNumberInfo;
     SwFootnoteIdxs       *mpFootnoteIdxs;
 
-    SwDocShell      *mpDocShell;         //< Ptr to SfxDocShell of Doc.
-    SfxObjectShellLock mxTmpDocShell;    //< A temporary shell that is used to copy OLE-Nodes
+    SwDocShell      *mpDocShell;                   //< Ptr to SfxDocShell of Doc.
+    SfxObjectShellLock mxTmpDocShell;              //< A temporary shell that is used to copy OLE-Nodes
 
-    SwAutoCorrExceptWord *mpACEWord;     /**< For the automated takeover of
-                                         auto-corrected words that are "re-corrected". */
-    SwURLStateChanged *mpURLStateChgd;   //< SfxClient for changes in INetHistory
-    SvNumberFormatter *mpNumberFormatter;//< NumFormatter for tables / fields
+    SwAutoCorrExceptWord *mpACEWord;               /**< For the automated takeover of
+                                                   auto-corrected words that are "re-corrected". */
+    SwURLStateChanged *mpURLStateChgd;             //< SfxClient for changes in INetHistory
+    SvNumberFormatter *mpNumberFormatter;          //< NumFormatter for tables / fields
 
-    mutable SwNumRuleTable    *mpNumRuleTable;   //< List of all named NumRules.
+    mutable SwNumRuleTable    *mpNumRuleTable;     //< List of all named NumRules.
 
     // Hash map to find numrules by name
     mutable std::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
 
-    SwPagePreviewPrtData *mpPgPViewPrtData;  //< Indenting / spacing for printing of page view.
+    SwPagePreviewPrtData *mpPgPViewPrtData;        //< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
 
-    IStyleAccess    *mpStyleAccess;  //< handling of automatic styles
-    SwLayoutCache   *mpLayoutCache;  /**< Layout cache to read and save with the
-                                     document for a faster formatting */
+    IStyleAccess    *mpStyleAccess;                //< handling of automatic styles
+    SwLayoutCache   *mpLayoutCache;                /**< Layout cache to read and save with the
+                                                   document for a faster formatting */
 
-    IGrammarContact *mpGrammarContact;   //< for grammar checking in paragraphs during editing
+    IGrammarContact *mpGrammarContact;             //< for grammar checking in paragraphs during editing
 
     // table of forbidden characters of this document
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
@@ -354,16 +353,14 @@ private:
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
-    bool mbIsAutoFormatRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
-    bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
-                                                View
+    bool mbIsAutoFormatRedline   : 1;    //< TRUE: Redlines are recorded by Autoformat.
+    bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of View
                                                 notification of OLE-Objects PrtOLENotify() is required. */
     bool mbAllOLENotify          : 1;    //< True: Notification of all objects is required.
-    bool mbInsOnlyTextGlssry      : 1;    //< True: insert 'only text' glossary into doc
+    bool mbInsOnlyTextGlssry     : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
     bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard
-    bool mbColumnSelection       : 1;    /**< TRUE: this content has bee created by a column selection
-                                                (clipboard docs only) */
+    bool mbColumnSelection       : 1;    //< TRUE: this content has been created by a column selection (clipboard docs only)
     bool mbIsPrepareSelAll       : 1;
 
 #ifdef DBG_UTIL
@@ -440,7 +437,7 @@ private:
 public:
     enum DocumentType {
         DOCTYPE_NATIVE,
-        DOCTYPE_MSWORD              //This doc model comes from MS Word
+        DOCTYPE_MSWORD              // This doc model comes from MS Word
         };
     DocumentType    meDocType;
     DocumentType    GetDocumentType(){ return meDocType; }
@@ -584,7 +581,7 @@ public:
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }
     inline void SetOLEPrtNotifyPending( bool bSet = true );
-    void PrtOLENotify( bool bAll ); //All or only marked
+    void PrtOLENotify( bool bAll ); // All or only marked
 
 #ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
@@ -862,7 +859,6 @@ public:
     void ReplaceCompatibilityOptions( const SwDoc& rSource );
 
     /** Replace all user defined document properties with xSourceDocProps.
-
         Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
      */
     void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
@@ -933,9 +929,8 @@ public:
     void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
                                  SfxHintId nOp);
 
-    /** The html import sometimes overwrites the
-     page sizes set in the page descriptions. This function is used to
-     correct this. */
+    /** The html import sometimes overwrites the page sizes set in
+     the page descriptions. This function is used to correct this. */
     void CheckDefaultPageFormat();
 
     // Methods for tables/indices
