@@ -1962,6 +1962,8 @@ OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
     if (nLen)
     {
         nLen = std::min(nLen, static_cast<std::size_t>(SAL_MAX_INT32));
+        //limit allocation to size of file, but + 1 to set eof state
+        nLen = std::min(nLen, rStrm.remainingSize() + 1);
         //alloc a (ref-count 1) rtl_String of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_string_alloc(sal::static_int_cast<sal_Int32>(nLen));
@@ -1991,6 +1993,8 @@ OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
     if (nLen)
     {
         nLen = std::min(nLen, static_cast<std::size_t>(SAL_MAX_INT32));
+        //limit allocation to size of file, but + 1 to set eof state
+        nLen = std::min(nLen, (rStrm.remainingSize() + 2) / 2);
         //alloc a (ref-count 1) rtl_uString of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
         pStr = rtl_uString_alloc(sal::static_int_cast<sal_Int32>(nLen));
