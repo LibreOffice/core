@@ -1635,7 +1635,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         return FALSE;
 
     SAL_WARN_IF( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "vcl", "cannot subset device font" );
-    SAL_WARN_IF( !aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "vcl", "can only subset TT font" );
+    SAL_WARN_IF( !(aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE), "vcl", "can only subset TT font" );
 #endif
 
     OUString aSysPath;
