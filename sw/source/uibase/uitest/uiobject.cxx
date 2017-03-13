@@ -52,6 +52,7 @@ StringMap SwEditWinUIObject::get_state()
     aMap["EndPara"] = OUString::boolean(rWrtShell.IsEndPara());
     aMap["StartDoc"] = OUString::boolean(rWrtShell.IsStartOfDoc());
     aMap["EndDoc"] = OUString::boolean(rWrtShell.IsEndOfDoc());
+    aMap["Zoom"] = OUString::number():
 
     return aMap;
 }
