@@ -4909,6 +4909,50 @@ void Test::testCopyPasteFormulasExternalDoc()
     xExtDocSh->DoClose();
 }
 
+void Test::testCopyPasteReferencesExternalDoc()
+{
+    OUString aDocName("file:///source.fake");
+    SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
+    getDocShell().DoInitNew(pMedium);
+    m_pDoc = &getDocShell().GetDocument();
+
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    xExtDocSh->SetIsInUcalc();
+    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtSh1Name("ExtSheet1");
+    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
+                           findLoadedDocShellByName(aExtDocName) != nullptr);
+
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
+    rExtDoc.InsertTab(0, aExtSh1Name);
+
+    m_pDoc->InsertTab(0, "Sheet1");
+
+    m_pDoc->SetString(0,5,0, "=SUM($Sheet1.A1:A5)");
+
+    ScRange aRange(0,2,0,0,5,0);
+    ScClipParam aClipParam(aRange, false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
+    aRange = ScRange(0,0,0,0,3,0);
+    ScMarkData aMarkData2;
+    aMarkData2.SetMarkArea(aRange);
+    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, nullptr, &aClipDoc);
+
+    OUString aFormula;
+    rExtDoc.GetFormula(0,3,0, aFormula);
+    //adjust absolute refs pointing to the copy area
+    CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=SUM('file:///source.fake'#$Sheet1.A#REF!:A3)"));
+
+    xExtDocSh->DoClose();
+}
+
 void Test::testFindAreaPosVertical()
 {
     const char* aData[][3] = {

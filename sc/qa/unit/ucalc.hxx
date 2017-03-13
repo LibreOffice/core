@@ -422,6 +422,7 @@ public:
     void testAutoFillSimple();
     void testCopyPasteFormulas();
     void testCopyPasteFormulasExternalDoc();
+    void testCopyPasteReferencesExternalDoc(); // tdf#106456
 
     void testFindAreaPosVertical();
     void testFindAreaPosColRight();
@@ -702,6 +703,7 @@ public:
     CPPUNIT_TEST(testAutoFillSimple);
     CPPUNIT_TEST(testCopyPasteFormulas);
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
+    CPPUNIT_TEST(testCopyPasteReferencesExternalDoc);
     CPPUNIT_TEST(testFindAreaPosVertical);
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
