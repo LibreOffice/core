@@ -112,7 +112,7 @@ XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
 
 bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewUnderline;
+    sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewUnderline, rStrImpValue, pXML_UnderlineType_Enum );
     if( bRet )
@@ -194,7 +194,7 @@ XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
 
 bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewUnderline;
+    sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewUnderline, rStrImpValue, pXML_UnderlineStyle_Enum );
     if( bRet )
@@ -284,7 +284,7 @@ XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
 
 bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewUnderline;
+    sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewUnderline, rStrImpValue, pXML_UnderlineWidth_Enum );
     if( bRet )
