@@ -205,7 +205,6 @@ namespace sdr
             {
                 // use visible pixels, but transform to world coordinates
                 aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-
                 // if a clip region is set, use it
                 if(!rDisplayInfo.GetRedrawArea().IsEmpty())
                 {
@@ -230,16 +229,22 @@ namespace sdr
                     aViewRange.intersect(aDiscreteClipRange);
                 }
 
-                // transform to world coordinates
-                aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+                const MapMode aOrigMapMode = rTargetOutDev.GetMapMode();
                 if (comphelper::LibreOfficeKit::isActive() &&
                     comphelper::LibreOfficeKit::isLocalRendering())
                 {
-                    const int TWIPS_PER_PIXEL = 15;
-                    aViewRange = basegfx::B2DRange(aViewRange.getMinimum().getX(),
-                                                   aViewRange.getMinimum().getY(),
-                                                   aViewRange.getMaximum().getX() * TWIPS_PER_PIXEL,
-                                                   aViewRange.getMaximum().getY() * TWIPS_PER_PIXEL);
+                    MapMode aMapMode = aOrigMapMode;
+                    aMapMode.SetOrigin(Point());
+                    rTargetOutDev.SetMapMode(aMapMode);
+                }
+
+                // transform to world coordinates
+                aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+
+                if (comphelper::LibreOfficeKit::isActive() &&
+                    comphelper::LibreOfficeKit::isLocalRendering())
+                {
+                    rTargetOutDev.SetMapMode(aOrigMapMode);
                 }
             }
 
@@ -315,25 +320,9 @@ namespace sdr
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                         rTargetOutDev, getViewInformation2D()));
 
-                if (comphelper::LibreOfficeKit::isActive() &&
-                    comphelper::LibreOfficeKit::isLocalRendering())
-                {
-                    // Restore the origin.
-                    MapMode aMapMode = pOutDev->GetMapMode();
-                    aMapMode.SetOrigin(aOrigMapMode.GetOrigin());
-                    pOutDev->SetMapMode(aMapMode);
-                }
-
                 if(pProcessor2D)
                 {
                     pProcessor2D->process(xPrimitiveSequence);
-                }
-
-                if (comphelper::LibreOfficeKit::isActive() &&
-                    comphelper::LibreOfficeKit::isLocalRendering())
-                {
-                    // Restore the original map-mode.
-                    pOutDev->SetMapMode(aOrigMapMode);
                 }
             }
 
