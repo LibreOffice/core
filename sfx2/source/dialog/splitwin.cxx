@@ -597,7 +597,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
         if (rD.pWin)
         {
-            // A docked window has been found. If no suitable window behind the
+            // A docked window has been found. If no suitable window behind
             // the desired insertion point s found, then insertion is done at
             // the end.
             nInsertPos = nCount;

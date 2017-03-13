@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module ui {
     <p>
     Note further:<br>
     All changes you made on this configuration access modify the
-    the configuration set inside memory only. You have to use
+    configuration set inside memory only. You have to use
     the com::sun::star::util::XFlushable interface
     (which must be available at the same implementation object too), to
     make it persistent.

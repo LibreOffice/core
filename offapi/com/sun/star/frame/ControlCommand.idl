@@ -41,7 +41,7 @@ struct ControlCommand
 
     /** specifies a sequence of named values which are used as argument
         for the command. The number and type of arguments depend on the
-        the command and control.
+        command and control.
      */
     sequence< com::sun::star::beans::NamedValue > Arguments;
 };

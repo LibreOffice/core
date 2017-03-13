@@ -46,10 +46,8 @@ public:
     bool SAL_CALL startup(bool bCreateSuspended = true);
     void SAL_CALL shutdown();
 
-    // notifications may be added the
-    // the event queue but will only
-    // be notified to the clients after
-    // resume was called
+    // notifications may be added the event queue but will only
+    // be notified to the clients after resume was called
     void suspend();
 
     // resume notifying events

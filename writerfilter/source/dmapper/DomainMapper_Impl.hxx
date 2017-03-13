@@ -98,9 +98,7 @@ enum PageMarElement
     PAGE_MAR_GUTTER
 };
 
-/*-------------------------------------------------------------------------
-    property stack element
-  -----------------------------------------------------------------------*/
+/// property stack element
 enum ContextType
 {
     CONTEXT_SECTION,
@@ -132,9 +130,7 @@ public:
     bool getTextInserted();
 };
 
-/*--------------------------------------------------
-   field stack element
- * --------------------------------------------------*/
+/// field stack element
 class FieldContext
 {
     bool                                                                            m_bFieldCommandCompleted;
@@ -150,7 +146,7 @@ class FieldContext
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
     OUString                                                                 m_sHyperlinkURL;
-    /// A frame for the the hyperlink when one exists.
+    /// A frame for the hyperlink when one exists.
     OUString m_sHyperlinkTarget;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
@@ -250,9 +246,7 @@ struct DeletableTabStop : public css::style::TabStop
     {
     }
 };
-/*-------------------------------------------------------------------------
-    /// helper to remember bookmark start position
-  -----------------------------------------------------------------------*/
+/// helper to remember bookmark start position
 struct BookmarkInsertPosition
 {
     bool                                                                    m_bIsStartOfText;

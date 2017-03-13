@@ -34,7 +34,7 @@
  *   In 'fsm' there is a line for each state X charset X nextstate.
  *   List chars that overwrite previous entries later (e.g. C_ALPH
  *   can be overridden by '_' by a later entry; and C_XX is the
- *   the universal set, and should always be first.
+ *   universal set, and should always be first.
  *   States above S_SELF are represented in the big table as negative values.
  *   S_SELF and S_SELFB encode the resulting token type in the upper bits.
  *   These actions differ in that S_SELF doesn't have a lookahead char,

@@ -1680,7 +1680,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         //    pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
         //}
 
-        // Register the new master pages with the document and then use the
+        // Register the new master pages with the document and then use
         // the new presentation layout for the default and notes pages
         if (pSourceDoc != this)
         {

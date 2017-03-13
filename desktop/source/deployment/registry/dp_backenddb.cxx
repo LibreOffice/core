@@ -459,9 +459,7 @@ void BackendDb::writeSimpleElement(
 
 }
 
-/** The key elements have an url attribute and are always children of the root
-    element.
-*/
+/// The key elements have an url attribute and are always children of the root element.
 Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
     OUString const & url)
 {
@@ -474,7 +472,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         //Check if there are an entry with the same url. This can be the case if the
-        //the status of an XPackage is ambiguous. In this case a call to activateExtension
+        //status of an XPackage is ambiguous. In this case a call to activateExtension
         //(dp_extensionmanager.cxx), will register the package again. See also
         //Package::processPackage_impl in dp_backend.cxx.
         //A package can become
