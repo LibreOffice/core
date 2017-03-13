@@ -26,6 +26,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <math.h>
+#include <algorithm>
 #include <memory>
 
 class FilterConfigItem;
@@ -2301,16 +2302,16 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nDataLen]);
             pOS2MET->ReadBytes(pBuf.get(), nDataLen);
             if (p->nBitsPerPixel==24) {
-                sal_uInt8 nTemp;
                 sal_uLong nBytesPerLine = (p->nWidth * 3 + 3) & 0xfffffffc;
                 sal_uLong nAlign = p->nMapPos - (p->nMapPos % nBytesPerLine);
                 sal_uLong i=0;
                 while (nAlign+i+2<p->nMapPos+nDataLen) {
                     if (nAlign+i>=p->nMapPos) {
                         sal_uLong j = nAlign + i - p->nMapPos;
-                        nTemp=pBuf[j]; pBuf[j]=pBuf[j+2]; pBuf[j+2]=nTemp;
+                        std::swap(pBuf[j], pBuf[j+2]);
                     }
-                    i+=3; if (i+2>=nBytesPerLine) {
+                    i+=3;
+                    if (i+2>=nBytesPerLine) {
                         nAlign+=nBytesPerLine;
                         i=0;
                     }
