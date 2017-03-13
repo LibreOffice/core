@@ -2409,7 +2409,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
         if( !m_nWidth )
         {
             // This happens only for percentage values for the table itself.
-            // In this case, the columns get the correct width even if the
+            // In this case, the columns get the correct width even if
             // the sum of the relative withs is smaller than the available
             // width in TWIP. Therefore, we can use the relative width.
             m_nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;

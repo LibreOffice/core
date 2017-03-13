@@ -232,7 +232,7 @@ class JavaPanZoomController
             synchronized (mTarget.getLock()) {
                 ImmutableViewportMetrics validated = getValidViewportMetrics();
                 if (!getMetrics().fuzzyEquals(validated)) {
-                    // page size changed such that we are now in overscroll. snap to the
+                    // page size changed such that we are now in overscroll. snap to
                     // the nearest valid viewport
                     mTarget.setViewportMetrics(validated);
                 }

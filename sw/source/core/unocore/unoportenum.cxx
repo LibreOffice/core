@@ -120,10 +120,10 @@ namespace
             //   ? ( r1->nBkmType <  r2->nBkmType )
             //   : ( r1->nIndex   <  r2->nIndex );
 
-            // MTG: 25/11/05: Note that the above code does not correctly handle
+            // Note that the above code does not correctly handle
             // the case when one bookmark ends, and another begins in the same
             // position. When this occurs, the above code will return the
-            // the start of the 2nd bookmark BEFORE the end of the first bookmark
+            // start of the 2nd bookmark BEFORE the end of the first bookmark
             // See bug #i58438# for more details. The below code is correct and
             // fixes both #i58438 and #i16896#
             return r1->aPosition < r2->aPosition;
@@ -429,7 +429,7 @@ lcl_ExportFieldMark(
 {
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCursor->GetDoc();
-    //flr: maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
+    // maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
     const sal_Int32 start = pUnoCursor->Start()->nContent.GetIndex();
     OSL_ENSURE(pUnoCursor->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
@@ -877,7 +877,7 @@ lcl_ExportHints(
                     {
                         pUnoCursor->Right(1);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
-                            break; // Robust #i81708 content in covered cells
+                            break; // Robust #i81708# content in covered cells
 
                         // Do not expose inline anchored textboxes.
                         if (SwTextBoxHelper::isTextBox(pAttr->GetFlyCnt().GetFrameFormat(), RES_FLYFRMFMT))
@@ -1091,24 +1091,24 @@ static void lcl_ExportRedline(
     const sal_Int32 nIndex)
 {
 
-    // MTG: 23/11/05: We want this loop to iterate over all red lines in this
+    // We want this loop to iterate over all red lines in this
     // array. We will only insert the ones with index matches
     for ( SwXRedlinePortion_ImplList::iterator aIter = rRedlineArr.begin(), aEnd = rRedlineArr.end();
           aIter != aEnd; )
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
         sal_Int32 nRealIndex = pPtr->getRealIndex();
-        // MTG: 23/11/05: If there are elements before nIndex, remove them
+        // If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
             aIter = rRedlineArr.erase(aIter);
-        // MTG: 23/11/05: If the elements match, and them to the list
+        // If the elements match, and them to the list
         else if ( nIndex == nRealIndex )
         {
             rPortions.push_back( new SwXRedlinePortion(
                         *pPtr->m_pRedline, pUnoCursor, xParent, pPtr->m_bStart));
             aIter = rRedlineArr.erase(aIter);
         }
-        // MTG: 23/11/05: If we've iterated past nIndex, exit the loop
+        // If we've iterated past nIndex, exit the loop
         else
             break;
     }

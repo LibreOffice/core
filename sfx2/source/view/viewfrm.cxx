@@ -1976,7 +1976,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
 (
     sal_uInt16  nViewIdOrNo,    /*  > 0
                                 Registration-Id of the View, to which the
-                                the method should switch, for example the one
+                                method should switch, for example the one
                                 that will be created.
 
                                 == 0

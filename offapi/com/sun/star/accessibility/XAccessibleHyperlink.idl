@@ -28,10 +28,10 @@ module com { module sun { module star { module accessibility {
 /** Implement this interface to represent a hyperlink or a group of
     hyperlinks.
 
-    <p>Single hyperlinks correspond to simple &lt;a href&gt; tags.  Groups
-    of hyperlinks are contained in client side image maps.  Linked objects
-    and anchors are implementation dependent.  This interface inherits the
-    XAccessibleAction interface.  Especially that interface's
+    <p>Single hyperlinks correspond to simple &lt;a href&gt; tags. Groups
+    of hyperlinks are contained in client side image maps. Linked objects
+    and anchors are implementation dependent. This interface inherits the
+    XAccessibleAction interface. Especially that interface's
     XAccessibleAction::getActionCount() method is needed to
     obtain a maximum value for the indices passed to the
     XAccessibleHyperlink::getAccessibleActionAnchor() and
@@ -40,8 +40,7 @@ module com { module sun { module star { module accessibility {
 
     <p>Furthermore, the object that implements this interface has to be
     connected implicitly or explicitly with an object that implements the
-    the XAccessibleText interface.  The
-    XAccessibleHyperlink::getStartIndex() and
+    XAccessibleText interface. The XAccessibleHyperlink::getStartIndex() and
     XAccessibleHyperlink::getEndIndex() methods return
     indices with respect to the text exposed by that interface.</p>
 
@@ -59,7 +58,7 @@ interface XAccessibleHyperlink :
         @param nIndex
             This index identifies the anchor when, as in the case of an
             image map, there is more than one link represented by this
-            object.  The valid maximal index can be determined by calling
+            object. The valid maximal index can be determined by calling
             the XAccessibleAction::getActionCount() method.
 
         @return
@@ -78,7 +77,7 @@ interface XAccessibleHyperlink :
         @param nIndex
             This index identifies the action object when, as in the case of
             an image map, there is more than one link represented by this
-            object.  The valid maximal index can be determined by calling
+            object. The valid maximal index can be determined by calling
             the XAccessibleAction::getActionCount() method.
 
         @return

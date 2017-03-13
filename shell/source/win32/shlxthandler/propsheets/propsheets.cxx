@@ -209,8 +209,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
         hPage = CreatePropertySheetPage(&psp);
 
         // keep this instance alive, will be released when the
-        // the page is about to be destroyed in the callback function
-
+        // page is about to be destroyed in the callback function
         if (hPage)
         {
             if (lpfnAddPage(hPage, lParam))
@@ -237,9 +236,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
             DestroyPropertySheetPage(hPage);
     }
 
-    // always return success else
-    // no property sheet will be
-    // displayed at all
+    // always return success else no property sheet will be displayed at all
     return NOERROR;
 }
 
@@ -257,8 +254,7 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
     CPropertySheet* pImpl =
         reinterpret_cast<CPropertySheet*>(ppsp->lParam);
 
-    // release this instance, acquired
-    // in the AddPages method
+    // release this instance, acquired in the AddPages method
     if (PSPCB_RELEASE == uMsg)
     {
         pImpl->Release();
@@ -329,8 +325,6 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 }
 
 
-/**
-*/
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
     try

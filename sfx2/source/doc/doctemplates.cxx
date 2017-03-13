@@ -1382,7 +1382,7 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
 
         if ( !UpdateUINamesForTemplateDir_Impl( aTargetPath, rGroupName, aNewFolderName ) )
         {
-            // we could not create the groupuinames for the folder, so we delete the group in the
+            // we could not create the groupuinames for the folder, so we delete the group in
             // the folder and return
             removeContent( aNewFolder );
             return OUString();

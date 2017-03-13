@@ -741,8 +741,7 @@ void LwpTableLayout::RegisterStyle()
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(xTableStyle.release()).m_pStyle->GetStyleName();
 
-    //convert to OO table now and register row style
-    // traverse
+    //convert to OO table now and register row style traverse
     TraverseTable();
 
     SplitConflictCells();
@@ -753,10 +752,8 @@ void LwpTableLayout::RegisterStyle()
     // Parse table
     ParseTable();
 
-    //Comment: the old code doesn't check if the LwpFoundry pointer is NULL,
-    //         so the NULL pointer cause sodc freeze. Add code to check the
-    //         the pointer.
-    //New Code
+    // the old code doesn't check if the LwpFoundry pointer is NULL,
+    // so the NULL pointer cause sodc freeze. Add code to check the pointer.
     if (GetFoundry() && GetTable())
         PutCellVals(GetFoundry(), GetTable()->GetObjectID());
 }
@@ -1101,10 +1098,8 @@ void LwpTableLayout::ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_
 void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 {
 
-    //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
-    //        So the NULL pointer cause sodc frozen. Add code to check the
-    //        the pointer.
-    //New Code
+    // The old code doesn't check if the LwpFoundry pointer is NULL, so the NULL
+    // pointer cause sodc frozen. Add code to check the pointer.
     if( !pFoundry ) return;
 
     try{
@@ -1435,7 +1430,7 @@ void LwpColumnLayout::Read()
     sal_uInt16 colid;
 
     colid = pStrm->QuickReaduInt16();   // forced to lushort
-    ccolid = (sal_uInt8)colid;  // Phillip
+    ccolid = (sal_uInt8)colid;
     cwidth = pStrm->QuickReadInt32();
 
     pStrm->SkipExtra();

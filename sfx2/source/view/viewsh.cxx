@@ -1525,7 +1525,7 @@ bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
     bool                    TRUE
                             The Key (Accelerator) is configured and the
-                            the associated Handler was called
+                            associated Handler was called
 
                             FALSE
                             The Key (Accelerator) is not configured and
