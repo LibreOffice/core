@@ -1774,8 +1774,8 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
     // Unfortunately, the number of TextPortions does not have to be
     // equal to aPositions.Count(), because of linebreaks
     sal_Int32 nPortionStart = 0;
-    sal_uInt16 nInvPortion = 0;
-    sal_uInt16 nP;
+    size_t nInvPortion = 0;
+    size_t nP;
     for ( nP = 0; nP < pTEParaPortion->GetTextPortions().size(); nP++ )
     {
         TETextPortion* pTmpPortion = pTEParaPortion->GetTextPortions()[nP];

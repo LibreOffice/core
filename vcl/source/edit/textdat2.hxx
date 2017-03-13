@@ -90,7 +90,7 @@ public:
 
     void    Reset();
     sal_uInt16  FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
-    void    DeleteFromPortion( sal_uInt16 nDelFrom );
+    void    DeleteFromPortion( size_t nDelFrom );
 };
 
 struct TEWritingDirectionInfo
