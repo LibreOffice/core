@@ -16,7 +16,6 @@
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/threadpool.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -96,12 +95,6 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
         test_init_impl(false, true, pFactory);
     }
     catch (...) { abort(); }
-}
-
-// this is called from pyuno
-SAL_DLLPUBLIC_EXPORT void test_fini()
-{
-    ::comphelper::ThreadPool::getSharedOptimalPool().shutdown();
 }
 
 } // extern "C"

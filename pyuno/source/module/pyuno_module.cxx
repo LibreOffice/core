@@ -318,7 +318,7 @@ static PyObject* getComponentContext(
 }
 
 static PyObject* initTestEnvironment(
-    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject* args)
+    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
 {
     // this tries to bootstrap enough of the soffice from python to run
     // unit tests, which is only possible indirectly because pyuno is URE
@@ -349,21 +349,10 @@ static PyObject* initTestEnvironment(
         mod.load(OStringToOUString(libname, osl_getThreadTextEncoding()),
                                 SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
         if (!mod.is()) { abort(); }
-        assert(PyTuple_Check(args));
-        if (PyTuple_Size(args) == 0)
-        {
-            oslGenericFunction const pFunc(
-                    mod.getFunctionSymbol("test_init"));
-            if (!pFunc) { abort(); }
-            reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
-        }
-        else
-        {
-            oslGenericFunction const pFunc(
-                    mod.getFunctionSymbol("test_fini"));
-            if (!pFunc) { abort(); }
-            reinterpret_cast<void (SAL_CALL *)()>(pFunc)();
-        }
+        oslGenericFunction const pFunc(
+                mod.getFunctionSymbol("test_init"));
+        if (!pFunc) { abort(); }
+        reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
     }
     catch (const css::uno::Exception &)
     {

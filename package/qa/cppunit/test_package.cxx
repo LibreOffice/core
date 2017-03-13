@@ -119,16 +119,8 @@ namespace
         uno::Reference<container::XNameAccess> xNA(xZip, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xNA.is());
 
-        struct TestThreadPool
         {
-            comphelper::ThreadPool aPool;
-            TestThreadPool(sal_Int32 const i) : aPool(i) {}
-            ~TestThreadPool() { aPool.shutdown(); }
-        };
-
-        {
-            TestThreadPool aPool(4);
-            comphelper::ThreadPool & rPool(aPool.aPool);
+            comphelper::ThreadPool aPool(4);
             std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
 
             std::vector<std::vector<char>> aTestBuffers(26);
@@ -143,10 +135,10 @@ namespace
                 xNA->getByName(aName) >>= xStrm;
 
                 CPPUNIT_ASSERT(xStrm.is());
-                rPool.pushTask(new Worker(pTag, xStrm, *itBuf));
+                aPool.pushTask(new Worker(pTag, xStrm, *itBuf));
             }
 
-            rPool.waitUntilDone(pTag);
+            aPool.waitUntilDone(pTag);
 
             // Verify the streams.
             CPPUNIT_ASSERT_EQUAL(size_t(26), aTestBuffers.size());

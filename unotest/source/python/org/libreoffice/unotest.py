@@ -182,9 +182,6 @@ class UnoInProcess:
         global havePonies
         if not(havePonies):
             pyuno.private_initTestEnvironment()
-            # note: this will be called early enough, from Py_Finalize
-            import atexit
-            atexit.register(pyuno.private_initTestEnvironment, False)
             havePonies = True
     def openEmptyWriterDoc(self):
         assert(self.xContext)
