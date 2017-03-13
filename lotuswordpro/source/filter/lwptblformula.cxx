@@ -194,9 +194,9 @@ void LwpFormulaInfo::ReadExpression()
             case TK_MAXIMUM:
             case TK_AVERAGE:
                 {
-                    LwpFormulaFunc* pFunc = new LwpFormulaFunc(TokenType);
-                    ReadArguments(*pFunc);
-                    m_aStack.push_back(pFunc);
+                    std::unique_ptr<LwpFormulaFunc> xFunc(new LwpFormulaFunc(TokenType));
+                    ReadArguments(*xFunc);
+                    m_aStack.push_back(xFunc.release());
                 }
                 break;
 
