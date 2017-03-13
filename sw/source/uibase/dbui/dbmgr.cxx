@@ -3112,8 +3112,11 @@ SwDoc* SwDBManager::getDoc() const
 
 void SwDBManager::releaseRevokeListener()
 {
-    pImpl->m_xDataSourceRemovedListener->Dispose();
-    pImpl->m_xDataSourceRemovedListener.clear();
+    if (pImpl->m_xDataSourceRemovedListener.is())
+    {
+        pImpl->m_xDataSourceRemovedListener->Dispose();
+        pImpl->m_xDataSourceRemovedListener.clear();
+    }
 }
 
 SwDBManager::ConnectionDisposedListener_Impl::ConnectionDisposedListener_Impl(SwDBManager& rManager)
