@@ -572,7 +572,7 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
 
 static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
 {
-//FIXME i59651 see above
+    // FIXME i59651 see above
     while( pStr && *pStr )
     {
         if( (*pStr >= 'A' && *pStr <= 'Z' ) ||
@@ -628,7 +628,7 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
     }
 }
 
-/**--->i56629
+/*
  * Convert a string before using it.
  *
  * This string conversion function is needed because the destination name
@@ -674,7 +674,6 @@ static void appendDestinationName( const OUString& rString, OStringBuffer& rBuff
         }
     }
 }
-//<--- i56629
 
 void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
 {
@@ -1943,7 +1942,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     osl_getDateTimeFromTimeValue( &aTVal, &aDT );
     OStringBuffer aCreationMetaDateString(64);
 
-    //--> i59651, we fill the Metadata date string as well, if PDF/A is requested
+    // i59651: we fill the Metadata date string as well, if PDF/A is requested
     // according to ISO 19005-1:2005 6.7.3 the date is corrected for
     // local time zone offset UTC only, whereas Acrobat 8 seems
     // to use the localtime notation only
@@ -3850,7 +3849,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
         OStringBuffer aLine( 1024 );
         aLine.append( rLink.m_nObject );
         aLine.append( " 0 obj\n" );
-//i59651  key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
+// i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
 // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
         aLine.append( "<</Type/Annot" );
         if( m_bIsPDF_A1 )
@@ -3872,7 +3871,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
         }
         else
         {
-/*--->i56629
+/*
 destination is external to the document, so
 we check in the following sequence:
 
@@ -4044,7 +4043,6 @@ we check in the following sequence:
                                                                                             ) :
                                                                                aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 }
-//<--- i56629
             }
             aLine.append( ">>\n" );
         }
@@ -4073,7 +4071,7 @@ bool PDFWriterImpl::emitNoteAnnotations()
         OStringBuffer aLine( 1024 );
         aLine.append( rNote.m_nObject );
         aLine.append( " 0 obj\n" );
-//i59651  key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
+// i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
 // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
         aLine.append( "<</Type/Annot" );
         if( m_bIsPDF_A1 )
@@ -5022,7 +5020,7 @@ bool PDFWriterImpl::emitCatalog()
 
     sal_Int32 nOutlineDict = emitOutline();
 
-    // emit Output intent i59651
+    // emit Output intent
     sal_Int32 nOutputIntentObject = emitOutputIntent();
 
     // emit metadata
@@ -5101,7 +5099,7 @@ bool PDFWriterImpl::emitCatalog()
                   "<</Type/Catalog/Pages " );
     aLine.append( nTreeNode );
     aLine.append( " 0 R\n" );
-//--->i56629
+
     // check if there are named destinations to emit (root must be inside the catalog)
     if( nNamedDestinationsDictionary )
     {
@@ -5109,7 +5107,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( nNamedDestinationsDictionary );
         aLine.append( " 0 R\n" );
     }
-//<----
+
     if( m_aContext.PageLayout != PDFWriter::DefaultLayout )
         switch(  m_aContext.PageLayout )
         {
@@ -5303,7 +5301,6 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/NeedAppearances true>>\n" );
     }
 
-//--->i59651
     //check if there is a Metadata object
     if( nOutputIntentObject )
     {
@@ -5318,7 +5315,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( nMetadataObject );
         aLine.append( " 0 R" );
     }
-//<----
+
     aLine.append( ">>\n"
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -7440,7 +7437,6 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     return nObject;
 }
 
-//--->i56629
 // Part of this function may be shared with method appendDest.
 sal_Int32 PDFWriterImpl::emitNamedDestinations()
 {
@@ -7515,9 +7511,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 
     return nObject;
 }
-//<--- i56629
 
-//--->i59651
 // emits the output intent dictionary
 sal_Int32 PDFWriterImpl::emitOutputIntent()
 {
@@ -7779,7 +7773,6 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
     return nObject;
 }
-//<---i59651
 
 bool PDFWriterImpl::emitTrailer()
 {
@@ -10506,7 +10499,6 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
                   "<<" );
     if( ! rObject.m_pSoftMaskStream )
     {
-//i59651
         if( m_bIsPDF_A1 )
         {
             aLine.append( "/CA 1.0/ca 1.0" );
@@ -10805,7 +10797,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     if( !!rObject.m_aMask )
     {
         if( rObject.m_aMask.GetBitCount() == 1 ||
-            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && !m_bIsPDF_A1 )//i59651
+            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && !m_bIsPDF_A1 )
             )
         {
             nMaskObject = createObject();
@@ -11140,7 +11132,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
     }
 
-    if( ! bMask && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !m_bIsPDF_A1 )//i59651
+    if( ! bMask && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !m_bIsPDF_A1 )
     {
         if( bWriteMask )
         {
@@ -12035,7 +12027,6 @@ sal_Int32 PDFWriterImpl::createScreen(const Rectangle& rRect, sal_Int32 nPageNr)
     return nRet;
 }
 
-//--->i56629
 sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     if( nPageNr < 0 )
@@ -12056,7 +12047,6 @@ sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Recta
 
     return nRet;
 }
-//<---i56629
 
 sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
@@ -12441,7 +12431,6 @@ void PDFWriterImpl::endStructureElement()
 #endif
 }
 
-//---> i94258
 /*
  * This function adds an internal structure list container to overcome the 8191 elements array limitation
  * in kids element emission.
@@ -12541,7 +12530,6 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         }
     }
 }
-//<--- i94258
 
 bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
 {
