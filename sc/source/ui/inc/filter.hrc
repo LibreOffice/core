@@ -20,9 +20,5 @@
 
 // Special filter
 #define STR_COPY_AREA_TO 5054
-#define RID_FILTER_OPERATOR 5055
-#define RID_FILTER_FIELDNAME 5056
-#define RID_FILTER_CONDITION 5057
-#define RID_FILTER_VALUE 5058
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

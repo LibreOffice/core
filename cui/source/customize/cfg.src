@@ -52,10 +52,6 @@ String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
 };
 
 // Strings ---------------------------------------------------------------
-String RID_SVXSTR_IMPORT_ICON_ERROR
-{
-    Text [ en-US ] = "The files listed below could not be imported. The file format could not be interpreted." ;
-};
 
 String RID_SVXSTR_DELETE_ICON_CONFIRM  //added for issue73355
 {
@@ -100,16 +96,6 @@ String RID_SVXSTR_TOOLBAR_CONTENT
 String RID_SVXSTR_COMMANDS
 {
     Text [ en-US ] = "Commands" ;
-};
-
-String RID_SVXSTR_COMMAND
-{
-    Text [ en-US ] = "Command" ;
-};
-
-String RID_SVXSTR_TOOLBAR_NAME
-{
-    Text [ en-US ] = "Toolbar Name" ;
 };
 
 String RID_SXVSTR_CONFIRM_DELETE_TOOLBAR

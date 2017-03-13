@@ -25,11 +25,6 @@ String STR_QUERY_BRW_DELETE_ROWS
     Text[ en-US ] = "Do you want to delete the selected data?" ;
 };
 
-String RID_STR_DATABROWSER_FILTERED
-{
-    Text [ en-US ] = "(filtered)" ;
-};
-
 String SBA_BROWSER_SETTING_ORDER
 {
     Text [ en-US ] = "Error setting the sort criteria";

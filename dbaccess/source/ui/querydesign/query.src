@@ -119,19 +119,9 @@ String STR_QUERY_UNDO_TABFIELDCREATE
     Text [ en-US ] = "Add Column" ;
 };
 
-String RID_STR_TABLE_DOESNT_EXIST
-{
-    Text [ en-US ] = "Invalid expression, table '$name$' does not exist.";
-};
-
 String RID_STR_FIELD_DOESNT_EXIST
 {
     Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
-};
-
-String RID_STR_TOMUCHTABLES
-{
-    Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement.";
 };
 
 String STR_QUERY_UNDO_TABWINDELETE

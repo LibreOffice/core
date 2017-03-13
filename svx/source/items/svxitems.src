@@ -87,120 +87,6 @@ StringArray RID_ATTR_NAMES
     };
 };
 
- // SvxSearchItem ------------------------------------------------------------
- // Kommando
-String RID_SVXITEMS_SEARCHCMD_FIND
-{
-    Text [ en-US ] = "Search" ;
-};
-String RID_SVXITEMS_SEARCHCMD_FIND_ALL
-{
-    Text [ en-US ] = "Find All" ;
-};
-String RID_SVXITEMS_SEARCHCMD_REPLACE
-{
-    Text [ en-US ] = "Replace" ;
-};
-String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
-{
-    Text [ en-US ] = "Replace all" ;
-};
- // Vorlagen
-String RID_SVXITEMS_SEARCHSTYL_CHAR
-{
-    Text [ en-US ] = "Character Style" ;
-};
-String RID_SVXITEMS_SEARCHSTYL_PARA
-{
-    Text [ en-US ] = "Paragraph Style" ;
-};
-String RID_SVXITEMS_SEARCHSTYL_FRAME
-{
-    Text [ en-US ] = "Frame Style" ;
-};
-String RID_SVXITEMS_SEARCHSTYL_PAGE
-{
-    Text [ en-US ] = "Page Style" ;
-};
- // Zellen-Typ
-String RID_SVXITEMS_SEARCHIN_FORMULA
-{
-    Text [ en-US ] = "Formula" ;
-};
-String RID_SVXITEMS_SEARCHIN_VALUE
-{
-    Text [ en-US ] = "Value" ;
-};
-String RID_SVXITEMS_SEARCHIN_NOTE
-{
-    Text [ en-US ] = "Note" ;
-};
- // Applikation
-String RID_SVXITEMS_SEARCHAPP_WRITER
-{
-    Text = "StarWriter" ;
-};
-String RID_SVXITEMS_SEARCHAPP_CALC
-{
-    Text = "StarCalc" ;
-};
-String RID_SVXITEMS_SEARCHAPP_DRAW
-{
-    Text = "StarDraw" ;
-};
-String RID_SVXITEMS_SEARCHAPP_BASE
-{
-    Text = "StarBase" ;
-};
- // enum BrushStyle ----------------------------------------------------------
-String RID_SVXITEMS_BRUSHSTYLE_NULL
-{
-    Text [ en-US ] = "None" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_SOLID
-{
-    Text [ en-US ] = "Solid" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_HORZ
-{
-    Text [ en-US ] = "Horizontal" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_VERT
-{
-    Text [ en-US ] = "Vertical" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_CROSS
-{
-    Text [ en-US ] = "Grid" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_DIAGCROSS
-{
-    Text [ en-US ] = "Diamond" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_UPDIAG
-{
-    Text [ en-US ] = "Diagonal up" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
-{
-    Text [ en-US ] = "Diagonal down" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_25
-{
-    Text = "25%" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_50
-{
-    Text = "50%" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_75
-{
-    Text = "75%" ;
-};
-String RID_SVXITEMS_BRUSHSTYLE_BITMAP
-{
-    Text [ en-US ] = "Image" ;
-};
 // end enum ColorName -----------------------------------------------------------
 String RID_SVXITEMS_ORI_STANDARD
 {
@@ -217,31 +103,6 @@ String RID_SVXITEMS_ORI_BOTTOMTOP
 String RID_SVXITEMS_ORI_STACKED
 {
     Text [ en-US ] = "Stacked" ;
-};
- // GetValueText von BoolItems
-String RID_SVXITEMS_BOXINF_TABLE_TRUE
-{
-    Text [ en-US ] = "Table" ;
-};
-String RID_SVXITEMS_BOXINF_TABLE_FALSE
-{
-    Text [ en-US ] = "Not Table" ;
-};
-String RID_SVXITEMS_BOXINF_DIST_TRUE
-{
-    Text [ en-US ] = "Spacing enabled" ;
-};
-String RID_SVXITEMS_BOXINF_DIST_FALSE
-{
-    Text [ en-US ] = "Spacing disabled" ;
-};
-String RID_SVXITEMS_BOXINF_MDIST_TRUE
-{
-    Text [ en-US ] = "Keep spacing interval" ;
-};
-String RID_SVXITEMS_BOXINF_MDIST_FALSE
-{
-    Text [ en-US ] = "Allowed to fall short of spacing interval" ;
 };
 String RID_SVXITEMS_MARGIN_LEFT
 {
@@ -322,14 +183,6 @@ String RID_SVXITEMS_DATE_COMPLETE
 String RID_SVXITEMS_TEXT_COMPLETE
 {
     Text [ en-US ] = "Text: " ;
-};
-String RID_SVXITEMS_BACKGROUND_COLOR
-{
-    Text [ en-US ] = "Background color: " ;
-};
-String RID_SVXITEMS_PATTERN_COLOR
-{
-    Text [ en-US ] = "Pattern color: " ;
 };
 String RID_SVXITEMS_BRUSH_CHAR
 {

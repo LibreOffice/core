@@ -23,14 +23,6 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
 {
     Text [ en-US ] = "3D material color" ;
 };
-String RID_SVXSTR_A11Y_TEXT_COLOR
-{
-    Text [ en-US ] = "Font color" ;
-};
-String RID_SVXSTR_A11Y_BACKGROUND_COLOR
-{
-    Text [ en-US ] = "Background color" ;
-};
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
     Text [ en-US ] = "None" ;

@@ -32,10 +32,6 @@ String RID_SVXSTR_DELFAILED
 {
     Text [ en-US ] = "The selected object could not be deleted.";
 };
-String RID_SVXSTR_DELFAILEDPERM
-{
-    Text [ en-US ] = " You do not have permission to delete this object.";
-};
 String RID_SVXSTR_DELFAILED_TITLE
 {
     Text [ en-US ] = "Error Deleting Object";
@@ -48,10 +44,6 @@ String RID_SVXSTR_CREATEFAILEDDUP
 {
     Text [ en-US ] = " Object with the same name already exists.";
 };
-String RID_SVXSTR_CREATEFAILEDPERM
-{
-    Text [ en-US ] = " You do not have permission to create this object.";
-};
 String RID_SVXSTR_CREATEFAILED_TITLE
 {
     Text [ en-US ] = "Error Creating Object";
@@ -59,10 +51,6 @@ String RID_SVXSTR_CREATEFAILED_TITLE
 String RID_SVXSTR_RENAMEFAILED
 {
     Text [ en-US ] = "The object could not be renamed.";
-};
-String RID_SVXSTR_RENAMEFAILEDPERM
-{
-    Text [ en-US ] = " You do not have permission to rename this object.";
 };
 String RID_SVXSTR_RENAMEFAILED_TITLE
 {
@@ -101,11 +89,6 @@ String RID_SVXSTR_EXCEPTION_AT_LINE
 String RID_SVXSTR_FRAMEWORK_ERROR_RUNNING
 {
     Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
-};
-
-String RID_SVXSTR_FRAMEWORK_ERROR_AT_LINE
-{
-    Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
 };
 
 String RID_SVXSTR_ERROR_TYPE_LABEL

@@ -37,8 +37,6 @@
 // Strings (500)
 #define RID_BIB_STRING              (RID_BIB_START + 200)
 #define RID_BIB_STR_NONE            (RID_BIB_STRING +  1)
-#define RID_BIB_STR_FIELDSELECTION  (RID_BIB_STRING +  2)
-#define RID_BIB_STR_TABWIN_PREFIX   (RID_BIB_STRING +  3)
 #define RID_BIB_STR_FRAME_TITLE     (RID_BIB_STRING +  4)
 #define RID_MAP_QUESTION            (RID_BIB_STRING +  5)
 

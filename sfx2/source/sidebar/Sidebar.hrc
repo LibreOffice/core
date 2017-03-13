@@ -18,8 +18,6 @@
  */
 #include <sfx2/sfx.hrc>
 
-#define RID_SIDEBAR_RESOURCE  (RID_SFX_SIDEBAR_START +  0)
-
 #define SFX_STR_SIDEBAR_MORE_OPTIONS            (RID_SFX_SIDEBAR_START + 1)
 #define SFX_STR_SIDEBAR_CLOSE_DECK              (RID_SFX_SIDEBAR_START + 2)
 #define SFX_STR_SIDEBAR_SETTINGS                (RID_SFX_SIDEBAR_START + 3)

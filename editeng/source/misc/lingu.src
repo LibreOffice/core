@@ -27,10 +27,6 @@ String RID_SVXSTR_QUERY_BW_CONTINUE
 {
     Text [ en-US ] = "Continue checking at end of document?" ;
 };
-String RID_SVXSTR_HMERR_THESAURUS
-{
-    Text [ en-US ] = "No thesaurus is available for the selected language. \nPlease check your installation and install the desired language\n" ;
-};
 String RID_SVXSTR_DIC_ERR_UNKNOWN
 {
     Text [ en-US ] = "Word cannot be added to dictionary\ndue to unknown reason.";

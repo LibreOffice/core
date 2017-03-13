@@ -21,93 +21,21 @@
 #include "helpid.hrc"
 #include "gallery.hrc"
 
-String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
-{
-    Text [ en-US ] = "Update";
-};
-String RID_SVXSTR_GALLERY_FOPENERROR
-{
-    Text [ en-US ] = "This file cannot be opened" ;
-};
-String RID_SVXSTR_GALLERY_NOTHEME
-{
-    Text [ en-US ] = "Invalid Theme Name!" ;
-};
-String RID_SVXSTR_EXTFORMAT1_SYS
-{
-    Text = "wav" ;
-};
-String RID_SVXSTR_EXTFORMAT1_UI
-{
-    Text [ en-US ] = "Wave - Sound File" ;
-};
-String RID_SVXSTR_EXTFORMAT2_SYS
-{
-    Text = "aif" ;
-};
-String RID_SVXSTR_EXTFORMAT2_UI
-{
-    Text [ en-US ] = "Audio Interchange File Format" ;
-};
-String RID_SVXSTR_EXTFORMAT3_SYS
-{
-    Text = "au" ;
-};
-String RID_SVXSTR_EXTFORMAT3_UI
-{
-    Text [ en-US ] = "AU - Sound File" ;
-};
 String RID_SVXSTR_GALLERY_FILTER
 {
     Text [ en-US ] = "Graphics filter" ;
-};
-String RID_SVXSTR_GALLERY_LENGTH
-{
-    Text [ en-US ] = "Length:" ;
-};
-String RID_SVXSTR_GALLERY_SIZE
-{
-    Text [ en-US ] = "Size:" ;
-};
-String RID_SVXSTR_GALLERY_DELETEDD
-{
-    Text [ en-US ] = "Do you want to delete the linked file?" ;
-};
-String RID_SVXSTR_GALLERY_SGIERROR
-{
-    Text [ en-US ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
 };
 String RID_SVXSTR_GALLERY_NEWTHEME
 {
     Text [ en-US ] = "New Theme" ;
 };
-String RID_SVXSTR_GALLERY_BROWSER
-{
-    Text [ en-US ] = "~Organizer..." ;
-};
-String RID_SVXSTR_GALLERY_THEMEERR
-{
-    Text [ en-US ] = "This theme name already exists.\nPlease choose a different one." ;
-};
-String RID_SVXSTR_GALLERY_IMPORTTHEME
-{
-    Text [ en-US ] = "I~mport..." ;
-};
 String RID_SVXSTR_GALLERY_CREATETHEME
 {
     Text [ en-US ] = "New Theme..." ;
 };
-String RID_SVXSTR_GALLERY_DIALOGID
-{
-    Text [ en-US ] = "Assign ID" ;
-};
 String RID_SVXSTR_GALLERY_TITLE
 {
     Text [ en-US ] = "Title" ;
-};
-String RID_SVXSTR_GALLERY_PATH
-{
-    Text [ en-US ] = "Path" ;
 };
 String RID_SVXSTR_GALLERY_ICONVIEW
 {
@@ -116,11 +44,6 @@ String RID_SVXSTR_GALLERY_ICONVIEW
 String RID_SVXSTR_GALLERY_LISTVIEW
 {
     Text [ en-US ] = "Detailed View";
-};
-
-Bitmap RID_SVXBMP_GALLERY
-{
-    File = "lx03135.png" ;
 };
 
 Bitmap RID_SVXBMP_THEME_NORMAL

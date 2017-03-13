@@ -114,11 +114,6 @@ Bitmap RID_SVXBMP_HLDOCNTP
     File = "hldocntp.png";
 };
 
-Bitmap RID_SVXBMP_BROWSE
-{
-    File = "browse.png";
-};
-
 Bitmap RID_SVXBMP_SCRIPT
 {
     File = "script.png";

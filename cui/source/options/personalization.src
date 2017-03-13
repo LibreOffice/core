@@ -19,11 +19,6 @@
 
 #include <cuires.hrc>
 
-String RID_SVXSTR_SEARCHTERM
-{
-    Text [ en-US ] = "Search term";
-};
-
 String RID_SVXSTR_SELECTEDPERSONA
 {
     Text [ en-US ] = "Selected Theme: ";

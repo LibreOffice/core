@@ -29,9 +29,4 @@ String RID_SVXSTR_DIAGRAM_ROW
     Text [ en-US ] = "Data Series $(ROW)" ;
 };
 
-String RID_OPTSTR_COLOR_CHART_DELETE
-{
-   Text [ en-US ] = "Chart Color Deletion" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

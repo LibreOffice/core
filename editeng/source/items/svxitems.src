@@ -19,15 +19,6 @@
 
 #include <editeng/editrids.hrc>
 
- // Value strings ------------------------------------------------------------
-String RID_SVXITEMS_TRUE
-{
-    Text [ en-US ] = "True" ;
-};
-String RID_SVXITEMS_FALSE
-{
-    Text [ en-US ] = "False" ;
-};
  // enum SvxBreak ------------------------------------------------------------
 String RID_SVXITEMS_BREAK_NONE
 {
@@ -503,35 +494,6 @@ String RID_SVXITEMS_ADJUST_BLOCKLINE
 {
     Text [ en-US ] = "Justify" ;
 };
- // enum SvxTabAdjust --------------------------------------------------------
-String RID_SVXITEMS_TAB_DECIMAL_CHAR
-{
-    Text [ en-US ] = "Decimal Symbol:" ;
-};
-String RID_SVXITEMS_TAB_FILL_CHAR
-{
-    Text [ en-US ] = "Fill character:" ;
-};
-String RID_SVXITEMS_TAB_ADJUST_LEFT
-{
-    Text [ en-US ] = "Left" ;
-};
-String RID_SVXITEMS_TAB_ADJUST_RIGHT
-{
-    Text [ en-US ] = "Right" ;
-};
-String RID_SVXITEMS_TAB_ADJUST_DECIMAL
-{
-    Text [ en-US ] = "Decimal" ;
-};
-String RID_SVXITEMS_TAB_ADJUST_CENTER
-{
-    Text [ en-US ] = "Centered" ;
-};
-String RID_SVXITEMS_TAB_ADJUST_DEFAULT
-{
-    Text [ en-US ] = "Default" ;
-};
 String RID_SOLID
 {
     Text [ en-US ] = "Single, solid" ;
@@ -668,22 +630,6 @@ String RID_SVXITEMS_CONTOUR_TRUE
 String RID_SVXITEMS_CONTOUR_FALSE
 {
     Text [ en-US ] = "No Outline" ;
-};
-String RID_SVXITEMS_NOLINEBREAK_TRUE
-{
-    Text = "?" ;
-};
-String RID_SVXITEMS_NOLINEBREAK_FALSE
-{
-    Text = "?" ;
-};
-String RID_SVXITEMS_NOHYPHEN_TRUE
-{
-    Text = "?" ;
-};
-String RID_SVXITEMS_NOHYPHEN_FALSE
-{
-    Text = "?" ;
 };
 String RID_SVXITEMS_PRINT_TRUE
 {
