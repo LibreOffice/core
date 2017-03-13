@@ -2301,9 +2301,10 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             // do have a different RGB ordering when using 24-bit
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nDataLen]);
             pOS2MET->ReadBytes(pBuf.get(), nDataLen);
-            if (p->nBitsPerPixel==24) {
-                sal_uLong nBytesPerLine = (p->nWidth * 3 + 3) & 0xfffffffc;
-                sal_uLong nAlign = p->nMapPos - (p->nMapPos % nBytesPerLine);
+            sal_uLong nBytesPerLineToSwap = (p->nBitsPerPixel == 24) ?
+                ((p->nWidth * 3 + 3) & 0xfffffffc) : 0;
+            if (nBytesPerLineToSwap) {
+                sal_uLong nAlign = p->nMapPos - (p->nMapPos % nBytesPerLineToSwap);
                 sal_uLong i=0;
                 while (nAlign+i+2<p->nMapPos+nDataLen) {
                     if (nAlign+i>=p->nMapPos) {
@@ -2311,8 +2312,8 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                         std::swap(pBuf[j], pBuf[j+2]);
                     }
                     i+=3;
-                    if (i+2>=nBytesPerLine) {
-                        nAlign+=nBytesPerLine;
+                    if (i + 2 >= nBytesPerLineToSwap) {
+                        nAlign += nBytesPerLineToSwap;
                         i=0;
                     }
                 }
