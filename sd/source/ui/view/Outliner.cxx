@@ -1070,8 +1070,12 @@ void Outliner::ProvideNextTextObject()
         if (maObjectIterator != ::sd::outliner::OutlinerContainer(this).end())
         {
             maCurrentPosition = *maObjectIterator;
+
+            // LOK: do not descent to notes or master pages when searching
+            bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
+
             // Switch to the current object only if it is a valid text object.
-            if (IsValidTextObject (maCurrentPosition))
+            if (!bForbiddenPage && IsValidTextObject(maCurrentPosition))
             {
                 // Don't set yet in case of searching: the text object may not match.
                 if (meMode != SEARCH)
@@ -1081,9 +1085,9 @@ void Outliner::ProvideNextTextObject()
             }
             ++maObjectIterator;
 
-            if (mpObj != nullptr)
+            if (mpObj)
             {
-                PutTextIntoOutliner ();
+                PutTextIntoOutliner();
 
                 std::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
                 if (pViewShell != nullptr)
