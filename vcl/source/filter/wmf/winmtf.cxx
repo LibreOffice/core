@@ -1342,11 +1342,11 @@ void WinMtfOutput::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecor
 
 void WinMtfOutput::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
-    UpdateClipRegion();
-
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
     {
+        UpdateClipRegion();
+
         ImplMap( rPolygon );
         if ( bTo )
         {
