@@ -514,7 +514,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         delete pOldEntry;
     }
     pFormatScanner->SetConvertMode(false);
-    pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset) );
+    pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset), SvNumberformat::FormatterPrivateAccess() );
 
     // append new system additional formats
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
@@ -605,7 +605,7 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
         else
         {
             SvNumberformat* pStdFormat = GetFormatEntry(CLOffset + ZF_STANDARD);
-            sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
+            sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey( SvNumberformat::FormatterPrivateAccess() );
             if (nPos+1 - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
                 SAL_WARN( "svl.numbers", "SvNumberFormatter::PutEntry: too many formats for CL");
@@ -620,7 +620,7 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
             {
                 bCheck = true;
                 nKey = nPos+1;
-                pStdFormat->SetLastInsertKey((sal_uInt16) (nKey-CLOffset));
+                pStdFormat->SetLastInsertKey((sal_uInt16) (nKey-CLOffset), SvNumberformat::FormatterPrivateAccess());
             }
         }
     }
@@ -2265,7 +2265,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         }
         pStdFormat->SetType( css::util::NumberFormat::NUMBER );
         pStdFormat->SetStandard();
-        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
+        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE, SvNumberformat::FormatterPrivateAccess() );
     }
     else
     {
@@ -2683,7 +2683,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: no GENERAL format" );
         return ;
     }
-    sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
+    sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey( SvNumberformat::FormatterPrivateAccess() );
     css::lang::Locale aLocale = GetLanguageTag().getLocale();
     sal_Int32 j;
 
@@ -2751,7 +2751,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         }
     }
 
-    pStdFormat->SetLastInsertKey( (sal_uInt16)(nPos - CLOffset) );
+    pStdFormat->SetLastInsertKey( (sal_uInt16)(nPos - CLOffset), SvNumberformat::FormatterPrivateAccess() );
 }
 
 
@@ -3114,7 +3114,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
             else
             {
                 SvNumberformat* pStdFormat = GetFormatEntry(nCLOffset + ZF_STANDARD);
-                sal_uInt32 nPos = nCLOffset + pStdFormat->GetLastInsertKey();
+                sal_uInt32 nPos = nCLOffset + pStdFormat->GetLastInsertKey( SvNumberformat::FormatterPrivateAccess() );
                 nNewKey = nPos+1;
                 if (nNewKey - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
@@ -3128,7 +3128,8 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 }
                 else
                 {
-                    pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset));
+                    pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset),
+                            SvNumberformat::FormatterPrivateAccess());
                 }
             }
             if (nNewKey != nOldKey)                     // new index

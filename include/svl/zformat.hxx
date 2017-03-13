@@ -226,10 +226,11 @@ public:
     sal_uInt16 GetFormatIntegerDigits() const { return NumFor[0].Info().nCntPre; }
 
     //! Read/write access on a special sal_uInt16 component, may only be used on the
-    //! standard format 0, 5000, ... and only by the number formatter!
-    sal_uInt16 GetLastInsertKey() const
+    //! standard format 0, 10000, ... and only by the number formatter!
+    struct FormatterPrivateAccess { friend SvNumberFormatter; private: FormatterPrivateAccess() {} };
+    sal_uInt16 GetLastInsertKey( const FormatterPrivateAccess& ) const
         { return NumFor[0].Info().nThousand; }
-    void SetLastInsertKey(sal_uInt16 nKey)
+    void SetLastInsertKey( sal_uInt16 nKey, const FormatterPrivateAccess& )
         { NumFor[0].Info().nThousand = nKey; }
 
     //! Only onLoad: convert from stored to current system language/country
