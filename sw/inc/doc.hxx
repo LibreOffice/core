@@ -206,13 +206,13 @@ namespace sw {
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
-    struct ForbiddenCharacters;    //< comes from the I18N UNO interface
+    struct ForbiddenCharacters;    // comes from the I18N UNO interface
 }
 namespace uno {
     template < class > class Sequence;
 }
 namespace container {
-    class XNameContainer; //< for getXForms()/isXForms()/initXForms() methods
+    class XNameContainer; // for getXForms()/isXForms()/initXForms() methods
 }
 }}}
 
@@ -239,19 +239,19 @@ class SW_DLLPUBLIC SwDoc :
     friend void FinitCore();
 
     // private Member
-    std::unique_ptr<SwNodes> m_pNodes;    //< document content (Nodes Array)
-    SwAttrPool*              mpAttrPool;  //< the attribute pool
-    SwPageDescs              m_PageDescs; //< PageDescriptors
-    Link<bool,void>          maOle2Link;  //< OLE 2.0-notification
+    std::unique_ptr<SwNodes> m_pNodes;    // document content (Nodes Array)
+    SwAttrPool*              mpAttrPool;  // the attribute pool
+    SwPageDescs              m_PageDescs; // PageDescriptors
+    Link<bool,void>          maOle2Link;  // OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objects
-    SwDBData    maDBData;                //< database descriptor
-    OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
-    std::vector<OUString> m_PatternNames; //< Array for names of document-templates
+    Idle       maOLEModifiedIdle;         // Timer for update modified OLE-Objects
+    SwDBData    maDBData;                 // database descriptor
+    OUString    msTOIAutoMarkURL;         // URL of table of index AutoMark file
+    std::vector<OUString> m_PatternNames; // Array for names of document-templates
     css::uno::Reference<css::container::XNameContainer>
-        mxXForms;                        //< container with XForms models
+        mxXForms;                         // container with XForms models
     mutable css::uno::Reference< css::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     const std::unique_ptr< ::sw::mark::MarkManager> mpMarkManager;
@@ -276,26 +276,25 @@ class SW_DLLPUBLIC SwDoc :
     const std::unique_ptr< ::sw::DocumentExternalDataManager > m_pDocumentExternalDataManager;
 
     // Pointer
-    SwFrameFormat        *mpDfltFrameFormat;       //< Default formats.
-    SwFrameFormat        *mpEmptyPageFormat;     //< Format for the default empty page
-    SwFrameFormat        *mpColumnContFormat;    //< Format for column container
+    SwFrameFormat        *mpDfltFrameFormat;       // Default formats.
+    SwFrameFormat        *mpEmptyPageFormat;       // Format for the default empty page
+    SwFrameFormat        *mpColumnContFormat;      // Format for column container
     SwCharFormat       *mpDfltCharFormat;
-    SwTextFormatColl    *mpDfltTextFormatColl;   //< Defaultformatcollections
+    SwTextFormatColl    *mpDfltTextFormatColl;     // Defaultformatcollections
     SwGrfFormatColl    *mpDfltGrfFormatColl;
 
-    SwFrameFormats       *mpFrameFormatTable;        //< Format table
+    SwFrameFormats       *mpFrameFormatTable;      // Format table
     SwCharFormats      *mpCharFormatTable;
     SwFrameFormats       *mpSpzFrameFormatTable;
     SwSectionFormats   *mpSectionFormatTable;
-    SwFrameFormats       *mpTableFrameFormatTable;     //< For tables
-    SwTextFormatColls   *mpTextFormatCollTable;    //< FormatCollections
+    SwFrameFormats       *mpTableFrameFormatTable; // For tables
+    SwTextFormatColls   *mpTextFormatCollTable;    // FormatCollections
     SwGrfFormatColls   *mpGrfFormatCollTable;
 
-    SwTOXTypes      *mpTOXTypes;         //< Tables/indices
-    SwDefTOXBase_Impl * mpDefTOXBases;   //< defaults of SwTOXBase's
+    SwTOXTypes      *mpTOXTypes;                   // Tables/indices
+    SwDefTOXBase_Impl * mpDefTOXBases;             // defaults of SwTOXBase's
 
-    SwDBManager         *mpDBManager;            /**< Pointer to the DBManager for
-                                         evaluation of DB-fields. */
+    SwDBManager         *mpDBManager;              // Pointer to the DBManager for evaluation of DB-fields
 
     SwNumRule       *mpOutlineRule;
     SwFootnoteInfo       *mpFootnoteInfo;
@@ -303,27 +302,27 @@ class SW_DLLPUBLIC SwDoc :
     SwLineNumberInfo*mpLineNumberInfo;
     SwFootnoteIdxs       *mpFootnoteIdxs;
 
-    SwDocShell      *mpDocShell;         //< Ptr to SfxDocShell of Doc.
-    SfxObjectShellLock mxTmpDocShell;    //< A temporary shell that is used to copy OLE-Nodes
+    SwDocShell      *mpDocShell;                   // Ptr to SfxDocShell of Doc.
+    SfxObjectShellLock mxTmpDocShell;              // A temporary shell that is used to copy OLE-Nodes
 
-    SwAutoCorrExceptWord *mpACEWord;     /**< For the automated takeover of
-                                         auto-corrected words that are "re-corrected". */
-    SwURLStateChanged *mpURLStateChgd;   //< SfxClient for changes in INetHistory
-    SvNumberFormatter *mpNumberFormatter;//< NumFormatter for tables / fields
+    SwAutoCorrExceptWord *mpACEWord;               /** For the automated takeover of
+                                                   auto-corrected words that are "re-corrected". */
+    SwURLStateChanged *mpURLStateChgd;             // SfxClient for changes in INetHistory
+    SvNumberFormatter *mpNumberFormatter;          // NumFormatter for tables / fields
 
-    mutable SwNumRuleTable    *mpNumRuleTable;   //< List of all named NumRules.
+    mutable SwNumRuleTable    *mpNumRuleTable;     // List of all named NumRules.
 
     // Hash map to find numrules by name
     mutable std::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
 
-    SwPagePreviewPrtData *mpPgPViewPrtData;  //< Indenting / spacing for printing of page view.
+    SwPagePreviewPrtData *mpPgPViewPrtData;        // Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
 
-    IStyleAccess    *mpStyleAccess;  //< handling of automatic styles
-    SwLayoutCache   *mpLayoutCache;  /**< Layout cache to read and save with the
-                                     document for a faster formatting */
+    IStyleAccess    *mpStyleAccess;                // handling of automatic styles
+    SwLayoutCache   *mpLayoutCache;                /** Layout cache to read and save with the
+                                                   document for a faster formatting */
 
-    IGrammarContact *mpGrammarContact;   //< for grammar checking in paragraphs during editing
+    IGrammarContact *mpGrammarContact;             // for grammar checking in paragraphs during editing
 
     // table of forbidden characters of this document
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
@@ -339,42 +338,41 @@ private:
 
     // other
 
-    sal_uInt32  mnRsid;              //< current session ID of the document
-    sal_uInt32  mnRsidRoot;          //< session ID when the document was created
+    sal_uInt32  mnRsid;                            // current session ID of the document
+    sal_uInt32  mnRsidRoot;                        // session ID when the document was created
 
     sal_Int32   mReferenceCount;
 
-    bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
+    bool mbDtor                  : 1;    /** TRUE: is in SwDoc DTOR.
                                                and unfortunately temorarily also in
                                                SwSwgReader::InLayout() when flawed
                                                frames need deletion. */
-    bool mbCopyIsMove            : 1;    //< TRUE: Copy is a hidden Move.
-    bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
-    bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
-    bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
-    bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
-    bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
-    bool mbIsAutoFormatRedline      : 1;    //< TRUE: Redlines are recorded by Autoformat.
-    bool mbOLEPrtNotifyPending   : 1;    /**< TRUE: Printer has changed. At creation of
-                                                View
+    bool mbCopyIsMove            : 1;    // TRUE: Copy is a hidden Move.
+    bool mbInReading             : 1;    // TRUE: Document is in the process of being read.
+    bool mbInMailMerge           : 1;    // TRUE: Document is in the process of being written by mail merge.
+    bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary.
+    bool mbUpdateTOX             : 1;    // TRUE: After loading document, update TOX.
+    bool mbInLoadAsynchron       : 1;    // TRUE: Document is in the process of being loaded asynchronously.
+    bool mbIsAutoFormatRedline   : 1;    // TRUE: Redlines are recorded by Autoformat.
+    bool mbOLEPrtNotifyPending   : 1;    /** TRUE: Printer has changed. At creation of View
                                                 notification of OLE-Objects PrtOLENotify() is required. */
-    bool mbAllOLENotify          : 1;    //< True: Notification of all objects is required.
-    bool mbInsOnlyTextGlssry      : 1;    //< True: insert 'only text' glossary into doc
-    bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
-    bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard
-    bool mbColumnSelection       : 1;    /**< TRUE: this content has bee created by a column selection
+    bool mbAllOLENotify          : 1;    // True: Notification of all objects is required.
+    bool mbInsOnlyTextGlssry     : 1;    // True: insert 'only text' glossary into doc
+    bool mbContains_MSVBasic     : 1;    // True: MS-VBasic exist is in our storage
+    bool mbClipBoard             : 1;    // TRUE: this document represents the clipboard
+    bool mbColumnSelection       : 1;    /** TRUE: this content has been created by a column selection
                                                 (clipboard docs only) */
     bool mbIsPrepareSelAll       : 1;
 
 #ifdef DBG_UTIL
-    bool mbXMLExport : 1;                //< true: during XML export
+    bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
     // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
 
-    static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
+    static SwAutoCompleteWord *mpACmpltWords;  // List of all words for AutoComplete
 
     // private methods
     SwFlyFrameFormat* MakeFlySection_( const SwPosition& rAnchPos,
@@ -440,7 +438,7 @@ private:
 public:
     enum DocumentType {
         DOCTYPE_NATIVE,
-        DOCTYPE_MSWORD              //This doc model comes from MS Word
+        DOCTYPE_MSWORD              // This doc model comes from MS Word
         };
     DocumentType    meDocType;
     DocumentType    GetDocumentType(){ return meDocType; }
@@ -464,9 +462,9 @@ public:
     virtual sal_Int32 getReferenceCount() const override;
 
     // IDocumentSettingAccess
-    IDocumentSettingAccess const & getIDocumentSettingAccess() const; //The IDocumentSettingAccess interface
+    IDocumentSettingAccess const & getIDocumentSettingAccess() const; // The IDocumentSettingAccess interface
     IDocumentSettingAccess & getIDocumentSettingAccess();
-    ::sw::DocumentSettingManager      & GetDocumentSettingManager(); //The implementation of the interface with some additional methods
+    ::sw::DocumentSettingManager      & GetDocumentSettingManager(); // The implementation of the interface with some additional methods
     ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
     sal_uInt32 getRsid() const;
     void setRsid( sal_uInt32 nVal );
@@ -584,7 +582,7 @@ public:
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }
     inline void SetOLEPrtNotifyPending( bool bSet = true );
-    void PrtOLENotify( bool bAll ); //All or only marked
+    void PrtOLENotify( bool bAll ); // All or only marked
 
 #ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
@@ -636,7 +634,7 @@ public:
                                 const SwSelBoxes* pSelBoxes,
                                 SwFrameFormat *pParent );
 
-    //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
+    // UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
     // modify/correct entries inside of the given SfxItemSet, and it will apply a name to
     // the items in question (what is essential to make the named slots associated with
@@ -691,7 +689,7 @@ public:
                             const Point* pPt = nullptr ) const;
     bool IsInVerticalText( const SwPosition& rPos ) const;
 
-    // Database  and DB-Manager
+    // Database and DB-Manager
     void SetDBManager( SwDBManager* pNewMgr )     { mpDBManager = pNewMgr; }
     SwDBManager* GetDBManager() const             { return mpDBManager; }
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
@@ -862,20 +860,18 @@ public:
     void ReplaceCompatibilityOptions( const SwDoc& rSource );
 
     /** Replace all user defined document properties with xSourceDocProps.
-
         Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
      */
     void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
 
     /** Replace document properties with those from rSource.
-
         This includes the user defined document properties!
      */
     void ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge = false);
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;
-    /// Query if table style is used.
+    // Query if table style is used.
     bool IsUsed( const SwTableAutoFormat& ) const;
     static bool IsUsed( const SwNumRule& );
 
@@ -1234,14 +1230,14 @@ public:
 
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
-    /// AutoFormat for table/table selection.
-    /// @param bResetDirect Reset direct formatting that might be applied to the cells.
+    // AutoFormat for table/table selection.
+    // @param bResetDirect Reset direct formatting that might be applied to the cells.
     bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, bool isSetStyleName = false);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
 
-    /// Return the available table styles.
+    // Return the available table styles.
     SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
     const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
     // Create a new table style. Tracked by Undo.

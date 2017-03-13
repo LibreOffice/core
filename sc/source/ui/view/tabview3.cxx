@@ -322,9 +322,8 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_NUMBER_TIME );
 }
 
-//      SetCursor - Cursor, set, draw, update InputWin
-//                  or send reference
-//      without optimising due to BugId 29307
+//  SetCursor - Cursor, set, draw, update InputWin
+//  or send reference without optimising
 
 void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 {
@@ -1735,7 +1734,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     if ( nTab != aViewData.GetTabNo() || bNew )
     {
-        // FormShell would like to bee informed before the switch
+        // FormShell would like to be informed before the switch
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
@@ -2108,7 +2107,7 @@ void ScTabView::KillEditView( bool bNoPaint )
         }
     }
 
-    // #108931#; notify accessibility before all things happen
+    // notify accessibility before all things happen
     if (bNotifyAcc && aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccLeaveEditMode));
 
@@ -2415,7 +2414,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
     }
 }
 
-//  for chart data selection
+// for chart data selection
 
 void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 {
@@ -2686,7 +2685,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
 
         if (!bRefMode)
         {
-            //  pass view to GetInputHdl, this view may not be current anymore
+            // pass view to GetInputHdl, this view may not be current anymore
             ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
             if (pHdl)
                 pHdl->EnterHandler();
@@ -2731,8 +2730,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
         }
         // do not call GrabFocus from here!
         // if the document is processed, then Sfx calls GrabFocus in the window of the shell.
-        // if it is a mail body for instance, then it can't get the focus (Bug #43638#)
-
+        // if it is a mail body for instance, then it can't get the focus
         UpdateInputContext();
     }
     else
@@ -2780,7 +2778,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         if ( bCapture || pGridWin[eWhich]->IsMouseCaptured() )
         {
             // tracking instead of CaptureMouse, so it can be cancelled cleanly
-            //  (SelectionEngine calls CaptureMouse for SetWindow)
+            // (SelectionEngine calls CaptureMouse for SetWindow)
             //! someday SelectionEngine itself should call StartTracking!?!
             pGridWin[eWhich]->ReleaseMouse();
             pGridWin[eWhich]->StartTracking();
@@ -2812,15 +2810,15 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         SfxInPlaceClient* pClient = aViewData.GetViewShell()->GetIPClient();
         bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-        //  don't switch ViewShell's active window during RefInput, because the focus
-        //  might change, and subsequent SetReference calls wouldn't find the right EditView
+        // don't switch ViewShell's active window during RefInput, because the focus
+        // might change, and subsequent SetReference calls wouldn't find the right EditView
         if ( !bRefMode && !bOleActive )
             aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
 
         if ( bFocus && !aViewData.IsAnyFillMode() && !bRefMode )
         {
             // GrabFocus only if previously the other GridWindow had the focus
-            //  (for instance due to search and replace)
+            // (for instance due to search and replace)
             pGridWin[eWhich]->GrabFocus();
         }
 
@@ -2847,7 +2845,7 @@ void ScTabView::UpdateInputContext()
         pTabControl->UpdateInputContext();
 }
 
-//  GetGridWidth - width of an output range (for ViewData)
+// GetGridWidth - width of an output range (for ViewData)
 
 long ScTabView::GetGridWidth( ScHSplitPos eWhich )
 {
@@ -2858,7 +2856,7 @@ long ScTabView::GetGridWidth( ScHSplitPos eWhich )
         return 0;
 }
 
-//  GetGridHeight - height of an output range (for ViewData)
+// GetGridHeight - height of an output range (for ViewData)
 
 long ScTabView::GetGridHeight( ScVSplitPos eWhich )
 {
@@ -2906,7 +2904,7 @@ void ScTabView::ZoomChanged()
 
     HideNoteMarker();
 
-    // AW: To not change too much, use pWin here
+    // To not change too much, use pWin here
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
 
     if ( pWin && aViewData.HasEditView( aViewData.GetActivePart() ) )
@@ -2914,8 +2912,8 @@ void ScTabView::ZoomChanged()
         // flush OverlayManager before changing the MapMode
         pWin->flushOverlayManager();
 
-        //  make sure the EditView's position and size are updated
-        //  with the right (logic, not drawing) MapMode
+        // make sure the EditView's position and size are updated
+        // with the right (logic, not drawing) MapMode
         pWin->SetMapMode( aViewData.GetLogicMode() );
         UpdateEditView();
     }
