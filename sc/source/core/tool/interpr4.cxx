@@ -1317,6 +1317,12 @@ void ScInterpreter::GetExternalDoubleRef(
 
     ScComplexRefData aData(rData);
     ScRange aRange = aData.toAbs(aPos);
+    if (!aRange.IsValid())
+    {
+        SetError(FormulaError::NoRef);
+        return;
+    }
+
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(
         nFileId, rTabName, aRange, &aPos);
 
