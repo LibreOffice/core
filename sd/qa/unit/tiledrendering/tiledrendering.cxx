@@ -72,6 +72,7 @@ public:
     void testSearchAllSelections();
     void testSearchAllNotifications();
     void testSearchAllFollowedBySearch();
+    void testDontSearchInMasterPages();
     void testInsertDeletePage();
     void testInsertTable();
     void testPartHash();
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testSearchAllSelections);
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testSearchAllFollowedBySearch);
+    CPPUNIT_TEST(testDontSearchInMasterPages);
     CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testInsertTable);
     CPPUNIT_TEST(testPartHash);
@@ -622,6 +624,21 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+}
+
+void SdTiledRenderingTest::testDontSearchInMasterPages()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
+
+    // This should trigger the not-found callback ("date" is present only on
+    // the master page)
+    lcl_search("date");
+    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 namespace
