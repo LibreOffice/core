@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ce799f31",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-13T13:26:37Z",
+      "side": 1,
+      "message": "I find using this function name in this context quite confusing.. I suggest to either add a new function for this (i.e. GetThousandDivisor()) ...",
+      "revId": "3edbf567a38d5cf1fc8654651753060feb078a5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0e748733",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-13T13:26:37Z",
+      "side": 1,
+      "message": "... or even better, move also this into the format knowledge and have something like GetThousandDivisorPrecision().\n\nBtw, that thousand divisor should not be l10n specific, otherwise different numbers would be displayed depending on the locale in which a document is loaded. (and I don\u0027t know locales that have thousand separators every 4th digit, only 2 followed by 3)",
+      "revId": "3edbf567a38d5cf1fc8654651753060feb078a5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
