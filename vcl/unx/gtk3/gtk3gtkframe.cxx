@@ -4241,7 +4241,7 @@ void GtkDragSource::dragEnd(GdkDragContext* context)
     {
         datatransfer::dnd::DragSourceDropEvent aEv;
         aEv.DropAction = GdkToVcl(gdk_drag_context_get_selected_action(context));
-        aEv.DropSuccess = gdk_drag_drop_succeeded(context);
+        aEv.DropSuccess = true;
         auto xListener = m_xListener;
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
