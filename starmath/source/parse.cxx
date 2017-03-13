@@ -1939,8 +1939,7 @@ void SmParser::DoBrace()
             pLeft.reset(new SmMathSymbolNode(m_aCurToken));
 
             NextToken();
-            DoBracebody(true);
-            pBody.reset(popOrZero(m_aNodeStack));
+            pBody.reset(DoBracebody(true));
 
             if (m_aCurToken.eType == TRIGHT)
             {   NextToken();
@@ -1967,8 +1966,7 @@ void SmParser::DoBrace()
         pLeft.reset(new SmMathSymbolNode(m_aCurToken));
 
         NextToken();
-        DoBracebody(false);
-        pBody.reset(popOrZero(m_aNodeStack));
+        pBody.reset(DoBracebody(false));
 
         SmTokenType  eExpectedType = TUNKNOWN;
         switch (pLeft->GetToken().eType)
@@ -2006,9 +2004,9 @@ void SmParser::DoBrace()
         Error(eError);
 }
 
-void SmParser::DoBracebody(bool bIsLeftRight)
+SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
 {
-    std::unique_ptr<SmStructureNode> pBody(new SmBracebodyNode(m_aCurToken));
+    auto pBody = o3tl::make_unique<SmBracebodyNode>(m_aCurToken);
     sal_uInt16           nNum = 0;
 
     // get body if any
@@ -2062,7 +2060,7 @@ void SmParser::DoBracebody(bool bIsLeftRight)
 
     pBody->SetSubNodes(aNodes);
     pBody->SetScaleMode(bIsLeftRight ? SCALE_HEIGHT : SCALE_NONE);
-    m_aNodeStack.push_front(std::move(pBody));
+    return pBody.release();
 }
 
 void SmParser::DoFunction()

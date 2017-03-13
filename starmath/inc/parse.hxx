@@ -83,7 +83,7 @@ class SmParser
     void    DoFontSize();
     void    DoColor();
     void    DoBrace();
-    void    DoBracebody(bool bIsLeftRight);
+    SmBracebodyNode *DoBracebody(bool bIsLeftRight);
     void    DoFunction();
     void    DoBinom();
     void    DoStack();
