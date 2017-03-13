@@ -105,7 +105,7 @@
                         </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="IgM-Gx-FQp">
                             <connections>
-                                <segue destination="5ff-kT-49H" kind="popoverPresentation" popoverAnchorBarButtonItem="IgM-Gx-FQp" id="If5-Nv-a7W">
+                                <segue destination="5ff-kT-49H" kind="popoverPresentation" identifier="showActions" popoverAnchorBarButtonItem="IgM-Gx-FQp" id="If5-Nv-a7W">
                                     <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                 </segue>
                             </connections>
@@ -122,7 +122,7 @@
             <objects>
                 <tableViewController autoresizesArchivedViewToFullSize="NO" title="File Manager Actions" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" clearsSelectionOnViewWillAppear="NO" id="5ff-kT-49H" customClass="FileManagerActions" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" id="2t6-op-1gZ">
-                        <rect key="frame" x="0.0" y="0.0" width="134" height="150"/>
+                        <rect key="frame" x="0.0" y="0.0" width="134" height="180"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -195,7 +195,6 @@
                                                     <state key="normal" title="Level up"/>
                                                     <connections>
                                                         <action selector="doLevelUp:" destination="5ff-kT-49H" eventType="touchUpInside" id="fM6-nH-5Z1"/>
-                                                        <action selector="doOpen:" destination="5ff-kT-49H" eventType="touchUpInside" id="kNJ-PT-8Y6"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -213,11 +212,26 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Create directory"/>
                                                     <connections>
-                                                        <action selector="doCreateDirectory:" destination="5ff-kT-49H" eventType="touchUpInside" id="58c-Ul-UIL"/>
-                                                        <action selector="doLevelUp:" destination="5ff-kT-49H" eventType="touchUpInside" id="4pP-76-PsI"/>
-                                                        <action selector="doOpen:" destination="5ff-kT-49H" eventType="touchUpInside" id="gZm-0c-D2v"/>
+                                                        <action selector="doCreateDirectory:" destination="5ff-kT-49H" eventType="touchUpInside" id="oJG-8y-O2q"/>
                                                     </connections>
                                                 </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Va5-1U-paI">
+                                        <rect key="frame" x="0.0" y="150" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Va5-1U-paI" id="LW9-jL-3U7">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="type name" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lms-Tp-Xtt">
+                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -229,23 +243,24 @@
                             <outlet property="delegate" destination="5ff-kT-49H" id="LEX-V1-HLr"/>
                         </connections>
                     </tableView>
-                    <value key="contentSizeForViewInPopover" type="size" width="134" height="150"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="134" height="180"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="134" height="150"/>
+                    <size key="freeformSize" width="134" height="180"/>
                     <connections>
                         <outlet property="buttonCreateDirectory" destination="5Rk-LW-Ub9" id="4oy-Px-rKR"/>
                         <outlet property="buttonDelete" destination="IQ3-hK-KmM" id="GNv-Wu-Gdw"/>
                         <outlet property="buttonLevelUp" destination="fNi-5u-PqA" id="phL-bi-HaC"/>
                         <outlet property="buttonOpen" destination="BSN-dd-e84" id="j4Q-KH-UFt"/>
                         <outlet property="buttonUploadDownload" destination="ZSm-By-dJs" id="oVW-Nt-Pfx"/>
+                        <outlet property="editDirectoryName" destination="Lms-Tp-Xtt" id="ztl-WH-mbg"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gPn-3u-MDl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1930" y="1201"/>
+            <point key="canvasLocation" x="1929.6875" y="1200.5859375"/>
         </scene>
         <!--Print Manager-->
         <scene sceneID="viJ-XJ-htc">

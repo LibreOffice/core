@@ -17,7 +17,7 @@ private class FileStorage
     // Start path for the 2 storage locations
     private let baseLocalDocPath : URL
     private let baseCloudDocPath : URL?
-    private var currrentDocPath  : URL? {
+    private var currentDocPath  : URL? {
         get {
             return storageIsLocal ? baseLocalDocPath : baseCloudDocPath
         }
@@ -54,11 +54,18 @@ private class FileStorage
     }
     
     
+    func isSubDirectory() -> Bool
+    {
+        return currentDir != currentDocPath
+    }
+    
+    
     
     func selectStorage(_ doSwitch : Bool) -> Bool
     {
         if doSwitch {
             storageIsLocal = !storageIsLocal
+            buildFileList()
         }
         return storageIsLocal
     }
@@ -77,7 +84,7 @@ private class FileStorage
     func leaveDirectory()
     {
         // step up for active storage, and only if not in root
-        if currentDir != currrentDocPath {
+        if isSubDirectory() {
             currentDir = currentDir.deletingLastPathComponent()
             buildFileList()
         }
@@ -89,7 +96,8 @@ private class FileStorage
     {
         let newDir = currentDir.appendingPathComponent(name)
         try! filemgr.createDirectory(at: newDir, withIntermediateDirectories: true, attributes: nil)
-        enterDirectory(name + "/")
+        currentDir = currentDir.appendingPathComponent(name)
+        buildFileList()
     }
     
     
@@ -122,6 +130,7 @@ private class FileStorage
     {
         try! filemgr.moveItem(at: currentDir.appendingPathComponent(name),
                               to: (storageIsLocal ? localDir : cloudDir).appendingPathComponent(name))
+        buildFileList()
     }
     
     
@@ -150,6 +159,8 @@ private class FileStorage
         baseLocalDocPath = filemgr.urls(for: .documentDirectory, in: .userDomainMask)[0]
         baseCloudDocPath = nil
         localDir         = baseLocalDocPath
+        
+        // JIX, fix add support for iCloud
         cloudDir         = baseLocalDocPath
         buildFileList()
     }
@@ -157,47 +168,84 @@ private class FileStorage
 
 
 
-class FileManagerController : UITableViewController
+class FileManagerController : UITableViewController, actionsControlDelegate
 
 {
+    // Housekeeping variables
     private var fileData = FileStorage()
+    private var selectedRow : IndexPath?
     
-    
-    func showFiles()
-    {
-        
-    }
-    
-    
-    
+
+    // Toogle between local and cloud storage
     @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
     {
-        if fileData.selectStorage(true) {
-            sender.title = "iCloud"
-        }
-        else {
-            sender.title = "iPad"
-        }
-        showFiles()
+        sender.title = fileData.selectStorage(true) ? "iCloud" : "iPad"
+        reloadData()
     }
     
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "ShowAttractionDetails" {
-            
-//            let detailViewController = segue.destination
-//                as! AttractionDetailViewController
-            
-//            let myIndexPath = self.tableView.indexPathForSelectedRow!
-//            let row = myIndexPath.row
-//            detailViewController.webSite = webAddresses[row]
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        let vc = segue.destination as! FileManagerActions
+        vc.delegate = self
+        vc.inFileSelect = (selectedRow != nil)
+        vc.inSubDirectory = fileData.isSubDirectory()
+    }
+
+    
+    
+    func actionOpen()
+    {
+        if selectedRow != nil {
+            let currentCell = tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            if currentCell.isDirectory {
+                fileData.enterDirectory(currentCell.fileName)
+                reloadData()
+            } else {
+                // JIX delegate to Document
+            }
         }
     }
     
     
     
+    func actionDelete()
+    {
+        if selectedRow != nil {
+            let currentCell = self.tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.deleteFileDirectory(currentCell.fileName)
+            reloadData()
+        }
+    }
+    
+    
+    
+    func actionUploadDownload()
+    {
+        // JIX filemanager copy
+    }
+    
+    
+    
+    func actionLevelUp()
+    {
+        fileData.leaveDirectory()
+        reloadData()
+    }
+    
+    
+    
+    func actionCreateDirectory(_ name : String)
+    {
+        fileData.createDirectory(name)
+        reloadData()
+    }
+
+    
+    
+    // Table handling functions
     override func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
@@ -229,18 +277,32 @@ class FileManagerController : UITableViewController
         }
         return cell
     }
-
-
-    // MARK: - ViewController basic
-    override func viewDidLoad()
+    
+    
+    
+    // Select a row (file) and show actions
+    override  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        super.viewDidLoad()
-        showFiles()
+        selectedRow = indexPath
+        performSegue(withIdentifier: "showActions", sender: self)
     }
+
+    
+    
+    // Support function
+    func reloadData()
+    {
+        selectedRow = nil
+        tableView.reloadData()
+    }
+
 }
 
+
+
+// Space holder for extra information needed to do the right thing for each action
 class FileManagerCell: UITableViewCell {
-        
+    
     @IBOutlet weak var fileLabel: UILabel!
     var isDirectory : Bool = false
     var fileName    : String = ""
@@ -248,37 +310,83 @@ class FileManagerCell: UITableViewCell {
 
 
 
+// Protocol for action popover callback
+protocol actionsControlDelegate
+{
+    func actionOpen()
+    func actionDelete()
+    func actionUploadDownload()
+    func actionLevelUp()
+    func actionCreateDirectory(_ name : String)
+}
+
+
+
+// Action popover dialog
 class FileManagerActions : UITableViewController
     
 {
+    // Pointer to callback class
+    var delegate : actionsControlDelegate?
+    var inSubDirectory : Bool = false
+    var inFileSelect   : Bool = false
+    
+    // Calling class might enable/disable each button
     @IBOutlet weak var buttonUploadDownload: UIButton!
     @IBOutlet weak var buttonDelete: UIButton!
     @IBOutlet weak var buttonOpen: UIButton!
     @IBOutlet weak var buttonLevelUp: UIButton!
     @IBOutlet weak var buttonCreateDirectory: UIButton!
-
-    @IBAction func doOpen(_ sender: UIButton) {
+    @IBOutlet weak var editDirectoryName: UITextField!
+    
+    
+    // Actions
+    @IBAction func doOpen(_ sender: UIButton)
+    {
+        delegate?.actionOpen()
         dismiss(animated: false)
     }
-    @IBAction func doDelete(_ sender: UIButton) {
+    
+    
+    
+    @IBAction func doDelete(_ sender: UIButton)
+    {
+        delegate?.actionDelete()
         dismiss(animated: false)
     }
-    @IBAction func doUploadDownload(_ sender: UIButton) {
+    
+    
+    
+    @IBAction func doUploadDownload(_ sender: UIButton)
+    {
+        delegate?.actionDelete()
         dismiss(animated: false)
     }
 
-    @IBAction func doLevelUp(_ sender: UIButton) {
+    
+    
+    @IBAction func doLevelUp(_ sender: UIButton)
+    {
+        delegate?.actionLevelUp()
         dismiss(animated: false)
     }
-    @IBAction func doCreateDirectory(_ sender: UIButton) {
+    
+    @IBAction func doCreateDirectory(_ sender: UIButton)
+    {
+        if editDirectoryName.text != "type name" {
+            delegate?.actionCreateDirectory(editDirectoryName.text!)
+        }
+        dismiss(animated: false)
     }
-    // MARK: - ViewController basic
 
-
-
+    
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        buttonLevelUp.isEnabled = inSubDirectory
+        buttonOpen.isEnabled = inFileSelect
+        buttonDelete.isEnabled = inFileSelect
+        buttonUploadDownload.isEnabled = inFileSelect
     }
 }
