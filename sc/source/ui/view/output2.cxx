@@ -1420,7 +1420,7 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
     if (bUseWritingDirection ||
             eInHorJust == SvxCellHorJustify::Block || eInHorJust == SvxCellHorJustify::Repeat)
     {
-        sal_uInt16 nDirection = lcl_GetValue<SvxFrameDirectionItem, sal_uInt16>( rPattern, ATTR_WRITINGDIR, pCondSet);
+        SvxFrameDirection nDirection = lcl_GetValue<SvxFrameDirectionItem, SvxFrameDirection>(rPattern, ATTR_WRITINGDIR, pCondSet);
         if (nDirection == FRMDIR_HORI_LEFT_TOP || nDirection == FRMDIR_VERT_TOP_LEFT)
             eHorJustContext = SvxCellHorJustify::Left;
         else if (nDirection == FRMDIR_ENVIRONMENT)
