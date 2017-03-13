@@ -650,7 +650,7 @@ public:
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     void            SetResizeOffset( std::size_t nNewResize ) { nResize = nNewResize; }
-    virtual sal_uInt64 remainingSize() override { return GetEndOfData() - Tell(); }
+    virtual sal_uInt64 remainingSize() override { FlushBuffer(true); return GetEndOfData() - Tell(); }
 };
 
 class TOOLS_DLLPUBLIC SvScriptStream: public SvStream
