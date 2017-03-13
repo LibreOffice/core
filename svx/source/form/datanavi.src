@@ -47,16 +47,6 @@ Bitmap RID_SVXBMP_REMOVE
     File = "tb05.png";
 };
 
-Bitmap RID_SVXBMP_GROUP_CLOSED
-{
-    File = "da01.png";
-};
-
-Bitmap RID_SVXBMP_GROUP_OPEN
-{
-    File = "da02.png";
-};
-
 Bitmap RID_SVXBMP_ELEMENT
 {
     File = "da03.png";
@@ -207,16 +197,6 @@ String RID_STR_REPLACE_INST
 String RID_STR_REPLACE_DOC
 {
     Text [ en-US ] = "Document" ;
-};
-
-String RID_STR_DATANAV_SUBM_PARENT
-{
-    Text [ en-US ] = "Submission: " ;
-};
-
-String RID_STR_DATANAV_SUBM_ID
-{
-    Text [ en-US ] = "ID: " ;
 };
 
 String RID_STR_DATANAV_SUBM_BIND

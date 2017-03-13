@@ -308,26 +308,6 @@ String RID_SVXSTR_EVENT_TITLECHANGED
     Text [ en-US ] = "Document title changed" ;
 };
 
-String RID_SVXSTR_EVENT_MODECHANGED
-{
-    Text [ en-US ] = "Document mode changed" ;
-};
-
-String RID_SVXSTR_EVENT_VISAREACHANGED
-{
-    Text [ en-US ] = "Visible area changed" ;
-};
-
-String RID_SVXSTR_EVENT_STORAGECHANGED
-{
-    Text [ en-US ] = "Document has got a new storage" ;
-};
-
-String RID_SVXSTR_EVENT_LAYOUT_FINISHED
-{
-    Text [ en-US ] = "Document layout finished" ;
-};
-
 String RID_SVXSTR_EVENT_SELECTIONCHANGED
 {
     Text [ en-US ] = "Selection changed" ;

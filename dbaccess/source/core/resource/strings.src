@@ -20,11 +20,6 @@
 #include "core_resource.hrc"
 #include "dbamiscres.hrc"
 
-String RID_STR_TRIED_OPEN_TABLE
-{
-    Text [ en-US ] = "Tried to open the table $name$.";
-};
-
 String RID_STR_CONNECTION_INVALID
 {
     Text [ en-US ] = "No connection could be established.";
@@ -33,11 +28,6 @@ String RID_STR_CONNECTION_INVALID
 String RID_STR_TABLE_IS_FILTERED
 {
     Text [ en-US ] = "The table $name$ already exists. It is not visible because it has been filtered out.";
-};
-
-String RID_STR_NEED_CONFIG_WRITE_ACCESS
-{
-    Text [ en-US ] = "You have no write access to the configuration data the object is based on.";
 };
 
 String RID_STR_COULDNOTCONNECT_UNSPECIFIED
@@ -140,11 +130,6 @@ String RID_STR_NO_XQUERIESSUPPLIER
     Text [ en-US ] = "The interface XQueriesSupplier is not available.";
 };
 
-String RID_STR_NOT_SUPPORTED_BY_DRIVER
-{
-    Text [ en-US ] = "The driver does not support this function.";
-};
-
 String RID_STR_NO_ABS_ZERO
 {
     Text [ en-US ] = "An 'absolute(0)' call is not allowed.";
@@ -178,11 +163,6 @@ String RID_STR_NO_DELETEROW
 String RID_STR_NO_TABLE_RENAME
 {
     Text [ en-US ] = "The driver does not support table renaming.";
-};
-
-String RID_STR_NO_ALTER_COLUMN_DEF
-{
-    Text [ en-US ] = "The driver does not support the modification of column descriptions.";
 };
 
 String RID_STR_COLUMN_ALTER_BY_NAME

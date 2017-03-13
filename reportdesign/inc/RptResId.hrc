@@ -52,8 +52,6 @@
 // undo strings
 #define RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER  ( RID_STRING_START +  11 )
 #define RID_STR_UNDO_ADD_REPORTHEADERFOOTER     ( RID_STRING_START +  12 )
-#define RID_STR_UNDO_REMOVE_PAGEHEADERFOOTER    ( RID_STRING_START +  13 )
-#define RID_STR_UNDO_ADD_PAGEHEADERFOOTER       ( RID_STRING_START +  14 )
 #define RID_STR_UNDO_PROPERTY                   ( RID_STRING_START +  15 )
 #define RID_STR_UNDO_REMOVE_GROUP               ( RID_STRING_START +  16 )
 #define RID_STR_UNDO_APPEND_GROUP               ( RID_STRING_START +  17 )
@@ -64,15 +62,9 @@
 #define RID_STR_UNDO_CHANGE_SIZE                ( RID_STRING_START +  22 )
 #define RID_STR_UNDO_INSERT_CONTROL             ( RID_STRING_START +  23 )
 #define RID_STR_UNDO_DELETE_CONTROL             ( RID_STRING_START +  24 )
-#define RID_STR_UNDO_GROUP                      ( RID_STRING_START +  25 )
-#define RID_STR_UNDO_UNGROUP                    ( RID_STRING_START +  26 )
 #define RID_STR_UNDO_CHANGEPOSITION             ( RID_STRING_START +  27 )
 #define RID_STR_UNDO_ADDFUNCTION                ( RID_STRING_START +  28 )
-#define RID_STR_UNDO_DELETEFUNCTION             ( RID_STRING_START +  29 )
 
-// title of tab pages
-#define RID_STR_DESIGN_VIEW                 ( RID_STRING_START +  30 )
-#define RID_STR_PREVIEW_VIEW                ( RID_STRING_START +  31 )
 // other
 #define STR_RPT_TITLE                       ( RID_STRING_START +  32 )
 #define STR_RPT_LABEL                       ( RID_STRING_START +  33 )
@@ -140,11 +132,9 @@
 #define RID_STR_BACKCOLOR                   (RID_STRING_START + 93)
 #define RID_STR_PRINTREPEATEDVALUES         (RID_STRING_START + 94)
 #define RID_STR_CONDITIONALPRINTEXPRESSION  (RID_STRING_START + 95)
-#define RID_STR_COLUMNHEADERFOOTER_INSERT   (RID_STRING_START + 96)
 #define RID_STR_STARTNEWCOLUMN              (RID_STRING_START + 97)
 #define RID_STR_STARTNEWPAGE                (RID_STRING_START + 98)
 #define RID_STR_RESETPAGENUMBER             (RID_STRING_START + 99)
-#define RID_STR_COLUMNHEADERFOOTER_DELETE   (RID_STRING_START + 100)
 #define RID_STR_PRINTWHENGROUPCHANGE        (RID_STRING_START + 102)
 #define RID_STR_REPORTHEADERFOOTER_INSERT   (RID_STRING_START + 103)
 #define RID_STR_REPORTHEADERFOOTER_DELETE   (RID_STRING_START + 104)
@@ -159,8 +149,6 @@
 #define RID_STR_REPORT_HEADER               (RID_STRING_START + 112)
 #define RID_STR_REPORT_FOOTER               (RID_STRING_START + 113)
 #define RID_STR_SCOPE_GROUP                 (RID_STRING_START + 114)
-#define RID_APP_TITLE                       (RID_STRING_START + 115)
-#define RID_APP_NEW_DOC                     (RID_STRING_START + 116)
 #define RID_STR_UNDO_ALIGNMENT              (RID_STRING_START + 117)
 #define RID_STR_HEADER                      (RID_STRING_START + 118)
 #define RID_STR_FOOTER                      (RID_STRING_START + 119)
@@ -230,7 +218,6 @@
 #define RID_SVXBMP_ICON_DETAIL              (RID_BITMAP_START + 16)
 #define RID_BMP_TREENODE_COLLAPSED          (RID_BITMAP_START + 17)
 #define RID_BMP_TREENODE_EXPANDED           (RID_BITMAP_START + 18)
-#define RID_BMP_REPORT_TREE_ICON            (RID_BITMAP_START + 19)
 
 // untyped ---------------------------------------------------------------------
 #define RID_STR_BOOL                        (RID_UNTYPED_START +  0 )

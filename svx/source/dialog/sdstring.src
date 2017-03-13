@@ -61,10 +61,6 @@ String RID_SVXSTR_LINEEND
     Text [ en-US ] = "Arrowheads" ;
 };
 
-String RID_SVXSTR_CLOSE
-{
-    Text [ en-US ] = "Close" ;
-};
 String RID_SVXSTR_COLOR_BLACK
 {
     Text [ en-US ] = "Black" ;
@@ -445,12 +441,6 @@ String RID_SVXSTR_COLOR_SALMON_DEF
 String RID_SVXSTR_COLOR_SEABLUE_DEF
 {
     Text = "Sea blue";
-};
-/* do not translate */
-String RID_SVXSTR_COLOR_SUN_DEF
-{
-    // attention: this is the color string for the Sun Microsystems specific colors !!!
-    Text = "Sun";
 };
 /* do not translate */
 String RID_SVXSTR_COLOR_CHART_DEF
@@ -2106,12 +2096,6 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     };
 
-// unknown text color
-String RID_SVXSTR_COLOR_USER
-{
-    Text [ en-US ] = "User" ;
-};
-
 String RID_SVXSTR_COLOR_LIBRE_GREEN_1
 {
     Text [ en-US ] = "Green 1 (%PRODUCTNAME Main Color)" ;
@@ -2283,16 +2267,6 @@ String RID_SVXSTR_GALLERY_THEMEITEMS
 String RID_SVXSTR_GALLERY_PREVIEW
 {
     Text [ en-US ] = "Preview";
-};
-
-String RID_SVXSTR_FILTER
-{
-    Text [ en-US ] = "Filter" ;
-};
-
-String RID_SVXSTR_VIEW
-{
-    Text [ en-US ] = "List" ;
 };
 
 Bitmap RID_SVXBMP_GREENCHECK
