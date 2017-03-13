@@ -359,6 +359,16 @@ void ViewShell::SetZoom(long nZoom)
     UpdateScrollBars();
 }
 
+long ViewShell::GetZoom() const
+{
+    if (mpContentWindow)
+    {
+        mpContentWindow->GetZoom();
+    }
+
+    return 0;
+}
+
 /**
  * Set zoom rectangle for active window. Sets all split windows to the same zoom
  * factor.

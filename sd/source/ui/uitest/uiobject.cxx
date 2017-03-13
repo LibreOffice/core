@@ -90,6 +90,7 @@ StringMap ImpressWindowUIObject::get_state()
 
     aMap["SelectedText"] = getViewShell(mxWindow)->GetSelectionText(false);
     aMap["CurrentSlide"] = OUString::number(getViewShell(mxWindow)->GetCurPageId());
+    aMap["Zoom"] = OUString::number(getViewShell(mxWindow)->GetZoom());
 
     return aMap;
 }

@@ -201,6 +201,7 @@ public:
     void    Scroll(long nX, long nY);
     void    ScrollLines(long nX, long nY);
     virtual void    SetZoom(long nZoom);
+    long    GetZoom() const;
     virtual void    SetZoomRect(const Rectangle& rZoomRect);
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                         const Point& rWinPos, bool bUpdate = false);
