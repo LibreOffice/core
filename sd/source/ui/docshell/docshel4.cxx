@@ -644,6 +644,13 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
             mpDoc->SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
 
+            if ( mpViewShell )
+            {
+                ::sd::View* pView = mpViewShell->GetView();
+                if ( pView->IsTextEdit() )
+                    pView->SdrEndTextEdit();
+            }
+
             bRet = xFilter->Export();
             if( !bRet )
                 mpDoc->SetSwapGraphicsMode( nOldSwapMode );
