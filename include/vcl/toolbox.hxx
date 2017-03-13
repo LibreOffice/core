@@ -36,7 +36,6 @@
 class Timer;
 class UserDrawEvent;
 struct ImplToolItem;
-struct ImplToolSize;
 struct ImplToolBoxPrivateData;
 class  ImplTrackRect;
 class  PopupMenu;
@@ -76,13 +75,6 @@ enum class ToolBoxLayoutMode { Normal, LockVert };
 // Position of the text when icon and text are painted
 enum class ToolBoxTextPosition { Right, Bottom };
 
-struct ImplToolSize
-{
-    long mnWidth;
-    long mnHeight;
-    sal_uInt16 mnLines;
-};
-
 class Idle;
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {
@@ -99,6 +91,13 @@ public:
         = std::numeric_limits<ImplToolItems::size_type>::max();
 
 private:
+    struct ImplToolSize
+    {
+        long mnWidth;
+        long mnHeight;
+        ImplToolItems::size_type mnLines;
+    };
+
     ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
     Idle               *mpIdle;
@@ -127,12 +126,12 @@ private:
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnDownItemId;
     ImplToolItems::size_type mnCurPos;
-    sal_uInt16          mnLines;        // total number of toolbox lines
-    sal_uInt16          mnCurLine;      // the currently visible line
-    sal_uInt16          mnCurLines;     // number of lines due to line breaking
-    sal_uInt16          mnVisLines;     // number of visible lines (for scrolling)
-    sal_uInt16          mnFloatLines;   // number of lines during floating mode
-    sal_uInt16          mnDockLines;
+    ImplToolItems::size_type mnLines;   // total number of toolbox lines
+    ImplToolItems::size_type mnCurLine; // the currently visible line
+    ImplToolItems::size_type mnCurLines; // number of lines due to line breaking
+    ImplToolItems::size_type mnVisLines; // number of visible lines (for scrolling)
+    ImplToolItems::size_type mnFloatLines; // number of lines during floating mode
+    ImplToolItems::size_type mnDockLines;
     sal_uInt16          mnConfigItem;
     sal_uInt16          mnMouseClicks;
     sal_uInt16          mnMouseModifier;
@@ -187,7 +186,7 @@ private:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
-    SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const Rectangle& rRect);
@@ -199,8 +198,8 @@ private:
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
-    SAL_DLLPRIVATE sal_uInt16      ImplGetItemLine( ImplToolItem* pCurrentItem );
-    SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplGetItemLine( ImplToolItem* pCurrentItem );
+    SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( ImplToolItems::size_type nLine );
     SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE void            ImplShowFocus();
@@ -250,19 +249,19 @@ public:
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem() const;
-    SAL_DLLPRIVATE Size ImplCalcSize( sal_uInt16 nCalcLines, sal_uInt16 nCalcMode = 0 );
+    SAL_DLLPRIVATE Size ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCalcMode = 0 );
     SAL_DLLPRIVATE void ImplCalcFloatSizes();
-    SAL_DLLPRIVATE Size ImplCalcFloatSize( sal_uInt16& rLines );
+    SAL_DLLPRIVATE Size ImplCalcFloatSize( ImplToolItems::size_type& rLines );
     SAL_DLLPRIVATE void ImplCalcMinMaxFloatSize( Size& rMinSize, Size& rMaxSize );
     SAL_DLLPRIVATE void ImplSetMinMaxFloatSize();
-    SAL_DLLPRIVATE sal_uInt16 ImplCalcLines( long nToolSize ) const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( long nToolSize ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
     SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const Point& rPos ) const;
     static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
-    SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks() const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCountLineBreaks() const;
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
 protected:
@@ -346,7 +345,7 @@ public:
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 
-    void                SetLineCount( sal_uInt16 nNewLines );
+    void                SetLineCount( ImplToolItems::size_type nNewLines );
     void                ShowLine( bool bNext );
 
     // Used to enable/disable scrolling one page at a time for toolbar
@@ -432,20 +431,20 @@ public:
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel();
     //  window size according to current alignment, floating state and a given number of lines
-    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines );
+    Size                CalcWindowSizePixel( ImplToolItems::size_type nCalcLines );
     //  window size according to current floating state and a given number of lines and a given alignment
-    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines, WindowAlign eAlign );
+    Size                CalcWindowSizePixel( ImplToolItems::size_type nCalcLines, WindowAlign eAlign );
     // floating window size according to number of lines (uses the number of line breaks)
     Size                CalcFloatingWindowSizePixel();
     // floating window size with a given number of lines
-    Size                CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines );
+    Size                CalcFloatingWindowSizePixel( ImplToolItems::size_type nCalcLines );
     // automatic window size for popup mode
     Size                CalcPopupWindowSizePixel();
 
     // computes the smallest useful size when docked, ie with the first item visible only (+drag area and menu button)
     Size                CalcMinimumWindowSizePixel();
 
-    sal_uInt16          GetFloatingLines() const;
+    ImplToolItems::size_type GetFloatingLines() const;
 
     void                SetStyle( WinBits nNewStyle );
     WinBits             GetStyle() const { return mnWinStyle; }
@@ -538,7 +537,7 @@ inline Size ToolBox::CalcWindowSizePixel()
     return CalcWindowSizePixel( mnLines );
 }
 
-inline sal_uInt16 ToolBox::GetFloatingLines() const
+inline ToolBox::ImplToolItems::size_type ToolBox::GetFloatingLines() const
 {
     return mnFloatLines;
 }

@@ -104,7 +104,7 @@ private:
     long            mnMinWidth;
     long            mnMaxWidth;
     sal_uInt16      mnLineMode;
-    sal_uInt16      mnStartLines;
+    ToolBox::ImplToolItems::size_type mnStartLines;
     void*           mpCustomizeData;
     bool            mbResizeMode;
     bool            mbShowDragRect;
@@ -665,7 +665,7 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem() const
     return nullptr;
 }
 
-Size ToolBox::ImplCalcSize( sal_uInt16 nCalcLines, sal_uInt16 nCalcMode )
+Size ToolBox::ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCalcMode )
 {
     long            nMax;
     long            nLeft = 0;
@@ -813,9 +813,9 @@ void ToolBox::ImplCalcFloatSizes()
     // calc an upper bound for ImplCalcBreaks below
     long upperBoundWidth = nCalcSize * mpData->m_aItems.size();
 
-    sal_uInt16  nLines;
-    sal_uInt16  nCalcLines;
-    sal_uInt16  nTempLines;
+    ImplToolItems::size_type nLines;
+    ImplToolItems::size_type nCalcLines;
+    ImplToolItems::size_type nTempLines;
     long    nMaxLineWidth;
     nCalcLines = ImplCalcBreaks( nCalcSize, &nMaxLineWidth, true );
 
@@ -846,7 +846,7 @@ void ToolBox::ImplCalcFloatSizes()
     }
 }
 
-Size ToolBox::ImplCalcFloatSize( sal_uInt16& rLines )
+Size ToolBox::ImplCalcFloatSize( ImplToolItems::size_type& rLines )
 {
     ImplCalcFloatSizes();
 
@@ -909,7 +909,7 @@ void ToolBox::ImplSetMinMaxFloatSize()
     }
 }
 
-sal_uInt16 ToolBox::ImplCalcLines( long nToolSize ) const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( long nToolSize ) const
 {
     long nLineHeight;
 
@@ -937,7 +937,7 @@ sal_uInt16 ToolBox::ImplCalcLines( long nToolSize ) const
     if( nLines < 1 )
         nLines = 1;
 
-    return static_cast<sal_uInt16>(nLines);
+    return nLines;
 }
 
 sal_uInt16 ToolBox::ImplTestLineSize( const Point& rPos ) const
@@ -1008,7 +1008,7 @@ void ToolBox::ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nL
     }
 
     Size    aWinSize = GetSizePixel();
-    sal_uInt16  nMaxLines = (mnLines > mnCurLines) ? mnLines : mnCurLines;
+    ImplToolItems::size_type nMaxLines = (mnLines > mnCurLines) ? mnLines : mnCurLines;
     if ( nMaxLines > TB_MAXLINES )
         nMaxLines = TB_MAXLINES;
     if ( bHorz )
@@ -1026,7 +1026,7 @@ void ToolBox::ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nL
             nMaxSize = aWinSize.Width();
     }
 
-    sal_uInt16 i = 1;
+    ImplToolItems::size_type i = 1;
     if ( nCurSize <= nOneLineSize )
         nSize = nOneLineSize;
     else
@@ -1972,7 +1972,7 @@ bool ToolBox::ImplCalcItem()
         return false;
 }
 
-sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const
 {
     sal_uLong           nLineStart = 0;
     sal_uLong           nGroupStart = 0;
@@ -1980,7 +1980,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
     long            nCurWidth;
     long            nLastGroupLineWidth = 0;
     long            nMaxLineWidth = 0;
-    sal_uInt16          nLines = 1;
+    ImplToolItems::size_type nLines = 1;
     bool            bWindow;
     bool            bBreak = false;
     long            nWidthTotal = nWidth;
@@ -2132,7 +2132,7 @@ Size ToolBox::ImplGetOptimalFloatingSize()
     // try to preserve current height
 
     // calc number of floating lines for current window height
-    sal_uInt16 nFloatLinesHeight = ImplCalcLines( mnDY );
+    ImplToolItems::size_type nFloatLinesHeight = ImplCalcLines( mnDY );
     // calc window size according to this number
     aSize1 = ImplCalcFloatSize( nFloatLinesHeight );
 
@@ -2146,9 +2146,9 @@ Size ToolBox::ImplGetOptimalFloatingSize()
     int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
     Size aSz( aCurrentSize );
     long maxX;
-    sal_uInt16 nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
+    ImplToolItems::size_type nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
 
-    sal_uInt16 manyLines = 1000;
+    ImplToolItems::size_type manyLines = 1000;
     Size aMinimalFloatSize = ImplCalcFloatSize( manyLines );
 
     aSz.Height() = nBorderY + nLineHeight * nLines;
@@ -2229,7 +2229,7 @@ void ToolBox::ImplFormat( bool bResize )
     long            nLeft;
     long            nTop;
     long            nMax;   // width of layoutarea in pixels
-    sal_uInt16          nFormatLine;
+    ImplToolItems::size_type nFormatLine;
     bool            bMustFullPaint;
 
     ImplToolItems::iterator   it;
@@ -3369,7 +3369,7 @@ void ToolBox::ShowLine( bool bNext )
 
     if ( mpData->mbPageScroll )
     {
-        sal_uInt16 delta = mnVisLines;
+        ImplToolItems::size_type delta = mnVisLines;
         if ( bNext )
         {
             mnCurLine = mnCurLine + delta;
@@ -4636,7 +4636,7 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         // to get a floating mode as result - switch to floating size
         // so the calculation only depends on the position of the rectangle, not the current
         // docking state of the window
-        sal_uInt16 nTemp = 0;
+        ImplToolItems::size_type nTemp = 0;
         aDockingRect.SetSize( ImplCalcFloatSize( nTemp ) );
 
         // in this mode docking is never done by keyboard, so it's OK to use the mouse position
@@ -4731,7 +4731,7 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         meDockAlign = meAlign;
         if ( !mbLastFloatMode )
         {
-            sal_uInt16 nTemp = 0;
+            ImplToolItems::size_type nTemp = 0;
             aDockingRect.SetSize( ImplCalcFloatSize( nTemp ) );
         }
     }
@@ -4757,8 +4757,8 @@ void ToolBox::EndDocking( const Rectangle& rRect, bool bFloatMode )
 
 void ToolBox::Resizing( Size& rSize )
 {
-    sal_uInt16  nCalcLines;
-    sal_uInt16  nTemp;
+    ImplToolItems::size_type nCalcLines;
+    ImplToolItems::size_type nTemp;
 
     // Alle Floatinggroessen berechnen
     ImplCalcFloatSizes();
@@ -4825,20 +4825,20 @@ Size ToolBox::GetOptimalSize() const
     return aSize;
 }
 
-Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines )
+Size ToolBox::CalcWindowSizePixel( ImplToolItems::size_type nCalcLines )
 {
     return ImplCalcSize( nCalcLines );
 }
 
-Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines, WindowAlign eAlign )
+Size ToolBox::CalcWindowSizePixel( ImplToolItems::size_type nCalcLines, WindowAlign eAlign )
 {
     return ImplCalcSize( nCalcLines,
         (eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
 }
 
-sal_uInt16 ToolBox::ImplCountLineBreaks() const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCountLineBreaks() const
 {
-    sal_uInt16 nLines = 0;
+    ImplToolItems::size_type nLines = 0;
 
     ImplToolItems::const_iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
@@ -4853,14 +4853,14 @@ sal_uInt16 ToolBox::ImplCountLineBreaks() const
 Size ToolBox::CalcPopupWindowSizePixel()
 {
     // count number of breaks and calc corresponding floating window size
-    sal_uInt16 nLines = ImplCountLineBreaks();
+    ImplToolItems::size_type nLines = ImplCountLineBreaks();
 
     if( nLines )
         ++nLines;   // add the first line
     else
     {
         // no breaks found: use quadratic layout
-        nLines = (sal_uInt16) ceil( sqrt( (double) GetItemCount() ) );
+        nLines = (ImplToolItems::size_type) ceil( sqrt( (double) GetItemCount() ) );
     }
 
     bool bPopup = mpData->mbAssumePopupMode;
@@ -4874,12 +4874,12 @@ Size ToolBox::CalcPopupWindowSizePixel()
 
 Size ToolBox::CalcFloatingWindowSizePixel()
 {
-    sal_uInt16 nLines = ImplCountLineBreaks();
+    ImplToolItems::size_type nLines = ImplCountLineBreaks();
     ++nLines; // add the first line
     return CalcFloatingWindowSizePixel( nLines );
 }
 
-Size ToolBox::CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines )
+Size ToolBox::CalcFloatingWindowSizePixel( ImplToolItems::size_type nCalcLines )
 {
     bool bFloat = mpData->mbAssumeFloating;
     bool bDocking = mpData->mbAssumeDocked;
@@ -5287,10 +5287,10 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 // returns the current toolbox line of the item
-sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
+ToolBox::ImplToolItems::size_type ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 {
     ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-    sal_uInt16 nLine = 1;
+    ImplToolItems::size_type nLine = 1;
     while( it != mpData->m_aItems.end() )
     {
         if ( it->mbBreak )
@@ -5303,7 +5303,7 @@ sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 }
 
 // returns the first displayable item in the given line
-ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
+ImplToolItem* ToolBox::ImplGetFirstValidItem( ImplToolItems::size_type nLine )
 {
     if( !nLine || nLine > mnCurLines )
         return nullptr;
@@ -5388,7 +5388,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
         if( aPos != ITEM_NOTFOUND)
         {
             // check for line breaks
-            sal_uInt16 nLine = ImplGetItemLine( pItem );
+            ImplToolItems::size_type nLine = ImplGetItemLine( pItem );
 
             if( nLine >= mnCurLine + mnVisLines )
             {

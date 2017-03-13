@@ -50,7 +50,7 @@ struct FloatingData
 
     css::awt::Point  m_aPos;
     css::awt::Size   m_aSize;
-    sal_Int16        m_nLines;
+    ToolBox::ImplToolItems::size_type m_nLines;
     bool             m_bIsHorizontal;
 };
 

@@ -685,7 +685,7 @@ void ToolBox::SetAlign( WindowAlign eNewAlign )
     }
 }
 
-void ToolBox::SetLineCount( sal_uInt16 nNewLines )
+void ToolBox::SetLineCount( ImplToolItems::size_type nNewLines )
 {
     if ( !nNewLines )
         nNewLines = 1;
