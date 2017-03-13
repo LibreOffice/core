@@ -229,23 +229,8 @@ namespace sdr
                     aViewRange.intersect(aDiscreteClipRange);
                 }
 
-                const MapMode aOrigMapMode = rTargetOutDev.GetMapMode();
-                if (comphelper::LibreOfficeKit::isActive() &&
-                    comphelper::LibreOfficeKit::isLocalRendering())
-                {
-                    MapMode aMapMode = aOrigMapMode;
-                    aMapMode.SetOrigin(Point());
-                    rTargetOutDev.SetMapMode(aMapMode);
-                }
-
                 // transform to world coordinates
                 aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
-
-                if (comphelper::LibreOfficeKit::isActive() &&
-                    comphelper::LibreOfficeKit::isLocalRendering())
-                {
-                    rTargetOutDev.SetMapMode(aOrigMapMode);
-                }
             }
 
             // update local ViewInformation2D
