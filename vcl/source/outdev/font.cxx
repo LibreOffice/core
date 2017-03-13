@@ -964,8 +964,8 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     SAL_INFO("vcl.gdi",
              "OutputDevice::GetDefaultFont() Type=\"" << s
              << "\" lang=" << eLang
-             << " flags=" << nFlags
-             << " FontName=\"" << OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr());
+             << " flags=" << static_cast<int>(nFlags)
+             << " family=\"" << OUStringToOString( aFont.GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr());
 #endif
 
     return aFont;
