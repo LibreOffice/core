@@ -89,8 +89,8 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     bool bSearchFormatted = false;
     if ( pToolBox )
     {
-        sal_uInt16 nItemCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
+        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
             sal_uInt16 id = pToolBox->GetItemId(i);
             OUString sItemCommand = pToolBox->GetItemCommand(id);
@@ -526,8 +526,8 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     if ( pToolBox )
     {
-        sal_uInt16 nItemCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
+        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
             OUString sItemCommand = pToolBox->GetItemCommand(i);
             sal_uInt16 id = pToolBox->GetItemId(i);
@@ -1435,8 +1435,8 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
         if ( pToolBox )
         {
-            sal_uInt16 nItemCount = pToolBox->GetItemCount();
-            for ( sal_uInt16 i=0; i<nItemCount; ++i )
+            ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
+            for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
             {
                 sal_uInt16 id = pToolBox->GetItemId(i);
                 OUString sItemCommand = pToolBox->GetItemCommand(id);

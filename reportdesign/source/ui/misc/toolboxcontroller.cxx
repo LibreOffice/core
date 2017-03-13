@@ -123,8 +123,8 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
     if ( pToolBox )
     {
-        const sal_uInt16 nCount = pToolBox->GetItemCount();
-        for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
+        const ToolBox::ImplToolItems::size_type nCount = pToolBox->GetItemCount();
+        for (ToolBox::ImplToolItems::size_type nPos = 0; nPos < nCount; ++nPos)
         {
             const sal_uInt16 nItemId = pToolBox->GetItemId(nPos);
             if ( pToolBox->GetItemCommand(nItemId) == m_aCommandURL )

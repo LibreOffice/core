@@ -238,11 +238,11 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
     ReferenceToolbarPathInfo aResult;
     aResult.bResult  = false;
     aResult.pToolbar = pToolbar;
-    aResult.nPos     = TOOLBOX_ITEM_NOTFOUND;
+    aResult.nPos     = ToolBox::ITEM_NOTFOUND;
 
-    const sal_uInt16 nSize( pToolbar->GetItemCount() );
+    const ToolBox::ImplToolItems::size_type nSize( pToolbar->GetItemCount() );
 
-    for ( sal_uInt16 i = 0; i < nSize; i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < nSize; i++ )
     {
         const sal_uInt16 nItemId = pToolbar->GetItemId( i );
         if ( nItemId > 0 )
@@ -308,7 +308,7 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
 */
 bool ToolBarMerger::ProcessMergeOperation(
     ToolBox*                               pToolbar,
-    sal_uInt16                             nPos,
+    ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
     const OUString&                        rModuleIdentifier,
@@ -371,7 +371,7 @@ bool ToolBarMerger::ProcessMergeOperation(
 */
 bool ToolBarMerger::ProcessMergeFallback(
     ToolBox*                         pToolbar,
-    sal_uInt16                       /*nPos*/,
+    ToolBox::ImplToolItems::size_type /*nPos*/,
     sal_uInt16&                      rItemId,
     CommandToInfoMap&                rCommandMap,
     const OUString&           rModuleIdentifier,
@@ -391,7 +391,7 @@ bool ToolBarMerger::ProcessMergeFallback(
         if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
             return MergeItems( pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
         else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
-            return MergeItems( pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
+            return MergeItems( pToolbar, ToolBox::APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     }
 
     return false;
@@ -435,7 +435,7 @@ bool ToolBarMerger::ProcessMergeFallback(
 */
 bool ToolBarMerger::MergeItems(
     ToolBox*                               pToolbar,
-    sal_uInt16                             nPos,
+    ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16                             nModIndex,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
@@ -450,12 +450,16 @@ bool ToolBarMerger::MergeItems(
         const AddonToolbarItem& rItem = rAddonToolbarItems[i];
         if ( IsCorrectContext( rItem.aContext, rModuleIdentifier ))
         {
-            sal_Int32 nInsPos = nPos+nModIndex+i;
-            if ( nInsPos > sal_Int32( pToolbar->GetItemCount() ))
-                nInsPos = TOOLBOX_APPEND;
+            ToolBox::ImplToolItems::size_type nInsPos = nPos;
+            if (nInsPos != ToolBox::APPEND)
+            {
+                nInsPos += nModIndex+i;
+                if ( nInsPos > pToolbar->GetItemCount() )
+                    nInsPos = ToolBox::APPEND;
+            }
 
             if ( rItem.aCommandURL == TOOLBOXITEM_SEPARATOR_STR )
-                pToolbar->InsertSeparator( sal_uInt16( nInsPos ));
+                pToolbar->InsertSeparator( nInsPos );
             else
             {
                 CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
@@ -471,7 +475,7 @@ bool ToolBarMerger::MergeItems(
                     pIter->second.aIds.push_back( rItemId );
                 }
 
-                ToolBarMerger::CreateToolbarItem( pToolbar, sal_uInt16( nInsPos ), rItemId, rItem );
+                ToolBarMerger::CreateToolbarItem( pToolbar, nInsPos, rItemId, rItem );
             }
 
             ++nIndex;
@@ -521,7 +525,7 @@ bool ToolBarMerger::MergeItems(
 */
 bool ToolBarMerger::ReplaceItem(
     ToolBox*                               pToolbar,
-    sal_uInt16                             nPos,
+    ToolBox::ImplToolItems::size_type      nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
     const OUString&                        rModuleIdentifier,
@@ -558,7 +562,7 @@ bool ToolBarMerger::ReplaceItem(
 */
 bool ToolBarMerger::RemoveItems(
     ToolBox*                  pToolbar,
-    sal_uInt16                nPos,
+    ToolBox::ImplToolItems::size_type nPos,
     const OUString&    rMergeCommandParameter )
 {
     sal_Int32 nCount = rMergeCommandParameter.toInt32();
@@ -633,7 +637,7 @@ bool ToolBarMerger::RemoveItems(
     return pResult;
 }
 
-void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
+void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, ToolBox::ImplToolItems::size_type nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
 {
     pToolbar->InsertItem( nItemId, rItem.aLabel, ToolBoxItemBits::NONE, nPos );
     pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );

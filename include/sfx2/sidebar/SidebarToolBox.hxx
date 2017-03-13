@@ -48,7 +48,7 @@ public:
             const css::uno::Reference<css::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits,
             const Size& rRequestedSize,
-            sal_uInt16 nPos = TOOLBOX_APPEND) override;
+            ImplToolItems::size_type nPos = APPEND) override;
 
     virtual bool EventNotify(NotifyEvent& rEvent) override;
 

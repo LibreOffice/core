@@ -765,8 +765,8 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 
     if( (m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
     {
-        const sal_uInt16 nCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
+        const ToolBox::ImplToolItems::size_type nCount = pToolBox->GetItemCount();
+        for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < nCount; ++nPos )
         {
             const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
             if ( pToolBox->GetItemCommand( nItemId ) == m_aCommandURL )

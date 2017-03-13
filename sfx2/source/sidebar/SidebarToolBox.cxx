@@ -109,7 +109,7 @@ ToolBoxButtonSize SidebarToolBox::GetDefaultButtonSize() const
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
         const css::uno::Reference<css::frame::XFrame>& rFrame,
-        ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
+        ToolBoxItemBits nBits, const Size& rRequestedSize, ImplToolItems::size_type nPos)
 {
     OUString aCommand( rCommand );
 

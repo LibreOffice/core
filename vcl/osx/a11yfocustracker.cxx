@@ -119,9 +119,10 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
 
         if( xContext.is() )
         {
-            sal_Int32 nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
-            if( nPos != TOOLBOX_ITEM_NOTFOUND )
+            ToolBox::ImplToolItems::size_type nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
+            if( nPos != ToolBox::ITEM_NOTFOUND )
                 setFocusedObject( xContext->getAccessibleChild( nPos ) );
+                    //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
         }
     }
 }

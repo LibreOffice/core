@@ -258,7 +258,7 @@ void BibToolBar::dispose()
 
 void BibToolBar::InitListener()
 {
-    sal_uInt16  nCount=GetItemCount();
+    ToolBox::ImplToolItems::size_type nCount=GetItemCount();
 
     uno::Reference< frame::XDispatch >  xDisp(xController,UNO_QUERY);
     uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
@@ -270,7 +270,7 @@ void BibToolBar::InitListener()
         BibToolBarListener* pQuery=new BibTBQueryMenuListener(this, aQueryURL.Complete, nTBC_BT_AUTOFILTER);
         xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pQuery),aQueryURL);
 
-        for(sal_uInt16 nPos=0;nPos<nCount;nPos++)
+        for(ToolBox::ImplToolItems::size_type nPos=0;nPos<nCount;nPos++)
         {
             sal_uInt16 nId=GetItemId(nPos);
             if(!nId || nId== nTBC_FT_SOURCE || nId == nTBC_FT_QUERY)

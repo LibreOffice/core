@@ -310,7 +310,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
         m_pToolBox->SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
         m_pInfoField->SetText(m_pToolBox->GetItemText(nSet));
         // check the current button only
-        for(sal_uInt16 i = 0; i < NID_COUNT; i++)
+        for(ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++)
         {
             sal_uInt16 nItemId = m_pToolBox->GetItemId( i );
             m_pToolBox->CheckItem( nItemId, nItemId == nSet );

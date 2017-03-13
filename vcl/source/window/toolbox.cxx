@@ -654,7 +654,7 @@ static bool ImplIsFixedControl( const ImplToolItem *pItem )
 
 const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
 {
-    std::vector< ImplToolItem >::const_iterator it;
+    ImplToolItems::const_iterator it;
     it = pThis->mpData->m_aItems.begin();
     while ( it != pThis->mpData->m_aItems.end() )
     {
@@ -789,7 +789,7 @@ void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
     // calculate the minimal size, i.e. where the biggest item just fits
     long            nCalcSize = 0;
 
-    std::vector< ImplToolItem >::const_iterator it;
+    ImplToolItems::const_iterator it;
     it = pThis->mpData->m_aItems.begin();
     while ( it != pThis->mpData->m_aItems.end() )
     {
@@ -1078,7 +1078,7 @@ sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
         aPos.Y() = aSize.Height()-TB_BORDER_OFFSET1;
 
     // Item suchen, das geklickt wurde
-    std::vector< ImplToolItem >::const_iterator it = pBox->mpData->m_aItems.begin();
+    ImplToolItems::const_iterator it = pBox->mpData->m_aItems.begin();
     while ( it != pBox->mpData->m_aItems.end() )
     {
         if ( it->mbVisible )
@@ -1360,7 +1360,7 @@ void ToolBox::ImplInitToolBoxData()
     mnHighItemId      = 0;
     mnCurItemId       = 0;
     mnDownItemId      = 0;
-    mnCurPos          = TOOLBOX_ITEM_NOTFOUND;
+    mnCurPos          = ITEM_NOTFOUND;
     mnLines           = 1;
     mnCurLine         = 1;
     mnCurLines        = 1;
@@ -1639,7 +1639,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
     if (!mpData)
         return nullptr;
 
-    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    ImplToolItems::iterator it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
     {
         if ( it->mnId == nItemId )
@@ -1756,7 +1756,7 @@ bool ToolBox::ImplCalcItem()
 
     if ( ! mpData->m_aItems.empty() )
     {
-        std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+        ImplToolItems::iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
             it->mbVisibleText = false;  // indicates if text will definitely be drawn, influences dropdown pos
@@ -1992,7 +1992,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
 
     // we need to know which item is the last visible one to be able to add
     // the menu width in case we are unable to show all the items
-    std::vector< ImplToolItem >::iterator it, lastVisible;
+    ImplToolItems::iterator it, lastVisible;
     for ( it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it )
     {
         if ( it->mbVisible )
@@ -2184,10 +2184,10 @@ Size ToolBox::ImplGetOptimalFloatingSize()
 
 namespace
 {
-void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
+void lcl_hideDoubleSeparators( ToolBox::ImplToolItems& rItems )
 {
     bool bLastSep( true );
-    std::vector< ImplToolItem >::iterator it;
+    ToolBox::ImplToolItems::iterator it;
     for ( it = rItems.begin(); it != rItems.end(); ++it )
     {
         if ( it->meType == ToolBoxItemType::SEPARATOR )
@@ -2196,7 +2196,7 @@ void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
             if ( !bLastSep )
             {
                 // check if any visible items have to appear behind it
-                std::vector< ImplToolItem >::iterator temp_it;
+                ToolBox::ImplToolItems::iterator temp_it;
                 for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
                 {
                     if ( ((temp_it->meType == ToolBoxItemType::BUTTON) &&
@@ -2232,7 +2232,7 @@ void ToolBox::ImplFormat( bool bResize )
     sal_uInt16          nFormatLine;
     bool            bMustFullPaint;
 
-    std::vector< ImplToolItem >::iterator   it;
+    ImplToolItems::iterator   it;
 
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     bool bIsInPopupMode = ImplIsInPopupMode();
@@ -2678,7 +2678,7 @@ void ToolBox::ImplFormat( bool bResize )
 
 IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
 {
-    if (mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
+    if (mnCurPos != ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN))
     {
         mpData->mbDropDownByKeyboard = false;
@@ -2692,7 +2692,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
             Deactivate();
             InvalidateItem(mnCurPos);
 
-            mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+            mnCurPos         = ITEM_NOTFOUND;
             mnCurItemId      = 0;
             mnDownItemId     = 0;
             mnMouseClicks    = 0;
@@ -2897,7 +2897,7 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
                           false/*bUpperIn*/, false/*bLowerIn*/, bTmpUpper, bTmpLower, !mbHorz);
 }
 
-void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
+void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const Rectangle& rRect)
 {
     if ( nPos >= mpData->m_aItems.size() - 1 )
         // no separator if it's the last item
@@ -2970,7 +2970,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
                                                   bChecked, true, bIsWindow, nullptr, 2);
 }
 
-void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight)
+void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight)
 {
     if (nPos >= mpData->m_aItems.size())
         return;
@@ -3347,13 +3347,13 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         // draw current item with highlight and keep old state
         bool bWasKeyboardActivate = mpData->mbDropDownByKeyboard;
 
-        if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+        if ( mnCurPos != ITEM_NOTFOUND )
             InvalidateItem(mnCurPos);
         Deactivate();
 
         if( !bWasKeyboardActivate )
         {
-            mnCurPos = TOOLBOX_ITEM_NOTFOUND;
+            mnCurPos = ITEM_NOTFOUND;
             mnCurItemId = 0;
             mnHighItemId = 0;
         }
@@ -3403,7 +3403,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         return false;
 
     // ToolBox active?
-    if ( mbDrag && mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+    if ( mbDrag && mnCurPos != ITEM_NOTFOUND )
     {
         // is the cursor over the item?
         ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
@@ -3489,7 +3489,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         else
         {
             mbSelection = false;
-            if ( mnCurPos == TOOLBOX_ITEM_NOTFOUND )
+            if ( mnCurPos == ITEM_NOTFOUND )
                 return true;
         }
 
@@ -3540,7 +3540,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                     // Get current pos for the case that items are inserted/removed
                     // in the toolBox
                     mnCurPos = GetItemPos( mnCurItemId );
-                    if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+                    if ( mnCurPos != ITEM_NOTFOUND )
                     {
                         InvalidateItem(mnCurPos);
                         Flush();
@@ -3549,7 +3549,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
             }
         }
 
-        mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+        mnCurPos         = ITEM_NOTFOUND;
         mnCurItemId      = 0;
         mnDownItemId     = 0;
         mnMouseClicks    = 0;
@@ -3594,11 +3594,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     if ( mbSelection && bDrawHotSpot )
     {
-        sal_uInt16  i = 0;
-        sal_uInt16  nNewPos = TOOLBOX_ITEM_NOTFOUND;
+        ImplToolItems::size_type i = 0;
+        ImplToolItems::size_type nNewPos = ITEM_NOTFOUND;
 
         // search the item that has been clicked
-        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        ImplToolItems::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
             // if the mouse position is in this item,
@@ -3626,16 +3626,16 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         // was a new entry selected?
         // don't change selection if keyboard selection is active and
         // mouse leaves the toolbox
-        if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == TOOLBOX_ITEM_NOTFOUND ) )
+        if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == ITEM_NOTFOUND ) )
         {
-            if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+            if ( mnCurPos != ITEM_NOTFOUND )
             {
                 InvalidateItem(mnCurPos);
                 CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( mnCurPos ) );
             }
 
             mnCurPos = nNewPos;
-            if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+            if ( mnCurPos != ITEM_NOTFOUND )
             {
                 mnCurItemId = mnHighItemId = it->mnId;
                 InvalidateItem(mnCurPos);
@@ -3687,7 +3687,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     if ( (eStyle == PointerStyle::Arrow) && mbCustomizeMode )
     {
         // search the item which was clicked
-        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        ImplToolItems::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
             // show resize pointer if it is a customize window
@@ -3708,9 +3708,9 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     if ( bDrawHotSpot && ( (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
     {
         bool bClearHigh = true;
-        if ( !rMEvt.IsLeaveWindow() && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
+        if ( !rMEvt.IsLeaveWindow() && (mnCurPos == ITEM_NOTFOUND) )
         {
-            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            ImplToolItems::const_iterator it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
                 if ( it->maRect.IsInside( aMousePos ) )
@@ -3722,11 +3722,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                             bClearHigh = false;
                             if ( mnHighItemId != it->mnId )
                             {
-                                sal_uInt16 nTempPos = sal::static_int_cast<sal_uInt16>(it - mpData->m_aItems.begin());
+                                ImplToolItems::size_type nTempPos = it - mpData->m_aItems.begin();
                                 if ( mnHighItemId )
                                 {
                                     ImplHideFocus();
-                                    sal_uInt16 nPos = GetItemPos( mnHighItemId );
+                                    ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
                                     InvalidateItem(nPos);
                                     CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
                                 }
@@ -3761,8 +3761,8 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
             if( mnHighItemId )
             {
-                sal_uInt16 nClearPos = GetItemPos( mnHighItemId );
-                if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
+                ImplToolItems::size_type nClearPos = GetItemPos( mnHighItemId );
+                if ( nClearPos != ITEM_NOTFOUND )
                 {
                     InvalidateItem(nClearPos);
                     if( nClearPos != mnCurPos )
@@ -3793,7 +3793,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // only trigger toolbox for left mouse button and when
     // we're not in normal operation
-    if ( rMEvt.IsLeft() && !mbDrag && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
+    if ( rMEvt.IsLeft() && !mbDrag && (mnCurPos == ITEM_NOTFOUND) )
     {
         // call activate already here, as items could
         // be exchanged
@@ -3807,11 +3807,11 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         }
 
         Point  aMousePos = rMEvt.GetPosPixel();
-        sal_uInt16 i = 0;
-        sal_uInt16 nNewPos = TOOLBOX_ITEM_NOTFOUND;
+        ImplToolItems::size_type i = 0;
+        ImplToolItems::size_type nNewPos = ITEM_NOTFOUND;
 
         // search for item that was clicked
-        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+        ImplToolItems::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
             // is this the item?
@@ -3831,7 +3831,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         }
 
         // item found
-        if ( nNewPos != TOOLBOX_ITEM_NOTFOUND )
+        if ( nNewPos != ITEM_NOTFOUND )
         {
             if ( mbCustomize )
             {
@@ -3912,7 +3912,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                             Deactivate();
                             InvalidateItem(mnCurPos);
 
-                            mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+                            mnCurPos         = ITEM_NOTFOUND;
                             mnCurItemId      = 0;
                             mnDownItemId     = 0;
                             mnMouseClicks    = 0;
@@ -4009,7 +4009,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             Click();
     }
 
-    if ( !mbDrag && !mbSelection && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
+    if ( !mbDrag && !mbSelection && (mnCurPos == ITEM_NOTFOUND) )
         DockingWindow::MouseButtonDown( rMEvt );
 }
 
@@ -4044,7 +4044,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     DockingWindow::Tracking( rTEvt );
 }
 
-void ToolBox::InvalidateItem(sal_uInt16 nPosition)
+void ToolBox::InvalidateItem(ImplToolItems::size_type nPosition)
 {
     if (mpData && nPosition < mpData->m_aItems.size())
     {
@@ -4096,14 +4096,14 @@ void ToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintR
     }
 
     // draw buttons
-    sal_uInt16 nHighPos;
+    ImplToolItems::size_type nHighPos;
     if ( mnHighItemId )
         nHighPos = GetItemPos( mnHighItemId );
     else
-        nHighPos = TOOLBOX_ITEM_NOTFOUND;
+        nHighPos = ITEM_NOTFOUND;
 
-    sal_uInt16 nCount = (sal_uInt16)mpData->m_aItems.size();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    ImplToolItems::size_type nCount = mpData->m_aItems.size();
+    for( ImplToolItems::size_type i = 0; i < nCount; i++ )
     {
         ImplToolItem* pItem = &mpData->m_aItems[i];
 
@@ -4379,7 +4379,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
         {
             // a child window got the focus so update current item to
             // allow for proper lose focus handling in keyboard navigation
-            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            ImplToolItems::const_iterator it = mpData->m_aItems.begin();
             while( it != mpData->m_aItems.end() )
             {
                 if ( it->mbVisible )
@@ -4401,7 +4401,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
         // deselect
         ImplHideFocus();
         mnHighItemId = 0;
-        mnCurPos = TOOLBOX_ITEM_NOTFOUND;
+        mnCurPos = ITEM_NOTFOUND;
     }
 
     return DockingWindow::EventNotify( rNEvt );
@@ -4412,7 +4412,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
     // depict StartDrag on MouseButton/Left/Alt
     if ( (rCEvt.GetCommand() == CommandEventId::StartDrag) && rCEvt.IsMouseEvent() &&
          mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
-         (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
+         (mnCurPos == ITEM_NOTFOUND) )
     {
         // We only allow dragging of items. Therefore, we have to check
         // if an item was clicked, otherwise we could move the window, and
@@ -4422,7 +4422,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
         if ( mbCustomizeMode )
         {
             Point           aMousePos = rCEvt.GetMousePosPixel();
-            std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+            ImplToolItems::const_iterator it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
                 // is this the item?
@@ -4540,7 +4540,7 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
 
         // update image orientation
         OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
-        for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
+        for (ImplToolItems::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
         {
             if (vcl::CommandInfoProvider::IsMirrored(it->maCommandStr, aModuleName))
                 SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
@@ -4840,7 +4840,7 @@ sal_uInt16 ToolBox::ImplCountLineBreaks( const ToolBox *pThis )
 {
     sal_uInt16 nLines = 0;
 
-    std::vector< ImplToolItem >::const_iterator it = const_cast<ToolBox*>(pThis)->mpData->m_aItems.begin();
+    ImplToolItems::const_iterator it = const_cast<ToolBox*>(pThis)->mpData->m_aItems.begin();
     while ( it != const_cast<ToolBox*>(pThis)->mpData->m_aItems.end() )
     {
         if( it->meType == ToolBoxItemType::BREAK )
@@ -4909,7 +4909,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
         VclPtrInstance< ToolBox > pToolBox( GetParent(), GetStyle() );
 
         // copy until first useful item
-        std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+        ImplToolItems::iterator it = mpData->m_aItems.begin();
         while( it != mpData->m_aItems.end() )
         {
             pToolBox->CopyItem( *this, it->mnId );
@@ -5291,7 +5291,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 // returns the current toolbox line of the item
 sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
 {
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+    ImplToolItems::const_iterator it = mpData->m_aItems.begin();
     sal_uInt16 nLine = 1;
     while( it != mpData->m_aItems.end() )
     {
@@ -5312,7 +5312,7 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
 
     nLine--;
 
-    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    ImplToolItems::iterator it = mpData->m_aItems.begin();
     while( it != mpData->m_aItems.end() )
     {
         // find correct line
@@ -5336,22 +5336,22 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
     return (it == mpData->m_aItems.end()) ? nullptr : &(*it);
 }
 
-std::vector<ImplToolItem>::size_type ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
+ToolBox::ImplToolItems::size_type ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList )
 {
     if( pItem )
     {
-        for( std::vector<ImplToolItem>::size_type nPos = 0; nPos < rList.size(); ++nPos )
+        for( ImplToolItems::size_type nPos = 0; nPos < rList.size(); ++nPos )
             if( &rList[ nPos ] == pItem )
                 return nPos;
     }
-    return std::numeric_limits<std::vector<ImplToolItem>::size_type>::max();
+    return ITEM_NOTFOUND;
 }
 
-void ToolBox::ChangeHighlight( sal_uInt16 nPos )
+void ToolBox::ChangeHighlight( ImplToolItems::size_type nPos )
 {
     if ( nPos < GetItemCount() ) {
         ImplGrabFocus( GetFocusFlags::NONE );
-        ImplChangeHighlight ( ImplGetItem ( GetItemId ( (sal_uInt16) nPos ) ) );
+        ImplChangeHighlight ( ImplGetItem ( GetItemId ( nPos ) ) );
     }
 }
 
@@ -5368,7 +5368,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
     if ( mnHighItemId )
     {
         ImplHideFocus();
-        sal_uInt16 nPos = GetItemPos( mnHighItemId );
+        ImplToolItems::size_type nPos = GetItemPos( mnHighItemId );
         pOldItem = ImplGetItem( mnHighItemId );
         // #i89962# ImplDrawItem can cause Invalidate/Update
         // which will in turn ImplShowFocus again
@@ -5386,8 +5386,8 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 
     if( pItem )
     {
-        std::vector<ImplToolItem>::size_type aPos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
-        if( aPos != std::numeric_limits<std::vector<ImplToolItem>::size_type>::max())
+        ImplToolItems::size_type aPos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
+        if( aPos != ITEM_NOTFOUND)
         {
             // check for line breaks
             sal_uInt16 nLine = ImplGetItemLine( pItem );
@@ -5410,11 +5410,9 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 
             mnHighItemId = pItem->mnId;
             InvalidateItem(aPos);
-                //TODO: std::vector<ImplToolItem>::size_type -> sal_uInt16!
 
             if( mbSelection )
                 mnCurPos = aPos;
-                    //TODO: std::vector<ImplToolItem>::size_type -> sal_uInt16!
             ImplShowFocus();
 
             if( pItem->mpWindow )
@@ -5427,7 +5425,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
     {
         ImplHideFocus();
         mnHighItemId = 0;
-        mnCurPos = TOOLBOX_ITEM_NOTFOUND;
+        mnCurPos = ITEM_NOTFOUND;
     }
 
     mbChangingHighlight = false;
@@ -5454,7 +5452,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( bUp )
             {
                 // select last valid non-clipped item
-                std::vector< ImplToolItem >::iterator it = mpData->m_aItems.end();
+                ImplToolItems::iterator it = mpData->m_aItems.end();
                 ImplToolItem* pItem = nullptr;
                 while( it != mpData->m_aItems.begin() )
                 {
@@ -5471,7 +5469,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             else
             {
                 // select first valid non-clipped item
-                std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+                ImplToolItems::iterator it = mpData->m_aItems.begin();
                 while( it != mpData->m_aItems.end() )
                 {
                     if ( ImplIsValidItem( &(*it), true ) )
@@ -5490,7 +5488,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         if( bUp )
         {
             // Select first valid item
-            std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+            ImplToolItems::iterator it = mpData->m_aItems.begin();
             while( it != mpData->m_aItems.end() )
             {
                 if ( ImplIsValidItem( &(*it), false ) )
@@ -5520,7 +5518,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             }
             else
             {
-                std::vector< ImplToolItem >::iterator it = mpData->m_aItems.end();
+                ImplToolItems::iterator it = mpData->m_aItems.end();
                 ImplToolItem* pItem = nullptr;
                 while( it != mpData->m_aItems.begin() )
                 {
@@ -5539,10 +5537,10 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
 
     if( pToolItem )
     {
-        std::vector<ImplToolItem>::size_type pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
-        std::vector<ImplToolItem>::size_type nCount = mpData->m_aItems.size();
+        ImplToolItems::size_type pos = ToolBox::ImplFindItemPos( pToolItem, mpData->m_aItems );
+        ImplToolItems::size_type nCount = mpData->m_aItems.size();
 
-        std::vector<ImplToolItem>::size_type i=0;
+        ImplToolItems::size_type i=0;
         do
         {
             if( bUp )

@@ -74,11 +74,11 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
     OSL_ENSURE( m_pToolBox, "invalid toolbox" );
-    m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
+    m_nItemId = m_pToolBox->GetItemId( m_nIndexInParent );
     m_sOldName = GetText();
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == TRISTATE_INDET );
-    ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
+    ToolBoxItemType eType = m_pToolBox->GetItemType( m_nIndexInParent );
     switch ( eType )
     {
         case ToolBoxItemType::BUTTON :
@@ -243,7 +243,7 @@ awt::Rectangle VCLXAccessibleToolBoxItem::implGetBounds(  )
 {
     awt::Rectangle aRect;
     if ( m_pToolBox )
-        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( (sal_uInt16)m_nIndexInParent ) );
+        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( m_nIndexInParent ) );
 
     return aRect;
 }

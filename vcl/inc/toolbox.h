@@ -112,7 +112,7 @@ struct ToolBoxLayoutData : public ControlLayoutData
 struct ImplToolBoxPrivateData
 {
     vcl::ToolBoxLayoutData*         m_pLayoutData;
-    std::vector< ImplToolItem >     m_aItems;
+    ToolBox::ImplToolItems          m_aItems;
 
     ImplToolBoxPrivateData();
     ~ImplToolBoxPrivateData();

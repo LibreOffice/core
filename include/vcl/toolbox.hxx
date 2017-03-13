@@ -26,6 +26,8 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <limits>
 #include <vector>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -40,9 +42,6 @@ class  ImplTrackRect;
 class  PopupMenu;
 
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
-
-#define TOOLBOX_APPEND              ((sal_uInt16)0xFFFF)
-#define TOOLBOX_ITEM_NOTFOUND       ((sal_uInt16)0xFFFF)
 
 // item ids in the custom menu may not exceed this constant
 #define TOOLBOX_MENUITEM_START      ((sal_uInt16)0x1000)
@@ -90,6 +89,15 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
     friend class FloatingWindow;
     friend class ImplTBDragMgr;
 
+public:
+    using ImplToolItems = std::vector<ImplToolItem>;
+
+    static constexpr auto APPEND
+        = std::numeric_limits<ImplToolItems::size_type>::max();
+
+    static constexpr auto ITEM_NOTFOUND
+        = std::numeric_limits<ImplToolItems::size_type>::max();
+
 private:
     ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
@@ -118,7 +126,7 @@ private:
     sal_uInt16          mnHighItemId;
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnDownItemId;
-    sal_uInt16          mnCurPos;
+    ImplToolItems::size_type mnCurPos;
     sal_uInt16          mnLines;        // total number of toolbox lines
     sal_uInt16          mnCurLine;      // the currently visible line
     sal_uInt16          mnCurLines;     // number of lines due to line breaking
@@ -168,7 +176,7 @@ private:
 public:
     using Window::ImplInit;
 private:
-    SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition);
+    SAL_DLLPRIVATE void InvalidateItem(ImplToolItems::size_type nPosition);
     SAL_DLLPRIVATE void InvalidateSpin(bool bInvalidateUpper = true,
                                        bool bInvalidateLower = true);
     SAL_DLLPRIVATE void InvalidateMenuButton();
@@ -182,11 +190,11 @@ private:
     SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect);
-    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight );
+    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const Rectangle& rRect);
+    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
-    SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
+    SAL_DLLPRIVATE void            ImplUpdateItem( ImplToolItems::size_type nIndex = ITEM_NOTFOUND );
     SAL_DLLPRIVATE bool            ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat = false );
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
@@ -250,7 +258,7 @@ public:
     static SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( ToolBox* pThis, const Point& rPos );
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
-    static SAL_DLLPRIVATE std::vector<ImplToolItem>::size_type ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );
+    static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
@@ -305,24 +313,24 @@ public:
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
                                     ToolBoxItemBits nBits,
                                     const Size& rRequestedSize,
-                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+                                    ImplToolItems::size_type nPos = APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
-                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+                                    ImplToolItems::size_type nPos = APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     const OUString& rText,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
-                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+                                    ImplToolItems::size_type nPos = APPEND );
     void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
-                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+                                    ImplToolItems::size_type nPos = APPEND );
     void                InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
                                       ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
-                                      sal_uInt16 nPos = TOOLBOX_APPEND );
+                                      ImplToolItems::size_type nPos = APPEND );
     void                InsertSpace();
-    void                InsertSeparator( sal_uInt16 nPos = TOOLBOX_APPEND, sal_uInt16 nPixSize = 0 );
-    void                InsertBreak( sal_uInt16 nPos = TOOLBOX_APPEND );
-    void                RemoveItem( sal_uInt16 nPos );
+    void                InsertSeparator( ImplToolItems::size_type nPos = APPEND, sal_uInt16 nPixSize = 0 );
+    void                InsertBreak( ImplToolItems::size_type nPos = APPEND );
+    void                RemoveItem( ImplToolItems::size_type nPos );
     void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId );
     void                Clear();
 
@@ -343,16 +351,16 @@ public:
     // Used to enable/disable scrolling one page at a time for toolbar
     void                SetPageScroll( bool b );
 
-    sal_uInt16          GetItemCount() const;
-    ToolBoxItemType     GetItemType( sal_uInt16 nPos ) const;
-    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16          GetItemPos( const Point& rPos ) const;
-    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    ImplToolItems::size_type GetItemCount() const;
+    ToolBoxItemType     GetItemType( ImplToolItems::size_type nPos ) const;
+    ImplToolItems::size_type GetItemPos( sal_uInt16 nItemId ) const;
+    ImplToolItems::size_type GetItemPos( const Point& rPos ) const;
+    sal_uInt16          GetItemId( ImplToolItems::size_type nPos ) const;
     sal_uInt16          GetItemId( const Point& rPos ) const;
     /// Map the command name (like .uno:Save) back to item id.
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
-    Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
+    Rectangle           GetItemPosRect( ImplToolItems::size_type nPos ) const;
     Rectangle           GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
@@ -506,7 +514,7 @@ public:
 
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
-    void                ChangeHighlight( sal_uInt16 nPos );
+    void                ChangeHighlight( ImplToolItems::size_type nPos );
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
     void statusChanged(const css::frame::FeatureStateEvent& rEvent);

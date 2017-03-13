@@ -443,8 +443,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin.get() );
                             if( pTextToolbox )
                             {
-                                sal_uInt16 nItemCount = pTextToolbox->GetItemCount();
-                                for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem )
+                                ToolBox::ImplToolItems::size_type nItemCount = pTextToolbox->GetItemCount();
+                                for( ToolBox::ImplToolItems::size_type nItem = 0; nItem < nItemCount; ++nItem )
                                 {
                                     sal_uInt16 nItemId = pTextToolbox->GetItemId( nItem );
                                     const OUString& rCommand = pTextToolbox->GetItemCommand( nItemId );

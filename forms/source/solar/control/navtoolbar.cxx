@@ -171,7 +171,7 @@ namespace frm
             pPositionWindow->setDispatcher( _pDispatcher );
 
         // update feature states
-        for ( sal_uInt16 nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
+        for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
         {
             sal_uInt16 nItemId = m_pToolbar->GetItemId( nPos );
 
@@ -199,7 +199,7 @@ namespace frm
 
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::enableFeature: invalid id!" );
 
         implEnableItem( (sal_uInt16)_nFeatureId, _bEnabled );
@@ -208,7 +208,7 @@ namespace frm
 
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
         m_pToolbar->CheckItem( (sal_uInt16)_nFeatureId, _bEnabled );
@@ -217,7 +217,7 @@ namespace frm
 
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
         vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( (sal_uInt16)_nFeatureId );
@@ -343,14 +343,14 @@ namespace frm
         if ( !m_pImageProvider )
             return;
 
-        const sal_uInt16 nItemCount = m_pToolbar->GetItemCount();
+        const ToolBox::ImplToolItems::size_type nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
         typedef ::std::vector< sal_Int16 >  FormFeatures;
         FormFeatures aFormFeatures;
         aFormFeatures.reserve( nItemCount );
 
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
             sal_uInt16 nId = m_pToolbar->GetItemId( i );
             if ( ( ToolBoxItemType::BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
@@ -552,7 +552,7 @@ namespace frm
 
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler )
     {
-        for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
+        for ( ToolBox::ImplToolItems::size_type item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
             sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
             vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
@@ -563,7 +563,7 @@ namespace frm
 
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler2 _handler, const void* _pParam )
     {
-        for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
+        for ( ToolBox::ImplToolItems::size_type item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
             sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
             vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );

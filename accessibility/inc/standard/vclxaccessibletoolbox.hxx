@@ -21,6 +21,7 @@
 
 #include <map>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/toolbox.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
@@ -39,16 +40,16 @@ class VCLXAccessibleToolBox : public VCLXAccessibleComponent, public VCLXAccessi
 private:
     ToolBoxItemsMap             m_aAccessibleChildren;
 
-    VCLXAccessibleToolBoxItem*  GetItem_Impl( sal_Int32 _nPos );
+    VCLXAccessibleToolBoxItem*  GetItem_Impl( ToolBox::ImplToolItems::size_type _nPos );
 
     void                        UpdateFocus_Impl();
-    void                        ReleaseFocus_Impl( sal_Int32 _nPos );
-    void                        UpdateChecked_Impl( sal_Int32 _nPos );
-    void                        UpdateIndeterminate_Impl( sal_Int32 _nPos );
-    void                        UpdateItem_Impl( sal_Int32 _nPos );
+    void                        ReleaseFocus_Impl( ToolBox::ImplToolItems::size_type _nPos );
+    void                        UpdateChecked_Impl( ToolBox::ImplToolItems::size_type _nPos );
+    void                        UpdateIndeterminate_Impl( ToolBox::ImplToolItems::size_type _nPos );
+    void                        UpdateItem_Impl( ToolBox::ImplToolItems::size_type _nPos );
     void                        UpdateAllItems_Impl();
-    void                        UpdateItemName_Impl( sal_Int32 _nPos );
-    void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );
+    void                        UpdateItemName_Impl( ToolBox::ImplToolItems::size_type _nPos );
+    void                        UpdateItemEnabled_Impl( ToolBox::ImplToolItems::size_type _nPos );
     void                        UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, bool bOpen );
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );

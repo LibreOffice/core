@@ -316,8 +316,8 @@ void OAddFieldWindow::Update()
     {
         // ListBox loeschen
         m_pListBox->Clear();
-        const sal_uInt16 nItemCount = m_aActions->GetItemCount();
-        for (sal_uInt16 j = 0; j< nItemCount; ++j)
+        const ToolBox::ImplToolItems::size_type nItemCount = m_aActions->GetItemCount();
+        for (ToolBox::ImplToolItems::size_type j = 0; j< nItemCount; ++j)
         {
             m_aActions->EnableItem(m_aActions->GetItemId(j),false);
         }
@@ -363,7 +363,7 @@ void OAddFieldWindow::Update()
             SetText( aTitle );
             if ( !m_aCommandName.isEmpty() )
             {
-                for (sal_uInt16 i = 0; i < nItemCount; ++i)
+                for (ToolBox::ImplToolItems::size_type i = 0; i < nItemCount; ++i)
                 {
                     m_aActions->EnableItem(m_aActions->GetItemId(i));
                 }
@@ -473,8 +473,8 @@ IMPL_LINK_NOARG( OAddFieldWindow, OnSortAction, ToolBox*, void )
     {
         if (nCurItem == m_nRemoveSortId || !m_aActions->IsItemChecked(nCurItem))
         {
-            const sal_uInt16 nItemCount = m_aActions->GetItemCount();
-            for (sal_uInt16 j = 0; j< nItemCount; ++j)
+            const ToolBox::ImplToolItems::size_type nItemCount = m_aActions->GetItemCount();
+            for (ToolBox::ImplToolItems::size_type j = 0; j< nItemCount; ++j)
             {
                 const sal_uInt16 nItemId = m_aActions->GetItemId(j);
                 if ( nCurItem != nItemId )

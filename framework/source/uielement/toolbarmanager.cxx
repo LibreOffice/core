@@ -223,7 +223,7 @@ void ToolBarManager::Destroy()
     }
 
     // Delete the additional add-ons data
-    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
         sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
         if ( nItemId > 0 )
@@ -639,7 +639,7 @@ void ToolBarManager::RemoveControllers()
     // destroyed by the dispose() at the XComponent. This is needed
     // as VCL code later tries to access the item window data in certain
     // dtors where the item window is already invalid!
-    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
         sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
         if ( nItemId > 0 )
@@ -669,7 +669,7 @@ void ToolBarManager::CreateControllers()
     bool                bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
 
-    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
         sal_uInt16 nId = m_pToolBar->GetItemId( i );
         if ( nId == 0 )
@@ -1177,7 +1177,7 @@ void ToolBarManager::FillOverflowToolbar( ToolBox* pParent )
 {
     CommandInfo aCmdInfo;
     bool bInsertSeparator = false;
-    for ( sal_uInt16 i = 0; i < pParent->GetItemCount(); ++i )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < pParent->GetItemCount(); ++i )
     {
         sal_uInt16 nId = pParent->GetItemId( i );
         if ( pParent->IsItemClipped( nId ) )
@@ -1422,7 +1422,6 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 
     if ( m_pToolBar->IsCustomize() )
     {
-        sal_uInt16    nPos( 0 );
         ::PopupMenu*  pVisibleItemsPopupMenu( aQuickCustomizationMenu->GetPopupMenu( 1 ));
 
         bool    bIsFloating( false );
@@ -1459,18 +1458,22 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
         std::map< OUString, Image > commandToImage;
 
         // Go through all toolbar items and add them to the context menu
-        for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+        for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
             if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
             {
                 sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
                 OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                 pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
+                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
+                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
+                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
                 Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
                 commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
+                    //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
             }
             else
             {
@@ -1480,7 +1483,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 
         // Now we go through all the contextual menu to update the icons
         std::map< OUString, Image >::iterator it;
-        for ( nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
+        for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
         {
             sal_uInt16 nId = pMenu->GetItemId( nPos );
             OUString cmdUrl = pMenu->GetItemCommand( nId );
@@ -1784,7 +1787,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEv
         CheckAndUpdateImages();
     }
 
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
         const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
         vcl::Window* pWindow = m_pToolBar->GetItemWindow( nId );

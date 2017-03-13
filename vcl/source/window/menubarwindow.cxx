@@ -67,8 +67,8 @@ void DecoToolBox::calcMinSize()
     }
     else
     {
-        sal_uInt16 nItems = GetItemCount();
-        for( sal_uInt16 i = 0; i < nItems; i++ )
+        ImplToolItems::size_type nItems = GetItemCount();
+        for( ImplToolItems::size_type i = 0; i < nItems; i++ )
         {
             sal_uInt16 nId = GetItemId( i );
             aTbx->InsertItem( nId, GetItemImage( nId ) );
@@ -261,7 +261,7 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
         aArg.nId = aCloseBtn->GetHighlightItemId();
     else if( rEvent.GetId() == VclEventId::ToolboxHighlightOff )
     {
-        sal_uInt16 nPos = static_cast< sal_uInt16 >(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
+        auto nPos = static_cast<ToolBox::ImplToolItems::size_type>(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
         aArg.nId = aCloseBtn->GetItemId(nPos);
     }
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
@@ -1170,7 +1170,7 @@ Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 
 void MenuBarWindow::RemoveMenuBarButton( sal_uInt16 nId )
 {
-    sal_uInt16 nPos = aCloseBtn->GetItemPos(nId);
+    ToolBox::ImplToolItems::size_type nPos = aCloseBtn->GetItemPos(nId);
     aCloseBtn->RemoveItem(nPos);
     m_aAddButtons.erase( nId );
     aCloseBtn->calcMinSize();

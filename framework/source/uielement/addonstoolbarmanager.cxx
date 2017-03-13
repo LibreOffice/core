@@ -142,7 +142,7 @@ void SAL_CALL AddonsToolBarManager::dispose()
     {
         // Remove addon specific data from toolbar items.
         SolarMutexGuard g;
-        for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
+        for ( ToolBox::ImplToolItems::size_type n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
             sal_uInt16 nId( m_pToolBar->GetItemId( n ) );
 
@@ -171,7 +171,7 @@ bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
 void AddonsToolBarManager::RefreshImages()
 {
     bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
 
@@ -239,7 +239,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         {
             if ( aURL == "private:separator" ) // toolbox item separator
             {
-                sal_uInt16 nCount = m_pToolBar->GetItemCount();
+                ToolBox::ImplToolItems::size_type nCount = m_pToolBar->GetItemCount();
                 if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR ) && nElements > 0 )
                 {
                     nElements = 0;
@@ -248,7 +248,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             }
             else
             {
-                sal_uInt16 nCount = m_pToolBar->GetItemCount();
+                ToolBox::ImplToolItems::size_type nCount = m_pToolBar->GetItemCount();
                 if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR ))
                 {
                     // We have to append a separator first if the last item is not a separator
@@ -451,7 +451,7 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent const *, pDataCha
         CheckAndUpdateImages();
     }
 
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
         const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
         vcl::Window* pWindow = m_pToolBar->GetItemWindow( nId );

@@ -392,8 +392,8 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( _xReportControlFormat.is() )
     {
-        sal_uInt16 nItemCount = m_pActions->GetItemCount();
-        for (sal_uInt16 j = 0; j< nItemCount; ++j)
+        ToolBox::ImplToolItems::size_type nItemCount = m_pActions->GetItemCount();
+        for (ToolBox::ImplToolItems::size_type j = 0; j< nItemCount; ++j)
         {
             sal_uInt16 nItemId = m_pActions->GetItemId(j);
             m_pActions->CheckItem( nItemId, OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(nItemId),

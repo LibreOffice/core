@@ -5185,6 +5185,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     pBtnDelete->SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
 
     m_nNextId = pTbSymbol->GetItemCount()+1;
+        //TODO: ToolBox::ImplToolItems::size_type -> sal_uInt16!
 }
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
@@ -5196,9 +5197,9 @@ void SvxIconSelectorDialog::dispose()
 {
     if (pTbSymbol)
     {
-        sal_uInt16 nCount = pTbSymbol->GetItemCount();
+        ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 
-        for (sal_uInt16 n = 0; n < nCount; ++n )
+        for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
         {
             sal_uInt16 nId = pTbSymbol->GetItemId(n);
 
@@ -5222,7 +5223,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     uno::Reference< graphic::XGraphic > result;
 
     sal_uInt16 nId;
-    for ( sal_uInt16 n = 0; n < pTbSymbol->GetItemCount(); ++n )
+    for ( ToolBox::ImplToolItems::size_type n = 0; n < pTbSymbol->GetItemCount(); ++n )
     {
         nId = pTbSymbol->GetItemId( n );
         if ( pTbSymbol->IsItemChecked( nId ) )
@@ -5238,9 +5239,9 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
 {
     (void)pToolBox;
 
-    sal_uInt16 nCount = pTbSymbol->GetItemCount();
+    ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 
-    for (sal_uInt16 n = 0; n < nCount; ++n )
+    for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
     {
         sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
@@ -5295,9 +5296,9 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
     if (ScopedVclPtrInstance<WarningBox>(this, WinBits(WB_OK_CANCEL), message)->Execute() == RET_OK)
     {
-        sal_uInt16 nCount = pTbSymbol->GetItemCount();
+        ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 
-        for (sal_uInt16 n = 0; n < nCount; ++n )
+        for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
         {
             sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
@@ -5353,8 +5354,8 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     }
 
     bool   bResult( false );
-    sal_uInt16 nCount = pTbSymbol->GetItemCount();
-    for (sal_uInt16 n = 0; n < nCount; ++n )
+    ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
+    for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )
     {
         sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
