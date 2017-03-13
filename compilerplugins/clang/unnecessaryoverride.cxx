@@ -143,6 +143,10 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
                         return true;
                     }
                 }
+                else
+                {
+                    return true; // dependent base
+                }
             }
         }
         // corner case
