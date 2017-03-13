@@ -81,7 +81,7 @@ XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 
 bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewStrikeout;
+    sal_uInt16 eNewStrikeout = 0;
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutType_Enum );
     if( bRet )
@@ -204,7 +204,7 @@ XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
 
 bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewStrikeout;
+    sal_uInt16 eNewStrikeout = 0;
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutWidth_Enum );
     if( bRet )
