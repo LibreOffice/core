@@ -68,6 +68,8 @@ public:
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
 
+    void            AddLanguages( const css::uno::Sequence< sal_Int16 >& rLanguageTypes, SvxLanguageListFlags nLangList );
+
     sal_Int32       InsertLanguage( const LanguageType eLangType );
     void            InsertDefaultLanguage( sal_Int16 nType );
     void            InsertSystemLanguage();
