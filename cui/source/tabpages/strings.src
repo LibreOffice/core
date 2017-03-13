@@ -23,10 +23,6 @@ String RID_SVXSTR_DESC_GRADIENT
 {
     Text [ en-US ] = "Please enter a name for the gradient:" ;
 };
-String RID_SVXSTR_ASK_CHANGE_GRADIENT
-{
-    Text [ en-US ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
-};
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
     Text [ en-US ] = "Please enter a name for the bitmap:" ;
@@ -38,14 +34,6 @@ String RID_SVXSTR_DESC_EXT_BITMAP
 String RID_SVXSTR_DESC_NEW_PATTERN
 {
     Text [ en-US ] = "Please enter a name for the pattern:" ;
-};
-String RID_SVXSTR_ASK_CHANGE_BITMAP
-{
-    Text [ en-US ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
-};
-String RID_SVXSTR_ASK_CHANGE_PATTERN
-{
-    Text [ en-US ] = "The pattern was modified without saving. \nModify the selected pattern or add a new pattern";
 };
 String RID_SVXSTR_DESC_LINESTYLE
 {
@@ -59,10 +47,6 @@ String RID_SVXSTR_DESC_HATCH
 {
     Text [ en-US ] = "Please enter a name for the hatching:" ;
 };
-String RID_SVXSTR_ASK_CHANGE_HATCH
-{
-    Text [ en-US ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
-};
 String RID_SVXSTR_CHANGE
 {
     Text [ en-US ] = "Modify" ;
@@ -74,10 +58,6 @@ String RID_SVXSTR_ADD
 String RID_SVXSTR_DESC_COLOR
 {
     Text [ en-US ] = "Please enter a name for the new color:" ;
-};
-String RID_SVXSTR_ASK_CHANGE_COLOR
-{
-    Text [ en-US ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
 };
 String RID_SVXSTR_TABLE
 {
@@ -198,10 +178,6 @@ String RID_SVXSTR_CONNECTOR
 String RID_SVXSTR_DIMENSION_LINE
 {
     Text [en-US ] = "Dimension line";
-};
-String RID_SVXSTR_READ_DATA_ERROR
-{
-    Text [ en-US ] = "The file could not be loaded!" ;
 };
 String RID_SVXSTR_LOAD_ERROR
 {

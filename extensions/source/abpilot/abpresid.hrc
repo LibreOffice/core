@@ -27,7 +27,6 @@
 
 #define RID_PAGE_START                  RID_ABP_START
 #define RID_STRING_START                RID_ABP_START
-#define RID_UNTYPED_START               RID_ABP_START
 #define RID_BITMAP_START                RID_ABP_START
 
 // strings
@@ -51,13 +50,6 @@
 
 #define RID_STRING_END                  RID_STR_QRY_NOTABLES
 
-// untyped resources
-
-#define RID_RSC_NOTUSEDYET              ( RID_UNTYPED_START +  0 )
-// please adjust RID_UNTYPED_END (below) when adding new untyped resources
-
-#define RID_UNTYPED_END                 RID_RSC_NOTUSEDYET
-
 // bitmaps
 
 #define BMP_HEADERIMAGE                 ( RID_BITMAP_START +  0 )
@@ -68,9 +60,6 @@
 // range checks
 
 #if RID_STRING_END > RID_ABP_END
-    #error "please adjust the resource id ranges!!"
-#endif
-#if RID_UNTYPED_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
 #if RID_BITMAP_END > RID_ABP_END

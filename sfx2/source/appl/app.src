@@ -213,11 +213,6 @@ String RID_STR_HELP
     Text [ en-US ] = "Help" ;
 };
 
-String RID_STR_NOAUTOSTARTHELPAGENT
-{
-    Text [ en-US ] = "No automatic start at 'XX'" ;
-};
-
 String RID_STR_HLPFILENOTEXIST
 {
     Text [ en-US ] = "The help file for this topic is not installed." ;
@@ -366,10 +361,6 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
 {
     Text [ en-US ] = "Image filter not found" ;
 };
-String RID_SVXSTR_GRFILTER_TOOBIG
-{
-    Text [ en-US ] = "Not enough memory to insert image" ;
-};
 String RID_SVXSTR_END_REDLINING_WARNING
 {
     Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
@@ -377,10 +368,6 @@ String RID_SVXSTR_END_REDLINING_WARNING
 String RID_SVXSTR_INCORRECT_PASSWORD
 {
     Text [ en-US ] = "Incorrect password" ;
-};
-String RID_SVXSTR_FORWARD_ERRMSSG
-{
-    Text [ en-US ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

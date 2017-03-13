@@ -23,10 +23,6 @@
 
 #define STR_TBL_FORMULA                  (RC_RIBBAR_BEGIN +8)
 
-#define RID_DRAW_WIN                (RC_RIBBAR_BEGIN + 9)
-#define RID_CNTRLR_WIN              (RC_RIBBAR_BEGIN + 10)
-#define RID_ALIGNMENT_WIN           (RC_RIBBAR_BEGIN + 11)
-
 #define ST_TBL                      (RC_RIBBAR_BEGIN + 14)
 #define ST_FRM                      (RC_RIBBAR_BEGIN + 15)
 #define ST_PGE                      (RC_RIBBAR_BEGIN + 16)

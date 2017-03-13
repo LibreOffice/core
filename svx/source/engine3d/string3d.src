@@ -20,29 +20,9 @@
 #include <svx/dialogs.hrc>
 
  // Strings for the Draw Dialog --------------------------------------------
-String RID_SVX_3D_CREATE_LATHE
-{
-    Text [ en-US ] = "Create 3D rotation object" ;
-};
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
     Text [ en-US ] = "Insert object(s)" ;
-};
-String RID_SVX_3D_UNDO_SEGMENTS
-{
-    Text [ en-US ] = "Number of segments" ;
-};
-String RID_SVX_3D_UNDO_DEEPTH
-{
-    Text [ en-US ] = "Object depth" ;
-};
-String RID_SVX_3D_UNDO_FOCAL
-{
-    Text [ en-US ] = "Focal length" ;
-};
-String RID_SVX_3D_UNDO_CAMPOS
-{
-    Text [ en-US ] = "Camera position" ;
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
@@ -59,10 +39,6 @@ String RID_SVX_3D_UNDO_LATHE
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
     Text [ en-US ] = "Split 3D object" ;
-};
-String RID_SVX_3D_UNDO_ATTRIBUTES
-{
-    Text [ en-US ] = "3D Attributes" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

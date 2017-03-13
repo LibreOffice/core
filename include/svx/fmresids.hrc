@@ -89,7 +89,6 @@
 #define RID_STR_UNDO_CONTAINER_REMOVE               (RID_FORMS_START +  16)
 #define RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE      (RID_FORMS_START +  27)
 #define RID_STR_UNDO_CONTAINER_REPLACE              (RID_FORMS_START +  28)
-#define RID_STR_UNDO_DELETE_LOGICAL                 (RID_FORMS_START +  30)
 #define RID_STR_UNDO_MODEL_REPLACE                  (RID_FORMS_START +  31)
 #define RID_STR_NAVIGATIONBAR                       (RID_FORMS_START +  32)
 #define RID_STR_FORM                                (RID_FORMS_START +  36)
@@ -102,11 +101,7 @@
 #define RID_STR_WRITEERROR                          (RID_FORMS_START +  43)
 #define RID_STR_DELETECONFIRM_RECORD                (RID_FORMS_START +  44)
 #define RID_STR_DELETECONFIRM                       (RID_FORMS_START +  45)
-#define RID_STR_GROUPBOX                            (RID_FORMS_START +  46)
-#define RID_STR_NAVIGATION                          (RID_FORMS_START +  47)
 #define RID_STR_COLUMN                              (RID_FORMS_START +  48)
-#define RID_STR_DATE                                (RID_FORMS_START +  49)
-#define RID_STR_TIME                                (RID_FORMS_START +  50)
 #define RID_STR_PROPTITLE_NAVBAR                    (RID_FORMS_START +  51)
 #define RID_STR_PROPTITLE_PUSHBUTTON                (RID_FORMS_START +  52)
 #define RID_STR_PROPTITLE_RADIOBUTTON               (RID_FORMS_START +  53)
@@ -163,8 +158,6 @@
 #define RID_STR_REPLACE_INST                        (RID_FORMS_START + 122)
 #define RID_STR_REPLACE_DOC                         (RID_FORMS_START + 123)
 #define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
-#define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)
-#define RID_STR_DATANAV_SUBM_ID                     (RID_FORMS_START + 126)
 #define RID_STR_DATANAV_SUBM_ACTION                 (RID_FORMS_START + 127)
 #define RID_STR_DATANAV_SUBM_METHOD                 (RID_FORMS_START + 128)
 #define RID_STR_DATANAV_SUBM_REF                    (RID_FORMS_START + 129)
@@ -191,10 +184,7 @@
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)
-#define RID_ERR_CONTEXT_ADDFORM                     (RID_ERR_START + 0)
-#define RID_ERR_DUPLICATE_NAME                      (RID_ERR_START + 1)
 #define RID_ERR_FIELDREQUIRED                       (RID_ERR_START + 2)
-#define RID_ERR_NO_ELEMENT                          (RID_ERR_START + 4)
 
 // untyped resources  ----------------------------------------------------------
 

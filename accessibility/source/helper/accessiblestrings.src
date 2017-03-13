@@ -74,11 +74,6 @@ String STR_SVT_ACC_LISTENTRY_SELCTED_STATE
     Text [ en-US ] = "(Selected)";
 };
 
-String RID_STR_ACC_NAME_PREVIEW
-{
-    Text [ en-US ] = "Preview";
-};
-
 String RID_STR_ACC_ACTION_CHECK
 {
     Text [ en-US ] = "Check";
@@ -86,10 +81,6 @@ String RID_STR_ACC_ACTION_CHECK
 String RID_STR_ACC_ACTION_UNCHECK
 {
     Text [ en-US ] = "Uncheck";
-};
-String RID_STR_ACC_ACTION_DOUBLE_CLICK
-{
-    Text [ en-US ] = "Double click";
 };
 
 String RID_STR_ACC_SCROLLBAR_NAME_VERTICAL
@@ -114,11 +105,6 @@ String RID_STR_ACC_COLUMN_NUM
 String RID_STR_ACC_ROW_NUM
 {
     Text [ en-US ] = "Row %ROWNUMBER";
-};
-
-String RID_STR_ACC_DESC_PANELDECL_TABBAR
-{
-    Text [ en-US ] = "Panel Deck Tab Bar";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
