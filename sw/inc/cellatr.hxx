@@ -49,7 +49,7 @@ public:
 
 class SwTableBoxFormula : public SfxPoolItem, public SwTableFormula
 {
-    SwModify* pDefinedIn;   // Modify object where the formula is located
+    SwModify* m_pDefinedIn;   // Modify object where the formula is located
                             // can only be TableBoxFormat
 
 public:
@@ -59,9 +59,9 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    const SwModify* GetDefinedIn() const { return pDefinedIn; }
+    const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew )
-                                            { pDefinedIn = const_cast<SwModify*>(pNew); }
+                                            { m_pDefinedIn = const_cast<SwModify*>(pNew); }
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const override;
 
