@@ -639,9 +639,6 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
             mbAliasSymbolsHigh = true;
         }
     }
-#ifdef DEBUG
-    fprintf(grLog(), "WinFontFace::WinFontFace() %lx\n", (unsigned long)this);
-#endif
 }
 
 WinFontFace::~WinFontFace()
