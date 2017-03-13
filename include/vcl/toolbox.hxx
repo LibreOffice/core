@@ -187,7 +187,7 @@ private:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
-    SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
+    SAL_DLLPRIVATE sal_uInt16      ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const Rectangle& rRect);
@@ -206,7 +206,7 @@ private:
     SAL_DLLPRIVATE void            ImplShowFocus();
     SAL_DLLPRIVATE void            ImplHideFocus();
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
-    SAL_DLLPRIVATE void            ImplFillLayoutData() const;
+    SAL_DLLPRIVATE void            ImplFillLayoutData();
     SAL_DLLPRIVATE bool            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
     SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
@@ -228,12 +228,13 @@ public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
-    static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );
+    SAL_DLLPRIVATE int ImplGetDragWidth() const;
     static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::RenderContext& rRenderContext,
                                                 bool bHorz );
-    static SAL_DLLPRIVATE void ImplUpdateDragArea( ToolBox *pThis );
-    static SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
-                                               long& rRight, long& rBottom, const ToolBox *pThis );
+    SAL_DLLPRIVATE void ImplUpdateDragArea() const;
+    SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
+                                               long& rRight, long& rBottom ) const;
+    SAL_DLLPRIVATE void ImplCheckUpdate();
     static SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext,
                                             const Rectangle &aDragArea, int nDragWidth,
                                             WindowAlign eAlign, bool bHorz);
@@ -248,20 +249,20 @@ public:
     SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
-    static SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis );
-    static SAL_DLLPRIVATE Size ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uInt16 nCalcMode = 0 );
-    static SAL_DLLPRIVATE void ImplCalcFloatSizes( ToolBox* pThis );
-    static SAL_DLLPRIVATE Size ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines );
-    static SAL_DLLPRIVATE void ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxSize );
-    static SAL_DLLPRIVATE void ImplSetMinMaxFloatSize( ToolBox *pThis );
-    static SAL_DLLPRIVATE sal_uInt16 ImplCalcLines( ToolBox* pThis, long nToolSize );
-    static SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( ToolBox* pThis, const Point& rPos );
-    static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
-    static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
+    SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem() const;
+    SAL_DLLPRIVATE Size ImplCalcSize( sal_uInt16 nCalcLines, sal_uInt16 nCalcMode = 0 );
+    SAL_DLLPRIVATE void ImplCalcFloatSizes();
+    SAL_DLLPRIVATE Size ImplCalcFloatSize( sal_uInt16& rLines );
+    SAL_DLLPRIVATE void ImplCalcMinMaxFloatSize( Size& rMinSize, Size& rMaxSize );
+    SAL_DLLPRIVATE void ImplSetMinMaxFloatSize();
+    SAL_DLLPRIVATE sal_uInt16 ImplCalcLines( long nToolSize ) const;
+    SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
+    SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
+    SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const Point& rPos ) const;
     static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
-    static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
+    SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks() const;
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
 protected:
@@ -359,12 +360,12 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     /// Map the command name (like .uno:Save) back to item id.
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
-    Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
-    Rectangle           GetItemPosRect( ImplToolItems::size_type nPos ) const;
+    Rectangle           GetItemRect( sal_uInt16 nItemId );
+    Rectangle           GetItemPosRect( ImplToolItems::size_type nPos );
     Rectangle           GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
-    Size                GetItemContentSize( sal_uInt16 nItemId ) const;
+    Size                GetItemContentSize( sal_uInt16 nItemId );
 
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     sal_uInt16          GetDownItemId() const { return mnDownItemId; }
@@ -429,20 +430,20 @@ public:
     OString             GetHelpId( sal_uInt16 nItemId ) const;
 
     //  window size according to current alignment, floating state and number of lines
-    Size                CalcWindowSizePixel() const;
+    Size                CalcWindowSizePixel();
     //  window size according to current alignment, floating state and a given number of lines
-    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines ) const;
+    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines );
     //  window size according to current floating state and a given number of lines and a given alignment
-    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines, WindowAlign eAlign ) const;
+    Size                CalcWindowSizePixel( sal_uInt16 nCalcLines, WindowAlign eAlign );
     // floating window size according to number of lines (uses the number of line breaks)
-    Size                CalcFloatingWindowSizePixel() const;
+    Size                CalcFloatingWindowSizePixel();
     // floating window size with a given number of lines
-    Size                CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines ) const;
+    Size                CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines );
     // automatic window size for popup mode
-    Size                CalcPopupWindowSizePixel() const;
+    Size                CalcPopupWindowSizePixel();
 
     // computes the smallest useful size when docked, ie with the first item visible only (+drag area and menu button)
-    Size                CalcMinimumWindowSizePixel() const;
+    Size                CalcMinimumWindowSizePixel();
 
     sal_uInt16          GetFloatingLines() const;
 
@@ -507,10 +508,10 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex ) const;
+    Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex );
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID );
 
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
@@ -532,7 +533,7 @@ inline bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const
     return (GetItemState( nItemId ) == TRISTATE_TRUE);
 }
 
-inline Size ToolBox::CalcWindowSizePixel() const
+inline Size ToolBox::CalcWindowSizePixel()
 {
     return CalcWindowSizePixel( mnLines );
 }

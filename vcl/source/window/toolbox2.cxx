@@ -775,10 +775,10 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
+Size ToolBox::GetItemContentSize( sal_uInt16 nItemId )
 {
     if ( mbCalc || mbFormat )
-        (const_cast<ToolBox*>(this))->ImplFormat();
+        ImplFormat();
 
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
     if ( nPos < mpData->m_aItems.size() )
@@ -855,19 +855,19 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
     return aPos;
 }
 
-Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
+Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId )
 {
     if ( mbCalc || mbFormat )
-        const_cast<ToolBox*>(this)->ImplFormat();
+        ImplFormat();
 
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
     return GetItemPosRect( nPos );
 }
 
-Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos ) const
+Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos )
 {
     if ( mbCalc || mbFormat )
-        const_cast<ToolBox*>(this)->ImplFormat();
+        ImplFormat();
 
     if ( nPos < mpData->m_aItems.size() )
         return mpData->m_aItems[nPos].maRect;
@@ -1471,7 +1471,7 @@ void ToolBox::ImplUpdateInputEnable()
     mpData->mbKeyInputDisabled = true;
 }
 
-void ToolBox::ImplFillLayoutData() const
+void ToolBox::ImplFillLayoutData()
 {
     mpData->m_pLayoutData = new ToolBoxLayoutData;
 
@@ -1482,18 +1482,18 @@ void ToolBox::ImplFillLayoutData() const
 
         // only draw, if the rectangle is within PaintRectangle
         if (!pItem->maRect.IsEmpty())
-            const_cast<ToolBox*>(this)->InvalidateItem(i);
+            InvalidateItem(i);
     }
 }
 
 OUString ToolBox::GetDisplayText() const
 {
     if( ! mpData->m_pLayoutData )
-        ImplFillLayoutData();
+        const_cast<ToolBox *>(this)->ImplFillLayoutData();
     return mpData->m_pLayoutData ? OUString(mpData->m_pLayoutData->m_aDisplayText) : OUString();
 }
 
-Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
+Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
 {
     long nItemIndex = -1;
     if( ! mpData->m_pLayoutData )
@@ -1512,7 +1512,7 @@ Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
     return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : Rectangle();
 }
 
-long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
+long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID )
 {
     long nIndex = -1;
     rItemID = 0;
@@ -1555,7 +1555,7 @@ void ToolBox::SetMenuType( ToolBoxMenuType aType )
 
             mbFormat = true;
             ImplFormat();
-            ImplSetMinMaxFloatSize( this );
+            ImplSetMinMaxFloatSize();
         }
         else
         {
