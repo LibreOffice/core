@@ -180,7 +180,7 @@ void XMLTextMarkImportContext::EndElement()
 
     if (!m_sBookmarkName.isEmpty())
     {
-        lcl_MarkType nTmp;
+        lcl_MarkType nTmp{};
         if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
                                             lcl_aMarkTypeMap))
         {
