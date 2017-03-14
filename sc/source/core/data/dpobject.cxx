@@ -1336,7 +1336,7 @@ public:
         if (pLayoutName && ScGlobal::pCharClass->uppercase(*pLayoutName) == maName)
             return true;
 
-        sal_Int16 eGenFunc = pDim->GetFunction();
+        ScGeneralFunction eGenFunc = pDim->GetFunction();
         ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
         OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
         OUString aFuncName = ScDPUtil::getDisplayedMeasureName(aSrcName, eFunc);
@@ -2684,11 +2684,11 @@ void ScDPObject::ConvertOrientation(
                 bFirst = std::none_of(itrBeg, itr, FindByOriginalDim(nCol));
             }
 
-            sal_Int16 eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
+            ScGeneralFunction eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
             if (!bFirst)
                 pDim = rSaveData.DuplicateDimension(pDim->GetName());
             pDim->SetOrientation(nOrient);
-            pDim->SetFunction(sal::static_int_cast<sal_uInt16>(eFunc));
+            pDim->SetFunction(eFunc);
 
             if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
                 pDim->SetReferenceValue(nullptr);
@@ -2699,13 +2699,13 @@ void ScDPObject::ConvertOrientation(
         {
             pDim->SetOrientation( nOrient );
 
-            std::vector<sal_uInt16> nSubTotalFuncs;
+            std::vector<ScGeneralFunction> nSubTotalFuncs;
             nSubTotalFuncs.reserve(16);
             sal_uInt16 nMask = 1;
             for (sal_uInt16 nBit=0; nBit<16; nBit++)
             {
                 if ( nFuncs & (PivotFunc)nMask )
-                    nSubTotalFuncs.push_back( sal::static_int_cast<sal_uInt16>(ScDataPilotConversion::FirstFunc( (PivotFunc)nMask )) );
+                    nSubTotalFuncs.push_back( ScDataPilotConversion::FirstFunc( (PivotFunc)nMask ) );
                 nMask *= 2;
             }
             pDim->SetSubTotals( nSubTotalFuncs );

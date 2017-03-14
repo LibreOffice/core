@@ -2880,7 +2880,7 @@ void ScExportTest::testPivotTableXLSX()
             }
 
             const ScDPSaveDimension* pDim = aDims[0];
-            if (pDim->GetFunction() != sheet::GeneralFunction2::SUM)
+            if (pDim->GetFunction() != ScGeneralFunction::SUM)
             {
                 cerr << "Data field should have SUM function." << endl;
                 return false;
@@ -2987,13 +2987,13 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
                 return false;
             }
 
-            if (aDims[0]->GetFunction() != sheet::GeneralFunction2::SUM)
+            if (aDims[0]->GetFunction() != ScGeneralFunction::SUM)
             {
                 cerr << "First data field should be SUM." << endl;
                 return false;
             }
 
-            if (aDims[1]->GetFunction() != sheet::GeneralFunction2::COUNT)
+            if (aDims[1]->GetFunction() != ScGeneralFunction::COUNT)
             {
                 cerr << "First data field should be COUNT." << endl;
                 return false;
@@ -3063,7 +3063,7 @@ void ScExportTest::testPivotTableMedianODS()
     const ScDPSaveDimension* pDim = aDims.back();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be MEDIAN.",
-        sal_uInt16(sheet::GeneralFunction2::MEDIAN), pDim->GetFunction());
+        sal_uInt16(ScGeneralFunction::MEDIAN), sal_uInt16(pDim->GetFunction()));
 
     xDocSh2->DoClose();
 }

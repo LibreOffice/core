@@ -1153,7 +1153,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
         rSaveDim.SetLayoutName(*pVisName);
 
     // aggregation function
-    rSaveDim.SetFunction( static_cast< sal_uInt16 >( rDataInfo.GetApiAggFunc() ) );
+    rSaveDim.SetFunction( rDataInfo.GetApiAggFunc() );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
