@@ -243,6 +243,7 @@ int getFlatTypeRank(const OUString& rType)
         "calc_ODS_FlatXML",
         "impress_ODP_FlatXML",
         "draw_ODG_FlatXML",
+        "calc_ADO_rowset_XML",
         "calc_MS_Excel_2003_XML",
         "writer_MS_Word_2003_XML",
         "writer_DocBook_File",
