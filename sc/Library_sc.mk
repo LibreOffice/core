@@ -666,6 +666,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/viewfunc \
     sc/source/ui/view/viewutil \
     sc/source/ui/view/waitoff \
+    sc/source/ui/view/CellProtectionControl \
     sc/source/ui/xmlsource/xmlsourcedlg \
 ))
 
