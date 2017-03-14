@@ -538,7 +538,8 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             {
                 return false;
             }
-            ImplDecodeRLE(pBuffer.get(), rHeader, rAcc, RLE_4 == rHeader.nCompression);
+            if (!ImplDecodeRLE(pBuffer.get(), rHeader, rAcc, RLE_4 == rHeader.nCompression))
+                return false;
         }
         else
         {
