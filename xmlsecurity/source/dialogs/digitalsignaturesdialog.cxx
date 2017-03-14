@@ -36,7 +36,7 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 
-
+#include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 
@@ -119,6 +119,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pAddBtn, "sign");
     get(m_pRemoveBtn, "remove");
     get(m_pCloseBtn, "close");
+    //get(m_pStartCertMgr, "start_certmanager");
     get(m_pSigsValidImg, "validimg");
     get(m_pSigsValidFI, "validft");
     get(m_pSigsInvalidImg, "invalidimg");
@@ -164,6 +165,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     m_pRemoveBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
     m_pRemoveBtn->Disable();
+
+    //m_pStartCertMgr->SetClickHdl( LINK( this, DigitalSignaturesDialog, CertMgrButtonHdl ) );
 
     m_pCloseBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
 
@@ -448,6 +451,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
         }
     }
 }
+
+/*IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
+{
+
+}*/
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
 {
