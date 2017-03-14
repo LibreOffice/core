@@ -73,6 +73,7 @@
 #include "undostyl.hxx"
 #include "markdata.hxx"
 #include "markarr.hxx"
+#include "attrib.hxx"
 
 #define ScFormatShell
 #define TableFont
@@ -1719,6 +1720,26 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     rBindings.Invalidate( nSlot );
                 }
                 break;
+
+            case SID_SCATTR_CELLPROTECTION:                  // without parameter as toggle
+                {
+                    const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
+                    bool bProtect = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetProtection();
+                    bool bHideFormula = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHideFormula();
+                    bool bHideCell = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHideCell();
+                    bool bHidePrint = static_cast<const ScProtectionAttr&>(pAttrs->GetItem(ATTR_PROTECTION)).GetHidePrint();
+
+                    ScProtectionAttr aProtectionItem( !bProtect, bHideFormula, bHideCell, bHidePrint );
+                    pTabViewShell->ApplyAttr( aProtectionItem );
+
+                    SfxAllItemSet aNewSet( GetPool() );
+                    aNewSet.Put( aProtectionItem, aProtectionItem.Which());
+                    aNewSet.Put( SfxBoolItem( SID_SCATTR_CELLPROTECTION, !bProtect ) );
+                    rReq.Done( aNewSet );
+
+                    rBindings.Invalidate( nSlot );
+                }
+                break;
         }
     }
     else
@@ -2195,6 +2216,12 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             {
                 std::unique_ptr<SfxPoolItem> pNewItem(rBrushItem.CloneSetWhich(GetPool().GetWhich(nWhich)));
                 rSet.Put( *pNewItem );
+            }
+            break;
+            case SID_SCATTR_CELLPROTECTION:
+            {
+                bool bProtect = static_cast<const ScProtectionAttr&>(rAttrSet.Get( ATTR_PROTECTION )).GetProtection();
+                rSet.Put( SfxBoolItem(SID_SCATTR_CELLPROTECTION, bProtect) );
             }
             break;
         }

@@ -76,6 +76,7 @@ interface FormatForSelection
     SID_ALIGN_ANY_VDEFAULT  [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
     SID_SCATTR_PROTECTION [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_SCATTR_CELLPROTECTION [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_BRUSH      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_OVERLINE  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
