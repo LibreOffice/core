@@ -121,7 +121,7 @@ public class FileUtilities {
         extensionToMimeTypeMap.put("oth", "application/vnd.oasis.opendocument.text-web");
     }
 
-    private static final String getExtension(String filename) {
+    public static final String getExtension(String filename) {
         if (filename == null)
             return "";
         int nExt = filename.lastIndexOf('.');

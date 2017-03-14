@@ -3,9 +3,11 @@ package org.libreoffice;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import org.libreoffice.canvas.SelectionHandle;
+import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -171,8 +173,6 @@ class LOKitThread extends Thread {
         } else {
             closeDocument();
         }
-
-
     }
 
     /**
@@ -189,14 +189,13 @@ class LOKitThread extends Thread {
 
     /**
      * Handle load document event.
-     * @param filename - filename where the document is located
+     * @param filePath - filePath to where the document is located
      */
-    private void loadDocument(String filename) {
-
+    private void loadDocument(String filePath) {
         mLayerClient = mContext.getLayerClient();
 
         mInvalidationHandler = new InvalidationHandler(mContext);
-        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
+        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filePath);
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
@@ -205,6 +204,47 @@ class LOKitThread extends Thread {
         } else {
             closeDocument();
         }
+    }
+
+    /**
+     * Handle load new document event.
+     * @param filePath - filePath to where new document is to be created
+     * @param fileType - fileType what type of new document is to be loaded
+     */
+    private void loadNewDocument(String filePath, String fileType) {
+        mLayerClient = mContext.getLayerClient();
+
+        mInvalidationHandler = new InvalidationHandler(mContext);
+        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, fileType);
+
+        if (mTileProvider.isReady()) {
+            LOKitShell.showProgressSpinner(mContext);
+            refresh();
+            LOKitShell.hideProgressSpinner(mContext);
+
+            if (fileType.matches(LibreOfficeUIActivity.NEW_WRITER_STRING_KEY))
+                mTileProvider.saveDocumentAs(filePath, "odt");
+            else if (fileType.matches(LibreOfficeUIActivity.NEW_CALC_STRING_KEY))
+                mTileProvider.saveDocumentAs(filePath, "ods");
+            else if (fileType.matches(LibreOfficeUIActivity.NEW_IMPRESS_STRING_KEY))
+                mTileProvider.saveDocumentAs(filePath, "odp");
+            else
+                mTileProvider.saveDocumentAs(filePath, "odg");
+
+        } else {
+            closeDocument();
+        }
+    }
+
+    /**
+     * Save the currently loaded document.
+     */
+    private void saveDocumentAs(String filePath, String fileType) {
+       if (mTileProvider == null) {
+           Log.e(LOGTAG, "Error in saving, Tile Provider instance is null");
+       } else {
+           mTileProvider.saveDocumentAs(filePath, fileType);
+       }
     }
 
     /**
@@ -223,7 +263,13 @@ class LOKitThread extends Thread {
     private void processEvent(LOEvent event) {
         switch (event.mType) {
             case LOEvent.LOAD:
-                loadDocument(event.mString);
+                loadDocument(event.filePath);
+                break;
+            case LOEvent.LOAD_NEW:
+                loadNewDocument(event.filePath, event.fileType);
+                break;
+            case LOEvent.SAVE_AS:
+                saveDocumentAs(event.filePath, event.fileType);
                 break;
             case LOEvent.RESUME:
                 resumeDocument(event.mString, event.mPartIndex);

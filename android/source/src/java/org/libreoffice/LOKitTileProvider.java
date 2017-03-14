@@ -131,6 +131,30 @@ class LOKitTileProvider implements TileProvider {
         });
     }
 
+    @Override
+    public void saveDocumentAs(String filePath, String format) {
+        String newFilePath = "file://" + filePath;
+        Log.d("saveFilePathURL", newFilePath);
+        mDocument.saveAs(newFilePath, format, "");
+        if (!mOffice.getError().isEmpty()){
+            Log.e("Save Error", mOffice.getError());
+            LOKitShell.getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    // There was some error
+                    mContext.showSaveStatusToast(true);
+                }
+            });
+        }
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                // There was no error
+                mContext.showSaveStatusToast(false);
+            }
+        });
+    }
+
     private void setupDocumentFonts() {
         String values = mDocument.getCommandValues(".uno:CharFontName");
         if (values == null || values.isEmpty())

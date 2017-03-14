@@ -20,6 +20,12 @@ import org.mozilla.gecko.gfx.IntSize;
  * Provides the tiles and other document information.
  */
 public interface TileProvider {
+
+    /**
+     * Save the current document.
+     */
+    void saveDocumentAs(String filePath, String format);
+
     /**
      * Returns the page width in pixels.
      */
