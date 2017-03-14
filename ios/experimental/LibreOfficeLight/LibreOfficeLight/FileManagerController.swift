@@ -25,10 +25,10 @@ private class FileStorage
     
     // make access to current dir independent of storage selection
     private var localDir  : URL
-    private var cloudDir  : URL
+    private var cloudDir  : URL?
     private var currentDir : URL {
         get {
-            return storageIsLocal ? localDir : cloudDir
+            return storageIsLocal ? localDir : cloudDir!
         }
         set(newDir) {
             if storageIsLocal {
@@ -50,7 +50,7 @@ private class FileStorage
     // Support functions
     func iCloudEnabled() -> Bool
     {
-        return baseCloudDocPath != nil
+        return filemgr.ubiquityIdentityToken != nil
     }
     
     
@@ -121,7 +121,7 @@ private class FileStorage
     func copyFile(_ name: String)
     {
         try! filemgr.copyItem(at: currentDir.appendingPathComponent(name),
-                              to: (storageIsLocal ? localDir : cloudDir).appendingPathComponent(name))
+                              to: (storageIsLocal ? cloudDir! : localDir).appendingPathComponent(name))
     }
     
     
@@ -129,7 +129,7 @@ private class FileStorage
     func moveFile(_ name: String)
     {
         try! filemgr.moveItem(at: currentDir.appendingPathComponent(name),
-                              to: (storageIsLocal ? localDir : cloudDir).appendingPathComponent(name))
+                              to: (storageIsLocal ? localDir : cloudDir!).appendingPathComponent(name))
         buildFileList()
     }
     
@@ -157,11 +157,11 @@ private class FileStorage
     init()
     {
         baseLocalDocPath = filemgr.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        baseCloudDocPath = nil
         localDir         = baseLocalDocPath
         
-        // JIX, fix add support for iCloud
-        cloudDir         = baseLocalDocPath
+        let cloudUrl     = filemgr.url(forUbiquityContainerIdentifier: nil)
+        baseCloudDocPath = (cloudUrl == nil) ? nil : cloudUrl?.appendingPathComponent("Documents")
+        cloudDir         = baseCloudDocPath
         buildFileList()
     }
 }
@@ -175,7 +175,18 @@ class FileManagerController : UITableViewController, actionsControlDelegate
     private var fileData = FileStorage()
     private var selectedRow : IndexPath?
     
+    
+    
+    // selectStorage is only enabled when iCloud is active
+    @IBOutlet weak var buttonSelectStorage: UIBarButtonItem!
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        buttonSelectStorage.isEnabled = fileData.iCloudEnabled()
+    }
 
+    
+    
     // Toogle between local and cloud storage
     @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
     {
@@ -192,6 +203,7 @@ class FileManagerController : UITableViewController, actionsControlDelegate
         vc.delegate = self
         vc.inFileSelect = (selectedRow != nil)
         vc.inSubDirectory = fileData.isSubDirectory()
+        vc.useCloud = fileData.iCloudEnabled()
     }
 
     
@@ -224,7 +236,11 @@ class FileManagerController : UITableViewController, actionsControlDelegate
     
     func actionUploadDownload()
     {
-        // JIX filemanager copy
+        if selectedRow != nil {
+            let currentCell = self.tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.copyFile(currentCell.fileName)
+            reloadData()
+        }
     }
     
     
@@ -330,6 +346,7 @@ class FileManagerActions : UITableViewController
     var delegate : actionsControlDelegate?
     var inSubDirectory : Bool = false
     var inFileSelect   : Bool = false
+    var useCloud       : Bool = false
     
     // Calling class might enable/disable each button
     @IBOutlet weak var buttonUploadDownload: UIButton!
@@ -359,7 +376,7 @@ class FileManagerActions : UITableViewController
     
     @IBAction func doUploadDownload(_ sender: UIButton)
     {
-        delegate?.actionDelete()
+        delegate?.actionUploadDownload()
         dismiss(animated: false)
     }
 
@@ -387,6 +404,6 @@ class FileManagerActions : UITableViewController
         buttonLevelUp.isEnabled = inSubDirectory
         buttonOpen.isEnabled = inFileSelect
         buttonDelete.isEnabled = inFileSelect
-        buttonUploadDownload.isEnabled = inFileSelect
+        buttonUploadDownload.isEnabled = (inFileSelect && useCloud)
     }
 }
