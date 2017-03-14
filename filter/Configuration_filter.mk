@@ -873,6 +873,7 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 
 # fcfg_xslt
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
+	calc_ADO_rowset_XML \
 	calc_MS_Excel_2003_XML \
 	writer_DocBook_File \
 	writer_MS_Word_2003_XML \
@@ -883,6 +884,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,f
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
+	ADO_rowset_XML \
 	DocBook_File \
 	MS_Excel_2003_XML \
 	MS_Word_2003_XML \
