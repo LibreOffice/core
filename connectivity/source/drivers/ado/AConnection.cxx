@@ -433,7 +433,7 @@ void OConnection::buildTypeInfo()
             do
             {
                 sal_Int32 nPos = 1;
-                OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
+                OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo;
                 aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value().getString();
                 aInfo->eType                        = (DataTypeEnum)(sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value().getInt32();
                 if ( aInfo->eType == adWChar && aInfo->aSimpleType.aTypeName == s_sVarChar )
