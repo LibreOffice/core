@@ -149,7 +149,7 @@ void SwPageDesc::ResetAllAttr()
 
     // #i73790# - method renamed
     rFormat.ResetAllFormatAttr();
-    rFormat.SetFormatAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
+    rFormat.SetFormatAttr( SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR) );
 }
 
 // gets information from Modify
@@ -382,7 +382,7 @@ SwPageFootnoteInfo::SwPageFootnoteInfo()
     , m_nTopDist( 57 )         //1mm
     , m_nBottomDist( 57 )
 {
-    m_eAdjust = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
+    m_eAdjust = SvxFrameDirection::Horizontal_RL_TB == GetDefaultFrameDirection(GetAppLanguage()) ?
            css::text::HorizontalAdjust_RIGHT :
            css::text::HorizontalAdjust_LEFT;
 }

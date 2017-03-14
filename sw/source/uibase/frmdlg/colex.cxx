@@ -48,8 +48,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
-        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
-                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+        m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
+                    rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
 
     SfxItemPool* pPool = rSet.GetPool();

@@ -1091,7 +1091,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         bAutoGrowHeight = bFitShapeToText;
                     }
                 }
-                pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+                pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
 
                 //Autofit text only if there is no auto grow height and width
                 //See fdo#41245
@@ -6246,7 +6246,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         rSet.Put(SvxHangingPunctuationItem(nVal != 0, EE_PARA_HANGINGPUNCTUATION));
 
     if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nDestinationInstance ) )
-        rSet.Put( SvxFrameDirectionItem( nVal == 1 ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+        rSet.Put( SvxFrameDirectionItem( nVal == 1 ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
@@ -7415,7 +7415,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)(static_cast<const SvxFrameDirectionItem&>(pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
         xPropSet->setPropertyValue(  "TextHorizontalAdjust" , Any( eHA ) );
-        if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
+        if ( eDirection == SvxFrameDirection::Vertical_RL_TB )
         {//vertical writing
             xPropSet->setPropertyValue(  "TextWritingMode" , Any( css::text::WritingMode_TB_RL ) );
         }

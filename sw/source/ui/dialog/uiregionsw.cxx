@@ -193,7 +193,7 @@ public:
 SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     : m_SectionData( rSect )
     , m_Brush( RES_BACKGROUND )
-    , m_FrameDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
+    , m_FrameDirItem( SvxFrameDirection::Environment, RES_FRAMEDIR )
     , m_LRSpaceItem( RES_LR_SPACE )
     , m_nArrPos(nPos)
     , m_bContent(m_SectionData.GetLinkFileName().isEmpty())

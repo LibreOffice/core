@@ -167,36 +167,36 @@ void wwSection::SetDirection()
             OSL_ENSURE(false, "Unknown layout type");
             SAL_FALLTHROUGH;
         case 0:
-            meDir=FRMDIR_HORI_LEFT_TOP;
+            meDir=SvxFrameDirection::Horizontal_LR_TB;
             break;
         case 1:
-            meDir=FRMDIR_VERT_TOP_RIGHT;
+            meDir=SvxFrameDirection::Vertical_RL_TB;
             break;
         case 2:
             //asian letters are not rotated, western are. We can't import
             //bottom to top going left to right, we can't do this in
             //pages, (in drawboxes we could partly hack it with a rotated
             //drawing box, though not frame)
-            meDir=FRMDIR_VERT_TOP_RIGHT;
+            meDir=SvxFrameDirection::Vertical_RL_TB;
             break;
         case 3:
             //asian letters are not rotated, western are. We can't import
-            meDir=FRMDIR_VERT_TOP_RIGHT;
+            meDir=SvxFrameDirection::Vertical_RL_TB;
             break;
         case 4:
             //asian letters are rotated, western not. We can't import
-            meDir=FRMDIR_HORI_LEFT_TOP;
+            meDir=SvxFrameDirection::Horizontal_LR_TB;
             break;
     }
 
     sal_uInt8 bRTLPgn = maSep.fBiDi;
-    if ((meDir == FRMDIR_HORI_LEFT_TOP) && bRTLPgn)
-        meDir = FRMDIR_HORI_RIGHT_TOP;
+    if ((meDir == SvxFrameDirection::Horizontal_LR_TB) && bRTLPgn)
+        meDir = SvxFrameDirection::Horizontal_RL_TB;
 }
 
 bool wwSection::IsVertical() const
 {
-    if (meDir == FRMDIR_VERT_TOP_RIGHT || meDir == FRMDIR_VERT_TOP_LEFT)
+    if (meDir == SvxFrameDirection::Vertical_RL_TB || meDir == SvxFrameDirection::Vertical_LR_TB)
         return true;
     return false;
 }
@@ -316,7 +316,7 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
     else
     {
         SvxFrameDirection eDir =
-            *pData ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+            *pData ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
         NewAttr(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
     }
 }
@@ -651,7 +651,7 @@ SwSectionFormat *wwSectionManager::InsertSection(
 
     bool bRTLPgn = !maSegments.empty() && maSegments.back().IsBiDi();
     aSet.Put(SvxFrameDirectionItem(
-        bRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+        bRTLPgn ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
     if (2 == mrReader.m_pWDop->fpc)
         aSet.Put( SwFormatFootnoteAtTextEnd(FTNEND_ATTXTEND));
@@ -757,7 +757,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode)
     , mpSection(nullptr)
     , mpPage(nullptr)
-    , meDir(FRMDIR_HORI_LEFT_TOP)
+    , meDir(SvxFrameDirection::Horizontal_LR_TB)
     , nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width())
     , nPgLeft(MM_250)
     , nPgRight(MM_250)
@@ -2018,7 +2018,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     if (!rReader.m_bNewDoc)
         Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
                                             // position
-    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+    Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
 /*Below can all go when we have from left in rtl mode*/
     SwTwips nXPos = pFS->nXPos;
@@ -2073,7 +2073,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
 {
     Init(rReader, pPaM);
 
-    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+    Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
     short aSizeArray[5]={0};
     /*
@@ -4378,7 +4378,7 @@ bool SwWW8ImplReader::IsRightToLeft()
     {
         const SvxFrameDirectionItem* pItem=
             static_cast<const SvxFrameDirectionItem*>(GetFormatAttr(RES_FRAMEDIR));
-        if (pItem && (pItem->GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        if (pItem && (pItem->GetValue() == SvxFrameDirection::Horizontal_RL_TB))
             bRTL = true;
     }
     return bRTL;

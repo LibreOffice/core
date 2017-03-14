@@ -122,7 +122,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
 {
     SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
-            FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
+            SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB);
     return eResult;
 }
 
@@ -321,7 +321,7 @@ void SwDoc::RemoveAllFormatLanguageDependencies()
     /* koreans do not like SvxScriptItem(TRUE) */
     pTextFormatColl->ResetFormatAttr( RES_PARATR_SCRIPTSPACE );
 
-    SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
+    SvxFrameDirectionItem aFrameDir( SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR );
 
     size_t nCount = GetPageDescCnt();
     for( size_t i=0; i<nCount; ++i )

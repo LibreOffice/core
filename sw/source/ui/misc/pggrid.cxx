@@ -300,8 +300,8 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
-        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
-                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+        m_bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
+                    rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))

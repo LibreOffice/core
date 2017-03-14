@@ -865,7 +865,7 @@ void RtfAttributeOutput::TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableT
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat* pFrameFormat = pTable->GetFrameFormat();
 
-    if (m_rExport.TrueFrameDirection(*pFrameFormat) != FRMDIR_HORI_RIGHT_TOP)
+    if (m_rExport.TrueFrameDirection(*pFrameFormat) != SvxFrameDirection::Horizontal_RL_TB)
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_LTRROW);
     else
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_RTLROW);
@@ -3377,7 +3377,7 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
 {
     if (!m_rExport.m_bOutPageDescs)
     {
-        if (rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP)
+        if (rDirection.GetValue() == SvxFrameDirection::Horizontal_RL_TB)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
         else
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);

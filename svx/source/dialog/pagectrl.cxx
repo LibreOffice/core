@@ -49,7 +49,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     pBorder(nullptr),
     bResetBackground(false),
     bFrameDirection(false),
-    nFrameDirection(0),
+    nFrameDirection(SvxFrameDirection::Horizontal_LR_TB),
 
     nHdLeft(0),
     nHdRight(0),
@@ -263,29 +263,30 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         long nAWidth = rRenderContext.GetTextWidth(sText.copy(0,1));
         switch (nFrameDirection)
         {
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Horizontal_LR_TB:
             aPos = aRect.TopLeft();
             aPos.X() += PixelToLogic(Point(1,1)).X();
             aMove.Y() = 0;
             cArrow = 0x2192;
             break;
-        case FRMDIR_HORI_RIGHT_TOP:
+        case SvxFrameDirection::Horizontal_RL_TB:
             aPos = aRect.TopRight();
             aPos.X() -= nAWidth;
             aMove.Y() = 0;
             aMove.X() *= -1;
             cArrow = 0x2190;
             break;
-        case FRMDIR_VERT_TOP_LEFT:
+        case SvxFrameDirection::Vertical_LR_TB:
             aPos = aRect.TopLeft();
             aPos.X() += rRenderContext.PixelToLogic(Point(1,1)).X();
             aMove.X() = 0;
             break;
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_RL_TB:
             aPos = aRect.TopRight();
             aPos.X() -= nAWidth;
             aMove.X() = 0;
             break;
+        default: break;
         }
         sText += OUStringLiteral1(cArrow);
         for (sal_Int32 i = 0; i < sText.getLength(); i++)
@@ -429,7 +430,7 @@ void SvxPageWindow::EnableFrameDirection(bool bEnable)
     bFrameDirection = bEnable;
 }
 
-void SvxPageWindow::SetFrameDirection(sal_Int32 nDirection)
+void SvxPageWindow::SetFrameDirection(SvxFrameDirection nDirection)
 {
     nFrameDirection = nDirection;
 }

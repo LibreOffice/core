@@ -168,7 +168,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                     0 );
                 bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
                 aAttr.Put( SvxFrameDirectionItem(
-                                bLeft ? FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP,
+                                bLeft ? SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB,
                                 EE_PARA_WRITINGDIR ) );
                 aAttr.Put( SvxAdjustItem(
                                 bLeft ? SvxAdjust::Left : SvxAdjust::Right,

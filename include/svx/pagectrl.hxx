@@ -25,6 +25,7 @@
 
 class SvxBoxItem;
 enum class SvxPageUsage;
+enum class SvxFrameDirection;
 
 class SVX_DLLPUBLIC SvxPageWindow : public vcl::Window
 {
@@ -42,7 +43,7 @@ private:
     SvxBoxItem* pBorder;
     bool bResetBackground;
     bool bFrameDirection;
-    sal_Int32 nFrameDirection;
+    SvxFrameDirection nFrameDirection;
 
     long nHdLeft;
     long nHdRight;
@@ -154,8 +155,7 @@ public:
     void SetVert( bool bNew ) { bVert = bNew; }
 
     void EnableFrameDirection(bool bEnable);
-    //uses enum SvxFrameDirection
-    void SetFrameDirection(sal_Int32 nDirection);
+    void SetFrameDirection(SvxFrameDirection nDirection);
 
     void ResetBackground();
 

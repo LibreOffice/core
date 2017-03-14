@@ -299,11 +299,11 @@ void SwPageFrame::CheckGrid( bool bInvalidate )
 
 void SwPageFrame::CheckDirection( bool bVert )
 {
-    sal_uInt16 nDir =
+    SvxFrameDirection nDir =
             static_cast<const SvxFrameDirectionItem&>(GetFormat()->GetFormatAttr( RES_FRAMEDIR )).GetValue();
     if( bVert )
     {
-        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+        if( SvxFrameDirection::Horizontal_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir )
         {
             mbVertLR = false;
             mbVertical = false;
@@ -320,9 +320,9 @@ void SwPageFrame::CheckDirection( bool bVert )
             {
                 mbVertical = true;
 
-                if(FRMDIR_VERT_TOP_RIGHT == nDir)
+                if(SvxFrameDirection::Vertical_RL_TB == nDir)
                     mbVertLR = false;
-                    else if(FRMDIR_VERT_TOP_LEFT==nDir)
+                    else if(SvxFrameDirection::Vertical_LR_TB==nDir)
                        mbVertLR = true;
             }
         }
@@ -332,7 +332,7 @@ void SwPageFrame::CheckDirection( bool bVert )
     }
     else
     {
-        if( FRMDIR_HORI_RIGHT_TOP == nDir )
+        if( SvxFrameDirection::Horizontal_RL_TB == nDir )
             mbRightToLeft = true;
         else
             mbRightToLeft = false;

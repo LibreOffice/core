@@ -687,7 +687,7 @@ public:
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
-    short GetTextDirection( const SwPosition& rPos,
+    SvxFrameDirection GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = nullptr ) const;
     bool IsInVerticalText( const SwPosition& rPos ) const;
 

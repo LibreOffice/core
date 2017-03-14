@@ -542,7 +542,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     // Name
     if( nFrameOpts & HtmlFrmOpts::Dir )
     {
-        sal_uInt16 nDir = GetHTMLDirection( rItemSet );
+        SvxFrameDirection nDir = GetHTMLDirection( rItemSet );
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         OutDirection( nDir );
     }
@@ -817,7 +817,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     // Name
     if (nFrameOptions & HtmlFrmOpts::Dir)
     {
-        sal_uInt16 nCurrentDirection = GetHTMLDirection(rItemSet);
+        SvxFrameDirection nCurrentDirection = GetHTMLDirection(rItemSet);
         OString sDirection = convertDirection(nCurrentDirection);
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_dir, sDirection);
     }

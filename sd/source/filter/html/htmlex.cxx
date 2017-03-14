@@ -316,7 +316,7 @@ OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 
     OUString sStyle;
 
-    if( aParaSet.GetItem<SvxFrameDirectionItem>( EE_PARA_WRITINGDIR )->GetValue() == FRMDIR_HORI_RIGHT_TOP )
+    if( aParaSet.GetItem<SvxFrameDirectionItem>( EE_PARA_WRITINGDIR )->GetValue() == SvxFrameDirection::Horizontal_RL_TB )
     {
 
         sStyle = "direction: rtl;";

@@ -1243,19 +1243,19 @@ void Alignment::finalizeImport()
     return nHori;
 }
 
-::SvxFrameDirection Alignment::GetScFrameDir() const
+SvxFrameDirection Alignment::GetScFrameDir() const
 {
-    ::SvxFrameDirection eFrameDir = ::FRMDIR_ENVIRONMENT;
+    SvxFrameDirection eFrameDir = SvxFrameDirection::Environment;
     switch( maApiData.mnWritingMode )
     {
         case css::text::WritingMode2::PAGE:
-            eFrameDir = ::FRMDIR_ENVIRONMENT;
+            eFrameDir = SvxFrameDirection::Environment;
             break;
         case css::text::WritingMode2::LR_TB:
-            eFrameDir = ::FRMDIR_HORI_LEFT_TOP;
+            eFrameDir = SvxFrameDirection::Horizontal_LR_TB;
             break;
         case css::text::WritingMode2::RL_TB:
-            eFrameDir = ::FRMDIR_HORI_RIGHT_TOP;
+            eFrameDir = SvxFrameDirection::Horizontal_RL_TB;
             break;
         default:
             OSL_FAIL( "GetScFrameDir - unknown CTL text direction" );

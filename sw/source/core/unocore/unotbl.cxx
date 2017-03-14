@@ -1017,10 +1017,10 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     // Hack to support hidden property to transfer textDirection
     if(rPropertyName == "FRMDirection")
     {
-        SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+        SvxFrameDirection eDir = SvxFrameDirection::Environment;
         try
         {
-            const std::array<SvxFrameDirection, 3> vDirs = { FRMDIR_HORI_LEFT_TOP,  FRMDIR_HORI_RIGHT_TOP, FRMDIR_VERT_TOP_RIGHT };
+            const std::array<SvxFrameDirection, 3> vDirs = { SvxFrameDirection::Horizontal_LR_TB,  SvxFrameDirection::Horizontal_RL_TB, SvxFrameDirection::Vertical_RL_TB };
             eDir = vDirs.at(aValue.get<sal_Int32>());
         } catch(std::out_of_range) {
             SAL_WARN("sw.uno", "unknown direction code, maybe it's a bitfield");

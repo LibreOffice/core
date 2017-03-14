@@ -587,13 +587,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
             if( bLeftToRight )
             {
-                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
                 if( nAdjust == SvxAdjust::Right )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             }
             else
             {
-                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
                 if( nAdjust == SvxAdjust::Left )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }
@@ -821,13 +821,13 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         bool bFlag = false;
                         switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
                         {
-                            case FRMDIR_HORI_LEFT_TOP:
+                            case SvxFrameDirection::Horizontal_LR_TB:
                             {
                                 bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;
                                 rSet.Put( SfxBoolItem( nWhich, bFlag ));
                                 break;
                             }
-                            case FRMDIR_HORI_RIGHT_TOP:
+                            case SvxFrameDirection::Horizontal_RL_TB:
                             {
                                 bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
                                 rSet.Put( SfxBoolItem( nWhich, bFlag ));

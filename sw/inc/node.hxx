@@ -469,7 +469,7 @@ public:
 
     /** determines the text direction for a certain
        position. @return -1, if text direction could *not* be determined. */
-    short GetTextDirection( const SwPosition& rPos,
+    SvxFrameDirection GetTextDirection( const SwPosition& rPos,
                             const Point* pPt ) const;
 
     void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }

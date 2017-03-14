@@ -30,9 +30,9 @@ namespace chart
 TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent ) :
     svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
 {
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), FRMDIR_HORI_LEFT_TOP );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_RTL ), FRMDIR_HORI_RIGHT_TOP );
-    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_SUPER ), FRMDIR_ENVIRONMENT );
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_SUPER ), SvxFrameDirection::Environment );
 
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {

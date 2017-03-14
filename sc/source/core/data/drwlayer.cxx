@@ -265,7 +265,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     SetScaleUnit(MapUnit::Map100thMM);
     SfxItemPool& rPool = GetItemPool();
     rPool.SetDefaultMetric(MapUnit::Map100thMM);
-    SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
+    SvxFrameDirectionItem aModeItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR );
     rPool.SetPoolDefaultItem( aModeItem );
 
     // #i33700#

@@ -1173,16 +1173,16 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     {
         SvxFrameDirection eAttrDir = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
                                         aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
-        if ( eAttrDir == FRMDIR_ENVIRONMENT )
+        if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style
             if ( pViewData->GetDocument()->GetEditTextDirection( pViewData->GetTabNo() ) == EE_HTEXTDIR_R2L )
-                eAttrDir = FRMDIR_HORI_RIGHT_TOP;
+                eAttrDir = SvxFrameDirection::Horizontal_RL_TB;
             else
-                eAttrDir = FRMDIR_HORI_LEFT_TOP;
+                eAttrDir = SvxFrameDirection::Horizontal_LR_TB;
         }
-        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, ( eAttrDir == FRMDIR_HORI_LEFT_TOP ) ) );
-        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, ( eAttrDir == FRMDIR_HORI_RIGHT_TOP ) ) );
+        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, ( eAttrDir == SvxFrameDirection::Horizontal_LR_TB ) ) );
+        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, ( eAttrDir == SvxFrameDirection::Horizontal_RL_TB ) ) );
     }
 }
 
