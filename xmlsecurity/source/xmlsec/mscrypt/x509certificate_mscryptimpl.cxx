@@ -381,7 +381,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
             if ( objId == "2.5.29.17" )
                 xExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
             else
-                xExtn = new CertificateExtension_XmlSecImpl() ;
+                xExtn = new CertificateExtension_XmlSecImpl;
             if( xExtn == nullptr )
                 throw RuntimeException() ;
 
@@ -406,7 +406,7 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
 
             //TODO: Compare the oid
             if( false ) {
-                xExtn = new CertificateExtension_XmlSecImpl() ;
+                xExtn = new CertificateExtension_XmlSecImpl;
                 if( xExtn == nullptr )
                     throw RuntimeException() ;
 
