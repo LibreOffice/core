@@ -934,7 +934,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             float maxCoordX = m_fMinCoordX + m_fMaxCoordX;
             glUniform1fv(maResources.m_3DMinCoordXID, 1, &minCoordX);
             glUniform1fv(maResources.m_3DMaxCoordXID, 1, &maxCoordX);
-            glUniform1i(maResources.m_3DUndrawID, static_cast<GLint>(m_bUndrawFlag));
+            glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             CHECK_GL_ERROR();
             //update light information
             glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, reinterpret_cast<GLfloat*>(m_LightColor));
@@ -948,7 +948,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &polygon.material.diffuse[0]);
             glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &polygon.material.specular[0]);
             glUniform4fv(maResources.m_3DMaterialColorID, 1, &polygon.material.materialColor[0]);
-            glUniform1i(maResources.m_3DMaterialTwoSidesID, static_cast<GLint>(polygon.material.twoSidesLighting));
+            glUniform1i(maResources.m_3DMaterialTwoSidesID, polygon.material.twoSidesLighting);
             glUniform1f(maResources.m_3DMaterialShininessID, polygon.material.shininess);
             CHECK_GL_ERROR();
         }
@@ -1619,7 +1619,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         {
             glUniform1fv(maResources.m_3DMinCoordXID, 1, &m_fMinCoordX);
             glUniform1fv(maResources.m_3DMaxCoordXID, 1, &m_fMaxCoordX);
-            glUniform1i(maResources.m_3DUndrawID, static_cast<GLint>(m_bUndrawFlag));
+            glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             //update light information
             glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, reinterpret_cast<GLfloat*>(m_LightColor));
             glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, reinterpret_cast<GLfloat*>(m_PositionWorldspace));
@@ -1680,7 +1680,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
                 glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &extrude3DInfo.material.diffuse[0]);
                 glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &extrude3DInfo.material.specular[0]);
                 glUniform4fv(maResources.m_3DMaterialColorID, 1, &extrude3DInfo.material.materialColor[0]);
-                glUniform1i(maResources.m_3DMaterialTwoSidesID, static_cast<GLint>(extrude3DInfo.material.twoSidesLighting));
+                glUniform1i(maResources.m_3DMaterialTwoSidesID, extrude3DInfo.material.twoSidesLighting);
                 glUniform1f(maResources.m_3DMaterialShininessID, extrude3DInfo.material.shininess);
             }
         }
@@ -2501,7 +2501,7 @@ void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
     {
         glUniform1fv(maResources.m_3DBatchMinCoordXID, 1, &m_fMinCoordX);
         glUniform1fv(maResources.m_3DBatchMaxCoordXID, 1, &m_fMaxCoordX);
-        glUniform1i(maResources.m_3DBatchUndrawID, static_cast<GLint>(m_bUndrawFlag));
+        glUniform1i(maResources.m_3DBatchUndrawID, m_bUndrawFlag);
         glUniformMatrix4fv(maResources.m_3DBatchTransMatrixID, 1, GL_FALSE, &m_ScrollMoveMatrix[0][0]);
     }
     glUniformMatrix4fv(maResources.m_3DBatchViewID, 1, GL_FALSE, &m_3DView[0][0]);
