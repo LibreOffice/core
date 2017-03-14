@@ -1118,7 +1118,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
                 BOOL    bValue  = FALSE;
                 HRESULT hResult = iCustom->GetCheckButtonState(nId, &bValue);
                 if ( SUCCEEDED(hResult) )
-                    aValue = css::uno::makeAny(bool(bValue));
+                    aValue <<= bool(bValue);
             }
             break;
         }
