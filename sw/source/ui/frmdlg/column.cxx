@@ -616,7 +616,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     if( SfxItemState::DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
         const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR));
-        sal_uIntPtr nVal  = rItem.GetValue();
+        SvxFrameDirection nVal  = rItem.GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
@@ -1204,8 +1204,8 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     {
         const SvxFrameDirectionItem& rDirItem =
                     static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
-        bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
-                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+        bVertical = rDirItem.GetValue() == SvxFrameDirection::Vertical_RL_TB||
+                    rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
 
     if (!m_bFrame)

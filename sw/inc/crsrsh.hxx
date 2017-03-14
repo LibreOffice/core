@@ -261,7 +261,7 @@ private:
     SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
     SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
 
-    SAL_DLLPRIVATE short GetTextDirection( const Point* pPt = nullptr ) const;
+    SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const Point* pPt = nullptr ) const;
 
     SAL_DLLPRIVATE bool isInHiddenTextFrame(SwShellCursor* pShellCursor);
 

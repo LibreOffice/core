@@ -2018,23 +2018,24 @@ bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTextNode& _rTextNode,
 {
     bool bRet( false );
 
-    const short nTextDir =
+    const SvxFrameDirection nTextDir =
         _rTextNode.GetTextDirection( SwPosition(_rTextNode), &_rDocPos );
     switch ( nTextDir )
     {
-        case -1:
-        case FRMDIR_HORI_RIGHT_TOP:
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Unknown:
+        case SvxFrameDirection::Horizontal_RL_TB:
+        case SvxFrameDirection::Horizontal_LR_TB:
         {
             bRet = false;
         }
         break;
-        case FRMDIR_VERT_TOP_LEFT:
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_LR_TB:
+        case SvxFrameDirection::Vertical_RL_TB:
         {
             bRet = true;
         }
         break;
+        default: break;
     }
 
     return bRet;

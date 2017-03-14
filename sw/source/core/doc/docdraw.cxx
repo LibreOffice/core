@@ -113,7 +113,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
                 static_cast<const SvxFrameDirectionItem&>(_pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR ));
             switch ( rDirItem.GetValue() )
             {
-                case FRMDIR_VERT_TOP_LEFT:
+                case SvxFrameDirection::Vertical_LR_TB:
                 {
                     // vertical from left-to-right
                     bVert = true;
@@ -121,30 +121,31 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
                     OSL_FAIL( "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
                 }
                 break;
-                case FRMDIR_VERT_TOP_RIGHT:
+                case SvxFrameDirection::Vertical_RL_TB:
                 {
                     // vertical from right-to-left
                     bVert = true;
                     bR2L = false;
                 }
                 break;
-                case FRMDIR_HORI_RIGHT_TOP:
+                case SvxFrameDirection::Horizontal_RL_TB:
                 {
                     // horizontal from right-to-left
                     bVert = false;
                     bR2L = true;
                 }
                 break;
-                case FRMDIR_HORI_LEFT_TOP:
+                case SvxFrameDirection::Horizontal_LR_TB:
                 {
                     // horizontal from left-to-right
                     bVert = false;
                     bR2L = false;
                 }
                 break;
-                case FRMDIR_ENVIRONMENT:
-                    SAL_WARN("sw.core", "lcl_AdjustPositioningAttr(..) FRMDIR_ENVIRONMENT not supported");
+                case SvxFrameDirection::Environment:
+                    SAL_WARN("sw.core", "lcl_AdjustPositioningAttr(..) SvxFrameDirection::Environment not supported");
                     break;
+                default: break;
             }
 
         }
@@ -154,11 +155,11 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         if ( bVert )
         {
             if ( bR2L ) {
-                  //FRMDIR_VERT_TOP_LEFT
+                  //SvxFrameDirection::Vertical_LR_TB
                   nHoriRelPos = aObjRect.Left() - aAnchorPos.getX();
                   nVertRelPos = aObjRect.Top() - aAnchorPos.getY();
             } else {
-                //FRMDIR_VERT_TOP_RIGHT
+                //SvxFrameDirection::Vertical_RL_TB
                 nHoriRelPos = aObjRect.Top() - aAnchorPos.getY();
                 nVertRelPos = aAnchorPos.getX() - aObjRect.Right();
             }

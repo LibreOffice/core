@@ -1812,7 +1812,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {   // Columns on the page
                     const SwFrameFormat& rMaster = rDesc.GetMaster();
                     SwFormatCol aCol(rMaster.GetCol());
-                    if(rFrameDir.GetValue() == FRMDIR_HORI_RIGHT_TOP)
+                    if(rFrameDir.GetValue() == SvxFrameDirection::Horizontal_RL_TB)
                         nNum = aCol.GetColumns().size() - nNum;
                     else
                         nNum--;

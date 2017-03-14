@@ -600,7 +600,7 @@ void InitCore()
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFormatFootnoteAtTextEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFormatEndAtTextEnd;
     aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] =        new SwFormatNoBalancedColumns;
-    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] =             new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
+    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] =             new SvxFrameDirectionItem( SvxFrameDirection::Environment, RES_FRAMEDIR );
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] =            new SwFormatRowSplit;
 
     // #i18732#

@@ -1530,7 +1530,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
             break;
         }
     }
-    rSet.Put( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+    rSet.Put( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
 
     rSet.Put( SdrTextVertAdjustItem( eTVA ) );
     rSet.Put( SdrTextHorzAdjustItem( eTHA ) );
@@ -4435,7 +4435,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     if ( bIsRTL )
                                     {
                                         SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );
-                                        aSet2.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                                        aSet2.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
                                         rOutliner.SetParaAttribs( i, aSet2 );
                                         bCreateNewParaObject = true;
                                     }

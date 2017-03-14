@@ -327,8 +327,8 @@ public:
     sal_uInt16 m_nExportMode;
     sal_uInt16 m_nCSS1OutMode;
     sal_uInt16 m_nCSS1Script;         // contains default script (that's the one
-                                    // that is not contained in class names)
-    sal_uInt16 m_nDirection;          // the current direction
+                                      // that is not contained in class names)
+    SvxFrameDirection   m_nDirection;     // the current direction
 
     rtl_TextEncoding    m_eDestEnc;
     LanguageType        m_eLang;
@@ -456,10 +456,10 @@ public:
     void OutBackground( const SfxItemSet& rItemSet, bool bGraphic );
 
     void OutLanguage( LanguageType eLang );
-    sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
-    sal_uInt16 GetHTMLDirection( const SfxItemSet& rItemSet ) const;
-    void OutDirection( sal_uInt16 nDir );
-    static OString convertDirection(sal_uInt16 nDirection);
+    SvxFrameDirection GetHTMLDirection( SvxFrameDirection nDir ) const;
+    SvxFrameDirection GetHTMLDirection( const SfxItemSet& rItemSet ) const;
+    void OutDirection( SvxFrameDirection nDir );
+    static OString convertDirection(SvxFrameDirection nDirection);
 
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
@@ -614,7 +614,7 @@ struct HTMLSaveData
     SwHTMLNumRuleInfo *pOldNumRuleInfo;     // Owner = this
     SwHTMLNumRuleInfo *pOldNextNumRuleInfo; // Owner = HTML-Writer
     sal_uInt16 nOldDefListLvl;
-    sal_uInt16 nOldDirection;
+    SvxFrameDirection nOldDirection;
     bool bOldWriteAll : 1;
     bool bOldOutHeader : 1;
     bool bOldOutFooter : 1;

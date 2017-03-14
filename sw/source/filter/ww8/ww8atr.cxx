@@ -4196,7 +4196,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
         const SwFrameFormat* pFormat = GetExport( ).m_pAktPageDesc ? &GetExport( ).m_pAktPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
         const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
         SwTwips nPageSize;
-        if ( frameDirection.GetValue() == FRMDIR_VERT_TOP_RIGHT || frameDirection.GetValue() == FRMDIR_VERT_TOP_LEFT )
+        if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )
         {
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
             nPageSize = pFormat->GetFrameSize().GetHeight();
@@ -4381,7 +4381,7 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
         bool bBiDiSwap = false;
         if ( m_rWW8Export.m_pOutFormatNode )
         {
-            short nDirection = FRMDIR_HORI_LEFT_TOP;
+            SvxFrameDirection nDirection = SvxFrameDirection::Horizontal_LR_TB;
             if ( dynamic_cast< const SwTextNode *>( m_rWW8Export.m_pOutFormatNode )  != nullptr )
             {
                 SwPosition aPos(*static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode));
@@ -4395,8 +4395,8 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
                     ItemGet<SvxFrameDirectionItem>(*pC, RES_FRAMEDIR);
                 nDirection = rItem.GetValue();
             }
-            if ( ( nDirection == FRMDIR_HORI_RIGHT_TOP ) ||
-                 ( nDirection == FRMDIR_ENVIRONMENT && AllSettings::GetLayoutRTL() ) )
+            if ( ( nDirection == SvxFrameDirection::Horizontal_RL_TB ) ||
+                 ( nDirection == SvxFrameDirection::Environment && AllSettings::GetLayoutRTL() ) )
             {
                 bBiDiSwap = true;
             }
@@ -4413,9 +4413,9 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
 {
     sal_uInt16 nTextFlow=0;
     bool bBiDi = false;
-    short nDir = rDirection.GetValue();
+    SvxFrameDirection nDir = rDirection.GetValue();
 
-    if ( nDir == FRMDIR_ENVIRONMENT )
+    if ( nDir == SvxFrameDirection::Environment )
     {
         if ( m_rWW8Export.m_bOutPageDescs )
             nDir = m_rWW8Export.GetCurrentPageDirection();
@@ -4434,11 +4434,11 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
                 nDir = m_rWW8Export.m_pDoc->GetTextDirection( aPos );
             }
             else if ( dynamic_cast< const SwTextFormatColl *>( m_rWW8Export.m_pOutFormatNode ) !=  nullptr )
-                nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
+                nDir = SvxFrameDirection::Horizontal_LR_TB;    //what else can we do :-(
         }
 
-        if ( nDir == FRMDIR_ENVIRONMENT )
-            nDir = FRMDIR_HORI_LEFT_TOP;    //Set something
+        if ( nDir == SvxFrameDirection::Environment )
+            nDir = SvxFrameDirection::Horizontal_LR_TB;    //Set something
     }
 
     switch ( nDir )
@@ -4447,15 +4447,15 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
             //Can't get an unknown type here
             OSL_FAIL("Unknown frame direction");
             SAL_FALLTHROUGH;
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Horizontal_LR_TB:
             nTextFlow = 0;
             break;
-        case FRMDIR_HORI_RIGHT_TOP:
+        case SvxFrameDirection::Horizontal_RL_TB:
             nTextFlow = 0;
             bBiDi = true;
             break;
-        case FRMDIR_VERT_TOP_LEFT:  //word doesn't have this
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_LR_TB:  //word doesn't have this
+        case SvxFrameDirection::Vertical_RL_TB:
             nTextFlow = 1;
             break;
     }

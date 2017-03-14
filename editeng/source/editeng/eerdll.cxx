@@ -106,7 +106,7 @@ std::vector<SfxPoolItem*>* GlobalEditData::GetDefItems()
         // Paragraph attributes:
         SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
 
-        rDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
+        rDefItems[0]  = new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
         rDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
         rDefItems[2]  = new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION);
         rDefItems[3]  = new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES);

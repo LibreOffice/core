@@ -988,14 +988,14 @@ ATTR_SETOVERLINE:
             case RTF_RTLPAR:
                 if (aPardMap.nDirection)
                 {
-                    pSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP,
+                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB,
                         aPardMap.nDirection));
                 }
                 break;
             case RTF_LTRPAR:
                 if (aPardMap.nDirection)
                 {
-                    pSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP,
+                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB,
                         aPardMap.nDirection));
                 }
                 break;

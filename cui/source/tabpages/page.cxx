@@ -217,11 +217,11 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     //  fill text flow listbox with valid entries
 
-    m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
+    m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), SvxFrameDirection::Horizontal_LR_TB );
 
 
     if( bCTL )
-        m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
+        m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), SvxFrameDirection::Horizontal_RL_TB );
 
 
     // #109989# do not show vertical directions in Writer/Web
@@ -229,8 +229,8 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     {
         if( bCJK )
         {
-            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
-            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
+            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
         }
     }
 
@@ -626,7 +626,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     {
         SvxFrameDirection nVal  = SfxItemState::SET == eState
                                 ? static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()
-                                : FRMDIR_HORI_LEFT_TOP;
+                                : SvxFrameDirection::Horizontal_LR_TB;
         m_pTextFlowBox->SelectEntryValue(nVal);
 
         m_pTextFlowBox->SaveValue();
@@ -1592,8 +1592,8 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, Button*, pBox, void )
 
 void SvxPageDescPage::DisableVerticalPageDir()
 {
-    m_pTextFlowBox->RemoveEntryValue( FRMDIR_VERT_TOP_RIGHT );
-    m_pTextFlowBox->RemoveEntryValue( FRMDIR_VERT_TOP_LEFT );
+    m_pTextFlowBox->RemoveEntryValue( SvxFrameDirection::Vertical_RL_TB );
+    m_pTextFlowBox->RemoveEntryValue( SvxFrameDirection::Vertical_LR_TB );
     if( m_pTextFlowBox->GetEntryCount() < 2 )
     {
         m_pTextFlowLbl->Hide();
@@ -1604,7 +1604,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
 
 IMPL_LINK_NOARG( SvxPageDescPage, FrameDirectionModify_Impl, ListBox&, void)
 {
-    m_pBspWin->SetFrameDirection( (sal_uInt32) m_pTextFlowBox->GetSelectEntryValue() );
+    m_pBspWin->SetFrameDirection( m_pTextFlowBox->GetSelectEntryValue() );
     m_pBspWin->Invalidate();
 }
 

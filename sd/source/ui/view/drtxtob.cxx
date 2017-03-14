@@ -514,26 +514,26 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         {
             switch( static_cast<const SvxFrameDirectionItem&>( aAttrSet.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
             {
-                case FRMDIR_VERT_TOP_LEFT:
-                case FRMDIR_VERT_TOP_RIGHT:
+                case SvxFrameDirection::Vertical_LR_TB:
+                case SvxFrameDirection::Vertical_RL_TB:
                 {
                     rSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
                     rSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
                 break;
 
-                case FRMDIR_HORI_LEFT_TOP:
+                case SvxFrameDirection::Horizontal_LR_TB:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, true ) );
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, false ) );
                 break;
 
-                case FRMDIR_HORI_RIGHT_TOP:
+                case SvxFrameDirection::Horizontal_RL_TB:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, false ) );
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, true ) );
                 break;
 
                 // The case for the superordinate object is missing.
-                case FRMDIR_ENVIRONMENT:
+                case SvxFrameDirection::Environment:
                 {
                     SdDrawDocument& rDoc = mpView->GetDoc();
                     css::text::WritingMode eMode = rDoc.GetDefaultWritingMode();
@@ -549,6 +549,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, !bIsLeftToRight ) );
                 }
                 break;
+                default: break;
             }
         }
 

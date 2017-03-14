@@ -1488,7 +1488,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_SHRINKTOFIT, bStyle );
 
             // CTL text direction
-            SetScFrameDir(GETITEM( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR ).GetValue());
+            SetScFrameDir( GETITEM( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR ).GetValue() );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
 
             SAL_FALLTHROUGH;

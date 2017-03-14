@@ -1421,9 +1421,9 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
             eInHorJust == SvxCellHorJustify::Block || eInHorJust == SvxCellHorJustify::Repeat)
     {
         SvxFrameDirection nDirection = lcl_GetValue<SvxFrameDirectionItem, SvxFrameDirection>(rPattern, ATTR_WRITINGDIR, pCondSet);
-        if (nDirection == FRMDIR_HORI_LEFT_TOP || nDirection == FRMDIR_VERT_TOP_LEFT)
+        if (nDirection == SvxFrameDirection::Horizontal_LR_TB || nDirection == SvxFrameDirection::Vertical_LR_TB)
             eHorJustContext = SvxCellHorJustify::Left;
-        else if (nDirection == FRMDIR_ENVIRONMENT)
+        else if (nDirection == SvxFrameDirection::Environment)
         {
             SAL_WARN_IF( !pDoc, "sc.ui", "getAlignmentFromContext - pDoc==NULL");
             // fdo#73588: The content of the cell must also
