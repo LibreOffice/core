@@ -686,10 +686,10 @@ bool SwMirrorGrf::GetPresentation(
     sal_uInt16 nId;
     switch( GetValue() )
     {
-    case RES_MIRROR_GRAPH_DONT:     nId = STR_NO_MIRROR;    break;
-    case RES_MIRROR_GRAPH_VERT: nId = STR_VERT_MIRROR;  break;
-    case RES_MIRROR_GRAPH_HOR:  nId = STR_HORI_MIRROR;  break;
-    case RES_MIRROR_GRAPH_BOTH: nId = STR_BOTH_MIRROR;  break;
+    case MirrorGraph::Dont:     nId = STR_NO_MIRROR;    break;
+    case MirrorGraph::Vertical: nId = STR_VERT_MIRROR;  break;
+    case MirrorGraph::Horizontal:  nId = STR_HORI_MIRROR;  break;
+    case MirrorGraph::Both: nId = STR_BOTH_MIRROR;  break;
     default:                    nId = 0;    break;
     }
     if ( nId )

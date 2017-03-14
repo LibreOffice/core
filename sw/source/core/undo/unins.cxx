@@ -811,7 +811,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     Graphic* pOldGrf = pGrf;
     OUString* pOldNm = pNm;
     OUString* pOldFltr = pFltr;
-    sal_uInt16 nOldMirr = nMirr;
+    MirrorGraph nOldMirr = nMirr;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );
 
@@ -827,7 +827,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
         delete pOldGrf;
     }
 
-    if( RES_MIRROR_GRAPH_DONT != nOldMirr )
+    if( MirrorGraph::Dont != nOldMirr )
         pGrfNd->SetAttr( SwMirrorGrf() );
 
     rContext.SetSelections(pGrfNd->GetFlyFormat(), nullptr);

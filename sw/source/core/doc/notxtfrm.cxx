@@ -325,15 +325,15 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
     @param Size   the graphic's size (also returned)
     @param nMirror the current mirror attribute
 */
-static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
+static void lcl_CalcRect( Point& rPt, Size& rDim, MirrorGraph nMirror )
 {
-    if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
+    if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
         rPt.setX(rPt.getX() + rDim.Width() -1);
         rDim.Width() = -rDim.Width();
     }
 
-    if( nMirror == RES_MIRROR_GRAPH_HOR || nMirror == RES_MIRROR_GRAPH_BOTH )
+    if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
         rPt.setY(rPt.getY() + rDim.Height() -1);
         rDim.Height() = -rDim.Height();
@@ -351,7 +351,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     const SwAttrSet& rAttrSet = GetNode()->GetSwAttrSet();
     const SwCropGrf& rCrop = rAttrSet.GetCropGrf();
-    sal_uInt16 nMirror = rAttrSet.GetMirrorGrf().GetValue();
+    MirrorGraph nMirror = rAttrSet.GetMirrorGrf().GetValue();
 
     if( rAttrSet.GetMirrorGrf().IsGrfToggle() )
     {
@@ -359,10 +359,10 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
         {
             switch ( nMirror )
             {
-                case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_VERT; break;
-                case RES_MIRROR_GRAPH_VERT: nMirror = RES_MIRROR_GRAPH_DONT; break;
-                case RES_MIRROR_GRAPH_HOR: nMirror = RES_MIRROR_GRAPH_BOTH; break;
-                default: nMirror = RES_MIRROR_GRAPH_HOR; break;
+                case MirrorGraph::Dont: nMirror = MirrorGraph::Vertical; break;
+                case MirrorGraph::Vertical: nMirror = MirrorGraph::Dont; break;
+                case MirrorGraph::Horizontal: nMirror = MirrorGraph::Both; break;
+                default: nMirror = MirrorGraph::Horizontal; break;
             }
         }
     }
@@ -387,7 +387,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
 
     // crop values have to be mirrored too
-    if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
+    if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
         long nTmpCrop = nLeftCrop;
         nLeftCrop = nRightCrop;
@@ -409,7 +409,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
 
     // crop values have to be mirrored too
-    if( nMirror == RES_MIRROR_GRAPH_HOR || nMirror == RES_MIRROR_GRAPH_BOTH )
+    if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
         long nTmpCrop = nTopCrop;
         nTopCrop   = nBottomCrop;
@@ -449,7 +449,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
         aGrfPt.setY(aGrfPt.getY() + nTopCrop);
         aTmpSz.Height()-= nTopCrop + nBottomCrop;
 
-        if( RES_MIRROR_GRAPH_DONT != nMirror )
+        if( MirrorGraph::Dont != nMirror )
             lcl_CalcRect( aGrfPt, aTmpSz, nMirror );
 
         pOrigRect->Pos  ( aGrfPt );

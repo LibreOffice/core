@@ -1002,13 +1002,13 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     {
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRAPH_DONT:
+        case MirrorGraph::Dont:
             nMirror = BmpMirrorFlags::Horizontal;
             break;
-        case RES_MIRROR_GRAPH_VERT:
+        case MirrorGraph::Vertical:
             nMirror = BmpMirrorFlags::NONE;
             break;
-        case RES_MIRROR_GRAPH_HOR:
+        case MirrorGraph::Horizontal:
             nMirror = BmpMirrorFlags::Horizontal|BmpMirrorFlags::Vertical;
             break;
         default:
@@ -1019,13 +1019,13 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     else
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRAPH_BOTH:
+        case MirrorGraph::Both:
             nMirror = BmpMirrorFlags::Horizontal|BmpMirrorFlags::Vertical;
             break;
-        case RES_MIRROR_GRAPH_VERT:
+        case MirrorGraph::Vertical:
             nMirror = BmpMirrorFlags::Horizontal;
             break;
-        case RES_MIRROR_GRAPH_HOR:
+        case MirrorGraph::Horizontal:
             nMirror = BmpMirrorFlags::Vertical;
             break;
         default: break;

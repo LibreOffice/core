@@ -2710,7 +2710,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
         }
 
         // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
-        if( RES_MIRROR_GRAPH_DONT != pGrfNd->GetSwAttrSet().
+        if( MirrorGraph::Dont != pGrfNd->GetSwAttrSet().
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 

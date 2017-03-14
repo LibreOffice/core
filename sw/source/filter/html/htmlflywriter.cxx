@@ -1774,7 +1774,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
     {
         const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
 
-        if( !pGrfNd->IsLinkedFile() || RES_MIRROR_GRAPH_DONT != rMirror.GetValue() )
+        if( !pGrfNd->IsLinkedFile() || MirrorGraph::Dont != rMirror.GetValue() )
         {
             // create a (mirrored) jpeg file
             if( rHTMLWrt.GetOrigFileName() )
@@ -1785,9 +1785,9 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                            XOutFlags::UseNativeIfPossible;
             switch( rMirror.GetValue() )
             {
-            case RES_MIRROR_GRAPH_VERT: nFlags = XOutFlags::MirrorHorz; break;
-            case RES_MIRROR_GRAPH_HOR:    nFlags = XOutFlags::MirrorVert; break;
-            case RES_MIRROR_GRAPH_BOTH:
+            case MirrorGraph::Vertical: nFlags = XOutFlags::MirrorHorz; break;
+            case MirrorGraph::Horizontal:    nFlags = XOutFlags::MirrorVert; break;
+            case MirrorGraph::Both:
                 nFlags = XOutFlags::MirrorVert | XOutFlags::MirrorHorz;
                 break;
             default: break;

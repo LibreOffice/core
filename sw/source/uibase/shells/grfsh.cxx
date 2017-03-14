@@ -516,29 +516,29 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             {
                 GetShell().GetCurAttr( aGrfSet );
                 SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>(aGrfSet.Get( RES_GRFATR_MIRRORGRF )) );
-                sal_uInt16 nMirror = aMirror.GetValue();
+                MirrorGraph nMirror = aMirror.GetValue();
                 if ( nSlot==SID_FLIP_HORIZONTAL )
                     switch( nMirror )
                     {
-                    case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_VERT;
+                    case MirrorGraph::Dont: nMirror = MirrorGraph::Vertical;
                                                 break;
-                    case RES_MIRROR_GRAPH_HOR:  nMirror = RES_MIRROR_GRAPH_BOTH;
+                    case MirrorGraph::Horizontal:  nMirror = MirrorGraph::Both;
                                                 break;
-                    case RES_MIRROR_GRAPH_VERT:   nMirror = RES_MIRROR_GRAPH_DONT;
+                    case MirrorGraph::Vertical:   nMirror = MirrorGraph::Dont;
                                                 break;
-                    case RES_MIRROR_GRAPH_BOTH: nMirror = RES_MIRROR_GRAPH_HOR;
+                    case MirrorGraph::Both: nMirror = MirrorGraph::Horizontal;
                                                 break;
                     }
                 else
                     switch( nMirror )
                     {
-                    case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_HOR;
+                    case MirrorGraph::Dont: nMirror = MirrorGraph::Horizontal;
                                                 break;
-                    case RES_MIRROR_GRAPH_VERT: nMirror = RES_MIRROR_GRAPH_BOTH;
+                    case MirrorGraph::Vertical: nMirror = MirrorGraph::Both;
                                                 break;
-                    case RES_MIRROR_GRAPH_HOR:    nMirror = RES_MIRROR_GRAPH_DONT;
+                    case MirrorGraph::Horizontal:    nMirror = MirrorGraph::Dont;
                                                 break;
-                    case RES_MIRROR_GRAPH_BOTH: nMirror = RES_MIRROR_GRAPH_VERT;
+                    case MirrorGraph::Both: nMirror = MirrorGraph::Vertical;
                                                 break;
                     }
                 aMirror.SetValue( (MirrorGraph)nMirror );
@@ -700,19 +700,17 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 MirrorGraph nState = static_cast< const MirrorGraph >(static_cast<const SwMirrorGrf &>( aCoreSet.Get(
                                         RES_GRFATR_MIRRORGRF )).GetValue());
 
-                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_VERT ||
-                                              nState == RES_MIRROR_GRAPH_BOTH));
+                rSet.Put(SfxBoolItem( nWhich, nState == MirrorGraph::Vertical ||
+                                              nState == MirrorGraph::Both));
             }
             break;
 
         case SID_FLIP_VERTICAL:
             if( !bParentCntProt )
             {
-                MirrorGraph nState = static_cast< MirrorGraph >(static_cast<const SwMirrorGrf &>( aCoreSet.Get(
-                                        RES_GRFATR_MIRRORGRF )).GetValue());
-
-                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_HOR ||
-                                              nState == RES_MIRROR_GRAPH_BOTH));
+                MirrorGraph nState = aCoreSet.GetItem<SwMirrorGrf>( RES_GRFATR_MIRRORGRF )->GetValue();
+                rSet.Put(SfxBoolItem( nWhich, nState == MirrorGraph::Horizontal ||
+                                              nState == MirrorGraph::Both));
             }
             break;
 
