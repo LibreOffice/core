@@ -182,6 +182,8 @@
 <block-list:block block-list:abbreviated-name="area" block-list:name="área"/>
 <block-list:block block-list:abbreviated-name="areas" block-list:name="áreas"/>
 <block-list:block block-list:abbreviated-name="arpovação" block-list:name="aprovação"/>
+<block-list:block block-list:abbreviated-name="arquetipo" block-list:name="arquétipo"/>
+<block-list:block block-list:abbreviated-name="arquetipos" block-list:name="arquétipos"/>
 <block-list:block block-list:abbreviated-name="as mos" block-list:name="as mãos"/>
 <block-list:block block-list:abbreviated-name="ás" block-list:name="às"/>
 <block-list:block block-list:abbreviated-name="asacina" block-list:name="assassina"/>
@@ -199,6 +201,9 @@
 <block-list:block block-list:abbreviated-name="assacinas" block-list:name="assassinas"/>
 <block-list:block block-list:abbreviated-name="assacino" block-list:name="assassino"/>
 <block-list:block block-list:abbreviated-name="assacinos" block-list:name="assassinos"/>
+<block-list:block block-list:abbreviated-name="assambarcar" block-list:name="açambarcar"/>
+<block-list:block block-list:abbreviated-name="assúcar" block-list:name="açúcar"/>
+<block-list:block block-list:abbreviated-name="assúcares" block-list:name="açúcares"/>
 <block-list:block block-list:abbreviated-name="assenção" block-list:name="ascensão"/>
 <block-list:block block-list:abbreviated-name="assesor" block-list:name="assessor"/>
 <block-list:block block-list:abbreviated-name="assesores" block-list:name="assessores"/>
@@ -211,6 +216,8 @@
 <block-list:block block-list:abbreviated-name="assuntoi" block-list:name="assunto"/>
 <block-list:block block-list:abbreviated-name="asterístico" block-list:name="asterisco"/>
 <block-list:block block-list:abbreviated-name="atè" block-list:name="até"/>
+<block-list:block block-list:abbreviated-name="atléctico" block-list:name="atlético"/>
+<block-list:block block-list:abbreviated-name="atlécticos" block-list:name="atléticos"/>
 <block-list:block block-list:abbreviated-name="atráves" block-list:name="através"/>
 <block-list:block block-list:abbreviated-name="atrazamos" block-list:name="atrasamos"/>
 <block-list:block block-list:abbreviated-name="atrazar" block-list:name="atrasar"/>
@@ -239,6 +246,7 @@
 <block-list:block block-list:abbreviated-name="auguma" block-list:name="alguma"/>
 <block-list:block block-list:abbreviated-name="augumas" block-list:name="algumas"/>
 <block-list:block block-list:abbreviated-name="augun" block-list:name="algum"/>
+<block-list:block block-list:abbreviated-name="auje" block-list:name="auge"/>
 <block-list:block block-list:abbreviated-name="autodromo" block-list:name="autódromo"/>
 <block-list:block block-list:abbreviated-name="autodromos" block-list:name="autódromos"/>
 <block-list:block block-list:abbreviated-name="automátcio" block-list:name="automático"/>
@@ -430,6 +438,7 @@
 <block-list:block block-list:abbreviated-name="concerteza" block-list:name="com certeza"/>
 <block-list:block block-list:abbreviated-name="congreço" block-list:name="congresso"/>
 <block-list:block block-list:abbreviated-name="congreso" block-list:name="congresso"/>
+<block-list:block block-list:abbreviated-name="conhecessemos" block-list:name="conhecêssemos"/>
 <block-list:block block-list:abbreviated-name="conhecidência" block-list:name="coincidência"/>
 <block-list:block block-list:abbreviated-name="conhecidências" block-list:name="coincidências"/>
 <block-list:block block-list:abbreviated-name="conhesse" block-list:name="conhece"/>
@@ -1472,6 +1481,8 @@
 <block-list:block block-list:abbreviated-name="paralizo" block-list:name="paraliso"/>
 <block-list:block block-list:abbreviated-name="paralizou" block-list:name="paralisou"/>
 <block-list:block block-list:abbreviated-name="parelisia" block-list:name="paralisia"/>
+<block-list:block block-list:abbreviated-name="pârametro" block-list:name="parâmetro"/>
+<block-list:block block-list:abbreviated-name="pârametros" block-list:name="parâmetros"/>
 <block-list:block block-list:abbreviated-name="parentese" block-list:name="parêntese"/>
 <block-list:block block-list:abbreviated-name="parenteses" block-list:name="parênteses"/>
 <block-list:block block-list:abbreviated-name="paresa" block-list:name="pareça"/>
