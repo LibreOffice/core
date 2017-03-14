@@ -35,16 +35,19 @@ sal_Int16 SAL_CALL CertificateImpl::getVersion()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSerialNumber()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 OUString SAL_CALL CertificateImpl::getIssuerName()
 {
-    return OStringToOUString(m_pKey.userID(0).name(), RTL_TEXTENCODING_UTF8);
+    // Empty for gpg
+    return OUString("");
 }
 
 OUString SAL_CALL CertificateImpl::getSubjectName()
 {
+    // Empty for gpg
     return OUString("");
 }
 
@@ -83,32 +86,41 @@ DateTime SAL_CALL CertificateImpl::getNotValidAfter()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getIssuerUniqueID()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSubjectUniqueID()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 Sequence< Reference< XCertificateExtension > > SAL_CALL CertificateImpl::getExtensions()
 {
+    // Empty for gpg
     return Sequence< Reference< XCertificateExtension > > ();
 }
 
 Reference< XCertificateExtension > SAL_CALL CertificateImpl::findCertificateExtension( const Sequence< sal_Int8 >& /*oid*/ )
 {
+    // Empty for gpg
     return Reference< XCertificateExtension > ();
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getEncoded()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 OUString SAL_CALL CertificateImpl::getSubjectPublicKeyAlgorithm()
 {
-    return OUString();
+    const GpgME::Subkey subkey = m_pKey.subkey(0);
+    if (subkey.isNull())
+        return OUString();
+
+    return OStringToOUString(subkey.publicKeyAlgorithmAsString(), RTL_TEXTENCODING_UTF8);
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSubjectPublicKeyValue()
