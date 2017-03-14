@@ -2082,12 +2082,12 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
             if( bFlipH )
             {
                 if( bFlipV )
-                    aMirror.SetValue(RES_MIRROR_GRAPH_BOTH);
+                    aMirror.SetValue(MirrorGraph::Both);
                 else
-                    aMirror.SetValue(RES_MIRROR_GRAPH_VERT);
+                    aMirror.SetValue(MirrorGraph::Vertical);
             }
             else
-                aMirror.SetValue(RES_MIRROR_GRAPH_HOR);
+                aMirror.SetValue(MirrorGraph::Horizontal);
 
             pGrfNd->SetAttr( aMirror );
         }
@@ -2967,13 +2967,13 @@ void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
 {
     if (rRecord.bVFlip || rRecord.bHFlip)
     {
-        MirrorGraph eType(RES_MIRROR_GRAPH_DONT);
+        MirrorGraph eType(MirrorGraph::Dont);
         if (rRecord.bVFlip && rRecord.bHFlip)
-            eType = RES_MIRROR_GRAPH_BOTH;
+            eType = MirrorGraph::Both;
         else if (rRecord.bVFlip)
-            eType = RES_MIRROR_GRAPH_HOR;
+            eType = MirrorGraph::Horizontal;
         else
-            eType = RES_MIRROR_GRAPH_VERT;
+            eType = MirrorGraph::Vertical;
         rFlySet.Put( SwMirrorGrf(eType) );
     }
 }
