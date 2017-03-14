@@ -103,6 +103,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationDrawer;
+    private ActionBar actionBar;
     private ActionBarDrawerToggle drawerToggle;
     private RecyclerView fileRecyclerView;
     private RecyclerView recentRecyclerView;
@@ -136,7 +137,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -373,11 +374,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             recentRecyclerView.setVisibility(View.VISIBLE);
             findViewById(R.id.header_browser).setVisibility((View.VISIBLE));
             findViewById(R.id.header_recents).setVisibility((View.VISIBLE));
-
+            actionBar.setTitle(R.string.app_name);
         } else {
             recentRecyclerView.setVisibility(View.GONE);
             findViewById(R.id.header_browser).setVisibility((View.GONE));
             findViewById(R.id.header_recents).setVisibility((View.GONE));
+            actionBar.setTitle(dir.getName());
+
         }
 
         new AsyncTask<IFile, Void, Void>() {
