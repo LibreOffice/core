@@ -792,14 +792,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
 
             // Roman numbers are "mdclxvi". Since we want to start numbering with c or d more often,
             // convert first to characters and later to roman numbers if needed.
-#ifdef WITH_ALPHANUM_AS_NUMFMT
-            // detection of 'c' and 'd' a ROMAN numbering should not be done here
-            if( 256 > cLow  &&( (eScan & (LOWER_ROMAN|UPPER_ROMAN))
-                                    ? strchr( "mdclxvi", cLow )
-                                    : strchr( "mlxvi", cLow ) ))
-#else
-            if( 256 > cLow  && ( strchr( "mdclxvi", cLow ) ))
-#endif
+            if( 256 > cLow  && strchr( "mdclxvi", cLow ) )
             {
                 if( bIsUpper )
                 {
