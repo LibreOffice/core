@@ -747,7 +747,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     if((!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES))) &&
                     aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SfxItemState::DEFAULT)
                     {
-                        SvxFrameDirection eFrameDir = (SvxFrameDirection)
+                        SvxFrameDirection eFrameDir =
                                 static_cast<const SvxFrameDirectionItem& >(aCoreSet.Get(RES_FRAMEDIR)).GetValue();
                         if (FRMDIR_ENVIRONMENT == eFrameDir)
                         {

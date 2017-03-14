@@ -438,9 +438,9 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
         const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
-            const sal_uInt32 nDirection =
-                             (sal_uInt32)reinterpret_cast<sal_uIntPtr>(m_pTextDirectionLB->GetEntryData( nPos ));
-            rCoreSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+            SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(
+                             reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos )));
+            rCoreSet->Put( SvxFrameDirectionItem( nDirection, RES_FRAMEDIR));
             bModified = true;
         }
     }
@@ -580,7 +580,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     //Text direction
     if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
-        sal_uIntPtr nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+        SvxFrameDirection nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
@@ -1457,8 +1457,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     if(m_pTextDirectionLB->IsValueChangedFromSaved())
     {
           bModified |= nullptr != rSet->Put(
-                    SvxFrameDirectionItem(
-                        (SvxFrameDirection)reinterpret_cast<sal_uLong>(m_pTextDirectionLB->GetSelectEntryData())
+                    SvxFrameDirectionItem( static_cast<SvxFrameDirection>(
+                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetSelectEntryData()))
                         , FN_TABLE_BOX_TEXTORIENTATION));
     }
 
@@ -1646,7 +1646,8 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
-        sal_uLong nDirection = static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
+        SvxFrameDirection nDirection =
+                static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nDirection) ));
     }
 

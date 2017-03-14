@@ -822,6 +822,8 @@ ASK_ESCAPE:
                         case FRMDIR_HORI_RIGHT_TOP:
                             bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
                         break;
+                        default:
+                        break;
                     }
                 }
             }

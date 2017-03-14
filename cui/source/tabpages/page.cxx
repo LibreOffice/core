@@ -649,10 +649,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
                                                 true, &pItem );
     if( SfxItemState::UNKNOWN != eState )
     {
-        sal_uInt32 nVal  = SfxItemState::SET == eState
+        SvxFrameDirection nVal  = SfxItemState::SET == eState
                                 ? static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()
-                                : 0;
-        m_pTextFlowBox->SelectEntryValue( static_cast< SvxFrameDirection >( nVal ) );
+                                : FRMDIR_HORI_LEFT_TOP;
+        m_pTextFlowBox->SelectEntryValue(nVal);
 
         m_pTextFlowBox->SaveValue();
         m_pBspWin->SetFrameDirection(nVal);

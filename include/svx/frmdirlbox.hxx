@@ -76,7 +76,7 @@ public:
 };
 
 /** Wrapper for usage of a SvxFrameDirectionItem in item connections. */
-typedef sfx::ValueItemWrapper< SvxFrameDirectionItem, SvxFrameDirection, sal_uInt16 > FrameDirItemWrapper;
+typedef sfx::ValueItemWrapper< SvxFrameDirectionItem, SvxFrameDirection > FrameDirItemWrapper;
 
 /** An item<->control connection for a FrameDirectionListBox. */
 typedef sfx::ItemControlConnection< FrameDirItemWrapper, FrameDirListBoxWrapper > FrameDirListBoxConnection;

@@ -109,9 +109,9 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
             aAnchorPos = _rSdrObj.GetAnchorPos();
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
-            const SvxFrameDirectionItem* pDirItem =
-                static_cast<const SvxFrameDirectionItem*>(&(_pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR )));
-            switch ( pDirItem->GetValue() )
+            const SvxFrameDirectionItem& rDirItem =
+                static_cast<const SvxFrameDirectionItem&>(_pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR ));
+            switch ( rDirItem.GetValue() )
             {
                 case FRMDIR_VERT_TOP_LEFT:
                 {
@@ -142,6 +142,9 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
                     bR2L = false;
                 }
                 break;
+                case FRMDIR_ENVIRONMENT:
+                    SAL_WARN("sw.core", "lcl_AdjustPositioningAttr(..) FRMDIR_ENVIRONMENT not supported");
+                    break;
             }
 
         }
