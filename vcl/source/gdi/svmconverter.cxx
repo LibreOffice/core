@@ -165,6 +165,12 @@ bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
         return false;
     }
 
+    if (nUnit < sal_Int16(MapUnit::Map100thMM) || nUnit > sal_Int16(MapUnit::LAST))
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode");
+        return false;
+    }
+
     rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
 
     return true;
