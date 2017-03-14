@@ -34,7 +34,7 @@
             <value xml:lang="en-US">Spreadsheets</value>
           </prop>
           <prop oor:name="Filters">
-            <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
+            <value oor:separator=";">ADO Rowset XML;Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
           </prop>
         </node>
         <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
