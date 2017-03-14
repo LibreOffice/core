@@ -3405,13 +3405,13 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
         sal_uInt32 nFlags = 0;
         if ( pFly != pRef && pNd->IsGrfNode() )
         {
-            const sal_uInt16 nMirror = pNd->GetSwAttrSet().
+            const MirrorGraph nMirror = pNd->GetSwAttrSet().
                                         GetMirrorGrf().GetValue();
-            if ( RES_MIRROR_GRAPH_BOTH == nMirror )
+            if ( MirrorGraph::Both == nMirror )
                 nFlags = IMAP_MIRROR_HORZ | IMAP_MIRROR_VERT;
-            else if ( RES_MIRROR_GRAPH_VERT == nMirror )
+            else if ( MirrorGraph::Vertical == nMirror )
                 nFlags = IMAP_MIRROR_VERT;
-            else if ( RES_MIRROR_GRAPH_HOR == nMirror )
+            else if ( MirrorGraph::Horizontal == nMirror )
                 nFlags = IMAP_MIRROR_HORZ;
 
         }

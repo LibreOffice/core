@@ -34,6 +34,7 @@ class SwUndoDelete;
 class SwUndoFormatAttr;
 class SwDoc;
 namespace sw { class DocumentContentOperationsManager; }
+enum class MirrorGraph;
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveContent
 {
@@ -137,7 +138,7 @@ class SwUndoReRead : public SwUndo
     OUString *pNm;
     OUString *pFltr;
     sal_uLong nPos;
-    sal_uInt16 nMirr;
+    MirrorGraph nMirr;
 
     void SaveGraphicData( const SwGrfNode& );
     void SetAndSave( ::sw::UndoRedoContext & );

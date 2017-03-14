@@ -37,7 +37,7 @@ SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 
 sal_uInt16 SwMirrorGrf::GetValueCount() const
 {
-    return RES_MIRROR_GRAPH_END - RES_MIRROR_GRAPH_BEGIN;
+    return 4;
 }
 
 bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
@@ -46,17 +46,17 @@ bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             static_cast<const SwMirrorGrf&>(rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-static bool lcl_IsHoriOnEvenPages(int nEnum, bool bToggle)
+static bool lcl_IsHoriOnEvenPages(MirrorGraph nEnum, bool bToggle)
 {
-    bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
-                   nEnum == RES_MIRROR_GRAPH_BOTH;
+    bool bEnum = nEnum == MirrorGraph::Vertical ||
+                   nEnum == MirrorGraph::Both;
             return bEnum != bToggle;
 }
 
-static bool lcl_IsHoriOnOddPages(int nEnum)
+static bool lcl_IsHoriOnOddPages(MirrorGraph nEnum)
 {
-    bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
-                   nEnum == RES_MIRROR_GRAPH_BOTH;
+    bool bEnum = nEnum == MirrorGraph::Vertical ||
+                   nEnum == MirrorGraph::Both;
             return bEnum;
 }
 
@@ -75,8 +75,8 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             bVal = lcl_IsHoriOnOddPages(GetValue());
         break;
         case MID_MIRROR_VERT:
-            bVal = GetValue() == RES_MIRROR_GRAPH_HOR ||
-                   GetValue() == RES_MIRROR_GRAPH_BOTH;
+            bVal = GetValue() == MirrorGraph::Horizontal ||
+                   GetValue() == MirrorGraph::Both;
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -97,15 +97,15 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
-                                GetValue() == RES_MIRROR_GRAPH_BOTH;
+            bool bIsVert = GetValue() == MirrorGraph::Horizontal ||
+                                GetValue() == MirrorGraph::Both;
             bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
             bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
             MirrorGraph nEnum = bOnOddPages ?
-                    bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
-                        bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
+                    bIsVert ? MirrorGraph::Both : MirrorGraph::Vertical :
+                        bIsVert ? MirrorGraph::Horizontal : MirrorGraph::Dont;
             bool bToggle = bOnOddPages != bOnEvenPages;
             SetValue(nEnum);
             SetGrfToggle( bToggle );
@@ -114,17 +114,17 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_MIRROR_VERT:
             if ( bVal )
             {
-                if ( GetValue() == RES_MIRROR_GRAPH_VERT )
-                    SetValue( RES_MIRROR_GRAPH_BOTH );
-                else if ( GetValue() != RES_MIRROR_GRAPH_BOTH )
-                    SetValue( RES_MIRROR_GRAPH_HOR );
+                if ( GetValue() == MirrorGraph::Vertical )
+                    SetValue( MirrorGraph::Both );
+                else if ( GetValue() != MirrorGraph::Both )
+                    SetValue( MirrorGraph::Horizontal );
             }
             else
             {
-                if ( GetValue() == RES_MIRROR_GRAPH_BOTH )
-                    SetValue( RES_MIRROR_GRAPH_VERT );
-                else if ( GetValue() == RES_MIRROR_GRAPH_HOR )
-                    SetValue( RES_MIRROR_GRAPH_DONT );
+                if ( GetValue() == MirrorGraph::Both )
+                    SetValue( MirrorGraph::Vertical );
+                else if ( GetValue() == MirrorGraph::Horizontal )
+                    SetValue( MirrorGraph::Dont );
             }
             break;
         default:

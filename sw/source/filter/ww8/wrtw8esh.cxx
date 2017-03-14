@@ -1592,15 +1592,15 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
     switch (rMirror.GetValue())
     {
         default:
-        case RES_MIRROR_GRAPH_DONT:
+        case MirrorGraph::Dont:
             break;
-        case RES_MIRROR_GRAPH_VERT:
+        case MirrorGraph::Vertical:
             nFlags |= SHAPEFLAG_FLIPH;
             break;
-        case RES_MIRROR_GRAPH_HOR:
+        case MirrorGraph::Horizontal:
             nFlags |= SHAPEFLAG_FLIPV;
             break;
-        case RES_MIRROR_GRAPH_BOTH:
+        case MirrorGraph::Both:
             nFlags |= SHAPEFLAG_FLIPH;
             nFlags |= SHAPEFLAG_FLIPV;
             break;

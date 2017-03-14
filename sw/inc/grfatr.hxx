@@ -29,14 +29,12 @@
 #include <swatrset.hxx>
 #include <format.hxx>
 
-enum MirrorGraph
+enum class MirrorGraph
 {
-RES_MIRROR_GRAPH_BEGIN,
-    RES_MIRROR_GRAPH_DONT = RES_MIRROR_GRAPH_BEGIN,
-    RES_MIRROR_GRAPH_VERT,
-    RES_MIRROR_GRAPH_HOR,
-    RES_MIRROR_GRAPH_BOTH,
-RES_MIRROR_GRAPH_END
+    Dont,
+    Vertical,
+    Horizontal,
+    Both
 };
 
 class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem<MirrorGraph>
@@ -44,7 +42,7 @@ class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem<MirrorGraph>
     bool bGrfToggle; // Flip graphics on even pages.
 
 public:
-    SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
+    SwMirrorGrf( MirrorGraph eMiro = MirrorGraph::Dont )
         : SfxEnumItem( RES_GRFATR_MIRRORGRF, eMiro ), bGrfToggle( false )
     {}
     SwMirrorGrf( const SwMirrorGrf &rMirrorGrf )

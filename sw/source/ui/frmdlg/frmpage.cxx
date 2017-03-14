@@ -2451,21 +2451,21 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 
         bEnable = true;
 
-        MirrorGraph eMirror = static_cast< MirrorGraph >(static_cast<const SwMirrorGrf* >(pItem)->GetValue());
+        MirrorGraph eMirror = static_cast<const SwMirrorGrf* >(pItem)->GetValue();
         switch( eMirror )
         {
-        case RES_MIRROR_GRAPH_DONT: break;
-        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(); break;
-        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(); break;
-        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check();
-                                    m_pMirrorVertBox->Check();
-                                    break;
+        case MirrorGraph::Dont: break;
+        case MirrorGraph::Vertical:    m_pMirrorHorzBox->Check(); break;
+        case MirrorGraph::Horizontal:  m_pMirrorVertBox->Check(); break;
+        case MirrorGraph::Both:        m_pMirrorHorzBox->Check();
+                                       m_pMirrorVertBox->Check();
+                                       break;
         default:
             ;
         }
 
         const int nPos = (static_cast<const SwMirrorGrf* >(pItem)->IsGrfToggle() ? 1 : 0)
-            + ((eMirror == RES_MIRROR_GRAPH_VERT || eMirror == RES_MIRROR_GRAPH_BOTH) ? 2 : 0);
+            + ((eMirror == MirrorGraph::Vertical || eMirror == MirrorGraph::Both) ? 2 : 0);
 
         bEnableMirrorRB = nPos != 0;
 
@@ -2541,9 +2541,9 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
 
         MirrorGraph eMirror;
         eMirror = m_pMirrorVertBox->IsChecked() && bHori ?
-                    RES_MIRROR_GRAPH_BOTH : bHori ?
-                    RES_MIRROR_GRAPH_VERT : m_pMirrorVertBox->IsChecked() ?
-                    RES_MIRROR_GRAPH_HOR  : RES_MIRROR_GRAPH_DONT;
+                    MirrorGraph::Both : bHori ?
+                    MirrorGraph::Vertical : m_pMirrorVertBox->IsChecked() ?
+                    MirrorGraph::Horizontal  : MirrorGraph::Dont;
 
         bool bMirror = !m_pAllPagesRB->IsChecked();
         SwMirrorGrf aMirror( eMirror );
