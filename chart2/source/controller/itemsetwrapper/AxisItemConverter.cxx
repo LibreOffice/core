@@ -444,7 +444,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
 bool lcl_isDateAxis( const SfxItemSet & rItemSet )
 {
-    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//css::chart2::AxisType
+    sal_Int32 nAxisType = rItemSet.GetItem<SfxInt32Item>( SCHATTR_AXISTYPE )->GetValue();//css::chart2::AxisType
     return (chart2::AxisType::DATE == nAxisType);
 }
 
