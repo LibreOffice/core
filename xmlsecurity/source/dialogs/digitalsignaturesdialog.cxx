@@ -35,8 +35,11 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 
-
+#include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 
@@ -119,6 +122,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     get(m_pAddBtn, "sign");
     get(m_pRemoveBtn, "remove");
     get(m_pCloseBtn, "close");
+    get(m_pStartCertMgrBtn, "start_certmanager");
     get(m_pSigsValidImg, "validimg");
     get(m_pSigsValidFI, "validft");
     get(m_pSigsInvalidImg, "invalidimg");
@@ -165,6 +169,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     m_pRemoveBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
     m_pRemoveBtn->Disable();
 
+    m_pStartCertMgrBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, CertMgrButtonHdl ) );
+
     m_pCloseBtn->SetClickHdl( LINK( this, DigitalSignaturesDialog, OKButtonHdl) );
 
     switch( maSignatureManager.meSignatureMode )
@@ -205,6 +211,7 @@ void DigitalSignaturesDialog::dispose()
     m_pAddBtn.clear();
     m_pRemoveBtn.clear();
     m_pCloseBtn.clear();
+    m_pStartCertMgrBtn.clear();
     ModalDialog::dispose();
 }
 
@@ -443,6 +450,44 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
             ImplFillSignaturesBox();
         }
     }
+}
+
+IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
+{
+    const OUString aGUIServers[] = {  OUString("kleopatra"), OUString("gpa"), OUString("kgpg") };
+    // FIXME: the same for Windows + registry search for gpg4win
+    const char* cPath = getenv("PATH");
+
+    if (cPath)
+    {
+       OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
+       OUString sFoundGUIServer, sExecutable;
+
+       for ( auto const &rServer : aGUIServers )
+       {
+           osl::FileBase::RC searchError = osl::File::searchFileURL(rServer, aPath, sFoundGUIServer );
+           if (searchError == osl::FileBase::E_None)
+           {
+               osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
+               break;
+           }
+
+       }
+
+       if ( !sExecutable.isEmpty() )
+       {
+           uno::Reference< uno::XComponentContext > xContext =
+               ::comphelper::getProcessComponentContext();
+           uno::Reference< css::system::XSystemShellExecute > xSystemShell(
+                    css::system::SystemShellExecute::create(xContext) );
+
+           xSystemShell->execute( sExecutable, OUString(),
+               css::system::SystemShellExecuteFlags::DEFAULTS );
+       }
+       //else FIXME: none of the certificate managers' there
+
+    }
+
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
