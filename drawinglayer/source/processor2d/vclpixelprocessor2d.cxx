@@ -56,6 +56,16 @@
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T round(T x)
+{
+    return ::round(x);
+}
+}
+#endif
 
 using namespace com::sun::star;
 
