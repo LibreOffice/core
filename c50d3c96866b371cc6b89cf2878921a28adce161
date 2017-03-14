@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_11c66867",
+        "filename": "include/editeng/frmdiritem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-03-14T09:36:42Z",
+      "side": 1,
+      "message": "no idea what this is used for, it is mandatory for SfxEnumItem.\nyou added an other value so maybe it has to be + 2 now. but saw one instance where this was less than the number of values.. who knowns..",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 5
+      },
+      "revId": "c50d3c96866b371cc6b89cf2878921a28adce161",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
