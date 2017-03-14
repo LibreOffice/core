@@ -41,6 +41,7 @@
 #include "xestring.hxx"
 #include "xelink.hxx"
 #include "dputil.hxx"
+#include "generalfunction.hxx"
 
 using namespace ::oox;
 
@@ -859,25 +860,24 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 namespace {
 
 /** Returns a display string for a data field containing the field name and aggregation function. */
-OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFunc )
+OUString lclGetDataFieldCaption( const OUString& rFieldName, ScGeneralFunction eFunc )
 {
     OUString aCaption;
 
     sal_uInt16 nResIdx = 0;
-    using namespace ::com::sun::star::sheet;
     switch( eFunc )
     {
-        case GeneralFunction_SUM:       nResIdx = STR_FUN_TEXT_SUM;     break;
-        case GeneralFunction_COUNT:     nResIdx = STR_FUN_TEXT_COUNT;   break;
-        case GeneralFunction_AVERAGE:   nResIdx = STR_FUN_TEXT_AVG;     break;
-        case GeneralFunction_MAX:       nResIdx = STR_FUN_TEXT_MAX;     break;
-        case GeneralFunction_MIN:       nResIdx = STR_FUN_TEXT_MIN;     break;
-        case GeneralFunction_PRODUCT:   nResIdx = STR_FUN_TEXT_PRODUCT; break;
-        case GeneralFunction_COUNTNUMS: nResIdx = STR_FUN_TEXT_COUNT;   break;
-        case GeneralFunction_STDEV:     nResIdx = STR_FUN_TEXT_STDDEV;  break;
-        case GeneralFunction_STDEVP:    nResIdx = STR_FUN_TEXT_STDDEV;  break;
-        case GeneralFunction_VAR:       nResIdx = STR_FUN_TEXT_VAR;     break;
-        case GeneralFunction_VARP:      nResIdx = STR_FUN_TEXT_VAR;     break;
+        case ScGeneralFunction::SUM:       nResIdx = STR_FUN_TEXT_SUM;     break;
+        case ScGeneralFunction::COUNT:     nResIdx = STR_FUN_TEXT_COUNT;   break;
+        case ScGeneralFunction::AVERAGE:   nResIdx = STR_FUN_TEXT_AVG;     break;
+        case ScGeneralFunction::MAX:       nResIdx = STR_FUN_TEXT_MAX;     break;
+        case ScGeneralFunction::MIN:       nResIdx = STR_FUN_TEXT_MIN;     break;
+        case ScGeneralFunction::PRODUCT:   nResIdx = STR_FUN_TEXT_PRODUCT; break;
+        case ScGeneralFunction::COUNTNUMS: nResIdx = STR_FUN_TEXT_COUNT;   break;
+        case ScGeneralFunction::STDEV:     nResIdx = STR_FUN_TEXT_STDDEV;  break;
+        case ScGeneralFunction::STDEVP:    nResIdx = STR_FUN_TEXT_STDDEV;  break;
+        case ScGeneralFunction::VAR:       nResIdx = STR_FUN_TEXT_VAR;     break;
+        case ScGeneralFunction::VARP:      nResIdx = STR_FUN_TEXT_VAR;     break;
         default:;
     }
     if( nResIdx )
@@ -1069,7 +1069,7 @@ void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim 
     maFieldInfo.AddApiOrient( DataPilotFieldOrientation_DATA );
 
     // aggregation function
-    GeneralFunction eFunc = static_cast< GeneralFunction >( rSaveDim.GetFunction() );
+    ScGeneralFunction eFunc = rSaveDim.GetFunction();
     rDataInfo.SetApiAggFunc( eFunc );
 
     // visible name

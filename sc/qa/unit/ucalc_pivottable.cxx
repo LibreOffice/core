@@ -18,6 +18,7 @@
 #include "queryentry.hxx"
 #include "stringutil.hxx"
 #include "dbdocfun.hxx"
+#include "generalfunction.hxx"
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -39,7 +40,7 @@ struct DPFieldDef
      * Function for data field.  It's used only for data field.  When 0, the
      * default function (SUM) is used.
      */
-    int eFunc;
+    ScGeneralFunction eFunc;
     bool bRepeatItemLabels;
 };
 
@@ -113,9 +114,9 @@ ScDPObject* createDPFromSourceDesc(
 
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
-            sheet::GeneralFunction eFunc = sheet::GeneralFunction_SUM;
-            if (aFields[i].eFunc)
-                eFunc = static_cast<sheet::GeneralFunction>(aFields[i].eFunc);
+            ScGeneralFunction eFunc = ScGeneralFunction::SUM;
+            if (aFields[i].eFunc != ScGeneralFunction::NONE)
+                eFunc = aFields[i].eFunc;
 
             pDim->SetFunction(eFunc);
             pDim->SetReferenceValue(nullptr);
@@ -193,9 +194,9 @@ void Test::testPivotTable()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -377,9 +378,9 @@ void Test::testPivotTableLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -433,9 +434,9 @@ void Test::testPivotTableDateLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -509,11 +510,11 @@ void Test::testPivotTableFilters()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, 0, false },
-        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, 0, false },
-        { "Group2", sheet::DataPilotFieldOrientation_PAGE, 0, false },
-        { "Val1",   sheet::DataPilotFieldOrientation_DATA, 0, false },
-        { "Val2",   sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::NONE, false },
+        { "Group2", sheet::DataPilotFieldOrientation_PAGE, ScGeneralFunction::NONE, false },
+        { "Val1",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false },
+        { "Val2",   sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -662,9 +663,9 @@ void Test::testPivotTableNamedSource()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -962,9 +963,9 @@ void Test::testPivotTableDuplicateDataFields()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT, false }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false }
     };
 
     ScAddress aPos(2,2,0);
@@ -1056,8 +1057,8 @@ void Test::testPivotTableNormalGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1218,8 +1219,8 @@ void Test::testPivotTableNumberGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Order", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Order", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1303,8 +1304,8 @@ void Test::testPivotTableDateGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Date", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Date", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1473,8 +1474,8 @@ void Test::testPivotTableEmptyRows()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1586,8 +1587,8 @@ void Test::testPivotTableTextNumber()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     // Insert raw data such that the first column values are entered as text.
@@ -1688,8 +1689,8 @@ void Test::testPivotTableCaseInsensitiveStrings()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1764,8 +1765,8 @@ void Test::testPivotTableNumStability()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Total", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     m_pDoc->InsertTab(0, "Data");
@@ -1851,8 +1852,8 @@ void Test::testPivotTableFieldReference()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2021,8 +2022,8 @@ void Test::testPivotTableDocFunc()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2096,8 +2097,8 @@ void Test::testFuncGETPIVOTDATA()
     {
         // Dimension definition
         DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2159,9 +2160,9 @@ void Test::testFuncGETPIVOTDATA()
     {
         // Dimension definition
         DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT, false },
+            { "Name", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::COUNT, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2254,9 +2255,9 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Type", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Member", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Type", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Member", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::SUM, false },
     };
 
     // Create pivot table at A1 on 2nd sheet.
@@ -2331,10 +2332,10 @@ void Test::testPivotTableRepeatItemLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, true },
-        { "Country", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Year", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, true },
+        { "Country", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Year", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -2409,9 +2410,9 @@ void Test::testPivotTableDPCollection()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0, false }
+        { "Software", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
     };
 
     // Raw data
@@ -2520,10 +2521,10 @@ void Test::testPivotTableMedianFunc()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Condition", sheet::DataPilotFieldOrientation_ROW, 0, false },
-        { "Day1Hit", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
-        { "Day1Miss", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
-        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
+        { "Condition", sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { "Day1Hit", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { "Day1Miss", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
+        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::MEDIAN, false },
     };
 
     ScAddress aPos(1, 1, 0);

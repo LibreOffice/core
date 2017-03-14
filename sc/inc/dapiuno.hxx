@@ -65,11 +65,12 @@ struct ScDPNumGroupInfo;
 class ScDataPilotTableObj;
 class ScDataPilotFieldObj;
 class ScDataPilotItemObj;
+enum class ScGeneralFunction;
 
 class ScDataPilotConversion
 {
 public:
-    static sal_Int16   FirstFunc( PivotFunc nBits );
+    static ScGeneralFunction   FirstFunc( PivotFunc nBits );
     static PivotFunc           FunctionBit( sal_Int16 eFunc );
 
     static void         FillGroupInfo(
@@ -445,9 +446,9 @@ public:
     css::sheet::DataPilotFieldOrientation getOrientation() const;
     void setOrientation(css::sheet::DataPilotFieldOrientation Orientation);
     sal_Int16 getFunction() const;
-    void setFunction(sal_Int16 Function);
+    void setFunction(ScGeneralFunction Function);
     css::uno::Sequence< sal_Int16 > getSubtotals() const;
-    void setSubtotals(const css::uno::Sequence< sal_Int16 >& rFunctions);
+    void setSubtotals(const std::vector< ScGeneralFunction >& rFunctions);
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
     const css::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();

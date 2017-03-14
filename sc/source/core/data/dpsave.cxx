@@ -25,6 +25,7 @@
 #include "global.hxx"
 #include "dptabsrc.hxx"
 #include "dputil.hxx"
+#include "generalfunction.hxx"
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -196,7 +197,7 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     bIsDataLayout( bDataLayout ),
     bDupFlag( false ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
-    nFunction( sheet::GeneralFunction2::AUTO ),
+    nFunction( ScGeneralFunction::AUTO ),
     nUsedHierarchy( -1 ),
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bRepeatItemLabels( false ),
@@ -352,7 +353,7 @@ void ScDPSaveDimension::SetOrientation(sal_uInt16 nNew)
     nOrientation = nNew;
 }
 
-void ScDPSaveDimension::SetSubTotals(std::vector<sal_uInt16> const & rFuncs)
+void ScDPSaveDimension::SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs)
 {
     maSubTotalFuncs = rFuncs;
     bSubTotalDefault = false;
@@ -373,7 +374,7 @@ void ScDPSaveDimension::SetRepeatItemLabels(bool bSet)
     bRepeatItemLabels = bSet;
 }
 
-void ScDPSaveDimension::SetFunction(sal_uInt16 nNew)
+void ScDPSaveDimension::SetFunction(ScGeneralFunction nNew)
 {
     nFunction = nNew;
 }
@@ -598,7 +599,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             {
                 if ( !bSubTotalDefault )
                 {
-                    uno::Sequence<sal_Int16> aSeq(comphelper::containerToSequence<sal_Int16>(maSubTotalFuncs));
+                    uno::Sequence<sal_Int16> aSeq(maSubTotalFuncs.size());
+                    for(size_t i = 0; i < maSubTotalFuncs.size(); ++i)
+                        aSeq.getArray()[i] = (sal_Int16)maSubTotalFuncs[i];
                     xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )

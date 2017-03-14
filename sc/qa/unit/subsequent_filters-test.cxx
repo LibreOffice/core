@@ -71,6 +71,7 @@
 #include "orcusfilters.hxx"
 #include "filter.hxx"
 #include "orcusinterface.hxx"
+#include "generalfunction.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1853,7 +1854,7 @@ void ScFiltersTest::testPivotTableBasicODS()
     const ScDPSaveDimension* pDim = aDims.back();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be COUNT.",
-        sal_uInt16(sheet::GeneralFunction2::COUNT), pDim->GetFunction());
+        sal_uInt16(ScGeneralFunction::COUNT), sal_uInt16(pDim->GetFunction()));
 
     xDocSh->DoClose();
 }

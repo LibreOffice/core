@@ -67,6 +67,7 @@
 #include "markdata.hxx"
 #include "stringutil.hxx"
 #include "tabvwsh.hxx"
+#include "generalfunction.hxx"
 
 #include <list>
 #include <memory>
@@ -1525,7 +1526,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                             if (pDim->GetSubTotalsCount() != 1)
                                 break;
 
-                            if (pDim->GetSubTotalFunc(0) != sheet::GeneralFunction_AUTO)
+                            if (pDim->GetSubTotalFunc(0) != ScGeneralFunction::AUTO)
                                 break;
 
                             const OUString* pLayoutName = pMem->GetLayoutName();

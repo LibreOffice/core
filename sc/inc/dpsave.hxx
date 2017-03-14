@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class ScDPDimensionSaveData;
 class ScDPTableData;
+enum class ScGeneralFunction;
 
 // classes to save Data Pilot settings
 
@@ -98,12 +99,12 @@ private:
     bool bIsDataLayout;
     bool bDupFlag;
     sal_uInt16 nOrientation;
-    sal_uInt16 nFunction; // GeneralFunction2, for data dimensions
+    ScGeneralFunction nFunction; // for data dimensions
     long nUsedHierarchy;
     sal_uInt16 nShowEmptyMode; //! at level
     bool bRepeatItemLabels; //! at level
     bool bSubTotalDefault; //! at level
-    std::vector<sal_uInt16> maSubTotalFuncs; // GeneralFunction2
+    std::vector<ScGeneralFunction> maSubTotalFuncs;
     css::sheet::DataPilotFieldReference* pReferenceValue;
     css::sheet::DataPilotFieldSortInfo* pSortInfo; // (level)
     css::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo; // (level)
@@ -145,11 +146,11 @@ public:
     void SetName( const OUString& rNew ); // used if the source dim was renamed (groups)
 
     void SetOrientation(sal_uInt16 nNew);
-    void SetSubTotals(std::vector<sal_uInt16> const & rFuncs);
+    void SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs);
     long GetSubTotalsCount() const
         { return maSubTotalFuncs.size(); }
 
-    sal_uInt16 GetSubTotalFunc(long nIndex) const
+    ScGeneralFunction GetSubTotalFunc(long nIndex) const
         { return maSubTotalFuncs[nIndex]; }
 
     bool HasShowEmpty() const;
@@ -161,8 +162,8 @@ public:
     bool GetRepeatItemLabels() const
         { return bRepeatItemLabels; }
 
-    void SetFunction(sal_uInt16 nNew); // enum GeneralFunction
-    sal_uInt16 GetFunction() const
+    void SetFunction(ScGeneralFunction nNew);
+    ScGeneralFunction GetFunction() const
         { return nFunction; }
 
     void SetUsedHierarchy(long nNew);
