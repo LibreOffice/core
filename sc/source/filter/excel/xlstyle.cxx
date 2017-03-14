@@ -1596,12 +1596,12 @@ SvxCellJustifyMethod XclCellAlign::GetScVerJustifyMethod() const
 
 SvxFrameDirection XclCellAlign::GetScFrameDir() const
 {
-    SvxFrameDirection eFrameDir = FRMDIR_ENVIRONMENT;
+    SvxFrameDirection eFrameDir = SvxFrameDirection::Environment;
     switch( mnTextDir )
     {
-        case EXC_XF_TEXTDIR_CONTEXT:    eFrameDir = FRMDIR_ENVIRONMENT;     break;
-        case EXC_XF_TEXTDIR_LTR:        eFrameDir = FRMDIR_HORI_LEFT_TOP;   break;
-        case EXC_XF_TEXTDIR_RTL:        eFrameDir = FRMDIR_HORI_RIGHT_TOP;  break;
+        case EXC_XF_TEXTDIR_CONTEXT:    eFrameDir = SvxFrameDirection::Environment;     break;
+        case EXC_XF_TEXTDIR_LTR:        eFrameDir = SvxFrameDirection::Horizontal_LR_TB;   break;
+        case EXC_XF_TEXTDIR_RTL:        eFrameDir = SvxFrameDirection::Horizontal_RL_TB;  break;
         default:    OSL_FAIL( "XclCellAlign::GetScFrameDir - unknown CTL text direction" );
     }
     return eFrameDir;
@@ -1639,9 +1639,9 @@ void XclCellAlign::SetScFrameDir( SvxFrameDirection eFrameDir )
 {
     switch( eFrameDir )
     {
-        case FRMDIR_ENVIRONMENT:    mnTextDir = EXC_XF_TEXTDIR_CONTEXT; break;
-        case FRMDIR_HORI_LEFT_TOP:  mnTextDir = EXC_XF_TEXTDIR_LTR;     break;
-        case FRMDIR_HORI_RIGHT_TOP: mnTextDir = EXC_XF_TEXTDIR_RTL;     break;
+        case SvxFrameDirection::Environment:      mnTextDir = EXC_XF_TEXTDIR_CONTEXT; break;
+        case SvxFrameDirection::Horizontal_LR_TB: mnTextDir = EXC_XF_TEXTDIR_LTR;     break;
+        case SvxFrameDirection::Horizontal_RL_TB: mnTextDir = EXC_XF_TEXTDIR_RTL;     break;
         default:                    mnTextDir = EXC_XF_TEXTDIR_CONTEXT;
             OSL_FAIL( "XclCellAlign::SetScFrameDir - unknown CTL text direction" );
     }

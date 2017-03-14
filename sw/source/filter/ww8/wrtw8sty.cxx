@@ -1592,7 +1592,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
             //Cannot export as normal page framedir, as continuous sections
             //cannot contain any grid settings like proper sections
-            AttrOutput().SectionBiDi( FRMDIR_HORI_RIGHT_TOP == TrueFrameDirection( *rSepInfo.pSectionFormat ) );
+            AttrOutput().SectionBiDi( SvxFrameDirection::Horizontal_RL_TB == TrueFrameDirection( *rSepInfo.pSectionFormat ) );
 
             m_pISet = pOldI;
         }

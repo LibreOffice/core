@@ -3455,22 +3455,23 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_TEMPLATE ) )
         return rWrt;
 
-    sal_uInt16 nDir =
+    SvxFrameDirection nDir =
         static_cast< const SvxFrameDirectionItem& >( rHt ).GetValue();
     const sal_Char* pStr = nullptr;
     switch( nDir )
     {
-    case FRMDIR_HORI_LEFT_TOP:
-    case FRMDIR_VERT_TOP_LEFT:
+    case SvxFrameDirection::Horizontal_LR_TB:
+    case SvxFrameDirection::Vertical_LR_TB:
         pStr = sCSS1_PV_ltr;
         break;
-    case FRMDIR_HORI_RIGHT_TOP:
-    case FRMDIR_VERT_TOP_RIGHT:
+    case SvxFrameDirection::Horizontal_RL_TB:
+    case SvxFrameDirection::Vertical_RL_TB:
         pStr = sCSS1_PV_rtl;
         break;
-    case FRMDIR_ENVIRONMENT:
+    case SvxFrameDirection::Environment:
         pStr = sCSS1_PV_inherit;
         break;
+    default: break;
     }
 
     if( pStr )

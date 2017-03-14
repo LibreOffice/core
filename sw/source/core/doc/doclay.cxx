@@ -1576,10 +1576,10 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
             nullptr != pNd->FindFooterStartNode();
 }
 
-short SwDoc::GetTextDirection( const SwPosition& rPos,
+SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
                                const Point* pPt ) const
 {
-    short nRet = -1;
+    SvxFrameDirection nRet = SvxFrameDirection::Unknown;
 
     SwContentNode *pNd = rPos.nNode.GetNode().GetContentNode();
 
@@ -1588,7 +1588,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
     {
         nRet = pNd->GetTextDirection( rPos, pPt );
     }
-    if ( nRet == -1 )
+    if ( nRet == SvxFrameDirection::Unknown )
     {
         const SvxFrameDirectionItem* pItem = nullptr;
         if( pNd )
@@ -1598,7 +1598,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
             while( pFlyFormat )
             {
                 pItem = &pFlyFormat->GetFrameDir();
-                if( FRMDIR_ENVIRONMENT == pItem->GetValue() )
+                if( SvxFrameDirection::Environment == pItem->GetValue() )
                 {
                     pItem = nullptr;
                     const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
@@ -1632,8 +1632,8 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
 bool SwDoc::IsInVerticalText( const SwPosition& rPos ) const
 {
-    const short nDir = GetTextDirection( rPos );
-    return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
+    const SvxFrameDirection nDir = GetTextDirection( rPos );
+    return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir;
 }
 
 std::set<SwRootFrame*> SwDoc::GetAllLayouts()

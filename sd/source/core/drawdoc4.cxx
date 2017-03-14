@@ -1239,9 +1239,9 @@ css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
     {
         switch( static_cast<const SvxFrameDirectionItem&>( *pItem ).GetValue() )
         {
-            case FRMDIR_HORI_LEFT_TOP: eRet = css::text::WritingMode_LR_TB; break;
-            case FRMDIR_HORI_RIGHT_TOP: eRet = css::text::WritingMode_RL_TB; break;
-            case FRMDIR_VERT_TOP_RIGHT: eRet = css::text::WritingMode_TB_RL; break;
+            case SvxFrameDirection::Horizontal_LR_TB: eRet = css::text::WritingMode_LR_TB; break;
+            case SvxFrameDirection::Horizontal_RL_TB: eRet = css::text::WritingMode_RL_TB; break;
+            case SvxFrameDirection::Vertical_RL_TB: eRet = css::text::WritingMode_TB_RL; break;
 
             default:
                 OSL_FAIL( "Frame direction not supported yet" );
@@ -1259,9 +1259,9 @@ void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
         SvxFrameDirection nVal;
         switch( eMode )
         {
-        case css::text::WritingMode_LR_TB: nVal = FRMDIR_HORI_LEFT_TOP; break;
-        case css::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
-        case css::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
+        case css::text::WritingMode_LR_TB: nVal = SvxFrameDirection::Horizontal_LR_TB; break;
+        case css::text::WritingMode_RL_TB: nVal = SvxFrameDirection::Horizontal_RL_TB; break;
+        case css::text::WritingMode_TB_RL: nVal = SvxFrameDirection::Vertical_RL_TB; break;
         default:
             OSL_FAIL( "Frame direction not supported yet" );
             return;

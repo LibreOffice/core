@@ -391,7 +391,7 @@ SET_LINESPACE:
 
             SvxFrameDirection eFrameDirection =
                     (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
-                        FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
+                        SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB;
             aSet.Put( SvxFrameDirectionItem( eFrameDirection, RES_FRAMEDIR ) );
 
             if (bChgAdjust)
@@ -749,15 +749,15 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     {
                         SvxFrameDirection eFrameDir =
                                 static_cast<const SvxFrameDirectionItem& >(aCoreSet.Get(RES_FRAMEDIR)).GetValue();
-                        if (FRMDIR_ENVIRONMENT == eFrameDir)
+                        if (SvxFrameDirection::Environment == eFrameDir)
                         {
                             eFrameDir = rSh.IsInRightToLeftText() ?
-                                    FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+                                    SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
                         }
                         bFlag = (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot &&
-                                            FRMDIR_HORI_LEFT_TOP == eFrameDir) ||
+                                            SvxFrameDirection::Horizontal_LR_TB == eFrameDir) ||
                                 (SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot &&
-                                            FRMDIR_HORI_RIGHT_TOP == eFrameDir);
+                                            SvxFrameDirection::Horizontal_RL_TB == eFrameDir);
                     }
                     else
                     {

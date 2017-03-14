@@ -1969,7 +1969,7 @@ WritingMode SdrTableObj::GetWritingMode() const
     if ( ( eWritingMode != WritingMode_TB_RL ) &&
          ( rSet.GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) == SfxItemState::SET ) )
     {
-        if ( static_cast< const SvxFrameDirectionItem * >( pItem )->GetValue() == FRMDIR_HORI_LEFT_TOP )
+        if ( static_cast< const SvxFrameDirectionItem * >( pItem )->GetValue() == SvxFrameDirection::Horizontal_LR_TB )
             eWritingMode = WritingMode_LR_TB;
         else
             eWritingMode = WritingMode_RL_TB;

@@ -372,9 +372,9 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
         SvxFrameDirection eDirection = (SvxFrameDirection)
             static_cast<const SvxFrameDirectionItem&>(rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
 
-        if ( eDirection == FRMDIR_HORI_LEFT_TOP )
+        if ( eDirection == SvxFrameDirection::Horizontal_LR_TB )
             eRet = EE_HTEXTDIR_L2R;
-        else if ( eDirection == FRMDIR_HORI_RIGHT_TOP )
+        else if ( eDirection == SvxFrameDirection::Horizontal_RL_TB )
             eRet = EE_HTEXTDIR_R2L;
         // else (invalid for EditEngine): keep "default"
     }

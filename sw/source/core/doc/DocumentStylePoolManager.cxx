@@ -356,7 +356,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 sal_uLong nAppLanguage = GetAppLanguage();
                 if (GetDefaultFrameDirection(nAppLanguage) ==
-                    FRMDIR_HORI_RIGHT_TOP)
+                    SvxFrameDirection::Horizontal_RL_TB)
                 {
                     SvxAdjustItem aAdjust(SvxAdjust::Right, RES_PARATR_ADJUST );
                     aSet.Put(aAdjust);

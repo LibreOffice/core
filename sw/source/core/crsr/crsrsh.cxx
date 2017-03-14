@@ -3109,7 +3109,7 @@ bool SwCursorShell::IsSelFullPara() const
     return bRet;
 }
 
-short SwCursorShell::GetTextDirection( const Point* pPt ) const
+SvxFrameDirection SwCursorShell::GetTextDirection( const Point* pPt ) const
 {
     SwPosition aPos( *m_pCurrentCursor->GetPoint() );
     Point aPt( pPt ? *pPt : m_pCurrentCursor->GetPtPos() );
@@ -3126,16 +3126,16 @@ short SwCursorShell::GetTextDirection( const Point* pPt ) const
 
 bool SwCursorShell::IsInVerticalText( const Point* pPt ) const
 {
-    const short nDir = GetTextDirection( pPt );
-    return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
+    const SvxFrameDirection nDir = GetTextDirection( pPt );
+    return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir;
 }
 
 bool SwCursorShell::IsInRightToLeftText() const
 {
-    const short nDir = GetTextDirection();
-    // GetTextDirection uses FRMDIR_VERT_TOP_LEFT to indicate RTL in
+    const SvxFrameDirection nDir = GetTextDirection();
+    // GetTextDirection uses SvxFrameDirection::Vertical_LR_TB to indicate RTL in
     // vertical environment
-    return FRMDIR_VERT_TOP_LEFT == nDir || FRMDIR_HORI_RIGHT_TOP == nDir;
+    return SvxFrameDirection::Vertical_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir;
 }
 
 /// If the current cursor position is inside a hidden range, the hidden range

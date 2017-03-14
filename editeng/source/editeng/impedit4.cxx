@@ -701,7 +701,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_WRITINGDIR:
         {
             const SvxFrameDirectionItem& rWritingMode = static_cast<const SvxFrameDirectionItem&>(rItem);
-            if ( rWritingMode.GetValue() == FRMDIR_HORI_RIGHT_TOP )
+            if ( rWritingMode.GetValue() == SvxFrameDirection::Horizontal_RL_TB )
                 rOutput.WriteCharPtr( "\\rtlpar" );
             else
                 rOutput.WriteCharPtr( "\\ltrpar" );

@@ -822,7 +822,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // and the text direction
-    sal_uInt16 nDir = rHWrt.GetHTMLDirection(
+    SvxFrameDirection nDir = rHWrt.GetHTMLDirection(
             (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
                                     pNodeItemSet->Get( RES_FRAMEDIR ) )
                           : rFormat.GetFrameDir() ).GetValue() );

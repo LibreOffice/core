@@ -1196,8 +1196,8 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
         mAny >>= nWritingMode;
 
         SvxFrameDirection eWritingMode( (SvxFrameDirection)nWritingMode );
-        if ( ( eWritingMode == FRMDIR_HORI_RIGHT_TOP )
-            || ( eWritingMode == FRMDIR_VERT_TOP_RIGHT ) )
+        if ( ( eWritingMode == SvxFrameDirection::Horizontal_RL_TB )
+            || ( eWritingMode == SvxFrameDirection::Vertical_RL_TB ) )
         {
             mnBiDi = 1;
         }

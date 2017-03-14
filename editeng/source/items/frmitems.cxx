@@ -4072,7 +4072,6 @@ SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*
     return new SvxFrameDirectionItem( static_cast<SvxFrameDirection>(nValue), Which() );
 }
 
-
 sal_uInt16 SvxFrameDirectionItem::GetVersion( sal_uInt16 nFVer ) const
 {
     return SOFFICE_FILEFORMAT_50 > nFVer ? USHRT_MAX : 0;
@@ -4101,19 +4100,19 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
         switch( nVal )
         {
             case text::WritingMode2::LR_TB:
-                SetValue( FRMDIR_HORI_LEFT_TOP );
+                SetValue( SvxFrameDirection::Horizontal_LR_TB );
                 break;
             case text::WritingMode2::RL_TB:
-                SetValue( FRMDIR_HORI_RIGHT_TOP );
+                SetValue( SvxFrameDirection::Horizontal_RL_TB );
                 break;
             case text::WritingMode2::TB_RL:
-                SetValue( FRMDIR_VERT_TOP_RIGHT );
+                SetValue( SvxFrameDirection::Vertical_RL_TB );
                 break;
             case text::WritingMode2::TB_LR:
-                SetValue( FRMDIR_VERT_TOP_LEFT );
+                SetValue( SvxFrameDirection::Vertical_LR_TB );
                 break;
             case text::WritingMode2::PAGE:
-                SetValue( FRMDIR_ENVIRONMENT );
+                SetValue( SvxFrameDirection::Environment );
                 break;
             default:
                 bRet = false;
@@ -4133,19 +4132,19 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
     bool bRet = true;
     switch( GetValue() )
     {
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Horizontal_LR_TB:
             nVal = text::WritingMode2::LR_TB;
             break;
-        case FRMDIR_HORI_RIGHT_TOP:
+        case SvxFrameDirection::Horizontal_RL_TB:
             nVal = text::WritingMode2::RL_TB;
             break;
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_RL_TB:
             nVal = text::WritingMode2::TB_RL;
             break;
-        case FRMDIR_VERT_TOP_LEFT:
+        case SvxFrameDirection::Vertical_LR_TB:
             nVal = text::WritingMode2::TB_LR;
             break;
-        case FRMDIR_ENVIRONMENT:
+        case SvxFrameDirection::Environment:
             nVal = text::WritingMode2::PAGE;
             break;
         default:

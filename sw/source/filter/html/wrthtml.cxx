@@ -119,7 +119,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_nExportMode(0)
     , m_nCSS1OutMode(0)
     , m_nCSS1Script(CSS1_OUTMODE_WESTERN)
-    , m_nDirection(FRMDIR_HORI_LEFT_TOP)
+    , m_nDirection(SvxFrameDirection::Horizontal_LR_TB)
     , m_eDestEnc(RTL_TEXTENCODING_MS_1252)
     , m_eLang(LANGUAGE_DONTKNOW)
     , m_bCfgOutStyles( false )
@@ -577,7 +577,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sOut.append('\"');
     }
 
-    sal_uInt16 nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
+    SvxFrameDirection nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
     rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     rHTMLWrt.OutDirection( nDir );
 
@@ -1293,31 +1293,33 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     }
 }
 
-sal_uInt16 SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const
+SvxFrameDirection SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const
 {
     return GetHTMLDirection(
         static_cast < const SvxFrameDirectionItem& >( rItemSet.Get( RES_FRAMEDIR ) )
             .GetValue() );
 }
 
-sal_uInt16 SwHTMLWriter::GetHTMLDirection( sal_uInt16 nDir ) const
+SvxFrameDirection SwHTMLWriter::GetHTMLDirection( SvxFrameDirection nDir ) const
 {
     switch( nDir )
     {
-    case FRMDIR_VERT_TOP_LEFT:
-        nDir = FRMDIR_HORI_LEFT_TOP;
+    case SvxFrameDirection::Vertical_LR_TB:
+        nDir = SvxFrameDirection::Horizontal_LR_TB;
         break;
-    case FRMDIR_VERT_TOP_RIGHT:
-        nDir = FRMDIR_HORI_RIGHT_TOP;
+    case SvxFrameDirection::Vertical_RL_TB:
+        nDir = SvxFrameDirection::Horizontal_RL_TB;
         break;
-    case FRMDIR_ENVIRONMENT:
+    case SvxFrameDirection::Environment:
         nDir = m_nDirection;
+        break;
+    default: break;
     }
 
     return nDir;
 }
 
-void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
+void SwHTMLWriter::OutDirection( SvxFrameDirection nDir )
 {
     OString sConverted = convertDirection(nDir);
     if (!sConverted.isEmpty())
@@ -1329,19 +1331,20 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     }
 }
 
-OString SwHTMLWriter::convertDirection(sal_uInt16 nDir)
+OString SwHTMLWriter::convertDirection(SvxFrameDirection nDir)
 {
     OString sConverted;
     switch (nDir)
     {
-    case FRMDIR_HORI_LEFT_TOP:
-    case FRMDIR_VERT_TOP_LEFT:
+    case SvxFrameDirection::Horizontal_LR_TB:
+    case SvxFrameDirection::Vertical_LR_TB:
         sConverted = "ltr";
         break;
-    case FRMDIR_HORI_RIGHT_TOP:
-    case FRMDIR_VERT_TOP_RIGHT:
+    case SvxFrameDirection::Horizontal_RL_TB:
+    case SvxFrameDirection::Vertical_RL_TB:
         sConverted = "rtl";
         break;
+    default: break;
     }
     return sConverted;
 }

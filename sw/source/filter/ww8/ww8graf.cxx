@@ -2885,7 +2885,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         SdrTextObj *pSdrTextObj = dynamic_cast<SdrTextObj*>(rpObject);
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
-            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT, RES_FRAMEDIR));
+            rFlySet.Put(SvxFrameDirectionItem(SvxFrameDirection::Vertical_RL_TB, RES_FRAMEDIR));
 
         pRetFrameFormat = m_rDoc.MakeFlySection(eAnchor, m_pPaM->GetPoint(), &rFlySet);
         OSL_ENSURE(pRetFrameFormat->GetAnchor().GetAnchorId() == eAnchor,
