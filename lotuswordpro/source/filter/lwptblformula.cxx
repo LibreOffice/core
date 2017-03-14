@@ -297,9 +297,9 @@ void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
                 break;
         }
 
-        if (bArgument)
+        if (bArgument && !m_aStack.empty())
         {
-            aFunc.AddArg( m_aStack.back() );
+            aFunc.AddArg(m_aStack.back());
             m_aStack.pop_back();
         }
     }
