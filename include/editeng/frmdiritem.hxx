@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EDITENG_FRMDIRITEM_HXX
 #define INCLUDED_EDITENG_FRMDIRITEM_HXX
 
-#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <editeng/frmdir.hxx>
 #include <editeng/editengdllapi.h>
 
@@ -32,7 +32,7 @@
     layout text for Western, CJK and CTL languages.
 */
 
-class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxEnumItem<SvxFrameDirection>
 {
 public:
     SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
@@ -41,7 +41,6 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
@@ -54,6 +53,10 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
+    virtual sal_uInt16      GetValueCount() const override
+    {
+        return FRMDIR_ENVIRONMENT + 1;
+    }
     SvxFrameDirectionItem& operator=( const SvxFrameDirectionItem& rItem )
     {
         SetValue( rItem.GetValue() );

@@ -4041,7 +4041,7 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )
-    : SfxUInt16Item( _nWhich, (sal_uInt16)nValue )
+    : SfxEnumItem<SvxFrameDirection>( _nWhich, nValue )
 {
 }
 
@@ -4069,15 +4069,7 @@ SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*
 {
     sal_uInt16 nValue;
     rStrm.ReadUInt16( nValue );
-    return new SvxFrameDirectionItem( (SvxFrameDirection)nValue, Which() );
-}
-
-
-SvStream& SvxFrameDirectionItem::Store( SvStream & rStrm, sal_uInt16 /*nIVer*/ ) const
-{
-    sal_uInt16 nValue = GetValue();
-    rStrm.WriteUInt16( nValue );
-    return rStrm;
+    return new SvxFrameDirectionItem( static_cast<SvxFrameDirection>(nValue), Which() );
 }
 
 
@@ -4093,7 +4085,7 @@ bool SvxFrameDirectionItem::GetPresentation(
     MapUnit             /*ePresUnit*/,
     OUString&           rText, const IntlWrapper *) const
 {
-    rText = EE_RESSTR( RID_SVXITEMS_FRMDIR_BEGIN + GetValue() );
+    rText = EE_RESSTR( RID_SVXITEMS_FRMDIR_BEGIN + GetEnumValue() );
     return true;
 }
 

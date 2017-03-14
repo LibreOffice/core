@@ -833,6 +833,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                                 rSet.Put( SfxBoolItem( nWhich, bFlag ));
                                 break;
                             }
+                            default:
+                                break;
                         }
                     }
                 }

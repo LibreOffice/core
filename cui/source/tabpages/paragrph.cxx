@@ -1259,7 +1259,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
     {
         const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
-        m_pTextDirectionLB->SelectEntryValue( (SvxFrameDirection)rFrameDirItem.GetValue() );
+        m_pTextDirectionLB->SelectEntryValue( rFrameDirItem.GetValue() );
         m_pTextDirectionLB->SaveValue();
     }
 
