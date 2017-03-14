@@ -43,6 +43,7 @@ $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/export/w
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/export/wordml/ooo2wordml_text.xsl,export/wordml/ooo2wordml_text.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/common/ms2ooo_docpr.xsl,import/common/ms2ooo_docpr.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl,import/spreadsheetml/spreadsheetml2ooo.xsl))
+$(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/spreadsheetml/adorowset2ods.xsl,import/spreadsheetml/adorowset2ods.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/uof/uof2odf_presentation.xsl,import/uof/uof2odf_presentation.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/uof/uof2odf_spreadsheet.xsl,import/uof/uof2odf_spreadsheet.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/import/uof/uof2odf_text.xsl,import/uof/uof2odf_text.xsl))
