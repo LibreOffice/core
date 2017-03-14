@@ -643,12 +643,12 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     aRange.aEnd.Col() != aRange.aStart.Col())
                                 || (nRow > static_cast<sal_uLong>(aRange.aEnd.Row()) &&
                                     aRange.aEnd.Row() != aRange.aStart.Row()))
-                          {
+                        {
                             fVal = CreateDoubleError( FormulaError::NotAvailable );
                             pJumpMatrix->PutResultDouble( fVal, nC, nR );
-                          }
-                          else
-                          {
+                        }
+                        else
+                        {
                             // Replicate column and/or row of a vector if it is
                             // one. Note that this could be a range reference
                             // that in fact consists of only one cell, e.g. A1:A1
@@ -662,7 +662,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                             if (aCell.hasEmptyValue())
                                 pJumpMatrix->PutResultEmpty( nC, nR );
                             else if (aCell.hasNumeric())
-                              {
+                            {
                                 double fCellVal = GetCellValue(aAdr, aCell);
                                 if ( nGlobalError != FormulaError::NONE )
                                 {
@@ -671,9 +671,9 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     nGlobalError = FormulaError::NONE;
                                 }
                                 pJumpMatrix->PutResultDouble( fCellVal, nC, nR );
-                              }
-                              else
-                              {
+                            }
+                            else
+                            {
                                 svl::SharedString aStr;
                                 GetCellString(aStr, aCell);
                                 if ( nGlobalError != FormulaError::NONE )
@@ -685,7 +685,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 else
                                     pJumpMatrix->PutResultString(aStr, nC, nR);
                             }
-                          }
+                        }
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                         SCSIZE nParmRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                         lcl_AdjustJumpMatrix( pJumpMatrix, nParmCols, nParmRows );
