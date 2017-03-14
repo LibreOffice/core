@@ -22,6 +22,30 @@
       "revId": "c50d3c96866b371cc6b89cf2878921a28adce161",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_91b098f6",
+        "filename": "include/editeng/frmdiritem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-14T12:01:31Z",
+      "side": 1,
+      "message": "nah, the new value doesn\u0027t count for purposes of this method, which is mostly used for populating comboboxes.",
+      "parentUuid": "9a57fde8_11c66867",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 5
+      },
+      "revId": "c50d3c96866b371cc6b89cf2878921a28adce161",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
