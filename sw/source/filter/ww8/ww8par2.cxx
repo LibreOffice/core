@@ -2479,7 +2479,7 @@ void WW8TabDesc::CreateSwTable()
     }
 
     SvxFrameDirectionItem aDirection(
-        m_bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
+        m_bIsBiDi ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR );
     m_pTable->GetFrameFormat()->SetFormatAttr(aDirection);
 
     if (text::HoriOrientation::LEFT_AND_WIDTH == m_eOri)
@@ -3108,7 +3108,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
 
 SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
 {
-    SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+    SvxFrameDirection eDir = SvxFrameDirection::Environment;
     // 1: Asian layout with rotated CJK characters
     // 5: Asian layout
     // 3: Western layout rotated by 90 degrees
@@ -3116,19 +3116,19 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
     switch (nCode)
     {
         default:
-            OSL_ENSURE(eDir == 4, "unknown direction code, maybe it's a bitfield");
+            OSL_ENSURE(eDir == SvxFrameDirection::Environment, "unknown direction code, maybe it's a bitfield");
             SAL_FALLTHROUGH;
         case 3:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
+            eDir = bIsBiDi ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB; // #i38158# - Consider RTL tables
             break;
         case 5:
-            eDir = FRMDIR_VERT_TOP_RIGHT;
+            eDir = SvxFrameDirection::Vertical_RL_TB;
             break;
         case 1:
-            eDir = FRMDIR_VERT_TOP_RIGHT;
+            eDir = SvxFrameDirection::Vertical_RL_TB;
             break;
         case 4:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
+            eDir = bIsBiDi ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB; // #i38158# - Consider RTL tables
             break;
     }
     return eDir;
@@ -4576,7 +4576,7 @@ void WW8RStyle::Import()
             false))
         {
            pIo->m_pStandardFormatColl->SetFormatAttr(
-                SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+                SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
         }
     }
 
@@ -4586,14 +4586,14 @@ void WW8RStyle::Import()
 
 rtl_TextEncoding SwWW8StyInf::GetCharSet() const
 {
-    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB))
         return m_eRTLFontSrcCharSet;
     return m_eLTRFontSrcCharSet;
 }
 
 rtl_TextEncoding SwWW8StyInf::GetCJKCharSet() const
 {
-    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+    if ((m_pFormat) && (m_pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB))
         return m_eRTLFontSrcCharSet;
     return m_eCJKFontSrcCharSet;
 }

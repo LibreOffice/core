@@ -117,9 +117,9 @@ static CSS1PropertyEnum const aTextTransformTable[] =
 
 static CSS1PropertyEnum const aDirectionTable[] =
 {
-    { "ltr",         FRMDIR_HORI_LEFT_TOP        },
-    { "rtl",         FRMDIR_HORI_RIGHT_TOP       },
-    { "inherit",     FRMDIR_ENVIRONMENT          },
+    { "ltr",         (sal_uInt16)SvxFrameDirection::Horizontal_LR_TB  },
+    { "rtl",         (sal_uInt16)SvxFrameDirection::Horizontal_RL_TB  },
+    { "inherit",     (sal_uInt16)SvxFrameDirection::Environment       },
     { nullptr,                    0                   }
 };
 

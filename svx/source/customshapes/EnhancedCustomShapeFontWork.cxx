@@ -60,15 +60,15 @@ using namespace com::sun::star::uno;
 
 struct FWCharacterData                  // representing a single character
 {
-    std::vector< tools::PolyPolygon >          vOutlines;
+    std::vector< tools::PolyPolygon >   vOutlines;
     Rectangle                           aBoundRect;
 };
 struct FWParagraphData                  // representing a single paragraph
 {
-    OUString                       aString;
+    OUString                            aString;
     std::vector< FWCharacterData >      vCharacters;
     Rectangle                           aBoundRect;
-    sal_Int16                           nFrameDirection;
+    SvxFrameDirection                   nFrameDirection;
 };
 struct FWTextArea                       // representing multiple concluding paragraphs
 {
@@ -81,7 +81,7 @@ struct FWData                           // representing the whole text
     double                              fHorizontalTextScaling;
     sal_uInt32                          nMaxParagraphsPerTextArea;
     sal_Int32                           nSingleLineHeight;
-    bool                            bSingleLineMode;
+    bool                                bSingleLineMode;
 };
 
 
@@ -264,7 +264,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             pVirDev->SetMapMode( MapUnit::Map100thMM );
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL();
-            if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
+            if ( aParagraphIter->nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )
                 pVirDev->SetLayoutMode( ComplexTextLayoutFlags::BiDiRtl );
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));

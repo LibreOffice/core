@@ -1138,7 +1138,7 @@ static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
     rSet.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
 
     // always using rtl writing direction would break formulas
-    //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+    //rSet.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
 
     // PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
     // sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be

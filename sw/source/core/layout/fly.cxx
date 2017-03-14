@@ -86,9 +86,9 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
 
     // Size setting: Fixed size is always the width
     const SwFormatFrameSize &rFrameSize = pFormat->GetFrameSize();
-    const sal_uInt16 nDir =
+    const SvxFrameDirection nDir =
         static_cast<const SvxFrameDirectionItem&>(pFormat->GetFormatAttr( RES_FRAMEDIR )).GetValue();
-    if( FRMDIR_ENVIRONMENT == nDir )
+    if( SvxFrameDirection::Environment == nDir )
     {
         mbDerivedVert = true;
         mbDerivedR2L = true;
@@ -98,7 +98,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
         mbInvalidVert = false;
         mbDerivedVert = false;
         mbDerivedR2L = false;
-        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+        if( SvxFrameDirection::Horizontal_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir )
         {
             mbVertLR = false;
             mbVertical = false;
@@ -115,7 +115,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
             {
                 mbVertical = true;
 
-                if ( FRMDIR_VERT_TOP_LEFT == nDir )
+                if ( SvxFrameDirection::Vertical_LR_TB == nDir )
                     mbVertLR = true;
                 else
                     mbVertLR = false;
@@ -123,7 +123,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
         }
 
         mbInvalidR2L = false;
-        if( FRMDIR_HORI_RIGHT_TOP == nDir )
+        if( SvxFrameDirection::Horizontal_RL_TB == nDir )
             mbRightToLeft = true;
         else
             mbRightToLeft = false;

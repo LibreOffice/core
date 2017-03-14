@@ -201,11 +201,11 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
 
                         //  Writing direction: not as pool default because the default for cells
-                        //  must remain FRMDIR_ENVIRONMENT, and each page style's setting is
+                        //  must remain SvxFrameDirection::Environment, and each page style's setting is
                         //  supposed to be saved in the file format.
                         //  The page default depends on the system language.
                         SvxFrameDirection eDirection = ScGlobal::IsSystemRTL() ?
-                                        FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+                                        SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
                         pSet->Put( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
 
                         rItemPool.SetPoolDefaultItem( aPageItem );

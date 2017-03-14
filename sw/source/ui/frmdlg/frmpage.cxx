@@ -3079,13 +3079,13 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         //vertical text flow is not possible in HTML
         if(m_bHtmlMode)
         {
-            sal_uLong nData = FRMDIR_VERT_TOP_RIGHT;
+            SvxFrameDirection nData = SvxFrameDirection::Vertical_RL_TB;
             m_pTextFlowLB->RemoveEntry(m_pTextFlowLB->GetEntryPos(reinterpret_cast<void*>(nData)));
         }
-        sal_uInt16 nVal = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR)).GetValue();
+        SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR)).GetValue();
         sal_Int32 nPos;
         for( nPos = m_pTextFlowLB->GetEntryCount(); nPos; )
-            if( (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos )) == nVal )
+            if( (SvxFrameDirection)reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos )) == nVal )
                 break;
         m_pTextFlowLB->SelectEntryPos( nPos );
         m_pTextFlowLB->SaveValue();

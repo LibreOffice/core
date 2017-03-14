@@ -187,7 +187,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
 {
 
     SwPosition aPos(rTextNd);
-    if (FRMDIR_HORI_RIGHT_TOP == rWr.m_pDoc->GetTextDirection(aPos))
+    if (SvxFrameDirection::Horizontal_RL_TB == rWr.m_pDoc->GetTextDirection(aPos))
         mbParaIsRTL = true;
     else
         mbParaIsRTL = false;
@@ -1488,7 +1488,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     return nullptr;
 }
 
-short MSWordExportBase::GetCurrentPageDirection() const
+SvxFrameDirection MSWordExportBase::GetCurrentPageDirection() const
 {
     const SwFrameFormat &rFormat = m_pAktPageDesc
                     ? m_pAktPageDesc->GetMaster()
@@ -1496,9 +1496,9 @@ short MSWordExportBase::GetCurrentPageDirection() const
     return rFormat.GetFrameDir().GetValue();
 }
 
-short MSWordExportBase::GetDefaultFrameDirection( ) const
+SvxFrameDirection MSWordExportBase::GetDefaultFrameDirection( ) const
 {
-    short nDir = FRMDIR_ENVIRONMENT;
+    SvxFrameDirection nDir = SvxFrameDirection::Environment;
 
     if ( m_bOutPageDescs )
         nDir = GetCurrentPageDirection(  );
@@ -1517,32 +1517,32 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         else if ( dynamic_cast< const SwTextFormatColl *>( m_pOutFormatNode ) !=  nullptr )
         {
             if ( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
-                nDir = FRMDIR_HORI_RIGHT_TOP;
+                nDir = SvxFrameDirection::Horizontal_RL_TB;
             else
-                nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
+                nDir = SvxFrameDirection::Horizontal_LR_TB;    //what else can we do :-(
         }
     }
 
-    if ( nDir == FRMDIR_ENVIRONMENT )
+    if ( nDir == SvxFrameDirection::Environment )
     {
         // fdo#44029 put direction right when the locale are RTL.
         if( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
-            nDir = FRMDIR_HORI_RIGHT_TOP;
+            nDir = SvxFrameDirection::Horizontal_RL_TB;
         else
-            nDir = FRMDIR_HORI_LEFT_TOP;        //Set something
+            nDir = SvxFrameDirection::Horizontal_LR_TB;        //Set something
     }
 
     return nDir;
 }
 
-short MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFlyFormat ) const
+SvxFrameDirection MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFlyFormat ) const
 {
     const SwFrameFormat *pFlyFormat = &rFlyFormat;
     const SvxFrameDirectionItem* pItem = nullptr;
     while ( pFlyFormat )
     {
         pItem = &pFlyFormat->GetFrameDir();
-        if ( FRMDIR_ENVIRONMENT == pItem->GetValue() )
+        if ( SvxFrameDirection::Environment == pItem->GetValue() )
         {
             pItem = nullptr;
             const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
@@ -1558,13 +1558,13 @@ short MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFlyFormat ) co
             pFlyFormat = nullptr;
     }
 
-    short nRet;
+    SvxFrameDirection nRet;
     if ( pItem )
         nRet = pItem->GetValue();
     else
         nRet = GetCurrentPageDirection();
 
-    OSL_ENSURE( nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction" );
+    OSL_ENSURE( nRet != SvxFrameDirection::Environment, "leaving with environment direction" );
     return nRet;
 }
 
@@ -2601,21 +2601,21 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
         }
 
         /*
-        If a given para is using the FRMDIR_ENVIRONMENT direction we
+        If a given para is using the SvxFrameDirection::Environment direction we
         cannot export that, its its ltr then that's ok as thats word's
         default. Otherwise we must add a RTL attribute to our export list
         */
         const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(
             rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR));
         if (
-            (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
+            (!pItem || pItem->GetValue() == SvxFrameDirection::Environment) &&
             aAttrIter.IsParaRTL()
            )
         {
             if ( !pTmpSet )
                 pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
 
-            pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP, RES_FRAMEDIR));
+            pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
         }
         // move code for handling of numbered,
         // but not counted paragraphs to this place. Otherwise, the paragraph

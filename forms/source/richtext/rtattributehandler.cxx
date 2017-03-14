@@ -375,14 +375,14 @@ namespace frm
 
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
         :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
-        ,m_eParagraphDirection( FRMDIR_HORI_LEFT_TOP )
+        ,m_eParagraphDirection( SvxFrameDirection::Horizontal_LR_TB )
         ,m_eDefaultAdjustment( SvxAdjust::Right )
         ,m_eOppositeDefaultAdjustment( SvxAdjust::Left )
     {
         switch ( getAttributeId() )
         {
-            case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = FRMDIR_HORI_LEFT_TOP; m_eDefaultAdjustment = SvxAdjust::Left; break;
-            case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = FRMDIR_HORI_RIGHT_TOP; m_eDefaultAdjustment = SvxAdjust::Right; break;
+            case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = SvxFrameDirection::Horizontal_LR_TB; m_eDefaultAdjustment = SvxAdjust::Left; break;
+            case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = SvxFrameDirection::Horizontal_RL_TB; m_eDefaultAdjustment = SvxAdjust::Right; break;
             default:
                 OSL_FAIL( "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
         }
@@ -397,7 +397,7 @@ namespace frm
     AttributeCheckState ParagraphDirectionHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( dynamic_cast<const SvxFrameDirectionItem*>( &_rItem) !=  nullptr, "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
-        SvxFrameDirection eDirection = static_cast< SvxFrameDirection >( static_cast< const SvxFrameDirectionItem& >( _rItem ).GetValue() );
+        SvxFrameDirection eDirection = static_cast< const SvxFrameDirectionItem& >( _rItem ).GetValue();
         return ( eDirection == m_eParagraphDirection ) ? eChecked : eUnchecked;
     }
 
