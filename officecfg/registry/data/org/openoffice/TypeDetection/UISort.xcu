@@ -21,7 +21,7 @@
   <node oor:name="ModuleDependendFilterOrder">
     <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
       <prop oor:name="SortedFilterList">
-        <value oor:separator=";">calc8;calc8_template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;OpenDocument Spreadsheet Flat XML;UOF spreadsheet;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;Calc MS Excel 2007 Binary;MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 95 Vorlage/Template;MS Excel 5.0/95;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0;MS Excel 4.0 Vorlage/Template;;DIF;dBase;HTML (StarCalc);Lotus;Pocket Excel;Quattro Pro 6.0;Rich Text Format (StarCalc);SYLK;Text - txt - csv (StarCalc);calc_HTML_WebQuery;Calc Office Open XML;Calc Office Open XML Template</value>
+        <value oor:separator=";">calc8;calc8_template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;OpenDocument Spreadsheet Flat XML;UOF spreadsheet;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;Calc MS Excel 2007 Binary;MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 95 Vorlage/Template;MS Excel 5.0/95;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0;MS Excel 4.0 Vorlage/Template;;DIF;dBase;HTML (StarCalc);Lotus;Pocket Excel;Quattro Pro 6.0;Rich Text Format (StarCalc);SYLK;Text - txt - csv (StarCalc);calc_HTML_WebQuery;Calc Office Open XML;Calc Office Open XML Template;ADO Rowset XML</value>
       </prop>
     </node>
     <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw">
