@@ -1984,11 +1984,6 @@ AC_ARG_WITH(system-liblangtag,
         [Use liblangtag library already on system.]),,
     [with_system_liblangtag="$with_system_libs"])
 
-AC_ARG_WITH(jpeg-turbo,
-    AS_HELP_STRING([--with-jpeg-turbo],
-        [Use internal libjpeg-turbo library.]),,
-    [with_jpeg_turbo=auto])
-
 AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
@@ -7506,18 +7501,6 @@ dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
 AC_MSG_CHECKING([which libjpeg to use])
-if test "$with_jpeg_turbo" = "auto"; then
-    # TODO use jpeg-turbo on Darwin too
-    case "$_os" in
-    WINNT)
-        with_jpeg_turbo=yes
-        ;;
-    *)
-        with_jpeg_turbo=no
-        ;;
-    esac
-fi
-
 if test "$with_system_jpeg" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_JPEG=TRUE
@@ -7527,11 +7510,12 @@ if test "$with_system_jpeg" = "yes"; then
         [AC_MSG_ERROR(jpeg library not found or fuctional)], [])
 else
     SYSTEM_JPEG=
-    if test "$with_jpeg_turbo" = "yes"; then
-        AC_MSG_RESULT([internal, jpeg-turbo])
-        BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
-        AC_CHECK_PROGS(NASM, [nasm nasmw yasm])
+    AC_MSG_RESULT([internal, jpeg-turbo])
+    BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
 
+    case "$host_cpu" in
+    x86_64 | amd64 | i*86 | x86 | ia32)
+        AC_CHECK_PROGS(NASM, [nasm nasmw yasm])
         if test -z "$NASM" -a "$build_os" = "cygwin"; then
             if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/nasm"; then
                 NASM="$LODE_HOME/opt/bin/nasm"
@@ -7542,25 +7526,18 @@ else
         if test -z "$NASM"; then
 cat << _EOS
 ****************************************************************************
-You need nasm (Netwide Assembler) to build internal jpeg library.
-To get one please do:
+You need yasm or nasm (Netwide Assembler) to build the internal jpeg library optimally.
+To get one please:
 
 _EOS
-        if test "$build_os" = "cygwin"; then
+            if test "$build_os" = "cygwin"; then
 cat << _EOS
 install a pre-compiled binary for Win32
 
- mkdir -p /opt/lo/bin
- cd /opt/lo/bin
- wget http://dev-www.libreoffice.org/bin/cygwin/nasm.exe
- chmod +x nasm
-_EOS
-            else
-cat << _EOS
-consult http://svn.code.sf.net/p/libjpeg-turbo/code/trunk/BUILDING.txt
-_EOS
-            fi
-cat << _EOS
+mkdir -p /opt/lo/bin
+cd /opt/lo/bin
+wget http://dev-www.libreoffice.org/bin/cygwin/nasm.exe
+chmod +x nasm
 
 or get and install one from http://www.nasm.us/
 
@@ -7570,7 +7547,13 @@ Note: autogen.sh will try to use /opt/lo/bin/nasm if the environment variable NA
 Alternatively, you can install the 'new' nasm where ever you want and make sure that \`which nasm\` finds it.
 
 _EOS
-        AC_MSG_ERROR([no nasm (Netwide Assembler) found])
+            else
+cat << _EOS
+consult http://svn.code.sf.net/p/libjpeg-turbo/code/trunk/BUILDING.txt
+
+_EOS
+            fi
+            AC_MSG_WARN([no nasm (Netwide Assembler) found])
         fi
         LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
         if test "$COM" = "MSC"; then
@@ -7578,17 +7561,10 @@ _EOS
         else
             LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs -ljpeg"
         fi
-    else
-        AC_MSG_RESULT([internal, jpeg])
-        BUILD_TYPE="$BUILD_TYPE JPEG"
-        LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg"
-        if test "$COM" = "MSC"; then
-            LIBJPEG_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/libjpeg.lib"
-        else
-            LIBJPEG_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -ljpeg"
-        fi
-    fi
+      ;;
+    esac
 fi
+
 AC_SUBST(NASM)
 AC_SUBST(LIBJPEG_CFLAGS)
 AC_SUBST(LIBJPEG_LIBS)
