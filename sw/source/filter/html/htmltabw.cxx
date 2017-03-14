@@ -608,7 +608,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
-    const sal_uInt16 nOldDirection = rWrt.m_nDirection;
+    const SvxFrameDirection nOldDirection = rWrt.m_nDirection;
     if( pFrameFormat )
         rWrt.m_nDirection = rWrt.GetHTMLDirection( pFrameFormat->GetAttrSet() );
     if( rWrt.m_bOutFlyFrame || nOldDirection != rWrt.m_nDirection )

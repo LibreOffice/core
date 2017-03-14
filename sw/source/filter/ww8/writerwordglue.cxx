@@ -523,7 +523,7 @@ namespace sw
             OSL_ENSURE(rTextNd.GetDoc(), "No document for node?, suspicious");
             if (rTextNd.GetDoc())
             {
-                if (FRMDIR_HORI_RIGHT_TOP ==
+                if (SvxFrameDirection::Horizontal_RL_TB ==
                     rTextNd.GetDoc()->GetTextDirection(SwPosition(rTextNd)))
                 {
                     bParaIsRTL = true;

@@ -3704,7 +3704,7 @@ void DocxAttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTabl
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat * pFrameFormat = pTable->GetFrameFormat();
 
-    if ( m_rExport.TrueFrameDirection( *pFrameFormat ) == FRMDIR_HORI_RIGHT_TOP )
+    if ( m_rExport.TrueFrameDirection( *pFrameFormat ) == SvxFrameDirection::Horizontal_RL_TB )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bidiVisual,
                 FSNS( XML_w, XML_val ), "true",
@@ -3717,11 +3717,11 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat *pFrameFormat = pTabBox->GetFrameFormat( );
 
-    if ( FRMDIR_VERT_TOP_RIGHT == m_rExport.TrueFrameDirection( *pFrameFormat ) )
+    if ( SvxFrameDirection::Vertical_RL_TB == m_rExport.TrueFrameDirection( *pFrameFormat ) )
         m_pSerializer->singleElementNS( XML_w, XML_textDirection,
                FSNS( XML_w, XML_val ), "tbRl",
                FSEND );
-    else if ( FRMDIR_HORI_LEFT_TOP == m_rExport.TrueFrameDirection( *pFrameFormat ) )
+    else if ( SvxFrameDirection::Horizontal_LR_TB == m_rExport.TrueFrameDirection( *pFrameFormat ) )
     {
         // Undo the text direction mangling done by the btLr handler in writerfilter::dmapper::DomainMapperTableManager::sprm()
         const SwStartNode* pSttNd = pTabBox->GetSttNd();
@@ -7076,12 +7076,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     const SvxFrameDirectionItem* rFrameDir = pItems?
         static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) ): nullptr;
 
-    short nDir = FRMDIR_ENVIRONMENT;
+    SvxFrameDirection nDir = SvxFrameDirection::Environment;
     if( rFrameDir != nullptr )
         nDir = rFrameDir->GetValue();
-    if ( nDir == FRMDIR_ENVIRONMENT )
+    if ( nDir == SvxFrameDirection::Environment )
         nDir = GetExport( ).GetDefaultFrameDirection( );
-    bool bRtl = ( nDir == FRMDIR_HORI_RIGHT_TOP );
+    bool bRtl = ( nDir == SvxFrameDirection::Horizontal_RL_TB );
 
     switch ( rAdjust.GetAdjust() )
     {
@@ -8082,23 +8082,23 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
 {
     OString sTextFlow;
     bool bBiDi = false;
-    short nDir = rDirection.GetValue();
+    SvxFrameDirection nDir = rDirection.GetValue();
 
-    if ( nDir == FRMDIR_ENVIRONMENT )
+    if ( nDir == SvxFrameDirection::Environment )
         nDir = GetExport( ).GetDefaultFrameDirection( );
 
     switch ( nDir )
     {
         default:
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Horizontal_LR_TB:
             sTextFlow = OString( "lrTb" );
             break;
-        case FRMDIR_HORI_RIGHT_TOP:
+        case SvxFrameDirection::Horizontal_RL_TB:
             sTextFlow = OString( "lrTb" );
             bBiDi = true;
             break;
-        case FRMDIR_VERT_TOP_LEFT: // many things but not this one
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_LR_TB: // many things but not this one
+        case SvxFrameDirection::Vertical_RL_TB:
             sTextFlow = OString( "tbRl" );
             break;
     }

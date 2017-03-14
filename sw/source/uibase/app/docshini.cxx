@@ -309,7 +309,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     /* #106748# If the default frame direction of a document is RTL
         the default adjustment is to the right. */
     if( !bHTMLTemplSet &&
-        FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
+        SvxFrameDirection::Horizontal_RL_TB == GetDefaultFrameDirection(GetAppLanguage()) )
     {
         m_pDoc->SetDefault( SvxAdjustItem(SvxAdjust::Right, RES_PARATR_ADJUST ) );
     }

@@ -57,6 +57,7 @@ class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
+enum class SvxFrameDirection;
 
 // Each FrameType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of
@@ -295,7 +296,7 @@ protected:
 
     SwFrame( SwModify*, SwFrame* );
 
-    void CheckDir( sal_uInt16 nDir, bool bVert, bool bOnlyBiDi, bool bBrowse );
+    void CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool bBrowse );
 
     /** enumeration for the different invalidations
         #i28701#

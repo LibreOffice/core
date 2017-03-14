@@ -1252,9 +1252,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     {
                         SfxItemSet aAttribs = pEditView->GetAttribs();
                         const SvxFrameDirectionItem& rCurrentWritingMode = (const SvxFrameDirectionItem&)aAttribs.Get( EE_PARA_WRITINGDIR );
-                        SvxFrameDirectionItem aNewItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
-                        if ( rCurrentWritingMode.GetValue() != FRMDIR_HORI_RIGHT_TOP )
-                            aNewItem.SetValue( FRMDIR_HORI_RIGHT_TOP );
+                        SvxFrameDirectionItem aNewItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
+                        if ( rCurrentWritingMode.GetValue() != SvxFrameDirection::Horizontal_RL_TB )
+                            aNewItem.SetValue( SvxFrameDirection::Horizontal_RL_TB );
                         aAttribs.Put( aNewItem );
                         pEditView->SetAttribs( aAttribs );
                     }

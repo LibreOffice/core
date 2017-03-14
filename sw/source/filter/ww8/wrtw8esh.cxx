@@ -662,7 +662,7 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     const ww8::Frame &rFrameFormat)
 {
     //Require nasty bidi swap
-    if (FRMDIR_HORI_RIGHT_TOP != m_pDoc->GetTextDirection(rFrameFormat.GetPosition()))
+    if (SvxFrameDirection::Horizontal_RL_TB != m_pDoc->GetTextDirection(rFrameFormat.GetPosition()))
         return;
 
     SwTwips nWidth = rRight - rLeft;
@@ -2954,7 +2954,7 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
     sal_uInt32 nTextBox, DrawObjPointerVector &rPVec)
 {
     const SwFrameFormat &rFormat = rObj.maContent.GetFrameFormat();
-    short nDirection = rObj.mnDirection;
+    SvxFrameDirection nDirection = rObj.mnDirection;
 
     sal_Int32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
@@ -2977,14 +2977,14 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
         default:
             OSL_ENSURE(false, "unknown direction type");
             SAL_FALLTHROUGH;
-        case FRMDIR_HORI_LEFT_TOP:
+        case SvxFrameDirection::Horizontal_LR_TB:
             nFlow=mso_txflHorzN;
         break;
-        case FRMDIR_HORI_RIGHT_TOP:
+        case SvxFrameDirection::Horizontal_RL_TB:
             nFlow=mso_txflHorzN;
         break;
-        case FRMDIR_VERT_TOP_LEFT: //not really possible in word
-        case FRMDIR_VERT_TOP_RIGHT:
+        case SvxFrameDirection::Vertical_LR_TB: //not really possible in word
+        case SvxFrameDirection::Vertical_RL_TB:
             nFlow=mso_txflTtoBA;
         break;
     }

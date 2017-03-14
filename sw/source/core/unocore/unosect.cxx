@@ -876,7 +876,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                         {
                             m_pProps->m_pFrameDirItem.reset(
                                 new SvxFrameDirectionItem(
-                                FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+                                SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
                         }
                         pPutItem = m_pProps->m_pFrameDirItem.get();
                     }
@@ -1216,7 +1216,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                         {
                             m_pProps->m_pFrameDirItem.reset(
                                 new SvxFrameDirectionItem(
-                                    FRMDIR_ENVIRONMENT, RES_FRAMEDIR));
+                                    SvxFrameDirection::Environment, RES_FRAMEDIR));
                         }
                         pQueryItem = m_pProps->m_pFrameDirItem.get();
                     }

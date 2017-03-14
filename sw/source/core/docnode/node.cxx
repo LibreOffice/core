@@ -1935,10 +1935,10 @@ void SwContentNode::ChkCondColl()
 }
 
 // #i42921#
-short SwContentNode::GetTextDirection( const SwPosition& rPos,
+SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
                                      const Point* pPt ) const
 {
-    short nRet = -1;
+    SvxFrameDirection nRet = SvxFrameDirection::Unknown;
 
     Point aPt;
     if( pPt )
@@ -1952,16 +1952,16 @@ short SwContentNode::GetTextDirection( const SwPosition& rPos,
         if ( pFrame->IsVertical() )
         {
             if ( pFrame->IsRightToLeft() )
-                nRet = FRMDIR_VERT_TOP_LEFT;
+                nRet = SvxFrameDirection::Vertical_LR_TB;
             else
-                nRet = FRMDIR_VERT_TOP_RIGHT;
+                nRet = SvxFrameDirection::Vertical_RL_TB;
         }
         else
         {
             if ( pFrame->IsRightToLeft() )
-                nRet = FRMDIR_HORI_RIGHT_TOP;
+                nRet = SvxFrameDirection::Horizontal_RL_TB;
             else
-                nRet = FRMDIR_HORI_LEFT_TOP;
+                nRet = SvxFrameDirection::Horizontal_LR_TB;
         }
     }
 

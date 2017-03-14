@@ -96,19 +96,19 @@ void SwFrame::RegisterToFormat( SwFormat& rFormat )
     rFormat.Add( this );
 }
 
-void SwFrame::CheckDir( sal_uInt16 nDir, bool bVert, bool bOnlyBiDi, bool bBrowse )
+void SwFrame::CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool bBrowse )
 {
-    if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
+    if( SvxFrameDirection::Environment == nDir || ( bVert && bOnlyBiDi ) )
     {
         mbDerivedVert = true;
-        if( FRMDIR_ENVIRONMENT == nDir )
+        if( SvxFrameDirection::Environment == nDir )
             mbDerivedR2L = true;
         SetDirFlags( bVert );
     }
     else if( bVert )
     {
         mbInvalidVert = false;
-        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
+        if( SvxFrameDirection::Horizontal_LR_TB == nDir || SvxFrameDirection::Horizontal_RL_TB == nDir
             || bBrowse )
         {
             mbVertical = false;
@@ -117,16 +117,16 @@ void SwFrame::CheckDir( sal_uInt16 nDir, bool bVert, bool bOnlyBiDi, bool bBrows
         else
            {
             mbVertical = true;
-            if(FRMDIR_VERT_TOP_RIGHT == nDir)
+            if(SvxFrameDirection::Vertical_RL_TB == nDir)
                 mbVertLR = false;
-               else if(FRMDIR_VERT_TOP_LEFT==nDir)
+               else if(SvxFrameDirection::Vertical_LR_TB==nDir)
                        mbVertLR = true;
         }
     }
     else
     {
         mbInvalidR2L = false;
-        if( FRMDIR_HORI_RIGHT_TOP == nDir )
+        if( SvxFrameDirection::Horizontal_RL_TB == nDir )
             mbRightToLeft = true;
         else
             mbRightToLeft = false;

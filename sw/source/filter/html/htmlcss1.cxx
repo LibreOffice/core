@@ -385,7 +385,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
 {
     SvxBrushItem aBrushItem( RES_BACKGROUND );
     SvxBoxItem aBoxItem( RES_BOX );
-    SvxFrameDirectionItem aFrameDirItem(FRMDIR_ENVIRONMENT, RES_FRAMEDIR);
+    SvxFrameDirectionItem aFrameDirItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
     bool bSetBrush = pBrush!=nullptr, bSetBox = false, bSetFrameDir = false;
     if( pBrush )
         aBrushItem = *pBrush;
@@ -1918,13 +1918,13 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
     if( pDir && !pDir->isEmpty() )
     {
         OUString aValue( *pDir );
-        SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+        SvxFrameDirection eDir = SvxFrameDirection::Environment;
         if (aValue.equalsIgnoreAsciiCase("LTR"))
-            eDir = FRMDIR_HORI_LEFT_TOP;
+            eDir = SvxFrameDirection::Horizontal_LR_TB;
         else if (aValue.equalsIgnoreAsciiCase("RTL"))
-            eDir = FRMDIR_HORI_RIGHT_TOP;
+            eDir = SvxFrameDirection::Horizontal_RL_TB;
 
-        if( FRMDIR_ENVIRONMENT != eDir )
+        if( SvxFrameDirection::Environment != eDir )
         {
             SvxFrameDirectionItem aDir( eDir, RES_FRAMEDIR );
             rItemSet.Put( aDir );

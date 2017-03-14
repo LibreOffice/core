@@ -337,14 +337,14 @@ class DrawObj
 public:
     WW8_CP mnCp;                // CP-Pos of references
     sal_uInt32 mnShapeId;       // ShapeId for the SwFrameFormats
-    ww8::Frame maContent;          // the frame itself
+    ww8::Frame maContent;       // the frame itself
     Point maParentPos;          // Points
     sal_Int32 mnThick;          // Border Thicknesses
-    short mnDirection;          // If BiDi or not
+    SvxFrameDirection mnDirection; // If BiDi or not
     unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
                                 // msword hd/ft
 
-    DrawObj(const ww8::Frame &rContent, WW8_CP nCp, Point aParentPos, short nDir,
+    DrawObj(const ww8::Frame &rContent, WW8_CP nCp, Point aParentPos, SvxFrameDirection nDir,
             unsigned int nHdFtIndex)
         : mnCp(nCp), mnShapeId(0), maContent(rContent), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
@@ -622,13 +622,13 @@ public:
     /// Use OutputItem() on an item set according to the parameters.
     void OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, bool bChpFormat, sal_uInt16 nScript, bool bExportParentItemSet );
 
-    short GetDefaultFrameDirection( ) const;
+    SvxFrameDirection GetDefaultFrameDirection( ) const;
 
     /// Right to left?
-    short TrueFrameDirection( const SwFrameFormat& rFlyFormat ) const;
+    SvxFrameDirection TrueFrameDirection( const SwFrameFormat& rFlyFormat ) const;
 
     /// Right to left?
-    short GetCurrentPageDirection() const;
+    SvxFrameDirection GetCurrentPageDirection() const;
 
     /// In case of numbering restart.
 

@@ -23,11 +23,7 @@
 #include <editeng/frmdir.hxx>
 #include <editeng/editengdllapi.h>
 
-// class SvxFrameDirectionItem ----------------------------------------------
-
-/* [Description]
-
-    This item defines a frame direction, which place the content inside
+/*  This item defines a frame direction, which place the content inside
     a frame. It exist different kind of directions which are used to the
     layout text for Western, CJK and CTL languages.
 */
@@ -35,16 +31,15 @@
 class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxEnumItem<SvxFrameDirection>
 {
 public:
-    SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
-                            sal_uInt16 nWhich  );
+    SvxFrameDirectionItem( SvxFrameDirection nValue, sal_uInt16 nWhich  );
     virtual ~SvxFrameDirectionItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const override;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool            GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText,
@@ -55,7 +50,7 @@ public:
 
     virtual sal_uInt16      GetValueCount() const override
     {
-        return FRMDIR_ENVIRONMENT + 1;
+        return (sal_uInt16)SvxFrameDirection::Environment + 1;
     }
     SvxFrameDirectionItem& operator=( const SvxFrameDirectionItem& rItem )
     {

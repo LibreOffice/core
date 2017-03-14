@@ -2634,7 +2634,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
             SvxFrameDirection eDirection = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ) ?
-                                                FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
+                                                SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB;
             pTabViewShell->ApplyAttr( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
         }
         break;
@@ -2662,10 +2662,10 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     {
         SvxFrameDirection eCellDir = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
                                         rAttrSet.Get( ATTR_WRITINGDIR )).GetValue();
-        if ( eCellDir == FRMDIR_ENVIRONMENT )
+        if ( eCellDir == SvxFrameDirection::Environment )
             eBidiDir = (EEHorizontalTextDirection)GetViewData()->GetDocument()->
                                 GetEditTextDirection( GetViewData()->GetTabNo() );
-        else if ( eCellDir == FRMDIR_HORI_RIGHT_TOP )
+        else if ( eCellDir == SvxFrameDirection::Horizontal_RL_TB )
             eBidiDir = EE_HTEXTDIR_R2L;
         else
             eBidiDir = EE_HTEXTDIR_L2R;

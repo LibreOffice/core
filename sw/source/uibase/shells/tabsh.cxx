@@ -171,7 +171,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put( aBrush );
 
     // text direction in boxes
-    SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
+    SvxFrameDirectionItem aBoxDirection( SvxFrameDirection::Environment, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
         aBoxDirection.SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
@@ -328,7 +328,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
         if(bBoxDirection)
         {
-            SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
+            SvxFrameDirectionItem aDirection( SvxFrameDirection::Environment, RES_FRAMEDIR );
             aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pBoxDirection)->GetValue());
             rSh.SetBoxDirection(aDirection);
         }
