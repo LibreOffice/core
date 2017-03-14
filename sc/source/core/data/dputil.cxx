@@ -12,6 +12,7 @@
 #include "dpnumgroupinfo.hxx"
 #include "globalnames.hxx"
 #include "globstr.hrc"
+#include "generalfunction.hxx"
 
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -402,49 +403,25 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     return aRet.makeStringAndClear();
 }
 
-ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
+ScSubTotalFunc ScDPUtil::toSubTotalFunc(ScGeneralFunction eGenFunc)
 {
     ScSubTotalFunc eSubTotal = SUBTOTAL_FUNC_NONE;
     switch (eGenFunc)
     {
-        case sheet::GeneralFunction_NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
-        case sheet::GeneralFunction_SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
-        case sheet::GeneralFunction_COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
-        case sheet::GeneralFunction_AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
-        case sheet::GeneralFunction_MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
-        case sheet::GeneralFunction_MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
-        case sheet::GeneralFunction_PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
-        case sheet::GeneralFunction_COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
-        case sheet::GeneralFunction_STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
-        case sheet::GeneralFunction_STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
-        case sheet::GeneralFunction_VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
-        case sheet::GeneralFunction_VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
-        case sheet::GeneralFunction_AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
-        default:
-            assert(false);
-    }
-    return eSubTotal;
-}
-
-ScSubTotalFunc ScDPUtil::toSubTotalFunc(sal_Int16 eGenFunc)
-{
-    ScSubTotalFunc eSubTotal = SUBTOTAL_FUNC_NONE;
-    switch (eGenFunc)
-    {
-        case sheet::GeneralFunction2::NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
-        case sheet::GeneralFunction2::SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
-        case sheet::GeneralFunction2::COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
-        case sheet::GeneralFunction2::AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
-        case sheet::GeneralFunction2::MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
-        case sheet::GeneralFunction2::MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
-        case sheet::GeneralFunction2::MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
-        case sheet::GeneralFunction2::PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
-        case sheet::GeneralFunction2::COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
-        case sheet::GeneralFunction2::STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
-        case sheet::GeneralFunction2::STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
-        case sheet::GeneralFunction2::VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
-        case sheet::GeneralFunction2::VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
-        case sheet::GeneralFunction2::AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
+        case ScGeneralFunction::NONE:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
+        case ScGeneralFunction::SUM:        eSubTotal = SUBTOTAL_FUNC_SUM;  break;
+        case ScGeneralFunction::COUNT:      eSubTotal = SUBTOTAL_FUNC_CNT2; break;
+        case ScGeneralFunction::AVERAGE:    eSubTotal = SUBTOTAL_FUNC_AVE;  break;
+        case ScGeneralFunction::MEDIAN:     eSubTotal = SUBTOTAL_FUNC_MED;  break;
+        case ScGeneralFunction::MAX:        eSubTotal = SUBTOTAL_FUNC_MAX;  break;
+        case ScGeneralFunction::MIN:        eSubTotal = SUBTOTAL_FUNC_MIN;  break;
+        case ScGeneralFunction::PRODUCT:    eSubTotal = SUBTOTAL_FUNC_PROD; break;
+        case ScGeneralFunction::COUNTNUMS:  eSubTotal = SUBTOTAL_FUNC_CNT;  break;
+        case ScGeneralFunction::STDEV:      eSubTotal = SUBTOTAL_FUNC_STD;  break;
+        case ScGeneralFunction::STDEVP:     eSubTotal = SUBTOTAL_FUNC_STDP; break;
+        case ScGeneralFunction::VAR:        eSubTotal = SUBTOTAL_FUNC_VAR;  break;
+        case ScGeneralFunction::VARP:       eSubTotal = SUBTOTAL_FUNC_VARP; break;
+        case ScGeneralFunction::AUTO:       eSubTotal = SUBTOTAL_FUNC_NONE; break;
         default:
             assert(false);
     }

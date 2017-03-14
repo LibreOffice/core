@@ -46,6 +46,7 @@
 #include "dputil.hxx"
 #include "dpresfilter.hxx"
 #include "calcmacros.hxx"
+#include "generalfunction.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -794,11 +795,11 @@ void ScDPSource::CreateRes_Impl()
         // Get function for each data field.
         long nDimIndex = *it;
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
-        sal_Int16 eUser = static_cast<sal_Int16>(pDim->getFunction());
-        if (eUser == sheet::GeneralFunction2::AUTO)
+        ScGeneralFunction eUser = pDim->getFunction();
+        if (eUser == ScGeneralFunction::AUTO)
         {
             //TODO: test for numeric data
-            eUser = sheet::GeneralFunction2::SUM;
+            eUser = ScGeneralFunction::SUM;
         }
 
         // Map UNO's enum to internal enum ScSubTotalFunc.
@@ -1306,7 +1307,7 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
 ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
-    nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
+    nFunction( ScGeneralFunction::SUM ),     // sum is default
     mpLayoutName(nullptr),
     mpSubtotalName(nullptr),
     nSourceDim( -1 ),
@@ -1370,7 +1371,7 @@ bool ScDPDimension::getIsDataLayoutDimension() const
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
 }
 
-void ScDPDimension::setFunction(sal_uInt16 nNew)
+void ScDPDimension::setFunction(ScGeneralFunction nNew)
 {
     nFunction = nNew;
 }
@@ -1477,13 +1478,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     {
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
-            setFunction( sal::static_int_cast<sal_uInt16>(eEnum) );
+            setFunction( (ScGeneralFunction)eEnum );
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
     {
         sal_Int16 eEnum;
         if (aValue >>= eEnum)
-            setFunction( eEnum );
+            setFunction( (ScGeneralFunction)eEnum );
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aValue >>= aReferenceValue;
@@ -1557,22 +1558,15 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {
-        sheet::GeneralFunction eVal;
-        sal_Int16 nVal = getFunction();
-        if (nVal == sheet::GeneralFunction2::MEDIAN)
-        {
-            eVal = sheet::GeneralFunction_NONE;
-        }
-        else
-        {
-            eVal = static_cast<sheet::GeneralFunction>(getFunction());
-        }
-        aRet <<= eVal;
+        ScGeneralFunction nVal = getFunction();
+        if (nVal == ScGeneralFunction::MEDIAN)
+            nVal = ScGeneralFunction::NONE;
+        aRet <<= (sheet::GeneralFunction)nVal;
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
     {
-        sal_Int16 eVal = getFunction();
-        aRet <<= eVal;
+        ScGeneralFunction eVal = getFunction();
+        aRet <<= (sal_Int16)eVal;
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aRet <<= aReferenceValue;
@@ -1581,9 +1575,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     else if ( aPropertyName == SC_UNO_DP_NUMBERFO )
     {
         sal_Int32 nFormat = 0;
-        sal_Int16 eFunc = getFunction();
+        ScGeneralFunction eFunc = getFunction();
         // #i63745# don't use source format for "count"
-        if ( eFunc != sheet::GeneralFunction2::COUNT && eFunc != sheet::GeneralFunction2::COUNTNUMS )
+        if ( eFunc != ScGeneralFunction::COUNT && eFunc != ScGeneralFunction::COUNTNUMS )
             nFormat = pSource->GetData()->GetNumberFormat( ( nSourceDim >= 0 ) ? nSourceDim : nDim );
 
         switch ( aReferenceValue.ReferenceType )

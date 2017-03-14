@@ -380,7 +380,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
                 for (SCCOL i = 0; i < nCount; ++i)
                 {
                     aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                    aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
+                    aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
                 }
             }
             else

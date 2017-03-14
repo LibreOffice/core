@@ -1829,7 +1829,7 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
 
     ScAddress aDummy;                   // if not marked, ignored if it is negative
     double fVal;
-    ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(nFunction);
+    ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc((ScGeneralFunction)nFunction);
     ScDocument& rDoc = pDocShell->GetDocument();
     if ( !rDoc.GetSelectionFunction( eFunc, aDummy, aMark, fVal ) )
     {

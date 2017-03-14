@@ -36,6 +36,7 @@
 
 class XclImpStream;
 class XclExpStream;
+enum class ScGeneralFunction;
 
 // Constants and Enumerations =================================================
 
@@ -580,7 +581,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo );
 
 // General field settings =====================================================
 
-typedef ::std::vector< sal_uInt16 > XclPTSubtotalVec;
+typedef ::std::vector< ScGeneralFunction > XclPTSubtotalVec;
 
 /** Contains data for a pivot table field (SXVD record). */
 struct XclPTFieldInfo : public XclPTVisNameInfo
@@ -676,9 +677,9 @@ struct XclPTDataFieldInfo : public XclPTVisNameInfo
     explicit            XclPTDataFieldInfo();
 
     /** Returns the API enum representing the aggregation function. */
-    css::sheet::GeneralFunction GetApiAggFunc() const;
+    ScGeneralFunction GetApiAggFunc() const;
     /** Sets the aggregation function represented by the passed API enum. */
-    void                SetApiAggFunc( css::sheet::GeneralFunction eAggFunc );
+    void                SetApiAggFunc( ScGeneralFunction eAggFunc );
 
     /** Returns the API constant representing the result reference type. */
     sal_Int32           GetApiRefType() const;

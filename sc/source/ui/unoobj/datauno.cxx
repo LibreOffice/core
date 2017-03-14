@@ -518,7 +518,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
             for (SCCOL i=0; i<nCount; i++)
             {
                 aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
+                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
             }
         }
         else
@@ -597,7 +597,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
             for (SCCOL i=0; i<nCount; i++)
             {
                 aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(pAry[i].Function);
+                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
             }
         }
         else
@@ -840,7 +840,7 @@ sheet::GeneralFunction SAL_CALL ScConsolidationDescriptor::getFunction()
 void SAL_CALL ScConsolidationDescriptor::setFunction( sheet::GeneralFunction nFunction )
 {
     SolarMutexGuard aGuard;
-    aParam.eFunction = ScDPUtil::toSubTotalFunc(nFunction);
+    aParam.eFunction = ScDPUtil::toSubTotalFunc((ScGeneralFunction)nFunction);
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSources()
