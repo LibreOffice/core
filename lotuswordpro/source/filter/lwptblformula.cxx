@@ -262,13 +262,11 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
 void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 {
     sal_uInt16 NumberOfArguments = m_pObjStrm->QuickReaduInt16();
-    sal_uInt16 ArgumentDiskLength, Count;
-    sal_uInt8 ArgumentType;
 
-    for (Count = 0; Count < NumberOfArguments; Count++)
+    for (sal_uInt16 Count = 0; Count < NumberOfArguments; Count++)
     {
-        ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
-        ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
+        sal_uInt8 ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
+        sal_uInt16 ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
         bool bArgument = true;
 
         switch(ArgumentType)
