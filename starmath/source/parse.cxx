@@ -2255,20 +2255,25 @@ SmGlyphSpecialNode *SmParser::DoGlyphSpecial()
     return pNode.release();
 }
 
-void SmParser::Error(SmParseError eError)
+SmExpressionNode *SmParser::DoError(SmParseError eError)
 {
-    SmStructureNode *pSNode = new SmExpressionNode(m_aCurToken);
+    auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode     *pErr   = new SmErrorNode(m_aCurToken);
     pSNode->SetSubNodes(pErr, nullptr);
 
+    AddError(eError, pSNode.get());
+
+    NextToken();
+
+    return pSNode.release();
+}
+
+void SmParser::Error(SmParseError eError)
+{
     //! put a structure node on the stack (instead of the error node itself)
     //! because sometimes such a node is expected in order to attach some
     //! subnodes
-    m_aNodeStack.push_front(std::unique_ptr<SmStructureNode>(pSNode));
-
-    AddError(eError, pSNode);
-
-    NextToken();
+    m_aNodeStack.emplace_front(DoError(eError));
 }
 
 
