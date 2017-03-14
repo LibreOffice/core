@@ -65,7 +65,7 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()
 {
-    return new CCustomControlContainer();
+    return new CCustomControlContainer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
