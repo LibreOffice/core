@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_915df8eb",
+        "filename": "android/source/gradle/wrapper/gradle-wrapper.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-03-14T07:24:50Z",
+      "side": 1,
+      "message": "Why did you change this in this commit? this is not related to what you have changed.",
+      "range": {
+        "startLine": 6,
+        "startChar": 59,
+        "endLine": 6,
+        "endChar": 65
+      },
+      "revId": "13b344ea5ab97a0c994de01c565fc97a23aa4975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
