@@ -2797,6 +2797,12 @@ DECLARE_RTFIMPORT_TEST(testTdf104287, "tdf104287.rtf")
     CPPUNIT_ASSERT(xShape->getAnchor().is());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf105729, "tdf105729.rtf")
+{
+    // This was style::ParagraphAdjust_LEFT, \ltrpar undone the effect of \qc from style.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
