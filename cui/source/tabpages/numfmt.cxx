@@ -368,19 +368,8 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     // initialize language ListBox
 
+    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
     m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
-    /* TODO: any reason we're doing a manual init here instead of using
-     * SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags::ONLY_KNOWN, ...)? */
-    // Don't list ambiguous locales where we won't be able to convert the
-    // LanguageType back to an identical Language_Country name and therefore
-    // couldn't load the i18n LocaleData. Show DebugMsg in non-PRODUCT version.
-    css::uno::Sequence< sal_uInt16 > xLang = LocaleDataWrapper::getInstalledLanguageTypes();
-    sal_Int32 nCount = xLang.getLength();
-    for ( sal_Int32 i=0; i<nCount; i++ )
-    {
-        if (!MsLangId::isLegacy( xLang[i]))
-            m_pLbLanguage->InsertLanguage( xLang[i] );
-    }
 }
 
 VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( vcl::Window* pParent,
