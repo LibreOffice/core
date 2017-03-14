@@ -601,3 +601,6 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/sc_cellprotection.png cmd/sc_protect.png
+cmd/lc_cellprotection.png cmd/lc_protect.png

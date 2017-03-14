@@ -6109,6 +6109,24 @@ ScProtectionAttr Protection SID_SCATTR_PROTECTION
 ]
 
 
+SfxBoolItem CellProtection SID_SCATTR_CELLPROTECTION
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+
 SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 ()
 [
