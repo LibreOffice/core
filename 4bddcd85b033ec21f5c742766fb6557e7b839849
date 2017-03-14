@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_349b5acb",
+        "filename": "sc/source/ui/dbgui/dbnamdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-14T16:14:18Z",
+      "side": 1,
+      "message": "Just a side note.. that \"Aufziehen der Referenz\" is not \"rolling up the reference\", but I don\u0027t have the correct translation at hand. Something with pulling the reference selection.",
+      "range": {
+        "startLine": 317,
+        "startChar": 74,
+        "endLine": 317,
+        "endChar": 83
+      },
+      "revId": "4bddcd85b033ec21f5c742766fb6557e7b839849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_54a0def4",
+        "filename": "sc/source/ui/dbgui/dbnamdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-14T16:14:18Z",
+      "side": 1,
+      "message": "transerred -\u003e transferred",
+      "range": {
+        "startLine": 396,
+        "startChar": 7,
+        "endLine": 396,
+        "endChar": 17
+      },
+      "revId": "4bddcd85b033ec21f5c742766fb6557e7b839849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_94aa46d3",
+        "filename": "sc/source/ui/dbgui/dbnamdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-14T16:14:18Z",
+      "side": 1,
+      "message": "Keep capitalization for identifiers like function names, so Save()",
+      "range": {
+        "startLine": 627,
+        "startChar": 23,
+        "endLine": 627,
+        "endChar": 27
+      },
+      "revId": "4bddcd85b033ec21f5c742766fb6557e7b839849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b4af4ae2",
+        "filename": "sc/source/ui/dbgui/foptmgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-14T16:14:18Z",
+      "side": 1,
+      "message": "Rather \"position to copy to\"",
+      "revId": "4bddcd85b033ec21f5c742766fb6557e7b839849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
