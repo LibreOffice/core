@@ -52,7 +52,6 @@ public:
 
     void DisableDeleteQueryBox() { mbDisableQueryBox = true; }
 
-    //UUUU
     virtual void PageCreated(const SfxAllItemSet&) override;
 
     void            EnableDynamicSpacing();

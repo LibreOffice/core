@@ -60,17 +60,16 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 6, 1,136, pVersionMap6 );
     SetVersionMap( 7, 1,144, pVersionMap7 );
 
-    //UUUU create secondary pools immediately
+    // create secondary pools immediately
     createAndAddSecondaryPools();
 }
 
 SwAttrPool::~SwAttrPool()
 {
-    //UUUU cleanup secondary pools first
+    // cleanup secondary pools first
     removeAndDeleteSecondaryPools();
 }
 
-//UUUU
 void SwAttrPool::createAndAddSecondaryPools()
 {
     const SfxItemPool* pCheckAlreadySet = GetSecondaryPool();
@@ -114,7 +113,6 @@ void SwAttrPool::createAndAddSecondaryPools()
     }
 }
 
-//UUUU
 void SwAttrPool::removeAndDeleteSecondaryPools()
 {
     SfxItemPool *pSdrPool = GetSecondaryPool();

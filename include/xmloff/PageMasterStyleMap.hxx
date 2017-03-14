@@ -85,7 +85,7 @@
 #define CTF_PM_GRAPHICFILTER            (XML_PM_CTF_START + 0x0033)
 #define CTF_PM_GRAPHICURL               (XML_PM_CTF_START + 0x0034)
 
-//UUUUNeed own entries for PageMasterStyleMap since these get *filtered*
+// Need own entries for PageMasterStyleMap since these get *filtered*
 // at export time using CTF_PM_FLAGMASK and XML_PM_CTF_START as detector
 // to find the first entry for header/footer (!), see
 // SvXMLAutoStylePoolP_Impl::exportXML, look for XML_STYLE_FAMILY_PAGE_MASTER
@@ -133,7 +133,7 @@
 #define CTF_PM_HEADERMARGINLEFT         (CTF_PM_HEADERFLAG|CTF_PM_MARGINLEFT)
 #define CTF_PM_HEADERMARGINRIGHT        (CTF_PM_HEADERFLAG|CTF_PM_MARGINRIGHT)
 
-//UUUUNeed own entries for PageMasterStyleMap ORed with the CTF_PM_HEADERFLAG
+// Need own entries for PageMasterStyleMap ORed with the CTF_PM_HEADERFLAG
 #define CTF_PM_HEADERREPEAT_OFFSET_X    (CTF_PM_HEADERFLAG|CTF_PM_REPEAT_OFFSET_X)
 #define CTF_PM_HEADERREPEAT_OFFSET_Y    (CTF_PM_HEADERFLAG|CTF_PM_REPEAT_OFFSET_Y)
 #define CTF_PM_HEADERFILLGRADIENTNAME   (CTF_PM_HEADERFLAG|CTF_PM_FILLGRADIENTNAME)
@@ -169,7 +169,7 @@
 #define CTF_PM_FOOTERMARGINLEFT         (CTF_PM_FOOTERFLAG|CTF_PM_MARGINLEFT)
 #define CTF_PM_FOOTERMARGINRIGHT        (CTF_PM_FOOTERFLAG|CTF_PM_MARGINRIGHT)
 
-//UUUUNeed own entries for PageMasterStyleMap ORed with the CTF_PM_FOOTERFLAG
+// Need own entries for PageMasterStyleMap ORed with the CTF_PM_FOOTERFLAG
 #define CTF_PM_FOOTERREPEAT_OFFSET_X    (CTF_PM_FOOTERFLAG|CTF_PM_REPEAT_OFFSET_X)
 #define CTF_PM_FOOTERREPEAT_OFFSET_Y    (CTF_PM_FOOTERFLAG|CTF_PM_REPEAT_OFFSET_Y)
 #define CTF_PM_FOOTERFILLGRADIENTNAME   (CTF_PM_FOOTERFLAG|CTF_PM_FILLGRADIENTNAME)

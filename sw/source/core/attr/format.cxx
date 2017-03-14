@@ -29,8 +29,6 @@
 #include <swcache.hxx>
 #include <swtblfmt.hxx>
 #include <svl/grabbagitem.hxx>
-
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
@@ -392,7 +390,7 @@ const SfxPoolItem& SwFormat::GetFormatAttr( sal_uInt16 nWhich, bool bInParents )
 {
     if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
         static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
@@ -411,7 +409,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
 {
     if (RES_BACKGROUND == nWhich && supportsFullDrawingLayerFillAttributeSet())
     {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFormat::GetBackgroundStat (simple fallback is in place and used)");
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
@@ -446,7 +444,7 @@ SfxItemState SwFormat::GetBackgroundState(SvxBrushItem &rItem) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
@@ -480,10 +478,9 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
 
     bool bRet = false;
 
-    //UUUU
     if (RES_BACKGROUND == rAttr.Which() && supportsFullDrawingLayerFillAttributeSet())
     {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
         SfxItemSet aTempSet(*m_aSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
         const SvxBrushItem& rSource = static_cast< const SvxBrushItem& >(rAttr);
@@ -572,11 +569,11 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 
     bool bRet = false;
 
-    //UUUU Use local copy to be able to apply needed changes, e.g. call
+    // Use local copy to be able to apply needed changes, e.g. call
     // CheckForUniqueItemForLineFillNameOrIndex which is needed for NameOrIndex stuff
     SfxItemSet aTempSet(rSet);
 
-    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+    // Need to check for unique item for DrawingLayer items of type NameOrIndex
     // and evtl. correct that item to ensure unique names for that type. This call may
     // modify/correct entries inside of the given SfxItemSet
     if(GetDoc())
@@ -590,7 +587,7 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
 
         if(SfxItemState::SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
         {
-            //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+            // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
 
             // copy all items to be set anyways to a local ItemSet with is also prepared for the new
@@ -798,12 +795,11 @@ void SwFormat::SetGrabBagItem(const uno::Any& rVal)
     m_pGrabBagItem->PutValue(rVal, 0);
 }
 
-//UUUU
 SvxBrushItem SwFormat::makeBackgroundBrushItem(bool bInP) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
-        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
 
         // fill the local static SvxBrushItem from the current ItemSet so that
@@ -815,7 +811,6 @@ SvxBrushItem SwFormat::makeBackgroundBrushItem(bool bInP) const
     return m_aSet.GetBackground(bInP);
 }
 
-//UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAttributesHelper() const
 {
     return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();

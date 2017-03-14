@@ -20,8 +20,6 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-
-//UUUU
 #include <xmloff/txtprmap.hxx>
 
 using namespace ::xmloff::token;
@@ -42,7 +40,7 @@ using namespace ::xmloff::token;
 const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 {
     //////////////////////////////////////////////////////////////////////////
-    //UUUU Section for 'page-layout-properties'
+    // Section for 'page-layout-properties'
 
     // page master
     PLMAP( "PageStyleLayout",            XML_NAMESPACE_STYLE,    XML_PAGE_USAGE,                    XML_PM_TYPE_PAGESTYLELAYOUT | MID_FLAG_SPECIAL_ITEM,    CTF_PM_PAGEUSAGE ),
@@ -119,7 +117,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 
     PLMAP( "UserDefinedAttributes",    XML_NAMESPACE_TEXT,        XML_XMLNS,                        XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    //UUUUIndex 65: fill attributes; use PLMAP macro here instead of GMAP, tis list is ordered and it's order is used
+    //Index 65: fill attributes; use PLMAP macro here instead of GMAP, tis list is ordered and it's order is used
     // to decide in which section in ODF to export the contained stuff (the PageMasterStyle creates several XML
     // sections, for Page, Header and Footer). The needed order seems to rely not on filtering, but using sections
     // based on the order used in this list.
@@ -158,7 +156,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
 
     //////////////////////////////////////////////////////////////////////////
-    //UUUUIndex 92: Section for 'header-style' own section, all members *have* to use CTF_PM_HEADERFLAG in the context entry (the 5th one)
+    //Index 92: Section for 'header-style' own section, all members *have* to use CTF_PM_HEADERFLAG in the context entry (the 5th one)
     HFMAP( "HeaderHeight",                XML_NAMESPACE_SVG,        XML_HEIGHT,                     XML_TYPE_MEASURE,        CTF_PM_HEADERHEIGHT ),
     HFMAP( "HeaderHeight",                XML_NAMESPACE_FO,        XML_MIN_HEIGHT,                 XML_TYPE_MEASURE,        CTF_PM_HEADERMINHEIGHT ),
     HFMAP( "HeaderIsDynamicHeight",        XML_NAMESPACE_STYLE,    XML__EMPTY,                        XML_TYPE_BOOL,            CTF_PM_HEADERDYNAMIC ),
@@ -189,7 +187,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "HeaderBackGraphicURL",        XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_HEADERGRAPHICURL ),
     HFMAP( "HeaderDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,            XML_TYPE_BOOL,          CTF_PM_HEADERFLAG ),
 
-    //UUUUIndex 121: Header DrawingLayer FillAttributes
+    //Index 121: Header DrawingLayer FillAttributes
     // Use HFMAP to get XML_TYPE_PROP_HEADER_FOOTER ORed to the 4th entry
     // Names have to begin with 'Header', all 5th entries need to be ORed with the CTF_PM_HEADERFLAG
     HFMAP( "HeaderFillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  CTF_PM_HEADERFLAG ),
@@ -214,7 +212,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "HeaderFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERREPEAT_OFFSET_Y ),
 
     //////////////////////////////////////////////////////////////////////////
-    //UUUUIndex 141: Section for 'footer-style' own section, all members *have* to use CTF_PM_FOOTERFLAG in the context entry (the 5th one)
+    //Index 141: Section for 'footer-style' own section, all members *have* to use CTF_PM_FOOTERFLAG in the context entry (the 5th one)
     HFMAP( "FooterHeight",                XML_NAMESPACE_SVG,        XML_HEIGHT,                     XML_TYPE_MEASURE,        CTF_PM_FOOTERHEIGHT ),
     HFMAP( "FooterHeight",                XML_NAMESPACE_FO,        XML_MIN_HEIGHT,                 XML_TYPE_MEASURE,        CTF_PM_FOOTERMINHEIGHT ),
     HFMAP( "FooterIsDynamicHeight",        XML_NAMESPACE_STYLE,    XML__EMPTY,                     XML_TYPE_BOOL,            CTF_PM_FOOTERDYNAMIC ),
@@ -245,7 +243,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterBackGraphicURL",        XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,            XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL ),
     HFMAP( "FooterDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,           XML_TYPE_BOOL,          CTF_PM_FOOTERFLAG ),
 
-    //UUUUIndex 170: Footer DrawingLayer FillAttributes
+    //Index 170: Footer DrawingLayer FillAttributes
     // Use HFMAP to get XML_TYPE_PROP_HEADER_FOOTER ORed to the 4th entry
     // Names have to begin with 'Footer', all 5th entries need to be ORed with the CTF_PM_FOOTERFLAG
     HFMAP( "FooterFillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  CTF_PM_FOOTERFLAG ),

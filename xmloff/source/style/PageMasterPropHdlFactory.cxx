@@ -28,8 +28,6 @@
 #include "PageMasterPropHdl.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/text/TextGridMode.hpp>
-
-//UUUU
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -41,7 +39,6 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
-//UUUU
 using namespace ::com::sun::star::drawing;
 
 static SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
@@ -132,7 +129,6 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                     aXML_TextGridMode_ConstantMap, XML_NONE );
             break;
 
-            //UUUU
             case XML_SW_TYPE_FILLSTYLE:
                 pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap );
                 break;
@@ -153,7 +149,6 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
                 break;
 
-            //UUUU
             default:
             {
                 OSL_ENSURE(false, "XMLPropertyHandler missing (!)");

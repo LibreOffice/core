@@ -1294,7 +1294,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );
             }
 
-            //UUUU for styles of FlyFrames do not set the FillStyle to make it a derived attribute
+            // for styles of FlyFrames do not set the FillStyle to make it a derived attribute
             aSet.ClearItem(XATTR_FILLSTYLE);
         }
         break;

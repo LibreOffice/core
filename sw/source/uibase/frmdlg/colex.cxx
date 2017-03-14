@@ -37,8 +37,6 @@
 #include <viewopt.hxx>
 #include "colex.hxx"
 #include "colmgr.hxx"
-
-//UUUU
 #include <svx/unobrushitemhelper.hxx>
 
 // Taking the updated values from the set
@@ -129,7 +127,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
             if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
             {
-                //UUUU create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
+                // create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(RES_BACKGROUND));
                 SfxItemSet aTempSet(*rHeaderSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -175,7 +173,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )
             {
-                //UUUU create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
+                // create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rFooterSet.Get(RES_BACKGROUND));
                 SfxItemSet aTempSet(*rFooterSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -198,7 +196,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
     {
-        //UUUU create FillAttributes from SvxBrushItem
+        // create FillAttributes from SvxBrushItem
         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
         SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -239,15 +237,12 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
     rRenderContext.DrawRect(aRect);
 
-    //UUUU
     const Rectangle aDefineRect(aRect);
-
-    //UUUU
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
 
     if (!rFillAttributes.get() || !rFillAttributes->isUsed())
     {
-        //UUUU If there is no fill, use fallback color
+        // If there is no fill, use fallback color
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         const Color& rFieldColor = rStyleSettings.GetFieldColor();
 
@@ -277,7 +272,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
         else
             aRect.Bottom() = aRect.Top() + nAutoColWidth;
 
-        //UUUU use primitive draw command
+        // use primitive draw command
         drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
 
         if (i < nColumnCount - 1)

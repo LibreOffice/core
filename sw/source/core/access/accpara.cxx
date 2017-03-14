@@ -1028,8 +1028,6 @@ static bool lcl_GetBackgroundColor( Color & rColor,
     const SvxBrushItem* pBackgrdBrush = nullptr;
     const Color* pSectionTOXColor = nullptr;
     SwRect aDummyRect;
-
-    //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( pFrame &&

@@ -61,8 +61,6 @@
 #include <undoflystrattr.hxx>
 #include <calbck.hxx>
 #include <memory>
-
-//UUUU
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xlndsit.hxx>

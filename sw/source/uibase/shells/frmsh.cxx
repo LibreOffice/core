@@ -386,10 +386,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSet aSet(GetPool(),  //UUUU sorted by indices
+                SfxItemSet aSet(GetPool(),  // sorted by indices
                     RES_FRMATR_BEGIN,       RES_FRMATR_END-1,                       // [82
 
-                    //UUUU FillAttribute support
+                    // FillAttribute support
                     XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [1014
 
                     SID_DOCFRAME,           SID_DOCFRAME,                           // [5598
@@ -399,7 +399,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     SID_ATTR_LRSPACE,       SID_ATTR_ULSPACE,                       // [10048
                     SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,                     // [10051
 
-                    //UUUU items to hand over XPropertyList things like
+                    // items to hand over XPropertyList things like
                     // XColorList, XHatchList, XGradientList and XBitmapList
                     // to the Area TabPage
                     SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
@@ -414,7 +414,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                     0);
 
-                //UUUU create needed items for XPropertyList entries from the DrawModel so that
+                // create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
                 const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                 pDrawModel->PutAreaListItems(aSet);
@@ -1204,7 +1204,6 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     }
 }
 
-//UUUU
 void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -1224,7 +1223,6 @@ void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
     }
 }
 
-//UUUU
 void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -1267,7 +1265,6 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
     }
 }
 
-//UUUU
 void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
 {
     switch(rReq.GetSlot())
@@ -1323,7 +1320,6 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
     }
 }
 
-//UUUU
 void SwFrameShell::DisableStateTextFrame(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);

@@ -1050,7 +1050,6 @@ VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxS
     return VclPtr<AbstractSvxSearchSimilarityDialog_Impl>::Create( pDlg );
 }
 
-//UUUU
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
     vcl::Window* pParent,
     const SfxItemSet& rCoreSet,

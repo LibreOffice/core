@@ -24,8 +24,6 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/extract.hxx>
-
-//UUUU
 #include <xmloff/txtprmap.hxx>
 
 using namespace ::com::sun::star;
@@ -326,7 +324,6 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     XMLPropertyState*       pPrint              = nullptr;
 
-    //UUUU
     XMLPropertyState* pRepeatOffsetX = nullptr;
     XMLPropertyState* pRepeatOffsetY = nullptr;
     XMLPropertyState* pHeaderRepeatOffsetX = nullptr;
@@ -393,37 +390,31 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTP_PM_GRID_SNAP_TO_CHARS:     pPMGridSnapToChars  = pProp;    break;
             case CTP_PM_GRID_SNAP_TO:       pPMGridSnapTo = pProp;    break;
 
-            //UUUU
             case CTF_PM_REPEAT_OFFSET_X:
                 pRepeatOffsetX = pProp;
                 break;
 
-            //UUUU
             case CTF_PM_REPEAT_OFFSET_Y:
                 pRepeatOffsetY = pProp;
                 break;
 
-            //UUUU
             case CTF_PM_HEADERREPEAT_OFFSET_X:
                 pHeaderRepeatOffsetX = pProp;
                 break;
 
-            //UUUU
             case CTF_PM_HEADERREPEAT_OFFSET_Y:
                 pHeaderRepeatOffsetY = pProp;
                 break;
 
-            //UUUU
             case CTF_PM_FOOTERREPEAT_OFFSET_X:
                 pFooterRepeatOffsetX = pProp;
                 break;
 
-            //UUUU
             case CTF_PM_FOOTERREPEAT_OFFSET_Y:
                 pFooterRepeatOffsetY = pProp;
                 break;
 
-            //UUUU Sort out empty entries
+            // Sort out empty entries
             case CTF_PM_FILLGRADIENTNAME:
             case CTF_PM_FILLHATCHNAME:
             case CTF_PM_FILLBITMAPNAME:
@@ -457,7 +448,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         }
     }
 
-    //UUUU These entries need to be reduced to a single one for XML export.
+    // These entries need to be reduced to a single one for XML export.
     // Both would be exported as 'draw:tile-repeat-offset' following a percent
     // value and a 'vertical' or 'horizontal' tag as mark. If both would be active
     // and both would be exported this would create an XML error (same property twice)
@@ -475,7 +466,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         }
     }
 
-    //UUUU Same as above for Header
+    // Same as above for Header
     if(pHeaderRepeatOffsetX && pHeaderRepeatOffsetY)
     {
         sal_Int32 nOffset(0);
@@ -490,7 +481,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         }
     }
 
-    //UUUU Same as above for Footer
+    // Same as above for Footer
     if(pFooterRepeatOffsetX && pFooterRepeatOffsetY)
     {
         sal_Int32 nOffset(0);

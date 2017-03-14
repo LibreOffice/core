@@ -67,8 +67,6 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <boost/circular_buffer.hpp>
-
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
 using namespace ::com::sun::star;
@@ -197,7 +195,6 @@ SwFrameNotify::~SwFrameNotify()
             aRectFnSet.GetHeight(maPrt)!=aRectFnSet.GetHeight(mpFrame->Prt());
     if ( bPrtWidth || bPrtHeight )
     {
-        //UUUU
         bool bUseNewFillProperties(false);
         if (mpFrame->supportsFullDrawingLayerFillAttributeSet())
         {
@@ -205,7 +202,7 @@ SwFrameNotify::~SwFrameNotify()
             if(aFillAttributes.get() && aFillAttributes->isUsed())
             {
                 bUseNewFillProperties = true;
-                //UUUU use SetCompletePaint if needed
+                // use SetCompletePaint if needed
                 if(aFillAttributes->needCompleteRepaint())
                 {
                     mpFrame->SetCompletePaint();

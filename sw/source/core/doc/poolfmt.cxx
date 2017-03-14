@@ -68,8 +68,6 @@
 #include <swtable.hxx>
 #include <tblafmt.hxx>
 #include <svx/xdef.hxx>
-
-//UUUU
 #include <svx/xfillit0.hxx>
 
 using namespace ::editeng;

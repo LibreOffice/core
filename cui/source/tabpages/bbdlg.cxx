@@ -20,7 +20,6 @@
 #include "bbdlg.hxx"
 #include "border.hxx"
 #include "backgrnd.hxx"
-//UUUU
 #include "svx/svxids.hrc"
 #include "cuitabarea.hxx"
 
@@ -45,7 +44,7 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     AddTabPage("borders", SvxBorderTabPage::Create, nullptr );
     if (mbEnableDrawingLayerFillStyles)
     {
-        //UUUU Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
+        // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
         m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, nullptr);
         m_nTransparencePageId = AddTabPage("transparence", SvxTransparenceTabPage::Create, nullptr);
     }
@@ -65,7 +64,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
             static_cast< SvxBackgroundTabPage& >(rTabPage).ShowSelector();
         }
     }
-    //UUUU inits for Area and Transparency TabPages
+    // inits for Area and Transparency TabPages
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
     // these pages find the needed attributes for fill style suggestions.

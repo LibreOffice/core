@@ -45,7 +45,6 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nLeft(0),
     nRight(0),
 
-    //UUUU
     pBorder(nullptr),
     bResetBackground(false),
     bFrameDirection(false),
@@ -208,10 +207,10 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
 
     if (bHeader || bFooter)
     {
-        //UUUU Header and/or footer used
+        // Header and/or footer used
         const Color aLineColor(rRenderContext.GetLineColor());
 
-        //UUUU draw PageFill first and on the whole page, no outline
+        // draw PageFill first and on the whole page, no outline
         rRenderContext.SetLineColor();
         drawFillAttributes(rRenderContext, maPageFillAttributes, aRect, aRect);
         rRenderContext.SetLineColor(aLineColor);
@@ -245,7 +244,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     }
     else
     {
-        //UUUU draw PageFill and outline
+        // draw PageFill and outline
         drawFillAttributes(rRenderContext, maPageFillAttributes, aRect, aRect);
     }
 
@@ -344,7 +343,6 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     }
 }
 
-//UUUU
 void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
                                        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                                        const Rectangle& rPaintRange,

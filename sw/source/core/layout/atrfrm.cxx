@@ -77,11 +77,11 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <calbck.hxx>
 #include <pagedeschint.hxx>
+
 #ifndef NDEBUG
 #include <ndtxt.hxx>
 #endif
 
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
@@ -2556,7 +2556,7 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
             RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
 
-        //UUUU reset fill information
+        // reset fill information
         if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
@@ -2575,7 +2575,7 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
     else if(RES_FMT_CHG == nWhich)
     {
-        //UUUU reset fill information on format change (e.g. style changed)
+        // reset fill information on format change (e.g. style changed)
         if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
             maFillAttributes.reset();
@@ -3144,7 +3144,6 @@ OUString SwFlyFrameFormat::GetObjDescription() const
 */
 bool SwFlyFrameFormat::IsBackgroundTransparent() const
 {
-    //UUUU
     if (supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return getSdrAllFillAttributesHelper()->isTransparent();
@@ -3186,7 +3185,6 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
 */
 bool SwFlyFrameFormat::IsBackgroundBrushInherited() const
 {
-    //UUUU
     if (supportsFullDrawingLayerFillAttributeSet() && getSdrAllFillAttributesHelper())
     {
         return !getSdrAllFillAttributesHelper()->isUsed();
@@ -3424,7 +3422,6 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
     return nullptr;
 }
 
-//UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllFillAttributesHelper() const
 {
     if (supportsFullDrawingLayerFillAttributeSet())

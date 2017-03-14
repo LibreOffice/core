@@ -136,7 +136,7 @@ class SwTableBoxValue;
 class SwAttrPool : public SfxItemPool
 {
 private:
-    //UUUU helpers to add/rmove DrawingLayer ItemPool, used in constructor
+    // helpers to add/rmove DrawingLayer ItemPool, used in constructor
     // and destructor; still isolated to evtl. allow other use later, but
     // used bz default now to have it instantly as needed for DrawingLayer
     // FillStyle support

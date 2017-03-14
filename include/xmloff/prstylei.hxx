@@ -26,7 +26,6 @@
 #include <vector>
 #include <xmloff/xmlstyle.hxx>
 
-//UUUU
 #include <unordered_set>
 
 struct XMLPropertyState;
@@ -36,7 +35,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-//UUUU
 typedef std::unordered_set<OUString, OUStringHash> OldFillStyleDefinitionSet;
 
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
@@ -53,25 +51,25 @@ private:
 
 protected:
 
-    //UUUU Helper to check if the local maProperties contains the given
+    // Helper to check if the local maProperties contains the given
     // FillStyle tag and if the FillStyle there is different from FillStyle_NONE
     bool doNewDrawingLayerFillStyleDefinitionsExist(
         const ::rtl::OUString& rFillStyleTag) const;
 
-    //UUUU Helper which will deactivate all old fill definitions (identified by
+    // Helper which will deactivate all old fill definitions (identified by
     // the given OldFillStyleDefinitionSet) in the local maProperties. Deactivation
     // is done setting theindex to -1. It returns true when actually old fill
     // definitions existed and were deactivated
     void deactivateOldFillStyleDefinitions(
         const OldFillStyleDefinitionSet& rHashSetOfTags);
 
-    //UUUU Helper to translate new DrawingLayer FillStyle values which are name-based
+    // Helper to translate new DrawingLayer FillStyle values which are name-based
     // from ODF internal name to style display names which can be found in the current
     // document model (using NameOrIndex Items). The change is executed on the internal
     // maProperties. The return value is true when actually names were changed
     void translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames();
 
-    //UUUU provider for often used sets
+    // provider for often used sets
     static const OldFillStyleDefinitionSet& getStandardSet();
     static const OldFillStyleDefinitionSet& getHeaderSet();
     static const OldFillStyleDefinitionSet& getFooterSet();

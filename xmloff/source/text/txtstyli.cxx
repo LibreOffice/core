@@ -51,7 +51,6 @@
 #include <utility>
 #include <vector>
 
-//UUUU
 #include <xmlsdtypes.hxx>
 #include <xmloff/xmlerror.hxx>
 
@@ -532,7 +531,7 @@ void XMLTextStyleContext::FillPropertySet(
                         rtl::OUString sStyleName;
                         rState.maValue >>= sStyleName;
 
-                        //UUUU translate the used name from ODF intern to the name used in the Model
+                        // translate the used name from ODF intern to the name used in the Model
                         sStyleName = GetImport().GetStyleDisplayName(aFamilies[i - 7], sStyleName);
 
                         if(bAutomatic)

@@ -50,8 +50,6 @@
 #include "txtprhdl.hxx"
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-
-//UUUU
 #include <xmloff/EnumPropertyHdl.hxx>
 #include "XMLFillBitmapSizePropertyHandler.hxx"
 #include "XMLBitmapLogicalSizePropertyHandler.hxx"
@@ -64,8 +62,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
-
-//UUUU
 using namespace ::com::sun::star::drawing;
 
 static SvXMLEnumMapEntry<sal_uInt16> const pXML_HoriPos_Enum[] =
@@ -1295,7 +1291,6 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, XML_TOKEN_INVALID );
         break;
 
-    //UUUU
     case XML_SW_TYPE_FILLSTYLE:
         pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap);
         break;
@@ -1316,7 +1311,6 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
         break;
 
-    //UUUU
     default:
     {
         OSL_ENSURE(false, "XMLPropertyHandler missing (!)");

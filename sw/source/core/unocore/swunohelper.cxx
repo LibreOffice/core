@@ -37,8 +37,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
-
-//UUUU
 #include <svx/xfillit0.hxx>
 #include <editeng/memberids.hrc>
 #include <svl/itemset.hxx>
@@ -259,7 +257,6 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
     return bOk;
 }
 
-//UUUU
 bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
         sal_uInt16 const nMID)
 {

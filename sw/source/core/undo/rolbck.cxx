@@ -903,7 +903,7 @@ void SwHistory::Add(
     // no default Attribute?
     SwHistoryHint* pHt = nullptr;
 
-    //UUUU To be able to include the DrawingLayer FillItems something more
+    // To be able to include the DrawingLayer FillItems something more
     // general has to be done to check if an Item is default than to check
     // if its pointer equals that in Writer's global PoolDefaults (held in
     // aAttrTab and used to fill the pool defaults in Writer - looks as if

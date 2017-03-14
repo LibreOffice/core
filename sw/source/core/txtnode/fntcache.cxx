@@ -2525,8 +2525,6 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
             {
                 const SvxBrushItem* pItem;
                 SwRect aOrigBackRect;
-
-                //UUUU
                 drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
                 /// OD 21.08.2002

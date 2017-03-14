@@ -909,12 +909,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
             bool bApplyCharUnit = ::HasCharUnit( dynamic_cast<SwWebView*>( &GetView()) != nullptr  );
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
-            SfxItemSet aCoreSet( GetPool(), //UUUU sorted by indices, one group of three concatenated
+            SfxItemSet aCoreSet( GetPool(), // sorted by indices, one group of three concatenated
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
                             RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,    // [77
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,         // [82
 
-                            //UUUU FillAttribute support
+                            // FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
 
                             // includes SID_ATTR_TABSTOP_POS
@@ -923,7 +923,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,      // [10023
                             SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,         // [10065
 
-                            //UUUU items to hand over XPropertyList things like
+                            // items to hand over XPropertyList things like
                             // XColorList, XHatchList, XGradientList and XBitmapList
                             // to the Area TabPage
                             SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
@@ -938,7 +938,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
 
-            //UUUU create needed items for XPropertyList entries from the DrawModel so that
+            // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
             // Do this after GetCurAttr, this resets the ItemSet content again
             const SwDrawModel* pDrawModel = GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();

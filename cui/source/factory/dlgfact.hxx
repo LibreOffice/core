@@ -505,7 +505,7 @@ public:
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog() override;
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog( vcl::Window* pParent,
                                             const SfxItemSet& rCoreSet) override;
-   //UUUU add for SvxBorderBackgroundDlg
+   // add for SvxBorderBackgroundDlg
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
        vcl::Window* pParent,
        const SfxItemSet& rCoreSet,

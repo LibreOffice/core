@@ -27,8 +27,6 @@ class PageStyleContext : public XMLPropStyleContext
 {
 private:
     OUString sPageUsage;
-
-    //UUUU
     bool                m_bIsFillStyleAlreadyConverted : 1;
 
 protected:

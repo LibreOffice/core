@@ -46,7 +46,6 @@
 #include <svx/svxdlg.hxx>
 #include <memory>
 
-//UUUU
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
@@ -66,7 +65,7 @@ const sal_uInt16 SvxHFPage::pRanges[] =
 {
     SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
 
-    //UUUU Support DrawingLayer FillStyles (no real call to below GetRanges()
+    // Support DrawingLayer FillStyles (no real call to below GetRanges()
     // detected, still do the complete transition)
     XATTR_FILL_FIRST,        XATTR_FILL_LAST,
 
@@ -265,7 +264,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
         nWShadow, nWShadow,
         nWDynSpacing, nWDynSpacing,
 
-        //UUUU take over DrawingLayer FillStyles
+        // take over DrawingLayer FillStyles
         XATTR_FILL_FIRST, XATTR_FILL_LAST,                // [1014
 
         0, 0};
@@ -278,7 +277,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 
     if(mbEnableDrawingLayerFillStyles)
     {
-        //UUUU When using the XATTR_FILLSTYLE DrawingLayer FillStyle definition
+        // When using the XATTR_FILLSTYLE DrawingLayer FillStyle definition
         // extra action has to be done here since the pool default is drawing::FillStyle_SOLID
         // instead of drawing::FillStyle_NONE (to have the default blue fill color at start).
         aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
@@ -353,7 +352,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
                 aSet.Put(_pSet->Get(nWShadow));
             }
 
-            //UUUU take care of [XATTR_XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+            // take care of [XATTR_XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             for(sal_uInt16 nFillStyleId(XATTR_FILL_FIRST); nFillStyleId <= XATTR_FILL_LAST; nFillStyleId++)
             {
                 if(_pSet->GetItemState(nFillStyleId) == SfxItemState::SET)
@@ -607,7 +606,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
                 nShadow, nShadow,
                 0, 0);
 
-            //UUUU copy items for XPropertyList entries from the DrawModel so that
+            // copy items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
             static const sal_uInt16 nCopyFlags[] = {
                 SID_COLOR_TABLE,
@@ -657,7 +656,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
         {
             if(mbEnableDrawingLayerFillStyles)
             {
-                //UUUU The style for header/footer is not yet created, need to reset
+                // The style for header/footer is not yet created, need to reset
                 // XFillStyleItem to drawing::FillStyle_NONE which is the same as in the style
                 // initialization. This needs to be done since the pool default for
                 // XFillStyleItem is drawing::FillStyle_SOLID
@@ -676,7 +675,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
     if(pFact)
     {
-        //UUUU
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
             this,
             *pBBSet,
@@ -704,7 +702,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
                 if(mbEnableDrawingLayerFillStyles)
                 {
-                    //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                    // create FillAttributes directly from DrawingLayer FillStyle entries
                     aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pBBSet));
                 }
                 else
@@ -713,7 +711,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
                     if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
                     {
-                        //UUUU create FillAttributes from SvxBrushItem
+                        // create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
                         SfxItemSet aTempSet(*pBBSet->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -791,7 +789,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
             if(mbEnableDrawingLayerFillStyles)
             {
-                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                // create FillAttributes directly from DrawingLayer FillStyle entries
                 aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
             else
@@ -800,7 +798,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
                 if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
-                    //UUUU create FillAttributes from SvxBrushItem
+                    // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -835,7 +833,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
             if(mbEnableDrawingLayerFillStyles)
             {
-                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                // create FillAttributes directly from DrawingLayer FillStyle entries
                 aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
             else
@@ -844,7 +842,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
                 if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
-                    //UUUU create FillAttributes from SvxBrushItem
+                    // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -868,7 +866,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     if(mbEnableDrawingLayerFillStyles)
     {
-        //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+        // create FillAttributes directly from DrawingLayer FillStyle entries
         aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rSet));
     }
     else
@@ -877,7 +875,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
         if(rSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
         {
-            //UUUU create FillAttributes from SvxBrushItem
+            // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
             SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1166,7 +1164,6 @@ void SvxHFPage::EnableDynamicSpacing()
 
 void SvxHFPage::PageCreated(const SfxAllItemSet &rSet)
 {
-    //UUUU
     const SfxBoolItem* pSupportDrawingLayerFillStyleItem = rSet.GetItem<SfxBoolItem>(SID_DRAWINGLAYER_FILLSTYLES, false);
 
     if(pSupportDrawingLayerFillStyleItem)

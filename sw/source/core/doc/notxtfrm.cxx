@@ -178,9 +178,9 @@ static void lcl_ClearArea( const SwFrame &rFrame,
 
     if ( !aRegion.empty() )
     {
-        const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
-
-        //UUUU
+        const SvxBrushItem *pItem;
+        const Color *pCol;
+        SwRect aOrigRect;
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )

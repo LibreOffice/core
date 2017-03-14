@@ -581,7 +581,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         {
             aCallMod.Add( mpDfltGrfFormatColl );
         }
-        else if (isFRMATR(nWhich) || isDrawingLayerAttribute(nWhich) ) //UUUU
+        else if (isFRMATR(nWhich) || isDrawingLayerAttribute(nWhich) )
         {
             aCallMod.Add( mpDfltGrfFormatColl );
             aCallMod.Add( mpDfltTextFormatColl );

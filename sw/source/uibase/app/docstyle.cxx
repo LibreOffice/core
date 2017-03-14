@@ -461,14 +461,14 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pTableFormat(nullptr),
     pBoxFormat(nullptr),
     rDoc(rDocument),
-    aCoreSet(GetPool().GetPool(),   //UUUU sorted by indices, one double removed
+    aCoreSet(GetPool().GetPool(),   // sorted by indices, one double removed
             RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,             // [60
             RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,        // [77
             RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,             // [82
             RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,           // [143
 
-            //UUUU FillAttribute support
+            // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
 
             SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,          // [10023
@@ -476,7 +476,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
             SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,        // [10058
             SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,            // [10065
 
-            //UUUU items to hand over XPropertyList things like
+            // items to hand over XPropertyList things like
             // XColorList, XHatchList, XGradientList and XBitmapList
             // to the Area TabPage
             SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
@@ -893,7 +893,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         bool bHasCJKFontPrefix = false;
         SvtCJKOptions aCJKOptions;
 
-        //UUUU Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
+        // Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
         // to decide if gradient transparence is used
         const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(pSet->Get(XATTR_FILLSTYLE)).GetValue());
         const bool bUseFloatTransparence(static_cast< const XFillFloatTransparenceItem& >(pSet->Get(XATTR_FILLFLOATTRANSPARENCE)).IsEnabled());
@@ -923,7 +923,6 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                             bool bIsDefault = false;
                             switch ( pItem->Which() )
                             {
-                                //UUUU
                                 case XATTR_FILLCOLOR:
                                 {
                                     // only use active FillStyle information
@@ -1369,7 +1368,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                     if(pFrameFormat->DerivedFrom())
                         aCoreSet.SetParent(&pFrameFormat->DerivedFrom()->GetAttrSet());
 
-                    //UUUU create needed items for XPropertyList entries from the DrawModel so that
+                    // create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
                     const SwDrawModel* pDrawModel = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
 
@@ -1384,7 +1383,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
         case SfxStyleFamily::Page :
             {
-                //UUUU set correct parent to get the drawing::FillStyle_NONE FillStyle as needed
+                // set correct parent to get the drawing::FillStyle_NONE FillStyle as needed
                 if(!aCoreSet.GetParent())
                 {
                     aCoreSet.SetParent(&rDoc.GetDfltFrameFormat()->GetAttrSet());
@@ -1690,7 +1689,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
         if(SfxStyleFamily::Frame == nFamily)
         {
-            //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+            // Need to check for unique item for DrawingLayer items of type NameOrIndex
             // and evtl. correct that item to ensure unique names for that type. This call may
             // modify/correct entries inside of the given SfxItemSet
             rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);

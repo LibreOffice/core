@@ -56,7 +56,6 @@ private:
     long nFtHeight;
     SvxBoxItem* pFtBorder;
 
-    //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maHeaderFillAttributes;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFooterFillAttributes;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maPageFillAttributes;
@@ -75,7 +74,6 @@ protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
                           const bool bSecond, const bool bEnabled);
 
-    //UUUU
     void drawFillAttributes(vcl::RenderContext& rRenderContext,
                             const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                             const Rectangle& rPaintRange, const Rectangle& rDefineRange);
@@ -85,7 +83,6 @@ public:
     virtual ~SvxPageWindow() override;
     virtual void dispose() override;
 
-    //UUUU
     void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
     {
         maHeaderFillAttributes = rFillAttributes;
