@@ -313,6 +313,9 @@ struct CompareSwRedlineTable
     bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
 };
 
+// Notification type for notifying about redlines to LOK clients
+enum class RedlineNotification { Add, Remove, Modify };
+
 class SwRedlineTable
 {
 public:
@@ -362,6 +365,9 @@ public:
     vector_type::const_iterator begin() const { return maVector.begin(); }
     vector_type::const_iterator end() const { return maVector.end(); }
     void                        Resort() { maVector.Resort(); }
+
+    // Notifies all LOK clients when redliens are added/modified/removed
+    static void                 LOKRedlineNotification(RedlineNotification eType, SwRedlineTable::size_type nPos, SwRangeRedline* pRedline);
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...

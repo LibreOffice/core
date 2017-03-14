@@ -60,8 +60,6 @@
 
 using namespace com::sun::star;
 
-enum class RedlineNotification { Add, Remove, Modify };
-
 #ifdef DBG_UTIL
 
     void sw_DebugRedline( const SwDoc* pDoc )
@@ -304,7 +302,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
 }
 
 /// Emits LOK notification about one addition / removal of a redline item.
-static void lcl_RedlineNotification(RedlineNotification nType, SwRedlineTable::size_type nPos, SwRangeRedline* pRedline)
+void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRedlineTable::size_type nPos, SwRangeRedline* pRedline)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -363,7 +361,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_type nP = rv.first - begin();
-        lcl_RedlineNotification(RedlineNotification::Add, nP, p);
+        LOKRedlineNotification(RedlineNotification::Add, nP, p);
         p->CallDisplayFunc(nP);
         return rv.second;
     }
@@ -523,7 +521,7 @@ bool SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( size_type nP )
 {
-    lcl_RedlineNotification(RedlineNotification::Remove, nP, maVector[nP]);
+    LOKRedlineNotification(RedlineNotification::Remove, nP, maVector[nP]);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = maVector.front()->GetDoc();
@@ -550,7 +548,7 @@ void SwRedlineTable::DeleteAndDestroy( size_type nP, size_type nL )
     size_t nCount = 0;
     for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
     {
-        lcl_RedlineNotification(RedlineNotification::Remove, nP + nCount, *it);
+        LOKRedlineNotification(RedlineNotification::Remove, nP + nCount, *it);
         delete *it;
         ++nCount;
     }
@@ -993,7 +991,7 @@ void SwRangeRedline::MaybeNotifyModification()
     {
         if (rRedTable[i] == this)
         {
-            lcl_RedlineNotification(RedlineNotification::Modify, i, this);
+            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, i, this);
             break;
         }
     }

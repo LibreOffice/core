@@ -1375,6 +1375,26 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
     // This was 0, as LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
+    // Turn off the change tracking mode, make some modification to left of the
+    // redline so that its position changes
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(false));
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Insert("This text is left of the redline");
+
+    // Position of the redline has changed => Modify callback
+    CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
+
+    pWrtShell->DelLeft();
+    // Deletion also emits Modify callback
+    CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
+
+    // Make changes to the right of the redline => no position change in redline
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 100/*Go enough right */, /*bBasicCall=*/false);
+    pWrtShell->Insert("This text is right of the redline");
+
+    // No Modify callbacks
+    CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
