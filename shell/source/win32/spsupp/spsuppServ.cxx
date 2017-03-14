@@ -8,7 +8,15 @@
 */
 
 // Include MIDL-generated file
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextra-tokens"
+    // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
+#endif
 #include "spsupp_i.c"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include <memory>
 #include "olectl.h"
@@ -17,7 +25,11 @@
 #include "COMOpenDocuments.hpp"
 #include "registrar.hpp"
 
+namespace {
+
 HANDLE g_hModule;
+
+}
 
 ITypeLib* GetTypeLib()
 {
@@ -26,7 +38,7 @@ ITypeLib* GetTypeLib()
     if (!aITypeLibGuard.get())
     {
         wchar_t szFile[MAX_PATH];
-        if (GetModuleFileNameW((HMODULE)g_hModule, szFile, MAX_PATH) == 0)
+        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
             return nullptr;
         ITypeLib* pTypeLib;
         HRESULT hr = LoadTypeLib(szFile, &pTypeLib);
@@ -43,7 +55,7 @@ const wchar_t* GetLOPath()
     if (*sPath == 0)
     {
         // Initialization
-        if (GetModuleFileNameW((HMODULE)g_hModule, sPath, MAX_PATH) == 0)
+        if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), sPath, MAX_PATH) == 0)
             return nullptr;
         wchar_t* pSlashPos = wcsrchr(sPath, L'\\');
         if (pSlashPos == nullptr)
@@ -107,7 +119,7 @@ STDAPI DllRegisterServer(void)
         return ResultFromScode(SELFREG_E_TYPELIB);
 
     wchar_t szFile[MAX_PATH];
-    if (GetModuleFileNameW((HMODULE)g_hModule, szFile, MAX_PATH) == 0)
+    if (GetModuleFileNameW(static_cast<HMODULE>(g_hModule), szFile, MAX_PATH) == 0)
         return HRESULT_FROM_WIN32(GetLastError());
 
     HRESULT hr = RegisterTypeLib(pTypeLib, szFile, nullptr);

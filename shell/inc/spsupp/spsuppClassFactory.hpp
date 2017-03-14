@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef _SPSUPPCLASSFACTORY_H_
-#define _SPSUPPCLASSFACTORY_H_
+#ifndef INCLUDED_SHELL_INC_SPSUPP_SPSUPPCLASSFACTORY_HPP
+#define INCLUDED_SHELL_INC_SPSUPP_SPSUPPCLASSFACTORY_HPP
 
 #include "COMRefCounted.hpp"
 
@@ -16,7 +16,7 @@ class ClassFactory : public COMRefCounted<IClassFactory>
 {
 public:
     ClassFactory();
-    virtual ~ClassFactory();
+    virtual ~ClassFactory() override;
 
     // IUnknown methods
 
@@ -44,6 +44,6 @@ private:
     static long m_nLockCount;
 };
 
-#endif // _SPSUPPCLASSFACTORY_H_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

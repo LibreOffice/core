@@ -7,10 +7,17 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef _COMOPENDOCUMENTS_HPP_
-#define _COMOPENDOCUMENTS_HPP_
+#ifndef INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
+#define INCLUDED_SHELL_INC_SPSUPP_COMOPENDOCUMENTS_HPP
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#endif
 #include "spsupp_h.h"
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #include "COMRefCounted.hpp"
 #include "Objsafe.h"
 #include "assert.h"
@@ -28,7 +35,7 @@ public:
     };
 
     COMOpenDocuments();
-    virtual ~COMOpenDocuments();
+    virtual ~COMOpenDocuments() override;
 
     // IUnknown methods
 
@@ -210,6 +217,6 @@ private:
     COMObjectSafety m_aObjectSafety;
 };
 
-#endif // _COMOPENDOCUMENTS_HPP_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

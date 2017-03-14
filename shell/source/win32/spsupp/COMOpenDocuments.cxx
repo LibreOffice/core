@@ -7,6 +7,10 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+#include <sal/config.h>
+
+#include <cstring>
+
 #include "COMOpenDocuments.hpp"
 #include "spsuppServ.hpp"
 #include "stdio.h"
@@ -27,7 +31,9 @@ bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 // Returns S_OK if successful
 HRESULT LOStart(wchar_t* sCommandLine)
 {
-    STARTUPINFOW si = { sizeof(si) };
+    STARTUPINFOW si;
+    std::memset(&si, 0, sizeof si);
+    si.cb = sizeof si;
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOW;
     PROCESS_INFORMATION pi = {};
@@ -42,7 +48,7 @@ HRESULT LOStart(wchar_t* sCommandLine)
             nullptr,
             dwError,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-            (LPWSTR)&sMsgBuf,
+            reinterpret_cast<LPWSTR>(&sMsgBuf),
             0, nullptr);
 
         size_t nBufSize = wcslen(sMsgBuf) + 100;
@@ -97,7 +103,7 @@ HRESULT STDMETHODCALLTYPE COMOpenDocuments::COMObjectSafety::GetInterfaceSafetyO
     }
 
     // We know about it; release reference and return required information
-    reinterpret_cast<IUnknown*>(ppvo)->Release();
+    static_cast<IUnknown*>(ppvo)->Release();
     *pdwSupportedOptions = iSupportedOptionsMask;
     *pdwEnabledOptions = m_iEnabledOptions;
     return S_OK;
@@ -173,7 +179,7 @@ STDMETHODIMP COMOpenDocuments::QueryInterface(REFIID riid, void **ppvObject)
         return E_NOINTERFACE;
     }
 
-    reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
+    static_cast<IUnknown*>(*ppvObject)->AddRef();
     return S_OK;
 }
 
@@ -306,7 +312,7 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     wchar_t sCommandLine[32768];
     swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" -n \"%s\"", sProgram, bstrTemplateLocation);
     HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 
@@ -356,7 +362,7 @@ STDMETHODIMP COMOpenDocuments::ViewDocument3(
     wchar_t sCommandLine[32768];
     swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" --view \"%s\"", sProgram, bstrDocumentLocation);
     HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 
@@ -430,7 +436,7 @@ STDMETHODIMP COMOpenDocuments::EditDocument3(
     wchar_t sCommandLine[32768];
     swprintf(sCommandLine, sizeof(sCommandLine) / sizeof(*sCommandLine), L"\"%s\" -o \"%s\"", sProgram, bstrDocumentLocation);
     HRESULT hr = LOStart(sCommandLine);
-    *pbResult = SUCCEEDED(hr);
+    *pbResult = VARIANT_BOOL(SUCCEEDED(hr));
     return hr;
 }
 

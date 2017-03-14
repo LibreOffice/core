@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef _COMREFCOUNTED_HPP_
-#define _COMREFCOUNTED_HPP_
+#ifndef INCLUDED_SHELL_INC_SPSUPP_COMREFCOUNTED_HPP
+#define INCLUDED_SHELL_INC_SPSUPP_COMREFCOUNTED_HPP
 
 #include "objbase.h"
 
@@ -37,6 +37,6 @@ private:
     long m_nRef = 1; // Created referenced
 };
 
-#endif // _COMREFCOUNTED_HPP_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

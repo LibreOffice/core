@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef _REGISTRAR_H
-#define _REGISTRAR_H
+#ifndef INCLUDED_SHELL_INC_SPSUPP_REGISTRAR_H
+#define INCLUDED_SHELL_INC_SPSUPP_REGISTRAR_H
 
 #include "windows.h"
 

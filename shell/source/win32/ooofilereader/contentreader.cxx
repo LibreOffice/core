@@ -88,7 +88,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
         if  ( XmlAttributes.find(CONTENT_STYLE_STYLE_NAME) != XmlAttributes.end())
             return new CAutoStyleTag(XmlAttributes);
        else
-            return new CDummyTag();
+            return new CDummyTag;
     }
     else if ( ( tag_name == CONTENT_STYLE_PROPERTIES ) || ( tag_name == CONTENT_TEXT_STYLE_PROPERTIES ) )
     {
@@ -98,10 +98,10 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
         ITag* pTagBuilder = m_TagBuilderStack.top();
         pTagBuilder->addAttributes( XmlAttributes );
 
-        return new CDummyTag();
+        return new CDummyTag;
     }
     else
-        return new CDummyTag();
+        return new CDummyTag;
 }
 
 /** get style of the current content.

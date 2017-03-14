@@ -25,8 +25,6 @@ ClassFactory::~ClassFactory()
 
 // IUnknown methods
 
-const wchar_t* GUID2Str(REFGUID rGUID);
-
 STDMETHODIMP ClassFactory::QueryInterface(
     REFIID riid,
     void **ppvObject)
