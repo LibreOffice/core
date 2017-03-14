@@ -145,7 +145,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
         RES_HEADER_FOOTER_EAT_SPACING,  RES_HEADER_FOOTER_EAT_SPACING,  // [115
         RES_UNKNOWNATR_CONTAINER,       RES_UNKNOWNATR_CONTAINER,       // [143
 
-        //UUUU take over DrawingLayer FillStyles
+        // take over DrawingLayer FillStyles
         XATTR_FILL_FIRST,               XATTR_FILL_LAST,                // [1014
 
         0};
@@ -169,7 +169,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
                 {
                     // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
                     case RES_HEADER_FOOTER_EAT_SPACING:
-                    //UUUU take out SvxBrushItem; it's the result of the fallback
+                    // take out SvxBrushItem; it's the result of the fallback
                     // at SwFormat::GetItemState and not really in state SfxItemState::SET
                     case RES_BACKGROUND:
                         bExecuteId = false;

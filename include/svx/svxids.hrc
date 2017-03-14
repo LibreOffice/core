@@ -972,7 +972,6 @@
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )
 // 1142 is used by editeng (SID_ATTR_CHAR_GRABBAG)
 
-//UUUU
 #define SID_OFFER_IMPORT                                ( SID_SVX_START + 1143 )
 #define SID_DRAWINGLAYER_FILLSTYLES                     ( SID_SVX_START + 1144)
 #define SID_PARASPACE_INCREASE                          ( SID_SVX_START + 1145 )

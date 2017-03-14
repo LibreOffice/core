@@ -219,12 +219,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
-            SfxItemSet aSet(GetPool(), //UUUU sorted by indices
+            SfxItemSet aSet(GetPool(), // sorted by indices
 
                 RES_FRMATR_BEGIN,RES_FRMATR_END - 1,                            // [   82
                 RES_GRFATR_MIRRORGRF,RES_GRFATR_CROPGRF,                        // [  123
 
-                //UUUU FillAttribute support
+                // FillAttribute support
                 XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [ 1014
 
                 SID_DOCFRAME,SID_DOCFRAME,                                      // [ 5598
@@ -233,7 +233,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 SID_ATTR_GRAF_KEEP_ZOOM,SID_ATTR_GRAF_KEEP_ZOOM,                // [10882
                 SID_ATTR_GRAF_FRMSIZE,SID_ATTR_GRAF_GRAPHIC,                    // [10884, contains SID_ATTR_GRAF_FRMSIZE_PERCENT
 
-                //UUUU items to hand over XPropertyList things like
+                // items to hand over XPropertyList things like
                 // XColorList, XHatchList, XGradientList and XBitmapList
                 // to the Area TabPage
                 SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
@@ -247,7 +247,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 SID_REFERER,            SID_REFERER,
                 0);
 
-            //UUUU create needed items for XPropertyList entries from the DrawModel so that
+            // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
             const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 

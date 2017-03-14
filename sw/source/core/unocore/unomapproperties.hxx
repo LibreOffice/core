@@ -251,7 +251,7 @@
 #define ANCHOR_TYPES_PROPERTY    { OUString(UNO_NAME_ANCHOR_TYPES), FN_UNO_ANCHOR_TYPES,    cppu::UnoType< cppu::UnoSequenceType<css::text::TextContentAnchorType> >::get(),PropertyAttribute::READONLY, 0xff},
 
 // #i18732# #i28701# #i73249#
-//UUUU all users of COMMON_FRAME_PROPERTIES add the new XATTR_FILL_FIRST, XATTR_FILL_LAST FillStyle,
+// all users of COMMON_FRAME_PROPERTIES add the new XATTR_FILL_FIRST, XATTR_FILL_LAST FillStyle,
 // thus it may be possible to remove the RES_BACKGROUND entries from SvxBrushItem completely (this includes
 // all using UNO_NAME_BACK_* slots) in the future
 #define COMMON_FRAME_PROPERTIES \
@@ -476,7 +476,6 @@
                     { OUString(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { OUString(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
 
-//UUUU
 #define FILL_PROPERTIES_SW_BMP \
     { OUString(UNO_NAME_SW_FILLBMP_LOGICAL_SIZE),               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get(),       0,  0}, \
     { OUString(UNO_NAME_SW_FILLBMP_OFFSET_X),                   XATTR_FILLBMP_TILEOFFSETX,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
@@ -490,11 +489,9 @@
     { OUString(UNO_NAME_SW_FILLBMP_TILE),                       XATTR_FILLBMP_TILE,         cppu::UnoType<bool>::get(),       0,  0},\
     { OUString(UNO_NAME_SW_FILLBMP_MODE),                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \
 
-//UUUU
 #define FILL_PROPERTIES_SW_DEFAULTS \
     { OUString(UNO_NAME_SW_FILLCOLOR),                          XATTR_FILLCOLOR,            cppu::UnoType<sal_Int32>::get(),   0,  0}, \
 
-//UUUU
 #define FILL_PROPERTIES_SW \
     FILL_PROPERTIES_SW_BMP \
     FILL_PROPERTIES_SW_DEFAULTS \

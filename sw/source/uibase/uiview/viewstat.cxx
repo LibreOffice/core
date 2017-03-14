@@ -60,7 +60,6 @@
 #include <cmdid.h>
 #include <IDocumentRedlineAccess.hxx>
 
-//UUUU
 #include <doc.hxx>
 
 using namespace ::com::sun::star;
@@ -158,7 +157,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
 
-                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                // set correct parent to get the XFILL_NONE FillStyle as needed
                 if(!rSet.GetParent())
                 {
                     const SwFrameFormat& rMaster = rDesc.GetMaster();

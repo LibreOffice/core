@@ -64,10 +64,7 @@
 #include "numrule.hxx"
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
-
-//UUUU
 #include <frmfmt.hxx>
-
 #include <unomid.h>
 
 using namespace ::com::sun::star;
@@ -531,8 +528,6 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
     {
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
-
-        //UUUU
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         // Consider, that [GetBackgroundBrush(...)] can set <pCol>

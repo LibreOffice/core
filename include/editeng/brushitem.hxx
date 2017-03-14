@@ -107,7 +107,7 @@ public:
     const OUString&         GetGraphicLink() const      { return maStrLink; }
     const OUString&         GetGraphicFilter() const    { return maStrFilter; }
 
-    //UUUU get graphic transparency in percent
+    // get graphic transparency in percent
     sal_Int8 getGraphicTransparency() const { return nGraphicTransparency; }
     void setGraphicTransparency(sal_Int8 nNew);
 

@@ -1049,7 +1049,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     VclPtr<SfxTabPage> pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
 
-    //UUUU fallback to 1st page when requested one does not exist
+    // fallback to 1st page when requested one does not exist
     if(!pDataObject && pTabCtrl->GetPageCount())
     {
         pTabCtrl->SetCurPageId(pTabCtrl->GetPageId(0));

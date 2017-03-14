@@ -1869,7 +1869,7 @@ bool DrawFillAttributes(
         {
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
 
-            //UUUU need to expand for correct AAed and non-AAed visualization as primitive.
+            // need to expand for correct AAed and non-AAed visualization as primitive.
             // This must probably be removed again when we will be able to get all Writer visualization
             // as primitives and Writer prepares all it's stuff in high precision coordinates (also
             // needs to avoid moving boundaries around to better show overlapping stuff...)
@@ -3952,7 +3952,6 @@ bool SwFlyFrame::IsBackgroundTransparent() const
         const SvxBrushItem* pBackgrdBrush = nullptr;
         const Color* pSectionTOXColor = nullptr;
         SwRect aDummyRect;
-        //UUUU
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false) )
@@ -3963,7 +3962,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
             {
                 bBackgroundTransparent = true;
             }
-            else if(aFillAttributes.get() && aFillAttributes->isUsed()) //UUUU
+            else if(aFillAttributes.get() && aFillAttributes->isUsed())
             {
                 bBackgroundTransparent = aFillAttributes->isTransparent();
             }
@@ -4166,7 +4165,7 @@ void SwFlyFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, 
 
             if (pSwFrameFormat && pSwFrameFormat->supportsFullDrawingLayerFillAttributeSet())
             {
-                //UUUU check for transparency
+                // check for transparency
                 const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pSwFrameFormat->getSdrAllFillAttributesHelper());
 
                 // check if the new fill attributes are used
@@ -5963,7 +5962,7 @@ void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
 {
     if (  _pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode() )
     {
-        //UUUU Simplified paint with DrawingLayer FillStyle
+        // Simplified paint with DrawingLayer FillStyle
         SwRect aPgRect = Frame();
         aPgRect.Intersection_( _rOutputRect );
 
@@ -6491,8 +6490,6 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
     SwRect aOrigBackRect;
     const bool bPageFrame = IsPageFrame();
     bool bLowMode = true;
-
-    //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode );
@@ -6580,8 +6577,6 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                 {
                     pNewItem = new SvxBrushItem( *pCol, RES_BACKGROUND );
                     pItem = pNewItem;
-
-                    //UUUU
                     aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
                 }
 
@@ -7294,13 +7289,11 @@ const Color SwPageFrame::GetDrawBackgrdColor() const
     const SvxBrushItem* pBrushItem;
     const Color* pDummyColor;
     SwRect aDummyRect;
-
-    //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true) )
     {
-        if(aFillAttributes.get() && aFillAttributes->isUsed()) //UUUU
+        if(aFillAttributes.get() && aFillAttributes->isUsed())
         {
             // let SdrAllFillAttributesHelper do the average color calculation
             return Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
@@ -7477,10 +7470,10 @@ bool SwFrame::GetBackgroundBrush(
     rpBrush = nullptr;
     rpCol = nullptr;
     do
-    {   if ( pFrame->IsPageFrame() && !pOpt->IsPageBack() )
+    {
+        if ( pFrame->IsPageFrame() && !pOpt->IsPageBack() )
             return false;
 
-        //UUUU
         if (pFrame->supportsFullDrawingLayerFillAttributeSet())
             rFillAttributes = pFrame->getSdrAllFillAttributesHelper();
         const SvxBrushItem &rBack = pFrame->GetAttrSet()->GetBackground();

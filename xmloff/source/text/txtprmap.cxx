@@ -25,8 +25,6 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
 #include "txtprhdl.hxx"
-
-//UUUU
 #include <xmlsdtypes.hxx>
 
 using namespace ::com::sun::star;
@@ -82,7 +80,6 @@ using namespace ::xmloff::token;
 #define M_END() \
     { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
-//UUUU
 #define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
 #define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,static_cast<sal_Int32>(type|XML_TYPE_PROP_GRAPHIC),context)
 
@@ -91,7 +88,7 @@ XMLPropertyMapEntry const aXMLParaPropMap[] =
     // RES_UNKNOWNATR_CONTAINER
     MP_E( "ParaUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    //UUUU fill attributes for paragraph backgrounds
+    // fill attributes for paragraph backgrounds
     // #i125045# moved to the front to be able to exclude these in lcl_txtprmap_getMap
     // for TextPropMap::SHAPE_PARA to not have these double for Shapes (which already have these)
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SW_TYPE_FILLSTYLE, 0 ),
@@ -759,7 +756,7 @@ XMLPropertyMapEntry const aXMLFramePropMap[] =
     MG_E( "BackGraphicFilter",STYLE,    FILTER_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     MG_E( "BackGraphicURL", STYLE,  BACKGROUND_IMAGE,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
 
-    //UUUU fill attributes
+    // fill attributes
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SW_TYPE_FILLSTYLE, 0 ),
     GMAP( "FillColor",                      XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
     GMAP( "FillColor2",                     XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0 ),

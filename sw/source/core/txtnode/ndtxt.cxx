@@ -88,8 +88,6 @@
 #include <memory>
 #include <unoparagraph.hxx>
 #include <wrtsh.hxx>
-
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
 
@@ -3541,7 +3539,7 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
                         static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
     }
 
-    //UUUU reset fill information
+    // reset fill information
     if(maFillAttributes.get())
     {
         const sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
@@ -3605,7 +3603,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
             HandleModifyAtTextNode( *this, &aTmp1, &aTmp2  );
         }
 
-        //UUUU reset fill information on parent style change
+        // reset fill information on parent style change
         if(maFillAttributes.get())
         {
             maFillAttributes.reset();
@@ -4930,7 +4928,6 @@ SwTextNode::MakeUnoObject()
     return xMeta;
 }
 
-//UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTextNode::getSdrAllFillAttributesHelper() const
 {
     // create SdrAllFillAttributesHelper on demand

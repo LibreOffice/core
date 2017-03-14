@@ -90,10 +90,8 @@ public:
     bool SetDerivedFrom(SwFormat *pDerivedFrom = nullptr);
 
     /// If bInParents is FALSE, search only in this format for attribute.
-    //UUUUinline
     const SfxPoolItem& GetFormatAttr( sal_uInt16 nWhich,
                                    bool bInParents = true ) const;
-    //UUUUinline
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
     SfxItemState GetBackgroundState(SvxBrushItem &rItem) const;
@@ -203,7 +201,7 @@ public:
     inline const SvxBoxItem               &GetBox( bool = true ) const;
     inline const SvxFormatKeepItem         &GetKeep( bool = true ) const;
 
-    //UUUU Create SvxBrushItem for Background fill (partially for backwards compatibility)
+    // Create SvxBrushItem for Background fill (partially for backwards compatibility)
     SvxBrushItem makeBackgroundBrushItem( bool = true ) const;
 
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
@@ -250,7 +248,7 @@ public:
     */
     virtual bool IsBackgroundTransparent() const;
 
-    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;
 };

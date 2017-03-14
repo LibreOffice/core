@@ -79,7 +79,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/make_unique.hxx>
 
-//UUUU
+//
 #include <svx/unobrushitemhelper.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/memberids.hrc>
@@ -1492,7 +1492,7 @@ public:
             m_pMyItemSet.reset(new SfxItemSet(m_xNewBase->GetItemSet()));
             m_pItemSet = m_pMyItemSet.get();
 
-            //UUUU set parent style to have the correct XFillStyle setting as XFILL_NONE
+            // set parent style to have the correct XFillStyle setting as XFILL_NONE
             if(!m_pItemSet->GetParent() && m_pParentStyle)
                 m_pItemSet->SetParent(m_pParentStyle);
         }
@@ -1982,7 +1982,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
         pUnoToCoreIt->second(*this, rEntry, rPropSet, rValue, rBase);
     else
     {
-        //UUUU adapted switch logic to a more readable state; removed goto's and made
+        // adapted switch logic to a more readable state; removed goto's and made
         // execution of standard setting of proerty in ItemSet dependent of this variable
         uno::Any aValue(rValue);
         lcl_TranslateMetric(rEntry, m_pDoc, aValue);
@@ -1999,7 +1999,7 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     if(rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
 
-    SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
+    SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     if(m_pBasePool)
     {
         const sal_uInt16 nSaveMask = m_pBasePool->GetSearchMask();
@@ -2246,7 +2246,6 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<RES_BACKGROUND>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    //UUUU
     const SfxItemSet& rSet = rBase.GetItemSet();
     const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
     const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
@@ -2259,7 +2258,6 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    //UUUU
     const SfxItemSet& rSet = rBase.GetItemSet();
     const XFillBmpTileItem* pTileItem = dynamic_cast<const XFillBmpTileItem*>(&rSet.Get(XATTR_FILLBMP_TILE));
     if(pTileItem && pTileItem->GetValue())
@@ -2276,11 +2274,11 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     SfxItemSet& rSet = rBase.GetItemSet();
     uno::Any aResult;
     rPropSet.getPropertyValue(rEntry, rSet, aResult);
-    //UUUU
+    //
     // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
         aResult <<= (sal_Int16)(aResult.get<sal_Int32>());
-    //UUUU check for needed metric translation
+    // check for needed metric translation
     if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
     {
         const SfxItemPool& rPool = GetDoc()->GetAttrPool();
@@ -2380,7 +2378,7 @@ uno::Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
         throw uno::RuntimeException();
     sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     return GetPropertyValue_Impl(pPropSet, aBase, rPropertyName);
 }
 
@@ -2393,7 +2391,7 @@ uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString
         throw uno::RuntimeException();
     sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); //UUUU add pDfltTextFormatColl as parent
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     uno::Sequence<uno::Any> aValues(rPropertyNames.getLength());
     // workaround for bad designed API
     try
@@ -2490,7 +2488,6 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
         {
             case OWN_ATTR_FILLBMP_MODE:
             {
-                //UUUU
                 if(SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_STRETCH, false)
                     || SfxItemState::SET == pSourceSet->GetItemState(XATTR_FILLBMP_TILE, false))
                 {
@@ -2504,7 +2501,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
             break;
             case RES_BACKGROUND:
             {
-                //UUUU for FlyFrames we need to mark the used properties from type RES_BACKGROUND
+                // for FlyFrames we need to mark the used properties from type RES_BACKGROUND
                 // as beans::PropertyState_DIRECT_VALUE to let users of this property call
                 // getPropertyValue where the member properties will be mapped from the
                 // fill attributes to the according SvxBrushItem entries
@@ -2599,7 +2596,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         pTargetFormat->ResetFormatAttr(pEntry->nWID);
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
-            //UUUU
+            //
             SwDoc* pDoc = pTargetFormat->GetDoc();
             SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
             aSet.SetParent(&pTargetFormat->GetAttrSet());
@@ -2808,7 +2805,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); //UUUU add pDfltFrameFormat as parent
+    SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); // add pDfltFrameFormat as parent
     if(!m_pBasePool)
     {
         if(!IsDescriptor())
@@ -2874,7 +2871,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
                             RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
-                            //UUUU FillAttribute support
+                            // FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
 
                             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
@@ -2883,7 +2880,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
                             0);
 
-                        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                        // set correct parent to get the XFILL_NONE FillStyle as needed
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_ON, true));
@@ -3060,7 +3057,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    SwStyleBase_Impl aBase(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); //UUUU add pDfltFrameFormat as parent
+    SwStyleBase_Impl aBase(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrameFormat()->GetAttrSet()); // add pDfltFrameFormat as parent
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         throw uno::RuntimeException();
@@ -3478,7 +3475,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         }
         case IStyleAccess::AUTO_STYLE_PARA:
         {
-            pRange = aTextNodeSetRange; //UUUU checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
+            pRange = aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
             break;
         }
@@ -3513,12 +3510,12 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     }
     else
     {
-        //UUUU set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
+        // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
         // to make cases in RES_BACKGROUND work correct; target *is* a style
         // where this is the case
         aSet.SetParent(&m_pDocShell->GetDoc()->GetDfltTextFormatColl()->GetAttrSet());
 
-        //UUUU here the used DrawingLayer FillStyles are imported when family is
+        // here the used DrawingLayer FillStyles are imported when family is
         // equal to IStyleAccess::AUTO_STYLE_PARA, thus we will need to serve the
         // used slots functionality here to do this correctly
         const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
@@ -3580,7 +3577,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 {
                     if(MID_NAME == nMemberId)
                     {
-                        //UUUU add set commands for FillName items
+                        // add set commands for FillName items
                         OUString aTempName;
 
                         if(!(aValue >>= aTempName))
@@ -3595,7 +3592,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                     {
                         if(XATTR_FILLBITMAP == pEntry->nWID)
                         {
-                            //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+                            // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
                             const Graphic aNullGraphic;
                             XFillBitmapItem aXFillBitmapItem(aSet.GetPool(), aNullGraphic);
 
@@ -3609,7 +3606,6 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 }
                 case RES_BACKGROUND:
                 {
-                    //UUUU
                     const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
                     SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
@@ -3625,7 +3621,6 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 }
                 case OWN_ATTR_FILLBMP_MODE:
                 {
-                    //UUUU
                     drawing::BitmapMode eMode;
 
                     if(!(aValue >>= eMode))
@@ -3666,11 +3661,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
             }
          }
 
-        //UUUU clear parent again
+        // clear parent again
         aSet.SetParent(nullptr);
     }
 
-    //UUUU need to ensure uniqueness of evtl. added NameOrIndex items
+    // need to ensure uniqueness of evtl. added NameOrIndex items
     // currently in principle only needed when bTakeCareOfDrawingLayerFillStyle,
     // but does not hurt and is easily forgotten later eventually, so keep it
     // as common case
@@ -3777,7 +3772,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
     return aRet;
 }
 
-//UUUU SwXAutoStyle with the family IStyleAccess::AUTO_STYLE_PARA (or
+// SwXAutoStyle with the family IStyleAccess::AUTO_STYLE_PARA (or
 // PROPERTY_MAP_PARA_AUTO_STYLE) now uses DrawingLayer FillStyles to allow
 // unified paragraph background fill, thus the UNO API implementation has to
 // support the needed slots for these. This seems to be used only for reading
@@ -3938,7 +3933,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         }
         else if(bTakeCareOfDrawingLayerFillStyle)
         {
-            //UUUU add support for DrawingLayer FillStyle slots
+            // add support for DrawingLayer FillStyle slots
             switch(pEntry->nWID)
             {
                 case RES_BACKGROUND:
@@ -4130,7 +4125,7 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
 
         if(bTakeCareOfDrawingLayerFillStyle)
         {
-            //UUUU DrawingLayer PropertyStyle support
+            // DrawingLayer PropertyStyle support
             switch(pEntry->nWID)
             {
                 case OWN_ATTR_FILLBMP_MODE:

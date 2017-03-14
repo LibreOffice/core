@@ -117,7 +117,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx>
 
-//UUUU
 #include <svx/xfillit0.hxx>
 
 using namespace ::com::sun::star;
@@ -272,7 +271,7 @@ SwDoc::SwDoc()
 
     meDocType(DOCTYPE_NATIVE)
 {
-    //UUUU The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool
+    // The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool
     // has a default for the XFillStyleItem of XFILL_SOLID and the color for it is the default
     // fill color (blue7 or similar). This is a problem, in Writer we want the default fill
     // style to be drawing::FillStyle_NONE. This cannot simply be done by changing it in the 2nd pool at the

@@ -40,11 +40,9 @@ public:
     void    GetLineStyleState(SfxItemSet &rSet);
     void    StateInsert(SfxItemSet &rSet);
 
-    //UUUU
     void GetDrawAttrStateTextFrame(SfxItemSet &rSet);
     void ExecDrawAttrArgsTextFrame(SfxRequest& rReq);
 
-    //UUUU
     void ExecDrawDlgTextFrame(SfxRequest& rReq);
     void DisableStateTextFrame(SfxItemSet &rSet);
 };

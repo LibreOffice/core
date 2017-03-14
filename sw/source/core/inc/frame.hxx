@@ -110,7 +110,6 @@ enum MakePageType
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
-//UUUU
 namespace drawinglayer { namespace attribute {
     class SdrAllFillAttributesHelper;
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
@@ -753,7 +752,6 @@ public:
     void ForbidDelete()      { mbForbidDelete = true; }
     void AllowDelete()    { mbForbidDelete = false; }
 
-    //UUUU
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     bool supportsFullDrawingLayerFillAttributeSet() const;
 

@@ -312,7 +312,7 @@
 #define WID_TXTCOL_AUTO_DISTANCE        6
 #define WID_TXTCOL_LINE_STYLE           7
 
-//UUUU This define would need the include of <svx/unoshprp.hxx>, but this ends
+// This define would need the include of <svx/unoshprp.hxx>, but this ends
 // in a mess; there *are* double used symbols which are used in a #define in
 // editengine and as an enum in sw; these will then collide and lead to severe
 // problems which will be hard to detect at all (e.g. look for UNO_NAME_CHAR_COLOR).

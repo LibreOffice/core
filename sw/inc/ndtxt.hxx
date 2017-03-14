@@ -114,7 +114,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
 
-    //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
     SAL_DLLPRIVATE SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl,
@@ -790,7 +790,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextNode)
 
-    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
 
     /// In MS Word, the font underline setting of the paragraph end position won't affect the formatting of numbering, so we ignore it

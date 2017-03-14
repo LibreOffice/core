@@ -389,7 +389,7 @@ inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
 }
-inline bool isDrawingLayerAttribute(const sal_uInt16 nWhich) //UUUU
+inline bool isDrawingLayerAttribute(const sal_uInt16 nWhich)
 {
     return (XATTR_START <= nWhich) && (XATTR_END > nWhich);
 }

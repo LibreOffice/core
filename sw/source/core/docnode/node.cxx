@@ -1986,7 +1986,6 @@ SwOLENodes* SwContentNode::CreateOLENodesArray( const SwFormatColl& rColl, bool 
     return pNodes;
 }
 
-//UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwContentNode::getSdrAllFillAttributesHelper() const
 {
     return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();

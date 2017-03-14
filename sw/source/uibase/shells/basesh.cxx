@@ -2214,7 +2214,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     }
     else
     {
-        //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
+        // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -2274,7 +2274,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     }
     else
     {
-        //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
+        // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -2333,7 +2333,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     }
     else
     {
-        //UUUU Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
+        // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSet aCoreSet(GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());

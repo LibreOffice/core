@@ -611,7 +611,6 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
         }
     }
 
-    //UUUU
     if(m_bNew)
     {
         if(SfxStyleFamily::Frame == m_nFamily || SfxStyleFamily::Para == m_nFamily)
@@ -786,7 +785,7 @@ sal_uInt16 SwDocShell::Edit(
 
     if(SfxStyleFamily::Page == nFamily || SfxStyleFamily::Para == nFamily)
     {
-        //UUUU create needed items for XPropertyList entries from the DrawModel so that
+        // create needed items for XPropertyList entries from the DrawModel so that
         // the Area TabPage can access them
         SfxItemSet& rSet = xTmp->GetItemSet();
         const SwDrawModel* pDrawModel = GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();

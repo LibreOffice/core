@@ -54,11 +54,8 @@
 #include <svl/slstitm.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/request.hxx>
-
-//UUUU
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
-
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 
 // static ----------------------------------------------------------------
@@ -140,21 +137,6 @@ bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 #define MARGIN_TOP      ( (MarginPosition)0x0004 )
 #define MARGIN_BOTTOM   ( (MarginPosition)0x0008 )
 
-//UUUU
-//struct SvxPage_Impl
-//{
-//  MarginPosition  m_nPos;
-//    Printer*        mpDefPrinter;
-//    bool            mbDelPrinter;
-//
-//    SvxPage_Impl() :
-//        m_nPos( 0 ),
-//        mpDefPrinter( 0 ),
-//        mbDelPrinter( false ) {}
-//
-//    ~SvxPage_Impl() { if ( mbDelPrinter ) delete mpDefPrinter; }
-//};
-
 // class SvxPageDescPage --------------------------------------------------
 
 VclPtr<SfxTabPage> SvxPageDescPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
@@ -170,16 +152,9 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     eMode               ( SVX_PAGE_MODE_STANDARD ),
     ePaperStart         ( PAPER_A3 ),
     ePaperEnd           ( PAPER_ENV_DL ),
-
-    //UUUU
-    // pImpl                ( new SvxPage_Impl ),
-
-    //UUUU
-    m_nPos( 0 ),
-    mpDefPrinter( nullptr ),
-    mbDelPrinter( false ),
-
-    //UUUU
+    m_nPos              ( 0 ),
+    mpDefPrinter        ( nullptr ),
+    mbDelPrinter        ( false ),
     mbEnableDrawingLayerFillStyles(false)
 {
     get(m_pPaperSizeBox,"comboPageFormat");
@@ -1168,7 +1143,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
             if(mbEnableDrawingLayerFillStyles)
             {
-                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                // create FillAttributes directly from DrawingLayer FillStyle entries
                 aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
             else
@@ -1177,7 +1152,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
                 if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
-                    //UUUU create FillAttributes from SvxBrushItem
+                    // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1212,7 +1187,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
             if(mbEnableDrawingLayerFillStyles)
             {
-                //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+                // create FillAttributes directly from DrawingLayer FillStyle entries
                 aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rTmpSet));
             }
             else
@@ -1221,7 +1196,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
                 if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
-                    //UUUU create FillAttributes from SvxBrushItem
+                    // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1246,7 +1221,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
     if(mbEnableDrawingLayerFillStyles)
     {
-        //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+        // create FillAttributes directly from DrawingLayer FillStyle entries
         aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rSet));
     }
     else
@@ -1255,7 +1230,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
         if(pItem)
         {
-            //UUUU create FillAttributes from SvxBrushItem
+            // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
             SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1316,7 +1291,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+            // create FillAttributes directly from DrawingLayer FillStyle entries
             aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rHeaderSet));
         }
         else
@@ -1325,7 +1300,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
             if(rHeaderSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
             {
-                //UUUU aBspWin.SetHdColor(rItem.GetColor());
+                // aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
                 SfxItemSet aTempSet(*rHeaderSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1378,7 +1353,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            //UUUU create FillAttributes directly from DrawingLayer FillStyle entries
+            // create FillAttributes directly from DrawingLayer FillStyle entries
             aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(rFooterSet));
         }
         else
@@ -1387,7 +1362,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
             if(rFooterSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
             {
-                //UUUU aBspWin.SetFtColor(rItem.GetColor());
+                // aBspWin.SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
                 SfxItemSet aTempSet(*rFooterSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
@@ -1699,8 +1674,6 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
     const SfxAllEnumItem* pPaperStartItem = aSet.GetItem<SfxAllEnumItem>(SID_PAPER_START, false);
     const SfxAllEnumItem* pPaperEndItem = aSet.GetItem<SfxAllEnumItem>(SID_PAPER_END, false);
     const SfxStringListItem* pCollectListItem = aSet.GetItem<SfxStringListItem>(SID_COLLECT_LIST, false);
-
-    //UUUU
     const SfxBoolItem* pSupportDrawingLayerFillStyleItem = aSet.GetItem<SfxBoolItem>(SID_DRAWINGLAYER_FILLSTYLES, false);
 
     if (pModeItem)

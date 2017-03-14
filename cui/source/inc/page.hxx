@@ -64,7 +64,6 @@
         <SvxLRSpaceItem>:       <SID_ATTR_LRSPACE>
 */
 
-//UUUU struct   SvxPage_Impl;
 typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
@@ -139,14 +138,11 @@ private:
     Paper               ePaperStart;
     Paper               ePaperEnd;
 
-    //UUUU SvxPage_Impl*        pImpl;
     MarginPosition      m_nPos;
     VclPtr<Printer>     mpDefPrinter;
 
     bool                mbDelPrinter : 1;
-
-    //UUUU
-    bool mbEnableDrawingLayerFillStyles : 1;
+    bool                mbEnableDrawingLayerFillStyles : 1;
 
     void                Init_Impl();
     DECL_LINK(    LayoutHdl_Impl, ListBox&, void);

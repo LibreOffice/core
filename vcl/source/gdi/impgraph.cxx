@@ -680,7 +680,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 
         case GraphicType::Bitmap:
         {
-            //UUUU used when importing a writer FlyFrame with SVG as graphic, added conversion
+            // used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
             if(maSvgData.get() && maEx.IsEmpty())
             {

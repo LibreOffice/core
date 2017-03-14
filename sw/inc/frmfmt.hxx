@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwFrameFormat: public SwFormat
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
-    //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
     // The assigned SwFrmFmt list.
@@ -163,7 +163,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrameFormat)
     void RegisterToFormat( SwFormat& rFormat );
 
-    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    // Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 

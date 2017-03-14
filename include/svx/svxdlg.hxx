@@ -377,7 +377,7 @@ public:
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger ) = 0;
-    //UUUU add for SvxBorderBackgroundDlg
+    // add for SvxBorderBackgroundDlg
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
         vcl::Window* pParent,
         const SfxItemSet& rCoreSet,

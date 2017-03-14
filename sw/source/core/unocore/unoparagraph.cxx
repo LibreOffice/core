@@ -46,7 +46,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/servicehelper.hxx>
 
-//UUUU
 #include <swunohelper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <editeng/unoipset.hxx>
@@ -164,7 +163,6 @@ public:
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames);
 
-    //UUUU
     /// @throws uno::RuntimeException
     void GetSinglePropertyValue_Impl(
         const SfxItemPropertySimpleEntry& rEntry,
@@ -438,7 +436,7 @@ void SAL_CALL SwXParagraph::setPropertyValues(
     }
 }
 
-//UUUU Support for DrawingLayer FillStyles for GetPropertyValue() usages
+// Support for DrawingLayer FillStyles for GetPropertyValue() usages
 void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
     const SfxItemPropertySimpleEntry& rEntry,
     const SfxItemSet& rSet,
@@ -501,7 +499,7 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
             }
         }
 
-        //UUUU check for needed metric translation
+        // check for needed metric translation
         if(rEntry.nMemberId & SFX_METRIC_ITEM)
         {
             bool bDoIt(true);
@@ -561,7 +559,6 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
                 *pEntry, aPam, &(pValues[nProp]), eTemp, &rTextNode );
             if (!bDone)
             {
-                //UUUU
                 GetSinglePropertyValue_Impl(*pEntry, rAttrSet, pValues[nProp]);
             }
         }
@@ -811,7 +808,6 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
                         // if not found try the real paragraph attributes...
                         if (!bDone)
                         {
-                            //UUUU
                             GetSinglePropertyValue_Impl(*pEntry, rValueAttrSet, aValue);
                         }
                     }
@@ -977,7 +973,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
             break;
         }
 
-        //UUUU DrawingLayer PropertyStyle support
+        // DrawingLayer PropertyStyle support
         case OWN_ATTR_FILLBMP_MODE:
         {
             if(*ppSet)
@@ -1126,7 +1122,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
     {
         std::set<sal_uInt16> aWhichIds;
 
-        //UUUU For FillBitmapMode two IDs have to be reset (!)
+        // For FillBitmapMode two IDs have to be reset (!)
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
             aWhichIds.insert(XATTR_FILLBMP_STRETCH);

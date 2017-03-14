@@ -122,7 +122,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if (pMgr)
             pDrawLayer->SetLinkManager(pMgr);
 
-        //UUUU set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
+        // set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
         // secondary pool to support DrawingLayer FillStyle ranges (and similar)
         // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
         // the PageStyle using SvxBrushItem is visualized and will be potentially
@@ -235,7 +235,7 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
 
 void ScDocument::DeleteDrawLayer()
 {
-    //UUUU remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
+    // remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
     // it is registered as secondary pool
     if (xPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
     {

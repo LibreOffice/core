@@ -1058,7 +1058,7 @@ namespace //local functions originally from docfmt.cxx
                      || isFRMATR(nWhich)
                      || isGRFATR(nWhich)
                      || isUNKNOWNATR(nWhich)
-                     || isDrawingLayerAttribute(nWhich) ) //UUUU
+                     || isDrawingLayerAttribute(nWhich) )
                 {
                     pOtherSet = &rChgSet;
                     bOtherAttr = true;
@@ -1086,7 +1086,7 @@ namespace //local functions originally from docfmt.cxx
                                         RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
-                                        //UUUU FillAttribute support
+                                        // FillAttribute support
                                         XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
                                         0 );
@@ -1395,7 +1395,7 @@ namespace //local functions originally from docfmt.cxx
             {
                 SwRegHistory aRegH( pNode, *pNode, pHistory );
 
-                //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+                // Need to check for unique item for DrawingLayer items of type NameOrIndex
                 // and evtl. correct that item to ensure unique names for that type. This call may
                 // modify/correct entries inside of the given SfxItemSet
                 SfxItemSet aTempLocalCopy(*pOtherSet);

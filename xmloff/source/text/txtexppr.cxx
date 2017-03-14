@@ -33,8 +33,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
-
-//UUUU
 #include <xmlsdtypes.hxx>
 
 using namespace ::com::sun::star;
@@ -664,7 +662,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pAllParaMargin = nullptr;
     XMLPropertyState* pAllMargin = nullptr;
 
-    //UUUU
     XMLPropertyState* pRepeatOffsetX = nullptr;
     XMLPropertyState* pRepeatOffsetY = nullptr;
 
@@ -810,17 +807,14 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_PARAMARGINALL:         pAllParaMargin = propertyState; break;
         case CTF_MARGINALL:             pAllMargin = propertyState; break;
 
-        //UUUU
         case CTF_REPEAT_OFFSET_X:
             pRepeatOffsetX = propertyState;
             break;
 
-        //UUUU
         case CTF_REPEAT_OFFSET_Y:
             pRepeatOffsetY = propertyState;
             break;
 
-        //UUUU
         case CTF_FILLGRADIENTNAME:
         case CTF_FILLHATCHNAME:
         case CTF_FILLBITMAPNAME:
@@ -838,7 +832,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
     }
 
-    //UUUU
     if( pRepeatOffsetX && pRepeatOffsetY )
     {
         sal_Int32 nOffset = 0;

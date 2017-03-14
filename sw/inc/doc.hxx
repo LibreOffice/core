@@ -636,7 +636,7 @@ public:
                                 const SwSelBoxes* pSelBoxes,
                                 SwFrameFormat *pParent );
 
-    //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
+    // Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
     // modify/correct entries inside of the given SfxItemSet, and it will apply a name to
     // the items in question (what is essential to make the named slots associated with

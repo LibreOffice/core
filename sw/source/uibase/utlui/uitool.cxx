@@ -467,7 +467,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         SfxItemSet aHeaderSet(*rSet.GetPool(),
             RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
-            //UUUU FillAttribute support
+            // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
 
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
@@ -476,7 +476,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
             0, 0);
 
-        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+        // set correct parent to get the XFILL_NONE FillStyle as needed
         aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height
@@ -518,7 +518,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         SfxItemSet aFooterSet(*rSet.GetPool(),
             RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
-            //UUUU FillAttribute support
+            // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
 
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
@@ -527,7 +527,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
             0, 0);
 
-        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+        // set correct parent to get the XFILL_NONE FillStyle as needed
         aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height

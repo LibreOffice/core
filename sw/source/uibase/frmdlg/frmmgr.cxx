@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 static sal_uInt16 aFrameMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
 
-                            //UUUU FillAttribute support
+                            // FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,

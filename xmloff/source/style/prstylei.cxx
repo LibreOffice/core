@@ -40,8 +40,6 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 #include <comphelper/sequence.hxx>
-
-//UUUU
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace ::com::sun::star;
@@ -52,8 +50,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
-
-//UUUU
 using namespace com::sun::star::drawing;
 
 void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -273,7 +269,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     OSL_ENSURE(xImpPrMap.is(), "There is no import prop mapper");
 
-    //UUUU need to filter out old fill definitions when the new ones are used. The new
+    // need to filter out old fill definitions when the new ones are used. The new
     // ones are used when a FillStyle is defined
     const bool bTakeCareOfDrawingLayerFillStyle(xImpPrMap.is() && GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH);
     bool bDrawingLayerFillStylesUsed(false);
@@ -293,7 +289,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     if( pSvXMLStylesContext->IsAutomaticStyle()
         && ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
     {
-        //UUUU Need to translate StyleName from temp MapNames to names
+        // Need to translate StyleName from temp MapNames to names
         // used in already imported items (already exist in the pool). This
         // is required for AutomaticStyles since these do *not* use FillPropertySet
         // and thus just trigger CheckSpecialContext in XMLTextStyleContext::FillPropertySet
@@ -534,7 +530,6 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     }
 }
 
-//UUUU
 bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
     const OUString& rFillStyleTag) const
 {
@@ -580,7 +575,6 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
     return false;
 }
 
-//UUUU
 void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
     const OldFillStyleDefinitionSet& rHashSetOfTags)
 {
@@ -607,7 +601,6 @@ void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
     }
 }
 
-//UUUU
 void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
 {
     if(maProperties.size())

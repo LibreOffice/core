@@ -181,7 +181,7 @@ bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId,
 
 bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
 {
-    //UUUU assert when the target SfxItemSet has no parent. It *should* have the pDfltFrameFormat
+    // assert when the target SfxItemSet has no parent. It *should* have the pDfltFrameFormat
     // from SwDoc set as parent (or similar) to have the necessary XFILL_NONE in the ItemSet
     if(!rToSet.GetParent())
     {
@@ -202,7 +202,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
     rToSet.Put(aAnchor);
 
-    //UUUU check for SvxBrushItem (RES_BACKGROUND) properties
+    // check for SvxBrushItem (RES_BACKGROUND) properties
     const ::uno::Any* pCol = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
     const ::uno::Any* pRGBCol = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
     const ::uno::Any* pColTrans = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
@@ -221,7 +221,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         pColTrans ||
         pRGBCol);
 
-    //UUUU check for FillStyle properties in the range XATTR_FILL_FIRST, XATTR_FILL_LAST
+    // check for FillStyle properties in the range XATTR_FILL_FIRST, XATTR_FILL_LAST
     const uno::Any* pXFillStyleItem = nullptr; GetProperty(XATTR_FILLSTYLE, 0, pXFillStyleItem);
     const uno::Any* pXFillColorItem = nullptr; GetProperty(XATTR_FILLCOLOR, 0, pXFillColorItem);
 
@@ -295,7 +295,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // from both sets.
     if(bSvxBrushItemPropertiesUsed && !bXFillStyleItemUsed)
     {
-        //UUUU create a temporary SvxBrushItem, fill the attributes to it and use it to set
+        // create a temporary SvxBrushItem, fill the attributes to it and use it to set
         // the corresponding FillAttributes
         SvxBrushItem aBrush(RES_BACKGROUND);
 
@@ -1410,11 +1410,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    //UUUU
     const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
     uno::Any aValue(_rValue);
 
-    //UUUU check for needed metric translation
+    // check for needed metric translation
     if(pEntry->nMemberId & SFX_METRIC_ITEM)
     {
         bool bDoIt(true);
@@ -1784,14 +1783,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 throw lang::IllegalArgumentException();
         }
         else
-        {   //UUUU
+        {
             // standard UNO API write attributes
             // adapt former attr from SvxBrushItem::PutValue to new items XATTR_FILL_FIRST, XATTR_FILL_LAST
             SfxItemSet aSet( pDoc->GetAttrPool(),
                 RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
                 RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
 
-                //UUUU FillAttribute support
+                // FillAttribute support
                 XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
                 0L);
@@ -1817,7 +1816,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
-                //UUUU
                 drawing::BitmapMode eMode;
 
                 if(!(aValue >>= eMode))
@@ -1842,7 +1840,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 case MID_NAME:
                 {
-                    //UUUU when named items get set, replace these with the NameOrIndex items
+                    // when named items get set, replace these with the NameOrIndex items
                     // which exist already in the pool
                     switch(pEntry->nWID)
                     {
@@ -1870,7 +1868,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
                 case MID_GRAFURL:
                 {
-                    //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+                    // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
                     switch(pEntry->nWID)
                     {
                         case XATTR_FILLBITMAP:
@@ -2003,7 +2001,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     if (!pEntry)
         throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    //UUUU
     const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
@@ -2247,7 +2244,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-        {   //UUUU
+        {
             // standard UNO API read attributes
             // adapt former attr from SvxBrushItem::PutValue to new items XATTR_FILL_FIRST, XATTR_FILL_LAST
             const SwAttrSet& rSet = pFormat->GetAttrSet();
@@ -2255,7 +2252,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             if(RES_BACKGROUND == pEntry->nWID)
             {
-                //UUUU
                 const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
                 if(!aOriginalBrushItem.QueryValue(aAny, nMemberId))
@@ -2267,7 +2263,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
-                //UUUU
                 const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
                 const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
 
@@ -2309,7 +2304,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else
         throw uno::RuntimeException();
 
-    //UUUU
     if(pEntry && pEntry->aType == ::cppu::UnoType<sal_Int16>::get() && pEntry->aType != aAny.getValueType())
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
@@ -2318,7 +2312,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         aAny <<= (sal_Int16)nValue;
     }
 
-    //UUUU check for needed metric translation
+    // check for needed metric translation
     if(pEntry->nMemberId & SFX_METRIC_ITEM)
     {
         bool bDoIt(true);
@@ -2412,7 +2406,6 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
             }
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
-                //UUUU
                 if(SfxItemState::SET == rFormatSet.GetItemState(XATTR_FILLBMP_STRETCH, false)
                     || SfxItemState::SET == rFormatSet.GetItemState(XATTR_FILLBMP_TILE, false))
                 {
@@ -2423,7 +2416,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                     pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
                 }
             }
-            //UUUU for FlyFrames we need to mark the used properties from type RES_BACKGROUND
+            // for FlyFrames we need to mark the used properties from type RES_BACKGROUND
             // as beans::PropertyState_DIRECT_VALUE to let users of this property call
             // getPropertyValue where the member properties will be mapped from the
             // fill attributes to the according SvxBrushItem entries
@@ -2484,7 +2477,6 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         bool bNextFrame;
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
-            //UUUU
             SwDoc* pDoc = pFormat->GetDoc();
             SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
             aSet.SetParent(&pFormat->GetAttrSet());
@@ -2576,7 +2568,6 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
             {
                 const SfxPoolItem& rDefItem =
                     pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
-                //UUUU
                 const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
 
                 rDefItem.QueryValue(aRet, nMemberId);
@@ -2713,7 +2704,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
 
-            //UUUU FillAttribute support
+            // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
             SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
@@ -2728,7 +2719,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         SfxItemSet aFrameSet(pDoc->GetAttrPool(), aFrameAttrRange );
 
-        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+        // set correct parent to get the XFILL_NONE FillStyle as needed
         aFrameSet.SetParent(&pDoc->GetDfltFrameFormat()->GetAttrSet());
 
         // no the related items need to be added to the set

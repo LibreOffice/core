@@ -30,12 +30,8 @@ namespace com { namespace sun { namespace star {
         class Any;
     }
 }}}
-
 namespace rtl {class OUString;}
-
 class DateTime;
-
-//UUUU
 class SfxItemSet;
 
 namespace SWUnoHelper {
@@ -74,7 +70,7 @@ SW_DLLPUBLIC bool UCB_IsFile( const OUString& rURL );
     // is the URL a existing directory?
 bool UCB_IsDirectory( const OUString& rURL );
 
-///UUUU helper to check if fill style is set to color or bitmap
+/// helper to check if fill style is set to color or bitmap
 /// and thus formerly used SvxBrushItem parts need to be mapped
 /// for backwards compatibility
 bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet, sal_uInt16 const nMemberId);
