@@ -75,6 +75,7 @@ private:
     VclPtr<PushButton>         m_pViewBtn;
     VclPtr<PushButton>         m_pAddBtn;
     VclPtr<PushButton>         m_pRemoveBtn;
+    VclPtr<PushButton>         m_pStartCertMgrBtn;
 
     VclPtr<CloseButton>        m_pCloseBtn;
 
@@ -94,6 +95,7 @@ private:
     DECL_LINK(SignatureSelectHdl, SvTreeListBox*, bool );
     DECL_LINK(StartVerifySignatureHdl, LinkParamNone*, bool );
     DECL_LINK(OKButtonHdl, Button*, void );
+    DECL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void );
 
     void                ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature);
     void                ImplFillSignaturesBox();
