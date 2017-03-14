@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0304677c",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-03-14T14:14:51Z",
+      "side": 1,
+      "message": "This function needs to be put into an anonymous namespace.",
+      "revId": "5c7e84bfc7c0bc1475e137e76b779ecf89173c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_63037374",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-03-14T14:14:51Z",
+      "side": 1,
+      "message": "Please use the calc naming style. Check the existing code in teh file how variables are prefixed.",
+      "revId": "5c7e84bfc7c0bc1475e137e76b779ecf89173c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_83f8577e",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-03-14T14:14:51Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment at all",
+      "revId": "5c7e84bfc7c0bc1475e137e76b779ecf89173c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
