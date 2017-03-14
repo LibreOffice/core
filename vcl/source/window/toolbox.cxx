@@ -66,7 +66,6 @@
 #define TB_SPIN_OFFSET          2
 #define TB_BORDER_OFFSET1       4
 #define TB_BORDER_OFFSET2       2
-#define TB_CUSTOMIZE_OFFSET     2
 #define TB_MAXLINES             5
 #define TB_MAXNOSCROLL          32765
 
@@ -86,14 +85,9 @@
 #define DOCK_LINETOP            ((sal_uInt16)0x8000)
 #define DOCK_LINEOFFSET         3
 
-typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
-
-
 class ImplTBDragMgr
 {
 private:
-    std::unique_ptr<ImplTBList>
-                    mpBoxList;
     VclPtr<ToolBox> mpDragBox;
     Point           maMouseOff;
     Rectangle       maRect;
@@ -101,7 +95,6 @@ private:
     Accelerator     maAccel;
     sal_uInt16      mnLineMode;
     ToolBox::ImplToolItems::size_type mnStartLines;
-    void*           mpCustomizeData;
     bool            mbShowDragRect;
 
     ImplTBDragMgr(const ImplTBDragMgr&) = delete;
@@ -110,27 +103,9 @@ private:
 public:
                     ImplTBDragMgr();
 
-    void            push_back( ToolBox* pBox )
-                        { mpBoxList->push_back( pBox ); }
-    void            erase( ToolBox* pBox )
-                    {
-                        for ( ImplTBList::iterator it = mpBoxList->begin(); it != mpBoxList->end(); ++it ) {
-                            if ( *it == pBox ) {
-                                mpBoxList->erase( it );
-                                break;
-                            }
-                        }
-                    }
-    size_t          size() const
-                    { return mpBoxList->size(); }
-
-    ToolBox*        FindToolBox( const Rectangle& rRect );
-
     void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode );
     void            Dragging( const Point& rPos );
     void            EndDragging( bool bOK = true );
-    void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
-    void            UpdateDragRect();
     DECL_LINK( SelectHdl, Accelerator&, void );
 };
 
@@ -1059,108 +1034,15 @@ void ToolBox::ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nL
     mnDockLines = i;
 }
 
-sal_uInt16 ToolBox::ImplFindItemPos( const Point& rPos ) const
-{
-    sal_uInt16  nPos = 0;
-    long    nLast = 0;
-    Point   aPos = rPos;
-    Size    aSize( mnDX, mnDY );
-
-    if ( aPos.X() > aSize.Width()-TB_BORDER_OFFSET1 )
-        aPos.X() = aSize.Width()-TB_BORDER_OFFSET1;
-    if ( aPos.Y() > aSize.Height()-TB_BORDER_OFFSET1 )
-        aPos.Y() = aSize.Height()-TB_BORDER_OFFSET1;
-
-    // Item suchen, das geklickt wurde
-    ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if ( it->mbVisible )
-        {
-            if ( nLast || !it->maRect.IsEmpty() )
-            {
-                if ( mbHorz )
-                {
-                    if ( nLast &&
-                         ((nLast < it->maRect.Top()) || it->maRect.IsEmpty()) )
-                        return nPos;
-
-                    if ( aPos.Y() <= it->maRect.Bottom() )
-                    {
-                        if ( aPos.X() < it->maRect.Left() )
-                            return nPos;
-                        else if ( aPos.X() < it->maRect.Right() )
-                            return nPos+1;
-                        else if ( !nLast )
-                            nLast = it->maRect.Bottom();
-                    }
-                }
-                else
-                {
-                    if ( nLast &&
-                         ((nLast < it->maRect.Left()) || it->maRect.IsEmpty()) )
-                        return nPos;
-
-                    if ( aPos.X() <= it->maRect.Right() )
-                    {
-                        if ( aPos.Y() < it->maRect.Top() )
-                            return nPos;
-                        else if ( aPos.Y() < it->maRect.Bottom() )
-                            return nPos+1;
-                        else if ( !nLast )
-                            nLast = it->maRect.Right();
-                    }
-                }
-            }
-        }
-
-        nPos++;
-        ++it;
-    }
-
-    return nPos;
-}
-
 ImplTBDragMgr::ImplTBDragMgr()
-    : mpBoxList(new ImplTBList)
-    , mpDragBox(nullptr)
+    : mpDragBox(nullptr)
     , mnLineMode(0)
     , mnStartLines(0)
-    , mpCustomizeData(nullptr)
     , mbShowDragRect(false)
 {
     maAccel.InsertItem( KEY_RETURN, vcl::KeyCode( KEY_RETURN ) );
     maAccel.InsertItem( KEY_ESCAPE, vcl::KeyCode( KEY_ESCAPE ) );
     maAccel.SetSelectHdl( LINK( this, ImplTBDragMgr, SelectHdl ) );
-}
-
-ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
-{
-    for (VclPtr<ToolBox> & i : *mpBoxList)
-    {
-        ToolBox* pBox = i;
-        /*
-         *  FIXME: since we can have multiple frames now we cannot
-         *  find the drag target by its position alone.
-         *  As long as the toolbar config dialogue is not a system window
-         *  this works in one frame only anyway. If the dialogue
-         *  changes to a system window, we need a new implementation here
-         */
-        if (  pBox->IsReallyVisible()
-           && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame
-        ) {
-            if ( !pBox->ImplIsFloatingMode() )
-            {
-                Point aPos = pBox->GetPosPixel();
-                aPos = pBox->GetParent()->OutputToScreenPixel( aPos );
-                Rectangle aTempRect( aPos, pBox->GetSizePixel() );
-                if ( aTempRect.IsOver( rRect ) )
-                    return pBox;
-            }
-        }
-    }
-
-    return nullptr;
 }
 
 void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
@@ -1172,19 +1054,8 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     pToolBox->mbDragging = true;
     Application::InsertAccel( &maAccel );
 
-    if ( nDragLineMode )
-    {
-        mnLineMode = nDragLineMode;
-        mnStartLines = pToolBox->mnDockLines;
-    }
-    else
-    {
-        mpCustomizeData = nullptr;
-        pToolBox->Activate();
-        pToolBox->mnCurItemId = pToolBox->mnConfigItem;
-        pToolBox->Highlight();
-        pToolBox->mnCurItemId = 0;
-    }
+    mnLineMode = nDragLineMode;
+    mnStartLines = pToolBox->mnDockLines;
 
     // MouseOffset berechnen
     maMouseOff.X() = rRect.Left() - rPos.X();
@@ -1197,21 +1068,12 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
 
 void ImplTBDragMgr::Dragging( const Point& rPos )
 {
-    if ( mnLineMode )
-    {
-        mpDragBox->ImplLineSizing( rPos, maRect, mnLineMode );
-        Point aOff = mpDragBox->OutputToScreenPixel( Point() );
-        maRect.Move( aOff.X(), aOff.Y() );
-        mpDragBox->Docking( rPos, maRect );
-        maRect.Move( -aOff.X(), -aOff.Y() );
-        mpDragBox->ShowTracking( maRect );
-    }
-    else
-    {
-        maRect.SetPos( rPos );
-        maRect.Move( maMouseOff.X(), maMouseOff.Y() );
-        mpDragBox->ShowTracking( maRect );
-    }
+    mpDragBox->ImplLineSizing( rPos, maRect, mnLineMode );
+    Point aOff = mpDragBox->OutputToScreenPixel( Point() );
+    maRect.Move( aOff.X(), aOff.Y() );
+    mpDragBox->Docking( rPos, maRect );
+    maRect.Move( -aOff.X(), -aOff.Y() );
+    mpDragBox->ShowTracking( maRect );
 }
 
 void ImplTBDragMgr::EndDragging( bool bOK )
@@ -1223,66 +1085,16 @@ void ImplTBDragMgr::EndDragging( bool bOK )
     mbShowDragRect = false;
     Application::RemoveAccel( &maAccel );
 
-    if ( mnLineMode )
+    if ( !bOK )
     {
-        if ( !bOK )
-        {
-            mpDragBox->mnDockLines = mnStartLines;
-            mpDragBox->EndDocking( maStartRect, false );
-        }
-        else
-            mpDragBox->EndDocking( maRect, false );
-        mnLineMode = 0;
-        mnStartLines = 0;
+        mpDragBox->mnDockLines = mnStartLines;
+        mpDragBox->EndDocking( maStartRect, false );
     }
     else
-    {
-        sal_uInt16 nTempItem = mpDragBox->mnConfigItem;
-        if ( nTempItem )
-        {
-            mpDragBox->mnConfigItem = 0;
-            mpDragBox->Invalidate( mpDragBox->GetItemRect( nTempItem ) );
-        }
-
-        if ( bOK && (maRect != maStartRect) )
-        {
-            Point aOff = mpDragBox->OutputToScreenPixel( Point() );
-            Rectangle aScreenRect( maRect );
-            aScreenRect.Move( aOff.X(), aOff.Y() );
-            ToolBox* pDropBox = FindToolBox( aScreenRect );
-            if ( pDropBox )
-            {
-                // Determine search position
-                Point aPos;
-                if ( pDropBox->mbHorz )
-                {
-                    aPos.X() = aScreenRect.Left()-TB_CUSTOMIZE_OFFSET;
-                    aPos.Y() = aScreenRect.Center().Y();
-                }
-                else
-                {
-                    aPos.X() = aScreenRect.Center().X();
-                    aPos.Y() = aScreenRect.Top()-TB_CUSTOMIZE_OFFSET;
-                }
-
-                aPos = pDropBox->ScreenToOutputPixel( aPos );
-                pDropBox->ImplFindItemPos( aPos );
-            }
-        }
-        mpCustomizeData = nullptr;
-        mpDragBox->Deactivate();
-    }
+        mpDragBox->EndDocking( maRect, false );
+    mnStartLines = 0;
 
     mpDragBox = nullptr;
-}
-
-void ImplTBDragMgr::UpdateDragRect()
-{
-    // Only update if we're already dragging
-    if ( !mbShowDragRect )
-        return;
-
-    mpDragBox->ShowTracking( maRect );
 }
 
 IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
@@ -1320,7 +1132,6 @@ void ToolBox::ImplInitToolBoxData()
     mnVisLines        = 1;
     mnFloatLines      = 0;
     mnDockLines       = 0;
-    mnConfigItem      = 0;
     mnMouseClicks     = 0;
     mnMouseModifier   = 0;
     mbDrag            = false;
@@ -1558,21 +1369,9 @@ void ToolBox::dispose()
     delete mpData;
     mpData = nullptr;
 
-    // remove the lists when there are no more toolbox references to
-    // the lists
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maCtrlData.mpTBDragMgr )
-    {
-        // remove if in TBDrag-Manager
-        if ( mbCustomize )
-            pSVData->maCtrlData.mpTBDragMgr->erase( this );
-
-        if ( !pSVData->maCtrlData.mpTBDragMgr->size() )
-        {
-            delete pSVData->maCtrlData.mpTBDragMgr;
-            pSVData->maCtrlData.mpTBDragMgr = nullptr;
-        }
-    }
+    delete pSVData->maCtrlData.mpTBDragMgr;
+    pSVData->maCtrlData.mpTBDragMgr = nullptr;
 
     if (mpStatusListener.is())
         mpStatusListener->dispose();
@@ -2993,16 +2792,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     if ( (pItem->meType != ToolBoxItemType::BUTTON) || pItem->mbShowWindow )
         return;
 
-    // we need a TBDragMananger to draw the configuration item
-    ImplTBDragMgr* pMgr;
-    if ( pItem->mnId == mnConfigItem )
-    {
-        pMgr = ImplGetTBDragMgr();
-        pMgr->HideDragRect();
-    }
-    else
-        pMgr = nullptr;
-
     if ( pItem->meState == TRISTATE_TRUE )
     {
         nStyle |= DrawButtonFlags::Checked;
@@ -3195,10 +2984,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         }
         ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
     }
-
-    // draw config-frame if required
-    if (pMgr)
-        pMgr->UpdateDragRect();
 }
 
 void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem)
@@ -3722,21 +3507,6 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         // item found
         if ( nNewPos != ITEM_NOTFOUND )
         {
-            if ( mbCustomize )
-            {
-                if ( rMEvt.IsMod2() )
-                {
-                    Deactivate();
-
-                    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-                    Rectangle aItemRect = GetItemRect( it->mnId );
-                    mnConfigItem = it->mnId;
-
-                    pMgr->StartDragging( this, aMousePos, aItemRect, 0 );
-                    return;
-                }
-            }
-
             if ( !it->mbEnabled )
             {
                 Deactivate();
@@ -4784,16 +4554,7 @@ Size ToolBox::CalcMinimumWindowSizePixel()
 
 void ToolBox::EnableCustomize( bool bEnable )
 {
-    if ( bEnable != mbCustomize )
-    {
-        mbCustomize = bEnable;
-
-        ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-        if ( bEnable )
-            pMgr->push_back( this );
-        else
-            pMgr->erase( this );
-    }
+    mbCustomize = bEnable;
 }
 
 void ToolBox::LoseFocus()

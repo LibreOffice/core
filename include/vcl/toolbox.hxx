@@ -132,7 +132,6 @@ private:
     ImplToolItems::size_type mnVisLines; // number of visible lines (for scrolling)
     ImplToolItems::size_type mnFloatLines; // number of lines during floating mode
     ImplToolItems::size_type mnDockLines;
-    sal_uInt16          mnConfigItem;
     sal_uInt16          mnMouseClicks;
     sal_uInt16          mnMouseModifier;
     bool                mbDrag:1,
@@ -255,7 +254,6 @@ public:
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( long nToolSize ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
     SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
-    SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const Point& rPos ) const;
     static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
     SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
