@@ -160,22 +160,21 @@ sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertifica
 }
 
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
-    const Reference< XCertificate >& /*aCert*/)
+    const Reference< XCertificate >& aCert)
 {
-//     const CertificateImpl* xCert;
-//     const GpgME::Key* key;
-//
-//     Reference< XUnoTunnel > xCertTunnel(aCert, UNO_QUERY_THROW) ;
-//     xCert = reinterpret_cast<CertificateImpl*>(sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething(CertificateImpl::getUnoTunnelId()))) ;
-//     if (xCert == nullptr)
-//         throw RuntimeException();
-//
-//     key = xCert->getCertificate();
-//
+    const CertificateImpl* xCert;
+    const GpgME::Key* key;
+
+    Reference< XUnoTunnel > xCertTunnel(aCert, UNO_QUERY_THROW) ;
+    xCert = reinterpret_cast<CertificateImpl*>(sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething(CertificateImpl::getUnoTunnelId()))) ;
+    if (xCert == nullptr)
+        throw RuntimeException();
+
+    key = xCert->getCertificate();
     sal_Int32 characters = 0x0;
 
-    // TODO There is a bug in gpgme, hasSecret() always returns false. Need to find a workaround.
-    //if (key->hasSecret())
+    // We need to use canSign() instead of hasSecret() because of a bug in the latter.
+    if (key->canSign())
         characters |= CertificateCharacters::HAS_PRIVATE_KEY;
 
     return characters;
