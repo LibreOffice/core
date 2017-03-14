@@ -411,13 +411,13 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             EditLine& rLine = pPPortion->GetLines()[nLine];
 
             OString aLine(OUStringToOString(pPPortion->GetNode()->Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
-            fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.getStr() );
+            fprintf( fp, "\nLine %" SAL_PRIdINT32 "\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
         for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine& rLine = pPPortion->GetLines()[nLine];
-            fprintf( fp, "\nZeile %i:\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
+            fprintf( fp, "\nZeile %" SAL_PRIdINT32 ":\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
             fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", rLine.GetStartPortion(), rLine.GetEndPortion(), rLine.GetHeight(), rLine.GetMaxAscent() );
         }
 
