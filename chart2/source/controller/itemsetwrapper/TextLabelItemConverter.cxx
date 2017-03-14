@@ -97,15 +97,14 @@ bool numberFormatFromItemToPropertySet(
         return bChanged;
 
     uno::Any aValue;
-    bool bUseSourceFormat = (static_cast<const SfxBoolItem&>(rItemSet.Get(nSourceWhich)).GetValue());
+    bool bUseSourceFormat = rItemSet.GetItem<SfxBoolItem>(nSourceWhich)->GetValue());
     if (!bUseSourceFormat)
     {
         SfxItemState aState = rItemSet.GetItemState(nWhichId);
         if (aState == SfxItemState::SET)
         {
             sal_Int32 nFmt = static_cast<sal_Int32>(
-                static_cast<const SfxUInt32Item&>(
-                    rItemSet.Get(nWhichId)).GetValue());
+                rItemSet.GetItem<SfxUInt32Item>(nWhichId)->GetValue());
             aValue <<= nFmt;
         }
         else
@@ -145,16 +144,14 @@ bool useSourceFormatFromItemToPropertySet(
         return bChanged;
 
     uno::Any aNewValue;
-    bool bUseSourceFormat = (static_cast<const SfxBoolItem&>(
-            rItemSet.Get(nWhichId)).GetValue());
+    bool bUseSourceFormat = rItemSet.GetItem<SfxBoolItem>(nWhichId)->GetValue());
     if (!bUseSourceFormat)
     {
         SfxItemState aState = rItemSet.GetItemState(nFormatWhich);
         if (aState == SfxItemState::SET)
         {
             sal_Int32 nFormatKey = static_cast<sal_Int32>(
-                static_cast<const SfxUInt32Item&>(
-                    rItemSet.Get(nFormatWhich)).GetValue());
+                rItemSet.GetItem<SfxUInt32Item>(nFormatWhich)->GetValue());
             aNewValue <<= nFormatKey;
         }
         else
@@ -261,7 +258,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
-            const SfxBoolItem& rItem = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId));
+            const SfxBoolItem& rItem = *rItemSet.GetItem<SfxBoolItem>(nWhichId);
 
             uno::Any aOldValue = GetPropertySet()->getPropertyValue(CHART_UNONAME_LABEL);
             chart2::DataPointLabel aLabel;
@@ -304,7 +301,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         break;
         case SCHATTR_DATADESCR_SEPARATOR:
         {
-            OUString aNewValue = static_cast<const SfxStringItem&>(rItemSet.Get(nWhichId)).GetValue();
+            OUString aNewValue = rItemSet.GetItem<SfxStringItem>(nWhichId)->GetValue();
             OUString aOldValue;
             try
             {
@@ -336,7 +333,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
 
             try
             {
-                bool bNew = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                bool bNew = rItemSet.GetItem<SfxBoolItem>( nWhichId )->GetValue();
                 bool bOld = false;
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
                 if( mbDataSeries )
@@ -365,7 +362,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         {
             try
             {
-                sal_Int32 nNew = static_cast<const SfxInt32Item&>(rItemSet.Get(nWhichId)).GetValue();
+                sal_Int32 nNew = rItemSet.GetItem<SfxInt32Item>(nWhichId)->GetValue();
                 sal_Int32 nOld = 0;
                 if (!(GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld))
                 {
@@ -396,9 +393,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         break;
         case SCHATTR_STYLE_SYMBOL:
         {
-            sal_Int32 nStyle =
-                static_cast<const SfxInt32Item&>(
-                rItemSet.Get(nWhichId)).GetValue();
+            sal_Int32 nStyle = rItemSet.GetItem<SfxInt32Item>(nWhichId)->GetValue();
             chart2::Symbol aSymbol;
 
             GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol;
@@ -437,8 +432,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         break;
         case SCHATTR_SYMBOL_SIZE:
         {
-            Size aSize = static_cast<const SvxSizeItem&>(
-                rItemSet.Get(nWhichId)).GetSize();
+            Size aSize = rItemSet.GetItem<SvxSizeItem>(nWhichId)->GetSize();
             chart2::Symbol aSymbol;
 
             GetPropertySet()->getPropertyValue("Symbol") >>= aSymbol;
@@ -455,8 +449,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         break;
         case SCHATTR_SYMBOL_BRUSH:
         {
-            const SvxBrushItem& rBrshItem(static_cast<const SvxBrushItem&>(
-                    rItemSet.Get(nWhichId)));
+            const SvxBrushItem& rBrshItem = *rItemSet.GetItem<SvxBrushItem>(nWhichId);
             uno::Any aXGraphicAny;
             const Graphic* pGraphic(rBrshItem.GetGraphic());
             if (pGraphic)
@@ -480,8 +473,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         case SCHATTR_TEXT_DEGREES:
         {
             double fValue = static_cast<double>(
-                static_cast<const SfxInt32Item&>(
-                    rItemSet.Get(nWhichId)).GetValue()) / 100.0;
+                rItemSet.GetItem<SfxInt32Item>(nWhichId)->GetValue()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
                 (GetPropertySet()->getPropertyValue("TextRotation") >>= fOldValue);
