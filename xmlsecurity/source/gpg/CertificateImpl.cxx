@@ -35,17 +35,23 @@ sal_Int16 SAL_CALL CertificateImpl::getVersion()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSerialNumber()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 OUString SAL_CALL CertificateImpl::getIssuerName()
 {
-    return OStringToOUString(m_pKey.userID(0).name(), RTL_TEXTENCODING_UTF8);
+    const GpgME::UserID userId = m_pKey.userID(0);
+    if (userId.isNull())
+        return OUString();
+
+    return OStringToOUString(userId.id(), RTL_TEXTENCODING_UTF8);
 }
 
 OUString SAL_CALL CertificateImpl::getSubjectName()
 {
-    return OUString("");
+    // Empty for gpg
+    return OUString();
 }
 
 namespace {
@@ -83,32 +89,41 @@ DateTime SAL_CALL CertificateImpl::getNotValidAfter()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getIssuerUniqueID()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSubjectUniqueID()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 Sequence< Reference< XCertificateExtension > > SAL_CALL CertificateImpl::getExtensions()
 {
+    // Empty for gpg
     return Sequence< Reference< XCertificateExtension > > ();
 }
 
 Reference< XCertificateExtension > SAL_CALL CertificateImpl::findCertificateExtension( const Sequence< sal_Int8 >& /*oid*/ )
 {
+    // Empty for gpg
     return Reference< XCertificateExtension > ();
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getEncoded()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 OUString SAL_CALL CertificateImpl::getSubjectPublicKeyAlgorithm()
 {
-    return OUString();
+    const GpgME::Subkey subkey = m_pKey.subkey(0);
+    if (subkey.isNull())
+        return OUString();
+
+    return OStringToOUString(subkey.publicKeyAlgorithmAsString(), RTL_TEXTENCODING_UTF8);
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSubjectPublicKeyValue()
@@ -118,21 +133,32 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSubjectPublicKeyValue()
 
 OUString SAL_CALL CertificateImpl::getSignatureAlgorithm()
 {
-    return OUString();
+    const GpgME::UserID userId = m_pKey.userID(0);
+    if (userId.isNull())
+        return OUString();
+
+    const GpgME::UserID::Signature signature = userId.signature(0);
+    if (signature.isNull())
+        return OUString();
+
+    return OStringToOUString(signature.algorithmAsString(), RTL_TEXTENCODING_UTF8);
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSHA1Thumbprint()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 uno::Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
 {
+    // Empty for gpg
     return Sequence< sal_Int8 > ();
 }
 
