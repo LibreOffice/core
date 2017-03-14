@@ -146,7 +146,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBSERIALIZER_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBXML_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_SAC_TARBALL) \
-		$(call fetch_Optional,JPEG,JPEG_TARBALL) \
 		$(call fetch_Optional,JPEG_TURBO,JPEG_TURBO_TARBALL) \
 		$(call fetch_Optional,LANGUAGETOOL,LANGUAGETOOL_TARBALL) \
 		$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \

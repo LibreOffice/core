@@ -1,6 +1,0 @@
-External library for reading/writing jpegs
-
-This is only used by the jpeg import filter that is provided
-for use by VCL see [[vcl/source/filter/jpeg]]
-
-
