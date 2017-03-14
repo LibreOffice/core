@@ -397,7 +397,7 @@ void ImpVclMEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
 
 void ImpVclMEdit::Resize()
 {
-    size_t nIteration = 1;
+    int nIteration = 1;
     do
     {
         WinBits nWinStyle( pVclMultiLineEdit->GetStyle() );
