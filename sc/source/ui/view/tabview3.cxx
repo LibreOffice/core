@@ -279,6 +279,8 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ALIGNBOTTOM );
     rBindings.Invalidate( SID_ALIGNCENTERVER );
 
+    rBindings.Invalidate( SID_SCATTR_PROTECTION );
+
     // stuff for sidebar panels
     {
         rBindings.Invalidate( SID_H_ALIGNCELL );
