@@ -40,6 +40,7 @@
 #include "hints.hxx"
 #include <dputil.hxx>
 #include "globstr.hrc"
+#include "generalfunction.hxx"
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -186,22 +187,22 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItem
 // name that is used in the API for the data layout field
 #define SC_DATALAYOUT_NAME  "Data"
 
-sal_Int16 ScDataPilotConversion::FirstFunc( PivotFunc nBits )
+ScGeneralFunction ScDataPilotConversion::FirstFunc( PivotFunc nBits )
 {
-    if ( nBits & PivotFunc::Sum )       return GeneralFunction2::SUM;
-    if ( nBits & PivotFunc::Count )     return GeneralFunction2::COUNT;
-    if ( nBits & PivotFunc::Average )   return GeneralFunction2::AVERAGE;
-    if ( nBits & PivotFunc::Median )    return GeneralFunction2::MEDIAN;
-    if ( nBits & PivotFunc::Max )       return GeneralFunction2::MAX;
-    if ( nBits & PivotFunc::Min )       return GeneralFunction2::MIN;
-    if ( nBits & PivotFunc::Product )   return GeneralFunction2::PRODUCT;
-    if ( nBits & PivotFunc::CountNum ) return GeneralFunction2::COUNTNUMS;
-    if ( nBits & PivotFunc::StdDev )   return GeneralFunction2::STDEV;
-    if ( nBits & PivotFunc::StdDevP )  return GeneralFunction2::STDEVP;
-    if ( nBits & PivotFunc::StdVar )   return GeneralFunction2::VAR;
-    if ( nBits & PivotFunc::StdVarP )  return GeneralFunction2::VARP;
-    if ( nBits & PivotFunc::Auto )      return GeneralFunction2::AUTO;
-    return GeneralFunction2::NONE;
+    if ( nBits & PivotFunc::Sum )       return ScGeneralFunction::SUM;
+    if ( nBits & PivotFunc::Count )     return ScGeneralFunction::COUNT;
+    if ( nBits & PivotFunc::Average )   return ScGeneralFunction::AVERAGE;
+    if ( nBits & PivotFunc::Median )    return ScGeneralFunction::MEDIAN;
+    if ( nBits & PivotFunc::Max )       return ScGeneralFunction::MAX;
+    if ( nBits & PivotFunc::Min )       return ScGeneralFunction::MIN;
+    if ( nBits & PivotFunc::Product )   return ScGeneralFunction::PRODUCT;
+    if ( nBits & PivotFunc::CountNum )  return ScGeneralFunction::COUNTNUMS;
+    if ( nBits & PivotFunc::StdDev )    return ScGeneralFunction::STDEV;
+    if ( nBits & PivotFunc::StdDevP )   return ScGeneralFunction::STDEVP;
+    if ( nBits & PivotFunc::StdVar )    return ScGeneralFunction::VAR;
+    if ( nBits & PivotFunc::StdVarP )   return ScGeneralFunction::VARP;
+    if ( nBits & PivotFunc::Auto )      return ScGeneralFunction::AUTO;
+    return ScGeneralFunction::NONE;
 }
 
 PivotFunc ScDataPilotConversion::FunctionBit( sal_Int16 eFunc )
@@ -1814,34 +1815,40 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     if ( aPropertyName == SC_UNONAME_FUNCTION )
     {
         // #i109350# use GetEnumFromAny because it also allows sal_Int32
-        GeneralFunction eFunction = (GeneralFunction)
+        ScGeneralFunction eFunction = (ScGeneralFunction)
                             ScUnoHelpFunctions::GetEnumFromAny( aValue );
-        setFunction( static_cast<sal_Int16> (eFunction) );
+        setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_FUNCTION2 )
     {
-        sal_Int16 eFunction = ScUnoHelpFunctions::GetInt16FromAny( aValue );
+        ScGeneralFunction eFunction = (ScGeneralFunction)ScUnoHelpFunctions::GetInt16FromAny( aValue );
         setFunction( eFunction );
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
-        Sequence< sal_Int16 > aSubTotals;
         uno::Sequence<sheet::GeneralFunction> aSeq;
         if( aValue >>= aSeq)
         {
-            aSubTotals.realloc(aSeq.getLength());
+            std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
             for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
             {
-                aSubTotals[nIndex] = static_cast<sal_Int16>(aSeq[nIndex]);
+                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(aSeq[nIndex]);
             }
             setSubtotals( aSubTotals );
         }
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS2 )
     {
-        Sequence< sal_Int16 > aSubtotals;
-        if( aValue >>= aSubtotals )
-            setSubtotals( aSubtotals );
+        Sequence< sal_Int16 > aSeq;
+        if( aValue >>= aSeq )
+        {
+            std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
+            for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
+            {
+                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(aSeq[nIndex]);
+            }
+            setSubtotals( aSubTotals );
+        }
     }
     else if ( aPropertyName == SC_UNONAME_ORIENT )
     {
@@ -2112,7 +2119,7 @@ sal_Int16 ScDataPilotFieldObj::getFunction() const
     return eRet;
 }
 
-void ScDataPilotFieldObj::setFunction(sal_Int16 eNewFunc)
+void ScDataPilotFieldObj::setFunction(ScGeneralFunction eNewFunc)
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
@@ -2121,15 +2128,15 @@ void ScDataPilotFieldObj::setFunction(sal_Int16 eNewFunc)
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
             // for non-data fields, property Function is the subtotals
-            std::vector<sal_uInt16> nSubTotalFuncs;
-            if ( eNewFunc != GeneralFunction2::NONE )
+            std::vector<ScGeneralFunction> nSubTotalFuncs;
+            if ( eNewFunc != ScGeneralFunction::NONE )
             {
-                nSubTotalFuncs.push_back( sal::static_int_cast<sal_uInt16>( eNewFunc ) );
+                nSubTotalFuncs.push_back( eNewFunc );
             }
             pDim->SetSubTotals( nSubTotalFuncs );
         }
         else
-            pDim->SetFunction( sal::static_int_cast<sal_uInt16>( eNewFunc ) );
+            pDim->SetFunction( eNewFunc );
         SetDPObject( pDPObj );
     }
 }
@@ -2155,7 +2162,7 @@ Sequence< sal_Int16 > ScDataPilotFieldObj::getSubtotals() const
     return aRet;
 }
 
-void ScDataPilotFieldObj::setSubtotals( const Sequence< sal_Int16 >& rSubtotals )
+void ScDataPilotFieldObj::setSubtotals( const std::vector< ScGeneralFunction >& rSubtotals )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = nullptr;
@@ -2163,30 +2170,29 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< sal_Int16 >& rSubtotals 
     {
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
-            sal_Int32 nCount = rSubtotals.getLength();
+            sal_Int32 nCount = rSubtotals.size();
             if( nCount == 1 )
             {
                 // count 1: all values are allowed (including NONE and AUTO)
-                std::vector<sal_uInt16> nTmpFuncs;
-                if( rSubtotals[ 0 ] != GeneralFunction2::NONE )
+                std::vector<ScGeneralFunction> nTmpFuncs;
+                if( rSubtotals[ 0 ] != ScGeneralFunction::NONE )
                 {
-                    nTmpFuncs.push_back( sal::static_int_cast<sal_uInt16>( rSubtotals[ 0 ] ) );
+                    nTmpFuncs.push_back( rSubtotals[ 0 ] );
                 }
                 pDim->SetSubTotals( nTmpFuncs );
             }
             else if( nCount > 1 )
             {
                 // set multiple functions, ignore NONE and AUTO in this case
-                ::std::vector< sal_uInt16 > aSubt;
+                ::std::vector< ScGeneralFunction > aSubt;
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
                 {
-                    sal_Int16 eFunc = rSubtotals[ nIdx ];
-                    if( (eFunc != GeneralFunction2::NONE) && (eFunc != GeneralFunction2::AUTO) )
+                    ScGeneralFunction eFunc = rSubtotals[ nIdx ];
+                    if( (eFunc != ScGeneralFunction::NONE) && (eFunc != ScGeneralFunction::AUTO) )
                     {
                         // do not insert functions twice
-                        sal_uInt16 nFunc = static_cast< sal_uInt16 >( eFunc );
-                        if( ::std::find( aSubt.begin(), aSubt.end(), nFunc ) == aSubt.end() )
-                            aSubt.push_back( nFunc );
+                        if( ::std::find( aSubt.begin(), aSubt.end(), eFunc ) == aSubt.end() )
+                            aSubt.push_back( eFunc );
                     }
                 }
                 // set values from vector to ScDPSaveDimension

@@ -25,6 +25,7 @@
 #include "subtotal.hxx"
 #include "globstr.hrc"
 #include "dpitemdata.hxx"
+#include "generalfunction.hxx"
 
 #include "document.hxx"
 #include "dpresfilter.hxx"
@@ -739,8 +740,8 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
 
         if ( nFuncNo >= 0 && nFuncNo < nSequence )
         {
-            sal_Int16 eUser = aSeq.getConstArray()[nFuncNo];
-            if (eUser != sheet::GeneralFunction2::AUTO)
+            ScGeneralFunction eUser = (ScGeneralFunction)aSeq.getConstArray()[nFuncNo];
+            if (eUser != ScGeneralFunction::AUTO)
                 eRet = ScDPUtil::toSubTotalFunc(eUser);
         }
     }

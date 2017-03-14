@@ -65,9 +65,6 @@ class ScDPResultMember;
 class ScDPResultData;
 class ScDPItemData;
 class ScDPTableData;
-
-//  implementation of DataPilotSource using ScDPTableData
-
 class ScDPDimensions;
 class ScDPDimension;
 class ScDPHierarchies;
@@ -76,6 +73,9 @@ class ScDPLevels;
 class ScDPLevel;
 class ScDPMembers;
 class ScDPMember;
+enum class ScGeneralFunction;
+
+//  implementation of DataPilotSource using ScDPTableData
 
 class ScDPSource : public cppu::WeakImplHelper<
                             css::sheet::XDimensionsSupplier,
@@ -267,7 +267,7 @@ class ScDPDimension : public cppu::WeakImplHelper<
     ScDPSource*         pSource;
     long                nDim;               // dimension index (== column ID)
     rtl::Reference<ScDPHierarchies> mxHierarchies;
-    sal_uInt16          nFunction;          // enum GeneralFunction2
+    ScGeneralFunction   nFunction;
     OUString            aName;              // if empty, take from source
     std::unique_ptr<OUString> mpLayoutName;
     std::unique_ptr<OUString> mpSubtotalName;
@@ -331,8 +331,8 @@ public:
 
     sal_uInt16 getOrientation() const;
     bool getIsDataLayoutDimension() const;
-    sal_uInt16 getFunction() const { return nFunction;}
-    void setFunction(sal_uInt16 nNew);       // for data dimension
+    ScGeneralFunction getFunction() const { return nFunction;}
+    void setFunction(ScGeneralFunction nNew);       // for data dimension
     static long getUsedHierarchy() { return 0;}
 
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }

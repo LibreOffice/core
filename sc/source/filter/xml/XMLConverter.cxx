@@ -29,6 +29,7 @@
 #include "convuno.hxx"
 #include "document.hxx"
 #include "ftools.hxx"
+#include "generalfunction.hxx"
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
@@ -72,35 +73,35 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
     return sheet::GeneralFunction_NONE;
 }
 
-sal_Int16 ScXMLConverter::GetFunctionFromString2( const OUString& sFunction )
+ScGeneralFunction ScXMLConverter::GetFunctionFromString2( const OUString& sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
-        return sheet::GeneralFunction2::SUM;
+        return ScGeneralFunction::SUM;
     if( IsXMLToken(sFunction, XML_AUTO ) )
-        return sheet::GeneralFunction2::AUTO;
+        return ScGeneralFunction::AUTO;
     if( IsXMLToken(sFunction, XML_COUNT ) )
-        return sheet::GeneralFunction2::COUNT;
+        return ScGeneralFunction::COUNT;
     if( IsXMLToken(sFunction, XML_COUNTNUMS ) )
-        return sheet::GeneralFunction2::COUNTNUMS;
+        return ScGeneralFunction::COUNTNUMS;
     if( IsXMLToken(sFunction, XML_PRODUCT ) )
-        return sheet::GeneralFunction2::PRODUCT;
+        return ScGeneralFunction::PRODUCT;
     if( IsXMLToken(sFunction, XML_AVERAGE ) )
-        return sheet::GeneralFunction2::AVERAGE;
+        return ScGeneralFunction::AVERAGE;
     if( IsXMLToken(sFunction, XML_MEDIAN ) )
-        return sheet::GeneralFunction2::MEDIAN;
+        return ScGeneralFunction::MEDIAN;
     if( IsXMLToken(sFunction, XML_MAX ) )
-        return sheet::GeneralFunction2::MAX;
+        return ScGeneralFunction::MAX;
     if( IsXMLToken(sFunction, XML_MIN ) )
-        return sheet::GeneralFunction2::MIN;
+        return ScGeneralFunction::MIN;
     if( IsXMLToken(sFunction, XML_STDEV ) )
-        return sheet::GeneralFunction2::STDEV;
+        return ScGeneralFunction::STDEV;
     if( IsXMLToken(sFunction, XML_STDEVP ) )
-        return sheet::GeneralFunction2::STDEVP;
+        return ScGeneralFunction::STDEVP;
     if( IsXMLToken(sFunction, XML_VAR ) )
-        return sheet::GeneralFunction2::VAR;
+        return ScGeneralFunction::VAR;
     if( IsXMLToken(sFunction, XML_VARP ) )
-        return sheet::GeneralFunction2::VARP;
-    return sheet::GeneralFunction2::NONE;
+        return ScGeneralFunction::VARP;
+    return ScGeneralFunction::NONE;
 }
 
 ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunction )
