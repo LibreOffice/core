@@ -11,6 +11,8 @@
 
 #include <comphelper/servicehelper.hxx>
 
+#include <com/sun/star/security/KeyUsage.hpp>
+
 using namespace css;
 using namespace css::uno;
 using namespace css::security;
@@ -136,7 +138,7 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
 
 sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
 {
-    return 0;
+    return KeyUsage::DIGITAL_SIGNATURE | KeyUsage::NON_REPUDIATION  | KeyUsage::KEY_ENCIPHERMENT | KeyUsage::DATA_ENCIPHERMENT;
 }
 
 /* XUnoTunnel */
