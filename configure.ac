@@ -1130,16 +1130,6 @@ libo_FUZZ_ARG_ENABLE(directx,
          compile. (DirectX SDK, GDI+ libs)])
 )
 
-libo_FUZZ_ARG_ENABLE(activex,
-    AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for a Windows build.])
-,)
-
-libo_FUZZ_ARG_ENABLE(atl,
-    AS_HELP_STRING([--disable-atl],
-        [Disable the use of ATL for a Windows build.])
-,)
-
 libo_FUZZ_ARG_ENABLE(avahi,
     AS_HELP_STRING([--enable-avahi],
         [Determines whether to use Avahi to advertise Impress to remote controls.]),
@@ -3698,34 +3688,11 @@ if test "$_os" = "WINNT"; then
         ENABLE_DIRECTX=""
         AC_MSG_RESULT([no])
     fi
-
-    AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = ""; then
-        DISABLE_ACTIVEX=""
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ACTIVEX="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
-        DISABLE_ATL=""
-        AC_DEFINE(HAVE_FEATURE_ATL, 1)
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ATL="TRUE"
-        AC_MSG_RESULT([no])
-    fi
 else
     ENABLE_DIRECTX=""
-    DISABLE_ACTIVEX="TRUE"
-    DISABLE_ATL="TRUE"
 fi
 
 AC_SUBST(ENABLE_DIRECTX)
-AC_SUBST(DISABLE_ACTIVEX)
-AC_SUBST(DISABLE_ATL)
 
 #
 # unowinreg.dll

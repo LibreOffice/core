@@ -346,7 +346,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
 	editeng \
-	$(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
+	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
 	expwrap \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
@@ -456,7 +456,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	mozbootstrap \
 	$(if $(filter $(OS),WNT), \
 		ado \
-		$(if $(DISABLE_ATL),,oleautobridge) \
+		oleautobridge \
 		smplmail \
 		wininetbe1 \
 	) \
@@ -604,7 +604,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_JAVA), \
 		$(if $(filter $(OS),MACOSX),,officebean) \
 	) \
-	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
+	emboleobj \
 	package2 \
 	$(if $(USING_X11),recentfile) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
@@ -636,11 +636,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		dtrans \
 		fps \
 		ftransl \
-		$(if $(DISABLE_ATL),,\
-			inprocserv \
-			UAccCOM \
-			winaccessibility \
-		) \
+		inprocserv \
+		UAccCOM \
+		winaccessibility \
 	) \
 ))
 
@@ -652,24 +650,18 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
-	$(if $(DISABLE_ACTIVEX),,\
-		regactivex \
-	) \
+	regactivex \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
-	$(if $(DISABLE_ACTIVEX),,\
-		so_activex \
-		spsupp \
-	) \
+	so_activex \
+	spsupp \
 ))
 
 ifneq ($(BUILD_X64),)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin64, \
-	$(if $(DISABLE_ACTIVEX),,\
-		so_activex_x64 \
-		spsupp_x64 \
-	) \
+	so_activex_x64 \
+	spsupp_x64 \
 ))
 endif
 

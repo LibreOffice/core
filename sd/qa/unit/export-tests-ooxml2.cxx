@@ -82,10 +82,7 @@ class SdOOXMLExportTest2 : public SdModelTestBaseXML
 public:
     void testTdf93883();
     void testTdf91378();
-//This test gives errors due to ATL
-#if HAVE_FEATURE_ATL || !defined(_WIN32)
     void testBnc822341();
-#endif
     void testMathObject();
     void testMathObjectPPT2010();
     void testTdf80224();
@@ -109,10 +106,7 @@ public:
 
     CPPUNIT_TEST(testTdf93883);
     CPPUNIT_TEST(testTdf91378);
-//This test gives errors due to ATL
-#if HAVE_FEATURE_ATL || !defined(_WIN32)
     CPPUNIT_TEST(testBnc822341);
-#endif
     CPPUNIT_TEST(testMathObject);
     CPPUNIT_TEST(testMathObjectPPT2010);
     CPPUNIT_TEST(testTdf80224);
@@ -174,8 +168,6 @@ void SdOOXMLExportTest2::testTdf93883()
     CPPUNIT_ASSERT(!xPropSet->getPropertyValue("NumberingLevel").hasValue());
 }
 
-//This test gives errors due to ATL
-#if HAVE_FEATURE_ATL || !defined(_WIN32)
 void SdOOXMLExportTest2::testBnc822341()
 {
     // Check import / export of embedded text document
@@ -245,7 +237,6 @@ void SdOOXMLExportTest2::testBnc822341()
 
     xDocShRef->DoClose();
 }
-#endif
 
 void SdOOXMLExportTest2::testMathObject()
 {

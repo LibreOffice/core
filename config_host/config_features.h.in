@@ -160,11 +160,6 @@
 #define HAVE_FEATURE_BREAKPAD 0
 
 /*
- * Whether to enable ATL
- */
-#define HAVE_FEATURE_ATL 0
-
-/*
  *  Whether OpenGL is enabled
  */
 #define HAVE_FEATURE_OPENGL 0
