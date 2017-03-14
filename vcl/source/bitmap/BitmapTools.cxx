@@ -82,7 +82,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
         const sal_Int32 nCount(aPrimitiveSequence.getLength());
         geometry::RealRectangle2D aRealRect;
         basegfx::B2DRange aRange;
-        for (sal_Int32 a = 0L; a < nCount; ++a)
+        for (sal_Int32 a = 0; a < nCount; ++a)
         {
             const Primitive2DReference xReference(aPrimitiveSequence[a]);
 

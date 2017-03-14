@@ -283,7 +283,7 @@ void DdeTransaction::Execute()
     if ( nType != XTYP_EXECUTE && nType != XTYP_POKE )
     {
         pData = nullptr;
-        nData = 0L;
+        nData = 0;
     }
     if ( nTime )
     {
