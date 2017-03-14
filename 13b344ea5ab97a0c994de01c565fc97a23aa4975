@@ -22,6 +22,30 @@
       "revId": "13b344ea5ab97a0c994de01c565fc97a23aa4975",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7126d469",
+        "filename": "android/source/gradle/wrapper/gradle-wrapper.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001572
+      },
+      "writtenOn": "2017-03-14T08:30:39Z",
+      "side": 1,
+      "message": "I am just using this version of gradle, I did not meant to push this file, you can ignore this file or I can edit it, I was just waiting for your reply on the irc. let me know if you want me to edit it.",
+      "parentUuid": "9a57fde8_915df8eb",
+      "range": {
+        "startLine": 6,
+        "startChar": 59,
+        "endLine": 6,
+        "endChar": 65
+      },
+      "revId": "13b344ea5ab97a0c994de01c565fc97a23aa4975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
