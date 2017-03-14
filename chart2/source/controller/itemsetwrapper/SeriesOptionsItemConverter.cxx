@@ -207,7 +207,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             if( m_bSupportingOverlapAndGapWidthProperties )
             {
                 sal_Int32& rBarPosition = ( SCHATTR_BAR_OVERLAP == nWhichId ) ? m_nBarOverlap : m_nGapWidth;
-                rBarPosition = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                rBarPosition = rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue();
 
                 OUString aPropName("GapwidthSequence" );
                 if( SCHATTR_BAR_OVERLAP == nWhichId )
@@ -224,7 +224,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     {
                         if( xChartTypeProps->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                         {
-                            bool bGroupBarsPerAxis =  static_cast< const SfxBoolItem & >(rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS )).GetValue();
+                            bool bGroupBarsPerAxis = rItemSet.GetItem<SfxBoolItem>( SCHATTR_GROUP_BARS_PER_AXIS )->GetValue();
                             if(!bGroupBarsPerAxis)
                             {
                                 //set the same value for all axes
@@ -245,8 +245,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_BAR_CONNECT:
         {
-            m_bConnectBars = static_cast< const SfxBoolItem & >(
-                rItemSet.Get( nWhichId )).GetValue();
+            m_bConnectBars = rItemSet.GetItem<SfxBoolItem>( nWhichId )->GetValue();
             if( m_bSupportingBarConnectors )
             {
                 bool bOldConnectBars = false;
@@ -264,8 +263,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_GROUP_BARS_PER_AXIS:
         {
-            m_bGroupBarsPerAxis = static_cast< const SfxBoolItem & >(
-                rItemSet.Get( nWhichId )).GetValue();
+            m_bGroupBarsPerAxis = rItemSet.GetItem<SfxBoolItem>( nWhichId )->GetValue();
             if( m_bSupportingAxisSideBySide )
             {
                 bool bOldGroupBarsPerAxis = true;
@@ -285,7 +283,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
          {
             if( m_bSupportingStartingAngle )
             {
-                m_nStartingAngle = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                m_nStartingAngle = rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue();
                 uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
                 if( xDiagramProperties.is() )
                 {
@@ -298,8 +296,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_CLOCKWISE:
         {
-            bool bClockwise = (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() );
+            bool bClockwise = rItemSet.GetItem<SfxBoolItem>( nWhichId )->GetValue();
             if( m_xCooSys.is() )
             {
                 uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );
@@ -318,7 +315,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
         {
             if( m_aSupportedMissingValueTreatments.getLength() )
             {
-                sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                sal_Int32 nNew = rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue();
                 if( m_nMissingValueTreatment != nNew )
                 {
                     try
@@ -342,7 +339,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
         {
             if( m_bSupportingPlottingOfHiddenCells )
             {
-                bool bIncludeHiddenCells = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
+                bool bIncludeHiddenCells = rItemSet.GetItem<SfxBoolItem>(nWhichId)->GetValue();
                 if (bIncludeHiddenCells != m_bIncludeHiddenCells)
                 {
                     ChartModel* pModel = dynamic_cast<ChartModel*>(m_xChartModel.get());

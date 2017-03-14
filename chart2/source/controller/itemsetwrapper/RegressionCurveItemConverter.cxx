@@ -44,7 +44,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, co
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
-        T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
+        T aValue = static_cast<T>(rItemSet.GetItem<D>( nWhichId )->GetValue());
         T aOldValue = aValue;
         bool aSuccess = xProperties->getPropertyValue( aPropertyID ) >>= aOldValue;
         if (!aSuccess || aOldValue != aValue)
@@ -62,7 +62,7 @@ void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::R
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
-        T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
+        T aValue = static_cast<T>(rItemSet.GetItem<D>( nWhichId )->GetValue());
         if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
         {
             rItemSet.Put(D( nWhichId, aValue ));
@@ -75,7 +75,7 @@ void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const 
     OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
-        double aValue = static_cast<double>(static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue());
+        double aValue = static_cast<double>(rItemSet.GetItem<SvxDoubleItem>( nWhichId )->GetValue());
         if(xProperties->getPropertyValue( aPropertyID ) >>= aValue)
         {
             rItemSet.Put(SvxDoubleItem( aValue, nWhichId ));

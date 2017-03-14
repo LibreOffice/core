@@ -406,7 +406,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
         case EE_CHAR_OVERLINE:
         {
-            const SvxOverlineItem& rItem = static_cast< const SvxOverlineItem & >( rItemSet.Get( nWhichId ) );
+            const SvxOverlineItem& rItem = *rItemSet.GetItem<SvxOverlineItem>( nWhichId );
 
             if ( rItem.QueryValue( aValue, MID_TL_STYLE ) )
             {

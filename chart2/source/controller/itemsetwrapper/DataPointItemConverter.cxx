@@ -298,7 +298,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_DATADESCR_SHOW_CATEGORY:
         case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
-            const SfxBoolItem & rItem = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId ));
+            const SfxBoolItem & rItem = *rItemSet.GetItem<SfxBoolItem>( nWhichId );
 
             uno::Any aOldValue = GetPropertySet()->getPropertyValue(CHART_UNONAME_LABEL);
             chart2::DataPointLabel aLabel;
@@ -344,7 +344,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_DATADESCR_SEPARATOR:
         {
-            OUString aNewValue = static_cast< const SfxStringItem & >( rItemSet.Get( nWhichId )).GetValue();
+            OUString aNewValue = rItemSet.GetItem<SfxStringItem>( nWhichId )->GetValue();
             OUString aOldValue;
             try
             {
@@ -377,7 +377,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
             try
             {
-                bool bNew = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                bool bNew = rItemSet.GetItem<SfxBoolItem>( nWhichId )->GetValue();
                 bool bOld = false;
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
@@ -408,8 +408,8 @@ bool DataPointItemConverter::ApplySpecialItem(
 
             try
             {
-                sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
-                sal_Int32 nOld =0;
+                sal_Int32 nNew = rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue();
+                sal_Int32 nOld = 0;
                 if( !(GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nOld) )
                 {
                     if( m_aAvailableLabelPlacements.getLength() )
@@ -440,9 +440,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_STYLE_SYMBOL:
         {
-            sal_Int32 nStyle =
-                static_cast< const SfxInt32Item & >(
-                    rItemSet.Get( nWhichId )).GetValue();
+            sal_Int32 nStyle = rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue();
             chart2::Symbol aSymbol;
 
             GetPropertySet()->getPropertyValue( "Symbol" ) >>= aSymbol;
@@ -482,8 +480,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_SYMBOL_SIZE:
         {
-            Size aSize = static_cast< const SvxSizeItem & >(
-                rItemSet.Get( nWhichId )).GetSize();
+            Size aSize = rItemSet.GetItem<SvxSizeItem>( nWhichId )->GetSize();
             chart2::Symbol aSymbol;
 
             GetPropertySet()->getPropertyValue( "Symbol" ) >>= aSymbol;
@@ -501,8 +498,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_SYMBOL_BRUSH:
         {
-            const SvxBrushItem & rBrshItem( static_cast< const SvxBrushItem & >(
-                                                rItemSet.Get( nWhichId )));
+            const SvxBrushItem & rBrshItem = *rItemSet.GetItem<SvxBrushItem>( nWhichId );
             uno::Any aXGraphicAny;
             const Graphic *pGraphic( rBrshItem.GetGraphic());
             if( pGraphic )
@@ -527,8 +523,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_TEXT_DEGREES:
         {
             double fValue = static_cast< double >(
-                static_cast< const SfxInt32Item & >(
-                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+                rItemSet.GetItem<SfxInt32Item>( nWhichId )->GetValue()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldValue );
