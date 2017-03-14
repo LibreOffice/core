@@ -102,12 +102,8 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
     if( rIcon )
     {
         // add to icon cache
-        pSalIcon = new SalIcon();
-        pSalIcon->nId = nId;
-        pSalIcon->hIcon = rIcon;
-        pSalIcon->hSmallIcon = rSmallIcon;
-        pSalIcon->pNext = pSalData->mpFirstIcon;
-        pSalData->mpFirstIcon = pSalIcon;
+        pSalData->mpFirstIcon = new SalIcon{
+            nId, rIcon, rSmallIcon, pSalData->mpFirstIcon};
     }
 
     return (rSmallIcon != nullptr);

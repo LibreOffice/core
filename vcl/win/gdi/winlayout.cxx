@@ -249,13 +249,13 @@ TextOutRenderer & TextOutRenderer::get(bool bUseDWrite)
     {
         static std::unique_ptr<TextOutRenderer> _impl(D2DWriteTextOutRenderer::InitModules()
             ? static_cast<TextOutRenderer*>(new D2DWriteTextOutRenderer())
-            : static_cast<TextOutRenderer*>(new ExTextOutRenderer()));
+            : static_cast<TextOutRenderer*>(new ExTextOutRenderer));
 
         return *_impl;
     }
     else
     {
-        static std::unique_ptr<TextOutRenderer> _impl(new ExTextOutRenderer());
+        static std::unique_ptr<TextOutRenderer> _impl(new ExTextOutRenderer);
 
         return *_impl;
     }
