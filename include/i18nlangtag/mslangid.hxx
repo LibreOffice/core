@@ -29,6 +29,7 @@
 
 struct IsoLanguageCountryEntry;
 struct IsoLanguageScriptCountryEntry;
+struct Bcp47CountryEntry;
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
@@ -266,6 +267,10 @@ public:
         /** Used by lookupFallbackLocale(Locale) */
         I18NLANGTAG_DLLPRIVATE static css::lang::Locale getLocale(
                 const IsoLanguageScriptCountryEntry * pEntry );
+
+        /** Used by lookupFallbackLocale(Locale) */
+        I18NLANGTAG_DLLPRIVATE static css::lang::Locale getLocale(
+                const Bcp47CountryEntry * pEntry );
 
 
         /** Convert a LanguageType to a Locale.

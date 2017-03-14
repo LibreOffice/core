@@ -607,6 +607,11 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         case LANGUAGE_TIBETAN_BHUTAN:
             nLang = LANGUAGE_DZONGKHA_BHUTAN;
             break;
+
+        // en-GB-oed is deprecated, use en-GB-oxendict instead.
+        case LANGUAGE_USER_ENGLISH_UK_OED:
+            nLang = LANGUAGE_USER_ENGLISH_UK_OXENDICT;
+            break;
     }
     return nLang;
 }

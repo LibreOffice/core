@@ -387,26 +387,29 @@ void TestLanguageTag::testAllTags()
     // 'en-GB-oed' is known grandfathered for English, Oxford English
     // Dictionary spelling.
     // Deprecated as of 2015-04-17, prefer en-GB-oxendict instead.
+    // As of 2017-03-14 we also alias to en-GB-oxendict.
     {
         OUString s_en_GB_oed( "en-GB-oed" );
+        OUString s_en_GB_oxendict( "en-GB-oxendict" );
         LanguageTag en_GB_oed( s_en_GB_oed );
         lang::Locale aLocale = en_GB_oed.getLocale();
-        CPPUNIT_ASSERT_EQUAL( s_en_GB_oed, en_GB_oed.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( s_en_GB_oxendict, en_GB_oed.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString("qlt"), aLocale.Language );
-        CPPUNIT_ASSERT_EQUAL( OUString("GB"), aLocale.Country );  // only 'GB' because we handle it, liblangtag would not fill this
-        CPPUNIT_ASSERT_EQUAL( s_en_GB_oed, aLocale.Variant );
-        CPPUNIT_ASSERT_EQUAL( static_cast<LanguageType>(LANGUAGE_USER_ENGLISH_UK_OED), en_GB_oed.getLanguageType() );
+        CPPUNIT_ASSERT_EQUAL( OUString("GB"), aLocale.Country );
+        CPPUNIT_ASSERT_EQUAL( s_en_GB_oxendict, aLocale.Variant );
+        CPPUNIT_ASSERT_EQUAL( static_cast<LanguageType>(LANGUAGE_USER_ENGLISH_UK_OXENDICT), en_GB_oed.getLanguageType() );
         CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() );
         CPPUNIT_ASSERT( !en_GB_oed.isIsoLocale() );
         CPPUNIT_ASSERT( !en_GB_oed.isIsoODF() );
         CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oed.getLanguageAndScript() );
-        CPPUNIT_ASSERT_EQUAL( OUString("oed"), en_GB_oed.getVariants() );
+        CPPUNIT_ASSERT_EQUAL( OUString("oxendict"), en_GB_oed.getVariants() );
         ::std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
-        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), en_GB_oed_Fallbacks.size() );
-        CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oed"), en_GB_oed_Fallbacks[0]);
-        CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oxendict"), en_GB_oed_Fallbacks[1]);
-        CPPUNIT_ASSERT_EQUAL( OUString("en-GB"), en_GB_oed_Fallbacks[2]);
-        CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oed_Fallbacks[3]);
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(5), en_GB_oed_Fallbacks.size() );
+        CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oxendict"), en_GB_oed_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oed"), en_GB_oed_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("en-oxendict"), en_GB_oed_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("en-GB"), en_GB_oed_Fallbacks[3]);
+        CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oed_Fallbacks[4]);
         // 'en-oed' is not a valid fallback!
     }
 
@@ -688,6 +691,7 @@ bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
     if (rStr1 == "eu"          ) return rStr2 == "eu-ES";
     if (rStr1 == "crk-Latn-CN" ) return rStr2 == "crk-Latn-CA";
     if (rStr1 == "crk-Cans-CN" ) return rStr2 == "crk-Cans-CA";
+    if (rStr1 == "en-GB-oed"   ) return rStr2 == "en-GB-oxendict";
     return rStr1 == rStr2;
 }
 
