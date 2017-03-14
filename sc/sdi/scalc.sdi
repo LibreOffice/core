@@ -6215,9 +6215,9 @@ ScProtectionAttr Protection SID_SCATTR_PROTECTION
     RecordPerSet;
 
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
