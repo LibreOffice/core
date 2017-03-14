@@ -71,24 +71,16 @@ LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt
     if (size >= IO_BUFFERSIZE)
         throw std::range_error("bad Object size");
     // read object data from stream
-    if(m_nBufSize == 0)
-    {
-        m_pContentBuf = nullptr;
-    }
-    else
-    {
+    if (m_nBufSize > 0)
         Read2Buffer();
-    }
 }
+
 /**
  * @descr  read object data from stream to buffer
  */
 void LwpObjectStream::Read2Buffer()
 {
-    if( m_pContentBuf )
-    {
-        ReleaseBuffer();
-    }
+    ReleaseBuffer();
 
     m_nReadPos = 0;
 
@@ -98,7 +90,7 @@ void LwpObjectStream::Read2Buffer()
 
         sal_uInt8* pCompressBuffer = xCompressBuf.get();
         memset(pCompressBuffer, 0, m_nBufSize);
-        m_pStrm->Read(pCompressBuffer, m_nBufSize);
+        m_nBufSize = m_pStrm->Read(pCompressBuffer, m_nBufSize);
 
         sal_uInt8 pTempDst[IO_BUFFERSIZE];
         m_nBufSize = DecompressBuffer(pTempDst, pCompressBuffer, m_nBufSize);
@@ -106,13 +98,11 @@ void LwpObjectStream::Read2Buffer()
 
         m_pContentBuf = AllocBuffer(m_nBufSize);
         memcpy(m_pContentBuf, pTempDst, m_nBufSize);
-        //delete [] pTempDst;
-
     }
     else
     {
         m_pContentBuf = AllocBuffer(m_nBufSize);
-        m_pStrm->Read(m_pContentBuf, m_nBufSize);
+        m_nBufSize = m_pStrm->Read(m_pContentBuf, m_nBufSize);
     }
 }
 /**
@@ -120,14 +110,12 @@ void LwpObjectStream::Read2Buffer()
  */
 sal_uInt8* LwpObjectStream::AllocBuffer(sal_uInt16 size)
 {
-    if(size<=100)
+    if (size<=100)
     {
         return m_SmallBuffer;
     }
-    else
-    {
-        return new sal_uInt8[size];
-    }
+    m_BigBuffer.resize(size);
+    return m_BigBuffer.data();
 }
 /**
  * @descr  signal complete to release object buffer
@@ -146,15 +134,8 @@ LwpObjectStream::~LwpObjectStream()
  */
 void LwpObjectStream::ReleaseBuffer()
 {
-
-    if(m_nBufSize>100)
-    {
-        if(m_pContentBuf)
-        {
-            delete [] m_pContentBuf;
-            m_pContentBuf = nullptr;
-        }
-    }
+    m_BigBuffer.clear();
+    m_pContentBuf = nullptr;
 }
 
 sal_uInt16 LwpObjectStream::remainingSize() const
