@@ -3617,7 +3617,7 @@ void SwUiWriterTest::testTdf77014()
 
         for (auto& rPortionItem : aHandler.mPortionItems)
         {
-            printf ("-- Type: %s length: %d text type: %d\n",
+            printf ("-- Type: %s length: %" SAL_PRIdINT32 " text type: %d\n",
                         rPortionItem.msItemType.toUtf8().getStr(),
                         rPortionItem.mnLength,
                         rPortionItem.mnTextType);
