@@ -4572,12 +4572,22 @@ SVGPathElement.prototype.appendPath = function( aPath )
     this.setAttribute( 'd', sPathData );
 };
 
+/** flipOnYAxis
+ *  Flips the SVG Path element along y-axis.
+ *
+ *  @param aPath
+ *      An object of type SVGPathElement to be flipped.
+ */
 function flipOnYAxis( aPath )
 {
-    var aMatrix = SVGIdentityMatrix.flipY().scaleNonUniform(-1, 1);
-    aPath.matrixTransform(aMatrix);
-    return aPath;
+    var aPolyPath = aPath.cloneNode(true);
+    var aTransform = document.documentElement.createSVGMatrix();
+    aTransform.a = -1;
+    aTransform.e = 1;
+    aPolyPath.matrixTransform(aTransform);
+    return aPolyPath;
 }
+
 /** SVGPathElement.matrixTransform
  *  Apply the transformation defined by the passed matrix to the referenced
  *  svg <path> element.
