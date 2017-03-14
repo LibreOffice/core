@@ -388,7 +388,7 @@ endef
 
 gb_ExternalProject__use_jpeg :=
 
-else ifneq ($(filter JPEG_TURBO,$(BUILD_TYPE)),)
+else
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
@@ -402,25 +402,6 @@ endef
 
 define gb_ExternalProject__use_jpeg
 $(call gb_ExternalProject_use_external_project,$(1),jpeg-turbo)
-
-endef
-
-else # !SYSTEM_JPEG
-
-define gb_LinkTarget__use_jpeg
-$(call gb_LinkTarget_set_include,$(1),\
-	$(LIBJPEG_CFLAGS) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	jpeg \
-)
-
-endef
-
-define gb_ExternalProject__use_jpeg
-$(call gb_ExternalProject_use_static_libraries,$(1),jpeg)
 
 endef
 
