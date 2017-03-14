@@ -132,19 +132,15 @@ public:
 
     void            SetStart( sal_Int32 n )         { mnStart = n; }
     sal_Int32       GetStart() const                { return mnStart; }
-    sal_Int32&      GetStart()                      { return mnStart; }
 
     void            SetEnd( sal_Int32 n )           { mnEnd = n; }
     sal_Int32       GetEnd() const                  { return mnEnd; }
-    sal_Int32&      GetEnd()                        { return mnEnd; }
 
     void            SetStartPortion( sal_uInt16 n )     { mnStartPortion = n; }
     sal_uInt16      GetStartPortion() const         { return mnStartPortion; }
-    sal_uInt16&     GetStartPortion()               { return mnStartPortion; }
 
     void            SetEndPortion( sal_uInt16 n )       { mnEndPortion = n; }
     sal_uInt16      GetEndPortion() const           { return mnEndPortion; }
-    sal_uInt16&     GetEndPortion()                 { return mnEndPortion; }
 
     sal_Int32       GetLen() const                  { return mnEnd - mnStart; }
 

@@ -252,11 +252,11 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
             {
                 TextLine& rLine = maLines[ nL ];
 
-                rLine.GetStartPortion() = rLine.GetStartPortion() + nPDiff;
-                rLine.GetEndPortion() = rLine.GetEndPortion() + nPDiff;
+                rLine.SetStartPortion(rLine.GetStartPortion() + nPDiff);
+                rLine.SetEndPortion(rLine.GetEndPortion() + nPDiff);
 
-                rLine.GetStart() = rLine.GetStart() + nTDiff;
-                rLine.GetEnd() = rLine.GetEnd() + nTDiff;
+                rLine.SetStart(rLine.GetStart() + nTDiff);
+                rLine.SetEnd(rLine.GetEnd() + nTDiff);
 
                 rLine.SetValid();
             }
