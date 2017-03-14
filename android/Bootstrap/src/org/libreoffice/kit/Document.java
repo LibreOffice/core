@@ -147,7 +147,7 @@ public class Document {
 
     public native void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight);
 
-    private native void saveAs(String url, String format, String options);
+    public native void saveAs(String url, String format, String options);
 
     private native void paintTileNative(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
 

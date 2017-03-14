@@ -34,6 +34,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int NAVIGATION_CLICK = 13;
     public static final int UNO_COMMAND = 14;
     public static final int RESUME = 15;
+    public static final int LOAD_NEW = 16;
+    public static final int SAVE_AS = 17;
 
     public final int mType;
     public int mPriority = 0;
@@ -42,6 +44,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public ThumbnailCreator.ThumbnailCreationTask mTask;
     public int mPartIndex;
     public String mString;
+    public String filePath;
+    public String fileType;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
     public PointF mDocumentCoordinate;
@@ -79,6 +83,19 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Resume partIndex";
         mString = key;
         mPartIndex = value;
+    }
+
+    public LOEvent(String filePath, int type) {
+        mType = type;
+        mTypeString = "Load";
+        this.filePath = filePath;
+    }
+
+    public LOEvent(String filePath, String fileType, int type) {
+        mType = type;
+        mTypeString = "Load New/Save As";
+        this.filePath = filePath;
+        this.fileType = fileType;
     }
 
     public LOEvent(int type, int partIndex) {

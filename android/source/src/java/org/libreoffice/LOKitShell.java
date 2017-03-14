@@ -106,8 +106,16 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_PART, part));
     }
 
-    public static void sendLoadEvent(String inputFile) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.LOAD, inputFile));
+    public static void sendLoadEvent(String inputFilePath) {
+        LOKitShell.sendEvent(new LOEvent(inputFilePath, LOEvent.LOAD));
+    }
+
+    public static void sendNewDocumentLoadEvent(String newDocumentPath, String newDocumentType) {
+        LOKitShell.sendEvent(new LOEvent(newDocumentPath, newDocumentType, LOEvent.LOAD_NEW));
+    }
+
+    public static void sendSaveAsEvent(String filePath, String fileFormat) {
+        LOKitShell.sendEvent(new LOEvent(filePath, fileFormat, LOEvent.SAVE_AS));
     }
 
     public static void sendResumeEvent(String inputFile, int partIndex) {
