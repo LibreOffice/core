@@ -227,7 +227,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.mbPrintGrid     =  GETITEMBOOL( rItemSet, ATTR_PAGE_GRID      );
         maData.mbPrintNotes    =  GETITEMBOOL( rItemSet, ATTR_PAGE_NOTES     );
 
-        maData.mnStartPage     = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_FIRSTPAGENO, sal_uInt16 );
+        maData.mnStartPage     = GETITEM( rItemSet, SfxUInt16Item, ATTR_PAGE_FIRSTPAGENO ).GetValue();
         maData.mbManualStart   = maData.mnStartPage && (!nScTab || rDoc.NeedPageResetAfterTab( nScTab - 1 ));
 
         const SvxLRSpaceItem& rLRItem = GETITEM( rItemSet, SvxLRSpaceItem, ATTR_LRSPACE );
@@ -242,8 +242,8 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.SetScPaperSize( rSizeItem.GetSize(), !rPageItem.IsLandscape() );
 
         const ScPageScaleToItem& rScaleToItem = GETITEM( rItemSet, ScPageScaleToItem, ATTR_PAGE_SCALETO );
-        sal_uInt16 nPages = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALETOPAGES, sal_uInt16 );
-        sal_uInt16 nScale = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALE, sal_uInt16 );
+        sal_uInt16 nPages = GETITEM( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALETOPAGES ).GetValue();
+        sal_uInt16 nScale = GETITEM( rItemSet, SfxUInt16Item, ATTR_PAGE_SCALE ).GetValue();
 
         if( ScfTools::CheckItem( rItemSet, ATTR_PAGE_SCALETO, false ) && rScaleToItem.IsValid() )
         {

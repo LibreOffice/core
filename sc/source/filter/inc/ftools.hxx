@@ -37,13 +37,9 @@
 #define GETITEM( itemset, itemtype, which ) \
     static_cast< const itemtype & >( (itemset).Get( which ) )
 
-/** Expands to the value (with type 'valuetype') of the item with Which-ID 'which'. */
-#define GETITEMVALUE( itemset, itemtype, which, valuetype ) \
-    static_cast< valuetype >( GETITEM( itemset, itemtype, which ).GetValue() )
-
 /** Expands to the value of the SfxBoolItem with Which-ID 'which'. */
 #define GETITEMBOOL( itemset, which ) \
-    GETITEMVALUE( itemset, SfxBoolItem, which, bool )
+    (static_cast<const SfxBoolItem &>( (itemset).Get( which )).GetValue() )
 
 // Global static helpers ======================================================
 
