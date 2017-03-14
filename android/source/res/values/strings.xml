@@ -16,6 +16,10 @@
     <string name="about_moreinfo">More Info</string>
     <string name="back_again_to_quit">Press back again to quit</string>
 
+    <string name="new_impress">New Impress</string>
+    <string name="new_spreadsheet">New Sheet</string>
+    <string name="new_draw">New Draw</string>
+
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>
@@ -89,6 +93,7 @@
     <string name="message_saved">Save complete</string>
     <string name="message_saving">Saving the document…</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
+    <string name="new_file_created">File created in Documents folder</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>
@@ -117,6 +122,7 @@
     <string name="save_document">SAVE</string>
     <string name="cancel_save_document">CANCEL</string>
     <string name="no_save_document">NO</string>
+    <string name="new_write">New Write</string>
 
 
 </resources>

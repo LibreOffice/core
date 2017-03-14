@@ -26,6 +26,7 @@ dependencies {
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 android {
@@ -64,6 +65,7 @@ android {
         // ToDo: fix openssl stuff to not block targeting 23 or later
         targetSdkVersion 22
         manifestPlaceholders = [installLocation: "preferExternal"]
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

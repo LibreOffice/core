@@ -23,11 +23,14 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,7 +50,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,10 +67,12 @@ import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
+import org.libreoffice.storage.local.LocalFile;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -74,7 +83,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LibreOfficeUIActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener{
+public class LibreOfficeUIActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener, View.OnClickListener{
     private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
@@ -98,6 +107,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String SORT_MODE_KEY = "SORT_MODE";
     private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS";
 
+    public static final String NEW_DOC_TYPE_KEY = "NEW_DOC_TYPE_KEY";
+    private static final String NEW_WRITER_STRING_KEY = "private:factory/swriter";
+    private static final String NEW_IMPRESS_STRING_KEY = "private:factory/simpress";
+    private static final String NEW_CALC_STRING_KEY = "private:factory/scalc";
+    private static final String NEW_DRAW_STRING_KEY = "private:factory/sdraw";
+
     public static final int GRID_VIEW = 0;
     public static final int LIST_VIEW = 1;
 
@@ -108,6 +123,20 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private RecyclerView recentRecyclerView;
 
     private boolean canQuit = false;
+
+    private Animation fabOpenAnimation;
+    private Animation fabCloseAnimation;
+    private boolean isFabMenuOpen = false;
+    private FloatingActionButton editFAB;
+    private FloatingActionButton writerFAB;
+    private FloatingActionButton drawFAB;
+    private FloatingActionButton impressFAB;
+    private FloatingActionButton calcFAB;
+    private LinearLayout drawLayout;
+    private LinearLayout writerLayout;
+    private LinearLayout impressLayout;
+    private LinearLayout calcLayout;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +157,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         // init UI and populate with contents from the provider
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
+        getAnimations();
     }
 
     public void createUI() {
@@ -141,6 +171,21 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        editFAB = (FloatingActionButton) findViewById(R.id.editFAB);
+        editFAB.setOnClickListener(this);
+        impressFAB = (FloatingActionButton) findViewById(R.id.newImpressFAB);
+        impressFAB.setOnClickListener(this);
+        writerFAB = (FloatingActionButton) findViewById(R.id.newWriterFAB);
+        writerFAB.setOnClickListener(this);
+        calcFAB = (FloatingActionButton) findViewById(R.id.newCalcFAB);
+        calcFAB.setOnClickListener(this);
+        drawFAB = (FloatingActionButton) findViewById(R.id.newDrawFAB);
+        drawFAB.setOnClickListener(this);
+        writerLayout = (LinearLayout) findViewById(R.id.writerLayout);
+        impressLayout = (LinearLayout) findViewById(R.id.impressLayout);
+        calcLayout = (LinearLayout) findViewById(R.id.calcLayout);
+        drawLayout = (LinearLayout) findViewById(R.id.drawLayout);
 
         recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
 
@@ -234,6 +279,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 super.onDrawerOpened(drawerView);
                 supportInvalidateOptionsMenu();
                 navigationDrawer.requestFocus(); // Make keypad navigation easier
+                if (isFabMenuOpen) {
+                    collapseFabMenu(); //Collapse FAB Menu when drawer is opened
+                }
             }
 
             @Override
@@ -245,6 +293,37 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+    }
+
+    private void getAnimations() {
+        fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
+    }
+
+    private void expandFabMenu() {
+        ViewCompat.animate(editFAB).rotation(45.0F).withLayer().setDuration(300).setInterpolator(new OvershootInterpolator(10.0F)).start();
+        drawLayout.startAnimation(fabOpenAnimation);
+        impressLayout.startAnimation(fabOpenAnimation);
+        writerLayout.startAnimation(fabOpenAnimation);
+        calcLayout.startAnimation(fabOpenAnimation);
+        writerFAB.setClickable(true);
+        impressFAB.setClickable(true);
+        drawFAB.setClickable(true);
+        calcFAB.setClickable(true);
+        isFabMenuOpen = true;
+    }
+
+    private void collapseFabMenu() {
+        ViewCompat.animate(editFAB).rotation(0.0F).withLayer().setDuration(300).setInterpolator(new OvershootInterpolator(10.0F)).start();
+        writerLayout.startAnimation(fabCloseAnimation);
+        impressLayout.startAnimation(fabCloseAnimation);
+        drawLayout.startAnimation(fabCloseAnimation);
+        calcLayout.startAnimation(fabCloseAnimation);
+        writerFAB.setClickable(false);
+        impressFAB.setClickable(false);
+        drawFAB.setClickable(false);
+        calcFAB.setClickable(false);
+        isFabMenuOpen = false;
     }
 
     private boolean checkDocumentProviderAvailability(IDocumentProvider provider) {
@@ -272,15 +351,23 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         fileRecyclerView.setAdapter(new ExplorerItemAdapter(this, filePaths));
         // close drawer if it was open
         drawerLayout.closeDrawer(navigationDrawer);
+        if (isFabMenuOpen) {
+            collapseFabMenu();
+        }
     }
 
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(navigationDrawer)) {
             drawerLayout.closeDrawer(navigationDrawer);
+            if (isFabMenuOpen) {
+                collapseFabMenu();
+            }
         } else if (!currentDirectory.equals(homeDirectory)) {
             // navigate upwards in directory hierarchy
             openParentDirectory();
+        } else if (isFabMenuOpen) {
+            collapseFabMenu();
         } else {
             // only exit if warning has been shown
             if (canQuit) {
@@ -455,6 +542,42 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 }
             }
         }.execute(document);
+    }
+
+    // For opening a new Document
+    private void open(String newDocumentType) throws IOException {
+        File file = null;
+        File documentDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        String documentsDirectoryPath;
+        if (!documentDirectory.exists()){
+            documentDirectory.mkdirs();
+        }
+        documentsDirectoryPath = documentDirectory.getPath();
+
+        if (newDocumentType.equals(NEW_WRITER_STRING_KEY)){
+            file = new File(documentsDirectoryPath, "untitled 1.odt");
+        } else if (newDocumentType.equals(NEW_IMPRESS_STRING_KEY)) {
+            file = new File(documentsDirectoryPath, "untitled 1.odp");
+        } else if (newDocumentType.equals(NEW_CALC_STRING_KEY)) {
+            file = new File(documentsDirectoryPath, "untitled 1.ods");
+        } else if (newDocumentType.equals(NEW_DRAW_STRING_KEY)){
+            file = new File(documentsDirectoryPath, "untitled 1.odg");
+        }
+        if (file != null) {
+            file.createNewFile();
+        }
+        IFile document = new LocalFile(file);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+        String packageName = this.getApplicationContext().getPackageName();
+        ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
+        intent.setComponent(componentName);
+        // these extras allow to rebuild the IFile object in LOMainActivity
+        intent.putExtra("org.libreoffice.document_provider_id",
+                documentProvider.getId());
+        intent.putExtra("org.libreoffice.document_uri",
+                document.getUri());
+        intent.putExtra(NEW_DOC_TYPE_KEY, newDocumentType);
+        startActivity(intent);
     }
 
     private void open(int position) {
@@ -880,6 +1003,49 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             shortcutManager.setDynamicShortcuts(shortcuts);
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.editFAB:
+                if (isFabMenuOpen) {
+                    collapseFabMenu();
+                } else {
+                    expandFabMenu();
+                }
+                break;
+            case R.id.newWriterFAB:
+                try {
+                    open(NEW_WRITER_STRING_KEY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.newImpressFAB:
+                try {
+                    open(NEW_IMPRESS_STRING_KEY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.newCalcFAB:
+                try {
+                    open(NEW_CALC_STRING_KEY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.newDrawFAB:
+                try {
+                    open(NEW_DRAW_STRING_KEY);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
 
     class ExplorerItemAdapter extends RecyclerView.Adapter<ExplorerItemAdapter.ViewHolder> {
 
