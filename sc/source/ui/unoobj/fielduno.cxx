@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 namespace {
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  no Which-ID here, map only for PropertySetInfo
 
 const SfxItemPropertySet* getDateTimePropertySet()
 {
@@ -147,8 +147,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
-
-//  ScUnoEditEngine nur um aus einer EditEngine die Felder herauszubekommen...
 
 enum ScUnoCollectMode
 {
@@ -311,21 +309,21 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        //! Ref-Update
+        //! update of references
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 
-    //  EditSource hat sich selber als Listener angemeldet
+    //  EditSource registered itself as a listener
 }
 
 // XIndexAccess (via XTextFields)
 
 uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //! Field functions have to be passed to the forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
     SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index));
@@ -334,7 +332,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
+    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field size is 1 character
 
     sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -346,11 +344,11 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount()
 {
     SolarMutexGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //! Field functions have to be passed to the forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    return aTempEngine.CountFields();       // Felder zaehlen, in Zelle ist der Typ egal
+    return aTempEngine.CountFields();       // count the fields, we don't care about their type in the cell
 }
 
 uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -456,7 +454,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
 uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //! Field functions have to be passed to the forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
@@ -503,7 +501,7 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount()
 {
     SolarMutexGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //! Field functions have to be passed to the forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
     return aTempEngine.CountFields();
@@ -638,7 +636,7 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
         ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //  don't care about the type (only URLs can be found in the cells)
         SvxFieldData* pField = aTempEngine.FindByPos(
             aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
         OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");

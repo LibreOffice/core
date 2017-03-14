@@ -34,9 +34,9 @@
 
 using namespace com::sun::star;
 
-//! SearchWords sucht in ganzen Zellen - umbenennen ???
+//! SearchWords searches in whole cells - rename it ???
 
-//  SfxItemPropertyMapEntry nur fuer GetPropertySetInfo
+//  SfxItemPropertyMapEntry only for GetPropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
@@ -53,7 +53,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
         {OUString(SC_UNO_SRCHSIMREL),   0,      cppu::UnoType<bool>::get(),       0, 0},
         {OUString(SC_UNO_SRCHSIMREM),   0,      cppu::UnoType<sal_Int16>::get(), 0, 0},
         {OUString(SC_UNO_SRCHSTYLES),   0,      cppu::UnoType<bool>::get(),       0, 0},
-        {OUString(SC_UNO_SRCHTYPE),     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch ist weg
+        {OUString(SC_UNO_SRCHTYPE),     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch is gone
         {OUString(SC_UNO_SRCHWORDS),    0,      cppu::UnoType<bool>::get(),       0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -86,7 +86,7 @@ ScCellSearchObj::ScCellSearchObj() :
     pSearchItem->SetRowDirection(false);
     pSearchItem->SetCellType(SvxSearchCellType::FORMULA);
 
-    //  Selection-Flag wird beim Aufruf gesetzt
+    //  Selection-Flag will be set when this is called
 }
 
 ScCellSearchObj::~ScCellSearchObj()

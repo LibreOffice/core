@@ -259,7 +259,7 @@ static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUS
             }
         }
     }
-    return nullptr;    // nicht gefunden
+    return nullptr;    // not found
 }
 
 static OUString lcl_CreatePivotName( ScDocShell* pDocShell )
@@ -271,7 +271,7 @@ static OUString lcl_CreatePivotName( ScDocShell* pDocShell )
         if ( pColl )
             return pColl->CreateNewName();
     }
-    return OUString();                    // sollte nicht vorkommen
+    return OUString();                    // shouldnt' happen
 }
 
 static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFieldId )
@@ -308,11 +308,11 @@ ScDataPilotTablesObj::~ScDataPilotTablesObj()
 
 void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //! update of references
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -639,11 +639,11 @@ Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
 
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update?
+    //! update of references ?
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
