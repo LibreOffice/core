@@ -14,6 +14,11 @@ $(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/uc
 
 $(eval $(call gb_Library_use_sdk_api,ucpdav1))
 
+$(eval $(call gb_Library_set_include,ucpdav1,\
+    -I$(SRCDIR)/ucb/source/ucp/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	comphelper \
 	cppu \
