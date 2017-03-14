@@ -114,10 +114,10 @@ Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& a
     if ( aRequestedDataType == CPPUTYPE_OUSTRING )
     {
         OUString str = byteStreamToOUString( aByteStream );
-        aAny = makeAny( str );
+        aAny <<= str;
     }
     else
-        aAny = makeAny( aByteStream );
+        aAny <<= aByteStream;
 
     return aAny;
 }
