@@ -6,37 +6,51 @@
  License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <!-- The toolbar -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:elevation="3dp"
         android:background="@color/toolbar_background"
         app:theme="@style/LibreOfficeTheme.Toolbar"
         tools:theme="@style/LibreOfficeTheme.Toolbar"
-        app:popupTheme="@style/LibreOfficeTheme">
+        app:popupTheme="@style/LibreOfficeTheme"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </android.support.v7.widget.Toolbar>
 
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent">
 
         <!-- The content -->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/srollView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,7 +67,7 @@
                     android:gravity="center_vertical"
                     android:textSize="14sp"
                     android:padding="16dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <!--Recent files-->
                 <android.support.v7.widget.RecyclerView
@@ -61,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -82,19 +96,185 @@
                     android:background="@color/background_normal"
                     android:orientation="vertical" />
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </ScrollView>
+        </ScrollView>
 
-    <!-- The navigation drawer -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_drawer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/background_normal"
-        app:menu="@menu/navigation_menu"
-        android:theme="@style/LibreOfficeTheme.NavigationView" />
+        <!-- The navigation drawer -->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/background_normal"
+            app:menu="@menu/navigation_menu"
+            android:theme="@style/LibreOfficeTheme.NavigationView" />
 
     </android.support.v4.widget.DrawerLayout>
-</LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/editFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:backgroundTint="@color/background_normal"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    <LinearLayout
+        android:id="@+id/writerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/editFAB"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/newWriterTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:elevation="2dp"
+            android:gravity="center_horizontal"
+            android:text="@string/new_write"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/background_normal"
+            android:typeface="normal" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/newWriterFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_normal"
+            app:srcCompat="@drawable/writer" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/impressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/writerLayout"
+        app:layout_constraintLeft_toLeftOf="@+id/writerLayout"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/newImpressTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:elevation="2dp"
+            android:gravity="center_horizontal"
+            android:text="@string/new_impress"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@color/background_normal"
+            android:typeface="normal" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/newImpressFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_normal"
+            app:srcCompat="@drawable/impress" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/calcLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/impressLayout"
+        app:layout_constraintLeft_toLeftOf="@+id/impressLayout"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/newCalcTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:elevation="2dp"
+            android:gravity="center_horizontal"
+            android:text="@string/new_spreadsheet"
+            android:background="@color/background_normal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/newCalcFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_normal"
+            app:srcCompat="@drawable/calc" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calcLayout"
+        app:layout_constraintLeft_toLeftOf="@+id/calcLayout"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/newDrawTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:elevation="2dp"
+            android:gravity="center_horizontal"
+            android:text="@string/new_draw"
+            android:background="@color/background_normal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/newDrawFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_normal"
+            app:srcCompat="@drawable/draw" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
