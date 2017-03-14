@@ -588,7 +588,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
         case RES_BREAK:
         {
             SvxFormatBreakItem& rFormatBreak = dynamic_cast<SvxFormatBreakItem&>(rItem);
-            sal_uInt16 eEnum;
+            sal_uInt16 eEnum{};
 
             if( !SvXMLUnitConverter::convertEnum( eEnum, rValue, psXML_BreakType ) )
                 return false;
