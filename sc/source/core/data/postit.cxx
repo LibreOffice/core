@@ -1106,8 +1106,9 @@ void ScPostIt::RemoveCaption()
         }
     }
     // Either the caption object is gone or, because of Undo or clipboard is
-    // held in at least two instances.
-    assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2);
+    // held in at least two instances, or the Undo document is just destroyed
+    // which leaves us with one reference.
+    assert(!maNoteData.mxCaption || maNoteData.mxCaption.getRefs() >= 2 || (mrDoc.IsUndo() && mrDoc.IsInDtorClear()));
     maNoteData.mxCaption.reset(nullptr);
 }
 
