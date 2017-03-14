@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -1206,6 +1207,29 @@ void SwTextNode::Update(
     SwSortedObjs* pSortedObjs = pContentFrame ? pContentFrame->GetDrawObjs() : nullptr;
     if (pSortedObjs)
         pSortedObjs->UpdateAll();
+
+    // Inform LOK clients about change in position of redlines (if any)
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
+        {
+            SwRangeRedline* pRedln = rTable[nRedlnPos];
+            if (pRedln->HasMark())
+            {
+                if (this == &pRedln->End()->nNode.GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
+                {
+                    // Redline is changed only when some change occurs before it
+                    if (nChangePos <= pRedln->Start()->nContent.GetIndex())
+                    {
+                        SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, nRedlnPos, pRedln);
+                    }
+                }
+            }
+            else if (this == &pRedln->GetPoint()->nNode.GetNode())
+                SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, nRedlnPos, pRedln);
+        }
+    }
 }
 
 void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
