@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_f1900498",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-14T06:36:08Z",
+      "side": 1,
+      "message": "removing the \"due to bugId\" part changes the meaning of the last phrase",
+      "revId": "f52162dbfb2c21dbb81ac1bab54e4199e2a48129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_31e9ac1b",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-14T06:36:08Z",
+      "side": 1,
+      "message": "don\u0027t remve these bug numbers, sometimes they are useful",
+      "revId": "f52162dbfb2c21dbb81ac1bab54e4199e2a48129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_51ee3023",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2733,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-14T06:36:08Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "f52162dbfb2c21dbb81ac1bab54e4199e2a48129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
