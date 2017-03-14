@@ -1325,7 +1325,6 @@ void ToolBox::ImplInitToolBoxData()
     mnMouseModifier   = 0;
     mbDrag            = false;
     mbSelection       = false;
-    mbCommandDrag     = false;
     mbUpper           = false;
     mbLower           = false;
     mbIn              = false;
@@ -3902,13 +3901,12 @@ void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
     if ( ImplHandleMouseButtonUp( rMEvt ) )
         return;
 
-    if ( mbDragging && (rMEvt.IsLeft() || mbCommandDrag) )
+    if ( mbDragging && rMEvt.IsLeft() )
     {
         ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
         pMgr->EndDragging();
         return;
     }
-    mbCommandDrag = false;
 
     DockingWindow::MouseButtonUp( rMEvt );
 }

@@ -1134,8 +1134,6 @@ void ToolBox::StartSelection()
 
 void ToolBox::EndSelection()
 {
-    mbCommandDrag = false;
-
     if ( mbDrag || mbSelection )
     {
         // reset
