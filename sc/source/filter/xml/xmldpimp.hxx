@@ -292,7 +292,7 @@ class ScXMLDataPilotFieldContext : public ScXMLImportContext
     double                      fStep;
     sal_Int32                   nUsedHierarchy;
     sal_Int32                   nGroupPart;
-    sal_Int16                   nFunction;
+    ScGeneralFunction           nFunction;
     sal_Int16                   nOrientation;
     bool                        bSelectedPage:1;
     bool                        bIsGroupField:1;
@@ -318,7 +318,7 @@ public:
 
     void SetShowEmpty(const bool bValue) { if (xDim) xDim->SetShowEmpty(bValue); }
     void SetRepeatItemLabels(const bool bSet) { if (xDim) xDim->SetRepeatItemLabels(bSet); }
-    void SetSubTotals(std::vector<sal_uInt16> const & rFunctions) { if (xDim) xDim->SetSubTotals(rFunctions); }
+    void SetSubTotals(std::vector<ScGeneralFunction> const & rFunctions) { if (xDim) xDim->SetSubTotals(rFunctions); }
     void AddMember(ScDPSaveMember* pMember);
     void SetSubTotalName(const OUString& rName);
     void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
@@ -411,10 +411,10 @@ public:
 
 class ScXMLDataPilotSubTotalsContext : public ScXMLImportContext
 {
-    ScXMLDataPilotFieldContext*  pDataPilotField;
+    ScXMLDataPilotFieldContext*    pDataPilotField;
 
-    std::vector<sal_uInt16>      maFunctions;
-    OUString                     maDisplayName;
+    std::vector<ScGeneralFunction> maFunctions;
+    OUString                       maDisplayName;
 
 public:
     ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -429,7 +429,7 @@ public:
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
-    void AddFunction(sal_Int16 nFunction);
+    void AddFunction(ScGeneralFunction nFunction);
     void SetDisplayName(const OUString& rName);
 };
 

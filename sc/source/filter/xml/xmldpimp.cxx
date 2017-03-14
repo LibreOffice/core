@@ -31,6 +31,7 @@
 #include "dpdimsave.hxx"
 #include "rangeutl.hxx"
 #include "dpoutputgeometry.hxx"
+#include "generalfunction.hxx"
 
 #include "pivotsource.hxx"
 
@@ -949,7 +950,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     fStep(0.0),
     nUsedHierarchy(1),
     nGroupPart(0),
-    nFunction(0),
+    nFunction(ScGeneralFunction::NONE),
     nOrientation(0),
     bSelectedPage(false),
     bIsGroupField(false),
@@ -1471,7 +1472,7 @@ void ScXMLDataPilotSubTotalsContext::EndElement()
         pDataPilotField->SetSubTotalName(maDisplayName);
 }
 
-void ScXMLDataPilotSubTotalsContext::AddFunction(sal_Int16 nFunction)
+void ScXMLDataPilotSubTotalsContext::AddFunction(ScGeneralFunction nFunction)
 {
     maFunctions.push_back(nFunction);
 }
