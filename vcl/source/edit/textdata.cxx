@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <vcl/textdata.hxx>
 #include <textdat2.hxx>
 
@@ -55,7 +59,7 @@ TETextPortionList::~TETextPortionList()
     Reset();
 }
 
-TETextPortion* TETextPortionList::operator[]( size_t nPos )
+TETextPortion* TETextPortionList::operator[]( std::size_t nPos )
 {
     return maPortions[ nPos ];
 }
@@ -85,7 +89,7 @@ bool TETextPortionList::empty() const
     return maPortions.empty();
 }
 
-size_t TETextPortionList::size() const
+std::size_t TETextPortionList::size() const
 {
     return maPortions.size();
 }
@@ -113,7 +117,7 @@ void TETextPortionList::Reset()
     maPortions.clear();
 }
 
-void TETextPortionList::DeleteFromPortion( size_t nDelFrom )
+void TETextPortionList::DeleteFromPortion( std::size_t nDelFrom )
 {
     SAL_WARN_IF( ( nDelFrom >= maPortions.size() ) && ( (nDelFrom != 0) || (maPortions.size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
     for ( auto it = maPortions.begin() + nDelFrom; it != maPortions.end(); ++it )
@@ -121,11 +125,11 @@ void TETextPortionList::DeleteFromPortion( size_t nDelFrom )
     maPortions.erase( maPortions.begin() + nDelFrom, maPortions.end() );
 }
 
-sal_uInt16 TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion )
+std::size_t TETextPortionList::FindPortion( sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion )
 {
     // find left portion at nCharPos at portion border
     sal_Int32 nTmpPos = 0;
-    for ( size_t nPortion = 0; nPortion < maPortions.size(); nPortion++ )
+    for ( std::size_t nPortion = 0; nPortion < maPortions.size(); nPortion++ )
     {
         TETextPortion* pPortion = maPortions[ nPortion ];
         nTmpPos += pPortion->GetLen();
@@ -237,14 +241,14 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     {
         const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];
         const TextLine& rUnformatted = maLines[ nLastFormattedLine+1 ];
-        short nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
+        std::ptrdiff_t nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
         sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
         nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
 
         // The first unformatted one has to start exactly one portion past the last
         // formatted one.
         // If a portion got split in the changed row, nLastEnd could be > nNextStart!
-        short nPDiff = sal::static_int_cast< short >(-( nPortionDiff-1 ));
+        std::ptrdiff_t nPDiff = -( nPortionDiff-1 );
         const sal_Int32 nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
         {

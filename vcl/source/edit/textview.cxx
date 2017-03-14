@@ -59,6 +59,8 @@
 #include <osl/mutex.hxx>
 
 #include <algorithm>
+#include <cstddef>
+
 #include <o3tl/make_unique.hxx>
 
 class TETextDataObject :    public css::datatransfer::XTransferable,
@@ -1627,7 +1629,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
 
             sal_Int32 nTextPortionStart = 0;
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
+            std::size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {

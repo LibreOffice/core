@@ -25,6 +25,8 @@
 #include <vcl/cursor.hxx>
 #include <vcl/idle.hxx>
 
+#include <cstddef>
+#include <limits>
 #include <vector>
 
 class TextNode;
@@ -73,24 +75,26 @@ private:
     std::vector<TETextPortion*> maPortions;
 
 public:
+    static constexpr auto npos = std::numeric_limits<std::size_t>::max();
+
     TETextPortionList();
     ~TETextPortionList();
 
-    TETextPortion* operator[]( size_t nPos );
+    TETextPortion* operator[]( std::size_t nPos );
     std::vector<TETextPortion*>::iterator begin();
     std::vector<TETextPortion*>::const_iterator begin() const;
     std::vector<TETextPortion*>::iterator end();
     std::vector<TETextPortion*>::const_iterator end() const;
     bool empty() const;
-    size_t size() const;
+    std::size_t size() const;
     std::vector<TETextPortion*>::iterator erase( std::vector<TETextPortion*>::iterator aIter );
     std::vector<TETextPortion*>::iterator insert( std::vector<TETextPortion*>::iterator aIter,
                                                   TETextPortion* pTP );
     void push_back( TETextPortion* pTP );
 
     void    Reset();
-    sal_uInt16  FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
-    void    DeleteFromPortion( size_t nDelFrom );
+    std::size_t FindPortion( sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false );
+    void    DeleteFromPortion( std::size_t nDelFrom );
 };
 
 struct TEWritingDirectionInfo
@@ -110,8 +114,8 @@ class TextLine
 private:
     sal_Int32           mnStart;
     sal_Int32           mnEnd;
-    sal_uInt16          mnStartPortion;
-    sal_uInt16          mnEndPortion;
+    std::size_t         mnStartPortion;
+    std::size_t         mnEndPortion;
 
     short               mnStartX;
 
@@ -136,11 +140,11 @@ public:
     void            SetEnd( sal_Int32 n )           { mnEnd = n; }
     sal_Int32       GetEnd() const                  { return mnEnd; }
 
-    void            SetStartPortion( sal_uInt16 n )     { mnStartPortion = n; }
-    sal_uInt16      GetStartPortion() const         { return mnStartPortion; }
+    void            SetStartPortion( std::size_t n ) { mnStartPortion = n; }
+    std::size_t     GetStartPortion() const         { return mnStartPortion; }
 
-    void            SetEndPortion( sal_uInt16 n )       { mnEndPortion = n; }
-    sal_uInt16      GetEndPortion() const           { return mnEndPortion; }
+    void            SetEndPortion( std::size_t n )  { mnEndPortion = n; }
+    std::size_t     GetEndPortion() const           { return mnEndPortion; }
 
     sal_Int32       GetLen() const                  { return mnEnd - mnStart; }
 

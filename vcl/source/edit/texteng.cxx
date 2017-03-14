@@ -54,6 +54,7 @@
 #include <unicode/ubidi.h>
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdlib>
 #include <memory>
 #include <set>
@@ -931,7 +932,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
 
     sal_Int32 nTextPortionStart = 0;
-    size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
+    std::size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
 
     SAL_WARN_IF( ( nTextPortion < pLine->GetStartPortion() ) || ( nTextPortion > pLine->GetEndPortion() ), "vcl", "GetXPos: Portion not in current line!" );
 
@@ -1102,7 +1103,7 @@ sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, std::vector<TextLine>::si
     if ( nXPos <= nTmpX )
         return nCurIndex;
 
-    for ( sal_uInt16 i = rLine.GetStartPortion(); i <= rLine.GetEndPortion(); i++ )
+    for ( std::size_t i = rLine.GetStartPortion(); i <= rLine.GetEndPortion(); i++ )
     {
         TETextPortion* pTextPortion = pPortion->GetTextPortions()[ i ];
         nTmpX += pTextPortion->GetWidth();
@@ -1157,7 +1158,7 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara )
     {
         long nLineWidth = 0;
         TextLine& rLine = pPortion->GetLines()[ --nLine ];
-        for ( sal_uInt16 nTP = rLine.GetStartPortion(); nTP <= rLine.GetEndPortion(); nTP++ )
+        for ( std::size_t nTP = rLine.GetStartPortion(); nTP <= rLine.GetEndPortion(); nTP++ )
         {
             TETextPortion* pTextPortion = pPortion->GetTextPortions()[ nTP ];
             nLineWidth += pTextPortion->GetWidth();
@@ -1217,7 +1218,7 @@ void TextEngine::GetTextPortionRange(const TextPaM& rPaM, sal_Int32& nStart, sal
     nStart = 0;
     nEnd = 0;
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
-    for ( size_t i = 0; i < pParaPortion->GetTextPortions().size(); ++i )
+    for ( std::size_t i = 0; i < pParaPortion->GetTextPortions().size(); ++i )
     {
         TETextPortion* pTextPortion = pParaPortion->GetTextPortions()[ i ];
         if (nStart + pTextPortion->GetLen() > rPaM.GetIndex())
@@ -1633,7 +1634,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     if ( bLineBreak )
     {
         // -2: The new one is already inserted.
-        const sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1;
+        const std::size_t nPos = pTEParaPortion->GetTextPortions().size() - 1;
         aTmpLine.SetStartPortion( nPos );
         aTmpLine.SetEndPortion( nPos );
     }
@@ -1674,7 +1675,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
 
     // the damaged Portion is the End Portion
     pLine->SetEnd( nBreakPos );
-    const sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
+    const std::size_t nEndPortion = SplitTextPortion( nPara, nBreakPos );
 
     if ( nBreakPos >= pLine->GetStart() &&
          nBreakPos < pNode->GetText().getLength() &&
@@ -1689,18 +1690,18 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
     pLine->SetEndPortion( nEndPortion );
 }
 
-sal_uInt16 TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
+std::size_t TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
 {
 
     // the Portion at nPos is being split, unless there is already a switch at nPos
     if ( nPos == 0 )
         return 0;
 
-    sal_uInt16 nSplitPortion;
+    std::size_t nSplitPortion;
     sal_Int32 nTmpPos = 0;
     TETextPortion* pTextPortion = nullptr;
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-    const sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
+    const std::size_t nPortions = pTEParaPortion->GetTextPortions().size();
     for ( nSplitPortion = 0; nSplitPortion < nPortions; nSplitPortion++ )
     {
         TETextPortion* pTP = pTEParaPortion->GetTextPortions()[nSplitPortion];
@@ -1774,8 +1775,8 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
     // Unfortunately, the number of TextPortions does not have to be
     // equal to aPositions.Count(), because of linebreaks
     sal_Int32 nPortionStart = 0;
-    size_t nInvPortion = 0;
-    size_t nP;
+    std::size_t nInvPortion = 0;
+    std::size_t nP;
     for ( nP = 0; nP < pTEParaPortion->GetTextPortions().size(); nP++ )
     {
         TETextPortion* pTmpPortion = pTEParaPortion->GetTextPortions()[nP];
@@ -1835,7 +1836,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
              ( nStartPos && ( pNode->GetText()[ nStartPos - 1 ] == '\t' ) ) ||
              ( ( !nStartPos && ( nNewChars < pNode->GetText().getLength() ) && pNode->GetText()[ nNewChars ] == '\t' ) ) )
         {
-            sal_uInt16 nNewPortionPos = 0;
+            std::size_t nNewPortionPos = 0;
             if ( nStartPos )
                 nNewPortionPos = SplitTextPortion( nPara, nStartPos ) + 1;
 
@@ -1856,7 +1857,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         else
         {
             sal_Int32 nPortionStart {0};
-            const sal_uInt16 nTP = pTEParaPortion->GetTextPortions().FindPortion( nStartPos, nPortionStart );
+            const std::size_t nTP = pTEParaPortion->GetTextPortions().FindPortion( nStartPos, nPortionStart );
             TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
             SAL_WARN_IF( !pTP, "vcl", "RecalcTextPortion: Portion not found!"  );
             pTP->GetLen() += nNewChars;
@@ -1870,10 +1871,10 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
 
         // There must be no Portion reaching into or starting within,
         // thus: nStartPos <= nPos <= nStartPos - nNewChars(neg.)
-        size_t nPortion = 0;
+        std::size_t nPortion = 0;
         sal_Int32 nPos = 0;
         const sal_Int32 nEnd = nStartPos-nNewChars;
-        const size_t nPortions = pTEParaPortion->GetTextPortions().size();
+        const std::size_t nPortions = pTEParaPortion->GetTextPortions().size();
         TETextPortion* pTP = nullptr;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
         {
@@ -1948,7 +1949,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                 {
                     // for all Portions of the line
                     nIndex = rLine.GetStart();
-                    for ( sal_uInt16 y = rLine.GetStartPortion(); y <= rLine.GetEndPortion(); y++ )
+                    for ( std::size_t y = rLine.GetStartPortion(); y <= rLine.GetEndPortion(); y++ )
                     {
                         OSL_ENSURE(pPortion->GetTextPortions().size(),
                                 "ImpPaint: Line without Textportion!");
@@ -2166,7 +2167,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     TextLine* pLine =  &( pTEParaPortion->GetLines()[ nLine ] );
 
     // format all lines starting here
-    size_t nDelFromLine = std::numeric_limits<size_t>::max();
+    std::size_t nDelFromLine = TETextPortionList::npos;
 
     sal_Int32 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
@@ -2180,7 +2181,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         sal_Int32 nPortionEnd = 0;
 
         sal_Int32 nTmpPos = nIndex;
-        sal_uInt16 nTmpPortion = pLine->GetStartPortion();
+        std::size_t nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = mpDoc->GetLeftMargin();
         // do not subtract margin; it is included in TmpWidth
         long nXWidth = mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<long>::max();
@@ -2250,7 +2251,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             pLine->SetEnd( nPortionEnd );
             OSL_ENSURE(pTEParaPortion->GetTextPortions().size(),
                     "CreateLines: No TextPortions?");
-            pLine->SetEndPortion( (sal_uInt16)pTEParaPortion->GetTextPortions().size() - 1 );
+            pLine->SetEndPortion( pTEParaPortion->GetTextPortions().size() - 1 );
         }
 
         if ( bFixedEnd )
@@ -2274,7 +2275,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         {
             // adjust
             long nTextWidth = 0;
-            for ( sal_uInt16 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
+            for ( std::size_t nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
             {
                 TETextPortion* pTextPortion = pTEParaPortion->GetTextPortions()[ nTP ];
                 nTextWidth += pTextPortion->GetWidth();
@@ -2344,7 +2345,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         nIndex = pLine->GetEnd();   // next line Start = previous line End
                                     // because nEnd is past the last char!
 
-        const sal_uInt16 nEndPortion = pLine->GetEndPortion();
+        const std::size_t nEndPortion = pLine->GetEndPortion();
 
         // next line or new line
         pLine = nullptr;
@@ -2376,7 +2377,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
 
     }   // while ( Index < Len )
 
-    if (nDelFromLine != std::numeric_limits<size_t>::max())
+    if (nDelFromLine != TETextPortionList::npos)
     {
         pTEParaPortion->GetLines().erase( pTEParaPortion->GetLines().begin() + nDelFromLine,
                                           pTEParaPortion->GetLines().end() );
@@ -2885,13 +2886,13 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
     return nRightToLeft;
 }
 
-long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uInt16 nTextPortion )
+long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, std::size_t nTextPortion )
 {
     long nX = pLine->GetStartX();
 
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
 
-    for ( sal_uInt16 i = pLine->GetStartPortion(); i < nTextPortion; i++ )
+    for ( std::size_t i = pLine->GetStartPortion(); i < nTextPortion; i++ )
     {
         TETextPortion* pPortion = pParaPortion->GetTextPortions()[ i ];
         nX += pPortion->GetWidth();
@@ -2903,7 +2904,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uI
         if ( !IsRightToLeft() && pDestPortion->IsRightToLeft() )
         {
             // Portions behind must be added, visual before this portion
-            sal_uInt16 nTmpPortion = nTextPortion+1;
+            std::size_t nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 TETextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[ nTmpPortion ];
@@ -2928,7 +2929,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uI
         else if ( IsRightToLeft() && !pDestPortion->IsRightToLeft() )
         {
             // Portions behind must be removed, visual behind this portion
-            sal_uInt16 nTmpPortion = nTextPortion+1;
+            std::size_t nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 TETextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[ nTmpPortion ];
@@ -2982,7 +2983,7 @@ long TextEngine::ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int3
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
 
     sal_Int32 nPortionStart {0};
-    const sal_uInt16 nPortion = pPortion->GetTextPortions().FindPortion( nIndex, nPortionStart, true );
+    const std::size_t nPortion = pPortion->GetTextPortions().FindPortion( nIndex, nPortionStart, true );
 
     TETextPortion* pTextPortion = pPortion->GetTextPortions()[ nPortion ];
 
