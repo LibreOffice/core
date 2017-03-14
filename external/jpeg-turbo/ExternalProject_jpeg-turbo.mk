@@ -32,6 +32,7 @@ $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 			--with-jpeg8 \
 			--without-java \
 			--without-turbojpeg \
+			$(if $(NASM),,--without-simd) \
 			CFLAGS='$(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) $(CFLAGS)' \
 	)
 
