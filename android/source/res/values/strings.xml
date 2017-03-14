@@ -117,6 +117,10 @@
     <string name="save_document">SAVE</string>
     <string name="cancel_save_document">CANCEL</string>
     <string name="no_save_document">NO</string>
+    <string name="new_write">New Write</string>
+    <string name="new_impress">New Impress</string>
+    <string name="new_spreadsheet">New Sheet</string>
+    <string name="new_draw">New Draw</string>
 
 
 </resources>

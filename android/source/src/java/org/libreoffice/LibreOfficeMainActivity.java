@@ -12,22 +12,26 @@ import android.content.res.AssetManager;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import org.libreoffice.overlay.DocumentOverlay;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
+import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -65,6 +69,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private URI documentUri;
 
     private DrawerLayout mDrawerLayout;
+    Toolbar toolbarTop;
 
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
@@ -73,7 +78,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
-
+    private String newDocumentType = null;
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
@@ -95,6 +100,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private boolean isFormattingToolbarOpen = false;
     private boolean isSearchToolbarOpen = false;
     private boolean isDocumentChanged = false;
+    private boolean isNewDocument = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -110,7 +116,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
+        toolbarTop = (Toolbar) findViewById(R.id.toolbar);
         hideBottomToolbar();
 
         mToolbarController = new ToolbarController(this, toolbarTop);
@@ -129,23 +135,32 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
-                    Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
+                    Log.e(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                 } else {
                     // TODO: can't open the file
                     Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
-                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
+                Log.e(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
 
                 // Gather data to rebuild IFile object later
                 providerId = getIntent().getIntExtra(
                         "org.libreoffice.document_provider_id", 0);
                 documentUri = (URI) getIntent().getSerializableExtra(
                         "org.libreoffice.document_uri");
+                if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
+                    newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
+                }
             }
         } else {
             mInputFile = new File(DEFAULT_DOC_PATH);
+        }
+
+        if (newDocumentType != null){
+            // We want to create a new Document
+            createAlertDialogue();
+            isNewDocument = true;
         }
 
         toolbarTop.setTitle(mInputFile.getName());
@@ -185,6 +200,38 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
         mToolbarController.setupToolbars();
+    }
+
+    private void createAlertDialogue() {
+        String documentName = mInputFile.getName();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Document");
+
+        final EditText input = new EditText(this);
+        input.setText(documentName);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
+                File fromFile = new File(dir, mInputFile.getName());
+                File newFile = new File(dir, input.getText().toString());
+                boolean isRenamed = fromFile.renameTo(newFile);
+                if (isRenamed) {
+                    toolbarTop.setTitle(newFile.getName());
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                startActivity(new Intent(LibreOfficeMainActivity.this, LibreOfficeUIActivity.class));
+            }
+        });
+        builder.show();
     }
 
     public RectF getCurrentCursorPosition() {
@@ -321,10 +368,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        if(partIndex == -1)
-            LOKitShell.sendLoadEvent(mInputFile.getPath());
-        else
-            LOKitShell.sendResumeEvent(mInputFile.getPath(), partIndex);
+        if (isNewDocument){
+            LOKitShell.sendLoadEvent(newDocumentType);
+        }
+        else {
+            if (partIndex == -1)
+                LOKitShell.sendLoadEvent(mInputFile.getPath());
+            else
+                LOKitShell.sendResumeEvent(mInputFile.getPath(), partIndex);
+        }
     }
 
     @Override
