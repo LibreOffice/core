@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_34dd1a15",
+        "filename": "xmlsecurity/source/gpg/CertificateImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-03-14T21:34:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this. Where do we display the name+email associated with a gpg key?",
+      "revId": "b257cff65f92f9b18401fed3d2224cc46c0e3fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
