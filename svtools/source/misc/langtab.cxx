@@ -175,6 +175,17 @@ bool SvtLanguageTable::HasLanguageType( const LanguageType eType )
     return theLanguageTable::get().HasType( eType );
 }
 
+OUString lcl_getDescription( const OUString& rBcp47 )
+{
+    // Place in curly brackets, so all on-the-fly tags are grouped together at
+    // the top of a listbox (but behind the "[None]" entry), and not sprinkled
+    // all over, which alphabetically might make sense in an English UI only
+    // anyway. Also a visual indicator that it is a programmatical name, IMHO.
+    /* TODO: pulling descriptive names (language, script, country, subtags)
+     * from liblangtag or ISO databases might be nice, but those are English
+     * only. Maybe ICU, that has translations for language and country. */
+    return "{" + rBcp47 + "}";
+}
 
 const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
@@ -185,7 +196,7 @@ const OUString SvtLanguageTableImpl::GetString( const LanguageType eType, bool b
         return ResStringArray::GetString( nPos );
 
     //Rather than return a fairly useless "Unknown" name, return a geeky but usable-in-a-pinch lang-tag
-    OUString sLangTag(LanguageTag::convertToBcp47(eType));
+    OUString sLangTag( lcl_getDescription( LanguageTag::convertToBcp47(eType)));
     SAL_WARN("svtools.misc", "Language: 0x"
         << std::hex << eType
         << " with unknown name, so returning lang-tag of: "
@@ -259,7 +270,7 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 
 sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString )
 {
-    return theLanguageTable::get().AddItem( (rString.isEmpty() ? rLanguageTag.getBcp47() : rString),
+    return theLanguageTable::get().AddItem( (rString.isEmpty() ? lcl_getDescription(rLanguageTag.getBcp47()) : rString),
             rLanguageTag.getLanguageType());
 }
 

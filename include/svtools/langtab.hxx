@@ -48,7 +48,7 @@ public:
 
         @param  rString
                 UI visible description string. If empty, the rLanguageTag Bcp47
-                string is used instead.
+                string placed in curly brackets is used instead, e.g. "{en-DK}"
      */
     static sal_uInt32   AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString );
 };
