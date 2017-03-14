@@ -67,11 +67,9 @@
 #define TB_BORDER_OFFSET1       4
 #define TB_BORDER_OFFSET2       2
 #define TB_CUSTOMIZE_OFFSET     2
-#define TB_RESIZE_OFFSET        3
 #define TB_MAXLINES             5
 #define TB_MAXNOSCROLL          32765
 
-#define TB_MIN_WIN_WIDTH        20
 #define TB_DRAGWIDTH            8  // the default width of the drag grip
 
 #define TB_CALCMODE_HORZ        1
@@ -101,12 +99,9 @@ private:
     Rectangle       maRect;
     Rectangle       maStartRect;
     Accelerator     maAccel;
-    long            mnMinWidth;
-    long            mnMaxWidth;
     sal_uInt16      mnLineMode;
     ToolBox::ImplToolItems::size_type mnStartLines;
     void*           mpCustomizeData;
-    bool            mbResizeMode;
     bool            mbShowDragRect;
 
     ImplTBDragMgr(const ImplTBDragMgr&) = delete;
@@ -131,8 +126,7 @@ public:
 
     ToolBox*        FindToolBox( const Rectangle& rRect );
 
-    void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode,
-                                   bool bResizeItem );
+    void            StartDragging( ToolBox* pDragBox, const Point& rPos, const Rectangle& rRect, sal_uInt16 nLineMode );
     void            Dragging( const Point& rPos );
     void            EndDragging( bool bOK = true );
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
@@ -1130,12 +1124,9 @@ sal_uInt16 ToolBox::ImplFindItemPos( const Point& rPos ) const
 ImplTBDragMgr::ImplTBDragMgr()
     : mpBoxList(new ImplTBList)
     , mpDragBox(nullptr)
-    , mnMinWidth(0)
-    , mnMaxWidth(0)
     , mnLineMode(0)
     , mnStartLines(0)
     , mpCustomizeData(nullptr)
-    , mbResizeMode(false)
     , mbShowDragRect(false)
 {
     maAccel.InsertItem( KEY_RETURN, vcl::KeyCode( KEY_RETURN ) );
@@ -1174,7 +1165,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 
 void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
                                    const Point& rPos, const Rectangle& rRect,
-                                   sal_uInt16 nDragLineMode, bool bResizeItem )
+                                   sal_uInt16 nDragLineMode )
 {
     mpDragBox = pToolBox;
     pToolBox->CaptureMouse();
@@ -1189,20 +1180,10 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     else
     {
         mpCustomizeData = nullptr;
-        mbResizeMode = bResizeItem;
         pToolBox->Activate();
         pToolBox->mnCurItemId = pToolBox->mnConfigItem;
         pToolBox->Highlight();
         pToolBox->mnCurItemId = 0;
-        if ( mbResizeMode )
-        {
-            if ( rRect.GetWidth() < TB_MIN_WIN_WIDTH )
-                mnMinWidth = rRect.GetWidth();
-            else
-                mnMinWidth = TB_MIN_WIN_WIDTH;
-            mnMaxWidth = pToolBox->GetSizePixel().Width()-rRect.Left()-
-                         TB_SPIN_SIZE-TB_BORDER_OFFSET1-(TB_SPIN_OFFSET*2);
-        }
     }
 
     // MouseOffset berechnen
@@ -1227,21 +1208,8 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
     }
     else
     {
-        if ( mbResizeMode )
-        {
-            long nXOff = rPos.X()-maStartRect.Left();
-            nXOff += maMouseOff.X()+(maStartRect.Right()-maStartRect.Left());
-            if ( nXOff < mnMinWidth )
-                nXOff = mnMinWidth;
-            if ( nXOff > mnMaxWidth )
-                nXOff = mnMaxWidth;
-            maRect.Right() = maStartRect.Left()+nXOff;
-        }
-        else
-        {
-            maRect.SetPos( rPos );
-            maRect.Move( maMouseOff.X(), maMouseOff.Y() );
-        }
+        maRect.SetPos( rPos );
+        maRect.Move( maMouseOff.X(), maMouseOff.Y() );
         mpDragBox->ShowTracking( maRect );
     }
 }
@@ -1273,50 +1241,35 @@ void ImplTBDragMgr::EndDragging( bool bOK )
         if ( nTempItem )
         {
             mpDragBox->mnConfigItem = 0;
-            if ( !mbResizeMode )
-                mpDragBox->Invalidate( mpDragBox->GetItemRect( nTempItem ) );
+            mpDragBox->Invalidate( mpDragBox->GetItemRect( nTempItem ) );
         }
 
         if ( bOK && (maRect != maStartRect) )
         {
-            if ( mbResizeMode )
+            Point aOff = mpDragBox->OutputToScreenPixel( Point() );
+            Rectangle aScreenRect( maRect );
+            aScreenRect.Move( aOff.X(), aOff.Y() );
+            ToolBox* pDropBox = FindToolBox( aScreenRect );
+            if ( pDropBox )
             {
-                ImplToolItem* pItem = mpDragBox->ImplGetItem( nTempItem );
-                Size aSize = pItem->mpWindow->GetSizePixel();
-                aSize.Width() = maRect.GetWidth();
-                pItem->mpWindow->SetSizePixel( aSize );
-
-                // re-calculate and show ToolBox
-                mpDragBox->ImplInvalidate( true );
-            }
-            else
-            {
-                Point aOff = mpDragBox->OutputToScreenPixel( Point() );
-                Rectangle aScreenRect( maRect );
-                aScreenRect.Move( aOff.X(), aOff.Y() );
-                ToolBox* pDropBox = FindToolBox( aScreenRect );
-                if ( pDropBox )
+                // Determine search position
+                Point aPos;
+                if ( pDropBox->mbHorz )
                 {
-                    // Determine search position
-                    Point aPos;
-                    if ( pDropBox->mbHorz )
-                    {
-                        aPos.X() = aScreenRect.Left()-TB_CUSTOMIZE_OFFSET;
-                        aPos.Y() = aScreenRect.Center().Y();
-                    }
-                    else
-                    {
-                        aPos.X() = aScreenRect.Center().X();
-                        aPos.Y() = aScreenRect.Top()-TB_CUSTOMIZE_OFFSET;
-                    }
-
-                    aPos = pDropBox->ScreenToOutputPixel( aPos );
-                    pDropBox->ImplFindItemPos( aPos );
+                    aPos.X() = aScreenRect.Left()-TB_CUSTOMIZE_OFFSET;
+                    aPos.Y() = aScreenRect.Center().Y();
                 }
+                else
+                {
+                    aPos.X() = aScreenRect.Center().X();
+                    aPos.Y() = aScreenRect.Top()-TB_CUSTOMIZE_OFFSET;
+                }
+
+                aPos = pDropBox->ScreenToOutputPixel( aPos );
+                pDropBox->ImplFindItemPos( aPos );
             }
         }
         mpCustomizeData = nullptr;
-        mbResizeMode = false;
         mpDragBox->Deactivate();
     }
 
@@ -1383,7 +1336,6 @@ void ToolBox::ImplInitToolBoxData()
     mbScroll          = false;
     mbLastFloatMode   = false;
     mbCustomize       = false;
-    mbCustomizeMode   = false;
     mbDragging        = false;
     mbIsShift         = false;
     mbIsKeyEvent = false;
@@ -2579,8 +2531,7 @@ void ToolBox::ImplFormat( bool bResize )
                         assert( it->maCalcRect.Top() >= 0 );
 
                         it->mpWindow->SetPosPixel( aPos );
-                        if ( !mbCustomizeMode )
-                            it->mpWindow->Show();
+                        it->mpWindow->Show();
                     }
                     else
                         it->mpWindow->Hide();
@@ -3040,8 +2991,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     }
 
     // do nothing if item is no button or will be displayed as window
-    if ( (pItem->meType != ToolBoxItemType::BUTTON) ||
-         (pItem->mbShowWindow && !mbCustomizeMode) )
+    if ( (pItem->meType != ToolBoxItemType::BUTTON) || pItem->mbShowWindow )
         return;
 
     // we need a TBDragMananger to draw the configuration item
@@ -3053,45 +3003,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     }
     else
         pMgr = nullptr;
-
-    // during configuration mode visible windows will be drawn in a special way
-    if ( mbCustomizeMode && pItem->mbShowWindow )
-    {
-        vcl::Font aOldFont = rRenderContext.GetFont();
-        Color     aOldTextColor = rRenderContext.GetTextColor();
-
-        SetZoomedPointFont(rRenderContext, rStyleSettings.GetAppFont());
-        rRenderContext.SetLineColor(Color(COL_BLACK));
-        rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
-        rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
-        rRenderContext.DrawRect(pItem->maRect);
-
-        Size aSize( GetCtrlTextWidth( pItem->maText ), GetTextHeight() );
-        Point aPos( pItem->maRect.Left()+2, pItem->maRect.Top() );
-        aPos.Y() += (pItem->maRect.GetHeight()-aSize.Height())/2;
-        bool bClip;
-        if ( (aSize.Width() > pItem->maRect.GetWidth()-2) ||
-             (aSize.Height() > pItem->maRect.GetHeight()-2) )
-        {
-            bClip = true;
-            Rectangle aTempRect(pItem->maRect.Left() + 1, pItem->maRect.Top() + 1,
-                                pItem->maRect.Right() - 1, pItem->maRect.Bottom() - 1);
-            vcl::Region aTempRegion(aTempRect);
-            rRenderContext.SetClipRegion(aTempRegion);
-        }
-        else
-            bClip = false;
-        rRenderContext.DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength() );
-        if (bClip)
-            rRenderContext.SetClipRegion();
-        rRenderContext.SetFont(aOldFont);
-        rRenderContext.SetTextColor(aOldTextColor);
-
-        // draw Config-Frame if required
-        if (pMgr)
-            pMgr->UpdateDragRect();
-        return;
-    }
 
     if ( pItem->meState == TRISTATE_TRUE )
     {
@@ -3684,27 +3595,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( (eStyle == PointerStyle::Arrow) && mbCustomizeMode )
-    {
-        // search the item which was clicked
-        ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-        while ( it != mpData->m_aItems.end() )
-        {
-            // show resize pointer if it is a customize window
-            if ( it->mbShowWindow )
-            {
-                if ( it->maRect.IsInside( aMousePos ) )
-                {
-                    if ( it->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X() )
-                        eStyle = PointerStyle::HSizeBar;
-                    break;
-                }
-            }
-
-            ++it;
-        }
-    }
-
     if ( bDrawHotSpot && ( (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
     {
         bool bClearHigh = true;
@@ -3820,7 +3710,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 // do nothing if it is a separator or
                 // if the item has been disabled
                 if ( (it->meType == ToolBoxItemType::BUTTON) &&
-                     (!it->mbShowWindow || mbCustomizeMode) )
+                     !it->mbShowWindow )
                     nNewPos = i;
 
                 break;
@@ -3835,7 +3725,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( mbCustomize )
             {
-                if ( rMEvt.IsMod2() || mbCustomizeMode )
+                if ( rMEvt.IsMod2() )
                 {
                     Deactivate();
 
@@ -3843,13 +3733,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                     Rectangle aItemRect = GetItemRect( it->mnId );
                     mnConfigItem = it->mnId;
 
-                    bool bResizeItem;
-                    if ( mbCustomizeMode && it->mbShowWindow &&
-                         (it->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X()) )
-                        bResizeItem = true;
-                    else
-                        bResizeItem = false;
-                    pMgr->StartDragging( this, aMousePos, aItemRect, 0, bResizeItem );
+                    pMgr->StartDragging( this, aMousePos, aItemRect, 0 );
                     return;
                 }
             }
@@ -3997,7 +3881,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 // start dragging
                 pMgr->StartDragging( this, aMousePos, Rectangle( aPos, aSize ),
-                                     nLineMode, false );
+                                     nLineMode );
                 return;
             }
         }
@@ -4409,46 +4293,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
 
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
-    // depict StartDrag on MouseButton/Left/Alt
-    if ( (rCEvt.GetCommand() == CommandEventId::StartDrag) && rCEvt.IsMouseEvent() &&
-         mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
-         (mnCurPos == ITEM_NOTFOUND) )
-    {
-        // We only allow dragging of items. Therefore, we have to check
-        // if an item was clicked, otherwise we could move the window, and
-        // this is unwanted.
-        // We only do this in customize mode, as otherwise
-        // items could be moved accidentally
-        if ( mbCustomizeMode )
-        {
-            Point           aMousePos = rCEvt.GetMousePosPixel();
-            ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-            while ( it != mpData->m_aItems.end() )
-            {
-                // is this the item?
-                if ( it->maRect.IsInside( aMousePos ) )
-                {
-                    // do nothing if it is a separator or
-                    // the item has been disabled
-                    if ( (it->meType == ToolBoxItemType::BUTTON) &&
-                         !it->mbShowWindow )
-                        mbCommandDrag = true;
-                    break;
-                }
-
-                ++it;
-            }
-
-            if ( mbCommandDrag )
-            {
-                MouseEvent aMEvt( aMousePos, 1, MouseEventModifiers::SIMPLEMOVE,
-                                  MOUSE_LEFT, KEY_MOD2 );
-                ToolBox::MouseButtonDown( aMEvt );
-                return;
-            }
-        }
-    }
-    else if ( rCEvt.GetCommand() == CommandEventId::Wheel )
+    if ( rCEvt.GetCommand() == CommandEventId::Wheel )
     {
         if ( (mnCurLine > 1) || (mnCurLine+mnVisLines-1 < mnCurLines) )
         {

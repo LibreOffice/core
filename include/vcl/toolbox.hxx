@@ -148,7 +148,6 @@ private:
                         mbScroll:1,
                         mbLastFloatMode:1,
                         mbCustomize:1,
-                        mbCustomizeMode:1,
                         mbDragging:1,
                         mbIsShift:1,
                         mbIsKeyEvent:1,
