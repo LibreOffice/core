@@ -46,6 +46,30 @@
       "revId": "13b344ea5ab97a0c994de01c565fc97a23aa4975",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b10cbc43",
+        "filename": "android/source/gradle/wrapper/gradle-wrapper.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001281
+      },
+      "writtenOn": "2017-03-14T18:34:12Z",
+      "side": 1,
+      "message": "Yes, it would be great to move this to a separate commit if you want to change this (so we could review it separately), otherwise you should edit the commit to not include this change.",
+      "parentUuid": "9a57fde8_7126d469",
+      "range": {
+        "startLine": 6,
+        "startChar": 59,
+        "endLine": 6,
+        "endChar": 65
+      },
+      "revId": "13b344ea5ab97a0c994de01c565fc97a23aa4975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
