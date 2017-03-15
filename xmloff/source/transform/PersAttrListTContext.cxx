@@ -161,9 +161,9 @@ bool XMLPersAttrListTContext::IsPersistent() const
 
 void XMLPersAttrListTContext::Export()
 {
-    GetTransformer().startFastElement( m_aElemQName, m_xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, m_xAttrList );
     ExportContent();
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 void XMLPersAttrListTContext::ExportContent()

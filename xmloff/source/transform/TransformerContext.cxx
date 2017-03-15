@@ -62,12 +62,12 @@ rtl::Reference<XMLTransformerContext> XMLTransformerContext::CreateChildContext(
 
 void XMLTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
 {
-    m_rTransformer.startFastElement( m_aQName, rAttrList );
+    m_rTransformer.GetDocHandler()->startElement( m_aQName, rAttrList );
 }
 
 void XMLTransformerContext::EndElement()
 {
-    GetTransformer().endFastElement( m_aQName );
+    GetTransformer().GetDocHandler()->endElement( m_aQName );
 }
 
 void XMLTransformerContext::Characters( const OUString& rChars )

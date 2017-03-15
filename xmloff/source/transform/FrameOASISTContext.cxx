@@ -145,7 +145,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
                     GetTransformer().ProcessAttrList( m_xAttrList,
                                                       OASIS_SHAPE_ACTIONS,
                                                       false );
-                    GetTransformer().startFastElement( m_aElemQName, m_xAttrList );
+                    GetTransformer().GetDocHandler()->startElement( m_aElemQName, m_xAttrList );
                 }
                 else
                 {
@@ -174,7 +174,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
 void XMLFrameOASISTransformerContext::EndElement()
 {
     if( !m_bIgnoreElement )
-        GetTransformer().endFastElement( m_aElemQName );
+        GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 void XMLFrameOASISTransformerContext::Characters( const OUString& rChars )

@@ -60,7 +60,7 @@ void XMLProcAddAttrTransformerContext::StartElement(
         xAttrList = pMutableAttrList;
     }
     pMutableAttrList->AddAttribute( m_aAttrQName, m_aAttrValue );
-    GetTransformer().startFastElement( GetElemQName(), xAttrList );
+    GetTransformer().GetDocHandler()->startElement( GetElemQName(), xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
