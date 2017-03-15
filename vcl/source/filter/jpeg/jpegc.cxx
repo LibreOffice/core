@@ -92,20 +92,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     cinfo.output_gamma = 1.0;
     cinfo.raw_data_out = FALSE;
     cinfo.quantize_colors = FALSE;
-    ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
-    int nPixelSize = 3;
-    if ( cinfo.jpeg_color_space == JCS_YCbCr )
-        cinfo.out_color_space = JCS_RGB;
-    else if ( cinfo.jpeg_color_space == JCS_YCCK )
-        cinfo.out_color_space = JCS_CMYK;
-
-    if (cinfo.out_color_space != JCS_CMYK &&
-        cinfo.out_color_space != JCS_GRAYSCALE &&
-        cinfo.out_color_space != JCS_RGB)
-    {
-        SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to rgb");
-        cinfo.out_color_space = JCS_RGB;
-    }
 
     /* change scale for preview import */
     long nPreviewWidth = previewSize.Width();
@@ -170,6 +156,21 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
         if (pAccess)
         {
+            ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
+            int nPixelSize = 3;
+            if ( cinfo.jpeg_color_space == JCS_YCbCr )
+                cinfo.out_color_space = JCS_RGB;
+            else if ( cinfo.jpeg_color_space == JCS_YCCK )
+                cinfo.out_color_space = JCS_CMYK;
+
+            if (cinfo.out_color_space != JCS_CMYK &&
+                cinfo.out_color_space != JCS_GRAYSCALE &&
+                cinfo.out_color_space != JCS_RGB)
+            {
+                SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to rgb");
+                cinfo.out_color_space = JCS_RGB;
+            }
+
             JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
             std::vector<sal_uInt8> pScanLineBuffer(nWidth * (bGray ? 1 : nPixelSize));
