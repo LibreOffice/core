@@ -96,8 +96,6 @@
 #define SV_HELPTEXT_SCREENSHOT                      10007
 #define SV_HELPTEXT_FADEIN                          10008
 #define SV_HELPTEXT_FADEOUT                         10009
-#define SV_HELPTEXT_SPLITFLOATING                   10010
-#define SV_HELPTEXT_SPLITFIXED                      10011
 #define SV_HELPTEXT_CLOSEDOCUMENT                   10012
 
 #define SV_BUTTONTEXT_OK                            10100
@@ -141,7 +139,6 @@
 #define SV_STDTEXT_DONTWARNAGAIN                    10213
 #define SV_STDTEXT_ABOUT                            10214
 #define SV_STDTEXT_PREFERENCES                      10215
-#define SV_MAC_SCREENNNAME                          10216
 #define SV_STDTEXT_ALLFILETYPES                     10217
 
 #define STR_FPICKER_AUTO_EXTENSION                  10300
@@ -165,16 +162,6 @@
 #define STR_FPICKER_TYPE                            10318
 
 #define SV_ACCESSERROR_NO_FONTS                     10510
-
-#define SV_SHORTCUT_HELP                            10600
-#define SV_SHORTCUT_CONTEXTHELP                     10601
-#define SV_SHORTCUT_ACTIVEHELP                      10602
-#define SV_SHORTCUT_DOCKUNDOCK                      10603
-#define SV_SHORTCUT_NEXTSUBWINDOW                   10604
-#define SV_SHORTCUT_PREVSUBWINDOW                   10605
-#define SV_SHORTCUT_TODOCUMENT                      10606
-#define SV_SHORTCUT_MENUBAR                         10607
-#define SV_SHORTCUT_SPLITTER                        10608
 
 #define SV_PRINT_NOPAGES                            10609
 #define SV_PRINT_TOFILE_TXT                         10610
@@ -201,14 +188,10 @@
 #define SV_ICON_SIZE32_START                        21000
 #define SV_ICON_SIZE16_START                        23000
 
-#define SV_ICON_ID_OFFICE                               1
 #define SV_ICON_ID_TEXT                                 2
-#define SV_ICON_ID_TEXT_TEMPLATE                        3
 #define SV_ICON_ID_SPREADSHEET                          4
-#define SV_ICON_ID_SPREADSHEET_TEMPLATE                 5
 #define SV_ICON_ID_DRAWING                              6
 #define SV_ICON_ID_PRESENTATION                         8
-#define SV_ICON_ID_MASTER_DOCUMENT                     10
 #define SV_ICON_ID_TEMPLATE                            11
 #define SV_ICON_ID_DATABASE                            12
 #define SV_ICON_ID_FORMULA                             13
