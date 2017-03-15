@@ -723,7 +723,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( eState >= SfxItemState::DEFAULT )
     {
         const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>(rSet.Get( nWhich ));
-        eItalic = (FontItalic)rItem.GetValue();
+        eItalic = rItem.GetValue();
         bStyle = true;
     }
     bStyleAvailable = bStyleAvailable && (eState >= SfxItemState::DONTCARE);
@@ -739,7 +739,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( eState >= SfxItemState::DEFAULT )
     {
         const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>(rSet.Get( nWhich ));
-        eWeight = (FontWeight)rItem.GetValue();
+        eWeight = rItem.GetValue();
     }
     else
         bStyle = false;
@@ -1725,7 +1725,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         else
         {
             const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>(rSet->Get( nWhich ));
-            FontLineStyle eUnderline = (FontLineStyle)rItem.GetValue();
+            FontLineStyle eUnderline = rItem.GetValue();
             rFont.SetUnderline( eUnderline );
             rCJKFont.SetUnderline( eUnderline );
             rCTLFont.SetUnderline( eUnderline );
@@ -1769,7 +1769,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         else
         {
             const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>(rSet->Get( nWhich ));
-            FontLineStyle eOverline = (FontLineStyle)rItem.GetValue();
+            FontLineStyle eOverline = rItem.GetValue();
             rFont.SetOverline( eOverline );
             rCJKFont.SetOverline( eOverline );
             rCTLFont.SetOverline( eOverline );
@@ -1813,7 +1813,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         else
         {
             const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>(rSet->Get( nWhich ));
-            FontStrikeout eStrikeout = (FontStrikeout)rItem.GetValue();
+            FontStrikeout eStrikeout = rItem.GetValue();
             rFont.SetStrikeout( eStrikeout );
             rCJKFont.SetStrikeout( eStrikeout );
             rCTLFont.SetStrikeout( eStrikeout );
@@ -2144,7 +2144,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxUnderlineItem& rItem = *static_cast<const SvxUnderlineItem*>(pOld);
-        if ( (FontLineStyle)rItem.GetValue() == eUnder &&
+        if ( rItem.GetValue() == eUnder &&
              ( LINESTYLE_NONE == eUnder || rItem.GetColor() == m_pUnderlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;
@@ -2178,7 +2178,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxOverlineItem& rItem = *static_cast<const SvxOverlineItem*>(pOld);
-        if ( (FontLineStyle)rItem.GetValue() == eOver &&
+        if ( rItem.GetValue() == eOver &&
              ( LINESTYLE_NONE == eOver || rItem.GetColor() == m_pOverlineColorLB->GetSelectEntryColor() ) &&
              ! bAllowChg )
             bChanged = false;
@@ -2213,7 +2213,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 
         const SvxCrossedOutItem& rItem = *static_cast<const SvxCrossedOutItem*>(pOld);
         if ( !m_pStrikeoutLB->IsEnabled()
-            || ((FontStrikeout)rItem.GetValue() == eStrike  && !bAllowChg) )
+            || (rItem.GetValue() == eStrike  && !bAllowChg) )
             bChanged = false;
     }
 

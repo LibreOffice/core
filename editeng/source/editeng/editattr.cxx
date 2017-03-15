@@ -122,7 +122,7 @@ EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, sal_uInt
 
 void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetWeight( (FontWeight)static_cast<const SvxWeightItem*>(GetItem())->GetValue() );
+    rFont.SetWeight( static_cast<const SvxWeightItem*>(GetItem())->GetValue() );
 }
 
 
@@ -136,7 +136,7 @@ EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr,
 
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetUnderline( (FontLineStyle)static_cast<const SvxUnderlineItem*>(GetItem())->GetValue() );
+    rFont.SetUnderline( static_cast<const SvxUnderlineItem*>(GetItem())->GetValue() );
 
     if ( pOutDev )
         pOutDev->SetTextLineColor( static_cast<const SvxUnderlineItem*>(GetItem())->GetColor() );
@@ -154,7 +154,7 @@ EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, sa
 
 void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
-    rFont.SetOverline( (FontLineStyle)static_cast<const SvxOverlineItem*>(GetItem())->GetValue() );
+    rFont.SetOverline( static_cast<const SvxOverlineItem*>(GetItem())->GetValue() );
     if ( pOutDev )
         pOutDev->SetOverlineColor( static_cast<const SvxOverlineItem*>(GetItem())->GetColor() );
 }
@@ -199,7 +199,7 @@ EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr
 
 void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetStrikeout( (FontStrikeout)static_cast<const SvxCrossedOutItem*>(GetItem())->GetValue() );
+    rFont.SetStrikeout( static_cast<const SvxCrossedOutItem*>(GetItem())->GetValue() );
 }
 
 

@@ -3331,22 +3331,22 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
         {
             case 2: bWordLine = true;
                 SAL_FALLTHROUGH;
-            case 1: eUnderline = (FontLineStyle)LINESTYLE_SINGLE;       break;
-            case 3: eUnderline = (FontLineStyle)LINESTYLE_DOUBLE;       break;
-            case 4: eUnderline = (FontLineStyle)LINESTYLE_DOTTED;       break;
-            case 7: eUnderline = (FontLineStyle)LINESTYLE_DASH;         break;
-            case 9: eUnderline = (FontLineStyle)LINESTYLE_DASHDOT;      break;
-            case 10:eUnderline = (FontLineStyle)LINESTYLE_DASHDOTDOT;   break;
-            case 6: eUnderline = (FontLineStyle)LINESTYLE_BOLD;         break;
-            case 11:eUnderline = (FontLineStyle)LINESTYLE_WAVE;         break;
-            case 20:eUnderline = (FontLineStyle)LINESTYLE_BOLDDOTTED;   break;
-            case 23:eUnderline = (FontLineStyle)LINESTYLE_BOLDDASH;     break;
-            case 39:eUnderline = (FontLineStyle)LINESTYLE_LONGDASH;     break;
-            case 55:eUnderline = (FontLineStyle)LINESTYLE_BOLDLONGDASH; break;
-            case 25:eUnderline = (FontLineStyle)LINESTYLE_BOLDDASHDOT;  break;
-            case 26:eUnderline = (FontLineStyle)LINESTYLE_BOLDDASHDOTDOT;break;
-            case 27:eUnderline = (FontLineStyle)LINESTYLE_BOLDWAVE;     break;
-            case 43:eUnderline = (FontLineStyle)LINESTYLE_DOUBLEWAVE;   break;
+            case 1: eUnderline = LINESTYLE_SINGLE;       break;
+            case 3: eUnderline = LINESTYLE_DOUBLE;       break;
+            case 4: eUnderline = LINESTYLE_DOTTED;       break;
+            case 7: eUnderline = LINESTYLE_DASH;         break;
+            case 9: eUnderline = LINESTYLE_DASHDOT;      break;
+            case 10:eUnderline = LINESTYLE_DASHDOTDOT;   break;
+            case 6: eUnderline = LINESTYLE_BOLD;         break;
+            case 11:eUnderline = LINESTYLE_WAVE;         break;
+            case 20:eUnderline = LINESTYLE_BOLDDOTTED;   break;
+            case 23:eUnderline = LINESTYLE_BOLDDASH;     break;
+            case 39:eUnderline = LINESTYLE_LONGDASH;     break;
+            case 55:eUnderline = LINESTYLE_BOLDLONGDASH; break;
+            case 25:eUnderline = LINESTYLE_BOLDDASHDOT;  break;
+            case 26:eUnderline = LINESTYLE_BOLDDASHDOTDOT;break;
+            case 27:eUnderline = LINESTYLE_BOLDWAVE;     break;
+            case 43:eUnderline = LINESTYLE_DOUBLEWAVE;   break;
         }
     }
 

@@ -786,7 +786,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             rFnt.SetPropWidth( static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_RELIEF :
-            rFnt.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem&>(rItem).GetValue() );
+            rFnt.SetRelief( static_cast<const SvxCharReliefItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_HIDDEN :
             if( mpShell && mpShell->GetWin())
