@@ -96,8 +96,8 @@ Bitmap JpegReaderTest::loadJPG(const OUString& aURL)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     SvFileStream aFileStream(aURL, StreamMode::READ);
-    bool bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream) == 0;
-    CPPUNIT_ASSERT(bResult);
+    sal_uInt16 bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), bResult);
     return aGraphic.GetBitmapEx().GetBitmap();
 }
 
