@@ -2783,6 +2783,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL
 
     bool bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
 
+    xDocShRef->DoClose();
+
     return bRet;
 }
 
