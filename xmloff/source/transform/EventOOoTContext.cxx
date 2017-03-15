@@ -209,7 +209,7 @@ void XMLEventOOoTransformerContext::StartElement(
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().startFastElement( GetExportQName(), xAttrList );
+        GetTransformer().GetDocHandler()->startElement( GetExportQName(), xAttrList );
 }
 
 void XMLEventOOoTransformerContext::EndElement()
@@ -217,7 +217,7 @@ void XMLEventOOoTransformerContext::EndElement()
     if( m_bPersistent )
         XMLPersElemContentTContext::EndElement();
     else
-        GetTransformer().endFastElement( GetExportQName() );
+        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
 }
 
 rtl::Reference<XMLTransformerContext> XMLEventOOoTransformerContext::CreateChildContext(

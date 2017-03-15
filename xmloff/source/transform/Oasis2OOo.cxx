@@ -1226,12 +1226,12 @@ void XMLTableTransformerContext_Impl::StartElement(
         }
     }
 
-    GetTransformer().startFastElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLTableTransformerContext_Impl::EndElement()
 {
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext

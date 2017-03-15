@@ -2082,4 +2082,88 @@ OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNa
     return OUString();
 }
 
+SvXMLLegacyToFastDocHandler::SvXMLLegacyToFastDocHandler( const rtl::Reference< SvXMLImport > & rImport )
+:   mrImport( rImport ),
+    mxFastAttributes( new sax_fastparser::FastAttributeList( mrImport->mxTokenHandler.get(),
+        dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( mrImport->mxTokenHandler.get() ) ) )
+{
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+{
+    mrImport->setTargetDocument( xDoc );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::startDocument()
+{
+    mrImport->startDocument();
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::endDocument()
+{
+    mrImport->endDocument();
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
+                        const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    mrImport->processNSAttributes(xAttrList);
+    OUString aLocalName;
+    sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+    Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
+                                    OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    mxFastAttributes->clear();
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        OUString aLocalAttrName;
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+        sal_uInt16 nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rAttrName, &aLocalAttrName );
+        if( XML_NAMESPACE_XMLNS != nAttrPrefix )
+        {
+            Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(
+                                    OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalAttrName.getLength() );
+            sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aAttrSeq ) ;
+            mxFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+    mrImport->startFastElement( mnElement, mxFastAttributes.get() );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
+{
+    OUString aLocalName;
+    sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+    Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
+                                    OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    mrImport->endFastElement( mnElement );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::characters( const OUString& aChars )
+{
+    mrImport->characters( aChars );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::ignorableWhitespace( const OUString& aWhitespaces )
+{
+    mrImport->ignorableWhitespace( aWhitespaces );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::processingInstruction( const OUString& aTarget,
+                                                                  const OUString& aData)
+{
+    mrImport->processingInstruction( aTarget, aData );
+}
+
+void SAL_CALL SvXMLLegacyToFastDocHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& rLocator )
+{
+    mrImport->setDocumentLocator( rLocator );
+}
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,12 +56,12 @@ void XMLProcAttrTransformerContext::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
     GetTransformer().ProcessAttrList( xAttrList, m_nActionMap, false );
-    GetTransformer().startFastElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLProcAttrTransformerContext::EndElement()
 {
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
