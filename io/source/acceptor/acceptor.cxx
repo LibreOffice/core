@@ -120,7 +120,7 @@ namespace io_acceptor
 
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )
     {
-        // if there is a thread alread accepting in this object, throw an exception.
+        // if there is a thread already accepting in this object, throw an exception.
         struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
 
         Reference< XConnection > r;

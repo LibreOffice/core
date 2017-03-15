@@ -294,7 +294,7 @@ sub create_unique_directorynames
         # setting the installlocation directory
         if ( $styles =~ /\bISINSTALLLOCATION\b/ )
         {
-            if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION alread set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
+            if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION already set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
             $installer::globals::installlocationdirectory = $uniquename;
             $installer::globals::installlocationdirectoryset = 1;
         }

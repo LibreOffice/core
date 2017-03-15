@@ -109,7 +109,7 @@ public final class socketConnector implements XConnector {
         throws NoConnectException, ConnectionSetupException
     {
         if (connected)
-            throw new ConnectionSetupException("alread connected");
+            throw new ConnectionSetupException("already connected");
 
         ConnectionDescriptor desc;
         try {

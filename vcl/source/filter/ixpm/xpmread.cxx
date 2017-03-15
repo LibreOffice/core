@@ -161,7 +161,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
             if ( ( mnWidth * mnCpp ) >= XPMSTRINGBUF )
                 mbStatus = false;
             //xpms are a minimum of one character (one byte) per pixel, so if the file isn't
-            //even that long, its not all there
+            //even that long, it's not all there
             if (mrIStm.remainingSize() < static_cast<sal_uInt64>(mnWidth) * mnHeight)
                 mbStatus = false;
             if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )

@@ -90,7 +90,7 @@ namespace pcr
         bool                            m_bHaveListSource : 1;
         /// our component has a "Command" property
         bool                            m_bHaveCommand : 1;
-        /// the class id of the component - if appliable
+        /// the class id of the component - if applicable
         sal_Int16                       m_nClassId;
 
     public:
