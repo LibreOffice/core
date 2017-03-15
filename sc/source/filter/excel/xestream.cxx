@@ -44,7 +44,7 @@
 #include "globstr.hrc"
 
 #include <../../ui/inc/docsh.hxx>
-#include "viewdata.hxx"
+#include <../../ui/inc/viewdata.hxx>
 #include <excdoc.hxx>
 
 #include <oox/token/tokens.hxx>
