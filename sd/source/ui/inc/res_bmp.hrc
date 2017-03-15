@@ -19,8 +19,6 @@
 #include "sfx2/sfx.hrc"
 #include "cfgids.hxx"
 
-#define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
-
 // Bitmaps for Tree-ListBox in Effects-TabDialog
 #define BMP_PAGE                RID_APP_START+42
 #define BMP_PAGEOBJS            RID_APP_START+43
@@ -46,8 +44,6 @@
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
 #define BMP_CUSTOM_ANIMATION_INDICATOR      RID_SD_START+332
-
-#define BMP_COMMENTS_INDICATOR              RID_SD_START+338
 
 #define BMP_LAYOUT_EMPTY                    RID_SD_START+340
 #define BMP_LAYOUT_HEAD01                   RID_SD_START+342

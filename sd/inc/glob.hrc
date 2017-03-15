@@ -42,7 +42,6 @@
 #define BMP_PRESOBJ_CHART                       RID_GLOB_START+16
 #define BMP_PRESOBJ_ORGCHART                    RID_GLOB_START+17
 #define BMP_PRESOBJ_TABLE                       RID_GLOB_START+18
-#define STR_STDOBJECTBARSHELL                   RID_GLOB_START+24
 
 #define STR_LAYOUT_TITLE                        RID_GLOB_START+27
 #define STR_LAYOUT_OUTLINE                      RID_GLOB_START+28
@@ -57,8 +56,6 @@
 #define STR_PRESOBJ_MPOUTLLAYER5                RID_GLOB_START+37
 #define STR_PRESOBJ_MPOUTLLAYER6                RID_GLOB_START+38
 #define STR_PRESOBJ_MPOUTLLAYER7                RID_GLOB_START+39
-#define STR_PRESOBJ_MPOUTLLAYER8                RID_GLOB_START+40
-#define STR_PRESOBJ_MPOUTLLAYER9                RID_GLOB_START+41
 #define STR_PRESOBJ_MPNOTESTITLE                RID_GLOB_START+42
 #define STR_PRESOBJ_MPNOTESTEXT                 RID_GLOB_START+43
 #define STR_PRESOBJ_NOTESTEXT                   RID_GLOB_START+44
@@ -66,10 +63,8 @@
 #define STR_STANDARD_STYLESHEET_NAME            RID_GLOB_START+46
 #define STR_NOTES                               RID_GLOB_START+47
 #define STR_HANDOUT                             RID_GLOB_START+48
-#define STR_MASTERPAGE                          RID_GLOB_START+49
 
 #define STR_UNDO_MOVEPAGES                      RID_GLOB_START+52
-#define STR_NOT_ENOUGH_MEMORY                   RID_GLOB_START+53
 #define STR_LAYOUT_SUBTITLE                     RID_GLOB_START+54
 #define STR_POOLSHEET_OBJWITHARROW              RID_GLOB_START+55
 #define STR_POOLSHEET_OBJWITHSHADOW             RID_GLOB_START+56
@@ -85,7 +80,6 @@
 #define STR_POOLSHEET_HEADLINE1                 RID_GLOB_START+66
 #define STR_POOLSHEET_HEADLINE2                 RID_GLOB_START+67
 #define STR_POOLSHEET_MEASURE                   RID_GLOB_START+68
-#define STR_POOLSHEET_ARROW                     RID_GLOB_START+69
 
 #define STR_POOLSHEET_BANDED_CELL               RID_GLOB_START+70
 #define STR_POOLSHEET_HEADER                    RID_GLOB_START+71
@@ -101,25 +95,18 @@
 #define STR_PSEUDOSHEET_BACKGROUND              RID_GLOB_START+83
 #define STR_PSEUDOSHEET_NOTES                   RID_GLOB_START+84
 #define STR_PSEUDOSHEET_SUBTITLE                RID_GLOB_START+85
-#define STR_GLUEPOINTSOBJECTBARSHELL            RID_GLOB_START+90
-#define STR_EMPTY_STYLESHEET_NAME               RID_GLOB_START+91
 #define STR_LAYER_MEASURELINES                  RID_GLOB_START+92
 #define STR_LAYOUT_DEFAULT_TITLE_NAME           RID_GLOB_START+93
 
 #define STR_POWERPOINT_IMPORT                   RID_GLOB_START+95
 #define STR_LOAD_DOC                            RID_GLOB_START+99
 #define STR_SAVE_DOC                            RID_GLOB_START+100
-#define STR_PREVIEWVIEWSHELL                    RID_GLOB_START+101
 #define RID_SD_ERRHDL                           RID_GLOB_START+102
 
 #define STR_PAGE_NAME                           RID_GLOB_START+111
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
 
 #define STR_ENTER_PIN                           RID_GLOB_START+115
-#define STR_TOOL_PANEL_SHELL                    RID_GLOB_START+116
-
-#define STR_TASKPANEVIEWSHELL                   RID_GLOB_START+117
-#define STR_TASKPANELAYOUTMENU                  RID_GLOB_START+118
 
 #define RID_CUSTOMANIMATION_START               RID_GLOB_START+120
 //      RID_CUSTOMANIMATION_END                 RID_GLOB_START+199
@@ -128,11 +115,6 @@
 #define STR_UNDO_ANIMATION                      RID_GLOB_START+221
 #define STR_UNDO_SLIDE_PARAMS                   RID_GLOB_START+222
 #define RID_SLIDESHOW_CONTEXTMENU               RID_GLOB_START+223
-
-#define DLG_TABLEDESIGNPANE                     RID_GLOB_START+224
-
-#define STR_CUSTOMANIMATIONPANE                 RID_GLOB_START+227
-#define STR_SLIDE_TRANSITION_PANE               RID_GLOB_START+228
 
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
 #define STR_MASTERSLIDE_NAME                    RID_GLOB_START+230

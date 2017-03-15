@@ -314,41 +314,6 @@ String STR_CUSTOMANIMATION_SAMPLE
     Text [ en-US ] = "Sample";
 };
 
-String STR_CUSTOMANIMATION_1_SPOKES
-{
-    Text [ en-US ] = "1 Spoke";
-};
-
-String STR_CUSTOMANIMATION_2_SPOKES
-{
-    Text [ en-US ] = "2 Spokes";
-};
-
-String STR_CUSTOMANIMATION_3_SPOKES
-{
-    Text [ en-US ] = "3 Spokes";
-};
-
-String STR_CUSTOMANIMATION_4_SPOKES
-{
-    Text [ en-US ] = "4 Spokes";
-};
-
-String STR_CUSTOMANIMATION_8_SPOKES
-{
-    Text [ en-US ] = "8 Spokes";
-};
-
-String STR_CUSTOMANIMATION_INSTANT
-{
-    Text [ en-US ] = "Instant";
-};
-
-String STR_CUSTOMANIMATION_GRADUAL
-{
-    Text [ en-US ] = "Gradual";
-};
-
 String STR_CUSTOMANIMATION_TRIGGER
 {
     Text [ en-US ] = "Trigger";

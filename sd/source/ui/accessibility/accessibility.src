@@ -253,21 +253,6 @@ String  SID_SD_A11Y_P_NUMBER_N_STYLE
     Text [ en-US ] = "Number";
 };
 
-String  SID_SD_A11Y_I_PREVIEW_N
-{
-    Text [ en-US ] = "Preview View";
-};
-
-String  SID_SD_A11Y_I_PREVIEW_D
-{
-    Text [ en-US ] = "This is where you print preview pages.";
-};
-
-String  SID_SD_A11Y_I_PREVIEW_SUFFIX
-{
-    Text [ en-US ] = "(Preview mode)";
-};
-
 String SID_SD_A11Y_D_PRESENTATION_READONLY
 {
     Text [ en-US ] = "(read-only)";

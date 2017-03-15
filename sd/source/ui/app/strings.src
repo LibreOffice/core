@@ -52,10 +52,6 @@ String STR_SLIDE_OBJ_TOOLBOX
 {
     Text [ en-US ] = "Slide Object Bar" ;
 };
-String STR_BEZIER_TOOLBOX
-{
-    Text [ en-US ] = "Bézier Object Bar" ;
-};
 String STR_GLUEPOINTS_TOOLBOX
 {
     Text [ en-US ] = "Glue Point Object Bar" ;
@@ -84,10 +80,6 @@ String STR_UNDO_SLIDE_PARAMS
 {
     Text [ en-US ] = "Slide parameter" ;
 };
-String STR_UNDO_SLIDE_MOVE
-{
-    Text [ en-US ] = "Move slide" ;
-};
 String STR_UNDO_CUT
 {
     Text [ en-US ] = "Cut" ;
@@ -103,18 +95,6 @@ String STR_UNDO_DRAGDROP
 String STR_INSERTGRAPHIC
 {
     Text [ en-US ] = "Insert Image" ;
-};
-String STR_SLOW
-{
-    Text [ en-US ] = "Slow" ;
-};
-String STR_MEDIUM
-{
-    Text [ en-US ] = "Medium" ;
-};
-String STR_FAST
-{
-    Text [ en-US ] = "Fast" ;
 };
 String STR_UNDO_BEZCLOSE
 {
@@ -180,10 +160,6 @@ String STR_AUTOLAYOUT_CONTENT_2CONTENT
 String STR_AUTOLAYOUT_2CONTENT_CONTENT
 {
     Text [ en-US ] = "Title, 2 Content and Content" ;
-};
-String STR_AUTOLAYOUT_CONTENT_OVER_2CONTENT
-{
-    Text [ en-US ] = "Title, Content over 2 Content" ;
 };
 String STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT
 {
@@ -277,14 +253,6 @@ String STR_UNDO_ANIMATION
 String STR_EXPORT_HTML_NAME
 {
     Text [ en-US ] = "Web Page";
-};
-String STR_EXPORT_HTML_FILTER
-{
-    Text = "*.html;*.htm" ;
-};
-String STR_EXPORT_DIALOG_TITLE
-{
-    Text [ en-US ] = "Export" ;
 };
 String STR_HTMLEXP_DEFAULT_EXTENSION
 {
@@ -442,10 +410,6 @@ String STR_WARN_PRINTFORMAT_FAILURE
 {
     Text [ en-US ] = "The document format could not be set on the specified printer." ;
 };
-String STR_REMOVE_LINK
-{
-    Text [ en-US ] = "This image is linked to a document. \nDo you want to unlink the image in order to edit it?" ;
-};
 String STR_IMPORT_GRFILTER_OPENERROR
 {
     Text [ en-US ] = "Image file cannot be opened" ;
@@ -494,17 +458,9 @@ String STR_UNDO_MODIFY_PAGE
 {
     Text [ en-US ] = "Slide layout" ;
 };
-String STR_STATSTR_PRINT
-{
-    Text [ en-US ] = "Printing..." ;
-};
 String STR_UNDO_INSERT_FILE
 {
     Text [ en-US ] = "Insert file" ;
-};
-String STR_SCALE_OBJS_TO_PAGE
-{
-    Text [ en-US ] = "Should the image be scaled to the new slide format?" ;
 };
 String STR_UNDO_INSERT_SPECCHAR
 {
@@ -525,22 +481,6 @@ String STR_STOP
 String STR_UNDO_ORIGINALSIZE
 {
     Text [ en-US ] = "Original Size" ;
-};
-String STR_PRINT_DRAWING
-{
-    Text [ en-US ] = " (Drawing)" ;
-};
-String STR_PRINT_NOTES
-{
-    Text [ en-US ] = " (Notes)" ;
-};
-String STR_PRINT_HANDOUT
-{
-    Text [ en-US ] = " (Handout)" ;
-};
-String STR_PRINT_OUTLINE
-{
-    Text [ en-US ] = " (Outline)" ;
 };
 String STR_WARN_SCALE_FAIL
 {
@@ -573,14 +513,6 @@ String STR_CLICK_ACTION_BOOKMARK
 String STR_CLICK_ACTION_DOCUMENT
 {
     Text [ en-US ] = "Go to document" ;
-};
-String STR_CLICK_ACTION_VANISH
-{
-    Text [ en-US ] = "Fade object" ;
-};
-String STR_CLICK_ACTION_INVISIBLE
-{
-    Text [ en-US ] = "Hide object" ;
 };
 String STR_CLICK_ACTION_SOUND
 {
@@ -631,10 +563,6 @@ String STR_EFFECTDLG_MACRO
     Text [ en-US ] = "Macro" ;
 };
  // Strings for animation effects
-String STR_EFFECT_NONE
-{
-    Text [ en-US ] = "No Effect" ;
-};
 String STR_INSERT_TEXT
 {
     Text [ en-US ] = "Insert Text" ;
@@ -947,16 +875,6 @@ String STR_PRES_PAUSE
     Text [ en-US ] = "Pause..." ;
 };
 
-String STR_WIZARD_ORIGINAL
-{
-    Text [ en-US ] = "<Original>";
-};
-
-String STR_ISLOADING
-{
-    Text [ en-US ] = "Loading...";
-};
-
 String STR_DRAW_GRAF_TOOLBOX
 {
     Text [ en-US ] = "Image Object Bar" ;
@@ -1107,38 +1025,6 @@ String STR_LEFT_PANE_DRAW_TITLE
 {
     Text [ en-US ] = "Pages";
 };
-String STR_RIGHT_PANE_TITLE
-{
-    Text [ en-US ] = "Tasks";
-};
-String STR_TASKPANEL_MASTER_PAGE_TITLE
-{
-    Text [ en-US ] = "Master Pages";
-};
-String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
-{
-    Text [ en-US ] = "View";
-};
-String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
-{
-    Text [ en-US ] = "~Dock Task Pane";
-};
-String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
-{
-    Text [ en-US ] = "~Undock Task Pane";
-};
-String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
-{
-    Text [ en-US ] = "Used in This Presentation";
-};
-String STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE
-{
-    Text [ en-US ] = "Recently Used";
-};
-String STR_TASKPANEL_ALL_MASTER_PAGES_TITLE
-{
-    Text [ en-US ] = "Available for Use";
-};
 String STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION
 {
     Text [ en-US ] = "Preview not available";
@@ -1163,18 +1049,6 @@ String STR_CELL_STYLE_FAMILY
 {
     Text [ en-US ] = "Cell Styles";
 };
-String DLG_TABLEDESIGNPANE
-{
-    Text [ en-US ] = "Table Designs";
-};
-String STR_CUSTOMANIMATIONPANE
-{
-    Text [ en-US ] = "Animation";
-};
-String STR_SLIDE_TRANSITION_PANE
-{
-    Text [ en-US ] = "Slide Transition";
-};
 String STR_NAVIGATOR_SHOW_NAMED_SHAPES
 {
     Text [ en-US ] = "Named shapes";
@@ -1190,11 +1064,6 @@ String STR_NAVIGATOR_SHAPE_BASE_NAME
 String STR_SET_BACKGROUND_PICTURE
 {
     Text [ en-US ] = "Set Background Image for Slide ..." ;
-};
-
-String STR_ACC_DIALOG_DESC
-{
-    Text [ en-US ] = "Select a template from which to import page designs." ;
 };
 
 String RID_ANNOTATIONS_START
