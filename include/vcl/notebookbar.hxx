@@ -37,6 +37,9 @@ public:
     void SetSystemWindow(SystemWindow* pSystemWindow);
 
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
+
+    void DataChanged(const DataChangedEvent& rDCEvt) override;
+
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
