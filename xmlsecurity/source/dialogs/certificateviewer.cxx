@@ -56,7 +56,10 @@ CertificateViewer::CertificateViewer(
 
     mpTabCtrl->SetTabPage(mnGeneralId, VclPtr<CertificateViewerGeneralTP>::Create( mpTabCtrl, this));
     mpTabCtrl->SetTabPage(mnDetailsId, VclPtr<CertificateViewerDetailsTP>::Create( mpTabCtrl, this));
-    mpTabCtrl->SetTabPage(mnPathId, VclPtr<CertificateViewerCertPathTP>::Create( mpTabCtrl, this));
+    if (mxSecurityEnvironment->buildCertificatePath(mxCert).getLength() == 0)
+        mpTabCtrl->RemovePage(mnPathId);
+    else
+        mpTabCtrl->SetTabPage(mnPathId, VclPtr<CertificateViewerCertPathTP>::Create( mpTabCtrl, this));
     mpTabCtrl->SetCurPageId(mnGeneralId);
 }
 
@@ -69,7 +72,8 @@ void CertificateViewer::dispose()
 {
     mpTabCtrl->GetTabPage(mnGeneralId)->disposeOnce();
     mpTabCtrl->GetTabPage(mnDetailsId)->disposeOnce();
-    mpTabCtrl->GetTabPage(mnPathId)->disposeOnce();
+    if (mpTabCtrl->GetTabPage(mnPathId))
+        mpTabCtrl->GetTabPage(mnPathId)->disposeOnce();
     mpTabCtrl.clear();
     TabDialog::dispose();
 }
