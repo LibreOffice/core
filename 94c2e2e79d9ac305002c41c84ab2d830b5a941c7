@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3f889322",
+        "filename": "sc/inc/CellProtectionControl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-15T14:00:46Z",
+      "side": 1,
+      "message": "As this dialog header is to be used by UI only, it can (and should) go into sc/source/ui/inc",
+      "revId": "94c2e2e79d9ac305002c41c84ab2d830b5a941c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
