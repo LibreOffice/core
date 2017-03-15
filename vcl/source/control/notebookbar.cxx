@@ -40,6 +40,8 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
     m_pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>("ContextContainer"));
+
+    UpdateBackground();
 }
 
 NotebookBar::~NotebookBar()
@@ -143,6 +145,25 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)
 {
     mpParent.clear();
+}
+
+void NotebookBar::DataChanged(const DataChangedEvent& rDCEvt)
+{
+    UpdateBackground();
+    Control::DataChanged(rDCEvt);
+}
+
+void NotebookBar::UpdateBackground()
+{
+    const StyleSettings& rStyleSettings = this->GetSettings().GetStyleSettings();
+    const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
+
+    if (!aPersona.IsEmpty())
+        SetBackground(Wallpaper(aPersona));
+    else
+        SetBackground(rStyleSettings.GetMenuBarColor());
+
+    Invalidate(Rectangle(Point(0,0), GetSizePixel()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
