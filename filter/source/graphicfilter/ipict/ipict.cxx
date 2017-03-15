@@ -469,7 +469,14 @@ sal_uLong PictReader::ReadPolygon(tools::Polygon & rPoly)
     }
     rPoly.SetSize(nSize);
     for (sal_uInt16 i = 0; i < nSize; ++i)
+    {
         rPoly.SetPoint(ReadPoint(), i);
+        if (!pPict->good())
+        {
+            rPoly.SetSize(i);
+            break;
+        }
+    }
     return nDataSize;
 }
 
