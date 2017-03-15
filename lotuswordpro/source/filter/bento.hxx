@@ -344,7 +344,7 @@ public: // Methods
 
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
-    pCBenObject pPrevObject, const char * sName,
+    pCUtListElmt pPrevObject, const char * sName,
     pCUtListElmt pPrevNamedObjectListElmt);
 
     const char * GetNameCStr() { return csName.c_str(); }
@@ -358,7 +358,7 @@ class CBenPropertyName : public CBenNamedObject
 {
 public: // Internal methods
     CBenPropertyName(pLtcBenContainer pContainer, BenObjectID ObjectID,
-    pCBenObject pPrevObject, const char * sName,
+    pCUtListElmt pPrevObject, const char * sName,
     pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }

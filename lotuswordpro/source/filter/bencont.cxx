@@ -129,7 +129,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
             return;
 
         *ppPropertyName = new CBenPropertyName(this, cNextAvailObjectID,
-          static_cast<pCBenObject>(pPrevObject), sPropertyName, pPrevNamedObjectListElmt);
+          pPrevObject, sPropertyName, pPrevNamedObjectListElmt);
         ++cNextAvailObjectID;
     }
 }
