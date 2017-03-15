@@ -64,6 +64,7 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
+    SAL_WARN("vcl.filter", "failure reading JPEG: " << buffer);
 }
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
