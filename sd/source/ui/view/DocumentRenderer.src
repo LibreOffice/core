@@ -24,10 +24,6 @@ String STR_IMPRESS_PRINT_UI_GROUP_NAME
 {
     Text [en-US] = "%PRODUCTNAME %s";
 };
-String STR_IMPRESS_PRINT_UI_PRINT_CONTENT
-{
-    Text [ en-US ] = "Print content";
-};
 String STR_IMPRESS_PRINT_UI_PRINT_GROUP
 {
     Text [ en-US ] = "Print";
@@ -95,10 +91,6 @@ String STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
 {
     Text [ en-US ] = "Hidden pages";
 };
-String STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
-{
-    Text [ en-US ] = "Output options";
-};
 String STR_IMPRESS_PRINT_UI_QUALITY
 {
     Text [ en-US ] = "Color";
@@ -158,10 +150,6 @@ StringArray STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST
     };
 };
 
-String STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
-{
-    Text [ en-US ] = "Paper tray";
-};
 String STR_IMPRESS_PRINT_UI_PAPER_TRAY
 {
     Text [ en-US ] = "~Use only paper tray from printer preferences";

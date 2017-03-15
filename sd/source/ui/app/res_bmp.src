@@ -267,19 +267,6 @@ Bitmap BMP_GRAPHIC
     File = "graphic.png" ;
 };
 
-String STR_STYLE_FILTER_USED
-{
-    Text [ en-US ] = "Applied Styles" ;
-};
-String STR_STYLE_FILTER_USERDEF
-{
-    Text [ en-US ] = "Custom Styles" ;
-};
-String STR_STYLE_FILTER_ALL
-{
-    Text [ en-US ] = "All Styles" ;
-};
-
 StringArray RID_GRAPHICSTYLEFAMILY
 {
     ItemList [ en-US ] =
@@ -353,11 +340,6 @@ Bitmap BMP_FADE_EFFECT_INDICATOR
 Bitmap BMP_CUSTOM_ANIMATION_INDICATOR
 {
     File = "click_16.png";
-};
-
-Bitmap BMP_COMMENTS_INDICATOR
-{
-    File = "comments_indicator.png";
 };
 
 // Presenter Screen bitmaps:
