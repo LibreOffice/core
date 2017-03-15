@@ -22,6 +22,30 @@
       "revId": "34c524573ae9c50df0fbb1102e38da43c1d8b817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3fb6d3dc",
+        "filename": "sc/source/ui/view/CellProtectionControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-15T14:19:22Z",
+      "side": 1,
+      "message": "Is that solved with the change in patch set 2?\n\nIf not, then invalidating the slot binding upon cell cursor change may be needed. Look for calls to Invalidate(...) under sc/source/ui/, i.e.\n\ngit grep -E \u0027Bind.+Invalidate\u0027 sc/source/ui\n\nJust hard to say where to place it.. I don\u0027t know off-head.",
+      "parentUuid": "9a57fde8_5fd8f753",
+      "range": {
+        "startLine": 37,
+        "startChar": 30,
+        "endLine": 37,
+        "endChar": 42
+      },
+      "revId": "34c524573ae9c50df0fbb1102e38da43c1d8b817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
