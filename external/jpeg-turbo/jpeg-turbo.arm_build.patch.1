@@ -1,18 +1,11 @@
 diff -ur jpeg.org/Makefile.am jpeg/Makefile.am
 --- jpeg.org/jmemmgr.c      2017-03-15 14:29:29.286587049 +0000
 +++ jpeg/jmemmgr.c	2017-03-15 14:31:21.096378506 +0000
-@@ -27,12 +27,13 @@
-  * memory then you shouldn't care about a little bit of unused code...)
-  */
- 
-+#include <stdint.h>
-+
- #define JPEG_INTERNALS
- #define AM_MEMORY_MANAGER       /* we define jvirt_Xarray_control structs */
- #include "jinclude.h"
+@@ -33,6 +33,7 @@
  #include "jpeglib.h"
  #include "jmemsys.h"            /* import the system-dependent declarations */
--#include <stdint.h>
+ #include <stdint.h>
++#include <limits.h>
  
  #ifndef NO_GETENV
  #ifndef HAVE_STDLIB_H           /* <stdlib.h> should declare getenv() */
