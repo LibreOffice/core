@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_b43f4a24",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6745,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-15T00:00:01Z",
+      "side": 1,
+      "message": "[$k$-409] is odd because the \u0027k\u0027 becomes part of the currency symbol, while actually it\u0027s only some unit string so it should be \"k\"[$$-409] or \\k[$$-409] (to be escaped for a literal string of course). Though it doesn\u0027t really matter here because it isn\u0027t saved to file, otherwise the cell would have office:currency\u003d\"k$\" instead of office:currency\u003d\"USD\" and the format \u003cnumber:currency-symbol\u003ek$\u003c/number:currency-symbol\u003e instead of \u003cnumber:currency-symbol\u003e$\u003c/number:currency-symbol\u003e\n\nI\u0027ll change that on the fly.",
+      "revId": "cd98df44eb1c51ac194f62972874fc8575ff0305",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
