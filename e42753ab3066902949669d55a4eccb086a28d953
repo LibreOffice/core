@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_9f725fe4",
+        "filename": "odk/examples/DevelopersGuide/Database/DriverSkeleton/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-03-15T20:26:48Z",
+      "side": 1,
+      "message": "Unrelated white space changes?",
+      "revId": "e42753ab3066902949669d55a4eccb086a28d953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
