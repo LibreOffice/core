@@ -8,7 +8,7 @@
  */
 
 #include "SecurityEnvironment.hxx"
-#include "SEInitializer.hxx"
+#include "gpg/SEInitializer.hxx"
 #include "XMLSignature.hxx"
 #include "XMLEncryption.hxx"
 #include "XMLSecurityContext.hxx"

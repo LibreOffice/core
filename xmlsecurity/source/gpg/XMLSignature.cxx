@@ -61,7 +61,7 @@ Sequence< OUString > SAL_CALL XMLSignatureGpg::getSupportedServiceNames()
 //Helper for XServiceInfo
 Sequence< OUString > XMLSignatureGpg::impl_getSupportedServiceNames()
 {
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLSignature"};
+    return {"com.sun.star.xml.crypto.XMLSignature"};
 }
 
 OUString XMLSignatureGpg::impl_getImplementationName()

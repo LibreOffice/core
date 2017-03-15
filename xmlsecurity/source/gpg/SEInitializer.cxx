@@ -7,14 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "SEInitializer.hxx"
+#include "gpg/SEInitializer.hxx"
 #include "SecurityEnvironment.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <com/sun/star/xml/crypto/gpg/GpgSecurityEnvironment.hpp>
-#include <com/sun/star/xml/crypto/gpg/GpgXMLSecurityContext.hpp>
 
 using namespace css;
 using namespace css::lang;
@@ -37,9 +34,11 @@ Reference< XXMLSecurityContext > SAL_CALL SEInitializerGpg::createSecurityContex
     try
     {
         /* Build XML Security Context */
-        Reference< XXMLSecurityContext > xSecCtx = xml::crypto::gpg::GpgXMLSecurityContext::create(m_xContext);
+        Reference< XXMLSecurityContext > xSecCtx(m_xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.xml.security.XMLSecurityContext_Gpg", m_xContext), uno::UNO_QUERY );
 
-        Reference< XSecurityEnvironment > xSecEnv = xml::crypto::gpg::GpgSecurityEnvironment::create(m_xContext);
+        Reference< XSecurityEnvironment > xSecEnv(m_xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.xml.security.SecurityEnvironment_Gpg", m_xContext), uno::UNO_QUERY );
         Reference< XUnoTunnel > xSecEnvTunnel(xSecEnv, uno::UNO_QUERY_THROW);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
@@ -64,7 +63,7 @@ OUString SEInitializer_getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames()
 {
-    return {"com.sun.star.xml.crypto.gpg.GpgSEInitializer"};
+    return {"com.sun.star.xml.crypto.SEInitializer"};
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SEInitializer_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
