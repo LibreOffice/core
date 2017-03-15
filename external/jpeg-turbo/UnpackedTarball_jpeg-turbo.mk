@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,jpeg-turbo,0))
 $(eval $(call gb_UnpackedTarball_add_patches,jpeg-turbo,\
 	external/jpeg-turbo/jpeg-turbo.build.patch.1 \
 	$(if $(filter WNT,$(OS)),external/jpeg-turbo/jpeg-turbo.win_build.patch.1) \
+	external/jpeg-turbo/jpeg-turbo.arm_build.patch.1 \
 	external/jpeg-turbo/ubsan.patch \
 ))
 
