@@ -562,6 +562,7 @@ const SwRect SwFrame::PaintArea() const
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
+    long nBottom = (aRect.*fnRect->fnGetBottom)();
     const SwFrame* pTmp = this;
     bool bLeft = true;
     bool bRight = true;
@@ -573,6 +574,7 @@ const SwRect SwFrame::PaintArea() const
             nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox()->getRowSpan();
         long nTmpRight = (pTmp->Frame().*fnRect->fnGetRight)();
         long nTmpLeft = (pTmp->Frame().*fnRect->fnGetLeft)();
+        long nTmpBottom = (pTmp->Frame().*fnRect->fnGetBottom)();
         if( pTmp->IsRowFrame() && nRowSpan > 1 )
         {
             const SwFrame* pNxt = pTmp;
@@ -588,6 +590,8 @@ const SwRect SwFrame::PaintArea() const
             pTmp->IsCellFrame() || pTmp->IsRowFrame() || //nobody leaves a table!
             pTmp->IsRootFrame() )
         {
+            if( nTmpBottom < nBottom )
+                nBottom = nTmpBottom;
             if( bLeft || nLeft < nTmpLeft )
                 nLeft = nTmpLeft;
             if( bRight || nTmpRight < nRight )
@@ -640,6 +644,7 @@ const SwRect SwFrame::PaintArea() const
     }
     (aRect.*fnRect->fnSetLeft)( nLeft );
     (aRect.*fnRect->fnSetRight)( nRight );
+    (aRect.*fnRect->fnSetBottom)( nBottom );
     return aRect;
 }
 
