@@ -126,19 +126,6 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
 void SwMailMergeWizard::enterState( WizardState _nState )
 {
     ::svt::RoadmapWizard::enterState( _nState );
-/*
-
-    entering a page after the layoutpage requires the insertion
-    of greeting and address block - if not yet done
-    entering the merge or output page requires to create the output document
-*/
-    if(_nState > MM_LAYOUTPAGE && m_xConfigItem->GetSourceView() &&
-            ((m_xConfigItem->IsAddressBlock() && !m_xConfigItem->IsAddressInserted()) ||
-             (m_xConfigItem->IsGreetingLine(false) && !m_xConfigItem->IsGreetingInserted() )))
-    {
-        SwMailMergeLayoutPage::InsertAddressAndGreeting(m_xConfigItem->GetSourceView(),
-                                *m_xConfigItem, Point(-1, -1), true);
-    }
 
     if (m_xConfigItem->GetTargetView())
     {
