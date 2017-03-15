@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_5fd8f753",
+        "filename": "sc/source/ui/view/CellProtectionControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-15T13:30:11Z",
+      "side": 1,
+      "message": "Because of the slot type is not bool(ScProtectionAttr) i have to use that controller to became toggle. But:\n\nToggle behaviour needs improvement. It works (notifies button for last state) when double click to a cell. But one click to cell doesn\u0027t notify the button? How can i implement it?",
+      "range": {
+        "startLine": 37,
+        "startChar": 30,
+        "endLine": 37,
+        "endChar": 42
+      },
+      "revId": "34c524573ae9c50df0fbb1102e38da43c1d8b817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
