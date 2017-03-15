@@ -243,8 +243,8 @@ void XMLFormPropOOoTransformerContext::EndElement()
                                 GetXMLToken( m_eValueTypeToken ) );
     }
 
-    GetTransformer().startFastElement( m_aElemQName, m_xAttrList );
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, m_xAttrList );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

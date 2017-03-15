@@ -53,6 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/formlayerimport.hxx>
 #include <comphelper/attributelist.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -133,6 +134,33 @@ public:
     virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
+class XMLOFF_DLLPUBLIC SvXMLLegacyToFastDocHandler : public ::cppu::WeakImplHelper<
+             css::xml::sax::XDocumentHandler,
+             css::document::XImporter >
+{
+private:
+    rtl::Reference< SvXMLImport > mrImport;
+    rtl::Reference< sax_fastparser::FastAttributeList > mxFastAttributes;
+
+public:
+    SvXMLLegacyToFastDocHandler( rtl::Reference< SvXMLImport > rImport );
+
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+
+    // css::xml::sax::XDocumentHandler
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
+    virtual void SAL_CALL startElement(const OUString& aName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
+    virtual void SAL_CALL endElement(const OUString& aName) override;
+    virtual void SAL_CALL characters(const OUString& aChars) override;
+    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
+    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                const OUString& aData) override;
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+};
+
 
 class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
              css::xml::sax::XExtendedDocumentHandler,
@@ -145,6 +173,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
              css::xml::sax::XFastParser>
 {
     friend class SvXMLImportContext;
+    friend class SvXMLLegacyToFastDocHandler;
 
     css::uno::Reference< css::xml::sax::XLocator > mxLocator;
     css::uno::Reference< css::frame::XModel > mxModel;

@@ -174,14 +174,10 @@ XMLTransformerActions *XMLTransformerBase::GetUserDefinedActions( sal_uInt16 )
 XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
                                     ::xmloff::token::XMLTokenEnum *pTKMapInit )
     throw () :
-    m_xTokenHandler( new FastTokenHandler() ),
     m_pNamespaceMap( new SvXMLNamespaceMap ),
     m_pReplaceNamespaceMap( new SvXMLNamespaceMap ),
     m_pElemActions( new XMLTransformerActions( pInit ) ),
-    m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) ),
-    m_nElement(0),
-    m_xFastAttributes( new sax_fastparser::FastAttributeList( m_xTokenHandler.get(),
-        dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( m_xTokenHandler.get() ) ) )
+    m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
@@ -413,9 +409,10 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( pAny->getValueType() ) )
         {
             m_xHandler.set( *pAny, UNO_QUERY );
-            m_xFastHandler.set( m_xHandler.get(), UNO_QUERY );
-            if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(m_xFastHandler.get()))
-                m_xNamespaceHandler = pFastHandler->getNamespaceHandler();
+        // Type change to avoid crashing of dynamic_cast
+            if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(
+                                uno::Reference< XFastDocumentHandler >( m_xHandler, uno::UNO_QUERY ).get() ) )
+                m_xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
         }
 
         // property set to transport data across
@@ -1441,51 +1438,5 @@ bool XMLTransformerBase::isWriter() const
             xSI->supportsService("com.sun.star.text.WebDocument") ||
             xSI->supportsService("com.sun.star.text.GlobalDocument") );
 }
-
-void XMLTransformerBase::startFastElement( const OUString& rName,
-                                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    if( m_xFastHandler.is() )
-    {
-        OUString aLocalName;
-        sal_uInt16 nPrefix = m_pNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        m_nElement = NAMESPACE_TOKEN( nPrefix ) | m_xTokenHandler->getTokenDirect(
-                        OUStringToOString( aLocalName, RTL_TEXTENCODING_ASCII_US ).getStr(), aLocalName.getLength() ) ;
-        m_xFastAttributes->clear();
-
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
-        {
-            OUString aLocalAttrName;
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            sal_uInt16 nAttrPrefix = m_pNamespaceMap->GetKeyByAttrName( rAttrName, &aLocalAttrName );
-            if( XML_NAMESPACE_XMLNS == nAttrPrefix )
-            {
-                if ( m_xNamespaceHandler.is() )
-                    m_xNamespaceHandler->registerNamespace( aLocalAttrName, rAttrValue );
-            }
-            else
-            {
-                sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | m_xTokenHandler->getTokenDirect(
-                                    OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_ASCII_US ).getStr(), aLocalAttrName.getLength() ) ;
-                m_xFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            }
-        }
-        m_xFastHandler->startFastElement( m_nElement, m_xFastAttributes.get() );
-    }
-    else
-        m_xHandler->startElement( rName, xAttrList );
-}
-
-void XMLTransformerBase::endFastElement( const OUString& rName )
-{
-    if( m_xFastHandler.is() )
-       m_xFastHandler->endFastElement( m_nElement );
-    else
-        m_xHandler->endElement( rName );
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
