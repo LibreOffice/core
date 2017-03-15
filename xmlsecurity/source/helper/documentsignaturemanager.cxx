@@ -18,6 +18,7 @@
  */
 
 #include <documentsignaturemanager.hxx>
+#include "gpg/SEInitializer.hxx"
 
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -25,7 +26,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
-#include <com/sun/star/xml/crypto/gpg/GpgSEInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -56,7 +56,10 @@ bool DocumentSignatureManager::init()
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
 #if !defined(MACOSX) && !defined(WNT)
-    mxGpgSEInitializer = xml::crypto::gpg::GpgSEInitializer::create(mxContext);
+    uno::Reference< xml::crypto::XSEInitializer > xGpgSeInitializer(
+            mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.xml.security.SEInitializer_Gpg", mxContext),
+            uno::UNO_QUERY);
+    mxGpgSEInitializer = xGpgSeInitializer;
 #endif
 
     if (mxSEInitializer.is())
