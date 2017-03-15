@@ -10,8 +10,6 @@
 #include "XMLSecurityContext.hxx"
 #include "SecurityEnvironment.hxx"
 
-#include <cppuhelper/supportsservice.hxx>
-
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::xml::crypto;
@@ -66,46 +64,5 @@ void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int3
 {
     m_nDefaultEnvIndex = nDefaultEnvIndex;
 }
-
-/* XServiceInfo */
-OUString SAL_CALL XMLSecurityContextGpg::getImplementationName()
-{
-    return impl_getImplementationName() ;
-}
-
-/* XServiceInfo */
-sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService( const OUString& serviceName)
-{
-    return cppu::supportsService(this, serviceName);
-}
-
-/* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames()
-{
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > XMLSecurityContextGpg::impl_getSupportedServiceNames()
-{
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLSecurityContext"};
-}
-
-OUString XMLSecurityContextGpg::impl_getImplementationName()
-{
-    return OUString("com.sun.star.xml.security.XMLSecurityContext_Gpg");
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLSecurityContextGpg::impl_createInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference< XInterface >( *new XMLSecurityContextGpg ) ;
-}
-
-Reference< XSingleServiceFactory > XMLSecurityContextGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager )
-{
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

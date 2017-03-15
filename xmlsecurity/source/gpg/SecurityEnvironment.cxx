@@ -32,45 +32,6 @@ SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
 {
 }
 
-/* XServiceInfo */
-OUString SAL_CALL SecurityEnvironmentGpg::getImplementationName()
-{
-    return impl_getImplementationName();
-}
-
-/* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironmentGpg::supportsService(const OUString& serviceName)
-{
-    return cppu::supportsService(this, serviceName);
-}
-
-/* XServiceInfo */
-Sequence< OUString > SAL_CALL SecurityEnvironmentGpg::getSupportedServiceNames()
-{
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > SecurityEnvironmentGpg::impl_getSupportedServiceNames()
-{
-    return { "com.sun.star.xml.crypto.gpg.GpgSecurityEnvironment" } ;
-}
-
-OUString SecurityEnvironmentGpg::impl_getImplementationName()
-{
-    return OUString("com.sun.star.xml.security.SecurityEnvironment_Gpg");
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironmentGpg::impl_createInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference< XInterface >( *new SecurityEnvironmentGpg ) ;
-}
-
-Reference< XSingleServiceFactory > SecurityEnvironmentGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
