@@ -103,7 +103,7 @@ public final class pipeConnector implements XConnector {
         throws NoConnectException, ConnectionSetupException
     {
         if (bConnected)
-            throw new ConnectionSetupException("alread connected");
+            throw new ConnectionSetupException("already connected");
 
         try {
             XConnection xConn = new PipeConnection( connectionDescription );

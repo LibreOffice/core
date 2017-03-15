@@ -694,7 +694,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                 }
                 case css::util::NumberFormat::NUMBER:
                 case css::util::NumberFormat::CURRENCY:
-                {   // tdf#106253 Thousands dividors for format "0,"
+                {   // tdf#106253 Thousands divisors for format "0,"
                     nPrecision -=  pFormat->GetThousandDivisorPrecision( nIdx );
                     break;
                 }

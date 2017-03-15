@@ -109,7 +109,7 @@ public:
                                 If not NULL, the object pointed to is used to calc handles which should be used
                                 for referring the aggregate's properties from outside.
                                 If one of the properties returned from the info service conflict with other handles
-                                alread present (e.g. through _rProperties), the property is handled as if -1 was returned.
+                                already present (e.g. through _rProperties), the property is handled as if -1 was returned.
                                 If NULL (or, for a special property, a call to getPreferredPropertyId returns -1),
                                 the aggregate property(ies) get a new handle which they can be referred by from outside.
         @param  _nFirstAggregateId

@@ -640,7 +640,7 @@ namespace osl_ClearableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized.",
+            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initialized.",
                 bRes);
         }
 
@@ -654,7 +654,7 @@ namespace osl_ClearableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
+            CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initialized, we use reference constructor this time.",
                 bRes);
         }
 
@@ -774,7 +774,7 @@ namespace osl_ResettableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initilized.",
+            CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initialized.",
                 bRes);
         }
 
@@ -788,7 +788,7 @@ namespace osl_ResettableGuard
             /// it will return sal_False if the aMutex has not been Guarded.
             bool bRes = aMutex.release( );
 
-            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
+            CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initialized, we use reference constructor this time.",
                 bRes);
         }
 

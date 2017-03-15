@@ -1199,7 +1199,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
             }
             else
             {
-                // Object has alread been read,
+                // Object has already been read,
                 xLoadedObj = m_aPersistVector[nId];
             }
         }

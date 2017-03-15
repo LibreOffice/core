@@ -377,7 +377,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
                 // move the DriverAccess pointed to by aPos.first to the position pointed to by aNoPrefDriversStart
 
                 if ( aPos.first != aNoPrefDriversStart )
-                {   // if this does not hold, the DriverAccess alread has the correct position
+                {   // if this does not hold, the DriverAccess already has the correct position
 
                     // rotate the range [aNoPrefDriversStart, aPos.second) right 1 element
                     std::rotate( aNoPrefDriversStart, aPos.second - 1, aPos.second );

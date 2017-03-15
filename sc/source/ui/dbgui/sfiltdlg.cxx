@@ -184,7 +184,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pLbFilterArea->SelectEntryPos( 0 );
 
-    // let options be initilized:
+    // let options be initialized:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
@@ -207,8 +207,8 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     pBtnHeader->Disable();
 
     // turn on modal mode
-//  SetDispatcherLock( true );
-    //@BugID 54702 enable/disalbe in base class only
+    // SetDispatcherLock( true );
+    //@BugID 54702 enable/disable in base class only
     //SFX_APPWINDOW->Disable(false);        //! general method in ScAnyRefDlg
 }
 

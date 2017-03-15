@@ -226,7 +226,7 @@ public:
     sal_uInt16 GetFormatIntegerDigits( sal_uInt16 nIx = 0 ) const
         { return NumFor[nIx].Info().nCntPre; }
 
-    /** Count of hidden integer digits with thousands dividor:
+    /** Count of hidden integer digits with thousands divisor:
      * formats like "0," to show only thousands
      */
     sal_uInt16 GetThousandDivisorPrecision( sal_uInt16 nIx = 0 ) const

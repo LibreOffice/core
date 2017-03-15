@@ -639,7 +639,7 @@ public:
 // TODO: provide proper documentation here
     /** read a BLIP out of a already positioned stream
 
-        @param[in] rBLIPStream alread positioned stream (mandatory)
+        @param[in] rBLIPStream already positioned stream (mandatory)
         @param[out] rData      already converted data (insert directly as
                                graphics into our documents)
         @param pVisArea        ???
