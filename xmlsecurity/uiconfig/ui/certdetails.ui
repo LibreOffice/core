@@ -24,7 +24,7 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-MultiLineEditSyntaxHighlight" id="valuedetails:border">
+      <object class="GtkTextView" id="valuedetails:border">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>

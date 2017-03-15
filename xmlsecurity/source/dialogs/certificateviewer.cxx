@@ -232,11 +232,14 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, GetDefaultFontFlags::OnlyOne, this ) )
 {
     get( m_pValueDetails, "valuedetails" );
+    WinBits nStyle = m_pValueDetails->GetStyle();
+    nStyle |= WB_AUTOVSCROLL;
+    m_pValueDetails->SetStyle(nStyle);
     get( m_pElementsLBContainer, "tablecontainer" );
     m_pElementsLB = VclPtr<SvSimpleTable>::Create( *m_pElementsLBContainer );
 
     m_aStdFont = m_pValueDetails->GetControlFont();
-    WinBits nStyle = m_pElementsLB->GetStyle();
+    nStyle = m_pElementsLB->GetStyle();
     nStyle &= ~WB_HSCROLL;
     m_pElementsLB->SetStyle( nStyle );
 

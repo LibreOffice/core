@@ -99,7 +99,7 @@ class CertificateViewerDetailsTP : public CertificateViewerTP
 private:
     VclPtr<SvSimpleTableContainer> m_pElementsLBContainer;
     VclPtr<SvSimpleTable>          m_pElementsLB;
-    VclPtr<MultiLineEdit>          m_pValueDetails;
+    VclPtr<VclMultiLineEdit>       m_pValueDetails;
     vcl::Font               m_aStdFont;
     vcl::Font               m_aFixedWidthFont;
 
