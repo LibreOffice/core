@@ -59,7 +59,6 @@ public:
 
     virtual OUString    GetComment() const;
     virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
-    virtual sal_uInt16  GetId() const;
     /// ID of the view shell that created this undo action.
     virtual sal_Int32 GetViewShellId() const;
     /// Timestamp when this undo item was created.
@@ -151,7 +150,7 @@ public:
     /// See SfxUndoAction::GetViewShellId().
     sal_Int32 GetViewShellId() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
-    virtual sal_uInt16      GetId() const override;
+    virtual sal_uInt16      GetId() const;
 
     void SetComment(const OUString& rComment);
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
@@ -194,7 +193,6 @@ namespace svl
         virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) = 0;
 
         virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual sal_uInt16      GetUndoActionId() const = 0;
         virtual OUString        GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const = 0;
         /// Get info about all undo actions (comment, view shell id, etc.)
@@ -314,7 +312,6 @@ public:
     virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount ) override;
     virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) override;
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const override;
-    virtual sal_uInt16      GetUndoActionId() const override;
     virtual OUString        GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const override;
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const override;
     OUString                GetUndoActionsInfo() const override;

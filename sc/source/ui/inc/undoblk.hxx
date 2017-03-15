@@ -671,7 +671,6 @@ public:
     virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const override;
 
     virtual OUString GetComment() const override;
-    virtual sal_uInt16  GetId() const override;
 
 private:
     ScMarkData      aMarkData;

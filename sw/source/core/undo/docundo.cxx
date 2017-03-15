@@ -387,8 +387,7 @@ UndoManager::GetLastUndoInfo(
     }
     if (o_pId)
     {
-        sal_uInt16 const nId(pAction->GetId());
-        *o_pId = static_cast<SwUndoId>(nId);
+        *o_pId = static_cast<const SwUndo*>(pAction)->GetId();
     }
 
     return true;
@@ -446,8 +445,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
     }
     if (o_pId)
     {
-        sal_uInt16 const nId(pAction->GetId());
-        *o_pId = static_cast<SwUndoId>(nId);
+        *o_pId = static_cast<const SwUndo*>(pAction)->GetId();
     }
 
     return true;
@@ -655,7 +653,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
 
     OUString const comment(pRepeatAction->GetComment());
     OUString const rcomment(pRepeatAction->GetRepeatComment(rContext));
-    sal_uInt16 const nId(pRepeatAction->GetId());
+    SwUndoId const nId(static_cast<const SwUndo*>(pRepeatAction)->GetId());
     if (DoesUndo())
     {
         int nViewShellId = -1;

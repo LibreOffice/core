@@ -56,14 +56,6 @@ OUString ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
     return OUString();
 }
 
-sal_uInt16 ScUndoDraw::GetId() const
-{
-    if (pDrawUndo)
-        return pDrawUndo->GetId();
-    else
-        return 0;
-}
-
 bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)

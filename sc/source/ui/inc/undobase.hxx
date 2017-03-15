@@ -183,7 +183,6 @@ public:
     virtual bool            Merge( SfxUndoAction *pNextAction ) override;
     virtual OUString        GetComment() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
-    virtual sal_uInt16      GetId() const override;
     /// See SfxUndoAction::GetViewShellId().
     sal_Int32 GetViewShellId() const override;
 };

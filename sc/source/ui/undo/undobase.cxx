@@ -642,14 +642,6 @@ OUString ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const
     return OUString();
 }
 
-sal_uInt16 ScUndoWrapper::GetId() const
-{
-    if (pWrappedUndo)
-        return pWrappedUndo->GetId();
-    else
-        return 0;
-}
-
 bool ScUndoWrapper::Merge( SfxUndoAction* pNextAction )
 {
     if (pWrappedUndo)

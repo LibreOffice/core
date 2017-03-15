@@ -70,11 +70,6 @@ OUString SfxUndoAction::GetComment() const
 }
 
 
-sal_uInt16 SfxUndoAction::GetId() const
-{
-    return 0;
-}
-
 sal_Int32 SfxUndoAction::GetViewShellId() const
 {
     return -1;
@@ -695,17 +690,6 @@ OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentL
     if( nNo < pUndoArray->nCurUndoAction )
         sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction - 1 - nNo ].pAction->GetComment();
     return sComment;
-}
-
-
-sal_uInt16 SfxUndoManager::GetUndoActionId() const
-{
-    UndoManagerGuard aGuard( *m_xData );
-
-    assert(m_xData->pActUndoArray->nCurUndoAction > 0);
-    if ( m_xData->pActUndoArray->nCurUndoAction == 0 )
-        return 0;
-    return m_xData->pActUndoArray->aUndoActions[m_xData->pActUndoArray->nCurUndoAction-1].pAction->GetId();
 }
 
 

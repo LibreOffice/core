@@ -1758,11 +1758,6 @@ bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-sal_uInt16 ScUndoSelectionStyle::GetId() const
-{
-    return STR_UNDO_APPLYCELLSTYLE;
-}
-
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
                                       ScDocument* pNewUndoDoc, const OUString& rForm ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
