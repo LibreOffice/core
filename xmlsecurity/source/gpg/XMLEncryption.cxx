@@ -9,8 +9,6 @@
 
 #include "XMLEncryption.hxx"
 
-#include <cppuhelper/supportsservice.hxx>
-
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::xml::wrapper;
@@ -34,46 +32,6 @@ Reference< XXMLEncryptionTemplate > SAL_CALL XMLEncryptionGpg::decrypt(const Ref
                                                                     const Reference< XXMLSecurityContext >& /*aSecurityCtx*/)
 {
     return nullptr;
-}
-
-/* XServiceInfo */
-OUString SAL_CALL XMLEncryptionGpg::getImplementationName()
-{
-    return impl_getImplementationName() ;
-}
-
-/* XServiceInfo */
-sal_Bool SAL_CALL XMLEncryptionGpg::supportsService(const OUString& serviceName)
-{
-    return cppu::supportsService(this, serviceName);
-}
-
-/* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLEncryptionGpg::getSupportedServiceNames()
-{
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > XMLEncryptionGpg::impl_getSupportedServiceNames()
-{
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLEncryption"};
-}
-
-OUString XMLEncryptionGpg::impl_getImplementationName()
-{
-    return OUString("com.sun.star.xml.security.XMLEncryption_Gpg");
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryptionGpg::impl_createInstance( const Reference< XMultiServiceFactory >&  )
-{
-    return Reference< XInterface >(*new XMLEncryptionGpg);
-}
-
-Reference< XSingleServiceFactory > XMLEncryptionGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager )
-{
-    return ::cppu::createSingleFactory(aServiceManager, impl_getImplementationName(), impl_createInstance, impl_getSupportedServiceNames());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
