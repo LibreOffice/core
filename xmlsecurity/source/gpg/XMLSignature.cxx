@@ -40,44 +40,4 @@ Reference< XXMLSignatureTemplate > SAL_CALL XMLSignatureGpg::validate(const Refe
     return nullptr;
 }
 
-/* XServiceInfo */
-OUString SAL_CALL XMLSignatureGpg::getImplementationName()
-{
-    return impl_getImplementationName() ;
-}
-
-/* XServiceInfo */
-sal_Bool SAL_CALL XMLSignatureGpg::supportsService( const OUString& serviceName)
-{
-    return cppu::supportsService(this, serviceName);
-}
-
-/* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignatureGpg::getSupportedServiceNames()
-{
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > XMLSignatureGpg::impl_getSupportedServiceNames()
-{
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLSignature"};
-}
-
-OUString XMLSignatureGpg::impl_getImplementationName()
-{
-    return OUString("com.sun.star.xml.security.XMLSignature_Gpg");
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLSignatureGpg::impl_createInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference< XInterface >( *new XMLSignatureGpg ) ;
-}
-
-Reference< XSingleServiceFactory > XMLSignatureGpg::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager )
-{
-    return cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
