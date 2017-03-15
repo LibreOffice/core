@@ -110,9 +110,7 @@
 #define RID_BMP_RIBBAR_FORMULA      (STR_IMGBTN_START +58)
 #define RID_BMP_RIBBAR_ERROR        (STR_IMGBTN_START +59)
 
-#define BTN_NAVI                    (STR_IMGBTN_START +60)
-
-#define RC_RIBBAR_ACT_END           BTN_NAVI
+#define RC_RIBBAR_ACT_END           RID_BMP_RIBBAR_ERROR
 
 #if  RC_RIBBAR_ACT_END   >  RC_RIBBAR_END
 #error Resource-Id Ueberlauf in #file, #line

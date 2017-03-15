@@ -19,20 +19,6 @@
 #include "frmui.hrc"
 
 /*-----------------------------------------------------------------------
-    Description: V-Rel
- -----------------------------------------------------------------------*/
-String STR_TOPPRT
-{
-    Text [ en-US ] = "Upper Margin" ;
-};
-
-/*-----------------------------------------------------------------------
-    Description: H-Rel
- -----------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------
-    Description: V-Rel character alignment
- -----------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------
     Description: character alignment for frmsh.cxx - context menu
  -----------------------------------------------------------------------*/
 String STR_TOP_BASE
@@ -58,18 +44,6 @@ String STR_LINE_BOTTOM
 String STR_LINE_CENTER
 {
     Text [ en-US ] = "Center of line" ;
-};
-String STR_CHAR_TOP
-{
-    Text [ en-US ] = "Top of character" ;
-};
-String STR_CHAR_BOTTOM
-{
-    Text [ en-US ] = "Bottom of character" ;
-};
-String STR_CHAR_CENTER
-{
-    Text [ en-US ] = "Center of character" ;
 };
 String STR_OLE_INSERT
 {

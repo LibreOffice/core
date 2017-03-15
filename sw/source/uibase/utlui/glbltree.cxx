@@ -53,7 +53,6 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#include <navipi.hrc>
 #include <utlui.hrc>
 #include <comcore.hrc>
 #include <globals.hrc>

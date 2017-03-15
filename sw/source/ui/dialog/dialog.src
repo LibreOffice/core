@@ -18,15 +18,6 @@
  */
 #include "dialog.hrc"
 
-String STR_LINKEDIT_TEXT
-{
-    Text [ en-US ] = "Edit links" ;
-};
-String STR_PATH_NOT_FOUND
-{
-    Text [ en-US ] = "The directory '%1' does not exist." ;
-};
-
 String STR_QUERY_SPELL_CONTINUE
 {
     Text [ en-US ] = "Continue checking at beginning of document?" ;

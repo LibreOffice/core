@@ -26,9 +26,6 @@
 
 // Strings in NumberFormatter-Listbox
 #define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)
-// hyperlink status bar control
-#define STR_HYPERCTRL_SEL                       (RC_UTLUI_BEGIN + 5)
-#define STR_HYPERCTRL_HYP                       (RC_UTLUI_BEGIN + 6)
 
 // names of content types                       (RC_UTLUI_BEGIN + 7)
 #define STR_CONTENT_TYPE_FIRST                  (RC_UTLUI_BEGIN + 8)
@@ -201,9 +198,7 @@
 // empty
 #define STR_CALC_DEFAULT                        (RID_SW_SHELLRES_BEGIN + 10)
 #define STR_CALC_ERROR                          (RID_SW_SHELLRES_BEGIN + 11)
-#define STR_GETREFFLD_UP                        (RID_SW_SHELLRES_BEGIN + 12)
-#define STR_GETREFFLD_DOWN                      (RID_SW_SHELLRES_BEGIN + 13)
-#define STR_ALLPAGE_HEADFOOT                    (RID_SW_SHELLRES_BEGIN + 14)
+// empty
 #define STR_TEMPLATE_NONE                       (RID_SW_SHELLRES_BEGIN + 15)
 #define STR_POSTIT_LINE                         (RID_SW_SHELLRES_BEGIN + 16)
 #define STR_FIELD_FIXED                         (RID_SW_SHELLRES_BEGIN + 17)

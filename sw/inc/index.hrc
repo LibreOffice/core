@@ -30,7 +30,6 @@
 #define  STR_ALPHA              (RC_INDEX_BEGIN + 7)
 #define  STR_LEVEL              (RC_INDEX_BEGIN + 8)
 
-#define  DLG_EDIT_IDXMARK       (RC_INDEX_BEGIN + 11)
 #define  DLG_EDIT_AUTHMARK      (RC_INDEX_BEGIN + 12)
 
 #define  STR_IDXMRK_INSERT      (RC_INDEX_BEGIN + 13)

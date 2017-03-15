@@ -18,17 +18,10 @@
  */
 
 #include "globdoc.hrc"
+
 String STR_HUMAN_SWGLOBDOC_NAME
 {
     Text [ en-US ] = "Master Document" ;
-};
-String STR_WRITER_GLOBALDOC_FULLTYPE_40
-{
-    Text = "%PRODUCTNAME 4.0 Global Document" ;
-};
-String STR_WRITER_GLOBALDOC_FULLTYPE_50
-{
-    Text = "%PRODUCTNAME 5.0 Global Document" ;
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE
 {

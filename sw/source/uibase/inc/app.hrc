@@ -25,10 +25,7 @@
 #define STR_CANTCREATE                  (RC_APP_BEGIN + 4)
 #define STR_CANTOPEN                    (RC_APP_BEGIN + 5)
 
-#define STR_UNBENANNT                   (RC_APP_BEGIN + 13)
 #define STR_VERSION                     (RC_APP_BEGIN + 14)
-#define STR_PRINT_MERGE_MACRO           (RC_APP_BEGIN + 15)
-#define STR_PAGE_COUNT_MACRO            (RC_APP_BEGIN + 16)
 
 // Strings for regions in the configuration
 #define STR_PAGEOFFSET                  (RC_APP_BEGIN + 74)
@@ -46,13 +43,11 @@
 
 #define RID_SW_ERRHDL                   (RC_APP_BEGIN + 95)
 
-#define STR_FDLG_TEMPLATE_BUTTON        (RC_APP_BEGIN + 1)
 #define STR_FDLG_TEMPLATE_NAME          (RC_APP_BEGIN + 2)
 
 #define STR_WRITER_DOCUMENT_FULLTYPE    (RC_APP_BEGIN + 100)
 #define STR_CONVERT_TEXT_TABLE          (RC_APP_BEGIN + 101)
 #define STR_ABSTRACT_TITLE              (RC_APP_BEGIN + 102)
-#define STR_DONT_ASK_AGAIN              (RC_APP_BEGIN + 103)
 #define STR_OUTLINE_NUMBERING           (RC_APP_BEGIN + 104)
 #define STR_FDLG_OUTLINE_LEVEL          (RC_APP_BEGIN + 105)
 #define STR_FDLG_STYLE                  (RC_APP_BEGIN + 106)
@@ -78,7 +73,6 @@
 #define STR_NUMERIC                     (RC_APP_BEGIN + 126)
 #define STR_COL                         (RC_APP_BEGIN + 127)
 #define STR_ROW                         (RC_APP_BEGIN + 128)
-#define STR_SIMPLE                      (RC_APP_BEGIN + 129)
 #define STR_AUTHMRK_EDIT                (RC_APP_BEGIN + 130)
 #define STR_AUTHMRK_INSERT              (RC_APP_BEGIN + 131)
 #define STR_CAPTION_TABLE               (RC_APP_BEGIN + 133)

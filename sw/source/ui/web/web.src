@@ -28,14 +28,6 @@ String STR_HUMAN_SWWEBDOC_NAME
 {
     Text [ en-US ] = "HTML" ;
 };
-String STR_WRITER_WEBDOC_FULLTYPE_40
-{
-    Text [ en-US ] = "%PRODUCTNAME 4.0 HTML" ;
-};
-String STR_WRITER_WEBDOC_FULLTYPE_50
-{
-    Text [ en-US ] = "%PRODUCTNAME 5.0 HTML" ;
-};
 String STR_WRITER_WEBDOC_FULLTYPE
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";

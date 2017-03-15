@@ -27,10 +27,6 @@ String STR_ACCESS_DOC_DESC
 {
     Text [ en-US ] = "Document view";
 };
-String STR_ACCESS_HEADING_WITH_NUM_DESC
-{
-    Text [ en-US ] = "Heading number $(ARG2): $(ARG1)";
-};
 String STR_ACCESS_HEADER_NAME
 {
     Text [ en-US ] = "Header $(ARG1)";
@@ -103,10 +99,6 @@ String STR_ACCESS_PREVIEW_DOC_SUFFIX
 String STR_ACCESS_DOC_WORDPROCESSING
 {
     Text [ en-US ] = "%PRODUCTNAME Document";
-};
-String STR_ACCESS_DOC_WORDPROCESSING_READONLY
-{
-    Text [ en-US ] = "(read-only)";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

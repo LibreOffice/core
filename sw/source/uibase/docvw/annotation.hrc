@@ -22,9 +22,6 @@
 
 #include "rcid.hrc"
 
-#define STR_POSTIT_TODAY                (RC_ANNOTATION_BEGIN +  1)
-#define STR_POSTIT_YESTERDAY            (RC_ANNOTATION_BEGIN +  2)
-
 #define STR_DELETE_ALL_NOTES            (RC_ANNOTATION_BEGIN +  3)
 #define STR_DELETE_AUTHOR_NOTES         (RC_ANNOTATION_BEGIN +  4)
 

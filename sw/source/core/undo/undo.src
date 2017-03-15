@@ -426,10 +426,6 @@ String STR_LDOTS
 {
     Text [ en-US ] = "...";
 };
-String STR_CLIPBOARD
-{
-    Text [ en-US ] = "clipboard";
-};
 String STR_MULTISEL
 {
     Text [ en-US ] = "multiple selection";
@@ -485,10 +481,6 @@ String STR_REDLINE_TABLE
 String STR_REDLINE_FMTCOLL
 {
     Text [ en-US ] = "Style changed";
-};
-String STR_REDLINE_MULTIPLE
-{
-    Text [ en-US ] = "multiple changes";
 };
 String STR_N_REDLINES
 {

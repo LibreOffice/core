@@ -50,10 +50,6 @@ String STR_INSERT_GRAPHIC
 {
     Text [ en-US ] = "Insert Image" ;
 };
-String STR_NO_ADDRESSBOOK
-{
-        Text [ en-US ] = "An Address Book does not exist" ;
-};
 String STR_REDLINE_COMMENT
 {
         Text [ en-US ] = "Comment: " ;
@@ -94,12 +90,6 @@ Bitmap BMP_REDLINE_TABLECHG
 };
 
 Bitmap BMP_REDLINE_FMTCOLLSET
-{
-    // FIXME
-    File = "redline_inserted.png";
-};
-
-Bitmap BMP_REDLINE_AUTOFMT
 {
     // FIXME
     File = "redline_inserted.png";

@@ -25,26 +25,14 @@
 
 #define DLG_COLUMN              (RC_FRMDLG_BEGIN +  4)
 
-#define DLG_CAPTION             (RC_FRMDLG_BEGIN + 11)
-
 #define STR_FRMUI_BORDER        (RC_FRMDLG_BEGIN + 16)
 #define STR_FRMUI_PATTERN       (RC_FRMDLG_BEGIN + 17)
 
-#define BMP_BEGIN               (RC_FRMDLG_BEGIN + 18)
-#define BMP_NOWRAP              (BMP_BEGIN+5)
+#define MN_BACKGROUND           (RC_FRMDLG_BEGIN + 27)
 
-#define BMP_END                 (BMP_NOWRAP)
-
-#define MN_BACKGROUND           (BMP_END + 4)
-
-#define MN_FOOTNOTE             (BMP_END + 7)
-
-#define STR_FRMDLG_BEGIN        (MN_FOOTNOTE + 1)
-
-#define STR_TOPPRT              (STR_FRMDLG_BEGIN + 1)
+#define STR_FRMDLG_BEGIN        (RC_FRMDLG_BEGIN + 31)
 
 #define STR_COLUMN              (STR_FRMDLG_BEGIN + 17)
-#define STR_CHAR                (STR_FRMDLG_BEGIN + 19)
 
 #define STR_OLE_INSERT          (STR_FRMDLG_BEGIN + 45)
 #define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
@@ -53,11 +41,8 @@
 #define STR_LINE_TOP            (STR_FRMDLG_BEGIN + 50)
 #define STR_LINE_BOTTOM         (STR_FRMDLG_BEGIN + 51)
 #define STR_LINE_CENTER         (STR_FRMDLG_BEGIN + 52)
-#define STR_CHAR_TOP            (STR_FRMDLG_BEGIN + 53)
-#define STR_CHAR_BOTTOM         (STR_FRMDLG_BEGIN + 54)
-#define STR_CHAR_CENTER         (STR_FRMDLG_BEGIN + 55)
 
-#define FRMDLG_ACT_END                  STR_CHAR_CENTER
+#define FRMDLG_ACT_END                  STR_LINE_CENTER
 
 #if FRMDLG_ACT_END > RC_FRMDLG_END
 #error Resource-Id Ueberlauf in #file, #line

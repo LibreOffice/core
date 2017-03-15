@@ -48,13 +48,6 @@
 #define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
 #define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
 
-#define STR_CHAIN_OK                    (RC_DOCVW_BEGIN + 2)
-#define STR_CHAIN_NOT_EMPTY             (RC_DOCVW_BEGIN + 3)
-#define STR_CHAIN_IS_IN_CHAIN           (RC_DOCVW_BEGIN + 4)
-#define STR_CHAIN_WRONG_AREA            (RC_DOCVW_BEGIN + 5)
-#define STR_CHAIN_NOT_FOUND             (RC_DOCVW_BEGIN + 6)
-#define STR_CHAIN_SOURCE_CHAINED        (RC_DOCVW_BEGIN + 7)
-#define STR_CHAIN_SELF                  (RC_DOCVW_BEGIN + 8)
 #define STR_REDLINE_INSERT              (RC_DOCVW_BEGIN + 9)
 #define STR_REDLINE_DELETE              (RC_DOCVW_BEGIN + 10)
 #define STR_REDLINE_FORMAT              (RC_DOCVW_BEGIN + 11)

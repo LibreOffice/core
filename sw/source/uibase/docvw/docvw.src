@@ -185,34 +185,6 @@ Menu MN_READONLY_POPUP
         };
     };
 };
-String STR_CHAIN_OK
-{
-    Text [ en-US ] = "Click the left mouse button to link the frames." ;
-};
-String STR_CHAIN_NOT_EMPTY
-{
-    Text [ en-US ] = "Target frame not empty." ;
-};
-String STR_CHAIN_IS_IN_CHAIN
-{
-    Text [ en-US ] = "Target frame is already linked." ;
-};
-String STR_CHAIN_WRONG_AREA
-{
-    Text [ en-US ] = "The target frame for the link is in an invalid area." ;
-};
-String STR_CHAIN_NOT_FOUND
-{
-    Text [ en-US ] = "Target frame not found at current position." ;
-};
-String STR_CHAIN_SOURCE_CHAINED
-{
-    Text [ en-US ] = "The source frame is already the source of a link." ;
-};
-String STR_CHAIN_SELF
-{
-    Text [ en-US ] = "A closed link is not possible." ;
-};
 String STR_REDLINE_INSERT
 {
     Text [ en-US ] = "Inserted" ;

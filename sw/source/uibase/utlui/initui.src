@@ -63,21 +63,9 @@ String STR_CALC_ERROR
 {
     Text [ en-US ] = "** Expression is faulty **" ;
 };
-String STR_GETREFFLD_UP
-{
-    Text [ en-US ] = "above" ;
-};
-String STR_GETREFFLD_DOWN
-{
-    Text [ en-US ] = "below" ;
-};
 String STR_GETREFFLD_REFITEMNOTFOUND
 {
     Text [ en-US ] = "Error: Reference source not found" ;
-};
-String STR_ALLPAGE_HEADFOOT
-{
-    Text [ en-US ] = "All" ;
 };
 String STR_TEMPLATE_NONE
 {

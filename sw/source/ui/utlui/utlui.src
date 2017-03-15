@@ -241,17 +241,9 @@ String RID_STR_SYSTEM
 {
     Text [ en-US ] = "[System]";
 };
-String STR_MULT_INTERACT_SPELL_WARN
-{
-    Text [ en-US ] = "The interactive spellcheck is already active\nin a different document";
-};
 String STR_MULT_INTERACT_HYPH_WARN
 {
     Text [ en-US ] = "The interactive hyphenation is already active\nin a different document";
-};
-String STR_SPELL_TITLE
-{
-    Text [ en-US ] = "Spellcheck";
 };
 String STR_HYPH_TITLE
 {
@@ -316,15 +308,6 @@ Bitmap RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
 Bitmap RID_BMP_PAGE_BREAK
 {
     File = "page_break.png" ;
-};
-
-String STR_HYPERCTRL_SEL
-{
-    Text [ en-US ] = "SEL";
-};
-String STR_HYPERCTRL_HYP
-{
-    Text [ en-US ] = "HYP";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
