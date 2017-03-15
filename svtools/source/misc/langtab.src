@@ -405,7 +405,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Hungarian (Szekely-Hungarian Rovas)" ; LANGUAGE_USER_HUNGARIAN_ROVAS ; > ;
         < "English (Malaysia)" ; LANGUAGE_ENGLISH_MALAYSIA ; > ;
         < "Manchu" ; LANGUAGE_USER_MANCHU ; > ;
-        < "Sibe" ; LANGUAGE_USER_SIBE ; > ;
+        < "Xibe" ; LANGUAGE_USER_XIBE ; > ;
     };
 };
 

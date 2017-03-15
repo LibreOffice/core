@@ -360,6 +360,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_KYRGYZ_CHINA:
         case LANGUAGE_USER_HUNGARIAN_ROVAS:
         case LANGUAGE_USER_MANCHU:
+        case LANGUAGE_USER_XIBE:
             nScript = css::i18n::ScriptType::COMPLEX;
             break;
 

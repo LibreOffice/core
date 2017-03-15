@@ -719,7 +719,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_SILESIAN              0x0699
 #define LANGUAGE_USER_HUNGARIAN_ROVAS       0x800E  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HUNGARIAN)) */
 #define LANGUAGE_USER_MANCHU                0x069A
-#define LANGUAGE_USER_SIBE                  0x069B
+#define LANGUAGE_USER_XIBE                  0x069B
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
