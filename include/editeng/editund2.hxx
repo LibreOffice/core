@@ -63,7 +63,7 @@ public:
     virtual OUString GetComment() const override;
     /// See SfxUndoAction::GetViewShellId().
     sal_Int32 GetViewShellId() const override;
-    virtual sal_uInt16  GetId() const override;
+    sal_uInt16  GetId() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITUND2_HXX

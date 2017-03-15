@@ -129,6 +129,7 @@
 #include "spellcheckcontext.hxx"
 #include "uiobject.hxx"
 #include "scabstdlg.hxx"
+#include "undoblk.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -1860,7 +1861,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if (nMouseStatus == SC_GM_WATERUNDO)    // Undo in format paintbrush mode
     {
         ::svl::IUndoManager* pMgr = pViewData->GetDocShell()->GetUndoManager();
-        if ( pMgr->GetUndoActionCount() && pMgr->GetUndoActionId() == STR_UNDO_APPLYCELLSTYLE )
+        if ( pMgr->GetUndoActionCount() && dynamic_cast<ScUndoSelectionStyle*>(pMgr->GetUndoAction()) )
             pMgr->Undo();
         return;
     }

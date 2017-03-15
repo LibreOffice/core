@@ -768,16 +768,8 @@ const char * dbg_out(SwNodes & rNodes)
 
 static OUString lcl_dbg_out(const SwUndo & rUndo)
 {
-    OUString aStr("[ ");
-
-    aStr += OUString::number(
-                static_cast<SfxUndoAction const&>(rUndo).GetId());
-    aStr += ": ";
-
-    aStr += rUndo.GetComment();
-    aStr += " ]";
-
-    return aStr;
+    return "[ " + OUString::number(rUndo.GetId())
+                + ": " + rUndo.GetComment() + " ]";
 }
 
 const char * dbg_out(const SwUndo & rUndo)

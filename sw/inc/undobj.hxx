@@ -72,9 +72,6 @@ protected:
     */
     virtual SwRewriter GetRewriter() const;
 
-    // return type is sal_uInt16 because this overrides SfxUndoAction::GetId()
-    virtual sal_uInt16 GetId() const override { return static_cast<sal_uInt16>(m_nId); }
-
     // the 4 methods that derived classes have to override
     // base implementation does nothing
     virtual void RepeatImpl( ::sw::RepeatContext & );
@@ -96,6 +93,8 @@ private:
 public:
     SwUndo(SwUndoId const nId, const SwDoc* pDoc);
     virtual ~SwUndo() override;
+
+    SwUndoId GetId() const { return m_nId; }
 
     /**
        Returns textual comment for this undo object.

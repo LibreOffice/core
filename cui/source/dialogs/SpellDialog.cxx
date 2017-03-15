@@ -119,7 +119,7 @@ public:
         {}
 
     virtual void            Undo() override;
-    virtual sal_uInt16          GetId() const override;
+    sal_uInt16              GetId() const;
 
     void                    SetEnableChangePB(){m_bEnableChangePB = true;}
     bool                    IsEnableChangePB(){return m_bEnableChangePB;}
@@ -1931,15 +1931,15 @@ void SentenceEditWindow_Impl::Undo()
     if(!GetUndoActionCount())
         return;
     bool bSaveUndoEdit = IsUndoEditMode();
-    sal_uInt16 nId;
+    SpellUndoAction_Impl* pUndoAction;
     //if the undo edit mode is active then undo all changes until the UNDO_EDIT_MODE action has been found
     do
     {
-        nId = rUndoMgr.GetUndoActionId();
+        pUndoAction = static_cast<SpellUndoAction_Impl*>(rUndoMgr.GetUndoAction());
         rUndoMgr.Undo();
-    }while(bSaveUndoEdit && SPELLUNDO_UNDO_EDIT_MODE != nId && GetUndoActionCount());
+    }while(bSaveUndoEdit && SPELLUNDO_UNDO_EDIT_MODE != pUndoAction->GetId() && GetUndoActionCount());
 
-    if(bSaveUndoEdit || SPELLUNDO_CHANGE_GROUP == nId)
+    if(bSaveUndoEdit || SPELLUNDO_CHANGE_GROUP == pUndoAction->GetId())
         GetSpellDialog()->UpdateBoxes_Impl();
 }
 
