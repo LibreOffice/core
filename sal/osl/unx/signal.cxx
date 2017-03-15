@@ -177,6 +177,17 @@ bool is_soffice_Impl()
     return (idx != -1);
 }
 
+bool is_unset_signal(int signal)
+{
+#ifdef DBG_UTIL
+    return (!bSetSEGVHandler && signal == SIGSEGV) ||
+        (!bSetWINCHHandler && signal == SIGWINCH) ||
+        (!bSetILLHandler && signal == SIGILL);
+#else
+    return false;
+#endif
+}
+
 }
 
 bool onInitSignal()
@@ -446,9 +457,9 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
     }
 
 #if HAVE_FEATURE_BREAKPAD
-    if (Info.Signal == osl_Signal_AccessViolation ||
+    if ((Info.Signal == osl_Signal_AccessViolation ||
             Info.Signal == osl_Signal_IntegerDivideByZero ||
-            Info.Signal == osl_Signal_FloatDivideByZero)
+            Info.Signal == osl_Signal_FloatDivideByZero) && !is_unset_signal(signal))
     {
         for (SignalAction & rSignal : Signals)
         {
