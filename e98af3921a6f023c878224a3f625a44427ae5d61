@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_7f585bfb",
+        "filename": "solenv/gbuild/AllLangHelp.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-03-15T12:33:20Z",
+      "side": 1,
+      "message": "This line *must* be the first line in the file for it to work.",
+      "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
