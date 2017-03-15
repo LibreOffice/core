@@ -34,7 +34,7 @@ namespace connectivity
         };
 
         /**
-         * Make sure an identifier is safe to use within the databse. Currently
+         * Make sure an identifier is safe to use within the database. Currently
          * firebird seems to return identifiers with 93 character (instead of
          * 31), whereby the name is simply padded with trailing whitespace.
          * This removes all trailing whitespace (i.e. if necessary so that
