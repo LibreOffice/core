@@ -37,9 +37,6 @@ public:
     CAccText()
     {
             }
-    ~CAccText() override
-    {
-            }
 
     BEGIN_COM_MAP(CAccText)
     COM_INTERFACE_ENTRY(IAccessibleText)

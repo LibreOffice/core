@@ -39,9 +39,6 @@ public:
     CAccHypertext()
     {
             }
-    ~CAccHypertext() override
-    {
-            }
 
     BEGIN_COM_MAP(CAccHypertext)
     COM_INTERFACE_ENTRY(IAccessibleText)

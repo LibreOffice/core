@@ -37,10 +37,6 @@ public:
     {
 
     }
-    ~CAccAction() override
-    {
-
-    }
 
     DECLARE_NO_REGISTRY()
 

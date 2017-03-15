@@ -40,7 +40,7 @@ namespace connectivity
             OLEVariant          m_aValue;
         public:
             DECLARE_SERVICE_INFO();
-            virtual ~OCallableStatement() override {} ;
+
             // a Constructor, that is needed for when Returning the Object is needed:
             OCallableStatement( OConnection* _pConnection, const OUString& sql );
 

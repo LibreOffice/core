@@ -42,9 +42,6 @@ public:
     CAccComponent()
     {
             }
-    ~CAccComponent() override
-    {
-            }
 
     BEGIN_COM_MAP(CAccComponent)
     COM_INTERFACE_ENTRY(IAccessibleComponent)
