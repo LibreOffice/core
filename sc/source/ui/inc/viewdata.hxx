@@ -233,7 +233,7 @@ private:
     bool                bGrowing;
 
     long                m_nLOKPageUpDownOffset;
-    
+
     DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
 
 
