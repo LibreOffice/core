@@ -285,10 +285,13 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         {
             m_seqSecureURLs.realloc( 0 );
             rValue >>= m_seqSecureURLs;
-            SvtPathOptions  aOpt;
-            sal_uInt32      nCount = m_seqSecureURLs.getLength();
-            for( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
-                m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
+            if (!utl::ConfigManager::IsAvoidConfig())
+            {
+                SvtPathOptions  aOpt;
+                sal_uInt32      nCount = m_seqSecureURLs.getLength();
+                for( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
+                    m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
+            }
             m_bROSecureURLs = bRO;
         }
         break;
