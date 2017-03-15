@@ -26,8 +26,7 @@
 
 #include <vector>
 
-class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext,
-                                                           css::lang::XServiceInfo >
+class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext >
 {
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
@@ -35,7 +34,7 @@ private:
     sal_Int32 m_nDefaultEnvIndex;
 
 public:
-    XMLSecurityContextGpg() ;
+    XMLSecurityContextGpg();
     virtual ~XMLSecurityContextGpg() override;
 
     // XXMLSecurityContext
@@ -51,25 +50,6 @@ public:
     virtual sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex() override;
 
     virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex ) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // XServiceInfo
-    static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
-
-    static OUString impl_getImplementationName();
-
-    //Helper for registry
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager);
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSECURITYCONTEXT_HXX
