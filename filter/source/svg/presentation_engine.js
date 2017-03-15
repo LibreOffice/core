@@ -5170,6 +5170,7 @@ SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 BARNDOORWIPE_TRANSITION     = 15; // 4
 VEEWIPE_TRANSITION          = 16; // 8
+MISCDIAGONALWIPE_TRANSITION = 17; // 7
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5179,6 +5180,7 @@ aTransitionTypeInMap = {
     'ellipseWipe'       : ELLIPSEWIPE_TRANSITION,
     'clockWipe'         : CLOCKWIPE_TRANSITION,
     'pinWheelWipe'      : PINWHEELWIPE_TRANSITION,
+    'miscDiagonalWipe'  : MISCDIAGONALWIPE_TRANSITION,
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION,
@@ -5245,6 +5247,8 @@ UP_TRANS_SUBTYPE                    = 45; // 21
 RIGHT_TRANS_SUBTYPE                 = 46; // 22
 DIAGONALBOTTOMLEFT_TRANS_SUBTYPE    = 47; // 15
 DIAGONALTOPLEFT_TRANS_SUBTYPE       = 48; // 16
+DOUBLEBARNDOOR_TRANS_SUBTYPE        = 49; // 17
+DOUBLEDIAMOND_TRANS_SUBTYPE         = 50; // 18
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5295,7 +5299,9 @@ aTransitionSubtypeInMap = {
     'up'                : UP_TRANS_SUBTYPE,
     'right'             : RIGHT_TRANS_SUBTYPE,
     'diagonalBottomLeft': DIAGONALBOTTOMLEFT_TRANS_SUBTYPE,
-    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE
+    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE,
+    'doubleBarnDoor'    : DOUBLEBARNDOOR_TRANS_SUBTYPE,
+    'doubleDiamond'     : DOUBLEDIAMOND_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5447,6 +5453,28 @@ aTransitionInfoTable[BARNDOORWIPE_TRANSITION][DIAGONALTOPLEFT_TRANS_SUBTYPE] =
     'scaleX': Math.SQRT2,
     'scaleY': Math.SQRT2,
     'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION] = {};
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION][DOUBLEBARNDOOR_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 45.0,
+    'scaleX': Math.SQRT2,
+    'scaleY': Math.SQRT2,
+    'reverseMethod': REVERSEMETHOD_IGNORE,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION][DOUBLEDIAMOND_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 0.0,
+    'scaleX': 1,
+    'scaleY': 1,
+    'reverseMethod': REVERSEMETHOD_IGNORE,
     'outInvertsSweep': true,
     'scaleIsotropically': false
 };
@@ -9442,7 +9470,14 @@ function createClipPolyPolygon( nType, nSubtype )
                     return null;
             }
         case BARNDOORWIPE_TRANSITION:
-            return new BarnDoorWipePath(true);
+            return new BarnDoorWipePath(false);
+        case MISCDIAGONALWIPE_TRANSITION:
+            switch(nSubtype) {
+                case DOUBLEBARNDOOR_TRANS_SUBTYPE:
+                    return new BarnDoorWipePath(true /* Doubled */);
+                case DOUBLEDIAMOND_TRANS_SUBTYPE:
+                    return new DoubleDiamondWipePath();
+            }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
         case VEEWIPE_TRANSITION:
@@ -9780,6 +9815,35 @@ BarnDoorWipePath.prototype.perform = function( nT ) {
         aPath.matrixTransform(aTransform);
         res.appendPath(aPath);
     }
+    return res;
+}
+
+/** Class DoubleDiamondWipePath
+ *
+ */
+function DoubleDiamondWipePath() { }
+
+DoubleDiamondWipePath.prototype.perform = function( nT ) {
+    var a = pruneScaleValue(0.25 + (nT * 0.75));
+    var aPath = 'M ' + (0.5 + a) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 - a) + ' ';
+    aPath += 'L ' + (0.5 - a) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 + a) + ' ';
+    aPath += 'L ' + (0.5 + a) + ' ' + 0.5 + ' ';
+    var poly = document.createElementNS( NSS['svg'], 'path');
+    poly.setAttribute('d', aPath);
+    var res = poly.cloneNode(true);
+
+    var b = pruneScaleValue( (1.0 - nT) * 0.25);
+    aPath = 'M ' + (0.5 + b) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 + b) + ' ';
+    aPath += 'L ' + (0.5 - b) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 - b) + ' ';
+    aPath += 'L ' + (0.5 + b) + ' ' + 0.5 + ' ';
+    poly = document.createElementNS( NSS['svg'], 'path');
+    poly.setAttribute('d', aPath);
+    res.appendPath(poly);
+
     return res;
 }
 
