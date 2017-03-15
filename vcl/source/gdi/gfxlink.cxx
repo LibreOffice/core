@@ -141,15 +141,15 @@ void GfxLink::SwapOut()
 
         OUString aURL = aTempFile.GetURL();
 
-        if (!aURL.isEmpty())
+        if( !aURL.isEmpty() )
         {
             std::shared_ptr<GfxLink::SwapOutData> pSwapOut = std::make_shared<SwapOutData>(aURL);    // aURL is removed in the destructor
-            SvStream* pOStm = aTempFile.GetStream(StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-            if (pOStm)
+            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE ));
+            if( xOStm )
             {
-                pOStm->WriteBytes(mpSwapInData.get(), mnSwapInDataSize);
-                bool bError = (ERRCODE_NONE != pOStm->GetError());
-                aTempFile.CloseStream();
+                xOStm->WriteBytes( mpSwapInData.get(), mnSwapInDataSize );
+                bool bError = ( ERRCODE_NONE != xOStm->GetError() );
+                xOStm.reset();
 
                 if( !bError )
                 {
