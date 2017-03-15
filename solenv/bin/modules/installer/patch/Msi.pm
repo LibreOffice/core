@@ -69,7 +69,7 @@ sub FindAndCreate($$$$$)
 
 =head2 new($class, $filename, $version, $is_current_version, $language, $product_name)
 
-    Create a new object of the Msi class.  The values of $version, $language, and $product_name define
+    Create a new object of the Msi class. The values of $version, $language, and $product_name define
     where to look for the msi file.
 
     If construction fails then IsValid() will return false.
@@ -136,7 +136,7 @@ sub IsValid ($)
 
 =head2 Commit($self)
 
-    Write all modified tables back into the databse.
+    Write all modified tables back into the database.
 
 =cut
 
@@ -172,8 +172,8 @@ sub Commit ($)
 
 =head2 GetTable($seld, $table_name)
 
-    Return an MsiTable object for $table_name.  Table objects are kept
-    alive for the life time of the Msi object.  Therefore the second
+    Return an MsiTable object for $table_name. Table objects are kept
+    alive for the life time of the Msi object. Therefore the second
     call for the same table is very cheap.
 
 =cut
@@ -212,7 +212,7 @@ sub GetTable ($$)
 
 =head2 PutTable($self, $table)
 
-    Write the given table back to the databse.
+    Write the given table back to the database.
 
 =cut
 
@@ -290,7 +290,7 @@ sub EnsureAYoungerThanB ($$)
 
     Split $name (typically from the 'FileName' column in the 'File'
     table or 'DefaultDir' column in the 'Directory' table) at the '|'
-    into short (8.3) and long names.  If there is no '|' in $name then
+    into short (8.3) and long names. If there is no '|' in $name then
     $name is returned as both short and long name.
 
     Returns long and short name (in this order) as array.
@@ -316,7 +316,7 @@ sub SplitLongShortName ($)
 =head2 SplitTargetSourceLongShortName ($name)
 
     Split $name first at the ':' into target and source parts and each
-    of those at the '|'s into long and short parts.  Names that follow
+    of those at the '|'s into long and short parts. Names that follow
     this pattern come from the 'DefaultDir' column in the 'Directory'
     table.
 
