@@ -27,6 +27,7 @@
 #include "editeng/section.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/flditem.hxx"
+#include "editeng/udlnitem.hxx"
 #include "svl/srchitem.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -62,6 +63,9 @@ public:
     /// Test Copy/Paste with Bold/Italic text using Legacy Format
     void testBoldItalicCopyPaste();
 
+    /// Test Copy/Paste with Underline text using Legacy Format
+    void testUnderlineCopyPaste();
+
     void testSectionAttributes();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -71,6 +75,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testBoldItalicCopyPaste);
+    CPPUNIT_TEST(testUnderlineCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -708,6 +713,126 @@ void Test::testBoldItalicCopyPaste()
     CPPUNIT_ASSERT_EQUAL( 37, (int)pSecAttr->mnStart );
     CPPUNIT_ASSERT_EQUAL( 38, (int)pSecAttr->mnEnd );
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+}
+
+// Auxiliary function to test Underline text Copy/Paste using Legacy Format
+bool hasUnderline(const editeng::Section& rSecAttr)
+{
+    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
+    for (; it != itEnd; ++it)
+    {
+        const SfxPoolItem* p = *it;
+        if (p->Which() != EE_CHAR_UNDERLINE)
+            continue;
+
+        if (static_cast<const SvxUnderlineItem*>(p)->GetLineStyle() != LINESTYLE_SINGLE)
+            continue;
+
+        return true;
+    }
+    return false;
+}
+
+void Test::testUnderlineCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // New instance must be empty - no initial text
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Get corresponding ItemSet for inserting Underline text
+    std::unique_ptr<SfxItemSet> pSet( new SfxItemSet(aEditEngine.GetEmptyItemSet()) );
+    SvxUnderlineItem aULine( LINESTYLE_SINGLE, EE_CHAR_UNDERLINE );
+
+    // Insert initial text
+    OUString aParaText = "sampletextforunderline";
+    // Positions Ref      ......*6.........*17..
+    // Underline Ref      ......[UNDERLINE ]....
+    sal_Int32 aTextLen = aParaText.getLength();
+    aEditEngine.SetText( aParaText );
+
+    // Apply Underline style
+    pSet->Put( aULine );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1), pSet->Count() );
+    aEditEngine.QuickSetAttribs( *pSet, ESelection(0,6,0,18) );
+
+    // Assert changes
+    std::unique_ptr<EditTextObject> pEditText1( aEditEngine.CreateTextObject() );
+    std::vector<editeng::Section> aAttrs1;
+    pEditText1->GetAllSections( aAttrs1 );
+
+    // There should be 3 sections - woUnderline - wUnderline - woUnderline (w - with, wo - without)
+    size_t nSecCountCheck1 = 3;
+    CPPUNIT_ASSERT_EQUAL( nSecCountCheck1, aAttrs1.size() );
+
+    const editeng::Section* pSecAttr = &aAttrs1[0];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 6, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs1[1];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 6, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be underlined.", hasUnderline(*pSecAttr) );
+
+    pSecAttr = &aAttrs1[2];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 22, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    // Copy text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,6,0,aTextLen-4) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + (OUString("textforunder")).getLength()), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(aParaText + "textforunder" ), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Check updated text for appropriate Underline
+    std::unique_ptr<EditTextObject> pEditText2( aEditEngine.CreateTextObject() );
+    std::vector<editeng::Section> aAttrs2;
+    pEditText2->GetAllSections( aAttrs2 );
+
+    // There should be 4 sections - woUnderline - wUnderline - woUnderline - wUnderline (w - with, wo - without)
+    size_t nSecCountCheck2 = 4;
+    CPPUNIT_ASSERT_EQUAL( nSecCountCheck2, aAttrs2.size() );
+
+    pSecAttr = &aAttrs2[0];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 6, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs2[1];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 6, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be underlined.", hasUnderline(*pSecAttr) );
+
+    pSecAttr = &aAttrs2[2];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 18, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 22, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->maAttributes.size() );
+
+    pSecAttr = &aAttrs2[3];
+    CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
+    CPPUNIT_ASSERT_EQUAL( 22, (int)pSecAttr->mnStart );
+    CPPUNIT_ASSERT_EQUAL( 34, (int)pSecAttr->mnEnd );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
+    CPPUNIT_ASSERT_MESSAGE( "This section must be underlined.", hasUnderline(*pSecAttr) );
 }
 
 void Test::testSectionAttributes()
