@@ -76,15 +76,15 @@ class CertificateViewerGeneralTP : public CertificateViewerTP
 {
 private:
     VclPtr<FixedImage>         m_pCertImg;
-    VclPtr<FixedText>          m_pHintNotTrustedFI;
+    VclPtr<FixedText>          m_pHintNotTrustedFT;
     VclPtr<FixedText>          m_pIssuedToLabelFT;
-    VclPtr<FixedText>          m_pIssuedToFI;
+    VclPtr<FixedText>          m_pIssuedToFT;
     VclPtr<FixedText>          m_pIssuedByLabelFT;
-    VclPtr<FixedText>          m_pIssuedByFI;
-    VclPtr<FixedText>          m_pValidFromDateFI;
-    VclPtr<FixedText>          m_pValidToDateFI;
+    VclPtr<FixedText>          m_pIssuedByFT;
+    VclPtr<FixedText>          m_pValidFromDateFT;
+    VclPtr<FixedText>          m_pValidToDateFT;
     VclPtr<FixedImage>         m_pKeyImg;
-    VclPtr<FixedText>          m_pHintCorrespPrivKeyFI;
+    VclPtr<FixedText>          m_pHintCorrespPrivKeyFT;
 public:
                         CertificateViewerGeneralTP( vcl::Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerGeneralTP() override;

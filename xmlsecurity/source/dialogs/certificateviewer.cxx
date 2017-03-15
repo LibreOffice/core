@@ -101,15 +101,15 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     :CertificateViewerTP    ( _pParent, "CertGeneral", "xmlsec/ui/certgeneral.ui", _pDlg )
 {
     get( m_pCertImg, "certimage" );
-    get( m_pHintNotTrustedFI, "hintnotrust" );
+    get( m_pHintNotTrustedFT, "hintnotrust" );
     get( m_pIssuedToLabelFT, "issued_to" );
-    get( m_pIssuedToFI, "issued_to_value" );
+    get( m_pIssuedToFT, "issued_to_value" );
     get( m_pIssuedByLabelFT, "issued_by");
-    get( m_pIssuedByFI, "issued_by_value" );
-    get( m_pValidFromDateFI, "valid_from_value" );
-    get( m_pValidToDateFI, "valid_to_value" );
+    get( m_pIssuedByFT, "issued_by_value" );
+    get( m_pValidFromDateFT, "valid_from_value" );
+    get( m_pValidToDateFT, "valid_to_value" );
     get( m_pKeyImg, "keyimage" );
-    get( m_pHintCorrespPrivKeyFI, "privatekey" );
+    get( m_pHintCorrespPrivKeyFT, "privatekey" );
 
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
@@ -120,7 +120,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     if ( !bCertValid )
     {
         m_pCertImg->SetImage(Image(BitmapEx(XMLSEC_RES(BMP_STATE_NOT_VALIDATED))));
-        m_pHintNotTrustedFI->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
+        m_pHintNotTrustedFT->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
 
     // insert data
@@ -128,12 +128,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
 
     OUString sSubjectName(XmlSec::GetContentPart(xCert->getSubjectName()));
     if (!sSubjectName.isEmpty())
-        m_pIssuedToFI->SetText(sSubjectName);
+        m_pIssuedToFT->SetText(sSubjectName);
     else
         m_pIssuedToLabelFT->Hide();
     OUString sIssuerName(XmlSec::GetContentPart(xCert->getIssuerName()));
     if (!sIssuerName.isEmpty())
-        m_pIssuedByFI->SetText(sIssuerName);
+        m_pIssuedByFT->SetText(sIssuerName);
     else
         m_pIssuedByLabelFT->Hide();
 
@@ -145,8 +145,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     OUString sValidFromDate = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTimeStart.GetDate()));
     OUString sValidToDate = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTimeEnd.GetDate()));
 
-    m_pValidFromDateFI->SetText(sValidFromDate);
-    m_pValidToDateFI->SetText(sValidToDate);
+    m_pValidFromDateFT->SetText(sValidFromDate);
+    m_pValidToDateFT->SetText(sValidToDate);
 
     // Check if we have the private key...
     bool bHasPrivateKey = false;
@@ -159,7 +159,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     if ( !bHasPrivateKey )
     {
         m_pKeyImg->Hide();
-        m_pHintCorrespPrivKeyFI->Hide();
+        m_pHintCorrespPrivKeyFT->Hide();
     }
 }
 
@@ -171,15 +171,15 @@ CertificateViewerGeneralTP::~CertificateViewerGeneralTP()
 void CertificateViewerGeneralTP::dispose()
 {
     m_pCertImg.clear();
-    m_pHintNotTrustedFI.clear();
+    m_pHintNotTrustedFT.clear();
     m_pIssuedToLabelFT.clear();
-    m_pIssuedToFI.clear();
+    m_pIssuedToFT.clear();
     m_pIssuedByLabelFT.clear();
-    m_pIssuedByFI.clear();
-    m_pValidFromDateFI.clear();
-    m_pValidToDateFI.clear();
+    m_pIssuedByFT.clear();
+    m_pValidFromDateFT.clear();
+    m_pValidToDateFT.clear();
     m_pKeyImg.clear();
-    m_pHintCorrespPrivKeyFI.clear();
+    m_pHintCorrespPrivKeyFT.clear();
     CertificateViewerTP::dispose();
 }
 
