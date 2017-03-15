@@ -5186,6 +5186,7 @@ FANWIPE_TRANSITION          = 19; // 25
 SINGLESWEEPWIPE_TRANSITION  = 20; // 24
 WATERFALLWIPE_TRANSITION    = 21; // 34
 SPIRALWIPE_TRANSITION       = 22; // 31
+MISCDIAGONALWIPE_TRANSITION = 23; // 7
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5195,6 +5196,7 @@ aTransitionTypeInMap = {
     'ellipseWipe'       : ELLIPSEWIPE_TRANSITION,
     'clockWipe'         : CLOCKWIPE_TRANSITION,
     'pinWheelWipe'      : PINWHEELWIPE_TRANSITION,
+    'miscDiagonalWipe'  : MISCDIAGONALWIPE_TRANSITION,
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION,
@@ -5293,6 +5295,8 @@ TOPLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE       = 71; // 73
 TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE      = 72; // 74
 BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 73; // 75
 BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 74; // 76
+DOUBLEBARNDOOR_TRANS_SUBTYPE                = 75; // 17
+DOUBLEDIAMOND_TRANS_SUBTYPE                 = 76; // 18
 
 aTransitionSubtypeInMap = {
     'default'                       : DEFAULT_TRANS_SUBTYPE,
@@ -5369,8 +5373,10 @@ aTransitionSubtypeInMap = {
     'verticalLeft'                  : VERTICALLEFT_TRANS_SUBTYPE,
     'verticalRight'                 : VERTICALRIGHT_TRANS_SUBTYPE,
     'horizontalLeft'                : HORIZONTALLEFT_TRANS_SUBTYPE,
-    'horizontalRight'               : HORIZONTALRIGHT_TRANS_SUBTYPE
-}
+    'horizontalRight'               : HORIZONTALRIGHT_TRANS_SUBTYPE,
+    'doubleBarnDoor'                : DOUBLEBARNDOOR_TRANS_SUBTYPE,
+    'doubleDiamond'                 : DOUBLEDIAMOND_TRANS_SUBTYPE
+};
 
 // Transition Modes
 TRANSITION_MODE_IN  = 1;
@@ -5603,6 +5609,28 @@ aTransitionInfoTable[BARNDOORWIPE_TRANSITION][DIAGONALTOPLEFT_TRANS_SUBTYPE] =
     'scaleX': Math.SQRT2,
     'scaleY': Math.SQRT2,
     'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION] = {};
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION][DOUBLEBARNDOOR_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 45.0,
+    'scaleX': Math.SQRT2,
+    'scaleY': Math.SQRT2,
+    'reverseMethod': REVERSEMETHOD_IGNORE,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+aTransitionInfoTable[MISCDIAGONALWIPE_TRANSITION][DOUBLEDIAMOND_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 0.0,
+    'scaleX': 1,
+    'scaleY': 1,
+    'reverseMethod': REVERSEMETHOD_IGNORE,
     'outInvertsSweep': true,
     'scaleIsotropically': false
 };
@@ -9837,7 +9865,7 @@ function createClipPolyPolygon( nType, nSubtype )
                     return null;
             }
         case BARNDOORWIPE_TRANSITION:
-            return new BarnDoorWipePath(true);
+            return new BarnDoorWipePath(false);
         case SINGLESWEEPWIPE_TRANSITION:
             return new SweepWipePath(
                 // center
@@ -9856,6 +9884,13 @@ function createClipPolyPolygon( nType, nSubtype )
             return new WaterfallWipePath(128, // flipOnYAxis
                                               nSubtype == VERTICALRIGHT_TRANS_SUBTYPE ||
                                               nSubtype == HORIZONTALLEFT_TRANS_SUBTYPE);
+        case MISCDIAGONALWIPE_TRANSITION:
+            switch(nSubtype) {
+                case DOUBLEBARNDOOR_TRANS_SUBTYPE:
+                    return new BarnDoorWipePath(true /* Doubled */);
+                case DOUBLEDIAMOND_TRANS_SUBTYPE:
+                    return new DoubleDiamondWipePath();
+            }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
         case VEEWIPE_TRANSITION:
@@ -10327,6 +10362,35 @@ WaterfallWipePath.prototype.perform = function( nT ) {
     poly.appendPath(aTailPath);
 
     return this.bFlipOnYAxis ? flipOnYAxis(poly) : poly;
+}
+
+/** Class DoubleDiamondWipePath
+ *
+ */
+function DoubleDiamondWipePath() { }
+
+DoubleDiamondWipePath.prototype.perform = function( nT ) {
+    var a = pruneScaleValue(0.25 + (nT * 0.75));
+    var aPath = 'M ' + (0.5 + a) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 - a) + ' ';
+    aPath += 'L ' + (0.5 - a) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 + a) + ' ';
+    aPath += 'L ' + (0.5 + a) + ' ' + 0.5 + ' ';
+    var poly = document.createElementNS( NSS['svg'], 'path');
+    poly.setAttribute('d', aPath);
+    var res = poly.cloneNode(true);
+
+    var b = pruneScaleValue( (1.0 - nT) * 0.25);
+    aPath = 'M ' + (0.5 + b) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 + b) + ' ';
+    aPath += 'L ' + (0.5 - b) + ' ' + 0.5 + ' ';
+    aPath += 'L ' + 0.5 + ' ' + (0.5 - b) + ' ';
+    aPath += 'L ' + (0.5 + b) + ' ' + 0.5 + ' ';
+    poly = document.createElementNS( NSS['svg'], 'path');
+    poly.setAttribute('d', aPath);
+    res.appendPath(poly);
+
+    return res;
 }
 
 /** Class Iriswipe
