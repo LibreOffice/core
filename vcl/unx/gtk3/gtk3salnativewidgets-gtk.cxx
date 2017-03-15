@@ -2564,6 +2564,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
 
+        // Cursor width
+        gfloat caretAspectRatio = 0;
+        gtk_style_context_get_style(pCStyle, "cursor-aspect-ratio", &caretAspectRatio, NULL);
+        // Assume 20px tall for the ratio computation, which should give reasonable results
+        aStyleSet.SetCursorSize( 20 * caretAspectRatio + 1 );
+
         // Dark shadow color
         style_context_set_state(pCStyle, GTK_STATE_FLAG_INSENSITIVE);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &color);
