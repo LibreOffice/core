@@ -160,6 +160,14 @@ void LwpGraphicObject::Read()
         sal_uInt32 nFilterContextSize = m_pObjStrm->QuickReaduInt32();
         if (nFilterContextSize > 0)
         {
+            sal_uInt16 nMaxPossibleSize = m_pObjStrm->remainingSize();
+
+            if (nFilterContextSize > nMaxPossibleSize)
+            {
+                SAL_WARN("lwp", "stream too short for claimed no of records");
+                nFilterContextSize = nMaxPossibleSize;
+            }
+
             pFilterContext = new unsigned char[nFilterContextSize];
             m_pObjStrm->QuickRead(pFilterContext, static_cast<sal_uInt16>(nFilterContextSize));
         }
