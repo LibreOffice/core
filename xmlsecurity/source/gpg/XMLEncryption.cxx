@@ -57,7 +57,7 @@ Sequence< OUString > SAL_CALL XMLEncryptionGpg::getSupportedServiceNames()
 //Helper for XServiceInfo
 Sequence< OUString > XMLEncryptionGpg::impl_getSupportedServiceNames()
 {
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLEncryption"};
+    return {"com.sun.star.xml.crypto.XMLEncryption"};
 }
 
 OUString XMLEncryptionGpg::impl_getImplementationName()

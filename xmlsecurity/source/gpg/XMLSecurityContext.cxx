@@ -88,7 +88,7 @@ Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames()
 //Helper for XServiceInfo
 Sequence< OUString > XMLSecurityContextGpg::impl_getSupportedServiceNames()
 {
-    return {"com.sun.star.xml.crypto.gpg.GpgXMLSecurityContext"};
+    return {"com.sun.star.xml.crypto.XMLSecurityContext"};
 }
 
 OUString XMLSecurityContextGpg::impl_getImplementationName()

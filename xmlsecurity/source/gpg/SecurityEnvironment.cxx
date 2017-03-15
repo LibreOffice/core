@@ -53,7 +53,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironmentGpg::getSupportedServiceNames()
 //Helper for XServiceInfo
 Sequence< OUString > SecurityEnvironmentGpg::impl_getSupportedServiceNames()
 {
-    return { "com.sun.star.xml.crypto.gpg.GpgSecurityEnvironment" } ;
+    return { "com.sun.star.xml.crypto.SecurityEnvironment" } ;
 }
 
 OUString SecurityEnvironmentGpg::impl_getImplementationName()
