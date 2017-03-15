@@ -157,19 +157,41 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
         if (pAccess)
         {
-            ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
             int nPixelSize = 3;
+            J_COLOR_SPACE best_out_color_space = JCS_RGB;
+            ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
+            ScanlineFormat eFinalFormat = pAccess->GetScanlineFormat();
+
+            if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
+            {
+                best_out_color_space = JCS_EXT_BGRA;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
+            else if (eFinalFormat == ScanlineFormat::N32BitTcRgba)
+            {
+                best_out_color_space = JCS_EXT_RGBA;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
+            else if (eFinalFormat == ScanlineFormat::N32BitTcArgb)
+            {
+                best_out_color_space = JCS_EXT_ARGB;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
+
             if ( cinfo.jpeg_color_space == JCS_YCbCr )
-                cinfo.out_color_space = JCS_RGB;
+                cinfo.out_color_space = best_out_color_space;
             else if ( cinfo.jpeg_color_space == JCS_YCCK )
                 cinfo.out_color_space = JCS_CMYK;
 
             if (cinfo.out_color_space != JCS_CMYK &&
                 cinfo.out_color_space != JCS_GRAYSCALE &&
-                cinfo.out_color_space != JCS_RGB)
+                cinfo.out_color_space != best_out_color_space)
             {
-                SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to rgb");
-                cinfo.out_color_space = JCS_RGB;
+                SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to :" << best_out_color_space);
+                cinfo.out_color_space = best_out_color_space;
             }
 
             JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
@@ -199,29 +221,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
             {
                 size_t yIndex = *pLines;
 
-                if (cinfo.out_color_space == JCS_CMYK)
-                {
-                    sal_uInt8* p = pCYMKBuffer.data();
-                    jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
-
-                    // convert CMYK to RGB
-                    for (int cmyk = 0, rgb = 0; cmyk < nWidth * 4; cmyk += 4, rgb += 3)
-                    {
-                        int color_C = 255 - pCYMKBuffer[cmyk + 0];
-                        int color_M = 255 - pCYMKBuffer[cmyk + 1];
-                        int color_Y = 255 - pCYMKBuffer[cmyk + 2];
-                        int color_K = 255 - pCYMKBuffer[cmyk + 3];
-
-                        pScanLineBuffer[rgb + 0] = aRangeLimit[255L - (color_C + color_K)];
-                        pScanLineBuffer[rgb + 1] = aRangeLimit[255L - (color_M + color_K)];
-                        pScanLineBuffer[rgb + 2] = aRangeLimit[255L - (color_Y + color_K)];
-                    }
-                }
-                else
-                {
-                    sal_uInt8* p = pScanLineBuffer.data();
-                    jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
-                }
+                sal_uInt8* p = (cinfo.out_color_space == JCS_CMYK) ? pCYMKBuffer.data() : pScanLineBuffer.data();
+                jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
 
                 if (bGray)
                 {
@@ -229,6 +230,23 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                     {
                         sal_uInt8 nColorGray = pScanLineBuffer[x];
                         pAccess->SetPixel(yIndex, x, pCols[nColorGray]);
+                    }
+                }
+                else if (cinfo.out_color_space == JCS_CMYK)
+                {
+                    // convert CMYK to RGB
+                    for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
+                    {
+                        int color_C = 255 - pCYMKBuffer[cmyk + 0];
+                        int color_M = 255 - pCYMKBuffer[cmyk + 1];
+                        int color_Y = 255 - pCYMKBuffer[cmyk + 2];
+                        int color_K = 255 - pCYMKBuffer[cmyk + 3];
+
+                        sal_uInt8 cRed = aRangeLimit[255L - (color_C + color_K)];
+                        sal_uInt8 cGreen = aRangeLimit[255L - (color_M + color_K)];
+                        sal_uInt8 cBlue = aRangeLimit[255L - (color_Y + color_K)];
+
+                        pAccess->SetPixel(yIndex, x, BitmapColor(cRed, cGreen, cBlue));
                     }
                 }
                 else
