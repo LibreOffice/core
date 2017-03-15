@@ -7479,6 +7479,12 @@ else
     SYSTEM_JPEG=
     AC_MSG_RESULT([internal, jpeg-turbo])
     BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
+    LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
+    if test "$COM" = "MSC"; then
+        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
+    else
+        LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs -ljpeg"
+    fi
 
     case "$host_cpu" in
     x86_64 | amd64 | i*86 | x86 | ia32)
@@ -7642,12 +7648,6 @@ consult http://svn.code.sf.net/p/libjpeg-turbo/code/trunk/BUILDING.txt
 _EOS
             fi
             AC_MSG_WARN([no suitable nasm (Netwide Assembler) found])
-        fi
-        LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
-        if test "$COM" = "MSC"; then
-            LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
-        else
-            LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs -ljpeg"
         fi
       ;;
     esac
