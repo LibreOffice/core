@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_bf6803bc",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-15T11:34:54Z",
+      "side": 1,
+      "message": "To determine whether to enable/disable the slot it is sufficient to check if there are notes, not gathering all which can be costly with lots of notes. This can be done using ScDocument::HasNotes() that immediately returns true if a note comment was found somewhere. Please change.\n\nQuestion remains, should the command really work on all sheets, or only on the currently selected sheet(s)? Asking because it is in the Sheet menu.. and from a user\u0027s perspective that\u0027s what I would expect. For only the selected sheets ScDocument::HasTabNotes() could be used with ScMarkData::GetTableSelect(), iterating from ScMarkData::GetFirstSelected() to ScMarkData::GetLastSelected()\n\nIt also makes a difference performance-wise when all notes are to be displayed, doing that only on the current (or selected) sheet is faster than for the entire document if the document contains a huge amount of notes.",
+      "revId": "935571a6aea1a30b5e667447553e4cbecbef6af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_dface7ef",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-15T11:34:54Z",
+      "side": 1,
+      "message": "If we do this for only selected sheets, like I commented for cellsh.cxx, then a new function ScDocument::GetAllNoteEntries(SCTAB,vector) should be introduced that acts on one ScTable::GetAllNoteEntries(), and iterate over selected sheets.",
+      "revId": "935571a6aea1a30b5e667447553e4cbecbef6af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
