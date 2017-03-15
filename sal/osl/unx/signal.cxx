@@ -445,6 +445,30 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
             break;
     }
 
+#if HAVE_FEATURE_BREAKPAD
+    if (Info.Signal == osl_Signal_AccessViolation ||
+            Info.Signal == osl_Signal_IntegerDivideByZero ||
+            Info.Signal == osl_Signal_FloatDivideByZero)
+    {
+        for (SignalAction & rSignal : Signals)
+        {
+            if (rSignal.Signal == signal)
+            {
+                if (rSignal.siginfo)
+                {
+                    (*reinterpret_cast<Handler2>(rSignal.Handler))(
+                        signal, info, context);
+                }
+                else
+                {
+                    rSignal.Handler(signal);
+                }
+                break;
+            }
+        }
+    }
+#endif
+
     switch (callSignalHandler(&Info))
     {
     case osl_Signal_ActCallNextHdl:
