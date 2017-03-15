@@ -54,11 +54,6 @@ String SV_EDIT_WARNING_STR
     Text [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
 };
 
-String SV_MAC_SCREENNNAME
-{
-    Text [en-US] = "Screen %d";
-};
-
 String SV_STDTEXT_ALLFILETYPES
 {
     Text [en-US] = "Any type";
