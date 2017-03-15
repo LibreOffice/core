@@ -616,7 +616,7 @@ namespace dbaui
 
     OUString OGeneralPageWizard::getDatasourceName(const SfxItemSet& _rSet)
     {
-        // Sets jdbc as the default selected databse on startup.
+        // Sets jdbc as the default selected database on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
             return m_pCollection->getTypeDisplayName( "jdbc:" );
 
