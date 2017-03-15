@@ -559,24 +559,6 @@ String FMT_MARK_OLE
     Text [ en-US ] = "Object" ;
 };
 /*--------------------------------------------------------------------
-    Description: text only
- --------------------------------------------------------------------*/
-String FMT_TEXT
-{
-    Text = "Text" ;
-};
-/*--------------------------------------------------------------------
-    Description: global String resources
- --------------------------------------------------------------------*/
-String STR_ALL
-{
-    Text [ en-US ] = "All" ;
-};
-String STR_INSERT
-{
-    Text [ en-US ] = "Insert" ;
-};
-/*--------------------------------------------------------------------
     Description:   ExchangeStrings for Edit/NameFT
  --------------------------------------------------------------------*/
 String STR_COND
@@ -607,10 +589,6 @@ String STR_COMBCHRS_FT
 {
     Text [ en-US ] = "Ch~aracters";
 };
-String STR_SETNO
-{
-    Text [ en-US ] = "Record number" ;
-};
 String STR_OFFSET
 {
     Text [ en-US ] = "O~ffset" ;
@@ -622,14 +600,6 @@ String STR_VALUE
 String STR_FORMULA
 {
     Text [ en-US ] = "Formula" ;
-};
-String STR_URLPROMPT
-{
-    Text [ en-US ] = "~URL" ;
-};
-String STR_ALL_DATABASE
-{
-    Text [ en-US ] = "<All>" ;
 };
 String STR_CUSTOM
 {

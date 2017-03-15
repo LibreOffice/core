@@ -30,16 +30,6 @@
 #include "shells.hrc"
 #include "helpid.h"
 
-String STR_PRINT_MERGE_MACRO
-{
-    Text [ en-US ] = "Print form letters" ;
-};
-
-String STR_PAGE_COUNT_MACRO
-{
-    Text [ en-US ] = "Changing the page count" ;
-};
-
 String STR_PARAGRAPHSTYLEFAMILY
 {
     Text [ en-US ] = "Paragraph Styles" ;
@@ -210,11 +200,6 @@ String STR_DLLNOTFOUND
     Text [ en-US ] = "Filter not found." ;
 };
 
-String STR_UNBENANNT
-{
-    Text [ en-US ] = "Untitled" ;
-};
-
 String STR_LOAD_GLOBAL_DOC
 {
     Text [ en-US ] = "Name and Path of Master Document" ;
@@ -280,16 +265,6 @@ String STR_READONLY_PATH
     Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
 };
 
-String STR_ERROR_PASSWD
-{
-    Text [ en-US ] = "Invalid password" ;
-};
-
-String STR_FMT_STD
-{
-    Text [ en-US ] = "(none)" ;
-};
-
 String STR_DOC_STAT
 {
     Text [ en-US ] = "Statistics" ;
@@ -327,29 +302,9 @@ String STR_STATSTR_AUTOFORMAT
     Text [ en-US ] = "Formatting document automatically..." ;
 };
 
-String STR_STATSTR_IMPGRF
-{
-    Text [ en-US ] = "Importing images..." ;
-};
-
 String STR_STATSTR_SEARCH
 {
     Text [ en-US ] = "Search..." ;
-};
-
-String STR_STATSTR_FORMAT
-{
-    Text [ en-US ] = "Formatting..." ;
-};
-
-String STR_STATSTR_PRINT
-{
-    Text [ en-US ] = "Printing..." ;
-};
-
-String STR_STATSTR_LAYOUTINIT
-{
-    Text [ en-US ] = "Converting..." ;
 };
 
 String STR_STATSTR_LETTER
@@ -442,11 +397,6 @@ String STR_ABSTRACT_TITLE
     Text [ en-US ] = "Abstract: " ;
 };
 
-String STR_FDLG_TEMPLATE_BUTTON
-{
-    Text [ en-US ] = "Style" ;
-};
-
 String STR_FDLG_TEMPLATE_NAME
 {
     Text [ en-US ] = "separated by: " ;
@@ -495,11 +445,6 @@ String STR_DELETE_NOTE_AUTHOR
 String STR_HIDE_NOTE_AUTHOR
 {
     Text [ en-US ] = "H~ide All Comments by $1";
-};
-
-String  STR_DONT_ASK_AGAIN
-{
-    Text [ en-US ] = "~Do not show warning again" ;
 };
 
 String STR_OUTLINE_NUMBERING
@@ -605,11 +550,6 @@ String STR_ROW
 String STR_COL
 {
     Text [ en-US ] = "Column" ;
-};
-
-String STR_SIMPLE
-{
-    Text [ en-US ] = "Plain" ;
 };
 
 String STR_AUTHMRK_EDIT

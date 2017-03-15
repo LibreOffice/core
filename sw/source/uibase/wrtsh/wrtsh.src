@@ -18,29 +18,4 @@
  */
 #include "wrtsh.hrc"
 
-String STR_DDEERROR_APP1
-{
-    Text[ en-US ] = "Application [" ;
-};
-String STR_DDEERROR_APP2
-{
-    Text[ en-US ] = "] is not responding." ;
-};
-String STR_DDEERROR_DATA1
-{
-    Text[ en-US ] = "Data for [" ;
-};
-String STR_DDEERROR_DATA2
-{
-    Text[ en-US ] = "] cannot be obtained" ;
-};
-String STR_DDEERROR_LINK1
-{
-    Text[ en-US ] = "Link to [" ;
-};
-String STR_DDEERROR_LINK2
-{
-    Text[ en-US ] = "] cannot be established" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

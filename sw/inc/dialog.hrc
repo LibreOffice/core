@@ -29,10 +29,7 @@
 
 // Strings ******************************************************************
 
-#define STR_LINKEDIT_TEXT       (RC_DIALOG_BEGIN +  1)
-
 #define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
-#define STR_PATH_NOT_FOUND      (RC_DIALOG_BEGIN +  4)
 
 // Bereiche *****************************************************************
 
@@ -42,12 +39,9 @@
 #define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
 //      RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
 
-#define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
+#define RC_DLG_ADDR             (RC_DIALOG_BEGIN + 90)
 #define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
 #define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
-#define RC_DLG_SWBORDERDLG      (RC_DIALOG_BEGIN + 93)
-#define RC_DLG_SWWRAPDLG        (RC_DIALOG_BEGIN + 94)
-#define RC_DLG_SWFLDEDITDLG     (RC_DIALOG_BEGIN + 95)
 // Ueberlaufpruefung ********************************************************
 
 #define DIALOG_ACT_END  RC_MACASSGN_END

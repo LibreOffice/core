@@ -42,16 +42,6 @@ Bitmap RID_BMP_PROT_NO_HIDE
     File = "re04.png";
 };
 
-String STR_REG_DUPLICATE
-{
-    Text [ en-US ] = "Section name changed:" ;
-};
-
-String STR_INFO_DUPLICATE
-{
-    Text [ en-US ] = "Duplicate section name" ;
-};
-
 String STR_QUERY_CONNECT
 {
     Text[ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;

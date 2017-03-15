@@ -126,11 +126,9 @@
 /*----------------------------------------------------------
  Format-Id's
  ----------------------------------------------------------*/
-// Text
-#define FMT_TEXT            FLD_PAGEREF_END
 
 // Numbers
-#define FMT_NUM_BEGIN       (FMT_TEXT       + 1)
+#define FMT_NUM_BEGIN       (FLD_PAGEREF_END + 1)
 #define FMT_NUM_ABC         FMT_NUM_BEGIN
 #define FMT_NUM_SABC        (FMT_NUM_BEGIN  + 1)
 #define FMT_NUM_ABC_N       (FMT_NUM_BEGIN  + 2)
@@ -232,8 +230,6 @@
  --------------------------------------------------------------------*/
 
 #define STR_FLDUI               FMT_MARK_END
-#define STR_INSERT              STR_FLDUI
-#define STR_ALL                 (STR_FLDUI + 1)
 #define STR_EXTRA               (STR_FLDUI + 2)
 
 /*--------------------------------------------------------------------
@@ -247,13 +243,10 @@
 #define STR_COMBCHRS_FT         (STR_EXTRA  + 4)
 #define STR_PROMPT              (STR_EXTRA  + 5)
 #define STR_MACNAME             (STR_EXTRA  + 6)
-#define STR_SETNO               (STR_EXTRA  + 7)
 #define STR_OFFSET              (STR_EXTRA  + 8)
 #define STR_VALUE               (STR_EXTRA  + 9)
 
-#define STR_URLPROMPT           (STR_EXTRA  + 11)
 #define STR_FORMULA             (STR_EXTRA  + 12)
-#define STR_ALL_DATABASE        (STR_EXTRA  + 13)
 
 #endif
 

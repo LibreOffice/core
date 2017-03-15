@@ -23,10 +23,6 @@ String STR_TEXTCOLL_HEADER
 {
     Text [ en-US ] = "(Paragraph Style: " ;
 };
-String STR_PAGEFMT_HEADER
-{
-    Text [ en-US ] = "(Page Style: " ;
-};
 String STR_ILLEGAL_PAGENUM
 {
     Text [ en-US ] = "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages." ;

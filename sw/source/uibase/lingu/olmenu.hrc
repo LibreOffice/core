@@ -22,10 +22,7 @@
 
 #include "rcid.hrc"
 
-#define STR_SPELL_OK                    (RC_LINGU_BEGIN + 2)
 #define STR_HYP_OK                      (RC_LINGU_BEGIN + 3)
-#define STR_WORD                        (RC_LINGU_BEGIN + 4)
-#define STR_PARAGRAPH                   (RC_LINGU_BEGIN + 5)
 #define STR_LANGSTATUS_NONE             (RC_LINGU_BEGIN + 6)
 #define STR_LANGSTATUS_MORE             (RC_LINGU_BEGIN + 7)
 #define STR_IGNORE_SELECTION            (RC_LINGU_BEGIN + 8)

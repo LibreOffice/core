@@ -20,11 +20,6 @@
 #include "helpid.h"
 #include <cmdid.h>
 
-String ST_SEND
-{
-    Text[ en-US ] = "Sending e-mails...";
-};
-
 String     ST_CONTINUE
 {
     Text[ en-US ] = "~Continue";
@@ -68,11 +63,6 @@ String ST_COMPLETED
 String ST_FAILED
 {
     Text[ en-US ] = "Sending failed";
-};
-
-String ST_TERMINATEQUERY
-{
-    Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

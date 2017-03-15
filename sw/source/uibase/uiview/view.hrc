@@ -26,8 +26,6 @@
 #define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
 #define STR_NUM_OUTLINE             (RC_VIEW_BEGIN + 4)
 
-#define STR_ERROR_NOLANG            (RC_VIEW_BEGIN + 6)
-
 #define STR_EDIT_FOOTNOTE           (RC_VIEW_BEGIN + 14)
 
 #define STR_NB_REPLACED             (RC_VIEW_BEGIN + 20)
@@ -38,11 +36,6 @@
 #define STR_SAVEAS_SRC              (RC_VIEW_BEGIN + 24)
 
 #define STR_NO_MERGE_ENTRY          (RC_VIEW_BEGIN + 25)
-
-#define STR_PRINT_TITLE             (RC_VIEW_BEGIN + 26)
-#define STR_PRINT_MSG               (RC_VIEW_BEGIN + 27)
-#define STR_PRINT_ALL               (RC_VIEW_BEGIN + 28)
-#define STR_PRINT_SELECTION         (RC_VIEW_BEGIN + 29)
 
 #define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
 #define STR_WEBOPTIONS              (RC_VIEW_BEGIN + 32)

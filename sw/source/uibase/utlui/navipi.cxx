@@ -50,7 +50,6 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <ribbar.hrc>
-#include <navipi.hrc>
 #include <utlui.hrc>
 
 #include "access.hrc"

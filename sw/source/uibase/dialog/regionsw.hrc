@@ -21,11 +21,7 @@
 
 #include "dialog.hrc"
 
-#define ST_INSERT              45
-
 /* global resources */
-#define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
-#define STR_INFO_DUPLICATE      (RC_REGIONSW_BEGIN+7)
 
 #define STR_QUERY_CONNECT       (RC_REGIONSW_BEGIN+10)
 #define STR_WRONG_PASSWORD      (RC_REGIONSW_BEGIN+11)

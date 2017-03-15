@@ -22,18 +22,6 @@
 #include "cmdid.h"
 #include "helpid.h"
 
-String STR_WORD
-{
-    Text [ en-US ] = "Word is " ;
-};
-String STR_PARAGRAPH
-{
-    Text [ en-US ] = "Paragraph is " ;
-};
-String STR_SPELL_OK
-{
-    Text [ en-US ] = "The spellcheck is complete." ;
-};
 String STR_HYP_OK
 {
     Text [ en-US ] = "Hyphenation completed" ;
