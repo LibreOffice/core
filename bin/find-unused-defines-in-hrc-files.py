@@ -78,6 +78,7 @@ exclusionSet = set([
     "STR_UPDATE_ALL",
     "STR_UPDATE_INDEX",
     "STR_UPDATE_LINK",
+    "BMP_PLACEHOLDER_",
     ])
 
 
@@ -125,10 +126,12 @@ with a.stdout as txt:
                 # these are used in calculations in other .hrc files
                 if "sw/inc/rcid.hrc:" in line2: found_reason_to_exclude = True
                 # calculations
-                if "sw/source/uibase/inc/ribbar.hrc:" in line2 and "ST_" in line2: found_reason_to_exclude = True
-                if "sw/source/uibase/inc/ribbar.hrc:" in line2 and "STR_IMGBTN_" in line2: found_reason_to_exclude = True
+                if "sw/source/uibase/inc/ribbar.hrc:" in line2 and "ST_" in idName: found_reason_to_exclude = True
+                if "sw/source/uibase/inc/ribbar.hrc:" in line2 and "STR_IMGBTN_" in idName: found_reason_to_exclude = True
                 if "sw/source/core/undo/undo.hrc:" in line2: found_reason_to_exclude = True
                 if "sw/inc/poolfmt.hrc:" in line2: found_reason_to_exclude = True
+                # not sure about these, looks suspicious
+                if "sd/source/ui/app/strings.src:" in line2 and idName.endswith("_TOOLBOX"): found_reason_to_exclude = True
 
         if not found_reason_to_exclude:
             sys.stdout.write(idName + '\n')

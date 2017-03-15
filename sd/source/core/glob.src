@@ -63,10 +63,6 @@ String STR_MASTERPAGE_NAME
 {
     Text [ en-US ] = "Master Page";
 };
-String STR_MASTERPAGE
-{
-    Text [ en-US ] = "Background" ;
-};
 String STR_NOTES
 {
     Text [ en-US ] = "(Notes)" ;
@@ -106,14 +102,6 @@ String STR_PRESOBJ_MPOUTLLAYER6
 String STR_PRESOBJ_MPOUTLLAYER7
 {
     Text [ en-US ] = "Seventh Outline Level" ;
-};
-String STR_PRESOBJ_MPOUTLLAYER8
-{
-    Text [ en-US ] = "Eighth Outline Level" ;
-};
-String STR_PRESOBJ_MPOUTLLAYER9
-{
-    Text [ en-US ] = "Ninth Outline Level" ;
 };
 String STR_PRESOBJ_MPNOTESTITLE
 {
@@ -159,18 +147,6 @@ String STR_PRESOBJ_TABLE
 {
     Text [ en-US ] = "Double-click to add a Spreadsheet" ;
 };
-String STR_PREVIEWVIEWSHELL
-{
-    Text [ en-US ] = "Preview Window";
-};
-String STR_STDOBJECTBARSHELL
-{
-    Text [ en-US ] = "Document Mode" ;
-};
-String STR_GLUEPOINTSOBJECTBARSHELL
-{
-    Text [ en-US ] = "Glue Points Mode" ;
-};
 /* do not translate */
 String STR_LAYOUT_TITLE
 {
@@ -211,10 +187,6 @@ String STR_STANDARD_STYLESHEET_NAME
 String STR_UNDO_MOVEPAGES
 {
     Text [ en-US ] = "Move slides" ;
-};
-String STR_NOT_ENOUGH_MEMORY
-{
-    Text [ en-US ] = "Not enough memory!\nThe action will be aborted." ;
 };
 /* do not translate */
 String STR_LAYOUT_SUBTITLE
@@ -282,10 +254,6 @@ String STR_POOLSHEET_HEADLINE2
 {
     Text [ en-US ] = "Heading2" ;
 };
-String STR_EMPTY_STYLESHEET_NAME
-{
-    Text [ en-US ] = "Blank template" ;
-};
 String STR_PSEUDOSHEET_TITLE
 {
     Text [ en-US ] = "Title" ;
@@ -311,29 +279,9 @@ String STR_PSEUDOSHEET_NOTES
     Text [ en-US ] = "Notes" ;
 };
 
-String STR_TOOL_PANEL_SHELL
-{
-    Text [ en-US ] = "Tool Panel" ;
-};
-
-String STR_TASKPANEVIEWSHELL
-{
-    Text [ en-US ] = "Tasks" ;
-};
-
-String STR_TASKPANELAYOUTMENU
-{
-    Text [ en-US ] = "Layout" ;
-};
-
 String STR_POWERPOINT_IMPORT
 {
     Text [ en-US ] = "PowerPoint Import";
-};
-
-String STR_POOLSHEET_ARROW
-{
-    Text [ en-US ] = "Arrow" ;
 };
 
 String STR_LOAD_DOC

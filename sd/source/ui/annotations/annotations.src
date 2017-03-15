@@ -191,11 +191,6 @@ String STR_ANNOTATION_UNDO_EDIT
     Text [ en-US ] = "Edit Comment";
 };
 
-String STR_ANNOTATION_UNDO_REPLY
-{
-    Text [ en-US ] = "Reply to Comment";
-};
-
 String STR_ANNOTATION_REPLY
 {
     Text [ en-US ] = "Reply to %1" ;
