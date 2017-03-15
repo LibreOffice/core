@@ -565,8 +565,8 @@ static void lcl_SetFontProperties(
     rFont.SetStyleName  ( rFontItem.GetStyleName() );
     rFont.SetCharSet    ( rFontItem.GetCharSet() );
     rFont.SetPitch      ( rFontItem.GetPitch() );
-    rFont.SetWeight     ( (FontWeight)rWeightItem.GetValue() );
-    rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
+    rFont.SetWeight     ( rWeightItem.GetValue() );
+    rFont.SetItalic     ( rPostureItem.GetValue() );
 }
 
 #define SETONALLFONTS( MethodName, Value )                  \
@@ -585,9 +585,9 @@ void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font
     lcl_SetFontProperties( rCJKFont, rBoxFormat.GetCJKFont(), rBoxFormat.GetCJKWeight(), rBoxFormat.GetCJKPosture() );
     lcl_SetFontProperties( rCTLFont, rBoxFormat.GetCTLFont(), rBoxFormat.GetCTLWeight(), rBoxFormat.GetCTLPosture() );
 
-    SETONALLFONTS( SetUnderline,        (FontLineStyle)rBoxFormat.GetUnderline().GetValue() );
-    SETONALLFONTS( SetOverline,         (FontLineStyle)rBoxFormat.GetOverline().GetValue() );
-    SETONALLFONTS( SetStrikeout,        (FontStrikeout)rBoxFormat.GetCrossedOut().GetValue() );
+    SETONALLFONTS( SetUnderline,        rBoxFormat.GetUnderline().GetValue() );
+    SETONALLFONTS( SetOverline,         rBoxFormat.GetOverline().GetValue() );
+    SETONALLFONTS( SetStrikeout,        rBoxFormat.GetCrossedOut().GetValue() );
     SETONALLFONTS( SetOutline,          rBoxFormat.GetContour().GetValue() );
     SETONALLFONTS( SetShadow,           rBoxFormat.GetShadowed().GetValue() );
     SETONALLFONTS( SetColor,            rBoxFormat.GetColor().GetValue() );

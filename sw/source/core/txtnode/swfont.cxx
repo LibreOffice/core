@@ -613,7 +613,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetShadow( static_cast<const SvxShadowedItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_RELIEF,
             true, &pItem ))
-            SetRelief( (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue() );
+            SetRelief( static_cast<const SvxCharReliefItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
             true, &pItem ))
             SetPropWidth(static_cast<const SvxShadowedItem*>(pItem)->GetValue() ? 50 : 100 );
@@ -815,7 +815,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
     SetPropWidth( pAttrSet->GetCharScaleW().GetValue() );
-    SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
+    SetRelief( pAttrSet->GetCharRelief().GetValue() );
     if( pAttrSet->GetAutoKern().GetValue() )
     {
         SetAutoKern( ( !pIDocumentSettingAccess ||

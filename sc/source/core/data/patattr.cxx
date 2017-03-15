@@ -285,19 +285,19 @@ void ScPatternAttr::GetFont(
 
         if ( pCondSet->GetItemState( nWeightId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nWeightId );
-        eWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+        eWeight = static_cast<const SvxWeightItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( nPostureId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nPostureId );
-        eItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+        eItalic = static_cast<const SvxPostureItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
-        eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
+        eUnder = static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
-        eOver = (FontLineStyle)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        eOver = static_cast<const SvxOverlineItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
@@ -305,7 +305,7 @@ void ScPatternAttr::GetFont(
 
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
-        eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
+        eStrike = static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_CONTOUR );
@@ -321,7 +321,7 @@ void ScPatternAttr::GetFont(
 
         if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_RELIEF );
-        eRelief = (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+        eRelief = static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_COLOR );
@@ -336,17 +336,17 @@ void ScPatternAttr::GetFont(
         pFontAttr = &static_cast<const SvxFontItem&>(rItemSet.Get( nFontId ));
         nFontHeight = static_cast<const SvxFontHeightItem&>(
                         rItemSet.Get( nHeightId )).GetHeight();
-        eWeight = (FontWeight)static_cast<const SvxWeightItem&>(
+        eWeight = static_cast<const SvxWeightItem&>(
                         rItemSet.Get( nWeightId )).GetValue();
-        eItalic = (FontItalic)static_cast<const SvxPostureItem&>(
+        eItalic = static_cast<const SvxPostureItem&>(
                         rItemSet.Get( nPostureId )).GetValue();
-        eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem&>(
+        eUnder = static_cast<const SvxUnderlineItem&>(
                         rItemSet.Get( ATTR_FONT_UNDERLINE )).GetValue();
-        eOver = (FontLineStyle)static_cast<const SvxOverlineItem&>(
+        eOver = static_cast<const SvxOverlineItem&>(
                         rItemSet.Get( ATTR_FONT_OVERLINE )).GetValue();
         bWordLine = static_cast<const SvxWordLineModeItem&>(
                         rItemSet.Get( ATTR_FONT_WORDLINE )).GetValue();
-        eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem&>(
+        eStrike = static_cast<const SvxCrossedOutItem&>(
                         rItemSet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = static_cast<const SvxContourItem&>(
                         rItemSet.Get( ATTR_FONT_CONTOUR )).GetValue();
@@ -354,7 +354,7 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( ATTR_FONT_SHADOWED )).GetValue();
         eEmphasis = static_cast<const SvxEmphasisMarkItem&>(
                         rItemSet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
-        eRelief = (FontRelief)static_cast<const SvxCharReliefItem&>(
+        eRelief = static_cast<const SvxCharReliefItem&>(
                         rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = static_cast<const SvxColorItem&>(
                         rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
@@ -519,25 +519,25 @@ ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nS
     if ( rItemSet.GetItemState( nWeightId, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( nWeightId );
-        aReturn.eWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+        aReturn.eWeight = static_cast<const SvxWeightItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( nPostureId, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( nPostureId );
-        aReturn.eItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+        aReturn.eItalic = static_cast<const SvxPostureItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
-        aReturn.eUnder = (FontLineStyle)static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
+        aReturn.eUnder = static_cast<const SvxUnderlineItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
-        aReturn.eOver = (FontLineStyle)static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        aReturn.eOver = static_cast<const SvxOverlineItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) == SfxItemState::SET )
@@ -549,7 +549,7 @@ ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nS
     if ( rItemSet.GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
-        aReturn.eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
+        aReturn.eStrike = static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) == SfxItemState::SET )
@@ -573,7 +573,7 @@ ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nS
     if ( rItemSet.GetItemState( ATTR_FONT_RELIEF, true, &pItem ) == SfxItemState::SET )
     {
         pItem = &rItemSet.Get( ATTR_FONT_RELIEF );
-        aReturn.eRelief = (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+        aReturn.eRelief = static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
     }
 
     if ( rItemSet.GetItemState( ATTR_FONT_COLOR, true, &pItem ) == SfxItemState::SET )
@@ -647,23 +647,23 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_WEIGHT );
-        eWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+        eWeight = static_cast<const SvxWeightItem*>(pItem)->GetValue();
         if ( pCondSet->GetItemState( ATTR_CJK_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_WEIGHT );
-        eCjkWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+        eCjkWeight = static_cast<const SvxWeightItem*>(pItem)->GetValue();
         if ( pCondSet->GetItemState( ATTR_CTL_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_WEIGHT );
-        eCtlWeight = (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue();
+        eCtlWeight = static_cast<const SvxWeightItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_POSTURE );
-        eItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+        eItalic = static_cast<const SvxPostureItem*>(pItem)->GetValue();
         if ( pCondSet->GetItemState( ATTR_CJK_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_POSTURE );
-        eCjkItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+        eCjkItalic = static_cast<const SvxPostureItem*>(pItem)->GetValue();
         if ( pCondSet->GetItemState( ATTR_CTL_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_POSTURE );
-        eCtlItalic = (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue();
+        eCtlItalic = static_cast<const SvxPostureItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_UNDERLINE );
@@ -679,7 +679,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_CROSSEDOUT );
-        eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
+        eStrike = static_cast<const SvxCrossedOutItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_CONTOUR );
@@ -698,7 +698,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
         eEmphasis = static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark();
         if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_RELIEF );
-        eRelief = (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+        eRelief = static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_LANGUAGE );
@@ -716,7 +716,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_WRITINGDIR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );
-        eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+        eDirection = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
     }
     else        // Everything directly from Pattern
     {
@@ -730,23 +730,23 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
                         rSrcSet.Get( ATTR_CJK_FONT_HEIGHT )).GetHeight();
         nCtlTHeight = static_cast<const SvxFontHeightItem&>(
                         rSrcSet.Get( ATTR_CTL_FONT_HEIGHT )).GetHeight();
-        eWeight = (FontWeight)static_cast<const SvxWeightItem&>(
+        eWeight = static_cast<const SvxWeightItem&>(
                         rSrcSet.Get( ATTR_FONT_WEIGHT )).GetValue();
-        eCjkWeight = (FontWeight)static_cast<const SvxWeightItem&>(
+        eCjkWeight = static_cast<const SvxWeightItem&>(
                         rSrcSet.Get( ATTR_CJK_FONT_WEIGHT )).GetValue();
-        eCtlWeight = (FontWeight)static_cast<const SvxWeightItem&>(
+        eCtlWeight = static_cast<const SvxWeightItem&>(
                         rSrcSet.Get( ATTR_CTL_FONT_WEIGHT )).GetValue();
-        eItalic = (FontItalic)static_cast<const SvxPostureItem&>(
+        eItalic = static_cast<const SvxPostureItem&>(
                         rSrcSet.Get( ATTR_FONT_POSTURE )).GetValue();
-        eCjkItalic = (FontItalic)static_cast<const SvxPostureItem&>(
+        eCjkItalic = static_cast<const SvxPostureItem&>(
                         rSrcSet.Get( ATTR_CJK_FONT_POSTURE )).GetValue();
-        eCtlItalic = (FontItalic)static_cast<const SvxPostureItem&>(
+        eCtlItalic = static_cast<const SvxPostureItem&>(
                         rSrcSet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
         aUnderlineItem = static_cast<const SvxUnderlineItem&>( rSrcSet.Get( ATTR_FONT_UNDERLINE ) );
         aOverlineItem  = static_cast<const SvxOverlineItem&>( rSrcSet.Get( ATTR_FONT_OVERLINE ) );
         bWordLine = static_cast<const SvxWordLineModeItem&>(
                         rSrcSet.Get( ATTR_FONT_WORDLINE )).GetValue();
-        eStrike = (FontStrikeout)static_cast<const SvxCrossedOutItem&>(
+        eStrike = static_cast<const SvxCrossedOutItem&>(
                         rSrcSet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = static_cast<const SvxContourItem&>(
                         rSrcSet.Get( ATTR_FONT_CONTOUR )).GetValue();
@@ -756,7 +756,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
                         rSrcSet.Get( ATTR_FORBIDDEN_RULES )).GetValue();
         eEmphasis = static_cast<const SvxEmphasisMarkItem&>(
                         rSrcSet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
-        eRelief = (FontRelief)static_cast<const SvxCharReliefItem&>(
+        eRelief = static_cast<const SvxCharReliefItem&>(
                         rSrcSet.Get( ATTR_FONT_RELIEF )).GetValue();
         eLang = static_cast<const SvxLanguageItem&>(
                         rSrcSet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
@@ -766,7 +766,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
                         rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE )).GetLanguage();
         bHyphenate = static_cast<const SfxBoolItem&>(
                         rSrcSet.Get( ATTR_HYPHENATE )).GetValue();
-        eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
+        eDirection = static_cast<const SvxFrameDirectionItem&>(
                         rSrcSet.Get( ATTR_WRITINGDIR )).GetValue();
     }
 
@@ -855,13 +855,13 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
                         100, ATTR_CTL_FONT_HEIGHT ) );
 
     if (rEditSet.GetItemState(EE_CHAR_WEIGHT,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxWeightItem( (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxWeightItem( static_cast<const SvxWeightItem*>(pItem)->GetValue(),
                         ATTR_FONT_WEIGHT) );
     if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CJK,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxWeightItem( (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxWeightItem( static_cast<const SvxWeightItem*>(pItem)->GetValue(),
                         ATTR_CJK_FONT_WEIGHT) );
     if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CTL,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxWeightItem( (FontWeight)static_cast<const SvxWeightItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxWeightItem( static_cast<const SvxWeightItem*>(pItem)->GetValue(),
                         ATTR_CTL_FONT_WEIGHT) );
 
     // SvxTextLineItem contains enum and color
@@ -874,17 +874,17 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
                         ATTR_FONT_WORDLINE) );
 
     if (rEditSet.GetItemState(EE_CHAR_STRIKEOUT,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxCrossedOutItem( (FontStrikeout)static_cast<const SvxCrossedOutItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxCrossedOutItem( static_cast<const SvxCrossedOutItem*>(pItem)->GetValue(),
                         ATTR_FONT_CROSSEDOUT) );
 
     if (rEditSet.GetItemState(EE_CHAR_ITALIC,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxPostureItem( (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxPostureItem( static_cast<const SvxPostureItem*>(pItem)->GetValue(),
                         ATTR_FONT_POSTURE) );
     if (rEditSet.GetItemState(EE_CHAR_ITALIC_CJK,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxPostureItem( (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxPostureItem( static_cast<const SvxPostureItem*>(pItem)->GetValue(),
                         ATTR_CJK_FONT_POSTURE) );
     if (rEditSet.GetItemState(EE_CHAR_ITALIC_CTL,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxPostureItem( (FontItalic)static_cast<const SvxPostureItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxPostureItem( static_cast<const SvxPostureItem*>(pItem)->GetValue(),
                         ATTR_CTL_FONT_POSTURE) );
 
     if (rEditSet.GetItemState(EE_CHAR_OUTLINE,true,&pItem) == SfxItemState::SET)
@@ -897,7 +897,7 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         rDestSet.Put( SvxEmphasisMarkItem( static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark(),
                         ATTR_FONT_EMPHASISMARK) );
     if (rEditSet.GetItemState(EE_CHAR_RELIEF,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxCharReliefItem( (FontRelief)static_cast<const SvxCharReliefItem*>(pItem)->GetValue(),
+        rDestSet.Put( SvxCharReliefItem( static_cast<const SvxCharReliefItem*>(pItem)->GetValue(),
                         ATTR_FONT_RELIEF) );
 
     if (rEditSet.GetItemState(EE_CHAR_LANGUAGE,true,&pItem) == SfxItemState::SET)
@@ -1389,7 +1389,7 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
     long nAttrRotate = GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
-        SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
+        SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
                                     GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD || nAttrRotate == 18000 )

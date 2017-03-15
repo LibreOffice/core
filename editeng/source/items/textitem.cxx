@@ -650,7 +650,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_WEIGHT:
         {
-            rVal <<= (float)( VCLUnoHelper::ConvertFontWeight( (FontWeight)GetValue() ) );
+            rVal <<= (float)( VCLUnoHelper::ConvertFontWeight( GetValue() ) );
         }
         break;
     }
@@ -1209,7 +1209,7 @@ bool SvxTextLineItem::HasBoolValue() const
 
 bool SvxTextLineItem::GetBoolValue() const
 {
-    return  (FontLineStyle)GetValue() != LINESTYLE_NONE;
+    return  GetValue() != LINESTYLE_NONE;
 }
 
 

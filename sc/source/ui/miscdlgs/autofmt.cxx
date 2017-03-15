@@ -107,8 +107,8 @@ static void lcl_SetFontProperties(
     rFont.SetStyleName  ( rFontItem.GetStyleName() );
     rFont.SetCharSet    ( rFontItem.GetCharSet() );
     rFont.SetPitch      ( rFontItem.GetPitch() );
-    rFont.SetWeight     ( (FontWeight)rWeightItem.GetValue() );
-    rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
+    rFont.SetWeight     ( rWeightItem.GetValue() );
+    rFont.SetItalic     ( rPostureItem.GetValue() );
 }
 
 void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
@@ -145,9 +145,9 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font
 #define SETONALLFONTS( MethodName, Value ) \
 rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Value );
 
-        SETONALLFONTS( SetUnderline,        (FontLineStyle)pUnderlineItem->GetValue() )
-        SETONALLFONTS( SetOverline,         (FontLineStyle)pOverlineItem->GetValue() )
-        SETONALLFONTS( SetStrikeout,        (FontStrikeout)pCrossedOutItem->GetValue() )
+        SETONALLFONTS( SetUnderline,        pUnderlineItem->GetValue() )
+        SETONALLFONTS( SetOverline,         pOverlineItem->GetValue() )
+        SETONALLFONTS( SetStrikeout,        pCrossedOutItem->GetValue() )
         SETONALLFONTS( SetOutline,          pContourItem->GetValue() )
         SETONALLFONTS( SetShadow,           pShadowedItem->GetValue() )
         SETONALLFONTS( SetColor,            aColor )

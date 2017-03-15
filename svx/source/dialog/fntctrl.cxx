@@ -873,13 +873,13 @@ static void SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_u
     if( GetWhich( rSet, nPosture, nWhich ) )
     {
         const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
-        rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
+        rFont.SetItalic( rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
     }
 
     if( GetWhich( rSet, nWeight, nWhich ) )
     {
         const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
-        rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
+        rFont.SetWeight( rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
     }
 }
 
@@ -940,7 +940,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_ATTR_CHAR_UNDERLINE, nWhich ) )
     {
         const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
-        eUnderline = ( FontLineStyle ) rItem.GetValue();
+        eUnderline = rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
     else
@@ -955,7 +955,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_ATTR_CHAR_OVERLINE, nWhich ) )
     {
         const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
-        eOverline = ( FontLineStyle ) rItem.GetValue();
+        eOverline = rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
     else
@@ -970,7 +970,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_ATTR_CHAR_STRIKEOUT, nWhich ) )
     {
         const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>( rSet.Get( nWhich ) );
-        eStrikeout = ( FontStrikeout ) rItem.GetValue();
+        eStrikeout = rItem.GetValue();
     }
     else
         eStrikeout = STRIKEOUT_NONE;
@@ -1002,7 +1002,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_ATTR_CHAR_RELIEF, nWhich ) )
     {
         const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>( rSet.Get( nWhich ) );
-        FontRelief eFontRelief = ( FontRelief ) rItem.GetValue();
+        FontRelief eFontRelief = rItem.GetValue();
         rFont.SetRelief( eFontRelief );
         rCJKFont.SetRelief( eFontRelief );
         rCTLFont.SetRelief( eFontRelief );
@@ -1176,7 +1176,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if( ISITEMSET )
     {
         const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
-        eUnderline = ( FontLineStyle ) rItem.GetValue();
+        eUnderline = rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
     else
@@ -1192,7 +1192,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if( ISITEMSET )
     {
         const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
-        eOverline = ( FontLineStyle ) rItem.GetValue();
+        eOverline = rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
     else
@@ -1208,7 +1208,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if( ISITEMSET )
     {
         const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>( rSet.Get( nWhich ) );
-        eStrikeout = ( FontStrikeout ) rItem.GetValue();
+        eStrikeout = rItem.GetValue();
     }
     else
         eStrikeout = STRIKEOUT_NONE;
@@ -1243,7 +1243,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if( ISITEMSET )
     {
         const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>( rSet.Get( nWhich ) );
-        FontRelief eFontRelief = ( FontRelief ) rItem.GetValue();
+        FontRelief eFontRelief = rItem.GetValue();
         rFont.SetRelief( eFontRelief );
         rCJKFont.SetRelief( eFontRelief );
         rCTLFont.SetRelief( eFontRelief );
@@ -1407,14 +1407,14 @@ void SvxFontPrevWindow::SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nPostur
     if( ISITEMSET )
     {
         const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
-        rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
+        rFont.SetItalic( rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
     }
 
     nWhich = rSet.GetPool()->GetWhich( nWeight );
     if( ISITEMSET )
     {
         const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
-        rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
+        rFont.SetWeight( rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
     }
 }
 
