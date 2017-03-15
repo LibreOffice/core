@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,xsec_gpg))
 
-$(eval $(call gb_Library_set_componentfile,xsec_gpg,xmlsecurity/util/xsec_gpg))
-
 $(eval $(call gb_Library_set_include,xsec_gpg,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
@@ -47,7 +45,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_gpg,\
 	xmlsecurity/source/gpg/CertificateImpl \
 	xmlsecurity/source/gpg/CipherContext \
 	xmlsecurity/source/gpg/DigestContext \
-	xmlsecurity/source/gpg/GpgComponentFactory \
 	xmlsecurity/source/gpg/SecurityEnvironment \
 	xmlsecurity/source/gpg/SEInitializer \
 	xmlsecurity/source/gpg/XMLEncryption \

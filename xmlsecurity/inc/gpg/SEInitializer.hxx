@@ -16,12 +16,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-class SEInitializerGpg : public cppu::WeakImplHelper< css::xml::crypto::XSEInitializer,
-                                                      css::lang::XServiceInfo >
+class SEInitializerGpg : public cppu::WeakImplHelper< css::xml::crypto::XSEInitializer >
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -36,21 +34,7 @@ public:
 
     virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
         css::xml::crypto::XXMLSecurityContext >& securityContext ) override;
-
-    /* XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-OUString SEInitializer_getImplementationName();
-
-css::uno::Sequence< OUString > SAL_CALL SEInitializer_getSupportedServiceNames();
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL SEInitializer_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
 
 #endif
 
