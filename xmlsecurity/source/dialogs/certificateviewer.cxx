@@ -102,7 +102,9 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
 {
     get( m_pCertImg, "certimage" );
     get( m_pHintNotTrustedFI, "hintnotrust" );
+    get( m_pIssuedToLabelFT, "issued_to" );
     get( m_pIssuedToFI, "issued_to_value" );
+    get( m_pIssuedByLabelFT, "issued_by");
     get( m_pIssuedByFI, "issued_by_value" );
     get( m_pValidFromDateFI, "valid_from_value" );
     get( m_pValidToDateFI, "valid_to_value" );
@@ -124,8 +126,16 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     // insert data
     css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
-    m_pIssuedToFI->SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
-    m_pIssuedByFI->SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
+    OUString sSubjectName(XmlSec::GetContentPart(xCert->getSubjectName()));
+    if (!sSubjectName.isEmpty())
+        m_pIssuedToFI->SetText(sSubjectName);
+    else
+        m_pIssuedToLabelFT->Hide();
+    OUString sIssuerName(XmlSec::GetContentPart(xCert->getIssuerName()));
+    if (!sIssuerName.isEmpty())
+        m_pIssuedByFI->SetText(sIssuerName);
+    else
+        m_pIssuedByLabelFT->Hide();
 
     DateTime aDateTimeStart( DateTime::EMPTY );
     DateTime aDateTimeEnd( DateTime::EMPTY );
@@ -162,7 +172,9 @@ void CertificateViewerGeneralTP::dispose()
 {
     m_pCertImg.clear();
     m_pHintNotTrustedFI.clear();
+    m_pIssuedToLabelFT.clear();
     m_pIssuedToFI.clear();
+    m_pIssuedByLabelFT.clear();
     m_pIssuedByFI.clear();
     m_pValidFromDateFI.clear();
     m_pValidToDateFI.clear();
