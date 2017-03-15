@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_5fa0f7f4",
+        "filename": "xmlsecurity/source/dialogs/certificateviewer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-15T11:09:38Z",
+      "side": 1,
+      "message": "It is too late to comment on this, but I have creeping feeling that this might also catch non-GPG certificates that are broken (buildCertificatePath failed for them). In that case we should show the tab with proper error message, instead of failing silently.",
+      "revId": "763d5df50aa9e57356fb99f270e809f77aa47091",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
