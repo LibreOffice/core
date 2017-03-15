@@ -135,7 +135,7 @@ void XMLControlOASISTransformerContext::StartElement(
     }
 
     if( m_bCreateControl )
-        GetTransformer().startFastElement( m_aElemQName,
+        GetTransformer().GetDocHandler()->startElement( m_aElemQName,
                                                         xControlAttrList );
     XMLTransformerContext::StartElement( xAttrList );
 }
@@ -144,7 +144,7 @@ void XMLControlOASISTransformerContext::EndElement()
 {
     XMLTransformerContext::EndElement();
     if( m_bCreateControl )
-        GetTransformer().endFastElement( m_aElemQName );
+        GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

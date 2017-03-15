@@ -101,7 +101,7 @@ void XMLMetaTransformerContext::EndElement()
 
                 Reference< XAttributeList > xAttrList =
                     new XMLMutableAttributeList;
-                GetTransformer().startFastElement( aKeywordsQName,
+                GetTransformer().GetDocHandler()->startElement( aKeywordsQName,
                                                             xAttrList );
             }
 
@@ -115,12 +115,12 @@ void XMLMetaTransformerContext::EndElement()
             }
 
             if( XML_KEYWORD == *pToken )
-                GetTransformer().endFastElement( aKeywordsQName );
+                GetTransformer().GetDocHandler()->endElement( aKeywordsQName );
         }
         pToken++;
     }
 
-    GetTransformer().endFastElement( GetQName() );
+    GetTransformer().GetDocHandler()->endElement( GetQName() );
 }
 
 void XMLMetaTransformerContext::Characters( const OUString& )
