@@ -4108,6 +4108,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
 
+    // Cursor width
+    gfloat caretAspectRatio = 0.04f;
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gEditBoxWidget, "cursor-aspect-ratio", &caretAspectRatio, nullptr );
+    // Assume 20px tall for the ratio computation, which should give reasonable results
+    aStyleSet.SetCursorSize( 20 * caretAspectRatio + 1 );
+
     // get cursor blink time
     gboolean blink = false;
 
