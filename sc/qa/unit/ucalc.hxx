@@ -485,6 +485,8 @@ public:
     void testCondFormatUpdateDeleteTab();
     void testCondFormatUpdateInsertTab();
     void testCondFormatUpdateReference();
+    void testCondFormatUpdateReferenceDelRow();
+    void testCondFormatUpdateReferenceInsRow();
 
     void testCondFormatEndsWithStr();
     void testCondFormatEndsWithVal();
@@ -745,6 +747,8 @@ public:
     CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST(testCondFormatEndsWithStr);
     CPPUNIT_TEST(testCondFormatEndsWithVal);
+    CPPUNIT_TEST(testCondFormatUpdateReferenceDelRow);
+    CPPUNIT_TEST(testCondFormatUpdateReferenceInsRow);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testDataBarLengthAutomaticAxis);
     CPPUNIT_TEST(testDataBarLengthMiddleAxis);
