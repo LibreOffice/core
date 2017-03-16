@@ -66,10 +66,8 @@
 #define RID_STR_UNDO_ADDFUNCTION                ( RID_STRING_START +  28 )
 
 // other
-#define STR_RPT_TITLE                       ( RID_STRING_START +  32 )
 #define STR_RPT_LABEL                       ( RID_STRING_START +  33 )
 #define STR_RPT_EXPRESSION                  ( RID_STRING_START +  34 )
-#define STR_RPT_SORTING                     ( RID_STRING_START +  35 )
 #define STR_RPT_PN_PAGE                     ( RID_STRING_START +  36 )
 #define STR_RPT_PN_PAGE_OF                  ( RID_STRING_START +  37 )
 #define STR_RPT_PREFIXCHARS                 ( RID_STRING_START +  38 )
@@ -97,8 +95,6 @@
 #define RID_STR_BRWTITLE_PROPERTIES         ( RID_STRING_START +  60 )
 #define RID_STR_BRWTITLE_NO_PROPERTIES      ( RID_STRING_START +  61 )
 #define RID_STR_BRWTITLE_MULTISELECT        ( RID_STRING_START +  62 )
-#define STR_SHOW_RULER                      ( RID_STRING_START +  63 )
-#define STR_SHOW_GRID                       ( RID_STRING_START +  64 )
 
 #define RID_STR_FIELDSELECTION              ( RID_STRING_START +  69 )
 

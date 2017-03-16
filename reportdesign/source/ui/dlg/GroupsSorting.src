@@ -25,11 +25,6 @@ String STR_RPT_EXPRESSION
     Text [ en-US ] = "Field/Expression" ;
 };
 
-String STR_RPT_SORTING
-{
-    Text [ en-US ] = "Sort Order" ;
-};
-
 String STR_RPT_PREFIXCHARS
 {
     Text [ en-US ] = "Prefix Characters" ;
