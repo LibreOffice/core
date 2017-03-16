@@ -21,7 +21,6 @@
 
 #include "dbu_resource.hrc"
 
-#define STR_REMEMBERPASSWORD_PERSISTENT         ( RID_STR_UNO_START +  0 )
 #define STR_CTW_NO_VIEWS_SUPPORT                ( RID_STR_UNO_START +  1 )
 #define STR_CTW_NO_PRIMARY_KEY_SUPPORT          ( RID_STR_UNO_START +  2 )
 #define STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR  ( RID_STR_UNO_START +  3 )

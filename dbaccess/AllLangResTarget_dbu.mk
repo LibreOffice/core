@@ -47,7 +47,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/relationdesign/relation.src \
     dbaccess/source/ui/tabledesign/table.src \
     dbaccess/source/ui/uno/copytablewizard.src \
-    dbaccess/source/ui/uno/dbinteraction.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,dbaccess/dbu,\

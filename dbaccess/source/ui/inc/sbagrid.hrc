@@ -32,39 +32,6 @@
 // Ausrichtung
 #define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
 
-// Spaltenbreite
-#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
-// FieldType
-#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
-// Feldlänge
-#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
-// Eingabe erforderlich
-#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
-// Position in der Tabelle, Abfrage
-#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
-// Name der zugehoerigen Tabelle
-#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
-// Spalte ausblenden
-#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
-
-// Ausrichtung
-#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
-
-// Spaltenbreite
-#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
-// Feldtyp
-#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
-// Feldlänge
-#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
-// Eingabe erforderlich
-#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
-// Position in der Tabelle, Abfrage
-#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
-// Name der zugehoerigen Tabelle
-#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
-// Spalte ausblenden
-#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
-
 #endif // DBACCESS_SBA_GRID_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
