@@ -781,6 +781,27 @@ void Test::testFetchVectorRefArray()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testGroupConverter3D()
+{
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(1, "Test2");
+
+    m_pDoc->SetValue(1, 0, 0, 1.0);
+    m_pDoc->SetValue(1, 0, 1, 2.0);
+
+    for (SCROW nRow = 0; nRow < 200; ++nRow)
+    {
+        OUString aFormula = "=SUM(Test.B" + OUString::number(nRow+1) + ":Test2.B" + OUString::number(nRow+1) + ")";
+        m_pDoc->SetString(0, nRow, 0, aFormula);
+    }
+
+    double nVal = m_pDoc->GetValue(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(3.0, nVal);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaHashAndTag()
 {
     m_pDoc->InsertTab(0, "Test");
