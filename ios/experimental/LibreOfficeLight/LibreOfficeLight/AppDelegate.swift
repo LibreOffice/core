@@ -6,6 +6,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 import UIKit
+import Foundation
 
 
 
@@ -23,6 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         LOinterface.Initialize()
+        
+        // Get version info
+        let appInfo = Bundle.main.infoDictionary as! Dictionary<String,AnyObject>
+        let applicationVersion = (appInfo["CFBundleShortVersionString"] as! String) + "." +
+                                 (appInfo["CFBundleVersion"] as! String)
+        let defaults = UserDefaults.standard
+        defaults.set(applicationVersion, forKey: "application_version")
+        defaults.synchronize()
         
         // Override point for customization after application launch.
         return true
