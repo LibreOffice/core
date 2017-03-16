@@ -507,7 +507,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                         SfxObjectFactory &rFact = GetFactory();
-                        SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
+                        SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
                         SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         std::shared_ptr<const SfxFilter> pFlt = aIter.First();
@@ -1407,8 +1407,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     sal_uLong nErr = 0;
 
     // Set filter:
-    OUString sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
-    SfxFilterMatcher aMatcher( sFactory );
+    SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );
 
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, StreamMode::STD_READ );
@@ -1416,8 +1415,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     aMatcher.DetectFilter( aMed, pFlt );
     if(!pFlt)
     {
-        OUString sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
-        SfxFilterMatcher aWebMatcher( sWebFactory );
+        SfxFilterMatcher aWebMatcher( SwWebDocShell::Factory().GetFactoryName() );
         aWebMatcher.DetectFilter( aMed, pFlt );
     }
     // --> OD #i117339# - trigger import only for own formats
@@ -1573,8 +1571,8 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     if (!xMed->GetError())
     {
         SfxFilterMatcher aMatcher( rFilter == "writerglobal8"
-            ? OUString::createFromAscii(SwGlobalDocShell::Factory().GetShortName())
-            : OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+            ? SwGlobalDocShell::Factory().GetFactoryName()
+            : SwDocShell::Factory().GetFactoryName() );
 
         // No Filter, so search for it. Else test if the one passed is a valid one
         if( !rFilter.isEmpty() )

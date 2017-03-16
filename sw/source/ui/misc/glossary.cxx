@@ -580,7 +580,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
 
         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-        SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+        SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );
         std::shared_ptr<const SfxFilter> pFilter = aIter.First();
         while ( pFilter )

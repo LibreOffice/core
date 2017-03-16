@@ -84,8 +84,7 @@ void ScLinkedAreaDlg::dispose()
 IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl, Button*, void)
 {
     if ( !pDocInserter )
-        pDocInserter = new sfx2::DocumentInserter(
-            OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
+        pDocInserter = new sfx2::DocumentInserter(ScDocShell::Factory().GetFactoryName());
     pDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
 }
 

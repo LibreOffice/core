@@ -275,7 +275,7 @@ bool SfxObjectShell::APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItem
             const SfxStringItem* pContentTypeItem = rItemSet.GetItem<SfxStringItem>(SID_CONTENTTYPE, false);
             if ( pContentTypeItem )
             {
-                std::shared_ptr<const SfxFilter> pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
+                std::shared_ptr<const SfxFilter> pFilter = SfxFilterMatcher( GetFactory().GetFactoryName() ).GetFilter4Mime( pContentTypeItem->GetValue(), SfxFilterFlags::EXPORT );
                 if ( pFilter )
                     aFilterName = pFilter->GetName();
             }
@@ -457,8 +457,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
                 else
                 {
-                    aURL = "private:factory/" + OUString::createFromAscii( GetFactory().GetShortName() );
-
+                    aURL = GetFactory().GetFactoryURL();
                     aTitle = GetTitle();
                 }
 

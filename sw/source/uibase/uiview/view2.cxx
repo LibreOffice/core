@@ -2146,8 +2146,10 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     }
     else
     {
-        OUString sFactory = OUString::createFromAscii( pDocSh->GetFactory().GetShortName() );
-        m_pViewImpl->StartDocumentInserter( sFactory, LINK( this, SwView, DialogClosedHdl ) );
+        m_pViewImpl->StartDocumentInserter(
+            pDocSh->GetFactory().GetFactoryName(),
+            LINK( this, SwView, DialogClosedHdl )
+        );
         return -1;
     }
 

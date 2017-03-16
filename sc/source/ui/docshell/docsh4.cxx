@@ -729,7 +729,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     pImpl->pRequest = new SfxRequest( rReq );
                     delete pImpl->pDocInserter;
                     pImpl->pDocInserter = new ::sfx2::DocumentInserter(
-                        OUString::createFromAscii( ScDocShell::Factory().GetShortName() ), false );
+                        ScDocShell::Factory().GetFactoryName(), false );
                     pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;
                 }
