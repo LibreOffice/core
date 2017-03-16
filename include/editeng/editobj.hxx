@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
 #include <rsc/rscsfx.hxx>
-#include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
@@ -34,7 +33,7 @@
 #include <vector>
 #include <memory>
 
-class SfxItemPool;
+class SfxItemSet;
 class SfxStyleSheetPool;
 class SvxFieldItem;
 class SvxFieldData;

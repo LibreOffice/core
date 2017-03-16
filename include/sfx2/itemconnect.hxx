@@ -25,6 +25,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/controlwrapper.hxx>
+#include <svl/itemset.hxx>
 #include <memory>
 
 

@@ -56,6 +56,7 @@
 #include "xestyle.hxx"
 #include "userdat.hxx"
 #include "drwlayer.hxx"
+#include <svl/itemset.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/algitem.hxx>
 #include "scitems.hxx"
