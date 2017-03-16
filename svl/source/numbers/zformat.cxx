@@ -2211,7 +2211,8 @@ OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
         {
-            while ( ( ++i < nAnz ) && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_STRING );
+            while ( ( ++i < nAnz ) && rInfo.nTypeArray[i] != NF_SYMBOLTYPE_FRAC_FDIV
+                                   && rInfo.nTypeArray[i] != NF_SYMBOLTYPE_DIGIT );
             for( ; i < nAnz; i++ )
             {
                 if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT )
@@ -2835,21 +2836,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     sal_uInt16 j = nAnz-1; // Last symbol -> backwards
     sal_Int32 k;           // Denominator
 
-    bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
-    if ( !bHideFraction &&  sDenominatorFormat.getLength() > 0 )
-    {
-        // Guard against a (theoretical?) endless loop of blanks only.
-        sal_Int32 n = sDiv.getLength();
-        sal_Int32 nDenominatorLen = sDenominatorFormat.getLength();
-        while ( n-- > 0 && sDiv[0] == ' ' ) // left align denominator
-        {
-            if (sDiv.getLength() <= nDenominatorLen)
-                sDiv.append(" ");
-            else
-                sDiv.insert( nDenominatorLen, " " );
-            sDiv.remove( 0, 1 );
-        }
-    }
+    bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC, true);
 
     bool bCont = true;
     if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
@@ -4504,7 +4491,8 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                                     sal_Int32& k,          // position within string
                                     sal_uInt16& j,         // symbol index within format code
                                     sal_uInt16 nIx,        // subformat index
-                                    short eSymbolType )    // type of stop condition
+                                    short eSymbolType,     // type of stop condition
+                                    bool bInsertRightBlank)// insert blank on right for denominator (default = false)
 {
     bool bRes = false;
     bool bStop = false;
@@ -4556,6 +4544,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         case NF_SYMBOLTYPE_DIGIT:
         {
             bFoundNumber = true;
+            sal_uInt16 nPosInsertBlank = bInsertRightBlank ? k : 0; // left alignment of denominator
             const OUString& rStr = rInfo.sStrArray[j];
             const sal_Unicode* p1 = rStr.getStr();
             const sal_Unicode* p = p1 + rStr.getLength();
@@ -4573,7 +4562,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                         sBuff.insert(0, '0');
                         break;
                     case '?':
-                        sBuff.insert(0, ' ');
+                        sBuff.insert(nPosInsertBlank, ' ');
                         break;
                     }
                 }
@@ -4593,6 +4582,10 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV: // Do Nothing
+            if (k > 0)
+            {
+                k--;
+            }
             break;
 
         default:
