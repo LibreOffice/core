@@ -448,18 +448,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
                     bReadOnly = pROItem->GetValue();
 
-                // collect data for dialog
-                OUString aURL, aTitle;
-                if ( HasName() )
-                {
-                    aURL = GetMedium()->GetName();
-                    aTitle = GetTitle();
-                }
-                else
-                {
-                    aURL = GetFactory().GetFactoryURL();
-                    aTitle = GetTitle();
-                }
+                // URL for dialog
+                const OUString aURL( HasName() ? GetMedium()->GetName() : GetFactory().GetFactoryURL() );
 
                 Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
                 uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
@@ -475,7 +465,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                 0L );
                 aSet.Put( aDocInfoItem );
                 aSet.Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
-                aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
+                aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, GetTitle() ) );
                 aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
 
                 // creating dialog is done via virtual method; application will
