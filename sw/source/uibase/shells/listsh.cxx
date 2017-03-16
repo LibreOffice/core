@@ -65,8 +65,8 @@ void SwListShell::InitInterface_Impl()
 // function is quite similar the code in SwContentTree::ExecCommand.
 static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 {
-    const sal_uInt16 nActPos = rSh.GetOutlinePos();
-    if ( nActPos < USHRT_MAX && rSh.IsOutlineMovable( nActPos ) )
+    const SwOutlineNodes::size_type nActPos = rSh.GetOutlinePos();
+    if ( nActPos < SwOutlineNodes::npos && rSh.IsOutlineMovable( nActPos ) )
     {
         rSh.Push();
         rSh.MakeOutlineSel( nActPos, nActPos, true );
@@ -75,8 +75,8 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         {
             const IDocumentOutlineNodes* pIDoc( rSh.getIDocumentOutlineNodesAccess() );
             const int nActLevel = pIDoc->getOutlineLevel( nActPos );
-            sal_Int32 nActEndPos = nActPos + 1;
-            sal_Int16 nDir = 0;
+            SwOutlineNodes::size_type nActEndPos = nActPos + 1;
+            SwOutlineNodes::difference_type nDir = 0;
 
             if ( !bUp )
             {
@@ -90,7 +90,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                     // The current subpoint which should be moved
                     // starts at nActPos and ends at nActEndPos - 1
                     --nActEndPos;
-                    sal_Int32 nDest = nActEndPos + 2;
+                    SwOutlineNodes::size_type nDest = nActEndPos + 2;
                     while ( nDest < pIDoc->getOutlineNodesCount() &&
                             pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         ++nDest;
@@ -104,7 +104,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                 if ( nActPos > 0 )
                 {
                     --nActEndPos;
-                    sal_Int32 nDest = nActPos - 1;
+                    SwOutlineNodes::size_type nDest = nActPos - 1;
                     while ( nDest > 0 && pIDoc->getOutlineLevel( nDest ) > nActLevel )
                         --nDest;
 

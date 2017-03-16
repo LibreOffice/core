@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/itemiter.hxx>
@@ -910,7 +911,7 @@ sal_Int32 SwCursorShell::EndOfInputFieldAtPos( const SwPosition& rPos )
     return *(pTextInputField->End());
 }
 
-void SwCursorShell::GotoOutline( sal_uInt16 nIdx )
+void SwCursorShell::GotoOutline( SwOutlineNodes::size_type nIdx )
 {
     SwCursor* pCursor = getShellCursor( true );
 
@@ -951,7 +952,7 @@ bool SwCursorShell::GotoNextOutline()
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = &(pCursor->GetNode());
-    sal_uInt16 nPos;
+    SwOutlineNodes::size_type nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
 
@@ -979,7 +980,7 @@ bool SwCursorShell::GotoPrevOutline()
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = &(pCursor->GetNode());
-    sal_uInt16 nPos;
+    SwOutlineNodes::size_type nPos;
     bool bRet = rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
     if (bRet && nPos)
     {
@@ -1003,13 +1004,13 @@ bool SwCursorShell::GotoPrevOutline()
 }
 
 /// search "outline position" before previous outline node at given level
-sal_uInt16 SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
+SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
 {
     SwPaM* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = &(pCursor->GetNode());
-    sal_uInt16 nPos;
+    SwOutlineNodes::size_type nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         nPos++; // is at correct position; take next for while
 
@@ -1021,10 +1022,10 @@ sal_uInt16 SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
             return nPos;
 
     }
-    return USHRT_MAX; // no more left
+    return SwOutlineNodes::npos; // no more left
 }
 
-bool SwCursorShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
+bool SwCursorShell::MakeOutlineSel( SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
                                   bool bWithChildren )
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
@@ -1038,9 +1039,7 @@ bool SwCursorShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
     if( nSttPos > nEndPos ) // parameters switched?
     {
         OSL_ENSURE( false, "Start > End for array access" );
-        sal_uInt16 nTmp = nSttPos;
-        nSttPos = nEndPos;
-        nEndPos = nTmp;
+        std::swap(nSttPos, nEndPos);
     }
 
     SwNode* pSttNd = rOutlNds[ nSttPos ];

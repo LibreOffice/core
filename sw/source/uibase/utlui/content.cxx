@@ -1054,7 +1054,7 @@ static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent
     if( pTree && pContent )
     {
         SwWrtShell* pShell = pTree->GetWrtShell();
-        sal_Int32 nPos = pContent->GetYPos();
+        long nPos = pContent->GetYPos();
 
         key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
 
@@ -1435,7 +1435,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                     if(pChild->HasChildren())
                     {
                         assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pChild->GetUserData())));
-                        sal_Int32 nPos = static_cast<SwContent*>(pChild->GetUserData())->GetYPos();
+                        long nPos = static_cast<SwContent*>(pChild->GetUserData())->GetYPos();
                         void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                         aCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
                         std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
@@ -1456,7 +1456,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         {
             SwWrtShell* pShell = GetWrtShell();
             assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
-            sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
+            long nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = true;
         }
@@ -1489,7 +1489,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
         {
             SwWrtShell* pShell = GetWrtShell();
             assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
-            sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
+            long nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = false;
         }
@@ -1717,7 +1717,7 @@ void SwContentTree::Display( bool bActive )
             if (m_nRootType == ContentTypeId::OUTLINE && State::ACTIVE == m_eState)
             {
                 // find out where the cursor is
-                const sal_uInt16 nActPos = pShell->GetOutlinePos(MAXLEVEL);
+                const SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(MAXLEVEL);
                 SvTreeListEntry* pEntry = First();
 
                 while( nullptr != (pEntry = Next(pEntry)) )
@@ -1797,7 +1797,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     {
         case ContentTypeId::OUTLINE:
         {
-            const sal_uInt16 nPos = static_cast<SwOutlineContent*>(pCnt)->GetPos();
+            const SwOutlineNodes::size_type nPos = static_cast<SwOutlineContent*>(pCnt)->GetPos();
             OSL_ENSURE(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
                        "outlinecnt changed");
 
@@ -2010,8 +2010,8 @@ bool SwContentTree::HasContentChanged()
                     const auto nSelLevel =
                         static_cast<SwOutlineContent*>(pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
-                    const sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                    if (nOutlinePos != USHRT_MAX &&
+                    const SwOutlineNodes::size_type nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
+                    if (nOutlinePos != SwOutlineNodes::npos &&
                         pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
                         bRepaint = true;
                 }
@@ -2043,7 +2043,7 @@ bool SwContentTree::HasContentChanged()
         if( !bRepaint && bOutline )
         {
             // find out where the cursor is
-            const sal_uInt16 nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
+            const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
             SvTreeListEntry* pFirstEntry = First();
 
             while( nullptr != (pFirstEntry = Next(pFirstEntry)) )
@@ -2302,7 +2302,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
 
     SwWrtShell *const pShell = GetWrtShell();
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
-    sal_uInt16 nActPos = pShell->GetOutlinePos(nActOutlineLevel);
+    SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(nActOutlineLevel);
 
     std::vector<SvTreeListEntry*> selected;
     for (SvTreeListEntry * pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
@@ -2346,7 +2346,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 nActPos = static_cast<SwOutlineContent*>(pCurrentEntry->GetUserData())->GetPos();
             }
         }
-        if (nActPos == USHRT_MAX || (bUpDown && !pShell->IsOutlineMovable(nActPos)))
+        if (nActPos == SwOutlineNodes::npos || (bUpDown && !pShell->IsOutlineMovable(nActPos)))
         {
             continue;
         }
@@ -2362,7 +2362,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren);
         if (bUpDown)
         {
-            short nDir = bUp ? -1 : 1;
+            SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
             if (!bOutlineWithChildren && ((nDir == -1 && nActPos > 0) ||
                                (nDir == 1 && nActPos < GetEntryCount() - 2)))
             {
@@ -2372,7 +2372,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
             }
             else if (bOutlineWithChildren && pCurrentEntry)
             {
-                sal_uInt16 nActEndPos = nActPos;
+                SwOutlineNodes::size_type nActEndPos = nActPos;
                 SvTreeListEntry* pEntry = pCurrentEntry;
                 assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pCurrentEntry->GetUserData())));
                 const auto nActLevel = static_cast<SwOutlineContent*>(
@@ -2396,7 +2396,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     {
                         // pEntry now points to the entry following the last
                         // selected entry.
-                        sal_uInt16 nDest = nActEndPos + 1;
+                        SwOutlineNodes::size_type nDest = nActEndPos + 1;
                         // here needs to found the next entry after next.
                         // The selection must be inserted in front of that.
                         while (pEntry)
@@ -2421,7 +2421,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 }
                 else
                 {
-                    sal_uInt16 nDest = nActPos;
+                    SwOutlineNodes::size_type nDest = nActPos;
                     pEntry = pCurrentEntry;
                     while (pEntry && nDest)
                     {
@@ -2464,7 +2464,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         Display(true);
         if (!m_bIsRoot)
         {
-            const sal_uInt16 nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
+            const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
             SvTreeListEntry* pFirst = First();
 
             while (nullptr != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
@@ -2569,18 +2569,18 @@ TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
 {
     if(!m_bDocChgdInDragging)
     {
-        sal_uInt16 nTargetPos = 0;
+        SwOutlineNodes::size_type nTargetPos = 0;
         assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-        sal_uInt16 nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
+        SwOutlineNodes::size_type nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
         if(!lcl_IsContent(pTarget))
-            nTargetPos = USHRT_MAX;
+            nTargetPos = SwOutlineNodes::npos;
         else
         {
             assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pTarget->GetUserData())));
             nTargetPos = static_cast<SwOutlineContent*>(pTarget->GetUserData())->GetPos();
         }
         if( MAXLEVEL > m_nOutlineLevel && // Not all layers are displayed.
-                        nTargetPos != USHRT_MAX)
+                        nTargetPos != SwOutlineNodes::npos)
         {
             SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)
@@ -2613,11 +2613,11 @@ TriState SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
 {
     if(!m_bDocChgdInDragging)
     {
-        sal_uInt16 nTargetPos = 0;
+        SwOutlineNodes::size_type nTargetPos = 0;
         assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-        sal_uInt16 nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
+        SwOutlineNodes::size_type nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
         if(!lcl_IsContent(pTarget))
-            nTargetPos = USHRT_MAX;
+            nTargetPos = SwOutlineNodes::npos;
         else
         {
             assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pTarget->GetUserData())));
@@ -2625,7 +2625,7 @@ TriState SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
         }
 
         if( MAXLEVEL > m_nOutlineLevel && // Not all layers are displayed.
-                        nTargetPos != USHRT_MAX)
+                        nTargetPos != SwOutlineNodes::npos)
         {
             SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)

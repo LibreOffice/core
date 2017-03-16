@@ -27,18 +27,18 @@ DocumentOutlineNodesManager::DocumentOutlineNodesManager( SwDoc& i_rSwdoc ) : m_
 {
 }
 
-sal_Int32 DocumentOutlineNodesManager::getOutlineNodesCount() const
+IDocumentOutlineNodes::tSortedOutlineNodeList::size_type DocumentOutlineNodesManager::getOutlineNodesCount() const
 {
     return m_rDoc.GetNodes().GetOutLineNds().size();
 }
 
-int DocumentOutlineNodesManager::getOutlineLevel( const sal_Int32 nIdx ) const
+int DocumentOutlineNodesManager::getOutlineLevel( const tSortedOutlineNodeList::size_type nIdx ) const
 {
     return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->
                                 GetTextNode()->GetAttrOutlineLevel()-1;
 }
 
-OUString DocumentOutlineNodesManager::getOutlineText( const sal_Int32 nIdx,
+OUString DocumentOutlineNodesManager::getOutlineText( const tSortedOutlineNodeList::size_type nIdx,
                               const bool bWithNumber,
                               const bool bWithSpacesForLevel,
                               const bool bWithFootnote ) const
@@ -48,7 +48,7 @@ OUString DocumentOutlineNodesManager::getOutlineText( const sal_Int32 nIdx,
                                             bWithNumber, bWithSpacesForLevel, bWithFootnote );
 }
 
-SwTextNode* DocumentOutlineNodesManager::getOutlineNode( const sal_Int32 nIdx ) const
+SwTextNode* DocumentOutlineNodesManager::getOutlineNode( const tSortedOutlineNodeList::size_type nIdx ) const
 {
     return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->GetTextNode();
 }
@@ -58,8 +58,8 @@ void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSorte
     orOutlineNodeList.clear();
     orOutlineNodeList.reserve( getOutlineNodesCount() );
 
-    const sal_Int32 nOutlCount = getOutlineNodesCount();
-    for ( sal_Int32 i = 0; i < nOutlCount; ++i )
+    const tSortedOutlineNodeList::size_type nOutlCount = getOutlineNodesCount();
+    for ( tSortedOutlineNodeList::size_type i = 0; i < nOutlCount; ++i )
     {
         orOutlineNodeList.push_back(
             m_rDoc.GetNodes().GetOutLineNds()[i]->GetTextNode() );

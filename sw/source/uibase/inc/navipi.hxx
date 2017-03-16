@@ -29,6 +29,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <conttree.hxx>
+#include <ndarr.hxx>
 
 class SwWrtShell;
 class SwNavigationPI;
@@ -135,7 +136,7 @@ public:
     virtual void    dispose() override;
 
     void            UpdateListBox();
-    void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
+    void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget, bool bWithCilds);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                             const SfxPoolItem* pState ) override;

@@ -545,7 +545,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
     return bRet;
 }
 
-bool SwEditShell::MoveOutlinePara( short nOffset )
+bool SwEditShell::MoveOutlinePara( SwOutlineNodes::difference_type nOffset )
 {
     StartAllAction();
     bool bRet = GetDoc()->MoveOutlinePara( *GetCursor(), nOffset );
@@ -563,7 +563,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
         SwNodePtr pNd = const_cast<SwNodePtr>(&rNd);
         bool bFirst = true;
-        sal_uInt16 nPos;
+        SwOutlineNodes::size_type nPos;
         int nLvl(0);
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
             --nPos;
@@ -608,7 +608,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
  * 2) outline must not be within table
  * 3) if bCopy is set, outline must not be write protected
  */
-static bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
+static bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, SwOutlineNodes::size_type nIdx, bool bCopy )
 {
     const SwNodes& rNds = pDoc->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
@@ -617,12 +617,12 @@ static bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bo
             ( bCopy || !pNd->IsProtect() );                         // 3) write
 }
 
-bool SwEditShell::IsOutlineMovable( sal_uInt16 nIdx ) const
+bool SwEditShell::IsOutlineMovable( SwOutlineNodes::size_type nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, false );
 }
 
-bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
+bool SwEditShell::IsOutlineCopyable( SwOutlineNodes::size_type nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }

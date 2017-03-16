@@ -96,22 +96,22 @@ OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 
 // Execution of the drag operation with and without the children.
 
-void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
+void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget,
                                                     bool bWithChildren)
 {
     SwView *pView = GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
-    if(nTarget < nSource || nTarget == USHRT_MAX)
+    if(nTarget < nSource || nTarget == SwOutlineNodes::npos)
         nTarget ++;
     if ( rSh.IsOutlineMovable( nSource ))
     {
 
-        short nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
+        SwOutlineNodes::difference_type nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
         rSh.GotoOutline(nSource);
         if (bWithChildren)
             rSh.MakeOutlineSel(nSource, nSource, true);
         // While moving, the selected children does not counting.
-        const sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
+        const SwOutlineNodes::size_type nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
         if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
         {

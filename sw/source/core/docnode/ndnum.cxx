@@ -30,7 +30,7 @@ bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) 
     return lhs->GetIndex() < rhs->GetIndex();
 }
 
-bool SwOutlineNodes::Seek_Entry(SwNode* rP, sal_uInt16* pnPos) const
+bool SwOutlineNodes::Seek_Entry(SwNode* rP, size_type* pnPos) const
 {
     const_iterator it = lower_bound(rP);
     *pnPos = it - begin();
@@ -80,7 +80,7 @@ void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
 
     const SwNodePtr pSrch = const_cast<SwNodePtr>(&rNd);
 
-    sal_uInt16 nPos;
+    SwOutlineNodes::size_type nPos;
     if (!m_pOutlineNodes->Seek_Entry(pSrch, &nPos))
         return;
     if( nPos == m_pOutlineNodes->size() )      // none present for updating ?

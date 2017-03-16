@@ -2023,9 +2023,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             std::stack< StackEntry > aOutlineStack;
             aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
 
-            const sal_uInt16 nOutlineCount =
-                static_cast<sal_uInt16>(mrSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
-            for ( sal_uInt16 i = 0; i < nOutlineCount; ++i )
+            const SwOutlineNodes::size_type nOutlineCount =
+                mrSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            for ( SwOutlineNodes::size_type i = 0; i < nOutlineCount; ++i )
             {
                 // Check if outline is hidden
                 const SwTextNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTextNode();

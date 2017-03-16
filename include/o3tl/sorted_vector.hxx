@@ -37,6 +37,7 @@ private:
     typedef typename std::vector<Value>::iterator  iterator;
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
+    typedef typename std::vector<Value>::difference_type difference_type;
     typedef typename std::vector<Value>::size_type size_type;
 
     // MODIFIERS

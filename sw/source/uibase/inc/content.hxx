@@ -35,13 +35,13 @@ class SwRangeRedline;
 
 class SwOutlineContent : public SwContent
 {
-    sal_uInt16  nOutlinePos;
+    SwOutlineNodes::size_type nOutlinePos;
     sal_uInt8   nOutlineLevel;
     bool    bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
                             const OUString& rName,
-                            sal_uInt16 nArrPos,
+                            SwOutlineNodes::size_type nArrPos,
                             sal_uInt8 nLevel,
                             bool bMove,
                             long nYPos) :

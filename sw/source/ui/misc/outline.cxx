@@ -804,9 +804,9 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     }
 
     m_pNumberBox->SelectNumberingType(rNumFormat.GetNumberingType());
-    sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
+    SwOutlineNodes::size_type nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     sal_uInt16 nTmp = 0;
-    if(nOutlinePos != USHRT_MAX)
+    if(nOutlinePos != SwOutlineNodes::npos)
     {
         nTmp = static_cast<sal_uInt16>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
     }

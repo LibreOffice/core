@@ -507,7 +507,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
                 const int nLvl = pNd->GetTextNode()->GetAttrOutlineLevel()-1;
 
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
-                sal_uInt16 nTmpPos;
+                SwOutlineNodes::size_type nTmpPos;
                 (void)rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 

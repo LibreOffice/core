@@ -83,7 +83,7 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
 }
 
 // two helpers for outline mode
-SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
+SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
 
@@ -96,7 +96,7 @@ SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16*
     return nullptr;
 }
 
-SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
+SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
 
@@ -116,7 +116,7 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
 }
 
 // two helpers for collection mode
-SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, sal_uInt16* nOutl )
+SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
@@ -129,7 +129,7 @@ SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* 
     return nullptr;
 }
 
-SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, sal_uInt16* nOutl )
+SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
 
@@ -160,7 +160,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         ( SPLITDOC_TO_GLOBALDOC == eDocType && GetDocumentSettingManager().get(DocumentSettingId::GLOBAL_DOCUMENT) ) )
         return false;
 
-    sal_uInt16 nOutl = 0;
+    SwOutlineNodes::size_type nOutl = 0;
     SwOutlineNodes* pOutlNds = const_cast<SwOutlineNodes*>(&GetNodes().GetOutLineNds());
     std::unique_ptr<SwOutlineNodes> xTmpOutlNds;
     SwNodePtr pStartNd;
@@ -401,7 +401,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         // it has to be a bug!
                         if( !pOutlNds->Seek_Entry( pStartNd, &nOutl ))
                             pStartNd = nullptr;
-                        ++nOutl;
+                        ++nOutl ;
                     }
                     break;
 

@@ -1043,7 +1043,7 @@ public:
     bool OutlineUpDown( const SwPaM& rPam, short nOffset );
 
     // Ountline - move up / move down.
-    bool MoveOutlinePara( const SwPaM& rPam, short nOffset);
+    bool MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset);
 
     bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
 

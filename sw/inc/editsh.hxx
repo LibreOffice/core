@@ -462,7 +462,7 @@ public:
 
     bool OutlineUpDown( short nOffset = 1 );
 
-    bool MoveOutlinePara( short nOffset = 1);
+    bool MoveOutlinePara( SwOutlineNodes::difference_type nOffset = 1);
 
     bool IsProtectedOutlinePara() const;
 
@@ -800,8 +800,8 @@ public:
 
     /** May an outline be moved or copied?
      Check whether it's in text body, not in table, and not read-only (move). */
-    bool IsOutlineMovable( sal_uInt16 nIdx ) const;
-    bool IsOutlineCopyable( sal_uInt16 nIdx ) const;
+    bool IsOutlineMovable( SwOutlineNodes::size_type nIdx ) const;
+    bool IsOutlineCopyable( SwOutlineNodes::size_type nIdx ) const;
 
     sal_uInt16 GetLineCount();
 

@@ -260,7 +260,7 @@ SwTextNode::~SwTextNode()
 
     // must be removed from outline nodes by now
 #if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 foo;
+    SwOutlineNodes::size_type foo;
     assert(!GetNodes().GetOutLineNds().Seek_Entry(this, &foo));
 #endif
 

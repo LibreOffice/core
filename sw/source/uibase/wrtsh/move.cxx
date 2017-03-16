@@ -608,7 +608,7 @@ bool SwWrtShell::GotoINetAttr( const SwTextINetFormat& rAttr )
     return bRet;
 }
 
-void SwWrtShell::GotoOutline( sal_uInt16 nIdx )
+void SwWrtShell::GotoOutline( SwOutlineNodes::size_type nIdx )
 {
     addCurrentPosition();
     SwCursorShell::GotoOutline (nIdx);

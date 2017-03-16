@@ -183,7 +183,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
     const SwNodePtr pSttNd = &rPam.Start()->nNode.GetNode();
     const SwNodePtr pEndNd = &rPam.End()->nNode.GetNode();
-    sal_uInt16 nSttPos, nEndPos;
+    SwOutlineNodes::size_type nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
         !nSttPos-- )
@@ -411,7 +411,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 }
 
 // Move up/down
-bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
+bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset )
 {
     // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),
@@ -424,7 +424,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         return false;
     }
 
-    sal_uInt16 nAktPos = 0;
+    SwOutlineNodes::size_type nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
     int nOutLineLevel = MAXLEVEL;
@@ -444,7 +444,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         else
             aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
     }
-    sal_uInt16 nTmpPos = 0;
+    SwOutlineNodes::size_type nTmpPos = 0;
     // If the given range ends at an outlined text node we have to decide if it has to be a part of
     // the moving range or not. Normally it will be a sub outline of our chapter
     // and has to be moved, too. But if the chapter ends with a table(or a section end),
@@ -498,9 +498,9 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     ++aEndRg;
 
     // calculation of the new position
-    if( nOffset < 0 && nAktPos < sal_uInt16(-nOffset) )
+    if( nOffset < 0 && nAktPos < SwOutlineNodes::size_type(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
-    else if( nAktPos + nOffset >= (sal_uInt16)GetNodes().GetOutLineNds().size() )
+    else if( nAktPos + nOffset >= GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();
     else
         pNd = GetNodes().GetOutLineNds()[ nAktPos + nOffset ];

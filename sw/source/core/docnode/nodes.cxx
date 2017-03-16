@@ -1117,7 +1117,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                     pTableNd->DelFrames();
 
                 SwNode *pNd, *pChkNd = pAktNode->m_pStartOfSection;
-                sal_uInt16 nIdxPos;
+                SwOutlineNodes::size_type nIdxPos;
                 do {
                     pNd = &aRg.aEnd.GetNode();
 
@@ -1384,7 +1384,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
             if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
             {
                 // remove the outline indices
-                sal_uInt16 nIdxPos;
+                SwOutlineNodes::size_type nIdxPos;
                 if( m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
                 {
                     m_pOutlineNodes->erase(nIdxPos);

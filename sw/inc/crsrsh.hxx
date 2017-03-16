@@ -600,12 +600,12 @@ public:
 
     bool GotoOutline( const OUString& rName );
     // to the next/previous or the given OutlineNode
-    void GotoOutline( sal_uInt16 nIdx );
+    void GotoOutline( SwOutlineNodes::size_type nIdx );
     // find the "outline position" in the nodes array of the current chapter
-    sal_uInt16 GetOutlinePos( sal_uInt8 nLevel = UCHAR_MAX );
+    SwOutlineNodes::size_type GetOutlinePos( sal_uInt8 nLevel = UCHAR_MAX );
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
-    bool MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
+    bool MakeOutlineSel( SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
                          bool bWithChildren );
 
     bool GotoNextOutline();

@@ -456,7 +456,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          bool bSelFrame = true );
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
-    void GotoOutline( sal_uInt16 nIdx );
+    void GotoOutline( SwOutlineNodes::size_type nIdx );
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( const OUString& rName );
     void GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,

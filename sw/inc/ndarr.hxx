@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_INC_NDARR_HXX
 #define INCLUDED_SW_INC_NDARR_HXX
 
+#include <sal/config.h>
+
+#include <limits>
 #include <vector>
 #include <memory>
 
@@ -79,7 +82,9 @@ struct CompareSwOutlineNodes
 class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes>
 {
 public:
-    bool Seek_Entry(SwNode* rP, sal_uInt16* pnPos) const;
+    static constexpr auto npos = std::numeric_limits<size_type>::max();
+
+    bool Seek_Entry(SwNode* rP, size_type* pnPos) const;
 };
 
 struct SwTableToTextSave;
