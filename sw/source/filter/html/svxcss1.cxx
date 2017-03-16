@@ -323,31 +323,31 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
     switch ( eStyle )
     {
         case CSS1_BS_SINGLE:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
             break;
         case CSS1_BS_DOUBLE:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
             break;
         case CSS1_BS_DOTTED:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOTTED);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOTTED);
             break;
         case CSS1_BS_DASHED:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DASHED);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DASHED);
             break;
         case CSS1_BS_GROOVE:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::ENGRAVED);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::ENGRAVED);
             break;
         case CSS1_BS_RIDGE:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::EMBOSSED);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::EMBOSSED);
             break;
         case CSS1_BS_INSET:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::INSET);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::INSET);
             break;
         case CSS1_BS_OUTSET:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::OUTSET);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::OUTSET);
             break;
         default:
-            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::NONE);
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::NONE);
             break;
     }
 

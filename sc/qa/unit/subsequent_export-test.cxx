@@ -292,6 +292,12 @@ private:
 
 };
 
+std::ostream& operator<<(std::ostream& os, SvxBorderLineStyle n)
+{
+    os << (int)n;
+    return os;
+}
+
 void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
     struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
@@ -1932,17 +1938,17 @@ void ScExportTest::testSheetProtectionXLSX()
 
 namespace {
 
-const char* toBorderName( sal_Int16 eStyle )
+const char* toBorderName( SvxBorderLineStyle eStyle )
 {
     switch (eStyle)
     {
-        case table::BorderLineStyle::SOLID: return "SOLID";
-        case table::BorderLineStyle::DOTTED: return "DOTTED";
-        case table::BorderLineStyle::DASHED: return "DASHED";
-        case table::BorderLineStyle::DASH_DOT: return "DASH_DOT";
-        case table::BorderLineStyle::DASH_DOT_DOT: return "DASH_DOT_DOT";
-        case table::BorderLineStyle::DOUBLE_THIN: return "DOUBLE_THIN";
-        case table::BorderLineStyle::FINE_DASHED: return "FINE_DASHED";
+        case SvxBorderLineStyle::SOLID: return "SOLID";
+        case SvxBorderLineStyle::DOTTED: return "DOTTED";
+        case SvxBorderLineStyle::DASHED: return "DASHED";
+        case SvxBorderLineStyle::DASH_DOT: return "DASH_DOT";
+        case SvxBorderLineStyle::DASH_DOT_DOT: return "DASH_DOT_DOT";
+        case SvxBorderLineStyle::DOUBLE_THIN: return "DOUBLE_THIN";
+        case SvxBorderLineStyle::FINE_DASHED: return "FINE_DASHED";
         default:
             ;
     }
@@ -1957,21 +1963,21 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
     struct
     {
         SCROW mnRow;
-        sal_Int16 mnStyle;
+        SvxBorderLineStyle mnStyle;
         long mnWidth;
     } aChecks[] = {
-        {  1, table::BorderLineStyle::SOLID,         1L }, // hair
-        {  3, table::BorderLineStyle::DOTTED,       15L }, // dotted
-        {  5, table::BorderLineStyle::DASH_DOT_DOT, 15L }, // dash dot dot
-        {  7, table::BorderLineStyle::DASH_DOT,     15L }, // dash dot
-        {  9, table::BorderLineStyle::FINE_DASHED,  15L }, // dashed
-        { 11, table::BorderLineStyle::SOLID,        15L }, // thin
-        { 13, table::BorderLineStyle::DASH_DOT_DOT, 35L }, // medium dash dot dot
-        { 17, table::BorderLineStyle::DASH_DOT,     35L }, // medium dash dot
-        { 19, table::BorderLineStyle::DASHED,       35L }, // medium dashed
-        { 21, table::BorderLineStyle::SOLID,        35L }, // medium
-        { 23, table::BorderLineStyle::SOLID,        50L }, // thick
-        { 25, table::BorderLineStyle::DOUBLE_THIN,  -1L }, // double (don't check width)
+        {  1, SvxBorderLineStyle::SOLID,         1L }, // hair
+        {  3, SvxBorderLineStyle::DOTTED,       15L }, // dotted
+        {  5, SvxBorderLineStyle::DASH_DOT_DOT, 15L }, // dash dot dot
+        {  7, SvxBorderLineStyle::DASH_DOT,     15L }, // dash dot
+        {  9, SvxBorderLineStyle::FINE_DASHED,  15L }, // dashed
+        { 11, SvxBorderLineStyle::SOLID,        15L }, // thin
+        { 13, SvxBorderLineStyle::DASH_DOT_DOT, 35L }, // medium dash dot dot
+        { 17, SvxBorderLineStyle::DASH_DOT,     35L }, // medium dash dot
+        { 19, SvxBorderLineStyle::DASHED,       35L }, // medium dashed
+        { 21, SvxBorderLineStyle::SOLID,        35L }, // medium
+        { 23, SvxBorderLineStyle::SOLID,        50L }, // thick
+        { 25, SvxBorderLineStyle::DOUBLE_THIN,  -1L }, // double (don't check width)
     };
 
     ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
@@ -2021,21 +2027,21 @@ void ScExportTest::testBordersExchangeXLSX()
     // Document: sc/qa/unit/data/README.cellborders
 
     // short name for the table
-    const ::editeng::SvxBorderStyle None     = table::BorderLineStyle::NONE;
-    const ::editeng::SvxBorderStyle Solid    = table::BorderLineStyle::SOLID;
-    const ::editeng::SvxBorderStyle Dotted   = table::BorderLineStyle::DOTTED;
-    const ::editeng::SvxBorderStyle Dashed   = table::BorderLineStyle::DASHED;
-    const ::editeng::SvxBorderStyle FineDash = table::BorderLineStyle::FINE_DASHED;
-    const ::editeng::SvxBorderStyle DashDot  = table::BorderLineStyle::DASH_DOT;
-    const ::editeng::SvxBorderStyle DashDoDo = table::BorderLineStyle::DASH_DOT_DOT;
-    const ::editeng::SvxBorderStyle DoubThin = table::BorderLineStyle::DOUBLE_THIN;
+    const SvxBorderLineStyle None     = SvxBorderLineStyle::NONE;
+    const SvxBorderLineStyle Solid    = SvxBorderLineStyle::SOLID;
+    const SvxBorderLineStyle Dotted   = SvxBorderLineStyle::DOTTED;
+    const SvxBorderLineStyle Dashed   = SvxBorderLineStyle::DASHED;
+    const SvxBorderLineStyle FineDash = SvxBorderLineStyle::FINE_DASHED;
+    const SvxBorderLineStyle DashDot  = SvxBorderLineStyle::DASH_DOT;
+    const SvxBorderLineStyle DashDoDo = SvxBorderLineStyle::DASH_DOT_DOT;
+    const SvxBorderLineStyle DoubThin = SvxBorderLineStyle::DOUBLE_THIN;
 
     const size_t nMaxCol = 18;
     const size_t nMaxRow = 7;
 
     static struct
     {
-        ::editeng::SvxBorderStyle BorderStyleTop, BorderStyleBottom;
+        SvxBorderLineStyle BorderStyleTop, BorderStyleBottom;
         long                      WidthTop, WidthBottom;
     } aCheckBorderWidth[nMaxCol][nMaxRow] =
     {

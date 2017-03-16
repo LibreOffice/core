@@ -1659,28 +1659,28 @@ void lclGetBorderLine(
 
         switch (pLine->GetBorderLineStyle())
         {
-            case table::BorderLineStyle::NONE:
+            case SvxBorderLineStyle::NONE:
                 nStyleIndex = Idx_None;
                 break;
-            case table::BorderLineStyle::SOLID:
+            case SvxBorderLineStyle::SOLID:
                 nStyleIndex = Idx_Solid;
                 break;
-            case table::BorderLineStyle::DOTTED:
+            case SvxBorderLineStyle::DOTTED:
                 nStyleIndex = Idx_Dotted;
                 break;
-            case table::BorderLineStyle::DASHED:
+            case SvxBorderLineStyle::DASHED:
                 nStyleIndex = Idx_Dashed;
                 break;
-            case table::BorderLineStyle::FINE_DASHED:
+            case SvxBorderLineStyle::FINE_DASHED:
                 nStyleIndex = Idx_FineDashed;
                 break;
-            case table::BorderLineStyle::DASH_DOT:
+            case SvxBorderLineStyle::DASH_DOT:
                 nStyleIndex = Idx_DashDot;
                 break;
-            case table::BorderLineStyle::DASH_DOT_DOT:
+            case SvxBorderLineStyle::DASH_DOT_DOT:
                 nStyleIndex = Idx_DashDotDot;
                 break;
-            case table::BorderLineStyle::DOUBLE_THIN:
+            case SvxBorderLineStyle::DOUBLE_THIN:
                 // the "nOuterWidth" is not right for this line type
                 // but at the moment width it not important for that
                 // the right function is nOuterWidth = (sal_uInt16) pLine->GetWidth();

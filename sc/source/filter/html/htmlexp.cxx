@@ -511,37 +511,37 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
             append("px ");
         switch (pLine->GetBorderLineStyle())
         {
-            case table::BorderLineStyle::SOLID:
+            case SvxBorderLineStyle::SOLID:
                 aOut.append("solid");
                 break;
-            case table::BorderLineStyle::DOTTED:
+            case SvxBorderLineStyle::DOTTED:
                 aOut.append("dotted");
                 break;
-            case table::BorderLineStyle::DASHED:
-            case table::BorderLineStyle::DASH_DOT:
-            case table::BorderLineStyle::DASH_DOT_DOT:
+            case SvxBorderLineStyle::DASHED:
+            case SvxBorderLineStyle::DASH_DOT:
+            case SvxBorderLineStyle::DASH_DOT_DOT:
                 aOut.append("dashed");
                 break;
-            case table::BorderLineStyle::DOUBLE:
-            case table::BorderLineStyle::DOUBLE_THIN:
-            case table::BorderLineStyle::THINTHICK_SMALLGAP:
-            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-            case table::BorderLineStyle::THINTHICK_LARGEGAP:
-            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+            case SvxBorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE_THIN:
+            case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+            case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+            case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+            case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+            case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+            case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
                 aOut.append("double");
                 break;
-            case table::BorderLineStyle::EMBOSSED:
+            case SvxBorderLineStyle::EMBOSSED:
                 aOut.append("ridge");
                 break;
-            case table::BorderLineStyle::ENGRAVED:
+            case SvxBorderLineStyle::ENGRAVED:
                 aOut.append("groove");
                 break;
-            case table::BorderLineStyle::OUTSET:
+            case SvxBorderLineStyle::OUTSET:
                 aOut.append("outset");
                 break;
-            case table::BorderLineStyle::INSET:
+            case SvxBorderLineStyle::INSET:
                 aOut.append("inset");
                 break;
             default:

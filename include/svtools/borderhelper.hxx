@@ -27,18 +27,20 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <vcl/outdev.hxx>
 
+enum class SvxBorderLineStyle : sal_Int16;
+
 namespace svtools {
 
-SVT_DLLPUBLIC std::vector<double> GetLineDashing( sal_uInt16 nDashing, double fScale );
+SVT_DLLPUBLIC std::vector<double> GetLineDashing( SvxBorderLineStyle nDashing, double fScale );
 
 SVT_DLLPUBLIC basegfx::B2DPolyPolygon ApplyLineDashing(
-    const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale );
+    const basegfx::B2DPolygon& rPolygon, SvxBorderLineStyle nDashing, double fScale );
 
 SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rBeg,
-        const basegfx::B2DPoint& rEnd, sal_uInt32 nWidth, sal_uInt16 nDashing );
+        const basegfx::B2DPoint& rEnd, sal_uInt32 nWidth, SvxBorderLineStyle nDashing );
 
 SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const Point& rBeg,
-        const Point& rEnd, sal_uInt32 nWidth, sal_uInt16 nDashing );
+        const Point& rEnd, sal_uInt32 nWidth, SvxBorderLineStyle nDashing );
 }
 
 #endif

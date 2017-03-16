@@ -65,7 +65,7 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFormatCol : public SfxPoolItem
 {
-    editeng::SvxBorderStyle m_eLineStyle;     ///< style of the separator line
+    SvxBorderLineStyle m_eLineStyle;     ///< style of the separator line
     sal_uLong   m_nLineWidth;                 ///< Width of the separator line.
     Color   m_aLineColor;                     ///< Color of the separator line.
 
@@ -112,7 +112,7 @@ public:
           SwColumns &GetColumns()       { return m_aColumns; }
     sal_uInt16           GetNumCols() const { return m_aColumns.size(); }
 
-    editeng::SvxBorderStyle     GetLineStyle() const  { return m_eLineStyle;}
+    SvxBorderLineStyle     GetLineStyle() const  { return m_eLineStyle;}
     sal_uLong           GetLineWidth() const  { return m_nLineWidth;}
     const Color&    GetLineColor() const { return m_aLineColor;}
 
@@ -125,7 +125,7 @@ public:
      @return smallest width if bMin is true. */
     sal_uInt16 GetGutterWidth( bool bMin = false ) const;
 
-    void SetLineStyle(editeng::SvxBorderStyle eStyle)        { m_eLineStyle = eStyle;}
+    void SetLineStyle(SvxBorderLineStyle eStyle)        { m_eLineStyle = eStyle;}
     void SetLineWidth(sal_uLong nLWidth)        { m_nLineWidth = nLWidth;}
     void SetLineColor(const Color& rCol )   { m_aLineColor = rCol;}
     void SetLineHeight( sal_uInt8 nNew )     { m_nLineHeight = nNew; }

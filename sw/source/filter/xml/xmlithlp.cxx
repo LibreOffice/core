@@ -149,9 +149,9 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
 
 void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
-    ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
+    SvxBorderLineStyle eStyle = SvxBorderLineStyle::NONE;
     if ( nStyle != API_LINE_NONE )
-        eStyle = ::editeng::SvxBorderStyle( nStyle );
+        eStyle = SvxBorderLineStyle( nStyle );
     rLine.SetBorderLineStyle(eStyle);
 }
 
@@ -201,7 +201,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
            {
                if (bDouble)
                {
-                   rpLine->SetBorderLineStyle( table::BorderLineStyle::DOUBLE );
+                   rpLine->SetBorderLineStyle( SvxBorderLineStyle::DOUBLE );
                }
                rpLine->SetWidth( aBorderWidths[nNamedWidth] );
            }
@@ -233,7 +233,7 @@ void sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( nWidth > 0 )
         rpLine->SetWidth( nWidth );
     else
-        rpLine->GuessLinesWidths(table::BorderLineStyle::DOUBLE,
+        rpLine->GuessLinesWidths(SvxBorderLineStyle::DOUBLE,
                 nOutWidth, nInWidth, nDistance);
 }
 

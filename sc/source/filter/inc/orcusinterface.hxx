@@ -22,6 +22,7 @@
 #include "conditio.hxx"
 
 #include <rtl/strbuf.hxx>
+#include <editeng/borderline.hxx>
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
@@ -37,8 +38,6 @@ class ScOrcusStyles;
 class ScOrcusFactory;
 class ScRangeData;
 class SfxItemSet;
-
-typedef sal_Int16 SvxBorderStyle;
 
 namespace com { namespace sun { namespace star { namespace task {
 
@@ -296,7 +295,7 @@ private:
     {
         struct border_line
         {
-            SvxBorderStyle mestyle;
+            SvxBorderLineStyle mestyle;
             Color maColor;
             double mnWidth;
 

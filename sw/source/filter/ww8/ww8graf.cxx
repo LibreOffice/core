@@ -1531,7 +1531,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    ::editeng::SvxBorderStyle nIdx = table::BorderLineStyle::NONE;
+    SvxBorderLineStyle nIdx = SvxBorderLineStyle::NONE;
 
     sal_Int32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
@@ -1552,21 +1552,21 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        nIdx = table::BorderLineStyle::SOLID;
+        nIdx = SvxBorderLineStyle::SOLID;
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        nIdx = table::BorderLineStyle::DOUBLE;
+        nIdx = SvxBorderLineStyle::DOUBLE;
     break;
     case mso_lineThickThin:
-        nIdx = table::BorderLineStyle::THICKTHIN_SMALLGAP;
+        nIdx = SvxBorderLineStyle::THICKTHIN_SMALLGAP;
     break;
     case mso_lineThinThick:
-        nIdx = table::BorderLineStyle::THINTHICK_SMALLGAP;
+        nIdx = SvxBorderLineStyle::THINTHICK_SMALLGAP;
     break;
     // We have no triple border, use double instead.
     case mso_lineTriple:
-        nIdx = table::BorderLineStyle::DOUBLE;
+        nIdx = SvxBorderLineStyle::DOUBLE;
     break;
     // no line style is set
     case (MSO_LineStyle)USHRT_MAX:
@@ -1580,16 +1580,16 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     switch( eDashing )
     {
         case mso_lineDashGEL:
-            nIdx = table::BorderLineStyle::DASHED;
+            nIdx = SvxBorderLineStyle::DASHED;
             break;
         case mso_lineDotGEL:
-            nIdx = table::BorderLineStyle::DOTTED;
+            nIdx = SvxBorderLineStyle::DOTTED;
             break;
         default:
             break;
     }
 
-    if (table::BorderLineStyle::NONE != nIdx)
+    if (SvxBorderLineStyle::NONE != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );

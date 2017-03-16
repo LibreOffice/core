@@ -263,10 +263,10 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
     // thickness, or one of smaller thickness. If too small we
     // can make the deficit up in additional white space or
     // object size
-    ::editeng::SvxBorderStyle const nLineStyle(
+    SvxBorderLineStyle const nLineStyle(
             ::editeng::ConvertBorderStyleFromWord(nLineType));
-    rToFill.LineStyle = nLineStyle;
-    double const fConverted( (table::BorderLineStyle::NONE == nLineStyle) ? 0.0 :
+    rToFill.LineStyle = (sal_Int16)nLineStyle;
+    double const fConverted( (SvxBorderLineStyle::NONE == nLineStyle) ? 0.0 :
         ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness,
             nLineType));
     rToFill.LineWidth = convertTwipToMM100(fConverted);

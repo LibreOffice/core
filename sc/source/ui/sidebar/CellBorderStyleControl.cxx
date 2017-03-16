@@ -244,7 +244,7 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
     else if (nId == maTBBorder3->GetItemId("doublebottom"))
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
         nValidFlags |= FRM_VALID_BOTTOM;
     }
     else if (nId == maTBBorder3->GetItemId("topthickbottom"))
@@ -256,7 +256,7 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
     else if (nId == maTBBorder3->GetItemId("topdoublebottom"))
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }

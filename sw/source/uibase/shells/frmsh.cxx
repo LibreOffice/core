@@ -1024,7 +1024,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     if(aBorderLine.GetOutWidth() == 0)
                     {
                         aBorderLine.SetBorderLineStyle(
-                                table::BorderLineStyle::SOLID);
+                                SvxBorderLineStyle::SOLID);
                         aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
                     }
                     //Set distance only if the request is received from the controller.

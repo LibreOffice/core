@@ -499,14 +499,14 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     // Fill the line styles listbox
     m_pLineTypeDLB->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
     m_pLineTypeDLB->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
-        table::BorderLineStyle::SOLID );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::SOLID),
+        SvxBorderLineStyle::SOLID );
     m_pLineTypeDLB->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DOTTED),
-        table::BorderLineStyle::DOTTED );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DOTTED),
+        SvxBorderLineStyle::DOTTED );
     m_pLineTypeDLB->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
-        table::BorderLineStyle::DASHED );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DASHED),
+        SvxBorderLineStyle::DASHED );
 
     long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
             m_pLineWidthEdit->GetValue( ),
@@ -733,7 +733,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
         else
         {
             m_pColMgr->SetLineWidthAndColor(
-                    ::editeng::SvxBorderStyle( m_pLineTypeDLB->GetSelectEntryStyle( ) ),
+                    SvxBorderLineStyle( m_pLineTypeDLB->GetSelectEntryStyle( ) ),
                     nLineWidth,
                     m_pLineColorDLB->GetSelectEntryColor() );
             m_pColMgr->SetAdjust( SwColLineAdj(

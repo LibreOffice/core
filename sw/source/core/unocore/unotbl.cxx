@@ -200,7 +200,7 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
 {
     rSvxLine.SetColor(Color(rLine.Color));
 
-    rSvxLine.GuessLinesWidths( table::BorderLineStyle::NONE,
+    rSvxLine.GuessLinesWidths( SvxBorderLineStyle::NONE,
                                 convertMm100ToTwip( rLine.OuterLineWidth ),
                                 convertMm100ToTwip( rLine.InnerLineWidth ),
                                 convertMm100ToTwip( rLine.LineDistance ) );

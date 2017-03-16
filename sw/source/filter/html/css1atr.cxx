@@ -3333,34 +3333,34 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     sOut.append(' ');
     switch (pLine->GetBorderLineStyle())
     {
-        case table::BorderLineStyle::SOLID:
+        case SvxBorderLineStyle::SOLID:
             sOut.append(sCSS1_PV_solid);
             break;
-        case table::BorderLineStyle::DOTTED:
+        case SvxBorderLineStyle::DOTTED:
             sOut.append(sCSS1_PV_dotted);
             break;
-        case table::BorderLineStyle::DASHED:
+        case SvxBorderLineStyle::DASHED:
             sOut.append(sCSS1_PV_dashed);
             break;
-        case table::BorderLineStyle::DOUBLE:
-        case table::BorderLineStyle::THINTHICK_SMALLGAP:
-        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-        case table::BorderLineStyle::THINTHICK_LARGEGAP:
-        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+        case SvxBorderLineStyle::DOUBLE:
+        case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+        case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+        case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+        case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+        case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+        case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
             sOut.append(sCSS1_PV_double);
             break;
-        case table::BorderLineStyle::EMBOSSED:
+        case SvxBorderLineStyle::EMBOSSED:
             sOut.append(sCSS1_PV_ridge);
             break;
-        case table::BorderLineStyle::ENGRAVED:
+        case SvxBorderLineStyle::ENGRAVED:
             sOut.append(sCSS1_PV_groove);
             break;
-        case table::BorderLineStyle::INSET:
+        case SvxBorderLineStyle::INSET:
             sOut.append(sCSS1_PV_inset);
             break;
-        case table::BorderLineStyle::OUTSET:
+        case SvxBorderLineStyle::OUTSET:
             sOut.append(sCSS1_PV_outset);
             break;
         default:

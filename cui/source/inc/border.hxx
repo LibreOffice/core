@@ -117,7 +117,7 @@ private:
     bool                mbRemoveAdjacentCellBorders;
     bool                bIsCalcDoc;
 
-    std::set<sal_Int16> maUsedBorderStyles;
+    std::set<SvxBorderLineStyle> maUsedBorderStyles;
 
     // Handler
     DECL_LINK( SelStyleHdl_Impl, ListBox&, void );
@@ -145,7 +145,7 @@ private:
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
 
-    bool IsBorderLineStyleAllowed( sal_Int16 nStyle ) const;
+    bool IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
 };
 

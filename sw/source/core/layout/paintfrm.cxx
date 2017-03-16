@@ -145,17 +145,17 @@ namespace o3tl {
 class SwLineRect : public SwRect
 {
     Color             aColor;
-    SvxBorderStyle    nStyle;
+    SvxBorderLineStyle nStyle;
     const SwTabFrame *pTab;
     SubColFlags       nSubColor;  //colorize subsidiary lines
     bool              bPainted;   //already painted?
     sal_uInt8         nLock;      //To distinguish the line and the hell layer.
 public:
-    SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
+    SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyle,
                 const SwTabFrame *pT , const SubColFlags nSCol );
 
     const Color&         GetColor() const { return aColor;}
-    SvxBorderStyle       GetStyle() const { return nStyle; }
+    SvxBorderLineStyle   GetStyle() const { return nStyle; }
     const SwTabFrame      *GetTab()   const { return pTab;  }
     void  SetPainted()                    { bPainted = true; }
     void  Lock( bool bLock )              { if ( bLock )
@@ -198,7 +198,7 @@ public:
         dummy_function();
 #endif
     }
-    void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
+    void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderLineStyle nStyle,
                       const SwTabFrame *pTab, const SubColFlags nSCol, SwPaintProperties &properties );
     void ConnectEdges( OutputDevice *pOut, SwPaintProperties &properties );
     void PaintLines  ( OutputDevice *pOut, SwPaintProperties &properties );
@@ -625,7 +625,7 @@ void BorderLines::AddBorderLine(
     m_Lines.push_back(xLine);
 }
 
-SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
+SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyl,
                         const SwTabFrame *pT, const SubColFlags nSCol ) :
     SwRect( rRect ),
     nStyle( nStyl ),
@@ -675,7 +675,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties& properties)
     return false;
 }
 
-void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
+void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyle,
                                const SwTabFrame *pTab, const SubColFlags nSCol, SwPaintProperties& properties )
 {
     // Loop backwards because lines which can be combined, can usually be painted
@@ -800,7 +800,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& propertie
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
                             aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
-                                        table::BorderLineStyle::SOLID,
+                                        SvxBorderLineStyle::SOLID,
                                         rL1.GetTab(), SubColFlags::Tab ) );
                             if ( isFull() )
                             {
@@ -841,7 +841,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& propertie
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
                             aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
-                                        table::BorderLineStyle::SOLID,
+                                        SvxBorderLineStyle::SOLID,
                                         rL1.GetTab(), SubColFlags::Tab ) );
                             if ( isFull() )
                             {
@@ -2668,7 +2668,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 if (isTableBoundariesEnabled() && gProp.pSGlobalShell->GetWin())
                     aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
                 else
-                    aStyles[0].SetType(table::BorderLineStyle::NONE);
+                    aStyles[0].SetType(SvxBorderLineStyle::NONE);
             }
             else
                 pTmpColor = pHCColor;
@@ -4650,7 +4650,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
                              const SwPageFrame * pPage,
                              const Color *pColor,
-                             const SvxBorderStyle nStyle ) const
+                             const SvxBorderLineStyle nStyle ) const
 {
     if ( !rOutRect.IsOver( rRect ) )
         return;
@@ -5588,7 +5588,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
                       nX), Size( nLineWidth, nWidth ) )
             : SwRect( Point( nX, Frame().Pos().Y() + rInf.GetTopDist() ),
                             Size( nWidth, rInf.GetLineWidth()));
-    if ( aLineRect.HasArea() && rInf.GetLineStyle() != css::table::BorderLineStyle::NONE)
+    if ( aLineRect.HasArea() && rInf.GetLineStyle() != SvxBorderLineStyle::NONE)
         PaintBorderLine( rRect, aLineRect , pPage, &rInf.GetLineColor(),
                 rInf.GetLineStyle() );
 }
@@ -6868,7 +6868,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
             SwRect aRect( aP1, aP2 );
             // OD 18.11.2002 #99672# - use parameter <pSubsLines> instead of
             // global variable <gProp.pSSubsLines>.
-            pSubsLines->AddLineRect( aRect, nullptr, table::BorderLineStyle::SOLID,
+            pSubsLines->AddLineRect( aRect, nullptr, SvxBorderLineStyle::SOLID,
                     nullptr, nSubColor, gProp );
         }
         aP1 = aP2;
@@ -7178,14 +7178,14 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
             {
                 const SwRect aRect( aOut.Pos(), aLB );
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
-                        table::BorderLineStyle::SOLID, nullptr, nSubColor, gProp );
+                        SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 const SwRect aRect( aRT, aRB );
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
-                        table::BorderLineStyle::SOLID, nullptr, nSubColor, gProp );
+                        SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
@@ -7196,13 +7196,13 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
-                        table::BorderLineStyle::SOLID, nullptr, nSubColor, gProp );
+                        SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
                 const SwRect aRect( aLB, aRB );
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
-                        table::BorderLineStyle::SOLID, nullptr, nSubColor, gProp );
+                        SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
         }
     }

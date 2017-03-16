@@ -3886,7 +3886,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
         // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
         switch (rLine.GetBorderLineStyle())
         {
-            case table::BorderLineStyle::SOLID:
+            case SvxBorderLineStyle::SOLID:
                 {
                     if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
                         brcType = 5;
@@ -3894,52 +3894,52 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                         brcType = 1;
                 }
                 break;
-            case table::BorderLineStyle::DOTTED:
+            case SvxBorderLineStyle::DOTTED:
                 brcType = 6;
                 break;
-            case table::BorderLineStyle::DASHED:
+            case SvxBorderLineStyle::DASHED:
                 brcType = 7;
                 break;
-            case table::BorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE:
                 brcType = 3;
                 break;
-            case table::BorderLineStyle::THINTHICK_SMALLGAP:
+            case SvxBorderLineStyle::THINTHICK_SMALLGAP:
                 brcType = 11;
                 break;
-            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+            case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
                 brcType = 14;
                 break;
-            case table::BorderLineStyle::THINTHICK_LARGEGAP:
+            case SvxBorderLineStyle::THINTHICK_LARGEGAP:
                 brcType = 17;
                 break;
-            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+            case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
                 brcType = 12;
                 break;
-            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+            case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
                 brcType = 15;
                 break;
-            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+            case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
                 brcType = 18;
                 break;
-            case table::BorderLineStyle::EMBOSSED:
+            case SvxBorderLineStyle::EMBOSSED:
                 brcType = 24;
                 break;
-            case table::BorderLineStyle::ENGRAVED:
+            case SvxBorderLineStyle::ENGRAVED:
                 brcType = 25;
                 break;
-            case table::BorderLineStyle::OUTSET:
+            case SvxBorderLineStyle::OUTSET:
                 brcType = 26;
                 break;
-            case table::BorderLineStyle::INSET:
+            case SvxBorderLineStyle::INSET:
                 brcType = 27;
                 break;
-            case table::BorderLineStyle::FINE_DASHED:
+            case SvxBorderLineStyle::FINE_DASHED:
                 brcType = 22;
                 break;
-            case table::BorderLineStyle::DASH_DOT:
+            case SvxBorderLineStyle::DASH_DOT:
                 brcType = 8;
                 break;
-            case table::BorderLineStyle::DASH_DOT_DOT:
+            case SvxBorderLineStyle::DASH_DOT_DOT:
                 brcType = 9;
                 break;
             default:
@@ -3986,7 +3986,7 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
     WW8_BRCVer9 aBrcVer9;
     WW8_BRC aBrcVer8;
 
-    if( pLine && pLine->GetBorderLineStyle() != table::BorderLineStyle::NONE )
+    if( pLine && pLine->GetBorderLineStyle() != SvxBorderLineStyle::NONE )
     {
         aBrcVer9 = TranslateBorderLine( *pLine, nDist, bShadow );
         sal_uInt8 ico = msfilter::util::TransColToIco( msfilter::util::BGRToRGB(aBrcVer9.cv()) );

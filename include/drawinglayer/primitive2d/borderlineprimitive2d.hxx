@@ -27,8 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <com/sun/star/table/BorderLineStyle.hpp>
-
+enum class SvxBorderLineStyle : sal_Int16;
 
 namespace drawinglayer
 {
@@ -66,7 +65,7 @@ namespace drawinglayer
             basegfx::BColor                                 maRGBColorGap;
             bool                                            mbHasGapColor;
 
-            short                                           mnStyle;
+            SvxBorderLineStyle                              mnStyle;
 
             double                                          mfPatternScale;
 
@@ -107,7 +106,7 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColorLeft,
                 const basegfx::BColor& rRGBColorGap,
                 bool bHasGapColor,
-                const short nStyle,
+                SvxBorderLineStyle nStyle,
                 double fPatternScale = 1.0 );
 
             /// data read access
@@ -124,7 +123,7 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorLeft () const { return maRGBColorLeft; }
             const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
             bool hasGapColor( ) const { return mbHasGapColor; }
-            short getStyle () const { return mnStyle; }
+            SvxBorderLineStyle getStyle () const { return mnStyle; }
             double getPatternScale() const { return mfPatternScale; }
             /// Same as create2DDecomposition(), but can do pixel correction if requested.
             void createDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation, bool bPixelCorrection) const;

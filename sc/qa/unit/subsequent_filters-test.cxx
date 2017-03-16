@@ -366,6 +366,11 @@ std::ostream& operator<<(std::ostream& rStrm, const SvxCellHorJustify& rCode)
     rStrm << static_cast<int>(rCode);
     return rStrm;
 }
+std::ostream& operator<<(std::ostream& os, SvxBorderLineStyle n)
+{
+    os << (int)n;
+    return os;
+}
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, SfxFilterFlags nFilterFlags,
@@ -936,7 +941,7 @@ void ScFiltersTest::testDoubleThinBorder()
     rDoc.GetBorderLines( 2, 2, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL( table::BorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle() );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE_THIN, pRight->GetBorderLineStyle() );
     xDocSh->DoClose();
 }
 
@@ -957,8 +962,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pTop);
     CPPUNIT_ASSERT(!pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
 
     rDoc.GetBorderLines( 2, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(!pLeft);
@@ -966,8 +970,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pBottom);
 
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(20L, pRight->GetWidth());
 
     rDoc.GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
@@ -976,8 +979,7 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pRight->GetBorderLineStyle());
     CPPUNIT_ASSERT_EQUAL(5L, pRight->GetWidth());
     CPPUNIT_ASSERT_EQUAL(Color(COL_BLUE), pRight->GetColor());
 
@@ -1004,17 +1006,18 @@ struct Border
     sal_uInt16 bOutWidth;
     sal_uInt16 bInWidth;
     sal_uInt16 bDistance;
-    sal_Int32 lStyle;
-    sal_Int32 tStyle;
-    sal_Int32 rStyle;
-    sal_Int32 bStyle;
+    SvxBorderLineStyle lStyle;
+    SvxBorderLineStyle tStyle;
+    SvxBorderLineStyle rStyle;
+    SvxBorderLineStyle bStyle;
     // that's a monstrum
     Border(sal_Int16 col, sal_Int32 r, sal_Int32 lW, sal_Int32 tW, sal_Int32 rW, sal_Int32 bW, sal_uInt16 lOutW, sal_uInt16 lInW,
         sal_uInt16 lDist, sal_uInt16 tOutW, sal_uInt16 tInW, sal_uInt16 tDist, sal_uInt16 rOutW, sal_uInt16 rInW, sal_uInt16 rDist,
-        sal_uInt16 bOutW, sal_uInt16 bInW, sal_uInt16 bDist, sal_Int32 lSt, sal_Int32 tSt, sal_Int32 rSt, sal_Int32 bSt):
+        sal_uInt16 bOutW, sal_uInt16 bInW, sal_uInt16 bDist, sal_Int16 lSt, sal_Int16 tSt, sal_Int16 rSt, sal_Int16 bSt):
     column(col), row(r), leftWidth(lW), topWidth(tW), rightWidth(rW), bottomWidth(bW), lOutWidth(lOutW), lInWidth(lInW), lDistance(lDist),
     tOutWidth(tOutW), tInWidth(tInW), tDistance(tDist), rOutWidth(rOutW), rInWidth(rInW), rDistance(rDist), bOutWidth(bOutW), bInWidth(bInW),
-    bDistance(bDist), lStyle(lSt), tStyle(tSt), rStyle(rSt), bStyle(bSt) {};
+    bDistance(bDist),
+    lStyle((SvxBorderLineStyle)lSt), tStyle((SvxBorderLineStyle)tSt), rStyle((SvxBorderLineStyle)rSt), bStyle((SvxBorderLineStyle)bSt) {};
 };
 
 void ScFiltersTest::testBordersOoo33()
@@ -1073,7 +1076,7 @@ void ScFiltersTest::testBordersOoo33()
                 CPPUNIT_ASSERT_EQUAL(borders[temp].bOutWidth, pBottom->GetOutWidth());
                 CPPUNIT_ASSERT_EQUAL(borders[temp].bInWidth, pBottom->GetInWidth());
                 CPPUNIT_ASSERT_EQUAL(borders[temp].bDistance, pBottom->GetDistance());
-                sal_Int32 tempStyle = pLeft->GetBorderLineStyle();
+                SvxBorderLineStyle tempStyle = pLeft->GetBorderLineStyle();
                 CPPUNIT_ASSERT_EQUAL(borders[temp].lStyle, tempStyle);
                 tempStyle = pTop->GetBorderLineStyle();
                 CPPUNIT_ASSERT_EQUAL(borders[temp].tStyle, tempStyle);
@@ -2865,10 +2868,10 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetRight()->GetColor());
     CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetTop()->GetColor());
     CPPUNIT_ASSERT_EQUAL(Color(255, 204, 18), pBoxItem->GetBottom()->GetColor());
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetTop()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetBottom()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), SvxBorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), SvxBorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetTop()->GetBorderLineStyle(), SvxBorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetBottom()->GetBorderLineStyle(), SvxBorderLineStyle::DOTTED);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with left width", 1, pBoxItem->GetLeft()->GetWidth());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with right width", 1, pBoxItem->GetRight()->GetWidth());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with top width", 1, pBoxItem->GetTop()->GetWidth());
@@ -2892,8 +2895,8 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     pBoxItem = static_cast<const SvxBoxItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(Color(0, 0, 0), pBoxItem->GetLeft()->GetColor());
     CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0), pBoxItem->GetRight()->GetColor());
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DOTTED);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetLeft()->GetBorderLineStyle(), SvxBorderLineStyle::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pBoxItem->GetRight()->GetBorderLineStyle(), SvxBorderLineStyle::DOTTED);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with left width", 0, pBoxItem->GetLeft()->GetWidth());
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with right width", 14, pBoxItem->GetRight()->GetWidth());
 
@@ -2902,7 +2905,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
 
     const SvxLineItem* pTLBR= static_cast<const SvxLineItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(Color(18, 0, 0), pTLBR->GetLine()->GetColor());
-    CPPUNIT_ASSERT_EQUAL(pTLBR->GetLine()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DASH_DOT);
+    CPPUNIT_ASSERT_EQUAL(pTLBR->GetLine()->GetBorderLineStyle(), SvxBorderLineStyle::DASH_DOT);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with diagonal tl-br width", 14, pTLBR->GetLine()->GetWidth());
 
     CPPUNIT_ASSERT_MESSAGE("Style Name2 : Doesn't have Attribute diagonal(bl-tr) border, but it should have.",
@@ -2910,7 +2913,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
 
     const SvxLineItem* pBLTR= static_cast<const SvxLineItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(Color(255, 204, 238), pBLTR->GetLine()->GetColor());
-    CPPUNIT_ASSERT_EQUAL(pBLTR->GetLine()->GetBorderLineStyle(), ::com::sun::star::table::BorderLineStyle::DASHED);
+    CPPUNIT_ASSERT_EQUAL(pBLTR->GetLine()->GetBorderLineStyle(), SvxBorderLineStyle::DASHED);
     ASSERT_DOUBLES_EQUAL_MESSAGE("Error with diagonal tl-br width", 34, pBLTR->GetLine()->GetWidth());
 
     CPPUNIT_ASSERT_MESSAGE("Style Name2 : Has Attribute background, but it shouldn't.",

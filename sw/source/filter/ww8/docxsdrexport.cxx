@@ -1352,7 +1352,7 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
                          FSEND);
     pFS->endElementNS(XML_a, XML_solidFill);
 
-    if (drawing::LineStyle_DASH == pBorderLine->GetBorderLineStyle()) // Line Style is Dash type
+    if (SvxBorderLineStyle::DASHED == pBorderLine->GetBorderLineStyle()) // Line Style is Dash type
         pFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
 
     pFS->endElementNS(XML_a, XML_ln);

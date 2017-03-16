@@ -394,7 +394,7 @@ public:
                           const bool bOnlyTextBackground = false ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrame*,
                           const Color *pColor,
-                          const editeng::SvxBorderStyle = css::table::BorderLineStyle::SOLID ) const;
+                          const SvxBorderLineStyle = SvxBorderLineStyle::SOLID ) const;
 
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DContainer& rSequence ) const;

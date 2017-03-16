@@ -377,7 +377,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
 SwPageFootnoteInfo::SwPageFootnoteInfo()
     : m_nMaxHeight( 0 )
     , m_nLineWidth(10)
-    , m_eLineStyle( table::BorderLineStyle::SOLID )
+    , m_eLineStyle( SvxBorderLineStyle::SOLID )
     , m_Width( 25, 100 )
     , m_nTopDist( 57 )         //1mm
     , m_nBottomDist( 57 )

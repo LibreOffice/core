@@ -30,14 +30,14 @@ using namespace editeng;
 
 CPPUNIT_NS_BEGIN
 
-template<> struct assertion_traits<SvxBorderStyle>
+template<> struct assertion_traits<SvxBorderLineStyle>
 {
-    static bool equal( SvxBorderStyle x, SvxBorderStyle y )
+    static bool equal( SvxBorderLineStyle x, SvxBorderLineStyle y )
     {
         return x == y;
     }
 
-    static std::string toString( SvxBorderStyle x )
+    static std::string toString( SvxBorderLineStyle x )
     {
         OStringStream ost;
         ost << static_cast<unsigned int>(x);
@@ -75,8 +75,8 @@ void BorderLineTest::testGuessWidthDouble()
 {
     // Normal double case
     SvxBorderLine line;
-    line.GuessLinesWidths( DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetBorderLineStyle() );
+    line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetInWidth()) );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetDistance()) );
@@ -86,9 +86,9 @@ void BorderLineTest::testGuessWidthDouble()
 void BorderLineTest::testGuessWidthNoMatch()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( DOUBLE,
+    line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE,
             TEST_WIDTH + 1, TEST_WIDTH + 2, TEST_WIDTH + 3 );
-    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetBorderLineStyle() );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+1, static_cast<long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+2, static_cast<long>(line.GetInWidth()) );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+3, static_cast<long>(line.GetDistance()));
@@ -98,11 +98,11 @@ void BorderLineTest::testGuessWidthNoMatch()
 void BorderLineTest::testGuessWidthThinthickSmallgap()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( DOUBLE,
+    line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE,
             THINTHICKSG_OUT_WIDTH,
             THINTHICKSG_IN_WIDTH,
             THINTHICKSG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_SMALLGAP, line.GetBorderLineStyle() );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_SMALLGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_OUT_WIDTH,
             static_cast<long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_IN_WIDTH,
@@ -116,11 +116,11 @@ void BorderLineTest::testGuessWidthThinthickSmallgap()
 void BorderLineTest::testGuessWidthThinthickLargegap()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( DOUBLE,
+    line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE,
             THINTHICKLG_OUT_WIDTH,
             THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH,
             static_cast<long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_IN_WIDTH,
@@ -134,11 +134,11 @@ void BorderLineTest::testGuessWidthThinthickLargegap()
 void BorderLineTest::testGuessWidthNostyleDouble()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( css::table::BorderLineStyle::NONE,
+    line.GuessLinesWidths( SvxBorderLineStyle::NONE,
             THINTHICKLG_OUT_WIDTH,
             THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH,
             static_cast<long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_IN_WIDTH,
@@ -152,8 +152,8 @@ void BorderLineTest::testGuessWidthNostyleDouble()
 void BorderLineTest::testGuessWidthNostyleSingle()
 {
     SvxBorderLine line;
-    line.GuessLinesWidths( css::table::BorderLineStyle::NONE, TEST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( SOLID, line.GetBorderLineStyle() );
+    line.GuessLinesWidths( SvxBorderLineStyle::NONE, TEST_WIDTH );
+    CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::SOLID, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 

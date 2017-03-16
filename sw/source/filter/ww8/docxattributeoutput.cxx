@@ -2636,52 +2636,52 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     {
         switch (pBorderLine->GetBorderLineStyle())
         {
-            case table::BorderLineStyle::SOLID:
+            case SvxBorderLineStyle::SOLID:
                 pVal = "single";
                 break;
-            case table::BorderLineStyle::DOTTED:
+            case SvxBorderLineStyle::DOTTED:
                 pVal = "dotted";
                 break;
-            case table::BorderLineStyle::DASHED:
+            case SvxBorderLineStyle::DASHED:
                 pVal = "dashed";
                 break;
-            case table::BorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE:
                 pVal = "double";
                 break;
-            case table::BorderLineStyle::THINTHICK_SMALLGAP:
+            case SvxBorderLineStyle::THINTHICK_SMALLGAP:
                 pVal = "thinThickSmallGap";
                 break;
-            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+            case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
                 pVal = "thinThickMediumGap";
                 break;
-            case table::BorderLineStyle::THINTHICK_LARGEGAP:
+            case SvxBorderLineStyle::THINTHICK_LARGEGAP:
                 pVal = "thinThickLargeGap";
                 break;
-            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+            case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
                 pVal = "thickThinSmallGap";
                 break;
-            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+            case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
                 pVal = "thickThinMediumGap";
                 break;
-            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+            case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
                 pVal = "thickThinLargeGap";
                 break;
-            case table::BorderLineStyle::EMBOSSED:
+            case SvxBorderLineStyle::EMBOSSED:
                 pVal = "threeDEmboss";
                 break;
-            case table::BorderLineStyle::ENGRAVED:
+            case SvxBorderLineStyle::ENGRAVED:
                 pVal = "threeDEngrave";
                 break;
-            case table::BorderLineStyle::OUTSET:
+            case SvxBorderLineStyle::OUTSET:
                 pVal = "outset";
                 break;
-            case table::BorderLineStyle::INSET:
+            case SvxBorderLineStyle::INSET:
                 pVal = "inset";
                 break;
-            case table::BorderLineStyle::FINE_DASHED:
+            case SvxBorderLineStyle::FINE_DASHED:
                 pVal = "dashSmallGap";
                 break;
-            case table::BorderLineStyle::NONE:
+            case SvxBorderLineStyle::NONE:
             default:
                 break;
         }
@@ -2695,7 +2695,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     // if they are equal, it means that they were style-defined and there is
     // no need to write them.
     if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
-            pBorderLine->GetBorderLineStyle() == rStyleProps->LineStyle &&
+            pBorderLine->GetBorderLineStyle() == (SvxBorderLineStyle)rStyleProps->LineStyle &&
             pBorderLine->GetColor() == rStyleProps->Color &&
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
@@ -7882,8 +7882,8 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 *pLeft == *pRight && *pLeft == *pTop && *pLeft == *pBottom)
         {
             // Check border style
-            editeng::SvxBorderStyle eBorderStyle = pTop->GetBorderLineStyle();
-            if (eBorderStyle == table::BorderLineStyle::NONE)
+            SvxBorderLineStyle eBorderStyle = pTop->GetBorderLineStyle();
+            if (eBorderStyle == SvxBorderLineStyle::NONE)
             {
                 if (m_rExport.SdrExporter().getTextFrameSyntax())
                 {
@@ -7904,7 +7904,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                     AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                             XML_strokecolor, sColor.getStr(),
                             XML_strokeweight, sWidth.getStr() );
-                    if( drawing::LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
+                    if( SvxBorderLineStyle::DASHED == pTop->GetBorderLineStyle() ) // Line Style is Dash type
                         AddToAttrList( m_rExport.SdrExporter().getDashLineStyle(),
                             XML_dashstyle, "dash" );
                 }

@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwPageFootnoteInfo
 private:
     SwTwips     m_nMaxHeight;   ///< maximum height of the footnote area.
     sal_uLong   m_nLineWidth;   ///< width of separator line
-    editeng::SvxBorderStyle m_eLineStyle;  ///< Style of the separator line
+    SvxBorderLineStyle m_eLineStyle;  ///< Style of the separator line
     Color       m_LineColor;    ///< color of the separator line
     Fraction    m_Width;        ///< percentage width of the separator line.
     css::text::HorizontalAdjust m_eAdjust;      ///< line adjustment.
@@ -60,7 +60,7 @@ public:
     SwTwips     GetHeight() const       { return m_nMaxHeight; }
     sal_uLong   GetLineWidth() const    { return m_nLineWidth; }
     const Color& GetLineColor() const   { return m_LineColor;}
-    editeng::SvxBorderStyle  GetLineStyle() const { return m_eLineStyle; }
+    SvxBorderLineStyle  GetLineStyle() const { return m_eLineStyle; }
     const Fraction& GetWidth() const    { return m_Width; }
     css::text::HorizontalAdjust GetAdj() const { return m_eAdjust; }
     SwTwips     GetTopDist() const      { return m_nTopDist; }
@@ -68,7 +68,7 @@ public:
 
     void SetHeight(SwTwips const nNew)      { m_nMaxHeight = nNew; }
     void SetLineWidth(sal_uLong const nSet) { m_nLineWidth = nSet; }
-    void SetLineStyle(editeng::SvxBorderStyle const eSet) {m_eLineStyle = eSet;}
+    void SetLineStyle(SvxBorderLineStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
     void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
     void SetAdj(css::text::HorizontalAdjust const eNew)   { m_eAdjust = eNew; }

@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svtools/borderhelper.hxx>
+#include <editeng/borderline.hxx>
 
 #include <algorithm>
 #include <cmath>
@@ -240,7 +241,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
 
                     // Get which is the line to show
-                    bool bIsSolidline = mnStyle == css::table::BorderLineStyle::SOLID;
+                    bool bIsSolidline = mnStyle == SvxBorderLineStyle::SOLID;
                     double nWidth = getLeftWidth();
                     basegfx::BColor aColor = getRGBColorLeft();
                     if ( basegfx::fTools::equal( 0.0, mfLeftWidth ) )
@@ -333,7 +334,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
             const basegfx::BColor& rRGBColorLeft,
             const basegfx::BColor& rRGBColorGap,
             bool bHasGapColor,
-            const short nStyle,
+            SvxBorderLineStyle nStyle,
             double fPatternScale)
         :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),

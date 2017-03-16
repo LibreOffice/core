@@ -101,10 +101,10 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             switch ( aFootnoteInfo.GetLineStyle( ) )
             {
                 default:
-                case table::BorderLineStyle::NONE : rVal <<= sal_Int8(0); break;
-                case table::BorderLineStyle::SOLID: rVal <<= sal_Int8(1); break;
-                case table::BorderLineStyle::DOTTED: rVal <<= sal_Int8(2); break;
-                case table::BorderLineStyle::DASHED: rVal <<= sal_Int8(3); break;
+                case SvxBorderLineStyle::NONE : rVal <<= sal_Int8(0); break;
+                case SvxBorderLineStyle::SOLID: rVal <<= sal_Int8(1); break;
+                case SvxBorderLineStyle::DOTTED: rVal <<= sal_Int8(2); break;
+                case SvxBorderLineStyle::DASHED: rVal <<= sal_Int8(3); break;
             }
             break;
         }
@@ -173,14 +173,14 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         break;
         case MID_FTN_LINE_STYLE:
         {
-            ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
+            SvxBorderLineStyle eStyle = SvxBorderLineStyle::NONE;
             sal_Int8 nSet = 0;
             rVal >>= nSet;
             switch ( nSet )
             {
-                case 1: eStyle = table::BorderLineStyle::SOLID; break;
-                case 2: eStyle = table::BorderLineStyle::DOTTED; break;
-                case 3: eStyle = table::BorderLineStyle::DASHED; break;
+                case 1: eStyle = SvxBorderLineStyle::SOLID; break;
+                case 2: eStyle = SvxBorderLineStyle::DOTTED; break;
+                case 3: eStyle = SvxBorderLineStyle::DASHED; break;
                 default: break;
             }
             aFootnoteInfo.SetLineStyle( eStyle );

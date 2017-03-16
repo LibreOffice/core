@@ -125,7 +125,7 @@ SwColMgr::~SwColMgr()
 {
 }
 
-void SwColMgr::SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nLWidth, const Color& rCol)
+void SwColMgr::SetLineWidthAndColor(SvxBorderLineStyle eStyle, sal_uLong nLWidth, const Color& rCol)
 {
     aFormatCol.SetLineStyle(eStyle);
     aFormatCol.SetLineWidth(nLWidth);

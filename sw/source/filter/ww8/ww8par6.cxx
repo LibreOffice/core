@@ -1335,12 +1335,12 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
         cv = 0xc0c0c0;
     }
 
-    ::editeng::SvxBorderStyle const eStyle(
+    SvxBorderLineStyle const eStyle(
             ::editeng::ConvertBorderStyleFromWord(nIdx));
 
     ::editeng::SvxBorderLine aLine;
     aLine.SetBorderLineStyle( eStyle );
-    double const fConverted( (table::BorderLineStyle::NONE == eStyle) ? 0.0 :
+    double const fConverted( (SvxBorderLineStyle::NONE == eStyle) ? 0.0 :
         ::editeng::ConvertBorderWidthFromWord(eStyle, nLineThickness, nIdx));
     aLine.SetWidth(fConverted);
 
@@ -4890,7 +4890,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             SetWW8_BRC(nBrcVer, aBrc, pData);
 
             // Border style is none -> no border, no shadow
-            if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != table::BorderLineStyle::NONE )
+            if( editeng::ConvertBorderStyleFromWord(aBrc.brcType()) != SvxBorderLineStyle::NONE )
             {
                 Set1Border(aBoxItem, aBrc, SvxBoxItemLine::TOP, 0, nullptr, true);
                 Set1Border(aBoxItem, aBrc, SvxBoxItemLine::BOTTOM, 0, nullptr, true);

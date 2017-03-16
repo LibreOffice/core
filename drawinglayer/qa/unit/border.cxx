@@ -22,6 +22,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
+#include <editeng/borderline.hxx>
 
 using namespace com::sun::star;
 
@@ -57,7 +58,7 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
     basegfx::BColor aColorLeft;
     basegfx::BColor aColorGap;
     bool bHasGapColor = false;
-    sal_Int16 nStyle = table::BorderLineStyle::DOUBLE;
+    SvxBorderLineStyle nStyle = SvxBorderLineStyle::DOUBLE;
     rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> aBorder(new drawinglayer::primitive2d::BorderLinePrimitive2D(aStart, aEnd, fLeftWidth, fDistance, fRightWidth, fExtendLeftStart, fExtendLeftEnd, fExtendRightStart, fExtendRightEnd, aColorRight, aColorLeft, aColorGap, bHasGapColor, nStyle));
 
     // Decompose it into polygons.
@@ -107,7 +108,7 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
     basegfx::BColor aColorLeft;
     basegfx::BColor aColorGap;
     bool bHasGapColor = false;
-    sal_Int16 nStyle = table::BorderLineStyle::DOUBLE;
+    SvxBorderLineStyle nStyle = SvxBorderLineStyle::DOUBLE;
     rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> xBorder(new drawinglayer::primitive2d::BorderLinePrimitive2D(aStart, aEnd, fLeftWidth, fDistance, fRightWidth, fExtendLeftStart, fExtendLeftEnd, fExtendRightStart, fExtendRightEnd, aColorRight, aColorLeft, aColorGap, bHasGapColor, nStyle));
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
     aPrimitives.push_back(drawinglayer::primitive2d::Primitive2DReference(xBorder.get()));

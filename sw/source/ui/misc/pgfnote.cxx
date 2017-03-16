@@ -200,14 +200,14 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
 
     m_pLineTypeBox->SetNone(SW_RESSTR(SW_STR_NONE));
     m_pLineTypeBox->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
-        table::BorderLineStyle::SOLID );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::SOLID),
+        SvxBorderLineStyle::SOLID );
     m_pLineTypeBox->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DOTTED),
-        table::BorderLineStyle::DOTTED );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DOTTED),
+        SvxBorderLineStyle::DOTTED );
     m_pLineTypeBox->InsertEntry(
-        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
-        table::BorderLineStyle::DASHED );
+        ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::DASHED),
+        SvxBorderLineStyle::DASHED );
     m_pLineTypeBox->SetWidth( pFootnoteInfo->GetLineWidth( ) );
     m_pLineTypeBox->SelectEntry( pFootnoteInfo->GetLineStyle() );
 
@@ -253,7 +253,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
             m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
 
     // Separator style
-    rFootnoteInfo.SetLineStyle( ::editeng::SvxBorderStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
+    rFootnoteInfo.SetLineStyle( SvxBorderLineStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
 
     // Separator width
     long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(

@@ -1451,8 +1451,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
 
-    pCurFrameLine   = new ::editeng::SvxBorderLine(&aColBlack, 20,
-                            table::BorderLineStyle::SOLID);
+    pCurFrameLine   = new ::editeng::SvxBorderLine(&aColBlack, 20, SvxBorderLineStyle::SOLID);
     pPivotSource    = new ScArea;
     StartListening(*GetViewData().GetDocShell(),true);
     StartListening(*GetViewFrame(),true);

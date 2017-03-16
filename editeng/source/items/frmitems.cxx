@@ -111,7 +111,7 @@ namespace
               .WriteUInt16( l.GetDistance() );
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
-               stream.WriteUInt16( l.GetBorderLineStyle() );
+               stream.WriteUInt16( (sal_uInt16)l.GetBorderLineStyle() );
 
         return stream;
     }
@@ -129,7 +129,7 @@ namespace
             stream.ReadUInt16( nStyle );
 
         SvxBorderLine border(&aColor);
-        border.GuessLinesWidths(nStyle, nOutline, nInline, nDistance);
+        border.GuessLinesWidths((SvxBorderLineStyle)nStyle, nOutline, nInline, nDistance);
         return border;
     }
 
@@ -1671,7 +1671,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
         aLine.InnerLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetInWidth() ): pLine->GetInWidth() );
         aLine.OuterLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetDistance()): pLine->GetDistance() );
-        aLine.LineStyle      = pLine->GetBorderLineStyle();
+        aLine.LineStyle      = sal_Int16(pLine->GetBorderLineStyle());
         aLine.LineWidth      = sal_uInt32( bConvert ? convertTwipToMm100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
     }
     else
@@ -1786,10 +1786,10 @@ bool SvxBoxItem::LineToSvxLine(const css::table::BorderLine& rLine, SvxBorderLin
 bool
 SvxBoxItem::LineToSvxLine(const css::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, bool bConvert)
 {
-    SvxBorderStyle const nStyle =
+    SvxBorderLineStyle const nStyle =
         (rLine.LineStyle < 0 || BORDER_LINE_STYLE_MAX < rLine.LineStyle)
-        ? SOLID     // default
-        : rLine.LineStyle;
+        ? SvxBorderLineStyle::SOLID     // default
+        : (SvxBorderLineStyle)rLine.LineStyle;
 
     rSvxLine.SetBorderLineStyle( nStyle );
 
@@ -1799,7 +1799,7 @@ SvxBoxItem::LineToSvxLine(const css::table::BorderLine2& rLine, SvxBorderLine& r
         rSvxLine.SetWidth( bConvert? convertMm100ToTwip( rLine.LineWidth ) : rLine.LineWidth );
         // fdo#46112: double does not necessarily mean symmetric
         // for backwards compatibility
-        bGuessWidth = ((DOUBLE == nStyle || DOUBLE_THIN == nStyle)) &&
+        bGuessWidth = ((SvxBorderLineStyle::DOUBLE == nStyle || SvxBorderLineStyle::DOUBLE_THIN == nStyle)) &&
             (rLine.InnerLineWidth > 0) && (rLine.OuterLineWidth > 0);
     }
 
@@ -1924,17 +1924,17 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 drawing::LineStyle eDrawingStyle;
                 rVal >>= eDrawingStyle;
-                editeng::SvxBorderStyle eBorderStyle = css::table::BorderLineStyle::NONE;
+                SvxBorderLineStyle eBorderStyle = SvxBorderLineStyle::NONE;
                 switch ( eDrawingStyle )
                 {
                     default:
                     case drawing::LineStyle_NONE:
                         break;
                     case drawing::LineStyle_SOLID:
-                        eBorderStyle = SOLID;
+                        eBorderStyle = SvxBorderLineStyle::SOLID;
                         break;
                     case drawing::LineStyle_DASH:
-                        eBorderStyle = DASHED;
+                        eBorderStyle = SvxBorderLineStyle::DASHED;
                         break;
                 }
 
@@ -2669,7 +2669,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         Color aColor;
         ReadColor( rStrm, aColor ).ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
         SvxBorderLine aBorder( &aColor );
-        aBorder.GuessLinesWidths(css::table::BorderLineStyle::NONE, nOutline, nInline, nDistance);
+        aBorder.GuessLinesWidths(SvxBorderLineStyle::NONE, nOutline, nInline, nDistance);
 
         switch( cLine )
         {
@@ -3166,7 +3166,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
             case MID_LINE_STYLE:
-                pLine->SetBorderLineStyle(static_cast<SvxBorderStyle>(nVal));
+                pLine->SetBorderLineStyle(static_cast<SvxBorderLineStyle>(nVal));
             break;
             default:
                 OSL_FAIL( "Wrong MemberId" );
@@ -3237,7 +3237,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
-        aLine.GuessLinesWidths(css::table::BorderLineStyle::NONE, nOutline, nInline, nDistance);
+        aLine.GuessLinesWidths(SvxBorderLineStyle::NONE, nOutline, nInline, nDistance);
         _pLine->SetLine( &aLine );
     }
     return _pLine;
