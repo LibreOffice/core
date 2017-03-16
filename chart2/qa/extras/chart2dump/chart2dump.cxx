@@ -393,11 +393,7 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
-#if defined(MACOSX)
     const double fLocalEPS = 700.1;
-#else
-    const double fLocalEPS = INT_EPS;
-#endif
     const std::vector<OUString> aTestFiles =
     {
         "legend_on_right_side.odp",
@@ -647,11 +643,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
-#if defined(MACOSX)
     const double fLocalEPS = 250.1;
-#else
-    const double fLocalEPS = INT_EPS;
-#endif
     const std::vector<OUString> aTestFiles =
     {
         "default_formated_axis.odp",
@@ -809,11 +801,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
-#if defined(MACOSX)
     const double fLocalEPS = 350.1;
-#else
-    const double fLocalEPS = INT_EPS;
-#endif
     const std::vector<OUString> aTestFiles =
     {
         "chartwall_auto_adjust_with_titles.ods",
