@@ -5899,6 +5899,14 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
 
     bool bIsHardAttribute = ( ( pParaSet->mnAttrSet & nMask ) != 0 );
 
+    sal_uInt16 nDepth = pParaSet->mnDepth;
+
+    if (nDepth >= nMaxPPTLevels)
+    {
+        SAL_WARN("filter.ms", "Para Style Sheet depth " << nDepth << " but " << nMaxPPTLevels - 1 << " is max possible");
+        nDepth = nMaxPPTLevels - 1;
+    }
+
     if ( bIsHardAttribute )
     {
         if ( nAttr == PPT_ParaAttr_BulletColor )
@@ -5907,7 +5915,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
                 bHardBulletColor = pParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
             else
-                bHardBulletColor = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ].mnBuFlags
+                bHardBulletColor = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[nDepth].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
             if ( bHardBulletColor )
                 rRetValue = pParaSet->mnBulletColor;
@@ -5923,7 +5931,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                     }
                     else
                     {
-                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[nDepth].mnFontColor;
                     }
                 }
             }
@@ -5934,7 +5942,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
             if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardFont ) )
                 bHardBuFont = pParaSet->mpArry[ PPT_ParaAttr_BuHardFont ] != 0;
             else
-                bHardBuFont = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ].mnBuFlags
+                bHardBuFont = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[nDepth].mnBuFlags
                                         & ( 1 << PPT_ParaAttr_BuHardFont ) ) != 0;
             if ( bHardBuFont )
                 rRetValue = pParaSet->mpArry[ PPT_ParaAttr_BulletFont ];
@@ -5951,7 +5959,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                     }
                     else
                     {
-                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
+                        rRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[nDepth].mnFont;
                     }
                 }
             }
@@ -5961,14 +5969,14 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
     }
     else
     {
-        const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ];
+        const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[nDepth];
 
         PPTParaLevel* pParaLevel = nullptr;
         if ( ( nDestinationInstance == TSS_Type::Unknown )
-            || ( pParaSet->mnDepth && ( ( mnInstance == TSS_Type::Subtitle ) || ( mnInstance == TSS_Type::TextInShape ) ) ) )
+            || ( nDepth && ( ( mnInstance == TSS_Type::Subtitle ) || ( mnInstance == TSS_Type::TextInShape ) ) ) )
             bIsHardAttribute = true;
         else if ( nDestinationInstance != mnInstance )
-            pParaLevel = &mrStyleSheet.mpParaSheet[ nDestinationInstance ]->maParaLevel[ pParaSet->mnDepth ];
+            pParaLevel = &mrStyleSheet.mpParaSheet[ nDestinationInstance ]->maParaLevel[nDepth];
         switch ( nAttr )
         {
             case PPT_ParaAttr_BulletOn :
@@ -6016,7 +6024,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                     }
                     else
                     {
-                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
+                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[nDepth].mnFont;
                         bIsHardAttribute = true;
                     }
                 }
@@ -6052,7 +6060,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                             if( rPortion.mbHardHylinkOrigColor )
                                 rRetValue = rPortion.mnHylinkOrigColor;
                             else
-                                rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                                rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[nDepth].mnFontColor;
                             bIsHardAttribute = true;
                         }
                         else
@@ -6062,7 +6070,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                     }
                     else
                     {
-                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                        rRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[nDepth].mnFontColor;
                         bIsHardAttribute = true;
                     }
                 }
