@@ -49,11 +49,6 @@ String STR_PAGE_CHART_ELEMENTS
     Text [ en-US ] = "Chart Elements";
 };
 
-String STR_PAGE_CHART_LOCATION
-{
-    Text [ en-US ] = "Chart Location";
-};
-
 String STR_PAGE_LINE
 {
     Text [ en-US ] = "Line" ;
@@ -127,11 +122,6 @@ String STR_PAGE_XERROR_BARS
 String STR_PAGE_YERROR_BARS
 {
     Text[ en-US ] = "Y Error Bars";
-};
-
-String STR_PAGE_ZERROR_BARS
-{
-    Text[ en-US ] = "Z Error Bars";
 };
 
 String STR_PAGE_ALIGNMENT

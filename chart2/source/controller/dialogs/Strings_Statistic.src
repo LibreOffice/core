@@ -18,20 +18,6 @@
  */
 #include "Strings.hrc"
 
-//SchStatisticTabPage and SchDataStatisticsDlg
-String STR_INDICATE_BOTH
-{
-    Text [ en-US ] = "Negative and Positive" ;
-};
-String STR_INDICATE_DOWN
-{
-    Text [ en-US ] = "Negative" ;
-};
-String STR_INDICATE_UP
-{
-    Text [ en-US ] = "Positive" ;
-};
-
 // used for own data in error bar dialog
 //TODO: ohallot: String inserted into tp_ErrorBars.ui
 String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA

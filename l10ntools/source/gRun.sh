@@ -218,7 +218,7 @@ ${MYCMD} --files basic/source/classes/sb.src
 
 ${MYCMD} --files basic/source/sbx/format.src
 
-${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src Strings.src Strings_AdditionalControls.src Strings_ChartTypes.src Strings_Scale.src Strings_Statistic.src
+${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src Strings.src Strings_ChartTypes.src Strings_Scale.src Strings_Statistic.src
 
 ${MYCMD} --base connectivity/source/resource --files conn_error_message.src conn_log_res.src conn_shared_res.src
 
