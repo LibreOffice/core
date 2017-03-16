@@ -469,6 +469,7 @@ public:
     void testCondCopyPasteSingleCell(); //e.g. fdo#82503
     void testCondCopyPasteSingleCellToRange(); //e.g. fdo#82503
     void testCondCopyPasteSingleRowToRange(); //e.g. tdf#106242
+    void testCondCopyPasteSingleRowToRange2();
     void testCondCopyPasteSheetBetweenDoc();
     void testCondCopyPasteSheet();
     void testIconSet();
@@ -747,6 +748,7 @@ public:
     CPPUNIT_TEST(testCondCopyPasteSingleCell);
     CPPUNIT_TEST(testCondCopyPasteSingleCellToRange);
     CPPUNIT_TEST(testCondCopyPasteSingleRowToRange);
+    CPPUNIT_TEST(testCondCopyPasteSingleRowToRange2);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
     CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST(testCondFormatEndsWithStr);
