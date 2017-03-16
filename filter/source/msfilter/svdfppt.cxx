@@ -7584,6 +7584,10 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
     sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj( pSdrModel );
     pTable->uno_lock();
     Reference< XTable > xTable( pTable->getTable() );
+
+    if (aRows.empty())
+        return pRet;
+
     try
     {
         CreateTableRows( xTable->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
