@@ -121,7 +121,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
         pShortcuts->Show();
 
         SetToolBox( static_cast<ToolBox*>( pShortcuts.get() ) );
-        SetIconClickHdl( LINK( nullptr, NotebookbarTabControl, OpenNotebookbarPopupMenu ) );
+        SetIconClickHdl( LINK( this, NotebookbarTabControl, OpenNotebookbarPopupMenu ) );
 
         m_pListener = new ChangedUIEventListener( this );
 
@@ -134,10 +134,10 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
-        Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-        OUString aModuleName = xModuleManager->identify( xFrame );
+        m_xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+        OUString aModuleName = xModuleManager->identify( m_xFrame );
 
-        FillShortcutsToolBox( xContext, xFrame, aModuleName, pToolBox );
+        FillShortcutsToolBox( xContext, m_xFrame, aModuleName, pToolBox );
 
         Size aSize( pToolBox->GetOptimalSize() );
         Point aPos( ICON_SIZE + 10, 0 );
@@ -204,14 +204,13 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext>& x
     }
 }
 
-IMPL_STATIC_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
+IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (pNotebookbar && pViewFrame)
+    if (pNotebookbar && m_xFrame.is())
     {
         Sequence<Any> aArgs {
             makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
-            makeAny(comphelper::makePropertyValue("Frame", pViewFrame->GetFrame().GetFrameInterface())) };
+            makeAny(comphelper::makePropertyValue("Frame", m_xFrame)) };
 
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference<XPopupMenuController> xPopupController(
