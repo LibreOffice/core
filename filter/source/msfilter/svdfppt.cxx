@@ -7554,158 +7554,164 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
 SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer )
 {
     SdrObject* pRet = pGroup;
-    sal_uInt32 nRows = pTableArry[ 1 ];
-    if ( nRows && dynamic_cast< const SdrObjGroup* >(pGroup) !=  nullptr )
-    {
-        SdrObjList* pSubList(static_cast<SdrObjGroup*>(pGroup)->GetSubList());
-        if ( pSubList )
-        {
-            std::set< sal_Int32 > aRows;
-            std::set< sal_Int32 > aColumns;
 
-            SdrObjListIter aGroupIter( *pSubList, SdrIterMode::DeepNoGroups, false );
-            while( aGroupIter.IsMore() )
+    sal_uInt32 nRows = pTableArry[ 1 ];
+    if (!nRows)
+        return pRet;
+
+    const SdrObjGroup* pObjGroup = dynamic_cast<const SdrObjGroup*>(pGroup);
+    if (!pObjGroup)
+        return pRet;
+
+    SdrObjList* pSubList(pObjGroup->GetSubList());
+    if (!pSubList)
+        return pRet;
+
+    std::set< sal_Int32 > aRows;
+    std::set< sal_Int32 > aColumns;
+
+    SdrObjListIter aGroupIter( *pSubList, SdrIterMode::DeepNoGroups, false );
+    while( aGroupIter.IsMore() )
+    {
+        const SdrObject* pObj( aGroupIter.Next() );
+        if ( !IsLine( pObj ) )
+        {
+            Rectangle aSnapRect( pObj->GetSnapRect() );
+            aRows.insert( aSnapRect.Top() );
+            aColumns.insert( aSnapRect.Left() );
+        }
+    }
+    sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj( pSdrModel );
+    pTable->uno_lock();
+    Reference< XTable > xTable( pTable->getTable() );
+    try
+    {
+        CreateTableRows( xTable->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
+        CreateTableColumns( xTable->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
+
+        sal_Int32 nCellCount = aRows.size() * aColumns.size();
+        std::unique_ptr<sal_Int32[]> pMergedCellIndexTable(new sal_Int32[ nCellCount ]);
+        for ( sal_Int32 i = 0; i < nCellCount; i++ )
+            pMergedCellIndexTable[ i ] = i;
+
+        aGroupIter.Reset();
+        while( aGroupIter.IsMore() )
+        {
+            SdrObject* pObj( aGroupIter.Next() );
+            if ( !IsLine( pObj ) )
             {
-                const SdrObject* pObj( aGroupIter.Next() );
-                if ( !IsLine( pObj ) )
+                sal_Int32 nTableIndex = 0;
+                sal_Int32 nRow = 0;
+                sal_Int32 nRowCount = 0;
+                sal_Int32 nColumn = 0;
+                sal_Int32 nColumnCount = 0;
+                if ( GetCellPosition( pObj, aRows, aColumns, nTableIndex, nRow, nRowCount, nColumn, nColumnCount ) )
                 {
-                    Rectangle aSnapRect( pObj->GetSnapRect() );
-                    aRows.insert( aSnapRect.Top() );
-                    aColumns.insert( aSnapRect.Left() );
+                    Reference< XCell > xCell( xTable->getCellByPosition( nColumn, nRow ) );
+
+                    ApplyCellAttributes( pObj, xCell );
+
+                    if ( ( nRowCount > 1 ) || ( nColumnCount > 1 ) )    // cell merging
+                    {
+                        MergeCells( xTable, nColumn, nRow, nColumnCount, nRowCount );
+                        for ( sal_Int32 nRowIter = 0; nRowIter < nRowCount; nRowIter++ )
+                        {
+                            for ( sal_Int32 nColumnIter = 0; nColumnIter < nColumnCount; nColumnIter++ )
+                            {   // now set the correct index for the merged cell
+                                pMergedCellIndexTable[ ( ( nRow + nRowIter ) * aColumns.size() ) + nColumn + nColumnIter ] = nTableIndex;
+                            }
+                        }
+                    }
+
+                    // applying text
+                    OutlinerParaObject* pParaObject = pObj->GetOutlinerParaObject();
+                    if ( pParaObject )
+                    {
+                        SdrText* pSdrText = pTable->getText( nTableIndex );
+                        if ( pSdrText )
+                            pSdrText->SetOutlinerParaObject(new OutlinerParaObject(*pParaObject) );
+                    }
                 }
             }
-            sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj( pSdrModel );
-            pTable->uno_lock();
-            Reference< XTable > xTable( pTable->getTable() );
-            try
+        }
+        aGroupIter.Reset();
+        while( aGroupIter.IsMore() )
+        {
+            SdrObject* pObj( aGroupIter.Next() );
+            if ( IsLine( pObj ) )
             {
-                CreateTableRows( xTable->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
-                CreateTableColumns( xTable->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
+                std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
+                GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
 
-                sal_Int32 nCellCount = aRows.size() * aColumns.size();
-                std::unique_ptr<sal_Int32[]> pMergedCellIndexTable(new sal_Int32[ nCellCount ]);
-                for ( sal_Int32 i = 0; i < nCellCount; i++ )
-                    pMergedCellIndexTable[ i ] = i;
-
-                aGroupIter.Reset();
-                while( aGroupIter.IsMore() )
+                // correcting merged cell position
+                std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
+                while( aIter != vPositions.end() )
                 {
-                    SdrObject* pObj( aGroupIter.Next() );
-                    if ( !IsLine( pObj ) )
-                    {
-                        sal_Int32 nTableIndex = 0;
-                        sal_Int32 nRow = 0;
-                        sal_Int32 nRowCount = 0;
-                        sal_Int32 nColumn = 0;
-                        sal_Int32 nColumnCount = 0;
-                        if ( GetCellPosition( pObj, aRows, aColumns, nTableIndex, nRow, nRowCount, nColumn, nColumnCount ) )
-                        {
-                            Reference< XCell > xCell( xTable->getCellByPosition( nColumn, nRow ) );
-
-                            ApplyCellAttributes( pObj, xCell );
-
-                            if ( ( nRowCount > 1 ) || ( nColumnCount > 1 ) )    // cell merging
-                            {
-                                MergeCells( xTable, nColumn, nRow, nColumnCount, nRowCount );
-                                for ( sal_Int32 nRowIter = 0; nRowIter < nRowCount; nRowIter++ )
-                                {
-                                    for ( sal_Int32 nColumnIter = 0; nColumnIter < nColumnCount; nColumnIter++ )
-                                    {   // now set the correct index for the merged cell
-                                        pMergedCellIndexTable[ ( ( nRow + nRowIter ) * aColumns.size() ) + nColumn + nColumnIter ] = nTableIndex;
-                                    }
-                                }
-                            }
-
-                            // applying text
-                            OutlinerParaObject* pParaObject = pObj->GetOutlinerParaObject();
-                            if ( pParaObject )
-                            {
-                                SdrText* pSdrText = pTable->getText( nTableIndex );
-                                if ( pSdrText )
-                                    pSdrText->SetOutlinerParaObject(new OutlinerParaObject(*pParaObject) );
-                            }
-                        }
-                    }
+                    sal_Int32 nOldPosition = *aIter & 0xffff;
+                    sal_Int32 nOldFlags = *aIter & 0xffff0000;
+                    sal_Int32 nNewPosition = pMergedCellIndexTable[ nOldPosition ] | nOldFlags;
+                    *aIter++ = nNewPosition;
                 }
-                aGroupIter.Reset();
-                while( aGroupIter.IsMore() )
-                {
-                    SdrObject* pObj( aGroupIter.Next() );
-                    if ( IsLine( pObj ) )
-                    {
-                        std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
-                        GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
+                ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
+            }
+        }
+        pMergedCellIndexTable.reset();
 
-                        // correcting merged cell position
-                        std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
-                        while( aIter != vPositions.end() )
-                        {
-                            sal_Int32 nOldPosition = *aIter & 0xffff;
-                            sal_Int32 nOldFlags = *aIter & 0xffff0000;
-                            sal_Int32 nNewPosition = pMergedCellIndexTable[ nOldPosition ] | nOldFlags;
-                            *aIter++ = nNewPosition;
-                        }
-                        ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
-                    }
-                }
-                pMergedCellIndexTable.reset();
+        // we are replacing the whole group object by a single table object, so
+        // possibly connections to the group object have to be removed.
+        if ( pSolverContainer )
+        {
+            for (SvxMSDffConnectorRule* pPtr : pSolverContainer->aCList)
+            {
+                // check connections to the group object
+                if ( pPtr->pAObj == pGroup )
+                    pPtr->pAObj = nullptr;
+                if ( pPtr->pBObj == pGroup )
+                    pPtr->pBObj = nullptr;
 
-                // we are replacing the whole group object by a single table object, so
-                // possibly connections to the group object have to be removed.
-                if ( pSolverContainer )
-                {
-                    for (SvxMSDffConnectorRule* pPtr : pSolverContainer->aCList)
-                    {
-                        // check connections to the group object
-                        if ( pPtr->pAObj == pGroup )
-                            pPtr->pAObj = nullptr;
-                        if ( pPtr->pBObj == pGroup )
-                            pPtr->pBObj = nullptr;
-
-                        // check connections to all its subobjects
-                        SdrObjListIter aIter( *pGroup, SdrIterMode::DeepWithGroups );
-                        while( aIter.IsMore() )
-                        {
-                            SdrObject* pPartObj = aIter.Next();
-                            if ( pPtr->pAObj == pPartObj )
-                                pPtr->pAObj = nullptr;
-                            if ( pPtr->pBObj == pPartObj )
-                                pPtr->pBObj = nullptr;
-                        }
-                        //In MS, the one_row_one_col table is made up of five
-                        //shape,the connector is connected to some part of a
-                        //table.  But for us, the connector is connected to the
-                        //whole group table,so the connector obj is a group
-                        //table when export by us. We should process this
-                        //situation when importing.
-                        if ( pPtr->pAObj == pGroup )
-                            pPtr->pAObj = pTable;
-                        if ( pPtr->pBObj == pGroup )
-                            pPtr->pBObj = pTable;
-                    }
-                }
-                pTable->uno_unlock();
-                pTable->SetSnapRect( pGroup->GetSnapRect() );
-                pRet = pTable;
-
-                //Remove Objects from shape map
+                // check connections to all its subobjects
                 SdrObjListIter aIter( *pGroup, SdrIterMode::DeepWithGroups );
                 while( aIter.IsMore() )
                 {
                     SdrObject* pPartObj = aIter.Next();
-                    removeShapeId( pPartObj );
+                    if ( pPtr->pAObj == pPartObj )
+                        pPtr->pAObj = nullptr;
+                    if ( pPtr->pBObj == pPartObj )
+                        pPtr->pBObj = nullptr;
                 }
-
-                SdrObject::Free( pGroup );
-            }
-            catch( const Exception& )
-            {
-                pTable->uno_unlock();
-                SdrObject* pObj = pTable;
-                SdrObject::Free( pObj );
+                //In MS, the one_row_one_col table is made up of five
+                //shape,the connector is connected to some part of a
+                //table.  But for us, the connector is connected to the
+                //whole group table,so the connector obj is a group
+                //table when export by us. We should process this
+                //situation when importing.
+                if ( pPtr->pAObj == pGroup )
+                    pPtr->pAObj = pTable;
+                if ( pPtr->pBObj == pGroup )
+                    pPtr->pBObj = pTable;
             }
         }
+        pTable->uno_unlock();
+        pTable->SetSnapRect( pGroup->GetSnapRect() );
+        pRet = pTable;
+
+        //Remove Objects from shape map
+        SdrObjListIter aIter( *pGroup, SdrIterMode::DeepWithGroups );
+        while( aIter.IsMore() )
+        {
+            SdrObject* pPartObj = aIter.Next();
+            removeShapeId( pPartObj );
+        }
+
+        SdrObject::Free( pGroup );
     }
+    catch( const Exception& )
+    {
+        pTable->uno_unlock();
+        SdrObject* pObj = pTable;
+        SdrObject::Free( pObj );
+    }
+
     return pRet;
 }
 
