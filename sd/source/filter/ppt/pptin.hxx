@@ -48,7 +48,6 @@ class ImplSdPPTImport : public SdrPowerPointImport
 {
     SfxMedium&      mrMed;
     SotStorage&      mrStorage;
-//  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
     std::vector<OUString> maSlideNameList;
     bool            mbDocumentFound;
@@ -82,14 +81,15 @@ public:
 
 class SdPPTImport
 {
+    PowerPointImportParam maParam;
     ImplSdPPTImport* pFilter;
 
-    public:
+public:
 
-        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMed );
-        ~SdPPTImport();
+    SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMed );
+    ~SdPPTImport();
 
-        bool Import();
+    bool Import();
 };
 
 #endif // INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX
