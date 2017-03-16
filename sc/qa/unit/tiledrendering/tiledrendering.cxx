@@ -1103,8 +1103,12 @@ void ScTiledRenderingTest::testCommentCallback()
     CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
 
     // Delete the comment
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (pTabViewShell)
+        pTabViewShell->SetCursor(4, 43);
     aArgs = comphelper::InitPropertySequence(
     {
+        {"Id", uno::makeAny(OUString("Sheet1.A2"))}
     });
     comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
     Scheduler::ProcessEventsToIdle();
