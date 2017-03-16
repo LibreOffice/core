@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_5f1d5772",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-16T07:02:56Z",
+      "side": 1,
+      "message": "\"send reference without optimising due to bug xx\"\n  means\n\n\"we couldn\u0027t optimise this because of this bug\"\n\n  but with your change it means\n\n\"we deliberately don\u0027t optimise this for some random reason\"",
+      "parentUuid": "9a57fde8_f1900498",
+      "revId": "f52162dbfb2c21dbb81ac1bab54e4199e2a48129",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_31e9ac1b",
         "filename": "sc/source/ui/view/tabview3.cxx",
         "patchSetId": 2
