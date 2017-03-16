@@ -65,14 +65,6 @@ String STR_MAGENTA
 {
     Text [ en-US ] = "magenta" ;
 };
-String STR_AQUA
-{
-    Text [ en-US ] = "aqua" ;
-};
-String STR_FUCHSIA
-{
-    Text [ en-US ] = "fuchsia" ;
-};
 String STR_GRAY
 {
     Text [ en-US ] = "gray" ;
