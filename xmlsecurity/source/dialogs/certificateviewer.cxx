@@ -245,6 +245,8 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
     m_aFixedWidthFont.SetFontHeight( m_aStdFont.GetFontHeight() );
 
+    constexpr int DLGS_WIDTH = 287;
+    constexpr int CS_LB_WIDTH = (DLGS_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT) - RSC_SP_DLG_INNERBORDER_LEFT;
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     m_pElementsLB->SetTabs( &nTabs[ 0 ] );
     m_pElementsLB->InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );

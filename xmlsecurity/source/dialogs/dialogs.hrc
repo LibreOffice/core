@@ -32,21 +32,10 @@
 #define STR_SUBJECT                     262
 #define STR_SUBJECT_PUBKEY_ALGO         263
 #define STR_SUBJECT_PUBKEY_VAL          264
-#define STR_SIGALGORITHM                265
 #define STR_SIGNATURE_ALGO              266
 #define STR_THUMBPRINT_SHA1             267
 #define STR_THUMBPRINT_MD5              268
 #define STR_USE                         271
-
-// --------- general metrics ---------
-#define DLGS_WIDTH                      287
-
-// --------- tab dialog Certificate viewer ---------
-
-// still used by certificateviewer.cxx
-#define CS_COL_0                        RSC_SP_DLG_INNERBORDER_LEFT
-#define CS_COL_2                        (DLGS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define CS_LB_WIDTH                     (CS_COL_2-CS_COL_0)
 
 // --------- tab page Certificate viewer - General ---------
 #define STR_CERTIFICATE_NOT_VALIDATED   269
