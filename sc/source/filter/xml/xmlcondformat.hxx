@@ -86,6 +86,7 @@ private:
     ScDataBarFormat* mpDataBarFormat;
     ScDataBarFormatData* mpFormatData;
 
+    sal_Int32 mnIndex;
 };
 
 class ScXMLIconSetFormatContext : public ScXMLImportContext
