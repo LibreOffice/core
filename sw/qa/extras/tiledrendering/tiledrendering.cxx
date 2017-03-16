@@ -31,6 +31,8 @@
 #include <cmdid.h>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <redline.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
@@ -651,6 +653,10 @@ public:
     bool m_bViewLock;
     /// Set if any callback was invoked.
     bool m_bCalled;
+    /// Redline table size changed payload
+    boost::property_tree::ptree m_aRedlineTableChanged;
+    /// Redline table modified payload
+    boost::property_tree::ptree m_aRedlineTableModified;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -755,6 +761,22 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        {
+            m_aRedlineTableChanged.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aRedlineTableChanged);
+            m_aRedlineTableChanged = m_aRedlineTableChanged.get_child("redline");
+        }
+        break;
+        case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        {
+            m_aRedlineTableModified.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aRedlineTableModified);
+            m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
         }
         break;
         }
@@ -1305,15 +1327,22 @@ void SwTiledRenderingTest::testTrackChanges()
     // Turn on trak changes, type "zzz" at the end, and move to the start.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    ViewCallback aView;
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
     pWrtShell->EndDoc();
     pWrtShell->Insert("zzz");
     pWrtShell->SttDoc();
 
-    // Reject the change by index, while the cursor does not cover the tracked change.
+    // Get the redline just created
+    const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
+    SwRangeRedline* pRedline = rTable[0];
+
+    // Reject the change by id, while the cursor does not cover the tracked change.
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
+        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(pRedline->GetId()))}
     }));
     comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
