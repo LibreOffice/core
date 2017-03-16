@@ -131,16 +131,6 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text [ en-US ] = "HTML Source";
 };
 
-String STR_HELP_FIRST_MESSAGE
-{
-    Text [ en-US ] = "The Help is being started...";
-};
-
-String STR_HELP_FIRST_HTML
-{
-    Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
-};
-
 String STR_HELP_MENU_TEXT_SELECTION_MODE
 {
     Text [ en-US ] = "Select Text";
@@ -228,11 +218,6 @@ Bitmap BMP_HELP_TOOLBOX_L_BOOKMARKS
 Bitmap BMP_HELP_TOOLBOX_L_SEARCHDIALOG
 {
     File = "lc05961.png" ;
-};
-
-Bitmap BMP_HELP_TOOLBOX_L_COPY
-{
-    File = "lc05711.png" ;
 };
 
 String RID_HELP_ONSTARTUP_TEXT

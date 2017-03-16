@@ -34,17 +34,9 @@ String STR_ERROR_PRINTER_BUSY
 {
     Text [ en-US ] = "Printer busy" ;
 };
-String STR_ERROR_PRINT
-{
-    Text [ en-US ] = "Error while printing" ;
-};
 String STR_PAGE
 {
     Text [ en-US ] = "Page " ;
-};
-String STR_ERROR_SAVE_TEMPLATE
-{
-    Text [ en-US ] = "Error saving template " ;
 };
 String STR_READONLY
 {

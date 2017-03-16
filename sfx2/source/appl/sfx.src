@@ -19,11 +19,6 @@
 
 #include <sfx2/sfx.hrc>
 
-String STR_ACCTITLE_PRODUCTIVITYTOOLS
-{
-    Text [ en-US ] = "%PRODUCTNAME";
-};
-
 String STR_PASSWD_MIN_LEN
 {
     Text [ en-US ] = "(Minimum $(MINLEN) characters)" ;
