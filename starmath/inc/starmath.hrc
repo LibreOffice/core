@@ -114,8 +114,6 @@
 #define STR_ALIGN_LEFT                      (RID_APP_START + 836)
 #define STR_ALIGN_CENTER                    (RID_APP_START + 837)
 #define STR_ALIGN_RIGHT                     (RID_APP_START + 838)
-#define STR_AQUA                            (RID_APP_START + 839)
-#define STR_FUCHSIA                         (RID_APP_START + 840)
 #define STR_GRAY                            (RID_APP_START + 841)
 #define STR_LIME                            (RID_APP_START + 842)
 #define STR_MAROON                          (RID_APP_START + 843)
