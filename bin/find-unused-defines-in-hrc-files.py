@@ -108,6 +108,7 @@ with a.stdout as txt:
         b = subprocess.Popen(["git", "grep", "-w", idName], stdout=subprocess.PIPE)
         found_reason_to_exclude = False
         with b.stdout as txt2:
+            cnt = 0
             for line2 in txt2:
                 line2 = line2.strip() # otherwise the comparisons below will not work
                 # check if we found one in actual code
@@ -137,7 +138,9 @@ with a.stdout as txt:
                 if "dbaccess/" in line2 and idName.startswith("PROPERTY_ID_"): found_reason_to_exclude = True
                 if "reportdesign/" in line2 and idName.startswith("HID_RPT_PROP_"): found_reason_to_exclude = True
                 if "reportdesign/" in line2 and idName.startswith("RID_STR_"): found_reason_to_exclude = True
-
+                # if we see more than 2 lines then it's probably one of the BASE/START/BEGIN things
+                cnt = cnt + 2
+                if cnt > 3: found_reason_to_exclude = True
         if not found_reason_to_exclude:
             sys.stdout.write(idName + '\n')
             # otherwise the previous line of output will be incorrectly mixed into the below git output, because of buffering

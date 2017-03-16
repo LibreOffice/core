@@ -43,11 +43,6 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text [ en-US ] = "Type";
 };
 
-String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
-{
-    Text [ en-US ] = "Could not create the folder %1.";
-};
-
 String STR_SVT_BYTES
 {
     Text [ en-US ] = "Bytes" ;
