@@ -36,6 +36,7 @@
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/character.hxx>
 
 
 const char* StringContainer::putString( const char* pString )
@@ -87,7 +88,7 @@ sal_uInt32 GetNumber()
             if( isdigit( c ) )
                 l = l * nLog + (c - '0');
             else
-                l = l * nLog + (toupper( c ) - 'A' + 10 );
+                l = l * nLog + (rtl::toAsciiUpperCase( c ) - 'A' + 10 );
 
             c = pFI->GetFastChar();
         }
