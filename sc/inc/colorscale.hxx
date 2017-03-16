@@ -49,6 +49,7 @@ private:
     std::unique_ptr<ScFormulaCell> mpCell;
     std::unique_ptr<ScFormulaListener> mpListener;
     ScColorScaleEntryType meType;
+    ScConditionalFormat* mpFormat;
 
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
@@ -74,6 +75,8 @@ public:
 
     ScColorScaleEntryType GetType() const { return meType;}
     void SetType( ScColorScaleEntryType eType );
+
+    void SetRepaintCallback(ScConditionalFormat* pParent);
 };
 
 namespace databar
@@ -97,7 +100,10 @@ struct SC_DLLPUBLIC ScDataBarFormatData
         meAxisPosition(databar::AUTOMATIC),
         mnMinLength(0),
         mnMaxLength(100),
-        mbOnlyBar(false){}
+        mbOnlyBar(false),
+        mpUpperLimit(new ScColorScaleEntry()),
+        mpLowerLimit(new ScColorScaleEntry())
+    {}
 
     ScDataBarFormatData(const ScDataBarFormatData& r):
         maPositiveColor(r.maPositiveColor),
@@ -114,8 +120,12 @@ struct SC_DLLPUBLIC ScDataBarFormatData
 
         if(r.mpLowerLimit)
             mpLowerLimit.reset( new ScColorScaleEntry(*r.mpLowerLimit));
+        else
+            mpLowerLimit.reset(new ScColorScaleEntry());
         if(r.mpUpperLimit)
             mpUpperLimit.reset( new ScColorScaleEntry(*r.mpUpperLimit));
+        else
+            mpUpperLimit.reset(new ScColorScaleEntry());
     }
 
     /**
@@ -255,6 +265,8 @@ public:
     virtual ~ScColorScaleFormat() override;
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
 
+    virtual void SetParent(ScConditionalFormat* pParent) override;
+
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
 
@@ -287,6 +299,8 @@ public:
     ScDataBarFormat(ScDocument* pDoc);
     ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
+
+    virtual void SetParent(ScConditionalFormat* pParent) override;
 
     ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
 
@@ -347,6 +361,8 @@ public:
     ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
 
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
+
+    virtual void SetParent(ScConditionalFormat* pParent) override;
 
     ScIconSetInfo* GetIconSetInfo(const ScAddress& rAddr) const;
 
