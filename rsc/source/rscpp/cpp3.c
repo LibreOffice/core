@@ -56,6 +56,14 @@ int openfile(char* filename)
     return (TRUE);
 }
 
+char easytoupper( char in )
+{
+    if( in<='z' && in>='a' )
+        return in-('z'-'Z');
+    return in;
+}
+
+
 /*
  * Initialize tables for this open file.  This is called from openfile()
  * above (for #include files), and from the entry to cpp to open the main
@@ -175,7 +183,7 @@ int dooptions(int argc, char** argv)
         {
             c = *ap++;                      /* Option byte          */
             if (islower(c))                 /* Normalize case       */
-                c = toupper(c);
+                c = easytoupper(c);
             switch (c)                      /* Command character    */
             {
             case 'C':                       /* Keep comments        */

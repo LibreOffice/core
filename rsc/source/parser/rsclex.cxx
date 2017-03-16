@@ -49,6 +49,13 @@ const char* StringContainer::putString( const char* pString )
     return aInsert.first->getStr();
 }
 
+char easytoupper( char in )
+{
+    if( in<='z' && in>='a' )
+        return in-('z'-'Z');
+    return in;
+}
+
 static int      c;
 static bool     bLastInclude;//  true, if last symbol was INCLUDE
 RscFileInst*    pFI;
@@ -87,7 +94,7 @@ sal_uInt32 GetNumber()
             if( isdigit( c ) )
                 l = l * nLog + (c - '0');
             else
-                l = l * nLog + (toupper( c ) - 'A' + 10 );
+                l = l * nLog + (easytoupper( c ) - 'A' + 10 );
 
             c = pFI->GetFastChar();
         }
