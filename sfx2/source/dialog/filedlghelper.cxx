@@ -1106,7 +1106,18 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // the "insert file" dialog needs another title
     if ( mbInsert )
     {
-        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ).toString() );
+        if ( nFlags & FileDialogFlags::InsertCompare )
+        {
+            mxFileDlg->setTitle( SfxResId( STR_PB_COMPAREDOC ).toString() );
+        }
+        else if ( nFlags & FileDialogFlags::InsertMerge )
+        {
+            mxFileDlg->setTitle( SfxResId( STR_PB_MERGEDOC ).toString() );
+        }
+        else
+        {
+            mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ).toString() );
+        }
         uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
         {

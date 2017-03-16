@@ -2148,7 +2148,8 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     {
         m_pViewImpl->StartDocumentInserter(
             pDocSh->GetFactory().GetFactoryName(),
-            LINK( this, SwView, DialogClosedHdl )
+            LINK( this, SwView, DialogClosedHdl ),
+            nSlotId
         );
         return -1;
     }
