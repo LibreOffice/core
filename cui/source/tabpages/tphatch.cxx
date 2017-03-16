@@ -41,7 +41,6 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
 #include <o3tl/make_unique.hxx>

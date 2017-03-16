@@ -47,7 +47,6 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/gallery.hxx>
-#include "paragrph.hrc"
 #include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

@@ -38,7 +38,6 @@
 #include "svx/dlgutil.hxx"
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include "paragrph.hrc"
 
 #include "sfx2/opengrf.hxx"
 #include <vcl/layout.hxx>
