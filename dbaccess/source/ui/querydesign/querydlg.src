@@ -44,9 +44,4 @@ String STR_QUERY_CROSS_JOIN
     Text [ en-US ] = "Contains the Cartesian product of ALL records from '%1' and from '%2'.";
 };
 
-String STR_QUERY_NATURAL_JOIN
-{
-    Text [ en-US ] = "Contains only one column for each pair of equally-named columns from '%1' and from '%2'.";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,8 +30,6 @@
 #define RID_STR_NEW_VIEW                    RID_STR_APP_START + 6
 #define RID_STR_NEW_QUERY                   RID_STR_APP_START + 8
 #define RID_STR_NEW_QUERY_AUTO              RID_STR_APP_START + 9
-#define STR_QUERY_DELETE_DATASOURCE         RID_STR_APP_START + 10
-#define STR_APP_TITLE                       RID_STR_APP_START + 11
 #define RID_STR_NEW_QUERY_SQL               RID_STR_APP_START + 12
 #define RID_STR_REPORTS_CONTAINER           RID_STR_APP_START + 13
 #define RID_STR_FORMS_CONTAINER             RID_STR_APP_START + 14
@@ -44,7 +42,6 @@
 #define STR_TASKS                           RID_STR_APP_START + 22
 #define STR_DESCRIPTION                     RID_STR_APP_START + 23
 #define STR_PREVIEW                         RID_STR_APP_START + 24
-#define STR_DISABLEPREVIEW                  RID_STR_APP_START + 25
 #define RID_STR_QUERIES_HELP_TEXT_WIZARD    RID_STR_APP_START + 26
 #define RID_STR_TABLES_HELP_TEXT_DESIGN     RID_STR_APP_START + 27
 #define RID_STR_TABLES_HELP_TEXT_WIZARD     RID_STR_APP_START + 28

@@ -252,7 +252,7 @@ ${MYCMD} --files dbaccess/source/ui/relationdesign/relation.src
 
 ${MYCMD} --files dbaccess/source/ui/tabledesign/table.src
 
-${MYCMD} --base dbaccess/source/ui/uno --files copytablewizard.src dbinteraction.src
+${MYCMD} --base dbaccess/source/ui/uno --files copytablewizard.src
 
 ${MYCMD} --files desktop/source/app/desktop.src
 

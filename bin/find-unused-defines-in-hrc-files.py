@@ -132,6 +132,8 @@ with a.stdout as txt:
                 if "sw/inc/poolfmt.hrc:" in line2: found_reason_to_exclude = True
                 # not sure about these, looks suspicious
                 if "sd/source/ui/app/strings.src:" in line2 and idName.endswith("_TOOLBOX"): found_reason_to_exclude = True
+                # used via a macro that hides them from search
+                if "dbaccess/" in line2 and idName.startswith("PROPERTY_ID_"): found_reason_to_exclude = True
 
         if not found_reason_to_exclude:
             sys.stdout.write(idName + '\n')
