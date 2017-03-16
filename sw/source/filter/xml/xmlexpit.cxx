@@ -355,13 +355,13 @@ static bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
     bool bIsOdfDouble = false;
     switch (pLine->GetBorderLineStyle())
     {
-        case table::BorderLineStyle::DOUBLE:
-        case table::BorderLineStyle::THINTHICK_SMALLGAP:
-        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-        case table::BorderLineStyle::THINTHICK_LARGEGAP:
-        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+        case SvxBorderLineStyle::DOUBLE:
+        case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+        case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+        case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+        case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+        case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+        case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
             bIsOdfDouble = true;
             break;
         default:
@@ -733,46 +733,46 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             bool bNoBorder = false;
                             switch (pLine->GetBorderLineStyle())
                             {
-                                case table::BorderLineStyle::SOLID:
+                                case SvxBorderLineStyle::SOLID:
                                     eStyle = XML_SOLID;
                                     break;
-                                case table::BorderLineStyle::DOTTED:
+                                case SvxBorderLineStyle::DOTTED:
                                     eStyle = XML_DOTTED;
                                     break;
-                                case table::BorderLineStyle::DASHED:
+                                case SvxBorderLineStyle::DASHED:
                                     eStyle = XML_DASHED;
                                     break;
-                                case table::BorderLineStyle::FINE_DASHED:
+                                case SvxBorderLineStyle::FINE_DASHED:
                                     eStyle = XML_FINE_DASHED;
                                     break;
-                                case table::BorderLineStyle::DASH_DOT:
+                                case SvxBorderLineStyle::DASH_DOT:
                                     eStyle = XML_DASH_DOT;
                                     break;
-                                case table::BorderLineStyle::DASH_DOT_DOT:
+                                case SvxBorderLineStyle::DASH_DOT_DOT:
                                     eStyle = XML_DASH_DOT_DOT;
                                     break;
-                                case table::BorderLineStyle::DOUBLE_THIN:
+                                case SvxBorderLineStyle::DOUBLE_THIN:
                                     eStyle = XML_DOUBLE_THIN;
                                     break;
-                                case table::BorderLineStyle::DOUBLE:
-                                case table::BorderLineStyle::THINTHICK_SMALLGAP:
-                                case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-                                case table::BorderLineStyle::THINTHICK_LARGEGAP:
-                                case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-                                case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-                                case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+                                case SvxBorderLineStyle::DOUBLE:
+                                case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+                                case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+                                case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+                                case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+                                case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+                                case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
                                     eStyle = XML_DOUBLE;
                                     break;
-                                case table::BorderLineStyle::EMBOSSED:
+                                case SvxBorderLineStyle::EMBOSSED:
                                     eStyle = XML_RIDGE;
                                     break;
-                                case table::BorderLineStyle::ENGRAVED:
+                                case SvxBorderLineStyle::ENGRAVED:
                                     eStyle = XML_GROOVE;
                                     break;
-                                case table::BorderLineStyle::INSET:
+                                case SvxBorderLineStyle::INSET:
                                     eStyle = XML_INSET;
                                     break;
-                                case table::BorderLineStyle::OUTSET:
+                                case SvxBorderLineStyle::OUTSET:
                                     eStyle = XML_OUTSET;
                                     break;
                                 default:

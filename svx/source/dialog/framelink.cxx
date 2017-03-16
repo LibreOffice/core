@@ -756,7 +756,7 @@ void lclDrawHorLine(
         OutputDevice& rDev,
         const Point& rLPos, const LineEndResult& rLRes,
         const Point& rRPos, const LineEndResult& rRRes,
-        long nTOffs, long nBOffs, SvxBorderStyle nDashing )
+        long nTOffs, long nBOffs, SvxBorderLineStyle nDashing )
 {
     LinePoints aTPoints( rLPos + lclToMapUnit( rLRes.mnOffs1, nTOffs ), rRPos + lclToMapUnit( rRRes.mnOffs1, nTOffs ) );
     LinePoints aBPoints( rLPos + lclToMapUnit( rLRes.mnOffs2, nBOffs ), rRPos + lclToMapUnit( rRRes.mnOffs2, nBOffs ) );
@@ -826,7 +826,7 @@ void lclDrawVerLine(
         OutputDevice& rDev,
         const Point& rTPos, const LineEndResult& rTRes,
         const Point& rBPos, const LineEndResult& rBRes,
-        long nLOffs, long nROffs, SvxBorderStyle nDashing )
+        long nLOffs, long nROffs, SvxBorderLineStyle nDashing )
 {
     LinePoints aLPoints( rTPos + lclToMapUnit( nLOffs, rTRes.mnOffs1 ), rBPos + lclToMapUnit( nLOffs, rBRes.mnOffs1 ) );
     LinePoints aRPoints( rTPos + lclToMapUnit( nROffs, rTRes.mnOffs2 ), rBPos + lclToMapUnit( nROffs, rBRes.mnOffs2 ) );
@@ -1011,7 +1011,7 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
  */
 void lclDrawDiagLine(
         OutputDevice& rDev, const Rectangle& rRect, bool bTLBR,
-        const DiagLineResult& rResult, long nDiagOffs1, long nDiagOffs2, SvxBorderStyle nDashing )
+        const DiagLineResult& rResult, long nDiagOffs1, long nDiagOffs2, SvxBorderLineStyle nDashing )
 {
     lclPushDiagClipRect( rDev, rRect, rResult );
     LinePoints aLPoints( lclGetDiagLineEnds( rRect, bTLBR, nDiagOffs1 ) );
@@ -1122,12 +1122,12 @@ void lclDrawDiagFrameBorders(
 Style::Style() :
     meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
-    mnType(table::BorderLineStyle::SOLID)
+    mnType(SvxBorderLineStyle::SOLID)
 {
     Clear();
 }
 
-Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType ) :
     meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
     mnType(nType)
@@ -1137,7 +1137,7 @@ Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
 }
 
 Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-              double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+              double nP, double nD, double nS, SvxBorderLineStyle nType ) :
     meRefMode(RefMode::Centered),
     mfPatternScale(1.0),
     mnType(nType)
@@ -1244,7 +1244,7 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     else
     {
         Clear();
-        mnType = table::BorderLineStyle::SOLID;
+        mnType = SvxBorderLineStyle::SOLID;
     }
 }
 
@@ -1284,7 +1284,7 @@ bool operator<( const Style& rL, const Style& rR )
     if( (rL.Secn() && rR.Secn()) && !rtl::math::approxEqual(rL.Dist(), rR.Dist()) ) return rL.Dist() > rR.Dist();
 
     // both lines single and 1 unit thick, only one is dotted -> rL<rR, if rL is dotted
-    if( (nLW == 1) && (rL.Type() != rR.Type()) ) return rL.Type();
+    if( (nLW == 1) && (rL.Type() != rR.Type()) ) return rL.Type() != SvxBorderLineStyle::SOLID;
 
     // seem to be equal
     return false;

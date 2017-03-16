@@ -92,7 +92,7 @@ static OString OutTBLBorderLine(RtfExport& rExport, const editeng::SvxBorderLine
         // single line
         switch (pLine->GetBorderLineStyle())
         {
-        case table::BorderLineStyle::SOLID:
+        case SvxBorderLineStyle::SOLID:
         {
             if (DEF_LINE_WIDTH_0 == pLine->GetWidth())
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
@@ -100,46 +100,46 @@ static OString OutTBLBorderLine(RtfExport& rExport, const editeng::SvxBorderLine
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
         }
         break;
-        case table::BorderLineStyle::DOTTED:
+        case SvxBorderLineStyle::DOTTED:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
             break;
-        case table::BorderLineStyle::DASHED:
+        case SvxBorderLineStyle::DASHED:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
             break;
-        case table::BorderLineStyle::DOUBLE:
+        case SvxBorderLineStyle::DOUBLE:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
             break;
-        case table::BorderLineStyle::THINTHICK_SMALLGAP:
+        case SvxBorderLineStyle::THINTHICK_SMALLGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
             break;
-        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+        case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
             break;
-        case table::BorderLineStyle::THINTHICK_LARGEGAP:
+        case SvxBorderLineStyle::THINTHICK_LARGEGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
             break;
-        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+        case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
             break;
-        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+        case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
             break;
-        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+        case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
             break;
-        case table::BorderLineStyle::EMBOSSED:
+        case SvxBorderLineStyle::EMBOSSED:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
             break;
-        case table::BorderLineStyle::ENGRAVED:
+        case SvxBorderLineStyle::ENGRAVED:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
             break;
-        case table::BorderLineStyle::OUTSET:
+        case SvxBorderLineStyle::OUTSET:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
             break;
-        case table::BorderLineStyle::INSET:
+        case SvxBorderLineStyle::INSET:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
             break;
-        case table::BorderLineStyle::NONE:
+        case SvxBorderLineStyle::NONE:
         default:
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
             break;
@@ -3276,7 +3276,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             // We in fact need RGB to BGR, but the transformation is symmetric.
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
 
-            if (pTop->GetBorderLineStyle() != table::BorderLineStyle::NONE)
+            if (pTop->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
             {
                 double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
                 sal_Int32 nWidth = fConverted * 635; // Twips -> EMUs

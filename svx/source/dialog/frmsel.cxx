@@ -150,7 +150,7 @@ void FrameBorder::SetState( FrameBorderState eState )
         break;
         case FrameBorderState::DontCare:
             maCoreStyle = SvxBorderLine();
-            maUIStyle = frame::Style(3, 0, 0, table::BorderLineStyle::SOLID); //OBJ_FRAMESTYLE_DONTCARE
+            maUIStyle = frame::Style(3, 0, 0, SvxBorderLineStyle::SOLID); //OBJ_FRAMESTYLE_DONTCARE
         break;
     }
 }
@@ -895,7 +895,7 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
 }
 
-bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const
+bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderLineStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -986,7 +986,7 @@ void FrameSelector::SelectAllVisibleBorders()
         mxImpl->SelectBorder( **aIt, true/*bSelect*/ );
 }
 
-void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
+void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderLineStyle nStyle )
 {
     mxImpl->maCurrStyle.SetBorderLineStyle( nStyle );
     mxImpl->maCurrStyle.SetWidth( nWidth );

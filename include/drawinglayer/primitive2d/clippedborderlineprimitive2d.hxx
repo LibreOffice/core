@@ -46,7 +46,7 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColorLeft,
                 const basegfx::BColor& rRGBColorGap,
                 bool bHasGapColor,
-                const short nStyle,
+                SvxBorderLineStyle nStyle,
                 double fPatternScale );
 
             /// compare operator

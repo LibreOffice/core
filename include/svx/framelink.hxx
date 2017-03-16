@@ -110,10 +110,10 @@ public:
     /** Constructs an invisible frame style. */
     explicit Style();
     /** Constructs a frame style with passed line widths. */
-    explicit Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType );
+    explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType );
     /** Constructs a frame style with passed color and line widths. */
     explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                    double nP, double nD, double nS, editeng::SvxBorderStyle nType );
+                    double nP, double nD, double nS, SvxBorderLineStyle nType );
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0 );
 
@@ -127,7 +127,7 @@ public:
     double       Secn() const { return mfSecn; }
     double PatternScale() const { return mfPatternScale;}
     void SetPatternScale( double fScale );
-    editeng::SvxBorderStyle Type() const { return mnType; }
+    SvxBorderLineStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
     double       GetWidth() const { return mfPrim + mfDist + mfSecn; }
@@ -150,7 +150,7 @@ public:
     void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
     void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
     /** Sets whether to use dotted style for single hair lines. */
-    void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
+    void         SetType( SvxBorderLineStyle nType ) { mnType = nType; }
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style&              MirrorSelf();
@@ -166,8 +166,8 @@ private:
     double              mfPrim;     /// Width of primary (single, left, or top) line.
     double              mfDist;     /// Distance between primary and secondary line.
     double              mfSecn;     /// Width of secondary (right or bottom) line.
-    double mfPatternScale; /// Scale used for line pattern spacing.
-    editeng::SvxBorderStyle      mnType;
+    double              mfPatternScale; /// Scale used for line pattern spacing.
+    SvxBorderLineStyle  mnType;
 };
 
 bool operator==( const Style& rL, const Style& rR );

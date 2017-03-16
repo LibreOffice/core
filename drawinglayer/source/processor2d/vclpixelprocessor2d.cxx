@@ -53,6 +53,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/borderhelper.hxx>
+#include <editeng/borderline.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -337,14 +338,14 @@ namespace drawinglayer
 
             switch (rSource.getStyle())
             {
-                case table::BorderLineStyle::SOLID:
-                case table::BorderLineStyle::DOUBLE_THIN:
+                case SvxBorderLineStyle::SOLID:
+                case SvxBorderLineStyle::DOUBLE_THIN:
                 {
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
 
-                    bool bDouble = rSource.getStyle() == table::BorderLineStyle::DOUBLE_THIN;
+                    bool bDouble = rSource.getStyle() == SvxBorderLineStyle::DOUBLE_THIN;
 
                     basegfx::B2DPolygon aTarget;
 
@@ -441,11 +442,11 @@ namespace drawinglayer
                     return true;
                 }
                 break;
-                case table::BorderLineStyle::DOTTED:
-                case table::BorderLineStyle::DASHED:
-                case table::BorderLineStyle::DASH_DOT:
-                case table::BorderLineStyle::DASH_DOT_DOT:
-                case table::BorderLineStyle::FINE_DASHED:
+                case SvxBorderLineStyle::DOTTED:
+                case SvxBorderLineStyle::DASHED:
+                case SvxBorderLineStyle::DASH_DOT:
+                case SvxBorderLineStyle::DASH_DOT_DOT:
+                case SvxBorderLineStyle::FINE_DASHED:
                 {
                     std::vector<double> aPattern =
                         svtools::GetLineDashing(rSource.getStyle(), rSource.getPatternScale()*10.0);
@@ -1268,7 +1269,7 @@ namespace drawinglayer
 
                     if (!tryDrawBorderLinePrimitive2DDirect(rBorder))
                     {
-                        if (rBorder.getStyle() == table::BorderLineStyle::DOUBLE)
+                        if (rBorder.getStyle() == SvxBorderLineStyle::DOUBLE)
                         {
                             primitive2d::Primitive2DContainer aContainer;
                             rBorder.createDecomposition(aContainer, getViewInformation2D(), true);

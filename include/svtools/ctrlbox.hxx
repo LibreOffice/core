@@ -34,6 +34,7 @@
 
 class FontList;
 class ImpLineListData;
+enum class SvxBorderLineStyle : sal_Int16;
 
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< FontMetric         > ImplFontList;
@@ -206,7 +207,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
                                     Color nColor1, Color nColor2, Color nColorDist,
-                                    sal_uInt16 nStyle, Bitmap& rBmp );
+                                    SvxBorderLineStyle nStyle, Bitmap& rBmp );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
@@ -231,21 +232,21 @@ public:
     using ListBox::InsertEntry;
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry(const BorderWidthImpl& rWidthImpl,
-                        sal_uInt16 nStyle, long nMinWidth = 0,
+                        SvxBorderLineStyle nStyle, long nMinWidth = 0,
                         ColorFunc pColor1Fn = &sameColor,
                         ColorFunc pColor2Fn = &sameColor,
                         ColorDistFunc pColorDistFn = &sameDistColor);
 
     using ListBox::GetEntryPos;
-    sal_Int32       GetEntryPos( sal_uInt16 nStyle ) const;
-    sal_uInt16      GetEntryStyle( sal_Int32  nPos ) const;
+    sal_Int32       GetEntryPos( SvxBorderLineStyle nStyle ) const;
+    SvxBorderLineStyle GetEntryStyle( sal_Int32 nPos ) const;
 
-    void            SelectEntry( sal_uInt16 nStyle, bool bSelect = true );
-    sal_uInt16      GetSelectEntryStyle() const;
+    void            SelectEntry( SvxBorderLineStyle nStyle, bool bSelect = true );
+    SvxBorderLineStyle GetSelectEntryStyle() const;
 
-    void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
+    void            SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
 
-    void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
+    void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const { return aColor; }

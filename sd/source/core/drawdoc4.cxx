@@ -596,7 +596,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Color aWhite( COL_WHITE );
     ::editeng::SvxBorderLine aBorderLine(
-            &aWhite, 1, table::BorderLineStyle::SOLID);
+            &aWhite, 1, SvxBorderLineStyle::SOLID);
 
     SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::TOP );

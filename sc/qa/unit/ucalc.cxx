@@ -2113,7 +2113,7 @@ void Test::testDataArea()
     CPPUNIT_ASSERT_MESSAGE("Sheet is expected to be empty.", m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
 
     // Now, set borders in some cells....
-    ::editeng::SvxBorderLine aLine(nullptr, 50, table::BorderLineStyle::SOLID);
+    ::editeng::SvxBorderLine aLine(nullptr, 50, SvxBorderLineStyle::SOLID);
     SvxBoxItem aBorderItem(ATTR_BORDER);
     aBorderItem.SetLine(&aLine, SvxBoxItemLine::LEFT);
     aBorderItem.SetLine(&aLine, SvxBoxItemLine::RIGHT);

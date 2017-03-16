@@ -2028,13 +2028,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                     MSO_LineDashing eDashing = mso_lineSolid;
                     switch (pLine->GetBorderLineStyle())
                     {
-                        case  table::BorderLineStyle::DASHED:
+                        case SvxBorderLineStyle::DASHED:
                             eDashing = mso_lineDashGEL;
                             break;
-                        case table::BorderLineStyle::DOTTED:
+                        case SvxBorderLineStyle::DOTTED:
                             eDashing = mso_lineDotGEL;
                             break;
-                        case table::BorderLineStyle::SOLID:
+                        case SvxBorderLineStyle::SOLID:
                         default:
                             break;
                     }

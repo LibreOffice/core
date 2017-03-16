@@ -199,7 +199,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
         std::vector<sal_Int32> aUsedStyles = p->GetList();
         for (int aUsedStyle : aUsedStyles)
-            maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyle));
+            maUsedBorderStyles.insert(static_cast<SvxBorderLineStyle>(aUsedStyle));
     }
 
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_DEFAULT_WIDTH, &pItem))
@@ -405,7 +405,7 @@ void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const 
     }
 }
 
-bool SvxBorderTabPage::IsBorderLineStyleAllowed( sal_Int16 nStyle ) const
+bool SvxBorderTabPage::IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const
 {
     if (maUsedBorderStyles.empty())
         // All border styles are allowed.
@@ -533,7 +533,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     {
         // Do all visible lines show the same line widths?
         long nWidth;
-        SvxBorderStyle nStyle;
+        SvxBorderLineStyle nStyle;
         bool bWidthEq = m_pFrameSel->GetVisibleWidth( nWidth, nStyle );
         if( bWidthEq )
         {
@@ -912,7 +912,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
     m_pLbLineStyle->SetWidth( nVal );
 
     m_pFrameSel->SetStyleToSelection( nVal,
-        SvxBorderStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
+        SvxBorderLineStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
 }
 
 
@@ -925,7 +925,7 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
                     m_pLineWidthMF->GetDecimalDigits( ),
                     m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
         m_pFrameSel->SetStyleToSelection ( nVal,
-            SvxBorderStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
+            SvxBorderLineStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
     }
 }
 
@@ -1057,35 +1057,35 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     using namespace ::com::sun::star::table::BorderLineStyle;
 
     struct {
-        sal_Int16 mnStyle;
+        SvxBorderLineStyle mnStyle;
         long mnMinWidth;
         LineListBox::ColorFunc mpColor1Fn;
         LineListBox::ColorFunc mpColor2Fn;
         LineListBox::ColorDistFunc mpColorDistFn;
     } aLines[] = {
         // Simple lines
-        { SOLID,        0, &sameColor, &sameColor, &sameDistColor },
-        { DOTTED,       0, &sameColor, &sameColor, &sameDistColor },
-        { DASHED,       0, &sameColor, &sameColor, &sameDistColor },
-        { FINE_DASHED,  0, &sameColor, &sameColor, &sameDistColor },
-        { DASH_DOT,     0, &sameColor, &sameColor, &sameDistColor },
-        { DASH_DOT_DOT, 0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::SOLID,        0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOTTED,       0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASHED,       0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::FINE_DASHED,  0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASH_DOT,     0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DASH_DOT_DOT, 0, &sameColor, &sameColor, &sameDistColor },
 
         // Double lines
-        { DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },
-        { DOUBLE_THIN,         10, &sameColor, &sameColor, &sameDistColor },
-        { THINTHICK_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
-        { THINTHICK_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
-        { THINTHICK_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
-        { THICKTHIN_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
-        { THICKTHIN_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
-        { THICKTHIN_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::DOUBLE_THIN,         10, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THINTHICK_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
+        { SvxBorderLineStyle::THICKTHIN_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
 
-        { EMBOSSED, 15, &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor, &lcl_mediumColor },
-        { ENGRAVED, 15, &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor, &lcl_mediumColor },
+        { SvxBorderLineStyle::EMBOSSED, 15, &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor, &lcl_mediumColor },
+        { SvxBorderLineStyle::ENGRAVED, 15, &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor, &lcl_mediumColor },
 
-        { OUTSET, 10, &SvxBorderLine::lightColor, &SvxBorderLine::darkColor, &sameDistColor },
-        { INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
+        { SvxBorderLineStyle::OUTSET, 10, &SvxBorderLine::lightColor, &SvxBorderLine::darkColor, &sameDistColor },
+        { SvxBorderLineStyle::INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
     };
 
     m_pLbLineStyle->SetSourceUnit( FUNIT_TWIP );

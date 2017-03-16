@@ -841,7 +841,7 @@ SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 
 SwFormatCol::SwFormatCol()
     : SfxPoolItem( RES_COL )
-    , m_eLineStyle( table::BorderLineStyle::NONE)
+    , m_eLineStyle( SvxBorderLineStyle::NONE)
     ,
     m_nLineWidth(0),
     m_nLineHeight( 100 ),
@@ -1100,10 +1100,10 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 switch ( pSwColums->GetSepLineStyle() )
                 {
                     default:
-                    case 0: m_eLineStyle = table::BorderLineStyle::NONE; break;
-                    case 1: m_eLineStyle = table::BorderLineStyle::SOLID; break;
-                    case 2: m_eLineStyle = table::BorderLineStyle::DOTTED; break;
-                    case 3: m_eLineStyle = table::BorderLineStyle::DASHED; break;
+                    case 0: m_eLineStyle = SvxBorderLineStyle::NONE; break;
+                    case 1: m_eLineStyle = SvxBorderLineStyle::SOLID; break;
+                    case 2: m_eLineStyle = SvxBorderLineStyle::DOTTED; break;
+                    case 3: m_eLineStyle = SvxBorderLineStyle::DASHED; break;
                 }
                 if(!pSwColums->GetSepLineIsOn())
                     m_eAdj = COLADJ_NONE;
@@ -1124,7 +1124,7 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatCol"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number(m_eLineStyle).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number((sal_Int16)m_eLineStyle).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineWidth"), BAD_CAST(OString::number(m_nLineWidth).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aLineColor"), BAD_CAST(m_aLineColor.AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineHeight"), BAD_CAST(OString::number(m_nLineHeight).getStr()));

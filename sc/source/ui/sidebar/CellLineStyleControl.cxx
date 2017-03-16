@@ -105,8 +105,7 @@ IMPL_LINK(CellLineStylePopup, VSSelectHdl, ValueSet*, pControl, void)
     {
         const sal_uInt16 iPos(maCellLineStyleValueSet->GetSelectItemId());
         SvxLineItem aLineItem(SID_FRAME_LINESTYLE);
-        using namespace ::com::sun::star::table::BorderLineStyle;
-        editeng::SvxBorderStyle nStyle = SOLID;
+        SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID;
         sal_uInt16 n1 = 0;
         sal_uInt16 n2 = 0;
         sal_uInt16 n3 = 0;
@@ -131,31 +130,31 @@ IMPL_LINK(CellLineStylePopup, VSSelectHdl, ValueSet*, pControl, void)
                 n1 = DEF_LINE_WIDTH_0;
                 n2 = DEF_LINE_WIDTH_0;
                 n3 = DEF_LINE_WIDTH_1;
-                nStyle = DOUBLE;
+                nStyle = SvxBorderLineStyle::DOUBLE;
                 break;
             case 6:
                 n1 = DEF_LINE_WIDTH_0;
                 n2 = DEF_LINE_WIDTH_0;
                 n3 = DEF_LINE_WIDTH_2;
-                nStyle = DOUBLE;
+                nStyle = SvxBorderLineStyle::DOUBLE;
                 break;
             case 7:
                 n1 = DEF_LINE_WIDTH_1;
                 n2 = DEF_LINE_WIDTH_2;
                 n3 = DEF_LINE_WIDTH_1;
-                nStyle = DOUBLE;
+                nStyle = SvxBorderLineStyle::DOUBLE;
                 break;
             case 8:
                 n1 = DEF_LINE_WIDTH_2;
                 n2 = DEF_LINE_WIDTH_0;
                 n3 = DEF_LINE_WIDTH_2;
-                nStyle = DOUBLE;
+                nStyle = SvxBorderLineStyle::DOUBLE;
                 break;
             case 9:
                 n1 = DEF_LINE_WIDTH_2;
                 n2 = DEF_LINE_WIDTH_2;
                 n3 = DEF_LINE_WIDTH_2;
-                nStyle = DOUBLE;
+                nStyle = SvxBorderLineStyle::DOUBLE;
                 break;
             default:
                 break;

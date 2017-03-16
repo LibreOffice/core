@@ -42,6 +42,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <editeng/borderline.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -208,10 +209,10 @@ private:
     Color  ( *m_pColorDistFn )( Color, Color );
 
     long   m_nMinWidth;
-    sal_uInt16 m_nStyle;
+    SvxBorderLineStyle m_nStyle;
 
 public:
-    ImpLineListData( BorderWidthImpl aWidthImpl, sal_uInt16 nStyle,
+    ImpLineListData( BorderWidthImpl aWidthImpl, SvxBorderLineStyle nStyle,
             long nMinWidth,
             Color ( *pColor1Fn ) ( Color ),
             Color ( *pColor2Fn ) ( Color ),
@@ -232,11 +233,11 @@ public:
 
     /** Returns the minimum width in twips */
     long   GetMinWidth( ) { return m_nMinWidth;}
-    sal_uInt16 GetStyle( ) { return m_nStyle;}
+    SvxBorderLineStyle GetStyle( ) { return m_nStyle;}
 };
 
 ImpLineListData::ImpLineListData( BorderWidthImpl aWidthImpl,
-       sal_uInt16 nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
+       SvxBorderLineStyle nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
        Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
     m_aWidthImpl( aWidthImpl ),
     m_pColor1Fn( pColor1Fn ),
@@ -263,9 +264,9 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
     return ( *m_pColorDistFn )( rMain, rDefault );
 }
 
-sal_uInt16 LineListBox::GetSelectEntryStyle() const
+SvxBorderLineStyle LineListBox::GetSelectEntryStyle() const
 {
-    sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID;
+    SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID;
     sal_Int32 nPos = GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -278,7 +279,7 @@ sal_uInt16 LineListBox::GetSelectEntryStyle() const
 }
 
 
-void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
+void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, SvxBorderLineStyle nDashing )
 {
     AntialiasingFlags nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::EnableB2dDraw );
@@ -319,30 +320,30 @@ namespace svtools {
 /**
  * Dashing array must start with a line width and end with a blank width.
  */
-std::vector<double> GetDashing( sal_uInt16 nDashing )
+std::vector<double> GetDashing( SvxBorderLineStyle nDashing )
 {
     std::vector<double> aPattern;
     switch (nDashing)
     {
-        case css::table::BorderLineStyle::DOTTED:
+        case SvxBorderLineStyle::DOTTED:
             aPattern.push_back( 1.0 ); // line
             aPattern.push_back( 2.0 ); // blank
         break;
-        case css::table::BorderLineStyle::DASHED:
+        case SvxBorderLineStyle::DASHED:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
         break;
-        case css::table::BorderLineStyle::FINE_DASHED:
+        case SvxBorderLineStyle::FINE_DASHED:
             aPattern.push_back( 6.0 ); // line
             aPattern.push_back( 2.0 ); // blank
         break;
-        case css::table::BorderLineStyle::DASH_DOT:
+        case SvxBorderLineStyle::DASH_DOT:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
             aPattern.push_back( 5.0 );  // line
             aPattern.push_back( 5.0 );  // blank
         break;
-        case css::table::BorderLineStyle::DASH_DOT_DOT:
+        case SvxBorderLineStyle::DASH_DOT_DOT:
             aPattern.push_back( 16.0 ); // line
             aPattern.push_back( 5.0 );  // blank
             aPattern.push_back( 5.0 );  // line
@@ -372,14 +373,14 @@ public:
 
 }
 
-std::vector<double> GetLineDashing( sal_uInt16 nDashing, double fScale )
+std::vector<double> GetLineDashing( SvxBorderLineStyle nDashing, double fScale )
 {
     std::vector<double> aPattern = GetDashing(nDashing);
     std::for_each(aPattern.begin(), aPattern.end(), ApplyScale(fScale));
     return aPattern;
 }
 
-basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale )
+basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, SvxBorderLineStyle nDashing, double fScale )
 {
     std::vector<double> aPattern = GetDashing(nDashing);
     std::for_each(aPattern.begin(), aPattern.end(), ApplyScale(fScale));
@@ -395,14 +396,14 @@ basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, s
 }
 
 void DrawLine( OutputDevice& rDev, const Point& rP1, const Point& rP2,
-    sal_uInt32 nWidth, sal_uInt16 nDashing )
+    sal_uInt32 nWidth, SvxBorderLineStyle nDashing )
 {
     DrawLine( rDev, basegfx::B2DPoint( rP1.X(), rP1.Y() ),
             basegfx::B2DPoint( rP2.X(), rP2.Y( ) ), nWidth, nDashing );
 }
 
 void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::B2DPoint& rP2,
-    sal_uInt32 nWidth, sal_uInt16 nDashing )
+    sal_uInt32 nWidth, SvxBorderLineStyle nDashing )
 {
     basegfx::B2DPolygon aPolygon;
     aPolygon.append( rP1 );
@@ -414,7 +415,7 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
-                            sal_uInt16 nStyle, Bitmap& rBmp )
+                            SvxBorderLineStyle nStyle, Bitmap& rBmp )
 {
     //TODO, rather than including the " " text to force
     //the line height, better would be do drop
@@ -472,7 +473,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         {
             double y2 =  n1 + nDist + double( n2 ) / 2;
             aVirDev->SetFillColor( aColor2 );
-            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, css::table::BorderLineStyle::SOLID );
+            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
         }
         rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
@@ -553,7 +554,7 @@ sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
     return nPos;
 }
 
-void LineListBox::SelectEntry( sal_uInt16 nStyle, bool bSelect )
+void LineListBox::SelectEntry( SvxBorderLineStyle nStyle, bool bSelect )
 {
     sal_Int32 nPos = GetEntryPos( nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -561,7 +562,7 @@ void LineListBox::SelectEntry( sal_uInt16 nStyle, bool bSelect )
 }
 
 void LineListBox::InsertEntry(
-    const BorderWidthImpl& rWidthImpl, sal_uInt16 nStyle, long nMinWidth,
+    const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
 {
     ImpLineListData* pData = new ImpLineListData(
@@ -569,9 +570,9 @@ void LineListBox::InsertEntry(
     pLineList->push_back( pData );
 }
 
-sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
+sal_Int32 LineListBox::GetEntryPos( SvxBorderLineStyle nStyle ) const
 {
-    if(nStyle == css::table::BorderLineStyle::NONE && !m_sNone.isEmpty())
+    if(nStyle == SvxBorderLineStyle::NONE && !m_sNone.isEmpty())
         return 0;
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         ImpLineListData* pData = (*pLineList)[ i ];
@@ -589,10 +590,10 @@ sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
+SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
     ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < pLineList->size()) ? (*pLineList)[ nPos ] : nullptr;
-    return ( pData ) ? pData->GetStyle() : css::table::BorderLineStyle::NONE;
+    return ( pData ) ? pData->GetStyle() : SvxBorderLineStyle::NONE;
 }
 
 void LineListBox::UpdatePaintLineColor()

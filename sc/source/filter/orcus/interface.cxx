@@ -853,7 +853,7 @@ ScOrcusStyles::border::border():
 }
 
 ScOrcusStyles::border::border_line::border_line():
-    mestyle(::com::sun::star::table::BorderLineStyle::SOLID),
+    mestyle(SvxBorderLineStyle::SOLID),
     maColor(COL_WHITE),
     mnWidth(0)
 {
@@ -1300,32 +1300,32 @@ void ScOrcusStyles::set_border_style(
         case orcus::spreadsheet::border_style_t::medium:
         case orcus::spreadsheet::border_style_t::thick:
         case orcus::spreadsheet::border_style_t::thin:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::SOLID;
+            current_line.mestyle = SvxBorderLineStyle::SOLID;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT;
+            current_line.mestyle = SvxBorderLineStyle::DASH_DOT;
             break;
         case orcus::spreadsheet::border_style_t::dash_dot_dot:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT_DOT;
+            current_line.mestyle = SvxBorderLineStyle::DASH_DOT_DOT;
             break;
         case orcus::spreadsheet::border_style_t::dashed:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASHED;
+            current_line.mestyle = SvxBorderLineStyle::DASHED;
             break;
         case orcus::spreadsheet::border_style_t::dotted:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DOTTED;
+            current_line.mestyle = SvxBorderLineStyle::DOTTED;
             break;
         case orcus::spreadsheet::border_style_t::double_border:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DOUBLE;
+            current_line.mestyle = SvxBorderLineStyle::DOUBLE;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot:
         case orcus::spreadsheet::border_style_t::slant_dash_dot:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT;
+            current_line.mestyle = SvxBorderLineStyle::DASH_DOT;
             break;
         case orcus::spreadsheet::border_style_t::medium_dash_dot_dot:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT_DOT;
+            current_line.mestyle = SvxBorderLineStyle::DASH_DOT_DOT;
             break;
         case orcus::spreadsheet::border_style_t::medium_dashed:
-            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASHED;
+            current_line.mestyle = SvxBorderLineStyle::DASHED;
             break;
         default:
             ;

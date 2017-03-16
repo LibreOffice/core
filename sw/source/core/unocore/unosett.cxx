@@ -2336,9 +2336,9 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
     sal_Int8 nStyle = API_COL_LINE_NONE;
     switch (rFormatCol.GetLineStyle())
     {
-        case table::BorderLineStyle::SOLID: nStyle = API_COL_LINE_SOLID; break;
-        case table::BorderLineStyle::DOTTED: nStyle= API_COL_LINE_DOTTED; break;
-        case table::BorderLineStyle::DASHED: nStyle= API_COL_LINE_DASHED; break;
+        case SvxBorderLineStyle::SOLID: nStyle = API_COL_LINE_SOLID; break;
+        case SvxBorderLineStyle::DOTTED: nStyle= API_COL_LINE_DOTTED; break;
+        case SvxBorderLineStyle::DASHED: nStyle= API_COL_LINE_DASHED; break;
         default: break;
     }
     nSepLineStyle = nStyle;

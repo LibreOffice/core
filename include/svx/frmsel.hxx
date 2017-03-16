@@ -121,7 +121,7 @@ public:
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the width in the passed parameter. */
-    bool                GetVisibleWidth( long& rnWidth, editeng::SvxBorderStyle& rnStyle ) const;
+    bool                GetVisibleWidth( long& rnWidth, SvxBorderLineStyle& rnStyle ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */
@@ -149,7 +149,7 @@ public:
     void                SelectAllVisibleBorders();
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( long nWidth, editeng::SvxBorderStyle nStyle );
+    void                SetStyleToSelection( long nWidth, SvxBorderLineStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 
