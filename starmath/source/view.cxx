@@ -1597,7 +1597,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             mpImpl->pRequest.reset(new SfxRequest( rReq ));
             mpImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(
-                              GetDoc()->GetFactory().GetFactoryName(), false ));
+                              GetDoc()->GetFactory().GetFactoryName()));
             mpImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
             break;
         }

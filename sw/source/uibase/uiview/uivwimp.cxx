@@ -230,10 +230,27 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     rTransferable.m_refCount--;
 }
 
-void SwView_Impl::StartDocumentInserter( const OUString& rFactory, const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl )
+void SwView_Impl::StartDocumentInserter(
+    const OUString& rFactory,
+    const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl,
+    const sal_uInt16 nSlotId
+)
 {
+    sfx2::DocumentInserter::Mode mode {sfx2::DocumentInserter::Mode::Insert};
+    switch( nSlotId )
+    {
+        case SID_DOCUMENT_MERGE:
+            mode = sfx2::DocumentInserter::Mode::Merge;
+            break;
+        case SID_DOCUMENT_COMPARE:
+            mode = sfx2::DocumentInserter::Mode::Compare;
+            break;
+        default:
+            break;
+    }
+
     delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter( rFactory );
+    m_pDocInserter = new ::sfx2::DocumentInserter( rFactory, mode );
     m_pDocInserter->StartExecuteModal( rEndDialogHdl );
 }
 

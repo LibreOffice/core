@@ -46,15 +46,39 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+
+FileDialogFlags lcl_map_mode_to_flags(const sfx2::DocumentInserter::Mode mode)
+{
+    FileDialogFlags f {FileDialogFlags::NONE};
+    switch (mode)
+    {
+        case sfx2::DocumentInserter::Mode::Insert:
+            f = FileDialogFlags::Insert;
+            break;
+        case sfx2::DocumentInserter::Mode::InsertMulti:
+            f = FileDialogFlags::Insert|FileDialogFlags::MultiSelection;
+            break;
+        case sfx2::DocumentInserter::Mode::Compare:
+            f = FileDialogFlags::InsertCompare;
+            break;
+        case sfx2::DocumentInserter::Mode::Merge:
+            f = FileDialogFlags::InsertMerge;
+            break;
+    }
+    return f;
+}
+
+}
+
 namespace sfx2 {
 
 DocumentInserter::DocumentInserter(
-    const OUString& rFactory, bool const bEnableMultiSelection) :
+    const OUString& rFactory, const Mode mode) :
 
       m_sDocFactory             ( rFactory )
-    , m_nDlgFlags               ( (bEnableMultiSelection)
-                                    ? (FileDialogFlags::Insert|FileDialogFlags::MultiSelection)
-                                    : FileDialogFlags::Insert )
+    , m_nDlgFlags               ( lcl_map_mode_to_flags(mode) )
     , m_nError                  ( ERRCODE_NONE )
     , m_pFileDlg                ( nullptr )
     , m_pItemSet                ( nullptr )

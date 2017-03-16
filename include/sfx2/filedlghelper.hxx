@@ -67,10 +67,12 @@ enum class FileDialogFlags {
     MultiSelection    = 0x08,
     Graphic           = 0x10,    // register graphic formats
     /// Sign existing PDF.
-    SignPDF           = 0x20
+    SignPDF           = 0x20,
+    InsertCompare     = 0x40,    /// Special insertion ("Compare" caption)
+    InsertMerge       = 0x80,    /// Special insertion ("Merge" caption)
 };
 namespace o3tl {
-    template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0x3f> {};
+    template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0xFF> {};
 }
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
