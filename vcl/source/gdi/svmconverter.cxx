@@ -1034,7 +1034,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, nIndex, nLen ) );
                 }
-                rIStm.Seek( nActBegin + nActionSize );
+
+                if (nActionSize < 28)
+                    rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+                else
+                    rIStm.Seek(nActBegin + nActionSize);
             }
             break;
 
