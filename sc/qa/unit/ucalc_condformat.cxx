@@ -875,4 +875,44 @@ void Test::testCondFormatUpdateReference()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatUpdateReferenceDelRow()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(0, 5, 0, 0, 5, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 4, 1);
+
+    OUString aStr = pEntry->GetExpression(ScAddress(0, 4, 0), 0);
+    CPPUNIT_ASSERT_EQUAL(OUString("B5"), aStr);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatUpdateReferenceInsRow()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScConditionEntry* pEntry = new ScConditionEntry(SC_COND_EQUAL, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, m_pDoc);
+    pFormat->SetRange(ScRange(0, 5, 0, 0, 5, 0));
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->InsertRow(0, 0, MAXCOL, 0, 4, 1);
+
+    OUString aStr = pEntry->GetExpression(ScAddress(0, 6, 0), 0);
+    CPPUNIT_ASSERT_EQUAL(OUString("B7"), aStr);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
