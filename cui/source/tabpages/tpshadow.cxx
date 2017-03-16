@@ -31,7 +31,6 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <cuitabline.hxx>
-#include "paragrph.hrc"
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>
 
