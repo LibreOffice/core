@@ -23,6 +23,8 @@
 #include <sfx2/sfx.hrc>
 
 #define STR_PB_SAVEACOPY            (RID_SFX_EXPLORER_START + 65)
+#define STR_PB_COMPAREDOC           (RID_SFX_EXPLORER_START + 66)
+#define STR_PB_MERGEDOC             (RID_SFX_EXPLORER_START + 67)
 
 #endif
 

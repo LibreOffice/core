@@ -50,6 +50,16 @@ String STR_PB_SAVEACOPY
     Text [ en-US ] = "Save a Copy" ;
 };
 
+String STR_PB_COMPAREDOC
+{
+    Text [ en-US ] = "Compare to" ;
+};
+
+String STR_PB_MERGEDOC
+{
+    Text [ en-US ] = "Merge with" ;
+};
+
 //******************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

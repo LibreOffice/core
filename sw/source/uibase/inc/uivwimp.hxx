@@ -160,7 +160,11 @@ public:
                                 return m_bEditingPositionSet;
                             }
 
-    void                    StartDocumentInserter( const OUString& rFactory, const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl );
+    void                    StartDocumentInserter(
+                                const OUString& rFactory,
+                                const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl,
+                                const sal_uInt16 nSlotId
+                            );
     SfxMedium*              CreateMedium();
     void                    InitRequest( const SfxRequest& rRequest );
 
