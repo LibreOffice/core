@@ -29,7 +29,6 @@
 #define STR_PATHNAME                        (RID_FPICKER_START+34)
 #define STR_PATHSELECT                      (RID_FPICKER_START+35)
 #define STR_BUTTONSELECT                    (RID_FPICKER_START+36)
-#define STR_ACTUALVERSION                   (RID_FPICKER_START+37)
 #define STR_PREVIEW                         (RID_FPICKER_START+38)
 #define STR_DEFAULT_DIRECTORY               (RID_FPICKER_START+39)
 #define STR_PLACES_TITLE                    (RID_FPICKER_START+40)
