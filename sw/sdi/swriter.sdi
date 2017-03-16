@@ -663,7 +663,7 @@ SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
 ]
 
 SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
-(SfxUInt16Item ChangeTrackingId FN_REDLINE_COMMENT,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SfxUInt32Item ChangeTrackingId FN_REDLINE_COMMENT,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7288,7 +7288,7 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
 ]
 
 SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
-( SfxUInt16Item AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT )
+( SfxUInt32Item AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7307,7 +7307,7 @@ SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
 ]
 
 SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
-( SfxUInt16Item RejectTrackedChange FN_REDLINE_REJECT_DIRECT )
+( SfxUInt32Item RejectTrackedChange FN_REDLINE_REJECT_DIRECT )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7326,7 +7326,7 @@ SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 ]
 
 SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
-( SfxUInt16Item NextTrackedChange FN_REDLINE_NEXT_CHANGE )
+( SfxUInt32Item NextTrackedChange FN_REDLINE_NEXT_CHANGE )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
