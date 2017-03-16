@@ -103,7 +103,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     if (err)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
-    std::shared_ptr<GpgME::Context> ctx(GpgME::Context::createForProtocol(GpgME::OpenPGP));
+    auto ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
     if (ctx == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
