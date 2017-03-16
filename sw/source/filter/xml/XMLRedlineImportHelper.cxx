@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "XMLRedlineImportHelper.hxx"
 #include <unotextcursor.hxx>
 #include <unotextrange.hxx>
@@ -673,7 +677,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 {
     // convert info:
     // 1) Author String -> Author ID (default to zero)
-    sal_uInt16 nAuthorId = (nullptr == pDoc) ? 0 :
+    std::size_t nAuthorId = (nullptr == pDoc) ? 0 :
         pDoc->getIDocumentRedlineAccess().InsertRedlineAuthor( pRedlineInfo->sAuthor );
 
     // 2) util::DateTime -> DateTime

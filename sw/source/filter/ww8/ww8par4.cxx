@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <functional>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
@@ -454,7 +455,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     for( sal_uInt16 nAuthor = 0; nAuthor < nCount; ++nAuthor )
     {
         // Store author in doc
-        sal_uInt16 nSWId = rDocOut.getIDocumentRedlineAccess().InsertRedlineAuthor(aAuthorNames[nAuthor]);
+        std::size_t nSWId = rDocOut.getIDocumentRedlineAccess().InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
         m_aAuthorInfos[nAuthor] = nSWId;
     }
@@ -512,7 +513,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
         sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort(pSprmCIbstRMark) : 0;
         sal_uInt32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
         DateTime aStamp(msfilter::util::DTTM2DateTime(nWWDate));
-        sal_uInt16 nAuthorNo = m_aAuthorInfos[nWWAutNo];
+        std::size_t nAuthorNo = m_aAuthorInfos[nWWAutNo];
         SwFltRedline  aNewAttr(eType, nAuthorNo, aStamp);
         NewAttr(aNewAttr);
     }

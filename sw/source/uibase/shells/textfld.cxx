@@ -71,6 +71,7 @@
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <calbck.hxx>
+#include <cstddef>
 #include <memory>
 #include <swmodule.hxx>
 
@@ -420,7 +421,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         sAuthor = pAuthorItem->GetValue();
                     else
                     {
-                        sal_uInt16 nAuthor = SW_MOD()->GetRedlineAuthor();
+                        std::size_t nAuthor = SW_MOD()->GetRedlineAuthor();
                         sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
                     }
 

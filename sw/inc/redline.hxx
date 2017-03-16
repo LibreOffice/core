@@ -27,6 +27,7 @@
 
 #include <IDocumentRedlineAccess.hxx>
 
+#include <cstddef>
 #include <vector>
 
 class SfxItemSet;
@@ -110,14 +111,15 @@ class SW_DLLPUBLIC SwRedlineData
     OUString sComment;
     DateTime aStamp;
     RedlineType_t eType;
-    sal_uInt16 nAuthor, nSeqNo;
+    std::size_t nAuthor;
+    sal_uInt16 nSeqNo;
 
 public:
-    SwRedlineData( RedlineType_t eT, sal_uInt16 nAut );
+    SwRedlineData( RedlineType_t eT, std::size_t nAut );
     SwRedlineData( const SwRedlineData& rCpy, bool bCpyNext = true );
 
     // For sw3io: pNext/pExtraData are taken over.
-    SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
+    SwRedlineData( RedlineType_t eT, std::size_t nAut, const DateTime& rDT,
                    const OUString& rCmnt, SwRedlineData* pNxt );
 
     ~SwRedlineData();
@@ -139,7 +141,7 @@ public:
     RedlineType_t GetType() const
         { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
 
-    sal_uInt16 GetAuthor() const                { return nAuthor; }
+    std::size_t GetAuthor() const                { return nAuthor; }
     const OUString& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
     const SwRedlineData* Next() const{ return pNext; }
@@ -209,7 +211,7 @@ public:
     void SetAutoFormatFlag()               { pRedlineData->SetAutoFormatFlag(); }
 
     sal_uInt16 GetStackCount() const;
-    sal_uInt16 GetAuthor( sal_uInt16 nPos = 0) const;
+    std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
     OUString GetAuthorString( sal_uInt16 nPos = 0 ) const;
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
     RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;

@@ -2597,13 +2597,13 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
 }
 
 // Create a new author if necessary
-sal_uInt16 DocumentRedlineManager::GetRedlineAuthor()
+std::size_t DocumentRedlineManager::GetRedlineAuthor()
 {
     return SW_MOD()->GetRedlineAuthor();
 }
 
 /// Insert new author into the Table for the Readers etc.
-sal_uInt16 DocumentRedlineManager::InsertRedlineAuthor( const OUString& rNew )
+std::size_t DocumentRedlineManager::InsertRedlineAuthor( const OUString& rNew )
 {
     return SW_MOD()->InsertRedlineAuthor(rNew);
 }

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <ctype.h>
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -710,7 +714,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                               | RedlineFlags::ShowDelete );
                 SwFltRedline& rFltRedline = *static_cast<SwFltRedline*>(rEntry.pAttr.get());
 
-                if( USHRT_MAX != rFltRedline.nAutorNoPrev )
+                if( SwFltRedline::NoPrevAuthor != rFltRedline.nAutorNoPrev )
                 {
                     SwRedlineData aData(rFltRedline.eTypePrev,
                                         rFltRedline.nAutorNoPrev,

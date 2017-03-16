@@ -24,6 +24,8 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include "swfont.hxx"
+
+#include <cstddef>
 #include <vector>
 
 class SwTextNode;
@@ -71,7 +73,7 @@ class SwRedlineItr
 
     void Clear_( SwFont* pFnt );
     bool ChkSpecialUnderline_() const;
-    void FillHints( sal_uInt16 nAuthor, RedlineType_t eType );
+    void FillHints( std::size_t nAuthor, RedlineType_t eType );
     short Seek_( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld );
     sal_Int32 GetNextRedln_( sal_Int32 nNext );
     short EnterExtend( SwFont& rFnt, sal_Int32 nNew ) {

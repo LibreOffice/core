@@ -1666,7 +1666,7 @@ void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
         rWW8Wrt.pFib->m_lcbSttbfRMark);
 }
 
-sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
+sal_uInt16 WW8Export::AddRedlineAuthor( std::size_t nId )
 {
     if( !m_pRedlAuthors )
     {

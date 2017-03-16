@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <cstdlib>
 
 #include <SidebarWin.hxx>
@@ -644,7 +645,7 @@ void SwSidebarWin::InitControls()
         nCntrl &= ~EEControlBits::ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
 
-    sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
+    std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
     SetColor( SwPostItMgr::GetColorDark(aIndex),
               SwPostItMgr::GetColorLight(aIndex),
               SwPostItMgr::GetColorAnchor(aIndex));

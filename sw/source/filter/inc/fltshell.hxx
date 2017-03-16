@@ -29,6 +29,8 @@
 #include <pam.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
+#include <cstddef>
+#include <limits>
 #include <memory>
 #include <deque>
 
@@ -225,14 +227,17 @@ public:
     DateTime        aStampPrev;
     RedlineType_t   eType;
     RedlineType_t   eTypePrev;
-    sal_uInt16          nAutorNo;
-    sal_uInt16          nAutorNoPrev;
+    std::size_t     nAutorNo;
+    std::size_t     nAutorNoPrev;
+
+    static constexpr auto NoPrevAuthor
+        = std::numeric_limits<std::size_t>::max();
 
     SwFltRedline(RedlineType_t   eType_,
-                 sal_uInt16          nAutorNo_,
+                 std::size_t     nAutorNo_,
                  const DateTime& rStamp_,
                  RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
-                 sal_uInt16          nAutorNoPrev_ = USHRT_MAX)
+                 std::size_t     nAutorNoPrev_ = NoPrevAuthor)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
         aStampPrev( DateTime::EMPTY ),
         eType(eType_),

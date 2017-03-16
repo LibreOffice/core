@@ -822,7 +822,7 @@ namespace sw
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr.get());
 
-                if (USHRT_MAX != pFltRedline->nAutorNoPrev)
+                if (SwFltRedline::NoPrevAuthor != pFltRedline->nAutorNoPrev)
                 {
                     SwRedlineData aData(pFltRedline->eTypePrev,
                         pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, OUString(),

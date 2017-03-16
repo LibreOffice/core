@@ -22,6 +22,7 @@
 #include <swrect.hxx>
 #include <fmtfld.hxx>
 #include <redline.hxx>
+#include <cstddef>
 #include <vector>
 #include <vcl/window.hxx>
 #include <SidebarWindowsTypes.hxx>
@@ -54,7 +55,7 @@ struct SwLayoutInfo
 
     sw::sidebarwindows::SidebarPosition meSidebarPosition;
 
-    sal_uInt16 mRedlineAuthor;
+    std::size_t mRedlineAuthor;
 
     SwLayoutInfo()
         : mpAnchorFrame(nullptr)

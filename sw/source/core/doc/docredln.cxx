@@ -856,7 +856,7 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
     return false;
 }
 
-SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
+SwRedlineData::SwRedlineData( RedlineType_t eT, std::size_t nAut )
     : pNext( nullptr ), pExtraData( nullptr ),
     aStamp( DateTime::SYSTEM ),
     eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
@@ -878,7 +878,7 @@ SwRedlineData::SwRedlineData(
 }
 
 // For sw3io: We now own pNext!
-SwRedlineData::SwRedlineData(RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
+SwRedlineData::SwRedlineData(RedlineType_t eT, std::size_t nAut, const DateTime& rDT,
     const OUString& rCmnt, SwRedlineData *pNxt)
     : pNext(pNxt), pExtraData(nullptr), sComment(rCmnt), aStamp(rDT),
     eType(eT), nAuthor(nAut), nSeqNo(0)
@@ -1630,7 +1630,7 @@ sal_uInt16 SwRangeRedline::GetStackCount() const
     return nRet;
 }
 
-sal_uInt16 SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
+std::size_t SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).nAuthor;
 }

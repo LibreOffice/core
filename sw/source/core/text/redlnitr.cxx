@@ -280,7 +280,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
     return nRet + EnterExtend( rFnt, nNew );
 }
 
-void SwRedlineItr::FillHints( sal_uInt16 nAuthor, RedlineType_t eType )
+void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
 {
     switch ( eType )
     {

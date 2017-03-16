@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_INC_SWMODULE_HXX
 #define INCLUDED_SW_INC_SWMODULE_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
@@ -187,16 +191,16 @@ public:
     bool            IsInsTableAlignNum(bool bHTML) const;
 
     // Redlining.
-    sal_uInt16          GetRedlineAuthor();
-    OUString            GetRedlineAuthor(sal_uInt16 nPos);
+    std::size_t         GetRedlineAuthor();
+    OUString            GetRedlineAuthor(std::size_t nPos);
     /// See SwXTextDocument::getTrackedChangeAuthors().
     OUString GetRedlineAuthorInfo();
-    sal_uInt16          InsertRedlineAuthor(const OUString& rAuthor);
+    std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
     void                SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 
-    void                GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
-    void                GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
-    void                GetFormatAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
+    void                GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
+    void                GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
+    void                GetFormatAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
 
     sal_uInt16              GetRedlineMarkPos();
     const Color&            GetRedlineMarkColor();

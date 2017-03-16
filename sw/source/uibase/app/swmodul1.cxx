@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -391,7 +394,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData)
     }
 }
 
-sal_uInt16 SwModule::GetRedlineAuthor()
+std::size_t SwModule::GetRedlineAuthor()
 {
     if (!m_bAuthorInitialised)
     {
@@ -415,7 +418,7 @@ void SwModule::SetRedlineAuthor(const OUString &rAuthor)
     InsertRedlineAuthor( m_sActAuthor );
 }
 
-OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
+OUString SwModule::GetRedlineAuthor(std::size_t nPos)
 {
     OSL_ENSURE(nPos < m_pAuthorNames.size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
     while(!(nPos < m_pAuthorNames.size()))
@@ -425,7 +428,7 @@ OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
     return m_pAuthorNames[nPos];
 }
 
-static ColorData lcl_GetAuthorColor(sal_uInt16 nPos)
+static ColorData lcl_GetAuthorColor(std::size_t nPos)
 {
     static const ColorData aColArr[] =
     {
@@ -438,7 +441,7 @@ static ColorData lcl_GetAuthorColor(sal_uInt16 nPos)
 }
 
 /// Returns a JSON representation of a redline author.
-boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, size_t nIndex)
+boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_t nIndex)
 {
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);
@@ -450,7 +453,7 @@ boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, size_t nIn
 OUString SwModule::GetRedlineAuthorInfo()
 {
     boost::property_tree::ptree aTable;
-    for (size_t nAuthor = 0; nAuthor < m_pAuthorNames.size(); ++nAuthor)
+    for (std::size_t nAuthor = 0; nAuthor < m_pAuthorNames.size(); ++nAuthor)
     {
         boost::property_tree::ptree aAuthor = lcl_AuthorToJson(m_pAuthorNames[nAuthor], nAuthor);
         aTable.push_back(std::make_pair("", aAuthor));
@@ -463,9 +466,9 @@ OUString SwModule::GetRedlineAuthorInfo()
     return OUString::fromUtf8(aStream.str().c_str());
 }
 
-sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
+std::size_t SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 {
-    sal_uInt16 nPos = 0;
+    std::size_t nPos = 0;
 
     while(nPos < m_pAuthorNames.size() && m_pAuthorNames[nPos] != rAuthor)
         ++nPos;
@@ -476,7 +479,7 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
     return nPos;
 }
 
-static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
+static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
 {
     Color aCol( rAttr.nColor );
@@ -535,18 +538,18 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
         rSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
 }
 
-void SwModule::GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
+void SwModule::GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet)
 {
     lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetInsertAuthorAttr());
 }
 
-void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
+void SwModule::GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet)
 {
     lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetDeletedAuthorAttr());
 }
 
 // For future extension:
-void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
+void SwModule::GetFormatAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet )
 {
     lcl_FillAuthorAttr( nAuthor, rSet, m_pModuleConfig->GetFormatAuthorAttr() );
 }

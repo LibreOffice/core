@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
+#include <cstddef>
 #include <vector>
 
 #include <list>
@@ -1633,7 +1634,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     SwPaM* pTmp = pDelRing;
 
     // get the Author / TimeStamp from the "other" document info
-    sal_uInt16 nAuthor = rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
+    std::size_t nAuthor = rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
     DateTime aTimeStamp( DateTime::SYSTEM );
     SwDocShell *pDocShell(rDoc.GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");

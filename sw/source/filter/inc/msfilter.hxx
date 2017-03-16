@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_MSFILTER_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_MSFILTER_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <set>
 #include <map>
 #include <vector>
@@ -133,7 +136,7 @@ namespace sw
     namespace util
     {
         /// Redlining Authors, map word author key to writer author value
-        typedef std::map<sal_uInt16, sal_uInt16> AuthorInfos;
+        typedef std::map<sal_uInt16, std::size_t> AuthorInfos;
 
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_INC_POSTITMGR_HXX
 #define INCLUDED_SW_INC_POSTITMGR_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <list>
 #include <vector>
 #include <editeng/outlobj.hxx>
@@ -262,9 +265,9 @@ class SwPostItMgr: public SfxListener
 
         void SetSpellChecking();
 
-        static Color           GetColorDark(sal_uInt16 aAuthorIndex);
-        static Color           GetColorLight(sal_uInt16 aAuthorIndex);
-        static Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
+        static Color           GetColorDark(std::size_t aAuthorIndex);
+        static Color           GetColorLight(std::size_t aAuthorIndex);
+        static Color           GetColorAnchor(std::size_t aAuthorIndex);
 
         void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
         OutlinerParaObject* IsAnswer() {return mpAnswer;}

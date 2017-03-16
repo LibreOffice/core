@@ -95,9 +95,9 @@ public:
 
     virtual void UpdateRedlineAttr() override;
 
-    virtual sal_uInt16 GetRedlineAuthor() override;
+    virtual std::size_t GetRedlineAuthor() override;
 
-    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) override;
+    virtual std::size_t InsertRedlineAuthor(const OUString& rAuthor) override;
 
     virtual bool SetRedlineComment(
         /*[in]*/const SwPaM& rPam,

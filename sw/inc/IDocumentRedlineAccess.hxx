@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <sal/types.h>
 #include <tools/solar.h>
 
@@ -210,10 +214,10 @@ public:
     virtual void UpdateRedlineAttr() = 0;
 
     // Create a new Author if required.
-    virtual sal_uInt16 GetRedlineAuthor() = 0;
+    virtual std::size_t GetRedlineAuthor() = 0;
 
     // For Readers etc.: register new Author in table.
-    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) = 0;
+    virtual std::size_t InsertRedlineAuthor(const OUString& rAuthor) = 0;
 
     // Place a comment at Redline at given position.
     virtual bool SetRedlineComment(

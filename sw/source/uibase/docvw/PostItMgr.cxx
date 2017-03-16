@@ -2043,7 +2043,7 @@ unsigned long SwPostItMgr::GetSidebarBorderWidth(bool bPx) const
         return mpWrtShell->GetOut()->PixelToLogic(Size(2,0)).Width();
 }
 
-Color SwPostItMgr::GetColorDark(sal_uInt16 aAuthorIndex)
+Color SwPostItMgr::GetColorDark(std::size_t aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
@@ -2058,7 +2058,7 @@ Color SwPostItMgr::GetColorDark(sal_uInt16 aAuthorIndex)
         return Color(COL_WHITE);
 }
 
-Color SwPostItMgr::GetColorLight(sal_uInt16 aAuthorIndex)
+Color SwPostItMgr::GetColorLight(std::size_t aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
@@ -2073,7 +2073,7 @@ Color SwPostItMgr::GetColorLight(sal_uInt16 aAuthorIndex)
         return Color(COL_WHITE);
 }
 
-Color SwPostItMgr::GetColorAnchor(sal_uInt16 aAuthorIndex)
+Color SwPostItMgr::GetColorAnchor(std::size_t aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {

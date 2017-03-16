@@ -42,6 +42,7 @@
 #include <boost/optional.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <cstddef>
 #include <memory>
 #include <map>
 #include <vector>
@@ -1010,7 +1011,7 @@ public:
     SwMSConvertControls& GetOCXExp()        { return *m_pOCXExp; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
-    sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );
+    sal_uInt16 AddRedlineAuthor( std::size_t nId );
 
     void WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes* pO = nullptr );
     void WritePostItBegin( ww::bytes* pO = nullptr );

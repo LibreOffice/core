@@ -1170,7 +1170,7 @@ void makeRedline( SwPaM& rPaM,
 
     //todo: what about REDLINE_FMTCOLL?
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    sal_uInt16 nAuthor = 0;
+    std::size_t nAuthor = 0;
     OUString sAuthor;
     if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
@@ -1284,7 +1284,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    sal_uInt16 nAuthor = 0;
+    std::size_t nAuthor = 0;
     OUString sAuthor;
     if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
@@ -1333,7 +1333,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
-    sal_uInt16 nAuthor = 0;
+    std::size_t nAuthor = 0;
     OUString sAuthor;
     if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
