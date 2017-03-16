@@ -53,17 +53,20 @@ public:
     {
         try
         {
-            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-            const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
-            Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            OUString aModuleName = xModuleManager->identify( xFrame );
+            if( SfxViewFrame::Current() )
+            {
+                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+                const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
+                Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+                OUString aModuleName = xModuleManager->identify( xFrame );
 
-            Reference<XUIConfigurationManager> m_xConfigManager;
-            Reference<XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-                theModuleUIConfigurationManagerSupplier::get( xContext ) );
-            m_xConfigManager.set( xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleName ) );
-            css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY_THROW );
-            xConfig->addConfigurationListener( this );
+                Reference<XUIConfigurationManager> m_xConfigManager;
+                Reference<XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+                    theModuleUIConfigurationManagerSupplier::get( xContext ) );
+                m_xConfigManager.set( xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleName ) );
+                css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY_THROW );
+                xConfig->addConfigurationListener( this );
+            }
         }
         catch( const css::uno::RuntimeException& ) {}
     }
@@ -90,6 +93,25 @@ public:
 
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override
     {
+        try
+        {
+            if( SfxViewFrame::Current() )
+            {
+                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+                const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
+                Reference<XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+                OUString aModuleName = xModuleManager->identify( xFrame );
+
+                Reference<XUIConfigurationManager> m_xConfigManager;
+                Reference<XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+                    theModuleUIConfigurationManagerSupplier::get( xContext ) );
+                m_xConfigManager.set( xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleName ) );
+                css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY_THROW );
+                xConfig->removeConfigurationListener( this );
+            }
+        }
+        catch( const css::uno::RuntimeException& ) {}
+
         m_pParent.clear();
     }
 };
@@ -130,6 +152,9 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
     if( m_bInitialized && m_bInvalidate && SfxViewFrame::Current() )
     {
         ToolBox* pToolBox = GetToolBox();
+        if( !pToolBox )
+            return;
+
         pToolBox->Clear();
 
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
