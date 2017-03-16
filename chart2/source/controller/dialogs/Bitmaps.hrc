@@ -170,7 +170,6 @@
 //further Images:
 
 //SchStatisticTabPage and SchDataStatisticsDlg part 2
-#define BMP_REGRESSION_NONE             (RID_APP_START + 92)
 #define BMP_REGRESSION_LINEAR           (RID_APP_START + 93)
 #define BMP_REGRESSION_LOG              (RID_APP_START + 94)
 #define BMP_REGRESSION_EXP              (RID_APP_START + 95)
@@ -192,10 +191,6 @@
 #define BMP_TYPE_STOCK  (RID_APP_START + 120)
 #define BMP_TYPE_COLUMN_LINE  (RID_APP_START + 131)
 #define BMP_TYPE_GL3D_BAR (RID_APP_START + 132)
-#define BMP_STEP_START  (RID_APP_START + 133)
-#define BMP_STEP_END    (RID_APP_START + 134)
-#define BMP_STEP_CENTER_X (RID_APP_START + 135)
-#define BMP_STEP_CENTER_Y (RID_APP_START + 136)
 
 //SchStatisticTabPage and SchDataStatisticsDlg part 1
 #define BMP_INDICATE_BOTH_VERTI (RID_APP_START + 137)

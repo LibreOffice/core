@@ -73,26 +73,6 @@ Bitmap BMP_TYPE_GL3D_BAR
     File = "typegl3dbar_16.png";
 };
 
-Bitmap BMP_STEP_START
-{
-    File = "step_start_30.png";
-};
-
-Bitmap BMP_STEP_END
-{
-    File = "step_end_30.png";
-};
-
-Bitmap BMP_STEP_CENTER_X
-{
-    File = "step_center_x_30.png";
-};
-
-Bitmap BMP_STEP_CENTER_Y
-{
-    File = "step_center_y_30.png";
-};
-
 Bitmap BMP_BUBBLE_1
 {
     File = "bubble_52x60.png" ;
@@ -538,10 +518,6 @@ Bitmap BMP_INDICATE_LEFT
 };
 
 //regression curves
-Bitmap BMP_REGRESSION_NONE
-{
-    File = "regno.png" ;
-};
 
 Bitmap BMP_REGRESSION_LINEAR
 {

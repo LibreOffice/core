@@ -67,15 +67,8 @@
 #define STR_TYPE_GL3D_BAR                   (RID_APP_START + 127)
 #define STR_GL3D_BAR                        (RID_APP_START + 128)
 
-//additional strings
-#define STR_TEXT_SEPARATOR                  (RID_APP_START + 20)
-
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src
-
-#define STR_INDICATE_BOTH                   (RID_APP_START + 131)
-#define STR_INDICATE_UP                     (RID_APP_START + 132)
-#define STR_INDICATE_DOWN                   (RID_APP_START + 133)
 
 #define STR_REGRESSION_LINEAR               (RID_APP_START + 135)
 #define STR_REGRESSION_LOG                  (RID_APP_START + 136)
@@ -216,12 +209,10 @@
 #define STR_PAGE_TRENDLINE_TYPE              (RID_APP_START + 89)
 #define STR_PAGE_XERROR_BARS                 (RID_APP_START + 293)
 #define STR_PAGE_YERROR_BARS                 (RID_APP_START + 206)
-#define STR_PAGE_ZERROR_BARS                 (RID_APP_START + 294)
 #define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA (RID_APP_START + 276)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
-#define STR_PAGE_CHART_LOCATION              (RID_APP_START + 230)
 
 #define STR_DLG_SMOOTH_LINE_PROPERTIES              (RID_APP_START + 239)
 #define STR_DLG_STEPPED_LINE_PROPERTIES             (RID_APP_START + 270)
