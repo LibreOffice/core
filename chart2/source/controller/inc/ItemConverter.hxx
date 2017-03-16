@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMCONVERTER_HXX
 
 #include <unotools/eventlisteneradapter.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

@@ -28,7 +28,6 @@
 #include <vcl/mapmod.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editeng.hxx>
 

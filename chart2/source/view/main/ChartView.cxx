@@ -109,6 +109,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <comphelper/classids.hxx>
 #include "servicenames_charttypes.hxx"
