@@ -4217,8 +4217,20 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
         }
     }
 
-    uno::Reference< sheet::XSpreadsheetView > xView( getCurrentExcelDoc(xContext)->getCurrentController(), uno::UNO_QUERY );
-    uno::Reference< table::XCellRange > xSheetRange( xView->getActiveSheet(), uno::UNO_QUERY_THROW );
+    uno::Reference<table::XCellRange> xSheetRange;
+
+    try
+    {
+        uno::Reference<sheet::XSpreadsheetView> xView(
+            getCurrentExcelDoc(xContext)->getCurrentController(), uno::UNO_QUERY_THROW);
+
+        xSheetRange.set(xView->getActiveSheet(), uno::UNO_QUERY_THROW);
+    }
+    catch (const uno::Exception&)
+    {
+        return uno::Reference<excel::XRange>();
+    }
+
     ScVbaRange* pRange = new ScVbaRange( excel::getUnoSheetModuleObj( xSheetRange ), xContext, xSheetRange );
     uno::Reference< excel::XRange > xVbSheetRange( pRange );
     return pRange->Range( Cell1, Cell2, true );
