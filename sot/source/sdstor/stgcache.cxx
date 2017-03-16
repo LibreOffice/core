@@ -297,7 +297,7 @@ bool StgCache::Open( const OUString& rName, StreamMode nMode )
     {
         sal_uLong nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
         m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
-        m_pStrm->Seek( 0L );
+        m_pStrm->Seek( 0 );
     }
     else
         m_nPages = 0;
@@ -335,7 +335,7 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf )
             // fixed address and size for the header
             if( nPage == -1 )
             {
-                nPos = 0L;
+                nPos = 0;
                 nBytes = 512;
                 nPg2 = 1;
             }
@@ -364,7 +364,7 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf )
         // nPageSize must be >= 512, otherwise the header can not be written here, we check it on import
         if( nPage == -1 )
         {
-            nPos = 0L;
+            nPos = 0;
             nBytes = 512;
         }
         if( m_pStrm->Tell() != nPos )
