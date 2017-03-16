@@ -22,7 +22,6 @@
 #include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
 #include <svx/svxdllapi.h>
-#include <svl/itempool.hxx>
 
 #include <rtl/ustring.hxx>
 

@@ -20,8 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
 #include <svtools/ivctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/msgbox.hxx>
@@ -36,6 +34,8 @@
 struct IconChoicePageData;
 class IconChoiceDialog;
 class IconChoicePage;
+class SfxItemPool;
+class SfxItemSet;
 
 // Create-Function
 typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);

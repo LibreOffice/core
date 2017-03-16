@@ -53,7 +53,6 @@
 #include <tools/link.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
 #include <svl/solar.hrc>
 #include <editeng/editdata.hxx>
 #include <editeng/unoedsrc.hxx>

@@ -27,6 +27,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>
+#include <svl/itempool.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <editeng/editstat.hxx>

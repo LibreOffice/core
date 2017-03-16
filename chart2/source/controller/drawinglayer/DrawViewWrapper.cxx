@@ -24,6 +24,7 @@
 
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>

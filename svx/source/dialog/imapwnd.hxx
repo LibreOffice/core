@@ -23,7 +23,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
-#include <svl/itempool.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/imap.hxx>
@@ -31,6 +30,8 @@
 #include <svx/graphctl.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
+
+struct SfxItemInfo;
 
 struct NotifyInfo
 {
