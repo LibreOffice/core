@@ -53,8 +53,14 @@ private:
     DECL_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);
 
 public:
+    enum class Mode {
+        Default,
+        Compare,
+        Merge
+    };
     DocumentInserter(const OUString& rFactory,
-                     bool const bEnableMultiSelection = false);
+                     bool const bEnableMultiSelection = false,
+                     const Mode mode = Mode::Default);
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
