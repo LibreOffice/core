@@ -365,7 +365,7 @@ public:
     void                        Resort() { maVector.Resort(); }
 
     // Notifies all LOK clients when redliens are added/modified/removed
-    static void                 LOKRedlineNotification(RedlineNotification eType, SwRedlineTable::size_type nPos, SwRangeRedline* pRedline);
+    static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...

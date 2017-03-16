@@ -302,7 +302,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
 }
 
 /// Emits LOK notification about one addition / removal of a redline item.
-void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, size_t nPos, SwRangeRedline* pRedline)
+void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -311,7 +311,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, size_t nP
     aRedline.put("action", (nType == RedlineNotification::Add ? "Add" :
                             (nType == RedlineNotification::Remove ? "Remove" :
                              (nType == RedlineNotification::Modify ? "Modify" : "???"))));
-    aRedline.put("index", nPos);
+    aRedline.put("index", pRedline->GetId());
     aRedline.put("author", pRedline->GetAuthorString(1).toUtf8().getStr());
     aRedline.put("type", nsRedlineType_t::SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()).toUtf8().getStr());
     aRedline.put("comment", pRedline->GetRedlineData().GetComment().toUtf8().getStr());
@@ -361,7 +361,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
         size_type nP = rv.first - begin();
-        LOKRedlineNotification(RedlineNotification::Add, nP, p);
+        LOKRedlineNotification(RedlineNotification::Add, p);
         p->CallDisplayFunc(nP);
         return rv.second;
     }
@@ -521,7 +521,7 @@ bool SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( sal_uInt16 nP )
 {
-    LOKRedlineNotification(RedlineNotification::Remove, nP, maVector[nP]);
+    LOKRedlineNotification(RedlineNotification::Remove, maVector[nP]);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
         pDoc = maVector.front()->GetDoc();
@@ -545,12 +545,10 @@ void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
     if( !nP && nL && nL == size() )
         pDoc = maVector.front()->GetDoc();
 
-    size_t nCount = 0;
     for( vector_type::const_iterator it = maVector.begin() + nP; it != maVector.begin() + nP + nL; ++it )
     {
-        LOKRedlineNotification(RedlineNotification::Remove, nP + nCount, *it);
+        LOKRedlineNotification(RedlineNotification::Remove, *it);
         delete *it;
-        ++nCount;
     }
     maVector.erase( maVector.begin() + nP, maVector.begin() + nP + nL );
 
@@ -931,10 +929,13 @@ OUString SwRedlineData::GetDescr() const
     return SW_RES(STR_REDLINE_INSERT + GetType());
 }
 
+sal_uInt32 SwRangeRedline::m_nLastId = 1;
+
 SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
-    pContentSect( nullptr )
+    pContentSect( nullptr ),
+    m_nId( m_nLastId++ )
 {
     bDelLastPara = false;
     bIsVisible = true;
@@ -945,7 +946,8 @@ SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( rData )),
-    pContentSect( nullptr )
+    pContentSect( nullptr ),
+    m_nId( m_nLastId++ )
 {
     bDelLastPara = false;
     bIsVisible = true;
@@ -956,7 +958,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos )
     : SwPaM( rPos ),
     pRedlineData( new SwRedlineData( rData )),
-    pContentSect( nullptr )
+    pContentSect( nullptr ),
+    m_nId( m_nLastId++ )
 {
     bDelLastPara = false;
     bIsVisible = true;
@@ -965,7 +968,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
 SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
     pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
-    pContentSect( nullptr )
+    pContentSect( nullptr ),
+    m_nId( rCpy.m_nId )
 {
     bDelLastPara = false;
     bIsVisible = true;
@@ -995,7 +999,7 @@ void SwRangeRedline::MaybeNotifyModification()
     {
         if (rRedTable[i] == this)
         {
-            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, i, this);
+            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, this);
             break;
         }
     }

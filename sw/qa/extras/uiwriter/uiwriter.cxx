@@ -3896,11 +3896,14 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->EndDoc();
     pWrtShell->Insert("zzz");
 
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
+
     // Select the first redline.
     pWrtShell->SttDoc();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
+        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[0]->GetId()))}
     }));
     lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -3913,7 +3916,7 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->SttDoc();
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
     });
     lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -3924,7 +3927,7 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->SttDoc();
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
     });
     lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();

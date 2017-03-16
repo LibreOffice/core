@@ -171,6 +171,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     SwNodeIndex* pContentSect;
     bool bDelLastPara : 1;
     bool bIsVisible : 1;
+    sal_uInt32 m_nId;
 
     void MoveToSection();
     void CopyToSection();
@@ -178,6 +179,8 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     void MoveFromSection(size_t nMyPos);
 
 public:
+    static sal_uInt32 m_nLastId;
+
     SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
@@ -185,11 +188,12 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), pRedlineData( pData ), pContentSect( nullptr ),
-        bDelLastPara( bDelLP ), bIsVisible( true )
+        bDelLastPara( bDelLP ), bIsVisible( true ), m_nId( m_nLastId++ )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
 
+    sal_uInt32 GetId() const { return m_nId; }
     SwNodeIndex* GetContentIdx() const { return pContentSect; }
     // For Undo.
     void SetContentIdx( const SwNodeIndex* );
