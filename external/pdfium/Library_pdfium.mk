@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,pdfium,\
 
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DPDFIUM_DLLIMPLEMENTATION \
+    -DUSE_SYSTEM_LIBJPEG \
 ))
 
 # Don't show warnings upstream doesn't care about.
@@ -507,49 +508,7 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/zlib_v128/zutil \
 ))
 
-# third_party/jpeg
-$(eval $(call gb_Library_add_generated_cobjects,pdfium,\
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcapimin \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcapistd \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jccoefct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jccolor \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcdctmgr \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jchuff \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcinit \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcmainct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcmarker \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcmaster \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcomapi \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcparam \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcphuff \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcprepct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jcsample \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jctrans \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdapimin \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdapistd \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdcoefct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdcolor \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jddctmgr \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdhuff \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdinput \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdmainct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdmarker \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdmaster \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdmerge \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdphuff \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdpostct \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdsample \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jdtrans \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jerror \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jfdctfst \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jfdctint \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jidctfst \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jidctint \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jidctred \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jmemmgr \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jmemnobs \
-    UnpackedTarball/pdfium/third_party/libjpeg/fpdfapi_jutils \
-))
+$(eval $(call gb_Library_use_external,pdfium,jpeg))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,pdfium,\
