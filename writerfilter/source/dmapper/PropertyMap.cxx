@@ -1192,10 +1192,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
     }
 
+    // The default section type is nextPage.
+    if( m_nBreakType == -1 )
+        m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
+
     // depending on the break type no page styles should be created
-    // If the section type is missing, but we have columns without new style info, then this should be
-    // handled as a continuous section break.
-    const bool bTreatAsContinuous = (m_nBreakType == -1 || m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage)
+    // Continuous sections usually create only a section, and not a new page style
+    const bool bTreatAsContinuous = m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage
                                     && m_nColumnCount > 0
                                     && !HasHeader(m_bTitlePage) && !HasFooter(m_bTitlePage)
                                     && (m_bIsFirstSection || m_sFollowPageStyleName.isEmpty() || (m_sFirstPageStyleName.isEmpty() && m_bTitlePage));
