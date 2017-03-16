@@ -170,7 +170,8 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport, nPrfx, rLName ),
     mpDataBarFormat(nullptr),
-    mpFormatData(nullptr)
+    mpFormatData(nullptr),
+    mnIndex(0)
 {
     OUString sPositiveColor;
     OUString sNegativeColor;
@@ -302,14 +303,20 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
         {
             ScColorScaleEntry* pEntry(nullptr);
             pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
-            if(mpFormatData->mpLowerLimit)
+            if(mnIndex == 0)
+            {
+                mpFormatData->mpLowerLimit.reset(pEntry);
+            }
+            else if (mnIndex == 1)
             {
                 mpFormatData->mpUpperLimit.reset(pEntry);
             }
             else
             {
-                mpFormatData->mpLowerLimit.reset(pEntry);
+                // data bars only support 2 entries
+                assert(false);
             }
+            ++mnIndex;
         }
         break;
         default:
