@@ -1506,27 +1506,12 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = nullptr;
+    // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
+    // (Use method "getInfoHelper()".)
+    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
+            cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() ) );
 
-    if( pInfo == nullptr )
-    {
-        SolarMutexGuard aGuard;
-
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfo == nullptr )
-        {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
-            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
-                    cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() ) );
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
+    return xInfo;
 }
 
 /*-************************************************************************************************************
