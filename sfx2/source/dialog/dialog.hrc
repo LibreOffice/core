@@ -49,14 +49,11 @@
 
 #define STR_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
 
-#define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
-
 // 100-106 in tbxcust.hrc
 #define STR_MACRO_LOSS                  ( RC_DIALOG_BEGIN + 107 )
 #define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
 
 #define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
-#define BMP_INFO                        ( RC_DIALOG_BEGIN + 122 )
 //free
 #define SFX_ST_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
