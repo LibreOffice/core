@@ -596,6 +596,16 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     if ( nScansize64 > SAL_MAX_UINT32 )
         return false;
 
+    // assume max theoretical compression of 1:1032
+    sal_uInt64 nMinSizeRequired = (nScansize64 * maOrigSize.Height()) / 1032;
+    if (nMinSizeRequired > mnStreamSize)
+    {
+        SAL_WARN("vcl.gdi", "overlarge png dimensions: " <<
+                 maOrigSize.Width() << " x " << maOrigSize.Height() << " depth: " << (int)mnPngDepth <<
+                 " couldn't be supplied by file length " << mnStreamSize << " at least " << nMinSizeRequired << " needed ");
+        return false;
+    }
+
     mnScansize = static_cast< sal_uInt32 >( nScansize64 );
 
     // calculate target size from original size and the preview hint
