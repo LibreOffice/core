@@ -93,6 +93,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     cinfo.output_gamma = 1.0;
     cinfo.raw_data_out = FALSE;
     cinfo.quantize_colors = FALSE;
+    ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
+    int nPixelSize = 3;
     if ( cinfo.jpeg_color_space == JCS_YCbCr )
         cinfo.out_color_space = JCS_RGB;
     else if ( cinfo.jpeg_color_space == JCS_YCCK )
@@ -171,7 +173,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         {
             JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
-            std::vector<sal_uInt8> pScanLineBuffer(nWidth * (bGray ? 1 : 3));
+            std::vector<sal_uInt8> pScanLineBuffer(nWidth * (bGray ? 1 : nPixelSize));
             std::vector<sal_uInt8> pCYMKBuffer;
 
             if (cinfo.out_color_space == JCS_CMYK)
@@ -230,7 +232,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 }
                 else
                 {
-                    pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), ScanlineFormat::N24BitTcRgb, nWidth * 3);
+                    pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), eScanlineFormat, pScanLineBuffer.size());
                 }
 
                 /* PENDING ??? */
