@@ -3187,7 +3187,7 @@ OUString SwXTextDocument::getTrackedChanges()
     for (SwRedlineTable::size_type i = 0; i < rRedlineTable.size(); ++i)
     {
         boost::property_tree::ptree aTrackedChange;
-        aTrackedChange.put("index", i);
+        aTrackedChange.put("id", OUString::number(sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(rRedlineTable[i]))));
         aTrackedChange.put("author", rRedlineTable[i]->GetAuthorString(1).toUtf8().getStr());
         aTrackedChange.put("type", nsRedlineType_t::SwRedlineTypeToOUString(rRedlineTable[i]->GetRedlineData().GetType()).toUtf8().getStr());
         aTrackedChange.put("comment", rRedlineTable[i]->GetRedlineData().GetComment().toUtf8().getStr());

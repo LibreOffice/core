@@ -510,19 +510,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 const SwRangeRedline *pRedline = rSh.GetCurrRedline();
                 SwDoc *pDoc = rSh.GetDoc();
-                SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
+                // If index is specified, goto and select the appropriate redline
                 if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
                 {
-                    //TODO: SfxUInt16Item vs. SwRedlineTable::size_type mismatch:
-                    nRedline = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-                    if (nRedline == USHRT_MAX)
-                        nRedline = SwRedlineTable::npos;
-
-                    if (nRedline != SwRedlineTable::npos)
+                    const sal_Int64 nChangeId = static_cast<const SfxStringItem*>(pItem)->GetValue().toInt64();
+                    const SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+                    for (SwRedlineTable::size_type nRedline = 0; nRedline < rRedlineTable.size(); ++nRedline)
                     {
-                        // If index is specified, goto and select the appropriate redline
-                        const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-                        if (nRedline < rTable.size())
+                        if (nChangeId == sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(rRedlineTable[nRedline])))
                             pRedline = rSh.GotoRedline(nRedline, true);
                     }
                 }
