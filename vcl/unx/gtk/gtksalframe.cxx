@@ -1046,7 +1046,7 @@ void GtkSalFrame::InitCommon()
     }
     updateScreenNumber();
 
-    SetIcon(1);
+    SetIcon(SV_ICON_ID_OFFICE);
 
     m_nWorkArea = pDisp->getWMAdaptor()->getCurrentWorkArea();
     /* #i64117# gtk sets a nice background pixmap

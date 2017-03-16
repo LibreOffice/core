@@ -254,6 +254,21 @@ Bitmap (SV_ICON_SIZE16_START)
     File = "mainapp_16_8.png" ;
 };
 
+Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_OFFICE)
+{
+    File = "mainapp_48_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_OFFICE)
+{
+    File = "mainapp_32_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_OFFICE)
+{
+    File = "mainapp_16_8.png" ;
+};
+
 Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_TEXT)
 {
     File = "odt_48_8.png" ;
@@ -269,6 +284,21 @@ Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_TEXT)
     File = "odt_16_8.png" ;
 };
 
+Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_TEXT_TEMPLATE)
+{
+    File = "ott_48_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_TEXT_TEMPLATE)
+{
+    File = "ott_32_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_TEXT_TEMPLATE)
+{
+    File = "ott_16_8.png" ;
+};
+
 Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_SPREADSHEET)
 {
     File = "ods_48_8.png" ;
@@ -282,6 +312,21 @@ Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_SPREADSHEET)
 Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_SPREADSHEET)
 {
     File = "ods_16_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_SPREADSHEET_TEMPLATE)
+{
+    File = "ots_48_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_SPREADSHEET_TEMPLATE)
+{
+    File = "ots_32_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_SPREADSHEET_TEMPLATE)
+{
+    File = "ots_16_8.png" ;
 };
 
 Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_DRAWING)
@@ -312,6 +357,21 @@ Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_PRESENTATION)
 Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_PRESENTATION)
 {
     File = "odp_16_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_MASTER_DOCUMENT)
+{
+    File = "odm_48_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_MASTER_DOCUMENT)
+{
+    File = "odm_32_8.png" ;
+};
+
+Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_MASTER_DOCUMENT)
+{
+    File = "odm_16_8.png" ;
 };
 
 Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_DATABASE)

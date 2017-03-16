@@ -1158,7 +1158,7 @@ void GtkSalFrame::InitCommon()
     }
     updateScreenNumber();
 
-    SetIcon(1);
+    SetIcon(SV_ICON_ID_OFFICE);
 }
 
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )

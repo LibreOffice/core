@@ -538,8 +538,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             try
             {
                 bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
-                                               mnIconID != 1 ? mnIconID :
-                                               (mpParent ? mpParent->mnIconID : 1), 32,
+                                               mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
+                                               (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
                                                Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
             }
             catch( css::uno::Exception& )
@@ -818,7 +818,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mbShaded                    = false;
     mbFullScreen                = false;
 
-    mnIconID                    = 1; // ICON_LO_DEFAULT
+    mnIconID                    = SV_ICON_ID_OFFICE;
 
     m_pClipRectangles           = nullptr;
     m_nCurClipRect              = 0;
