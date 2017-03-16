@@ -722,13 +722,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
+                    const sfx2::DocumentInserter::Mode mode { nSlot==SID_DOCUMENT_COMPARE
+                        ? sfx2::DocumentInserter::Mode::Compare
+                        : sfx2::DocumentInserter::Mode::Merge};
                     // start file dialog asynchronous
                     pImpl->bIgnoreLostRedliningWarning = true;
                     delete pImpl->pRequest;
                     pImpl->pRequest = new SfxRequest( rReq );
                     delete pImpl->pDocInserter;
                     pImpl->pDocInserter = new ::sfx2::DocumentInserter(
-                        ScDocShell::Factory().GetFactoryName(), false );
+                        ScDocShell::Factory().GetFactoryName(), mode );
                     pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;
                 }
