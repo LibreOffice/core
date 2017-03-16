@@ -236,31 +236,6 @@ String STR_SVT_MIMETYPE_APP_STARW_WEB
     Text [ en-US ] = "%PRODUCTNAME Writer/Web" ;
 };
 
-String STR_SVT_MIMETYPE_SCHEDULE
-{
-    Text [ en-US ] = "Tasks & Events" ;
-};
-
-String STR_SVT_MIMETYPE_SCHEDULE_EVT
-{
-    Text [ en-US ] = "%PRODUCTNAME Events View" ;
-};
-
-String STR_SVT_MIMETYPE_SCHEDULE_TASK
-{
-    Text [ en-US ] = "%PRODUCTNAME Task View" ;
-};
-
-String STR_SVT_MIMETYPE_SCHEDULE_FEVT
-{
-    Text [ en-US ] = "%PRODUCTNAME Event" ;
-};
-
-String STR_SVT_MIMETYPE_SCHEDULE_FTASK
-{
-    Text [ en-US ] = "%PRODUCTNAME Task" ;
-};
-
 String STR_SVT_MIMETYPE_FRAMESET
 {
     Text [ en-US ] = "Frameset Document" ;
