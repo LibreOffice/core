@@ -7631,6 +7631,10 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     aColumns.insert( aSnapRect.Left() );
                 }
             }
+
+            if (aRows.empty())
+                return pRet;
+
             sdr::table::SdrTableObj* pTable = new sdr::table::SdrTableObj( pSdrModel );
             pTable->uno_lock();
             Reference< XTable > xTable( pTable->getTable() );
