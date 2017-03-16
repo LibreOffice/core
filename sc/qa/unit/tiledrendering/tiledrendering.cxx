@@ -1082,8 +1082,14 @@ void ScTiledRenderingTest::testCommentCallback()
     CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
 
     // Edit a comment
+    // Select some random cell, we should be able to edit the cell note without
+    // selecting the cell
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (pTabViewShell)
+        pTabViewShell->SetCursor(3, 100);
     aArgs = comphelper::InitPropertySequence(
     {
+        {"Id", uno::makeAny(OUString("Sheet1.A2"))},
         {"Text", uno::makeAny(OUString("Edited comment"))},
         {"Author", uno::makeAny(OUString("LOK User2"))},
     });
@@ -1103,7 +1109,6 @@ void ScTiledRenderingTest::testCommentCallback()
     CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
 
     // Delete the comment
-    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     if (pTabViewShell)
         pTabViewShell->SetCursor(4, 43);
     aArgs = comphelper::InitPropertySequence(
