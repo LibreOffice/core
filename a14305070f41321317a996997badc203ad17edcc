@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_baaf31e2",
+        "filename": "xmlsecurity/source/gpg/SecurityEnvironment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-16T08:40:52Z",
+      "side": 1,
+      "message": "Do you think it\u0027s a good idea to use \"auto\" here? auto is great when you initialize from a cast or you use an iterator or in a range-based for loop where the type information would be just spelled out multiple times. But here the reader of this code would have to look up the gpgme header to see what is the type, that sounds like a step backwards.",
+      "revId": "a14305070f41321317a996997badc203ad17edcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
