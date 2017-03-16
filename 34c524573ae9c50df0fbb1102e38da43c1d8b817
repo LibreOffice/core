@@ -46,6 +46,30 @@
       "revId": "34c524573ae9c50df0fbb1102e38da43c1d8b817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_baf8117e",
+        "filename": "sc/source/ui/view/CellProtectionControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-16T12:38:02Z",
+      "side": 1,
+      "message": "Patchset 2 was for failed patchset 1. I did invalidation and it works. \\o/ Thank you for spending your time for me.",
+      "parentUuid": "9a57fde8_3fb6d3dc",
+      "range": {
+        "startLine": 37,
+        "startChar": 30,
+        "endLine": 37,
+        "endChar": 42
+      },
+      "revId": "34c524573ae9c50df0fbb1102e38da43c1d8b817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
