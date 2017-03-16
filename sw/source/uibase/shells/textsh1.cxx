@@ -305,13 +305,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
                 aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
                 aRewriter.AddRule( UndoArg3, sReplacement );
-                rWrtSh.StartUndo(UNDO_REPLACE, &aRewriter);
+                rWrtSh.StartUndo(SwUndoId::REPLACE, &aRewriter);
                 rWrtSh.GetCursor()->Normalize(false);
                 rWrtSh.ClearMark();
                 for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
                     rWrtSh.DelLeft();
                 rWrtSh.Insert2( sReplacement );
-                rWrtSh.EndUndo(UNDO_REPLACE, &aRewriter);
+                rWrtSh.EndUndo(SwUndoId::REPLACE, &aRewriter);
             }
         }
         break;
@@ -402,7 +402,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.ExtendedSelectAll();
                     }
 
-                    rWrtSh.StartUndo( ( !bForParagraph && !bForSelection ) ? UNDO_SETDEFTATTR : UNDO_EMPTY );
+                    rWrtSh.StartUndo( ( !bForParagraph && !bForSelection ) ? SwUndoId::SETDEFTATTR : SwUndoId::EMPTY );
                     if (aNewLangText == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
                     else if (aNewLangText == aStrResetLangs)
@@ -459,7 +459,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
             bool bFont = pFont && !pFont->GetValue().isEmpty();
-            rWrtSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
+            rWrtSh.StartUndo( SwUndoId::UI_INSERT_FOOTNOTE );
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
             {
@@ -471,7 +471,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFootnoteText();
             }
-            rWrtSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
+            rWrtSh.EndUndo( SwUndoId::UI_INSERT_FOOTNOTE );
             rReq.Done();
         }
         break;
@@ -771,7 +771,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 bool bDelSel = rWrtSh.HasSelection();
                 if( bDelSel )
                 {
-                    rWrtSh.StartUndo( UNDO_START );
+                    rWrtSh.StartUndo( SwUndoId::START );
                     rWrtSh.DelRight();
                 }
                 else
@@ -800,7 +800,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 if( bDelSel )
-                    rWrtSh.EndUndo( UNDO_END );
+                    rWrtSh.EndUndo( SwUndoId::END );
                 rWrtSh.EndAllAction();
                 rReq.Done();
             }
@@ -1054,7 +1054,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
                 if ( bUndoNeeded )
                 {
-                    rWrtSh.StartUndo( UNDO_INSATTR );
+                    rWrtSh.StartUndo( SwUndoId::INSATTR );
                 }
                 if( pSet->Count() )
                 {
@@ -1101,7 +1101,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // #i56253#
                 if ( bUndoNeeded )
                 {
-                    rWrtSh.EndUndo( UNDO_INSATTR );
+                    rWrtSh.EndUndo( SwUndoId::INSATTR );
                 }
             }
         }
@@ -1206,7 +1206,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rWrtSh.StartUndo( UNDO_INSATTR );
+                    rWrtSh.StartUndo( SwUndoId::INSATTR );
                     rWrtSh.SetAttrItem(
                         SvxBrushItem( rEdtWin.GetWaterCanTextBackColor(), RES_CHRATR_BACKGROUND) );
 
@@ -1229,7 +1229,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         }
                         rWrtSh.SetAttrItem( aGrabBag );
                     }
-                    rWrtSh.EndUndo( UNDO_INSATTR );
+                    rWrtSh.EndUndo( SwUndoId::INSATTR );
                 }
                 else
                     rWrtSh.SetAttrItem(

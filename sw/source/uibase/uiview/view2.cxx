@@ -447,7 +447,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
         const bool bReplaceMode(rSh.HasSelection() && nsSelectionType::SEL_FRM == rSh.GetSelectionType());
 
-        rSh.StartUndo(UNDO_INSERT, &aRewriter);
+        rSh.StartUndo(SwUndoId::INSERT, &aRewriter);
 
         int nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
 

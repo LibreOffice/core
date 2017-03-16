@@ -22,7 +22,7 @@
 #include <doctxm.hxx>
 
 SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc, SwTOXBase * _pTOX, const SwTOXBase & rNew)
-    : SwUndo(UNDO_TOXCHANGE, pDoc), pTOX(_pTOX), aOld(*_pTOX), aNew(rNew)
+    : SwUndo(SwUndoId::TOXCHANGE, pDoc), pTOX(_pTOX), aOld(*_pTOX), aNew(rNew)
 {
 }
 

@@ -134,7 +134,7 @@ bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rText )
         bUndoIdInitialized = true;
         if( 1 == rText.getLength() )
         {
-            rEditSh.StartUndo( UNDO_AUTOCORRECT );
+            rEditSh.StartUndo( SwUndoId::AUTOCORRECT );
             ++m_nEndUndoCounter;
         }
     }
@@ -217,7 +217,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
             bUndoIdInitialized = true;
             if( 1 == rText.getLength() )
             {
-                rEditSh.StartUndo( UNDO_AUTOCORRECT );
+                rEditSh.StartUndo( SwUndoId::AUTOCORRECT );
                 ++m_nEndUndoCounter;
             }
         }

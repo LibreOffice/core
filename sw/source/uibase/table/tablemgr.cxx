@@ -196,7 +196,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         SwFlyFrameFormat** ppFlyFrameFormat )
 {
     uno::Reference< frame::XModel > xChartModel;
-    pSh->StartUndo( UNDO_UI_INSERT_CHART );
+    pSh->StartUndo( SwUndoId::UI_INSERT_CHART );
     pSh->StartAllAction();
 
     OUString aName;
@@ -319,7 +319,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         xDataReceiver->setArguments( aArgs );
     }
 
-    pSh->EndUndo( UNDO_UI_INSERT_CHART );
+    pSh->EndUndo( SwUndoId::UI_INSERT_CHART );
 
     if( xChartModel.is() )
         xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often

@@ -1857,7 +1857,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             StartAction();
 
             SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
-            SwUndoId nUndoId = UNDO_INS_FROM_SHADOWCRSR;
+            SwUndoId nUndoId = SwUndoId::INS_FROM_SHADOWCRSR;
             // If only the paragraph attributes "Adjust" or "LRSpace" are set,
             // then the following should not delete those again.
             if( 0 == aFPos.nParaCnt + aFPos.nColumnCnt &&
@@ -1865,7 +1865,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                   ( text::HoriOrientation::NONE != aFPos.eOrient &&
                     0 == aFPos.nTabCnt + aFPos.nSpaceCnt )) &&
                 pCNd && pCNd->Len() )
-                nUndoId = UNDO_EMPTY;
+                nUndoId = SwUndoId::EMPTY;
 
             GetDoc()->GetIDocumentUndoRedo().StartUndo( nUndoId, nullptr );
 

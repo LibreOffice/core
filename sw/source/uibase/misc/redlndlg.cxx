@@ -824,7 +824,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aTmpStr);
 
-        pSh->StartUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE,
+        pSh->StartUndo(bAccept? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE,
                        &aRewriter);
     }
 

@@ -1315,7 +1315,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrame->Frame().Left();
         }
     }
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
     if( pCnt != GetAnchorFrame() || ( IsAutoPos() && pCnt->IsTextFrame() &&
                                   GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)) )
@@ -1374,7 +1374,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
 
     ChgRelPos( aRelPos );
 
-    GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 
     if ( pOldPage != FindPageFrame() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, false );

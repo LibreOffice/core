@@ -80,7 +80,7 @@ sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nS
         aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UndoArg3, pReplFormatColl->GetName());
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE_STYLE,
+        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE_STYLE,
                 &aRewriter );
     }
 
@@ -94,7 +94,7 @@ sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nS
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     }
     return nRet;
 }

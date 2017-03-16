@@ -39,7 +39,7 @@ SwEditShell::InsertSection(
     if( !IsTableMode() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, nullptr );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSSECTION, nullptr );
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
@@ -49,7 +49,7 @@ SwEditShell::InsertSection(
                 pRet = pNew;
         }
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, nullptr );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSSECTION, nullptr );
         EndAllAction();
     }
     return pRet;

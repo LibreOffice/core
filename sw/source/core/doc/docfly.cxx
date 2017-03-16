@@ -588,7 +588,7 @@ void SwDoc::SetFlyFrameTitle( SwFlyFrameFormat& rFlyFrameFormat,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrameFormat,
-                                          UNDO_FLYFRMFMT_TITLE,
+                                          SwUndoId::FLYFRMFMT_TITLE,
                                           rFlyFrameFormat.GetObjTitle(),
                                           sNewTitle ) );
     }
@@ -611,7 +611,7 @@ void SwDoc::SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrameFormat,
-                                          UNDO_FLYFRMFMT_DESCRIPTION,
+                                          SwUndoId::FLYFRMFMT_DESCRIPTION,
                                           rFlyFrameFormat.GetObjDescription(),
                                           sNewDescription ) );
     }
@@ -730,7 +730,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         return false;
     }
 
-    GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::INSATTR, nullptr );
 
     bool bUnmark = false;
     for ( size_t i = 0; i < _rMrkList.GetMarkCount(); ++i )
@@ -961,7 +961,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         }
     }
 
-    GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     getIDocumentState().SetModified();
 
     return bUnmark;
@@ -1069,7 +1069,7 @@ SwChainRet SwDoc::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
     SwChainRet nErr = Chainable( rSource, rDest );
     if ( nErr == SwChainRet::OK )
     {
-        GetIDocumentUndoRedo().StartUndo( UNDO_CHAINE, nullptr );
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::CHAINE, nullptr );
 
         SwFlyFrameFormat& rDestFormat = const_cast<SwFlyFrameFormat&>(static_cast<const SwFlyFrameFormat&>(rDest));
 
@@ -1102,7 +1102,7 @@ SwChainRet SwDoc::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
         }
         SetAttr( aSet, rSource );
 
-        GetIDocumentUndoRedo().EndUndo( UNDO_CHAINE, nullptr );
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::CHAINE, nullptr );
     }
     return nErr;
 }
@@ -1112,14 +1112,14 @@ void SwDoc::Unchain( SwFrameFormat &rFormat )
     SwFormatChain aChain( rFormat.GetChain() );
     if ( aChain.GetNext() )
     {
-        GetIDocumentUndoRedo().StartUndo( UNDO_UNCHAIN, nullptr );
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::UNCHAIN, nullptr );
         SwFrameFormat *pFollow = aChain.GetNext();
         aChain.SetNext( nullptr );
         SetAttr( aChain, rFormat );
         aChain = pFollow->GetChain();
         aChain.SetPrev( nullptr );
         SetAttr( aChain, *pFollow );
-        GetIDocumentUndoRedo().EndUndo( UNDO_UNCHAIN, nullptr );
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::UNCHAIN, nullptr );
     }
 }
 

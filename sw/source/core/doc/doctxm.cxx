@@ -325,7 +325,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SfxItemSet* pSet,
                                                 bool bExpand )
 {
-    GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
     SwPaM aPam( rPos );
@@ -362,7 +362,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
         }
     }
 
-    GetIDocumentUndoRedo().EndUndo( UNDO_INSTOX, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::INSTOX, nullptr );
 
     return pNewSection;
 }
@@ -495,7 +495,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
     SwSectionNode const * pMyNode = pFormat ? pFormat->GetSectionNode() : nullptr;
     if (pMyNode)
     {
-        GetIDocumentUndoRedo().StartUndo( UNDO_CLEARTOXRANGE, nullptr );
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::CLEARTOXRANGE, nullptr );
 
         /* Save start node of section's surrounding. */
         SwNode const * pStartNd = pMyNode->StartOfSectionNode();
@@ -562,7 +562,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 
         DelSectionFormat( const_cast<SwSectionFormat *>(pFormat), bDelNodes );
 
-        GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, nullptr );
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::CLEARTOXRANGE, nullptr );
         bRet = true;
     }
 

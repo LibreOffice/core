@@ -267,18 +267,18 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 {
     if (!IsUndoEnabled())
     {
-        return UNDO_EMPTY;
+        return SwUndoId::EMPTY;
     }
 
-    SwUndoId const eUndoId( (i_eUndoId == UNDO_EMPTY) ? UNDO_START : i_eUndoId );
+    SwUndoId const eUndoId( (i_eUndoId == SwUndoId::EMPTY) ? SwUndoId::START : i_eUndoId );
 
-    assert(UNDO_END != eUndoId);
-    OUString comment( (UNDO_START == eUndoId)
+    assert(SwUndoId::END != eUndoId);
+    OUString comment( (SwUndoId::START == eUndoId)
         ?   OUString("??")
-        :   OUString(SW_RES(UNDO_BASE + eUndoId)) );
+        :   OUString(SW_RES(UNDO_BASE + (int)eUndoId)) );
     if (pRewriter)
     {
-        assert(UNDO_START != eUndoId);
+        assert(SwUndoId::START != eUndoId);
         comment = pRewriter->Apply(comment);
     }
 
@@ -288,22 +288,22 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         if (const SwView* pView = m_pDocShell->GetView())
             nViewShellId = pView->GetViewShellId();
     }
-    SdrUndoManager::EnterListAction(comment, comment, eUndoId, nViewShellId);
+    SdrUndoManager::EnterListAction(comment, comment, (sal_uInt16)eUndoId, nViewShellId);
 
     return eUndoId;
 }
 
 SwUndoId
-UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
+UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
 {
     if (!IsUndoEnabled())
     {
-        return UNDO_EMPTY;
+        return SwUndoId::EMPTY;
     }
 
-    SwUndoId const eUndoId( ((i_eUndoId == UNDO_EMPTY) || (UNDO_START == i_eUndoId))
-            ? UNDO_END : i_eUndoId );
-    OSL_ENSURE(!((UNDO_END == eUndoId) && pRewriter),
+    if ((eUndoId == SwUndoId::EMPTY) || (SwUndoId::START == eUndoId))
+           eUndoId = SwUndoId::END;
+    OSL_ENSURE(!((SwUndoId::END == eUndoId) && pRewriter),
                 "EndUndo(): no Undo ID, but rewriter given?");
 
     SfxUndoAction *const pLastUndo(
@@ -315,24 +315,22 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
     if (nCount) // otherwise: empty list action not inserted!
     {
         assert(pLastUndo);
-        assert(UNDO_START != eUndoId);
-        SfxUndoAction *const pUndoAction(SdrUndoManager::GetUndoAction());
-        SfxListUndoAction *const pListAction(
-            dynamic_cast<SfxListUndoAction*>(pUndoAction));
+        assert(SwUndoId::START != eUndoId);
+        auto pListAction = dynamic_cast<SfxListUndoAction*>(SdrUndoManager::GetUndoAction());
         assert(pListAction);
-        if (UNDO_END != eUndoId)
+        if (SwUndoId::END != eUndoId)
         {
-            OSL_ENSURE(pListAction->GetId() == eUndoId,
+            OSL_ENSURE((SwUndoId)pListAction->GetId() == eUndoId,
                     "EndUndo(): given ID different from StartUndo()");
             // comment set by caller of EndUndo
-            OUString comment = SW_RES(UNDO_BASE + eUndoId);
+            OUString comment = SW_RES(UNDO_BASE + (int)eUndoId);
             if (pRewriter)
             {
                 comment = pRewriter->Apply(comment);
             }
             pListAction->SetComment(comment);
         }
-        else if ((UNDO_START != pListAction->GetId()))
+        else if (SwUndoId::START != (SwUndoId)pListAction->GetId())
         {
             // comment set by caller of StartUndo: nothing to do here
         }
@@ -375,7 +373,7 @@ UndoManager::GetLastUndoInfo(
         {
             if (o_pId)
             {
-                 *o_pId = UNDO_CONFLICT;
+                 *o_pId = SwUndoId::CONFLICT;
             }
             return false;
         }
@@ -433,7 +431,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
         {
             if (o_pId)
             {
-                 *o_pId = UNDO_CONFLICT;
+                 *o_pId = SwUndoId::CONFLICT;
             }
             return false;
         }
@@ -470,9 +468,9 @@ SwUndoComments_t UndoManager::GetRedoComments() const
 
 SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
 {
-    SwUndoId nRepeatId(UNDO_EMPTY);
+    SwUndoId nRepeatId(SwUndoId::EMPTY);
     GetLastUndoInfo(o_pStr, & nRepeatId);
-    if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
+    if( SwUndoId::REPEAT_START <= nRepeatId && SwUndoId::REPEAT_END > nRepeatId )
     {
         return nRepeatId;
     }
@@ -480,7 +478,7 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
     {
         o_pStr->clear();
     }
-    return UNDO_EMPTY;
+    return SwUndoId::EMPTY;
 }
 
 SwUndo * UndoManager::RemoveLastUndo()
@@ -662,7 +660,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
             if (const SwView* pView = m_pDocShell->GetView())
                 nViewShellId = pView->GetViewShellId();
         }
-        EnterListAction(comment, rcomment, nId, nViewShellId);
+        EnterListAction(comment, rcomment, (sal_uInt16)nId, nViewShellId);
     }
 
     SwPaM* pTmp = rContext.m_pCurrentPaM;

@@ -707,7 +707,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             aTmpStr += OUString(SW_RES(STR_END_QUOTE));
             aRewriter.AddRule(UndoArg3, aTmpStr);
 
-            m_pSh->StartUndo(UNDO_UI_REPLACE, &aRewriter);
+            m_pSh->StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
             m_pSh->StartAction();
             m_pSh->DelLeft();
 

@@ -931,7 +931,7 @@ void SwDrawView::DeleteMarked()
     SwRootFrame *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
         SdrPageView* pDrawPageView = rImp.GetPageView();
@@ -966,7 +966,7 @@ void SwDrawView::DeleteMarked()
         for (std::vector<SwFrameFormat*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
             pDoc->getIDocumentLayoutAccess().DelLayoutFormat(*i);
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
     if( pTmpRoot )
         pTmpRoot->EndAllAction();
 }

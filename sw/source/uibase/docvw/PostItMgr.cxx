@@ -1492,7 +1492,7 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     }
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + rAuthor);
-    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
+    mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithAuthorOf aFilter(rAuthor);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
@@ -1519,7 +1519,7 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     }
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_CONTENT_TYPE_SINGLE_POSTIT));
-    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
+    mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithPostitId aFilter(nPostItId);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
@@ -1540,7 +1540,7 @@ void SwPostItMgr::Delete()
     SetActiveSidebarWin(nullptr);
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RES(STR_DELETE_ALL_NOTES) );
-    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
+    mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitField aFilter;
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(),
@@ -1599,7 +1599,7 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
     mpWrtShell->StartAllAction();
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RES(STR_FORMAT_ALL_NOTES) );
-    mpWrtShell->StartUndo( UNDO_INSATTR, &aRewriter );
+    mpWrtShell->StartUndo( SwUndoId::INSATTR, &aRewriter );
 
     for(SwSidebarItem_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
     {

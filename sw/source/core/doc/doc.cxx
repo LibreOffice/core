@@ -1313,7 +1313,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
 bool SwDoc::RemoveInvisibleContent()
 {
     bool bRet = false;
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_DELETE_INVISIBLECNTNT, nullptr );
 
     {
         SwTextNode* pTextNd;
@@ -1474,7 +1474,7 @@ bool SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_DELETE_INVISIBLECNTNT, nullptr );
     return bRet;
 }
 
@@ -1509,9 +1509,9 @@ bool SwDoc::HasInvisibleContent() const
 
 bool SwDoc::RestoreInvisibleContent()
 {
-    SwUndoId nLastUndoId(UNDO_EMPTY);
+    SwUndoId nLastUndoId(SwUndoId::EMPTY);
     if (GetIDocumentUndoRedo().GetLastUndoInfo(nullptr, & nLastUndoId)
-        && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
+        && (SwUndoId::UI_DELETE_INVISIBLECNTNT == nLastUndoId))
     {
         GetIDocumentUndoRedo().Undo();
         GetIDocumentUndoRedo().ClearRedo();
@@ -1524,7 +1524,7 @@ bool SwDoc::ConvertFieldsToText()
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE, nullptr );
 
     const SwFieldTypes* pMyFieldTypes = getIDocumentFieldsAccess().GetFieldTypes();
     const SwFieldTypes::size_type nCount = pMyFieldTypes->size();
@@ -1619,7 +1619,7 @@ bool SwDoc::ConvertFieldsToText()
 
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_REPLACE, nullptr );
     getIDocumentFieldsAccess().UnlockExpFields();
     return bRet;
 

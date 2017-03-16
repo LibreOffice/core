@@ -37,7 +37,7 @@ protected:
     SwPosition GetPosition();
 
 public:
-    SwUndoField(const SwPosition & rPos, SwUndoId nId = UNDO_FIELD );
+    SwUndoField(const SwPosition & rPos, SwUndoId nId = SwUndoId::FIELD );
     virtual ~SwUndoField() override;
 };
 

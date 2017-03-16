@@ -84,10 +84,10 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, nullptr );
+                        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::OVERWRITE, nullptr );
                         pDoc->getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
                         pDoc->getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
-                        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, nullptr );
+                        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::OVERWRITE, nullptr );
                     }
                 }
                 else

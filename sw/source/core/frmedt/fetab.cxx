@@ -309,9 +309,9 @@ bool SwFEShell::DeleteCol()
         ParkCursorInTab();
 
         // then delete the column
-        StartUndo(UNDO_COL_DELETE);
+        StartUndo(SwUndoId::COL_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes, true );
-        EndUndo(UNDO_COL_DELETE);
+        EndUndo(SwUndoId::COL_DELETE);
 
     }
     else
@@ -433,9 +433,9 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         }
 
         // now delete the lines
-        StartUndo(bCompleteTable ? UNDO_UI_TABLE_DELETE : UNDO_ROW_DELETE);
+        StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes );
-        EndUndo(bCompleteTable ? UNDO_UI_TABLE_DELETE : UNDO_ROW_DELETE);
+        EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
     }
     else
         bRet = false;

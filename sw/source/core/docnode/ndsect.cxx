@@ -516,7 +516,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
 {
     SwSectionFormats::iterator itFormatPos = std::find( mpSectionFormatTable->begin(), mpSectionFormatTable->end(), pFormat );
 
-    GetIDocumentUndoRedo().StartUndo(UNDO_DELSECTION, nullptr);
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::DELSECTION, nullptr);
 
     if( mpSectionFormatTable->end() != itFormatPos )
     {
@@ -542,7 +542,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                     GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
                 getIDocumentState().SetModified();
                 //#126178# start/end undo have to be pairs!
-                GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, nullptr);
+                GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
                 return ;
             }
             GetIDocumentUndoRedo().AppendUndo( MakeUndoDelSection( *pFormat ) );
@@ -556,7 +556,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                 GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
             getIDocumentState().SetModified();
             //#126178# start/end undo have to be pairs!
-            GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, nullptr);
+            GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
             return ;
         }
 
@@ -599,7 +599,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
 //FEATURE::CONDCOLL
     }
 
-    GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, nullptr);
+    GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
 
     getIDocumentState().SetModified();
 }

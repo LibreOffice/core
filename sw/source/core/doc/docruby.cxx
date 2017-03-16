@@ -93,7 +93,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
 void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             sal_uInt16 nMode )
 {
-    GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::SETRUBYATTR, nullptr );
     std::set<sal_uInt16> aDelArr;
     aDelArr.insert( RES_TXTATR_CJK_RUBY );
 
@@ -174,7 +174,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     } while( 30 > rList.size() &&
         (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2 );
 
-    GetIDocumentUndoRedo().EndUndo( UNDO_SETRUBYATTR, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::SETRUBYATTR, nullptr );
 }
 
 bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )

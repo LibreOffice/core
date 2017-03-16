@@ -835,7 +835,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                 if( rPam.GetNext() != &rPam )           // Multiple selection?
                 {
-                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for ( size_t n = 0; n < aRangeArr.Count(); ++n )
@@ -843,7 +843,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
                 }
                 else
                 {
@@ -925,12 +925,12 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
 
             if( rPam.GetNext() != &rPam )           // Multiple selection?
             {
-                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+                pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( size_t n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+                pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );

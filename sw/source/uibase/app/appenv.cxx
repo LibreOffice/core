@@ -267,7 +267,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
             // Here it goes (insert)
-            pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE);
+            pSh->StartUndo(SwUndoId::UI_INSERT_ENVELOPE);
             pSh->StartAllAction();
             pSh->SttEndDoc(true);
 
@@ -467,7 +467,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if (nMode == ENV_NEWDOC)
             pSh->DoUndo();
         else
-            pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
+            pSh->EndUndo(SwUndoId::UI_INSERT_ENVELOPE);
 
         if (nMode == ENV_NEWDOC)
         {

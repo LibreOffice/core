@@ -219,7 +219,7 @@ void SwWrtShell::Insert( const OUString &rStr )
             aRewriter.AddRule(UndoArg3, rStr);
         }
 
-        StartUndo(UNDO_REPLACE, &aRewriter);
+        StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
         bDeleted = DelRight() != 0;
     }
@@ -250,7 +250,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SW_RES(STR_GRAPHIC));
 
-    StartUndo(UNDO_INSERT, &aRewriter);
+    StartUndo(SwUndoId::INSERT, &aRewriter);
 
     if ( HasSelection() )
         DelRight();
@@ -445,7 +445,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     ResetCursorStack();
     StartAllAction();
 
-    StartUndo(UNDO_INSERT);
+    StartUndo(SwUndoId::INSERT);
 
     //Some differences between StarMath and any other objects:
     //1. Selections should be deleted. For StarMath the Text should be
@@ -560,7 +560,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     else
         aRewriter.AddRule(UndoArg1, SW_RES(STR_OLE));
 
-    EndUndo(UNDO_INSERT, &aRewriter);
+    EndUndo(SwUndoId::INSERT, &aRewriter);
 
     return bActivate;
 }
@@ -841,7 +841,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
     if( CanInsert() )
     {
         SwActContext aActContext(this);
-        StartUndo(UNDO_UI_INSERT_PAGE_BREAK);
+        StartUndo(SwUndoId::UI_INSERT_PAGE_BREAK);
 
         if ( !IsCursorInTable() )
         {
@@ -862,7 +862,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
         }
         else
             SetAttrItem( SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
-        EndUndo(UNDO_UI_INSERT_PAGE_BREAK);
+        EndUndo(SwUndoId::UI_INSERT_PAGE_BREAK);
     }
 }
 
@@ -895,7 +895,7 @@ void SwWrtShell::InsertColumnBreak()
     ResetCursorStack();
     if( CanInsert() )
     {
-        StartUndo(UNDO_UI_INSERT_COLUMN_BREAK);
+        StartUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
 
         if ( !IsCursorInTable() )
         {
@@ -905,7 +905,7 @@ void SwWrtShell::InsertColumnBreak()
         }
         SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
 
-        EndUndo(UNDO_UI_INSERT_COLUMN_BREAK);
+        EndUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
     }
 }
 
@@ -956,13 +956,13 @@ void SwWrtShell::SplitNode( bool bAutoFormat )
         bool bHasSel = HasSelection();
         if( bHasSel )
         {
-            StartUndo( UNDO_INSERT );
+            StartUndo( SwUndoId::INSERT );
             DelRight();
         }
 
         SwFEShell::SplitNode( bAutoFormat );
         if( bHasSel )
-            EndUndo( UNDO_INSERT );
+            EndUndo( SwUndoId::INSERT );
     }
 }
 
@@ -985,7 +985,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     // determine numbering rule found at current cursor position in the document.
     const SwNumRule* pCurRule = GetNumRuleAtCurrCursorPos();
 
-    StartUndo(UNDO_NUMORNONUM);
+    StartUndo(SwUndoId::NUMORNONUM);
 
     const SwNumRule * pNumRule = pCurRule;
 
@@ -1290,7 +1290,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         SetCurNumRule( aNumRule, true, OUString(), true );
     }
 
-    EndUndo(UNDO_NUMORNONUM);
+    EndUndo(SwUndoId::NUMORNONUM);
 }
 // <- #i40041#
 
@@ -1610,7 +1610,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
             aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
             aRewriter.AddRule( UndoArg3, aTmpStr3 );
 
-            StartUndo( UNDO_REPLACE, &aRewriter );
+            StartUndo( SwUndoId::REPLACE, &aRewriter );
             bStarted = true;
             DelRight();
         }
@@ -1619,7 +1619,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
         if(bStarted)
         {
             EndAllAction();
-            EndUndo( UNDO_REPLACE, &aRewriter );
+            EndUndo( SwUndoId::REPLACE, &aRewriter );
         }
     }
 }
@@ -1766,7 +1766,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
 {
     addCurrentPosition();
     StartAllAction();
-    StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
+    StartUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
     bool bExecute = true;
     bool bCursorSet = false;
     for( size_t nFrom = 0, nTo = GetPageDescCnt();
@@ -1829,7 +1829,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
             }
         }
     }
-    EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
+    EndUndo( SwUndoId::HEADER_FOOTER ); // #i7983#
     EndAllAction();
 }
 

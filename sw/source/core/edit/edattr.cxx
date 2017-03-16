@@ -521,7 +521,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
 {
     StartAllAction();
-    StartUndo( UNDO_START );
+    StartUndo( SwUndoId::START );
 
     SwPaM* pCursor = GetCursor();
     if( pCursor->GetNext() != pCursor )         // Multiple selection ?
@@ -535,7 +535,7 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     else
         GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus );
 
-    EndUndo( UNDO_END );
+    EndUndo( SwUndoId::END );
     EndAllAction();
 }
 

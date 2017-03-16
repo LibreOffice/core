@@ -661,7 +661,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
     SwFlyFrameFormat *pRet;
     if( bMoveContent )
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, nullptr );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSLAYFMT, nullptr );
         SwFormatAnchor* pOldAnchor = nullptr;
         bool bHOriChgd = false, bVOriChgd = false;
         SwFormatVertOrient aOldV;
@@ -718,12 +718,12 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                 // changing the anchors should not be recorded
                 bool const bDoesUndo =
                     GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-                SwUndoId nLastUndoId(UNDO_EMPTY);
+                SwUndoId nLastUndoId(SwUndoId::EMPTY);
                 if (bDoesUndo &&
                     GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(nullptr,
                         & nLastUndoId))
                 {
-                    if (UNDO_INSLAYFMT == nLastUndoId)
+                    if (SwUndoId::INSLAYFMT == nLastUndoId)
                     {
                         GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
                     }
@@ -741,7 +741,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
             }
             delete pOldAnchor;
         }
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, nullptr );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSLAYFMT, nullptr );
     }
     else
         /* If called from a shell try to propagate an

@@ -70,7 +70,7 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
 
         SwPosition start = pField->GetMarkStart();
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
@@ -91,7 +91,7 @@ namespace
             ++rEnd.nContent;
         }
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };
 
     void lcl_RemoveFieldMarks(Fieldmark* const pField,
@@ -99,7 +99,7 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
 
         const SwPosition& rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
@@ -128,7 +128,7 @@ namespace
             --aEnd.Start()->nContent;
         io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };
 }
 

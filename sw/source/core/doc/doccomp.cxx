@@ -1855,7 +1855,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         CmpOptions.nIgnoreLen = SW_MOD()->IsIgnorePieces() ? SW_MOD()->GetPieceLen() : 0;
     }
 
-    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     bool bDocWasModified = getIDocumentState().IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
@@ -1893,7 +1893,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     if( !bSrcModified )
         rSrcDoc.getIDocumentState().ResetModified();
 
-    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+    GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     return nRet;
 }
@@ -2078,7 +2078,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
@@ -2140,7 +2140,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
-    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+    GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     return nRet;
 }

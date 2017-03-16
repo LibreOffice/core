@@ -99,7 +99,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
     bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
-        StartUndo( UNDO_START );
+        StartUndo( SwUndoId::START );
         GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
     }
 
@@ -110,7 +110,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
                                                    css::text::HoriOrientation::FULL, pTAFormat,
                                                    nullptr, true );
     if( bEndUndo )
-        EndUndo( UNDO_END );
+        EndUndo( SwUndoId::END );
 
     EndAllAction();
     return *pTable;
@@ -220,7 +220,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
     bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
-        StartUndo( UNDO_START );
+        StartUndo( SwUndoId::START );
         GetDoc()->getIDocumentContentOperations().SplitNode( *pPos, false );
     }
 
@@ -235,7 +235,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
     pTableNode->SetNewTable( pDDETable );       // setze die DDE-Tabelle
 
     if( bEndUndo )
-        EndUndo( UNDO_END );
+        EndUndo( SwUndoId::END );
 
     EndAllAction();
 }
@@ -355,12 +355,12 @@ void SwEditShell::SetTableBoxFormulaAttrs( const SfxItemSet& rSet )
         ClearTableBoxContent();
 
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     for (size_t n = 0; n < aBoxes.size(); ++n)
     {
         GetDoc()->SetTableBoxFormulaAttrs( *aBoxes[ n ], rSet );
     }
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     EndAllAction();
 }
 
@@ -433,11 +433,11 @@ bool SwEditShell::SplitTable( SplitTable_HeadlineOption eMode )
     if( pCursor->GetNode().FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
         bRet = GetDoc()->SplitTable( *pCursor->GetPoint(), eMode, true );
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -451,11 +451,11 @@ bool SwEditShell::MergeTable( bool bWithPrev )
     if( pCursor->GetNode().FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
         bRet = GetDoc()->MergeTable( *pCursor->GetPoint(), bWithPrev );
 
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         ClearFEShellTabCols();
         EndAllAction();
     }

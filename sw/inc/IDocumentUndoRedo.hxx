@@ -106,7 +106,7 @@ public:
         @param pRewriter      rewriter for comments @see SwUndo::GetComment
 
         If the given nUndoId is equal to zero an undo object with ID
-        UNDO_START will be generated.
+        SwUndoId::START will be generated.
 
         @return the undo ID of the created object
     */
@@ -121,11 +121,11 @@ public:
        @param nUndoId         undo ID for the list action
        @param pRewriter       rewriter for comments @see SwUndo::GetComment
 
-       If the given nUndoId is not UNDO_EMPTY or UNDO_END, the comment of
+       If the given nUndoId is not SwUndoId::EMPTY or SwUndoId::END, the comment of
        the resulting list action will be set via the nUndoId, applying the
        given pRewriter (if not 0).  Otherwise the comment of the resulting
-       list action is unchanged if it has an UndoId that is not UNDO_START
-       set by StartUndo, and in case the UndoId is UNDO_START the comment
+       list action is unchanged if it has an UndoId that is not SwUndoId::START
+       set by StartUndo, and in case the UndoId is SwUndoId::START the comment
        of the list action defaults to the comment of the last action
        contained in the list action.
     */
@@ -184,13 +184,13 @@ public:
         @param o_pStr       if not 0, receives comment of last Undo action
                             if it is Repeat capable.
         @return     Id of last Undo action if it is Repeat capable,
-                    or UNDO_EMPTY if there is none or it is not Repeat capable.
+                    or SwUndoId::EMPTY if there is none or it is not Repeat capable.
     */
     virtual SwUndoId GetRepeatInfo(OUString *const o_pStr) const = 0;
 
     /** Add new Undo action.
         Takes over ownership of pUndo.
-        @remark     calls ClearRedo(), except for UNDO_START/UNDO_END.
+        @remark     calls ClearRedo(), except for SwUndoId::START/SwUndoId::END.
         @remark     does nothing if !DoesUndo().
     */
     virtual void AppendUndo(SwUndo *const pUndo) = 0;

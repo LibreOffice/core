@@ -351,7 +351,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
 {
     const SwFormatAnchor& rAnch = static_cast<const SwFormatAnchor&>(rSet.Get( RES_ANCHOR ));
 
-    GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::INSLAYFMT, nullptr );
 
     SwFlyFrameFormat* pFormat = MakeFlySection( rAnch.GetAnchorId(), rPam.GetPoint(),
                                         &rSet, pParent );
@@ -458,7 +458,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
 
     getIDocumentState().SetModified();
 
-    GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::INSLAYFMT, nullptr );
 
     return pFormat;
 }

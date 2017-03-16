@@ -129,7 +129,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
     SET_CURR_SHELL( this );
     StartAllAction();
-    StartUndo( UNDO_DELETE );
+    StartUndo( SwUndoId::DELETE );
     Push();
     SwPaM* pPaM = GetCursor();
     // TODO: this is really hackish
@@ -143,7 +143,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
     Pop( false );
     EndAllAction();
-    EndUndo( UNDO_DELETE );
+    EndUndo( SwUndoId::DELETE );
 }
 
 /// add a field at the cursor position

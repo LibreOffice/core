@@ -478,7 +478,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rWrtShell = GetShell();
 
-    SwUndoId nUndoId(UNDO_EMPTY);
+    SwUndoId nUndoId(SwUndoId::EMPTY);
     sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -533,7 +533,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             OSL_FAIL("wrong Dispatcher");
     }
 
-    if (nUndoId == UNDO_CONFLICT)
+    if (nUndoId == SwUndoId::CONFLICT)
     {
         rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
     }
@@ -545,7 +545,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
-    SwUndoId nUndoId(UNDO_EMPTY);
+    SwUndoId nUndoId(SwUndoId::EMPTY);
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -560,7 +560,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
                 }
-                else if (nUndoId == UNDO_CONFLICT)
+                else if (nUndoId == SwUndoId::CONFLICT)
                 {
                     rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
                 }
@@ -576,7 +576,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
                 }
-                else if (nUndoId == UNDO_CONFLICT)
+                else if (nUndoId == SwUndoId::CONFLICT)
                 {
                      rSet.Put( SfxInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
                 }
@@ -588,7 +588,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             {   // Repeat is only possible if no REDO is possible - UI-Restriction
                 if ((!rSh.GetFirstRedoInfo(nullptr, nullptr)) &&
                     !rSh.IsSelFrameMode() &&
-                    (UNDO_EMPTY != rSh.GetRepeatInfo(nullptr)))
+                    (SwUndoId::EMPTY != rSh.GetRepeatInfo(nullptr)))
                 {
                     rSet.Put(SfxStringItem(nWhich, rSh.GetRepeatString()));
                 }
@@ -2619,7 +2619,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
             SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
 
-            rSh.StartUndo(UNDO_INSTABLE);
+            rSh.StartUndo(SwUndoId::INSTABLE);
             bCallEndUndo = true;
 
             bool bInserted = rSh.TextToTable( aInsTableOpts, '\t' );
@@ -2703,7 +2703,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) aInsTableOpts.mnInsMode ) );
                 _rRequest.Done();
 
-                rSh.StartUndo(UNDO_INSTABLE);
+                rSh.StartUndo(SwUndoId::INSTABLE);
                 bCallEndUndo = true;
 
                 rSh.StartAllAction();
@@ -2733,7 +2733,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
             }
-            rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // If possible change the Shell
+            rSh.EndUndo(SwUndoId::INSTABLE, &aRewriter); // If possible change the Shell
         }
     }
 }

@@ -394,7 +394,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
         bool bDelMarked = true;
 
         if( 1 == rMrkList.GetMarkCount() )
@@ -476,7 +476,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         }
         getIDocumentState().SetModified();
 
-        GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
     }
 
     return bCallBase;

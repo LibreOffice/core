@@ -654,7 +654,7 @@ sal_uInt16 SwDocShell::Edit(
     sal_uInt16 nRet = nMask;
     bool bModified = m_pDoc->getIDocumentState().IsModified();
 
-    SwUndoId nNewStyleUndoId(UNDO_EMPTY);
+    SwUndoId nNewStyleUndoId(SwUndoId::EMPTY);
 
     if( bNew )
     {
@@ -1072,7 +1072,7 @@ SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFa
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, pColl->GetName());
 
-                GetWrtShell()->StartUndo(UNDO_INSFMTATTR, &aRewriter);
+                GetWrtShell()->StartUndo(SwUndoId::INSFMTATTR, &aRewriter);
                 GetWrtShell()->FillByEx(pColl);
                     // also apply template to remove hard set attributes
                 GetWrtShell()->SetTextFormatColl( pColl );

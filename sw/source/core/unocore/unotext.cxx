@@ -921,7 +921,7 @@ SwXText::setString(const OUString& rString)
         throw uno::RuntimeException();
     }
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
     if (CursorType::Meta != m_pImpl->m_eType)
@@ -959,14 +959,14 @@ SwXText::setString(const OUString& rString)
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
         uno::RuntimeException aRuntime;
         aRuntime.Message = cInvalidObject;
         throw aRuntime;
     }
     xRet->gotoEnd(true);
     xRet->setString(rString);
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
@@ -1246,7 +1246,7 @@ SwXText::Impl::finishOrAppendParagraph(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , nullptr);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::START , nullptr);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, GoInNode );
@@ -1292,7 +1292,7 @@ SwXText::Impl::finishOrAppendParagraph(
         bRuntimeException = true;
     }
 
-    m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pDoc->GetIDocumentUndoRedo().Undo();
@@ -1345,7 +1345,7 @@ SwXText::insertTextPortion(
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
     auto& rCursor(pTextCursor->GetCursor());
     m_pImpl->m_pDoc->DontExpandFormat( *rCursor.Start() );
@@ -1379,7 +1379,7 @@ SwXText::insertTextPortion(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
@@ -1430,7 +1430,7 @@ SwXText::insertTextContentWithProperties(
         throw  uno::RuntimeException();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
     // now attach the text content here
     insertTextContent( xInsertPosition, xTextContent, false );
@@ -1454,13 +1454,13 @@ SwXText::insertTextContentWithProperties(
         }
         catch (const uno::Exception& e)
         {
-            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+            m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
             lang::WrappedTargetRuntimeException wrapped;
             wrapped.TargetException <<= e;
             throw wrapped;
         }
     }
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     return xInsertPosition;
 }
 
@@ -1518,7 +1518,7 @@ SwXText::convertToTextFrame(
         pEndRange->Invalidate();
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
@@ -1732,7 +1732,7 @@ SwXText::convertToTextFrame(
         }
     }
 
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     if (bIllegalException || bRuntimeException)
     {
         m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();

@@ -723,7 +723,7 @@ sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSear
     bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, nullptr );
+        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
     }
 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
@@ -739,7 +739,7 @@ sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSear
     {
         SwRewriter rewriter(MakeUndoReplaceRewriter(
                 nRet, rSearchOpt.searchString, rSearchOpt.replaceString));
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, & rewriter );
+        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, & rewriter );
     }
     return nRet;
 }

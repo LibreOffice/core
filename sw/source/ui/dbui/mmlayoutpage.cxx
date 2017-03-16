@@ -253,7 +253,7 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         bool bAlignToBody)
 {
     SwFrameFormat* pAddressBlockFormat = nullptr;
-    pView->GetWrtShell().StartUndo(UNDO_INSERT);
+    pView->GetWrtShell().StartUndo(SwUndoId::INSERT);
     if(rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted())
     {
         //insert the frame
@@ -271,7 +271,7 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         InsertGreeting( pView->GetWrtShell(), rConfigItem, false);
         rConfigItem.SetGreetingInserted();
     }
-    pView->GetWrtShell().EndUndo(UNDO_INSERT);
+    pView->GetWrtShell().EndUndo(SwUndoId::INSERT);
     return pAddressBlockFormat;
 }
 

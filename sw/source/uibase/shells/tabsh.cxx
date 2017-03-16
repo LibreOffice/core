@@ -280,7 +280,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
                                 SwWrtShell &rSh )
 {
     rSh.StartAllAction();
-    rSh.StartUndo( UNDO_TABLE_ATTR );
+    rSh.StartUndo( SwUndoId::TABLE_ATTR );
     const SfxPoolItem* pItem = nullptr;
 
     if(SfxItemState::SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
@@ -441,7 +441,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetTabCols( aTabCols, bSingleLine );
     }
 
-    rSh.EndUndo( UNDO_TABLE_ATTR );
+    rSh.EndUndo( SwUndoId::TABLE_ATTR );
     rSh.EndAllAction();
 }
 
@@ -901,22 +901,22 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
                 ::lcl_TableParamToItemSet( aCoreSet, rSh );
                 bool bSetInnerBorders = false;
-                SwUndoId nUndoId = UNDO_EMPTY;
+                SwUndoId nUndoId = SwUndoId::EMPTY;
                 // <--End
 
                 if( bColumn )
                 {
-                    rSh.StartUndo( UNDO_TABLE_INSCOL );
+                    rSh.StartUndo( SwUndoId::TABLE_INSCOL );
                     rSh.InsertCol( nCount, bAfter );
                     bSetInnerBorders = true;
-                    nUndoId = UNDO_TABLE_INSCOL;
+                    nUndoId = SwUndoId::TABLE_INSCOL;
                 }
                 else if ( !rSh.IsInRepeatedHeadline() )
                 {
-                    rSh.StartUndo( UNDO_TABLE_INSROW );
+                    rSh.StartUndo( SwUndoId::TABLE_INSROW );
                     rSh.InsertRow( nCount, bAfter );
                     bSetInnerBorders = true;
-                    nUndoId = UNDO_TABLE_INSROW;
+                    nUndoId = SwUndoId::TABLE_INSROW;
                 }
 
                 // -->after inserting,reset the inner table borders

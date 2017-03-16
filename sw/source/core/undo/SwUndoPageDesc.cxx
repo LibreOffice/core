@@ -100,8 +100,8 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
                                SwDoc * _pDoc)
     : SwUndo( _aOld.GetName() != _aNew.GetName() ?
-              UNDO_RENAME_PAGEDESC :
-              UNDO_CHANGE_PAGEDESC,
+              SwUndoId::RENAME_PAGEDESC :
+              SwUndoId::CHANGE_PAGEDESC,
               _pDoc ),
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
@@ -372,7 +372,7 @@ SwRewriter SwUndoPageDesc::GetRewriter() const
 
 SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
                                            SwDoc * _pDoc)
-    : SwUndo(UNDO_CREATE_PAGEDESC, _pDoc), pDesc(pNew), aNew(*pNew, _pDoc),
+    : SwUndo(SwUndoId::CREATE_PAGEDESC, _pDoc), pDesc(pNew), aNew(*pNew, _pDoc),
       pDoc(_pDoc)
 {
     OSL_ENSURE(nullptr != pDoc, "no document?");
@@ -424,7 +424,7 @@ SwRewriter SwUndoPageDescCreate::GetRewriter() const
 
 SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc * _pDoc)
-    : SwUndo(UNDO_DELETE_PAGEDESC, _pDoc), aOld(_aOld, _pDoc), pDoc(_pDoc)
+    : SwUndo(SwUndoId::DELETE_PAGEDESC, _pDoc), aOld(_aOld, _pDoc), pDoc(_pDoc)
 {
     OSL_ENSURE(nullptr != pDoc, "no document?");
 }

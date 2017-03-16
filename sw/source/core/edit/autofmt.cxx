@@ -2538,7 +2538,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
 
     SET_CURR_SHELL( this );
     StartAllAction();
-    StartUndo( UNDO_AUTOFORMAT );
+    StartUndo( SwUndoId::AUTOFORMAT );
 
     SvxSwAutoFormatFlags aAFFlags;     // use default values or add params?
     if( pAFlags )
@@ -2566,7 +2566,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
         SwAutoFormat aFormat( this, aAFFlags );
     }
 
-    EndUndo( UNDO_AUTOFORMAT );
+    EndUndo( SwUndoId::AUTOFORMAT );
     EndAllAction();
 }
 
@@ -2577,7 +2577,7 @@ void SwEditShell::AutoFormatBySplitNode()
     if( !pCursor->IsMultiSelection() && pCursor->Move( fnMoveBackward, GoInNode ) )
     {
         StartAllAction();
-        StartUndo( UNDO_AUTOFORMAT );
+        StartUndo( SwUndoId::AUTOFORMAT );
 
         bool bRange = false;
         pCursor->SetMark();
@@ -2616,7 +2616,7 @@ void SwEditShell::AutoFormatBySplitNode()
         pCursor->DeleteMark();
         pCursor->Move( fnMoveForward, GoInNode );
 
-        EndUndo( UNDO_AUTOFORMAT );
+        EndUndo( SwUndoId::AUTOFORMAT );
         EndAllAction();
     }
 }

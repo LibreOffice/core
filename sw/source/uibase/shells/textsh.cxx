@@ -488,7 +488,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 SwWrtShell& rShell = GetShell();
                 rShell.LockPaint();
                 rShell.StartAllAction();
-                rShell.StartUndo(UNDO_INSERT);
+                rShell.StartUndo(SwUndoId::INSERT);
 
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 aMgr.SetAttrSet(*pOutSet);
@@ -518,7 +518,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                     aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_FRAME));
 
-                    rShell.EndUndo(UNDO_INSERT, &aRewriter);
+                    rShell.EndUndo(SwUndoId::INSERT, &aRewriter);
                 }
                 rShell.EndAllAction();
                 rShell.UnlockPaint();
@@ -971,7 +971,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_SPECIALCHAR));
 
-        rSh.StartUndo( UNDO_INSERT, &aRewriter );
+        rSh.StartUndo( SwUndoId::INSERT, &aRewriter );
         if ( rSh.HasSelection() )
         {
             rSh.DelRight();

@@ -686,7 +686,7 @@ void SwView::Replace()
         aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
         aRewriter.AddRule(UndoArg3, m_pSrchItem->GetReplaceString());
 
-        m_pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
+        m_pWrtShell->StartUndo(SwUndoId::UI_REPLACE_STYLE, &aRewriter);
 
         m_pWrtShell->SetTextFormatColl( m_pWrtShell->GetParaStyle(
                             m_pSrchItem->GetReplaceString(),

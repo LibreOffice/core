@@ -179,8 +179,8 @@ sal_Int32 SwUndo::CreateViewShellId(const SwDoc* pDoc)
 
 bool SwUndo::IsDelBox() const
 {
-    return GetId() == UNDO_COL_DELETE || GetId() == UNDO_ROW_DELETE ||
-        GetId() == UNDO_TABLE_DELBOX;
+    return GetId() == SwUndoId::COL_DELETE || GetId() == SwUndoId::ROW_DELETE ||
+        GetId() == SwUndoId::TABLE_DELBOX;
 }
 
 SwUndo::~SwUndo()
@@ -250,7 +250,7 @@ bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
 {
     assert(dynamic_cast< ::sw::RepeatContext * >(& rContext));
     (void)rContext;
-    return (REPEAT_START <= GetId()) && (GetId() < REPEAT_END);
+    return (SwUndoId::REPEAT_START <= GetId()) && (GetId() < SwUndoId::REPEAT_END);
 }
 
 void SwUndo::RepeatImpl( ::sw::RepeatContext & )
@@ -265,7 +265,7 @@ OUString SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment.reset( new OUString(SW_RES(UNDO_BASE + GetId())) );
+            pComment.reset( new OUString(SW_RES(UNDO_BASE + (int)GetId())) );
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -276,7 +276,7 @@ OUString SwUndo::GetComment() const
     }
     else
     {
-        aResult = SW_RES(UNDO_BASE + GetId());
+        aResult = SW_RES(UNDO_BASE + (int)GetId());
 
         SwRewriter aRewriter = GetRewriter();
 

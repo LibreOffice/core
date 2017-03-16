@@ -72,7 +72,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
 }
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
-    : SwUndoBookmark( UNDO_INSBOOKMARK, rBkmk )
+    : SwUndoBookmark( SwUndoId::INSBOOKMARK, rBkmk )
 {
 }
 
@@ -87,7 +87,7 @@ void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::IMark& rBkmk )
-    : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
+    : SwUndoBookmark( SwUndoId::DELBOOKMARK, rBkmk )
 {
 }
 
@@ -102,7 +102,7 @@ void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc* pDoc )
-    : SwUndo( UNDO_BOOKMARK_RENAME, pDoc )
+    : SwUndo( SwUndoId::BOOKMARK_RENAME, pDoc )
     , m_sOldName( rOldName )
     , m_sNewName( rNewName )
 {

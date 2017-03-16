@@ -774,7 +774,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 
     // Apply values
     pSh->StartAllAction();
-//    pSh->StartUndo(UNDO_START);
+//    pSh->StartUndo(SwUndoId::START);
 
     // Set new crop values in twips
     aCrop.SetLeft  (convertMm100ToTwip(nLeftCrop));
@@ -790,7 +790,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     aSz.SetHeight(aNewRect.GetHeight());
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
 
-//    pSh->EndUndo(UNDO_END);
+//    pSh->EndUndo(SwUndoId::END);
     pSh->EndAllAction();
 
 }

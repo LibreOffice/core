@@ -363,7 +363,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, nullptr);
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::OUTLINE_LR, nullptr);
         SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
         GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
     }
@@ -401,7 +401,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().EndUndo(UNDO_OUTLINE_LR, nullptr);
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::OUTLINE_LR, nullptr);
     }
 
     ChkCondColls();
@@ -833,7 +833,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // Start/End for attributes!
-        GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, nullptr );
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::INSNUM, nullptr );
         pUndo = new SwUndoInsNum( rPam, rRule );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
@@ -936,7 +936,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, nullptr );
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::INSNUM, nullptr );
     }
 
     getIDocumentState().SetModified();
@@ -1133,7 +1133,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             // Start/End for attributes!
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+            GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
             pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
@@ -1170,7 +1170,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pTextNd->NumRuleChgd();
                 }
             }
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+            GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             getIDocumentState().SetModified();
 
             bRet = true;
@@ -1889,7 +1889,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
         if( !pOwnRedl )
         {
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+            GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
             // First the Insert, then the Delete
             SwPosition aInsPos( aIdx );
@@ -1968,7 +1968,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 // Still NEEDS to be optimized (even after 14 years)
                 getIDocumentRedlineAccess().SetRedlineFlags(
                    RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
-                SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
+                SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, SwUndoId::DELETE));
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
@@ -1984,7 +1984,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
             // Still NEEDS to be optimized!
             getIDocumentRedlineAccess().SetRedlineFlags( eOld );
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+            GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             getIDocumentState().SetModified();
 
             return true;
