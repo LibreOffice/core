@@ -29,68 +29,9 @@
 
 // = the mozab driver's resource strings
 
-String STR_MOZILLA_ADDRESSBOOKS
-{
-    Text [ en-US ] = "Mozilla/Seamonkey Address Book Directory";
-    Text [ x-comment ] = "This must be the term referring to address books in the user's "
-        "Mozilla/Seamonkey profile in the system.";
-};
-
-String STR_THUNDERBIRD_ADDRESSBOOKS
-{
-    Text [ en-US ] = "Thunderbird Address Book Directory";
-    Text [ x-comment ] = "This must be the term referring to address books in the user's "
-        "Thunderbird profile in the system.";
-};
-
-String STR_NO_TABLE_CREATION_SUPPORT
-{
-    Text [ en-US ] = "Creating tables is not supported for this kind of address books.";
-};
-
-String STR_MOZILLA_IS_RUNNING
-{
-    Text [ en-US ] = "Cannot create new address books while Mozilla is running.";
-};
-
-String STR_COULD_NOT_RETRIEVE_AB_ENTRY
-{
-    Text [ en-US ] = "An address book entry could not be retrieved, an unknown error occurred.";
-};
-
-String STR_COULD_NOT_GET_DIRECTORY_NAME
-{
-    Text [ en-US ] = "An address book directory name could not be retrieved, an unknown error occurred.";
-};
-
-String STR_TIMEOUT_WAITING
-{
-    Text [ en-US ] = "Timed out while waiting for the result.";
-};
-
 String STR_ERR_EXECUTING_QUERY
 {
     Text [ en-US ] = "An error occurred while executing the query.";
-};
-
-String STR_MOZILLA_IS_RUNNIG_NO_CHANGES
-{
-    Text [ en-US ] = "You can't make any changes to Mozilla Address Book when Mozilla is running.";
-};
-
-String STR_FOREIGN_PROCESS_CHANGED_AB
-{
-    Text [ en-US ] = "Mozilla Address Book has been changed out of this process, we can't modify it in this condition.";
-};
-
-String STR_CANT_FIND_ROW
-{
-    Text [ en-US ] = "Can't find the requested row.";
-};
-
-String STR_CANT_FIND_CARD_FOR_ROW
-{
-    Text [ en-US ] = "Can't find the card for the requested row.";
 };
 
 String STR_QUERY_AT_LEAST_ONE_TABLES
@@ -113,16 +54,6 @@ String STR_UNSPECIFIED_ERROR
     Text [ en-US ] = "An unknown error occurred.";
 };
 
-String STR_COULD_NOT_CREATE_ADDRESSBOOK
-{
-    Text [ en-US ] = "Could not create a new address book. Mozilla error code is $1$.";
-};
-
-String STR_COULD_NOT_LOAD_LIB
-{
-    Text [ en-US ] = "The library '$libname$' could not be loaded.";
-};
-
 String STR_ERROR_REFRESH_ROW
 {
     Text [ en-US ] = "An error occurred while refreshing the current row.";
@@ -131,16 +62,6 @@ String STR_ERROR_REFRESH_ROW
 String STR_ERROR_GET_ROW
 {
     Text [ en-US ] = "An error occurred while getting the current row.";
-};
-
-String STR_CAN_NOT_CANCEL_ROW_UPDATE
-{
-    Text [ en-US ] = "The row update can not be canceled.";
-};
-
-String STR_CAN_NOT_CREATE_ROW
-{
-    Text [ en-US ] = "A new row can not be created.";
 };
 
 String STR_QUERY_INVALID_IS_NULL_COLUMN
@@ -158,31 +79,6 @@ String STR_COMMIT_ROW
     Text [ en-US ] = "Please commit row '$position$' before update rows or insert new rows.";
 };
 
-String STR_INVALID_ROW_UPDATE
-{
-    Text [ en-US ] = "The update call can not be executed. The row is invalid.";
-};
-
-String STR_ROW_CAN_NOT_SAVE
-{
-    Text [ en-US ] = "The current row can not be saved.";
-};
-
-String STR_NO_HOSTNAME
-{
-    Text [ en-US ] = "No hostname was provided.";
-};
-
-String STR_NO_BASEDN
-{
-    Text [ en-US ] = "No Base DN was provided.";
-};
-
-String STR_COULD_NOT_CONNECT_LDAP
-{
-    Text [ en-US ] = "The connection to the LDAP server could not be established.";
-};
-
 // = common strings
 
 String STR_NO_CONNECTION_GIVEN
@@ -192,10 +88,6 @@ String STR_NO_CONNECTION_GIVEN
 String STR_WRONG_PARAM_INDEX
 {
     Text [ en-US ] = "You tried to set a parameter at position '$pos$' but there is/are only '$count$' parameter(s) allowed. One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source.";
-};
-String STR_INPUTSTREAM_WRONG_LEN
-{
-    Text [ en-US ] = "End of InputStream reached before satisfying length specified when InputStream was set.";
 };
 String STR_NO_INPUTSTREAM
 {
@@ -218,10 +110,6 @@ String STR_PRIVILEGE_NOT_REVOKED
     Text [ en-US ] = "Privilege not revoked: Only table privileges can be revoked.";
 };
 
-String STR_UNKNOWN_COLUMN_NAME
-{
-    Text [ en-US ] = "The column name '$columnname$' is unknown.";
-};
 String STR_ERRORMSG_SEQUENCE
 {
     Text [ en-US ] = "Function sequence error.";
@@ -392,11 +280,6 @@ String STR_SQL_NAME_ERROR
 String STR_COULD_NOT_DELETE_FILE
 {
     Text [ en-US ] = "The file $filename$ could not be deleted.";
-};
-
-String STR_COULD_NOT_RENAME_FILE
-{
-    Text [ en-US ] = "The file could not be renamed to $filename$.";
 };
 
 String STR_INVALID_COLUMN_TYPE
@@ -593,10 +476,6 @@ String STR_INVALID_FILE_URL
 String STR_NO_TABLE_CONTAINER
 {
     Text [ en-US ] = "An error occurred while obtaining the connection's table container.";
-};
-String STR_NO_TABLE_EDITOR_DIALOG
-{
-    Text [ en-US ] = "An error occurred while creating the table editor dialog.";
 };
 String STR_NO_TABLENAME
 {
