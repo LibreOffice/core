@@ -134,6 +134,7 @@ public:
     void testFormulaCreateStringFromTokens();
     void testFormulaParseReference();
     void testFetchVectorRefArray();
+    void testGroupConverter3D();
     void testFormulaHashAndTag();
     void testFormulaTokenEquality();
     void testFormulaRefData();
@@ -529,6 +530,7 @@ public:
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
+    CPPUNIT_TEST(testGroupConverter3D);
     // CPPUNIT_TEST(testFormulaHashAndTag);
     CPPUNIT_TEST(testFormulaTokenEquality);
     CPPUNIT_TEST(testFormulaRefData);
