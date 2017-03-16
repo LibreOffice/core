@@ -19,16 +19,6 @@
 
 #include "desktop.hrc"
 
-String STR_RECOVER_QUERY
-{
-    Text [ en-US ] = "Should the file \"$1\" be restored?" ;
-};
-
-String STR_RECOVER_TITLE
-{
-    Text [ en-US ] = "File Recovery" ;
-};
-
 String STR_BOOTSTRAP_ERR_CANNOT_START
 {
     Text [ en-US ] = "The application cannot be started. ";
@@ -42,11 +32,6 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
     Text [ en-US ] = "The installation path is invalid.";
-};
-
-String STR_BOOTSTRAP_ERR_NO_PATH
-{
-    Text [ en-US ] = "The installation path is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
@@ -84,39 +69,14 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text [ en-US ] = "The configuration service is not available.";
 };
 
-String STR_BOOTSTRAP_ERR_MULTISESSION
-{
-    Text [ en-US ] = "You have another instance running in a different terminal session. Close that instance and then try again.";
-};
-
 String STR_ASK_START_SETUP_MANUALLY
 {
     Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
 };
 
-String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
-{
-    Text [ en-US ] = "The startup settings for accessing the central configuration are incomplete. ";
-};
-
-String STR_CONFIG_ERR_CANNOT_CONNECT
-{
-    Text [ en-US ] = "A connection to the central configuration could not be established. ";
-};
-
-String STR_CONFIG_ERR_RIGHTS_MISSING
-{
-    Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
-};
-
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
     Text [ en-US ] = "A general error occurred while accessing your central configuration. ";
-};
-
-String STR_CONFIG_ERR_NO_WRITE_ACCESS
-{
-    Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
@@ -147,11 +107,6 @@ String STR_TITLE_USERDATALOCKED
 String STR_ERR_PRINTDISABLED
 {
     Text [ en-US ] = "Printing is disabled. No documents can be printed.";
-};
-
-String STR_TITLE_EXPIRED
-{
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE
