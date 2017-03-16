@@ -2905,7 +2905,18 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             // obsolete here, too.
                             pRet->getSdrPageProperties().ClearItem();
                             pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
-                            SdrObject::Free( rSlidePersist.pBObj );
+                            if (rSlidePersist.pSolverContainer)
+                            {
+                                for (SvxMSDffConnectorRule* pPtr : rSlidePersist.pSolverContainer->aCList)
+                                {
+                                    // check connections to the group object
+                                    if (pPtr->pAObj == rSlidePersist.pBObj)
+                                        pPtr->pAObj = nullptr;
+                                    if (pPtr->pBObj == rSlidePersist.pBObj)
+                                        pPtr->pBObj = nullptr;
+                                }
+                            }
+                            SdrObject::Free(rSlidePersist.pBObj);
                         }
                     }
                 }
