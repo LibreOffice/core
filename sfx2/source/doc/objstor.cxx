@@ -3506,8 +3506,9 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno
             xSet->setPropertyValue("MediaType", uno::makeAny(OUString("image/png")));
         if (bEncrypted)
         {
-            OUString sFactoryName = OUString::createFromAscii(GetFactory().GetShortName());
-            sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(sFactoryName, bIsTemplate);
+            const sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(
+                GetFactory().GetFactoryName(),
+                bIsTemplate);
             if (nResID)
                 bResult = GraphicHelper::getThumbnailReplacement_Impl(nResID, xStream);
         }
