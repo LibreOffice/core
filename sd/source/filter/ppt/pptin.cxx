@@ -97,10 +97,8 @@
 using namespace ::com::sun::star;
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotStorage& rStorage, SfxMedium& rMedium )
+    : maParam(rDocStream, 0)
 {
-
-    sal_uInt32 nImportFlags = 0;
-
 #ifdef DBG_UTIL
     PropRead* pSummaryInformation = new PropRead( rStorage, OUString( "\005SummaryInformation"  ) );
     if ( pSummaryInformation->IsValid() )
@@ -120,7 +118,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
                 aPropItem.Read( aComment );
                 if ( aComment.indexOf( "Applixware" ) >= 0 )
                 {
-                    nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
+                    maParam.nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
                 }
             }
         }
@@ -128,11 +126,10 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     delete pSummaryInformation;
 #endif
 
-    PowerPointImportParam aParam( rDocStream, nImportFlags );
     SvStream* pCurrentUserStream = rStorage.OpenSotStream( OUString( "Current User" ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
-        ReadPptCurrentUserAtom( *pCurrentUserStream, aParam.aCurrentUserAtom );
+        ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
         delete pCurrentUserStream;
     }
 
@@ -152,7 +149,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
         }
     }
 
-    pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
+    pFilter = new ImplSdPPTImport(pDocument, rStorage, rMedium, maParam);
 }
 
 bool SdPPTImport::Import()
