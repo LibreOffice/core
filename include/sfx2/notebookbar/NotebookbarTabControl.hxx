@@ -32,9 +32,10 @@ private:
                                           const OUString& aModuleName,
                                           ToolBox* pShortcuts
                              );
-    DECL_STATIC_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, void);
+    DECL_LINK(OpenNotebookbarPopupMenu, NotebookBar*, void);
 
     ChangedUIEventListener* m_pListener;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 protected:
     bool m_bInitialized;
