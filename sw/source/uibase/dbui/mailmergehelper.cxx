@@ -56,7 +56,7 @@ OUString CallSaveAsDialog(OUString& rFilter)
 {
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE,
-                OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+                SwDocShell::Factory().GetFactoryName() );
 
     if (aDialog.Execute()!=ERRCODE_NONE)
     {

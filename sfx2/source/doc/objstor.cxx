@@ -2588,7 +2588,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         OUString aFilterName;
         std::shared_ptr<const SfxFilter> pFilter;
         if ( pFilterItem )
-            pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
+            pFilter = SfxFilterMatcher( GetFactory().GetFactoryName() ).GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );

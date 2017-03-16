@@ -141,7 +141,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
-        SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
+        SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
         SfxFilterMatcherIter aIter( aMatcher );
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         std::shared_ptr<const SfxFilter> pFlt = aIter.First();

@@ -116,7 +116,7 @@ void SfxViewFrame::UpdateTitle()
 {
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
-    m_pImpl->aFactoryName = OUString::createFromAscii(rFact.GetShortName());
+    m_pImpl->aFactoryName = rFact.GetFactoryName();
 
     SfxObjectShell *pObjSh = GetObjectShell();
     if ( !pObjSh )
