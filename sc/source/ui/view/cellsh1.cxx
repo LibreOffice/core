@@ -2201,9 +2201,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pText;
                 if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_TEXT, &pText) )
                 {
+                    const SvxPostItIdItem*      pIdItem     = static_cast<const SvxPostItIdItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_ID ) );
                     const SvxPostItTextItem*    pTextItem   = static_cast<const SvxPostItTextItem*>( pText );
-                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR) );
+                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR ) );
                     const SvxPostItDateItem*    pDateItem   = static_cast<const SvxPostItDateItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_DATE ) );
+
+                    ScAddress aParsedPos;
+                    ScRefFlags nRes = aParsedPos.Parse(pIdItem->GetValue(),
+                                                       GetViewData()->GetDocument(),
+                                                       ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF));
+                    if (nRes & ScRefFlags::VALID)
+                    {
+                        pTabViewShell->SetTabNo(aParsedPos.Tab());
+                        pTabViewShell->SetCursor(aParsedPos.Col(), aParsedPos.Row());
+                    }
 
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                     pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(),
