@@ -78,15 +78,6 @@ String RID_STR_REPORTS_CONTAINER
 {
     Text [ en-US ] = "Reports" ;
 };
-String STR_QUERY_DELETE_DATASOURCE
-{
-    Text [ en-US ] = "Do you want to delete the data source '%1'?" ;
-};
-
-String STR_APP_TITLE
-{
-    Text [ en-US ] = " - %PRODUCTNAME Base" ;
-};
 
 String RID_STR_REPORTS_HELP_TEXT_WIZARD
 {
@@ -156,11 +147,6 @@ String STR_DESCRIPTION
 String STR_PREVIEW
 {
     Text [ en-US ] = "Preview" ;
-};
-
-String STR_DISABLEPREVIEW
-{
-    Text [ en-US ] = "Disable Preview" ;
 };
 
 String STR_QUERY_CLOSEDOCUMENTS
@@ -242,11 +228,6 @@ String STR_PAGETITLE_CONNECTION
 String STR_TBL_LABEL
 {
     Text [ en-US ] = "~Table Name" ;
-};
-
-String STR_VW_LABEL
-{
-    Text [ en-US ] = "~Name of table view" ;
 };
 
 String STR_QRY_LABEL

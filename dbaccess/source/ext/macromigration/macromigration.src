@@ -19,11 +19,6 @@
 
 #include "dbmm_global.hrc"
 
-String STR_TITLE_MACRO_MIGRATION
-{
-    Text [ en-US ]  = "Database Document Macro Migration" ;
-};
-
 String STR_STATE_CLOSE_SUB_DOCS
 {
     Text [ en-US ] = "Prepare";

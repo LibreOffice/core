@@ -303,16 +303,6 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text [ en-US ] = "The column could not be found. Please note that the database is case-sensitive.";
 };
 
-String STR_QUERYDESIGN
-{
-    Text [ en-US ] = " - %PRODUCTNAME Base: Query Design";
-};
-
-String STR_VIEWDESIGN
-{
-    Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
-};
-
 String STR_QUERY_SAVEMODIFIED
 {
     Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
@@ -346,11 +336,6 @@ StringArray RSC_QUERY_OBJECT_TYPE
 String STR_STATEMENT_WITHOUT_RESULT_SET
 {
     Text [ en-US ] = "The query does not create a result set, and thus cannot be part of another query.";
-};
-
-String STR_NO_DATASOURCE_OR_CONNECTION
-{
-    Text [ en-US ] = "Both the ActiveConnection and the DataSourceName parameter are missing or wrong - cannot initialize the query designer.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
