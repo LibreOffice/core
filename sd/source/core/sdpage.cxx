@@ -49,6 +49,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdlayer.hxx>
+#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
@@ -147,6 +148,10 @@ SdPage::~SdPage()
     DisconnectLink();
 
     EndListenOutlineText();
+
+    fprintf(stderr, "on dtor %p, have %p\n", this, mxAnimationNode.get());
+
+    mxAnimationNode.clear();
 
     delete mpItems;
 
