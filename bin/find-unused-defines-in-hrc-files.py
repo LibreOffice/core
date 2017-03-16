@@ -80,6 +80,7 @@ exclusionSet = set([
     "STR_UPDATE_LINK",
     "BMP_PLACEHOLDER_",
     "STR_RPT_HELP_"
+    "STR_TEMPLATE_NAME"
     ])
 
 
