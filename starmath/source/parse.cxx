@@ -1487,16 +1487,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 bool    bIsAttr;
                 while ( (bIsAttr = TokenInGroup(TG::Attribute))
                        ||  TokenInGroup(TG::FontAttr))
-                {
-                    if (bIsAttr)
-                        DoAttribut();
-                    else
-                        DoFontAttribut();
-
-                    SmNode* pTmp = popOrZero(m_aNodeStack);
-                    assert(pTmp && !pTmp->IsVisible());
-                    aStack.push(static_cast<SmStructureNode *>(pTmp));
-                }
+                    aStack.push((bIsAttr) ? DoAttribut() : DoFontAttribut());
 
                 DoPower();
 
@@ -1716,11 +1707,11 @@ void SmParser::DoUnOper()
     m_aNodeStack.push_front(std::move(pSNode));
 }
 
-void SmParser::DoAttribut()
+SmAttributNode *SmParser::DoAttribut()
 {
     assert(TokenInGroup(TG::Attribute));
 
-    std::unique_ptr<SmStructureNode> pSNode(new SmAttributNode(m_aCurToken));
+    auto pSNode = o3tl::make_unique<SmAttributNode>(m_aCurToken);
     SmNode      *pAttr;
     SmScaleMode  eScaleMode = SCALE_NONE;
 
@@ -1748,11 +1739,11 @@ void SmParser::DoAttribut()
 
     pSNode->SetSubNodes(pAttr, nullptr); // the body will be filled later
     pSNode->SetScaleMode(eScaleMode);
-    m_aNodeStack.push_front(std::move(pSNode));
+    return pSNode.release();
 }
 
 
-void SmParser::DoFontAttribut()
+SmStructureNode *SmParser::DoFontAttribut()
 {
     assert(TokenInGroup(TG::FontAttr));
 
@@ -1763,28 +1754,28 @@ void SmParser::DoFontAttribut()
         case TBOLD :
         case TNBOLD :
         case TPHANTOM :
-            m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(m_aCurToken));
-            NextToken();
-            break;
+            {
+                auto pNode = o3tl::make_unique<SmFontNode>(m_aCurToken);
+                NextToken();
+                return pNode.release();
+            }
 
         case TSIZE :
-            DoFontSize();
-            break;
+            return DoFontSize();
 
         case TFONT :
-            DoFont();
-            break;
+            return DoFont();
 
         case TCOLOR :
-            DoColor();
-            break;
+            return DoColor();
 
         default :
             assert(false);
+            return nullptr;
     }
 }
 
-void SmParser::DoColor()
+SmStructureNode *SmParser::DoColor()
 {
     assert(m_aCurToken.eType == TCOLOR);
 
@@ -1798,16 +1789,13 @@ void SmParser::DoColor()
             NextToken();
         }
         else
-        {
-            Error(SmParseError::ColorExpected);
-            return;
-        }
+            return DoError(SmParseError::ColorExpected);
     } while (m_aCurToken.eType == TCOLOR);
 
-    m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
+    return new SmFontNode(aToken);
 }
 
-void SmParser::DoFont()
+SmStructureNode *SmParser::DoFont()
 {
     assert(m_aCurToken.eType == TFONT);
 
@@ -1821,13 +1809,10 @@ void SmParser::DoFont()
             NextToken();
         }
         else
-        {
-            Error(SmParseError::FontExpected);
-            return;
-        }
+            return DoError(SmParseError::FontExpected);
     } while (m_aCurToken.eType == TFONT);
 
-    m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
+    return new SmFontNode(aToken);
 }
 
 
@@ -1853,7 +1838,7 @@ static bool lcl_IsNumber(const OUString& rText)
     return true;
 }
 
-void SmParser::DoFontSize()
+SmStructureNode *SmParser::DoFontSize()
 {
     assert(m_aCurToken.eType == TSIZE);
 
@@ -1871,18 +1856,14 @@ void SmParser::DoFontSize()
         case TDIVIDEBY: Type = FontSizeType::DIVIDE;   break;
 
         default:
-            Error(SmParseError::SizeExpected);
-            return;
+            return DoError(SmParseError::SizeExpected);
     }
 
     if (Type != FontSizeType::ABSOLUT)
     {
         NextToken();
         if (m_aCurToken.eType != TNUMBER)
-        {
-            Error(SmParseError::SizeExpected);
-            return;
-        }
+            return DoError(SmParseError::SizeExpected);
     }
 
     // get number argument
@@ -1916,7 +1897,7 @@ void SmParser::DoFontSize()
     NextToken();
 
     pFontNode->SetSizeParameter(aValue, Type);
-    m_aNodeStack.push_front(std::move(pFontNode));
+    return pFontNode.release();
 }
 
 void SmParser::DoBrace()

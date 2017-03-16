@@ -77,11 +77,11 @@ class SmParser
     void    DoOper();
     void    DoUnOper();
     void    DoAlign();
-    void    DoFontAttribut();
-    void    DoAttribut();
-    void    DoFont();
-    void    DoFontSize();
-    void    DoColor();
+    SmStructureNode *DoFontAttribut();
+    SmAttributNode *DoAttribut();
+    SmStructureNode *DoFont();
+    SmStructureNode *DoFontSize();
+    SmStructureNode *DoColor();
     void    DoBrace();
     SmBracebodyNode *DoBracebody(bool bIsLeftRight);
     void    DoFunction();
