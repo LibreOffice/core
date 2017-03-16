@@ -32,14 +32,10 @@
 #define RSC_CD_PUSHBUTTON_WIDTH             50
 #define RSC_CD_PUSHBUTTON_HEIGHT            14
 
-#define RSC_CD_FIXEDTEXT_HEIGHT             RSC_BS_CHARHEIGHT
-#define RSC_CD_FIXEDLINE_HEIGHT             RSC_BS_CHARHEIGHT
-
 #define RSC_CD_TEXTBOX_HEIGHT               12      // also numeric fields etc.
 
 // spacings
 #define RSC_SP_CTRL_X                       6       // controls that are unrelated
-#define RSC_SP_CTRL_Y                       7
 #define RSC_SP_CTRL_GROUP_Y                 4
 #define RSC_SP_CTRL_DESC_X                  3       // between description text and related control
 #define RSC_SP_CTRL_DESC_Y                  3
@@ -48,7 +44,6 @@
 #define RSC_SP_DLG_INNERBORDER_LEFT         6
 #define RSC_SP_DLG_INNERBORDER_TOP          6
 #define RSC_SP_DLG_INNERBORDER_RIGHT        6
-#define RSC_SP_DLG_INNERBORDER_BOTTOM       6
 
 #endif
 
