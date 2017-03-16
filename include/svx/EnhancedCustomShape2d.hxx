@@ -42,7 +42,6 @@
 class Color;
 class SdrObject;
 class SdrPathObj;
-class SfxItemSet;
 
 enum class HandleFlags
 {

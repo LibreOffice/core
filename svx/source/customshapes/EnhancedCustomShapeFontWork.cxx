@@ -18,6 +18,7 @@
  */
 
 #include "EnhancedCustomShapeFontWork.hxx"
+#include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>

@@ -36,9 +36,6 @@ enum class SwHtmlOptType {
     SIZE = 3
 };
 
-
-class SfxItemSet;
-
 #define OOO_STRING_SW_HTML_O_Hidden "HIDDEN"
 
 class SwApplet_Impl

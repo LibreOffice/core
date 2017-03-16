@@ -23,10 +23,9 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/itemset.hxx>
 
+class SfxItemSet;
 
 namespace sfx {
 

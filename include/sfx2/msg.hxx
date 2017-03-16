@@ -23,9 +23,13 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
-#include <svl/itemset.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
+
+class SfxItemPool;
+class SfxItemSet;
+class SfxPoolItem;
+class SfxRequest;
 
 enum class SfxSlotMode {
     NONE            =    0x0000L, // default
@@ -55,9 +59,6 @@ namespace o3tl
 {
     template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x13ec72cL> {};
 }
-
-
-class SfxRequest;
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \
  void SfxStub##aShellClass##aExecMethod( \
@@ -94,7 +95,7 @@ struct SfxTypeAttrib
     sal_uInt16                  nAID;
     const char* pName;
 };
-class SfxPoolItem;
+
 template<class T> SfxPoolItem* createSfxPoolItem()
 {
     return T::CreateDefault();
