@@ -1339,8 +1339,8 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
         aBuf.resize(nSize);
     OString aPrefix("startxref");
     // Find the last startxref at the end of the document.
-    std::vector<char>::iterator itLastValid = aBuf.end();
-    std::vector<char>::iterator it = aBuf.begin();
+    auto itLastValid = aBuf.end();
+    auto it = aBuf.begin();
     while (true)
     {
         it = std::search(it, aBuf.end(), aPrefix.getStr(), aPrefix.getStr() + aPrefix.getLength());
