@@ -102,16 +102,6 @@ Bitmap RID_BMP_TREENODE_EXPANDED
     File = "minus.png";
 };
 
-String STR_SHOW_RULER
-{
-    Text [ en-US ] = "Show ruler";
-};
-
-String STR_SHOW_GRID
-{
-    Text [ en-US ] = "Show grid";
-};
-
 String RID_STR_UNDO_CHANGEPOSITION
 {
     Text [ en-US ] = "Change Object";
@@ -162,11 +152,6 @@ String RID_STR_UNDO_REMOVE_GROUP_FOOTER
 String RID_STR_UNDO_ADDFUNCTION
 {
     Text [ en-US ] = "Add function";
-};
-
-String STR_RPT_TITLE
-{
-    Text [ en-US ] = "Report #" ;
 };
 
 String STR_RPT_LABEL

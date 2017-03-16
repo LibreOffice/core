@@ -175,8 +175,6 @@
 #define SID_ARRANGEMENU                         ( SID_RPTUI_START +  148 )
 #define SID_SELECTALL_IN_SECTION                ( SID_RPTUI_START +  149 )
 
-#define SID_ICON_DETAIL                         ( SID_RPTUI_START +  151 )
-
 #define SID_SECTION_ALIGN                       ( SID_RPTUI_START +  152 )
 #define SID_SECTION_ALIGN_LEFT                  ( SID_RPTUI_START +  153 )
 #define SID_SECTION_ALIGN_CENTER                ( SID_RPTUI_START +  154 )
@@ -194,7 +192,6 @@
 #define SID_SECTION_SHRINK                      ( SID_RPTUI_START +  163 )
 #define SID_SECTION_SHRINK_TOP                  ( SID_RPTUI_START +  164 )
 #define SID_SECTION_SHRINK_BOTTOM               ( SID_RPTUI_START +  165 )
-#define SID_SECTION_SHRINK_MENU                 ( SID_RPTUI_START +  166 )
 
 #define SID_COLLAPSE_SECTION                    ( SID_RPTUI_START +  167 )
 #define SID_EXPAND_SECTION                      ( SID_RPTUI_START +  168 )

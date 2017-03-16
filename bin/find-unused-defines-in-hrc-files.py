@@ -79,6 +79,7 @@ exclusionSet = set([
     "STR_UPDATE_INDEX",
     "STR_UPDATE_LINK",
     "BMP_PLACEHOLDER_",
+    "STR_RPT_HELP_"
     ])
 
 
@@ -134,6 +135,8 @@ with a.stdout as txt:
                 if "sd/source/ui/app/strings.src:" in line2 and idName.endswith("_TOOLBOX"): found_reason_to_exclude = True
                 # used via a macro that hides them from search
                 if "dbaccess/" in line2 and idName.startswith("PROPERTY_ID_"): found_reason_to_exclude = True
+                if "reportdesign/" in line2 and idName.startswith("HID_RPT_PROP_"): found_reason_to_exclude = True
+                if "reportdesign/" in line2 and idName.startswith("RID_STR_"): found_reason_to_exclude = True
 
         if not found_reason_to_exclude:
             sys.stdout.write(idName + '\n')
