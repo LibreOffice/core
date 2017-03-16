@@ -571,7 +571,8 @@ private:
                     sal_Int32& k,
                     sal_uInt16& j,
                     sal_uInt16 nIx,
-                    short eSymbolType );
+                    short eSymbolType,
+                    bool bInsertRightBlank = false );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
     SVL_DLLPRIVATE bool ImpNumberFillWithThousands( OUStringBuffer& sStr,
