@@ -493,85 +493,156 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
     switch ( rReq.GetSlot() )
     {
         case SID_ATTR_LONG_LRSPACE:
-        {
-            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
-            pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
-
-            const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
-                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE)));
-
-            if( mpDrawView->IsTextEdit() )
+            if (pArgs)
             {
-                Rectangle aRect = maMarkRect;
-                aRect.SetPos(aRect.TopLeft() + aPagePos);
-                aRect.Left()  = rLRSpace.GetLeft();
-                aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
-                aRect.SetPos(aRect.TopLeft() - aPagePos);
-                if ( aRect != maMarkRect)
+                SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+                pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
+
+                const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
+                        pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE)));
+
+                if( mpDrawView->IsTextEdit() )
                 {
-                    mpDrawView->SetAllMarkedRect(aRect);
-                    maMarkRect = mpDrawView->GetAllMarkedRect();
-                    Invalidate( SID_RULER_OBJECT );
+                    Rectangle aRect = maMarkRect;
+                    aRect.SetPos(aRect.TopLeft() + aPagePos);
+                    aRect.Left()  = rLRSpace.GetLeft();
+                    aRect.Right() = aViewSize.Width() - rLRSpace.GetRight();
+                    aRect.SetPos(aRect.TopLeft() - aPagePos);
+                    if ( aRect != maMarkRect)
+                    {
+                        mpDrawView->SetAllMarkedRect(aRect);
+                        maMarkRect = mpDrawView->GetAllMarkedRect();
+                        Invalidate( SID_RULER_OBJECT );
+                    }
                 }
+                else
+                {
+                    long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
+                    long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                                          aPageSize.Width() - aViewSize.Width());
+
+                    sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
+                    sal_uInt16 i;
+                    for ( i = 0; i < nPageCnt; i++)
+                    {
+                        SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
+                        SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
+                                                pPage,
+                                                pPage->GetLftBorder(),
+                                                pPage->GetRgtBorder(),
+                                                nLeft, nRight);
+                        pUndoGroup->AddAction(pUndo);
+                        pPage->SetLftBorder(nLeft);
+                        pPage->SetRgtBorder(nRight);
+                    }
+                    nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
+
+                    for (i = 0; i < nPageCnt; i++)
+                    {
+                        SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
+                        SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
+                                                pPage,
+                                                pPage->GetLftBorder(),
+                                                pPage->GetRgtBorder(),
+                                                nLeft, nRight);
+                        pUndoGroup->AddAction(pUndo);
+                        pPage->SetLftBorder(nLeft);
+                        pPage->SetRgtBorder(nRight);
+                    }
+                    InvalidateWindows();
+                }
+
+                // give the undo group to the undo manager
+                GetViewFrame()->GetObjectShell()->GetUndoManager()->
+                                                    AddUndoAction(pUndoGroup);
             }
-            else
-            {
-                long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
-                long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
-                                      aPageSize.Width() - aViewSize.Width());
-
-                sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
-                sal_uInt16 i;
-                for ( i = 0; i < nPageCnt; i++)
-                {
-                    SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
-                    SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
-                                            pPage,
-                                            pPage->GetLftBorder(),
-                                            pPage->GetRgtBorder(),
-                                            nLeft, nRight);
-                    pUndoGroup->AddAction(pUndo);
-                    pPage->SetLftBorder(nLeft);
-                    pPage->SetRgtBorder(nRight);
-                }
-                nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
-
-                for (i = 0; i < nPageCnt; i++)
-                {
-                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
-                    SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
-                                            pPage,
-                                            pPage->GetLftBorder(),
-                                            pPage->GetRgtBorder(),
-                                            nLeft, nRight);
-                    pUndoGroup->AddAction(pUndo);
-                    pPage->SetLftBorder(nLeft);
-                    pPage->SetRgtBorder(nRight);
-                }
-                InvalidateWindows();
-            }
-
-            // give the undo group to the undo manager
-            GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                                                AddUndoAction(pUndoGroup);
             break;
-        }
         case SID_ATTR_LONG_ULSPACE:
-        {
-            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
-            pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
+            if (pArgs)
+            {
+                SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+                pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
-            const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
-                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE)));
+                const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
+                        pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE)));
 
-            if( mpDrawView->IsTextEdit() )
+                if( mpDrawView->IsTextEdit() )
+                {
+                    Rectangle aRect = maMarkRect;
+                    aRect.SetPos(aRect.TopLeft() + aPagePos);
+                    aRect.Top()  = rULSpace.GetUpper();
+                    aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
+                    aRect.SetPos(aRect.TopLeft() - aPagePos);
+
+                    if ( aRect != maMarkRect)
+                    {
+                        mpDrawView->SetAllMarkedRect(aRect);
+                        maMarkRect = mpDrawView->GetAllMarkedRect();
+                        Invalidate( SID_RULER_OBJECT );
+                    }
+                }
+                else
+                {
+                    long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
+                    long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                                          aPageSize.Height() - aViewSize.Height());
+
+                    sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
+                    sal_uInt16 i;
+                    for ( i = 0; i < nPageCnt; i++)
+                    {
+                        SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
+                        SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
+                                                pPage,
+                                                pPage->GetUppBorder(),
+                                                pPage->GetLwrBorder(),
+                                                nUpper, nLower);
+                        pUndoGroup->AddAction(pUndo);
+                        pPage->SetUppBorder(nUpper);
+                        pPage->SetLwrBorder(nLower);
+                    }
+                    nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
+
+                    for (i = 0; i < nPageCnt; i++)
+                    {
+                        SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
+                        SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
+                                                pPage,
+                                                pPage->GetUppBorder(),
+                                                pPage->GetLwrBorder(),
+                                                nUpper, nLower);
+                        pUndoGroup->AddAction(pUndo);
+                        pPage->SetUppBorder(nUpper);
+                        pPage->SetLwrBorder(nLower);
+                    }
+                    InvalidateWindows();
+                }
+
+                // give the undo group to the undo manager
+                GetViewFrame()->GetObjectShell()->GetUndoManager()->
+                                                    AddUndoAction(pUndoGroup);
+            }
+            break;
+        case SID_RULER_OBJECT:
+            if (pArgs)
             {
                 Rectangle aRect = maMarkRect;
                 aRect.SetPos(aRect.TopLeft() + aPagePos);
-                aRect.Top()  = rULSpace.GetUpper();
-                aRect.Bottom() = aViewSize.Height() - rULSpace.GetLower();
-                aRect.SetPos(aRect.TopLeft() - aPagePos);
 
+                const SvxObjectItem& rOI = static_cast<const SvxObjectItem&>(
+                        pArgs->Get(GetPool().GetWhich(SID_RULER_OBJECT)));
+
+                if ( rOI.GetStartX() != rOI.GetEndX() )
+                {
+                    aRect.Left()  = rOI.GetStartX();
+                    aRect.Right() = rOI.GetEndX();
+                }
+                if ( rOI.GetStartY() != rOI.GetEndY() )
+                {
+                    aRect.Top()    = rOI.GetStartY();
+                    aRect.Bottom() = rOI.GetEndY();
+                }
+                aRect.SetPos(aRect.TopLeft() - aPagePos);
                 if ( aRect != maMarkRect)
                 {
                     mpDrawView->SetAllMarkedRect(aRect);
@@ -579,81 +650,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     Invalidate( SID_RULER_OBJECT );
                 }
             }
-            else
-            {
-                long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
-                long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
-                                      aPageSize.Height() - aViewSize.Height());
-
-                sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
-                sal_uInt16 i;
-                for ( i = 0; i < nPageCnt; i++)
-                {
-                    SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
-                    SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
-                                            pPage,
-                                            pPage->GetUppBorder(),
-                                            pPage->GetLwrBorder(),
-                                            nUpper, nLower);
-                    pUndoGroup->AddAction(pUndo);
-                    pPage->SetUppBorder(nUpper);
-                    pPage->SetLwrBorder(nLower);
-                }
-                nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
-
-                for (i = 0; i < nPageCnt; i++)
-                {
-                    SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
-                    SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
-                                            pPage,
-                                            pPage->GetUppBorder(),
-                                            pPage->GetLwrBorder(),
-                                            nUpper, nLower);
-                    pUndoGroup->AddAction(pUndo);
-                    pPage->SetUppBorder(nUpper);
-                    pPage->SetLwrBorder(nLower);
-                }
-                InvalidateWindows();
-            }
-
-            // give the undo group to the undo manager
-            GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                                                AddUndoAction(pUndoGroup);
-
             break;
-        }
-
-        case SID_RULER_OBJECT:
-        {
-            Rectangle aRect = maMarkRect;
-            aRect.SetPos(aRect.TopLeft() + aPagePos);
-
-            const SvxObjectItem& rOI = static_cast<const SvxObjectItem&>(
-                    pArgs->Get(GetPool().GetWhich(SID_RULER_OBJECT)));
-
-            if ( rOI.GetStartX() != rOI.GetEndX() )
-            {
-                aRect.Left()  = rOI.GetStartX();
-                aRect.Right() = rOI.GetEndX();
-            }
-            if ( rOI.GetStartY() != rOI.GetEndY() )
-            {
-                aRect.Top()    = rOI.GetStartY();
-                aRect.Bottom() = rOI.GetEndY();
-            }
-            aRect.SetPos(aRect.TopLeft() - aPagePos);
-            if ( aRect != maMarkRect)
-            {
-                mpDrawView->SetAllMarkedRect(aRect);
-                maMarkRect = mpDrawView->GetAllMarkedRect();
-                Invalidate( SID_RULER_OBJECT );
-            }
-            break;
-        }
-
         case SID_ATTR_TABSTOP:
-        {
-            if( mpDrawView->IsTextEdit() )
+            if (pArgs && mpDrawView->IsTextEdit())
             {
                 const SvxTabStopItem& rItem = static_cast<const SvxTabStopItem&>(
                             pArgs->Get( EE_PARA_TABS ));
@@ -666,23 +665,22 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 Invalidate(SID_ATTR_TABSTOP);
             }
             break;
-        }
-
         case SID_ATTR_PARA_LINESPACE:
-        {
-            sal_uInt16 nSlot = SID_ATTR_PARA_LINESPACE;
-            SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
-                GetPool().GetWhich(nSlot)));
+            if (pArgs)
+            {
+                sal_uInt16 nSlot = SID_ATTR_PARA_LINESPACE;
+                SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
+                    GetPool().GetWhich(nSlot)));
 
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
-            aParaLineSP.SetWhich( EE_PARA_SBL );
+                SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
+                aParaLineSP.SetWhich( EE_PARA_SBL );
 
-            aEditAttr.Put( aParaLineSP );
-            mpDrawView->SetAttributes( aEditAttr );
+                aEditAttr.Put( aParaLineSP );
+                mpDrawView->SetAttributes( aEditAttr );
 
-            Invalidate(SID_ATTR_PARA_LINESPACE);
-        }
-        break;
+                Invalidate(SID_ATTR_PARA_LINESPACE);
+            }
+            break;
         case SID_ATTR_PARA_ADJUST_LEFT:
         {
             SvxAdjustItem aItem( SvxAdjust::Left, EE_PARA_JUST );
@@ -692,8 +690,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             mpDrawView->SetAttributes( aEditAttr );
 
             Invalidate(SID_ATTR_PARA_ADJUST_LEFT);
+            break;
         }
-        break;
         case SID_ATTR_PARA_ADJUST_CENTER:
         {
             SvxAdjustItem aItem( SvxAdjust::Center, EE_PARA_JUST );
@@ -703,8 +701,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             mpDrawView->SetAttributes( aEditAttr );
 
             Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
+            break;
         }
-        break;
         case SID_ATTR_PARA_ADJUST_RIGHT:
         {
             SvxAdjustItem aItem( SvxAdjust::Right, EE_PARA_JUST );
@@ -714,8 +712,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             mpDrawView->SetAttributes( aEditAttr );
 
             Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
+            break;
         }
-        break;
         case SID_ATTR_PARA_ADJUST_BLOCK:
         {
             SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
@@ -725,41 +723,41 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             mpDrawView->SetAttributes( aEditAttr );
 
             Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
-        }
-        break;
-        case SID_ATTR_PARA_ULSPACE:
-        {
-            sal_uInt16 nSlot = SID_ATTR_PARA_ULSPACE;
-            SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
-                GetPool().GetWhich(nSlot)));
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
-            aULSP.SetWhich( EE_PARA_ULSPACE );
-
-            aEditAttr.Put( aULSP );
-            mpDrawView->SetAttributes( aEditAttr );
-
-            Invalidate(SID_ATTR_PARA_ULSPACE);
-        }
-        break;
-
-        case SID_ATTR_PARA_LRSPACE:
-        {
-            sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
-            SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
-                GetPool().GetWhich(nSlot)));
-
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
-            aLRSpace.SetWhich( EE_PARA_LRSPACE );
-
-            aEditAttr.Put( aLRSpace );
-            mpDrawView->SetAttributes( aEditAttr );
-
-            Invalidate(SID_ATTR_PARA_LRSPACE);
             break;
         }
+        case SID_ATTR_PARA_ULSPACE:
+            if (pArgs)
+            {
+                sal_uInt16 nSlot = SID_ATTR_PARA_ULSPACE;
+                SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
+                    GetPool().GetWhich(nSlot)));
+                SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
+                aULSP.SetWhich( EE_PARA_ULSPACE );
+
+                aEditAttr.Put( aULSP );
+                mpDrawView->SetAttributes( aEditAttr );
+
+                Invalidate(SID_ATTR_PARA_ULSPACE);
+            }
+            break;
+        case SID_ATTR_PARA_LRSPACE:
+            if (pArgs)
+            {
+                sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
+                SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
+                    GetPool().GetWhich(nSlot)));
+
+                SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                aLRSpace.SetWhich( EE_PARA_LRSPACE );
+
+                aEditAttr.Put( aLRSpace );
+                mpDrawView->SetAttributes( aEditAttr );
+
+                Invalidate(SID_ATTR_PARA_LRSPACE);
+            }
+            break;
         case SID_ATTR_LRSPACE:
-        {
-            if( mpDrawView->IsTextEdit() )
+            if (pArgs && mpDrawView->IsTextEdit())
             {
                 sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                 const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
@@ -846,7 +844,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 Invalidate(SID_ATTR_PARA_LRSPACE);
             }
             break;
-        }
     }
 }
 
