@@ -155,6 +155,11 @@ String STR_SIGNATURE_PARTIAL_OK
     Text[ en-US ] = "The signature is OK, but the document is only partially signed.";
 };
 
+String STR_SIGNATURE_OK
+{
+    Text[ en-US ] = "This document is digitally signed and the signature is valid.";
+};
+
 String STR_SIGNATURE_SHOW
 {
     Text[ en-US ] = "Show Signatures";

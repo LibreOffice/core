@@ -1195,6 +1195,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     sMessage = SfxResId(STR_SIGNATURE_PARTIAL_OK);
                     aInfoBarType = InfoBarType::Warning;
                     break;
+                case SignatureState::OK:
+                    sMessage = SfxResId(STR_SIGNATURE_OK);
+                    aInfoBarType = InfoBarType::Info;
+                    break;
                 default:
                     break;
                 }
