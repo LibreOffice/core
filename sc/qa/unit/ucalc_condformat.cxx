@@ -411,6 +411,38 @@ void Test::testCondCopyPasteSingleRowToRange()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondCopyPasteSingleRowToRange2()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,0,0,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,3,0,0), &aClipDoc);
+    ScRange aTargetRange(0,4,0,MAXCOL,4,0);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    std::set<sal_uLong> aCondFormatIndices;
+
+    for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
+    {
+        ScConditionalFormat* pNewFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        if (nCol % 4 == 0)
+            CPPUNIT_ASSERT(pNewFormat);
+        else
+            CPPUNIT_ASSERT(!pNewFormat);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCondCopyPasteSheetBetweenDoc()
 {
     m_pDoc->InsertTab(0, "Test");
