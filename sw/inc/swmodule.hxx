@@ -96,7 +96,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     SwView*             m_pView;
 
     // List of all Redline-authors.
-    std::vector<OUString>* m_pAuthorNames;
+    std::vector<OUString> m_pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     css::uno::Reference< css::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;

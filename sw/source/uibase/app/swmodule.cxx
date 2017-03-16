@@ -184,8 +184,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     m_pStdFontConfig = new SwStdFontConfig;
 
-    m_pAuthorNames = new std::vector<OUString>;  // All Redlining-Authors
-
     StartListening( *SfxGetpApp() );
 
     if (!utl::ConfigManager::IsAvoidConfig())

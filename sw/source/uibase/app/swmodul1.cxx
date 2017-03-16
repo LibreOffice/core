@@ -417,12 +417,12 @@ void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 
 OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos < m_pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
-    while(!(nPos < m_pAuthorNames->size()))
+    OSL_ENSURE(nPos < m_pAuthorNames.size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    while(!(nPos < m_pAuthorNames.size()))
     {
         InsertRedlineAuthor("nn");
     }
-    return (*m_pAuthorNames)[nPos];
+    return m_pAuthorNames[nPos];
 }
 
 static ColorData lcl_GetAuthorColor(sal_uInt16 nPos)
@@ -450,9 +450,9 @@ boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, size_t nIn
 OUString SwModule::GetRedlineAuthorInfo()
 {
     boost::property_tree::ptree aTable;
-    for (size_t nAuthor = 0; nAuthor < m_pAuthorNames->size(); ++nAuthor)
+    for (size_t nAuthor = 0; nAuthor < m_pAuthorNames.size(); ++nAuthor)
     {
-        boost::property_tree::ptree aAuthor = lcl_AuthorToJson((*m_pAuthorNames)[nAuthor], nAuthor);
+        boost::property_tree::ptree aAuthor = lcl_AuthorToJson(m_pAuthorNames[nAuthor], nAuthor);
         aTable.push_back(std::make_pair("", aAuthor));
     }
 
@@ -467,11 +467,11 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 {
     sal_uInt16 nPos = 0;
 
-    while(nPos < m_pAuthorNames->size() && (*m_pAuthorNames)[nPos] != rAuthor)
+    while(nPos < m_pAuthorNames.size() && m_pAuthorNames[nPos] != rAuthor)
         ++nPos;
 
-    if (nPos == m_pAuthorNames->size())
-        m_pAuthorNames->push_back(rAuthor);
+    if (nPos == m_pAuthorNames.size())
+        m_pAuthorNames.push_back(rAuthor);
 
     return nPos;
 }

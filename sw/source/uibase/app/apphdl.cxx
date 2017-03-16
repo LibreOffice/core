@@ -887,7 +887,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             DELETEZ(m_pNavigationConfig);
             DELETEZ(m_pToolbarConfig);
             DELETEZ(m_pWebToolbarConfig);
-            DELETEZ(m_pAuthorNames);
             DELETEZ(m_pDBConfig);
             if( m_pColorConfig )
             {
