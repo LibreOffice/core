@@ -72,6 +72,10 @@ class SwContent : public SwTypeNumber
     const SwContentType*    pParent;
     OUString                sContentName;
     long                    nYPosition;
+        // most subclasses appear to use this for a tools/gen.hxx-style
+        // geometric Y position, while SwOutlineContent wants to store a
+        // SwOutlineNodes::size_type value (where all such values used in
+        // practice hopefully fit into 'long')
     bool                    bInvisible;
 public:
         SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos );
