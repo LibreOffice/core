@@ -44,11 +44,6 @@ String STR_SERIALNUM
     Text [ en-US ] = "Serial Number";
 };
 
-String STR_SIGALGORITHM
-{
-    Text [ en-US ] = "Signature Algorithm";
-};
-
 String STR_ISSUER
 {
     Text [ en-US ] = "Issuer";
