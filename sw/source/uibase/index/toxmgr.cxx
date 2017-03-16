@@ -429,7 +429,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, nullptr);
+            pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
         }
 
         pDoc->ChgTOX(*pTOX, *pNewTOX);
@@ -440,7 +440,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, nullptr);
+            pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
         }
     }
 

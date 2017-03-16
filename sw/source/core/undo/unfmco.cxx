@@ -29,7 +29,7 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
                               SwFormatColl* pColl,
                               const bool bReset,
                               const bool bResetListAttrs )
-    : SwUndo( UNDO_SETFMTCOLL, rRange.GetDoc() ),
+    : SwUndo( SwUndoId::SETFMTCOLL, rRange.GetDoc() ),
       SwUndRng( rRange ),
       pHistory( new SwHistory ),
       pFormatColl( pColl ),

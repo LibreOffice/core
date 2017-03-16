@@ -467,7 +467,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     }
 
     rWrtShell.StartAction();
-    rWrtShell.StartUndo(UNDO_INSATTR);
+    rWrtShell.StartUndo(SwUndoId::INSATTR);
 
     ItemVector aItemVector;
 
@@ -573,7 +573,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     if( m_pTableItemSet && nSelectionType & (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS) )
         lcl_setTableAttributes( *m_pTableItemSet, rWrtShell );
 
-    rWrtShell.EndUndo(UNDO_INSATTR);
+    rWrtShell.EndUndo(SwUndoId::INSATTR);
     rWrtShell.EndAction();
 
     if(!m_bPersistentCopy)

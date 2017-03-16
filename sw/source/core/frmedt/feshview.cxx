@@ -738,7 +738,7 @@ void SwFEShell::EndDrag( const Point * )
         for(SwViewShell& rSh : GetRingContainer())
             rSh.StartAction();
 
-        StartUndo( UNDO_START );
+        StartUndo( SwUndoId::START );
 
         // #50778# Bug during dragging: In StartAction a HideShowXor is called.
         // In EndDragObj() this is reversed, for no reason and even wrong.
@@ -755,7 +755,7 @@ void SwFEShell::EndDrag( const Point * )
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
         ChgAnchor( 0, true );
 
-        EndUndo( UNDO_END );
+        EndUndo( SwUndoId::END );
 
         for(SwViewShell& rSh : GetRingContainer())
         {
@@ -2415,11 +2415,11 @@ void SwFEShell::GroupSelection()
     if ( IsGroupAllowed() )
     {
         StartAllAction();
-        StartUndo( UNDO_START );
+        StartUndo( SwUndoId::START );
 
         GetDoc()->GroupSelection( *Imp()->GetDrawView() );
 
-        EndUndo( UNDO_END );
+        EndUndo( SwUndoId::END );
         EndAllAction();
     }
 }
@@ -2430,11 +2430,11 @@ void SwFEShell::UnGroupSelection()
     if ( IsGroupSelected() )
     {
         StartAllAction();
-        StartUndo( UNDO_START );
+        StartUndo( SwUndoId::START );
 
         GetDoc()->UnGroupSelection( *Imp()->GetDrawView() );
 
-        EndUndo( UNDO_END );
+        EndUndo( SwUndoId::END );
         EndAllAction();
     }
 }
@@ -2628,7 +2628,7 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     }
 
     StartAllAction();
-    StartUndo( UNDO_INSATTR );
+    StartUndo( SwUndoId::INSATTR );
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -2638,7 +2638,7 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
         GetDoc()->SetAttr( rSet, *pContact->GetFormat() );
     }
 
-    EndUndo( UNDO_INSATTR );
+    EndUndo( SwUndoId::INSATTR );
     EndAllActionAndCall();
     GetDoc()->getIDocumentState().SetModified();
     return true;

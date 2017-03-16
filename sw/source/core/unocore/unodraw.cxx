@@ -760,7 +760,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 if( !bFlyInCnt )
                 {
                     UnoActionContext aContext(pDoc);
-                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor(
@@ -774,7 +774,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                         uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
                         xRet.set(xInt, uno::UNO_QUERY);
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
                 }
             }
             pPage->RemovePageView();
@@ -795,13 +795,13 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
         {
             pPage->PreUnGroup(rShapeGroup);
             UnoActionContext aContext(pDoc);
-            pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+            pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
                         FLY_AT_PARA,
                         true, false );
-            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+            pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             pPage->RemovePageView();
         }
     }

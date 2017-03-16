@@ -264,7 +264,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             else
                 vItems = rWrtSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );
 
-            rWrtSh.StartUndo( UNDO_INSATTR );
+            rWrtSh.StartUndo( SwUndoId::INSATTR );
             for( std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >& iPair : vItems )
             {
                 std::unique_ptr<SwPaM> pPaM = std::move(iPair.second);
@@ -293,7 +293,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                         rWrtSh.SetAttrSet( aAttrSet, SetAttrMode::DEFAULT, pPaM.get() );
                 }
             }
-            rWrtSh.EndUndo( UNDO_INSATTR );
+            rWrtSh.EndUndo( SwUndoId::INSATTR );
             rReq.Done();
         }
         break;
@@ -492,14 +492,14 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
-                    rSh.StartUndo( UNDO_START );
+                    rSh.StartUndo( SwUndoId::START );
                     if ( SfxItemState::SET == aSet.GetItemState(HINT_END,false,&pItem) )
                     {
                         if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
                             rSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     }
                     rSh.SetAttrSet(*pDlg->GetOutputItemSet());
-                    rSh.StartUndo( UNDO_END );
+                    rSh.StartUndo( SwUndoId::END );
                     rSh.EndAction();
                     rReq.Done(*pDlg->GetOutputItemSet());
                 }

@@ -139,7 +139,7 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
-        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        SwUndoRedline* pUndo = new SwUndoRedline( SwUndoId::REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
             GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -218,7 +218,7 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
-        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        SwUndoRedline* pUndo = new SwUndoRedline( SwUndoId::REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
             GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -265,7 +265,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
-        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        SwUndoRedline* pUndo = new SwUndoRedline( SwUndoId::REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
             GetIDocumentUndoRedo().AppendUndo(pUndo);

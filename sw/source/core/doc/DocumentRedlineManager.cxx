@@ -1892,7 +1892,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 
     if (bSaveInUndo && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        SwUndoRedline* pUndo = new SwUndoRedline( SwUndoId::REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -2114,7 +2114,7 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
-            m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_ACCEPT_REDLINE, &aRewriter);
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::ACCEPT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2157,7 +2157,7 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
         }
     }
     return bRet;
@@ -2180,7 +2180,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_ACCEPT_REDLINE, nullptr );
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::ACCEPT_REDLINE, nullptr );
         m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
@@ -2204,7 +2204,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aTmpStr);
 
-        m_rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
+        m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::ACCEPT_REDLINE, &aRewriter );
     }
     return nRet != 0;
 
@@ -2228,7 +2228,7 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
-            m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_REJECT_REDLINE, &aRewriter);
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::REJECT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2271,7 +2271,7 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
         }
     }
     return bRet;
@@ -2294,7 +2294,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, nullptr );
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::REJECT_REDLINE, nullptr );
         m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoRejectRedline(aPam) );
     }
 
@@ -2318,7 +2318,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aTmpStr);
 
-        m_rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
+        m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::REJECT_REDLINE, &aRewriter );
     }
 
     return nRet != 0;

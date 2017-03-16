@@ -338,7 +338,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
     UnoActionContext aAction(pDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, nullptr);
+        pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSATTR, nullptr);
 
         for(SwPaM& rCurrent : rPam.GetRingContainer())
         {
@@ -350,7 +350,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
             }
         }
 
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, nullptr);
+        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSATTR, nullptr);
     }
     else
     {
@@ -814,7 +814,7 @@ void SwXTextRange::DeleteAndInsert(
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
         if (aCursor.HasMark())
         {
             m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
@@ -829,7 +829,7 @@ void SwXTextRange::DeleteAndInsert(
             aCursor.Left(rText.getLength());
         }
         SetPositions(aCursor);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     }
 }
 
@@ -1551,7 +1551,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     // Start/EndAction
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
     if (rCursor.HasMark())
     {
         pDoc->getIDocumentContentOperations().DeleteAndJoin(rCursor);
@@ -1565,7 +1565,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength());
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
 struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration

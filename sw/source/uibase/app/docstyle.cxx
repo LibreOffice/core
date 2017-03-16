@@ -1458,7 +1458,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     {
         SwRewriter aRewriter;
         aRewriter.AddRule( UndoArg1, GetName() );
-        rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_INSFMTATTR, &aRewriter );
+        rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::INSFMTATTR, &aRewriter );
     }
 
     SwFormat* pFormat = nullptr;
@@ -1720,7 +1720,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+        rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     }
 }
 

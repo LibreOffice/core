@@ -2912,7 +2912,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 if ( xIPObj.is() )
                 {
                     UnoActionContext aAction(pDoc);
-                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
                     if(!bSizeFound)
                     {
                         //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
@@ -2959,7 +2959,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pFormat2 = pDoc->getIDocumentContentOperations().Insert(aPam, xObjRef, &aFrameSet );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
-                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                     pFormat2->Add(this);
                     if(!m_sName.isEmpty())
                         pDoc->SetFlyName((SwFlyFrameFormat&)*pFormat2, m_sName);
@@ -2969,11 +2969,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
-                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+                pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
                 pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrameSet, nullptr );
-                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+                pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
@@ -2985,7 +2985,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 svt::EmbeddedObjectRef xObj;
                 xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
 
-                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+                pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
                 // Not sure if these setParent() and InsertEmbeddedObject() calls are really
                 // needed, it seems to work without, but logic from code elsewhere suggests
@@ -2999,7 +2999,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
                 pFrameFormat = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrameSet );
-                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+                pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);

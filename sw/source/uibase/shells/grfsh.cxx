@@ -169,7 +169,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( aDialog->Execute() == RET_OK )
                 {
                     rSh.StartAllAction();
-                    rSh.StartUndo(UNDO_START);
+                    rSh.StartUndo(SwUndoId::START);
                     Rectangle aScaledCropedRectangle = aDialog->GetScaledCropRectangle();
 
                     aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
@@ -183,7 +183,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     rSh.SetAttrItem(aCrop);
                     rSh.SetAttrItem(aMirror);
 
-                    rSh.EndUndo(UNDO_END);
+                    rSh.EndUndo(SwUndoId::END);
                     rSh.EndAllAction();
                 }
             }
@@ -360,7 +360,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             if (pDlg->Execute() == RET_OK)
             {
                 rSh.StartAllAction();
-                rSh.StartUndo(UNDO_START);
+                rSh.StartUndo(SwUndoId::START);
                 const SfxPoolItem* pItem;
                 SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                 rReq.Done(*pSet);
@@ -462,7 +462,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( aGrfSet.Count() )
                     rSh.SetAttrSet( aGrfSet );
 
-                rSh.EndUndo(UNDO_END);
+                rSh.EndUndo(SwUndoId::END);
                 rSh.EndAllAction();
             }
         }
@@ -857,7 +857,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     }
 
     rShell.StartAllAction();
-    rShell.StartUndo(UNDO_START);
+    rShell.StartUndo(SwUndoId::START);
 
     Graphic aGraphic = *rShell.GetGraphic();
     GraphicNativeTransform aTransform(aGraphic);
@@ -902,7 +902,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
 
     rShell.SetAttrItem(aCrop);
 
-    rShell.EndUndo(UNDO_END);
+    rShell.EndUndo(SwUndoId::END);
     rShell.EndAllAction();
 }
 

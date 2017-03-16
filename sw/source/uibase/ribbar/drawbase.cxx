@@ -265,7 +265,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 SwRewriter aRewriter;
 
                 aRewriter.AddRule(UndoArg1, SW_RES(STR_FRAME));
-                m_pSh->StartUndo(UNDO_INSERT, &aRewriter);
+                m_pSh->StartUndo(SwUndoId::INSERT, &aRewriter);
             }
 
             m_pSh->EndCreate(SdrCreateCmd::ForceEnd);

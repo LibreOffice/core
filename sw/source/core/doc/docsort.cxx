@@ -322,7 +322,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     if( bUndo )
     {
-        GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     }
 
     SwPaM* pRedlPam = nullptr;
@@ -471,7 +471,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     GetIDocumentUndoRedo().DoUndo( bUndo );
     if( bUndo )
     {
-        GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
 
     return true;

@@ -1135,7 +1135,7 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        mpDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_TEXT_CORRECTION, nullptr );
+        mpDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
         StartAction();
 
         SwPaM *pCursor = GetCursor();
@@ -1265,7 +1265,7 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
         // set continuation position for spell/grammar checking to the end of this sentence
         g_pSpellIter->SetCurr( new SwPosition(*pCursor->Start()) );
 
-        mpDoc->GetIDocumentUndoRedo().EndUndo( UNDO_UI_TEXT_CORRECTION, nullptr );
+        mpDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
         EndAction();
     }
 }

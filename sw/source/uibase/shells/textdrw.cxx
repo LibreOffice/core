@@ -59,7 +59,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
     Point aStartPos(rSh.GetCharRect().Pos() + Point(0, 1));
 
     rSh.StartAction();
-    rSh.StartUndo( UNDO_UI_INSERT_URLBTN );
+    rSh.StartUndo( SwUndoId::UI_INSERT_URLBTN );
     if (rSh.BeginCreate(OBJ_FM_BUTTON, SdrInventor::FmForm, aStartPos))
     {
         pSdrView->SetOrtho(false);
@@ -122,7 +122,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
             rSh.UnSelectFrame();
         }
     }
-    rSh.EndUndo( UNDO_UI_INSERT_URLBTN );
+    rSh.EndUndo( SwUndoId::UI_INSERT_URLBTN );
     rSh.EndAction();
 }
 

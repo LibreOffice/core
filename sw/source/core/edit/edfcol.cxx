@@ -385,7 +385,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
@@ -405,7 +405,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
         }
 
     }
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
 

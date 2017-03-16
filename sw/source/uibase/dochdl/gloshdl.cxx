@@ -491,7 +491,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         // otherwise the possible Shell change gets delayed and
         // API-programs would hang.
         // Moreover the event macro must also not be called in an action
-        pWrtShell->StartUndo(UNDO_INSGLOSSARY);
+        pWrtShell->StartUndo(SwUndoId::INSGLOSSARY);
         if( aStartMacro.HasMacro() )
             pWrtShell->ExecMacro( aStartMacro );
         if(pWrtShell->HasSelection())
@@ -507,7 +507,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         {
             pWrtShell->ExecMacro( aEndMacro );
         }
-        pWrtShell->EndUndo(UNDO_INSGLOSSARY);
+        pWrtShell->EndUndo(SwUndoId::INSGLOSSARY);
 
         // demand input for all new InputFields
         if( aFieldLst.BuildSortLst() )

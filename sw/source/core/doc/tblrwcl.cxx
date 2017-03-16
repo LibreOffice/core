@@ -3504,8 +3504,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
-                                        aParam.bBigger ? UNDO_COL_DELETE
-                                                       : UNDO_TABLE_INSCOL );
+                                        aParam.bBigger ? SwUndoId::COL_DELETE
+                                                       : SwUndoId::TABLE_INSCOL );
                 }
                 else if( ppUndo )
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
@@ -3698,8 +3698,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     xFndBox.reset(::lcl_SaveInsDelData(aParam, ppUndo, aTmpLst, nDistStt));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
-                                        aParam.bBigger ? UNDO_TABLE_DELBOX
-                                                       : UNDO_TABLE_INSCOL );
+                                        aParam.bBigger ? SwUndoId::TABLE_DELBOX
+                                                       : SwUndoId::TABLE_INSCOL );
                 }
                 else if( ppUndo )
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
@@ -3812,8 +3812,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     xFndBox.reset(::lcl_SaveInsDelData(aParam, ppUndo, aTmpLst, nDistStt));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
-                                        aParam.bBigger ? UNDO_TABLE_DELBOX
-                                                       : UNDO_TABLE_INSCOL );
+                                        aParam.bBigger ? SwUndoId::TABLE_DELBOX
+                                                       : SwUndoId::TABLE_INSCOL );
                 }
                 else if( ppUndo )
                     *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
@@ -4197,8 +4197,8 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
-                                        bBigger ? UNDO_TABLE_INSROW
-                                                : UNDO_ROW_DELETE );
+                                        bBigger ? SwUndoId::TABLE_INSROW
+                                                : SwUndoId::ROW_DELETE );
                     }
                     else if( ppUndo )
                         *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
@@ -4281,8 +4281,8 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst ));
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
-                                        bBigger ? UNDO_TABLE_INSROW
-                                                : UNDO_ROW_DELETE );
+                                        bBigger ? SwUndoId::TABLE_INSROW
+                                                : SwUndoId::ROW_DELETE );
                     }
                     else if( ppUndo )
                         *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );

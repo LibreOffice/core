@@ -26,7 +26,7 @@
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
-    : SwUndo( UNDO_OUTLINE_LR, rPam.GetDoc() ), SwUndRng( rPam ), nOffset( nOff )
+    : SwUndo( SwUndoId::OUTLINE_LR, rPam.GetDoc() ), SwUndRng( rPam ), nOffset( nOff )
 {
 }
 

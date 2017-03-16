@@ -711,7 +711,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
 
     bool bRet = true;
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
     GetDoc()->getIDocumentFieldsAccess().LockExpFields();
 
     // When the clipboard content has been created by a rectangular selection
@@ -1082,7 +1082,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
         }
     }
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSGLOSSARY, nullptr );
 
     // have new table formulas been inserted?
     if( pTableFieldTyp->HasWriterListeners() )
@@ -1128,7 +1128,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     if(pTableNode)
     {
         //insert a paragraph
-        StartUndo(UNDO_INSERT);
+        StartUndo(SwUndoId::INSERT);
         SwNodeIndex aTableIdx(  *pTableNode, -1 );
         SwPosition aBefore(aTableIdx);
         if(GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore ))
@@ -1136,7 +1136,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
             SwPaM aTmp(aBefore);
             aCpyPam = aTmp;
         }
-        EndUndo(UNDO_INSERT);
+        EndUndo(SwUndoId::INSERT);
     }
 
     MovePage( GetThisFrame, GetLastSub );

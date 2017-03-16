@@ -423,7 +423,7 @@ void SwHHCWrapper::ReplaceUnit(
 
     if (pRuby)
     {
-        m_rWrtShell.StartUndo( UNDO_SETRUBYATTR );
+        m_rWrtShell.StartUndo( SwUndoId::SETRUBYATTR );
         if (!aNewOrigText.isEmpty())
         {
             // according to FT we currently should not bother about keeping
@@ -451,11 +451,11 @@ void SwHHCWrapper::ReplaceUnit(
 #endif
         m_rWrtShell.SetAttrItem(*pRuby);
         delete pRuby;
-        m_rWrtShell.EndUndo( UNDO_SETRUBYATTR );
+        m_rWrtShell.EndUndo( SwUndoId::SETRUBYATTR );
     }
     else
     {
-        m_rWrtShell.StartUndo( UNDO_OVERWRITE );
+        m_rWrtShell.StartUndo( SwUndoId::OVERWRITE );
 
         // according to FT we should currently not bother about keeping
         // attributes in Hangul/Hanja conversion and leave that untouched.
@@ -504,7 +504,7 @@ void SwHHCWrapper::ReplaceUnit(
             m_rWrtShell.ClearMark();
         }
 
-        m_rWrtShell.EndUndo( UNDO_OVERWRITE );
+        m_rWrtShell.EndUndo( SwUndoId::OVERWRITE );
     }
 
     m_rWrtShell.EndAllAction();

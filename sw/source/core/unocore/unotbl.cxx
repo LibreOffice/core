@@ -2143,7 +2143,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
     {
         UnoActionContext aCont(pDoc);
 
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
         const SwTable* pTable(nullptr);
         if( 0 != aPam.Start()->nContent.GetIndex() )
         {
@@ -2184,7 +2184,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
                 setName(pName->get<OUString>());
             m_pImpl->m_pTableProps.reset();
         }
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
 }
 
@@ -2681,7 +2681,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SwDoc* pDoc = pFormat->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
-                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
                     for(size_t i = 0; i < rLines.size(); ++i)
                     {
                         SwTableLine* pLine = rLines[i];
@@ -2711,7 +2711,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                             }
                         }
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
                 }
                 break;
 

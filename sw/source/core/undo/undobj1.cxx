@@ -208,7 +208,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
 SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
-                                            UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
+                                            SwUndoId::INSDRAWFMT : SwUndoId::INSLAYFMT ),
     mnCursorSaveIndexPara( nNodeIdx ), mnCursorSaveIndexPos( nCntIdx )
 {
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
@@ -365,15 +365,15 @@ lcl_GetSwUndoId(SwFrameFormat *const pFrameFormat)
         SwNoTextNode *const pNoTextNode(firstNode.GetNode().GetNoTextNode());
         if (pNoTextNode && pNoTextNode->IsGrfNode())
         {
-            return UNDO_DELGRF;
+            return SwUndoId::DELGRF;
         }
         else if (pNoTextNode && pNoTextNode->IsOLENode())
         {
-            // surprisingly not UNDO_DELOLE, which does not seem to work
-            return UNDO_DELETE;
+            // surprisingly not SwUndoId::DELOLE, which does not seem to work
+            return SwUndoId::DELETE;
         }
     }
-    return UNDO_DELLAYFMT;
+    return SwUndoId::DELLAYFMT;
 }
 
 SwUndoDelLayFormat::SwUndoDelLayFormat( SwFrameFormat* pFormat )
@@ -437,7 +437,7 @@ void SwUndoDelLayFormat::RedoForRollback()
 }
 
 SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat )
-    : SwUndo( UNDO_SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
+    : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
     pOldFormat( static_cast<SwFrameFormat*>(rFlyFormat.DerivedFrom()) ), pNewFormat( &rNewFrameFormat ),
     pItemSet( new SfxItemSet( *rFlyFormat.GetAttrSet().GetPool(),
                                 rFlyFormat.GetAttrSet().GetRanges() )),

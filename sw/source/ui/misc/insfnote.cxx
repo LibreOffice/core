@@ -52,7 +52,7 @@ void SwInsFootNoteDlg::Apply()
     {
         rSh.StartAction();
         rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
-        rSh.StartUndo( UNDO_START );
+        rSh.StartUndo( SwUndoId::START );
         SwFormatFootnote aNote( m_pEndNoteBtn->IsChecked() );
         aNote.SetNumStr( aStr );
 
@@ -70,7 +70,7 @@ void SwInsFootNoteDlg::Apply()
             rSh.ResetSelect(nullptr, false);
             rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         }
-        rSh.EndUndo( UNDO_END );
+        rSh.EndUndo( SwUndoId::END );
         rSh.EndAction();
     }
     else

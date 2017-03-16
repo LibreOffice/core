@@ -181,11 +181,11 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             // since this conversion is not interactive the whole converted
                             // document should be undone in a single undo step.
-                            m_pWrtShell->StartUndo( UNDO_OVERWRITE );
+                            m_pWrtShell->StartUndo( SwUndoId::OVERWRITE );
 
                             StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
 
-                            m_pWrtShell->EndUndo( UNDO_OVERWRITE );
+                            m_pWrtShell->EndUndo( SwUndoId::OVERWRITE );
 
                             if (bRestoreCursor)
                             {
@@ -448,7 +448,7 @@ void SwView::HyphenateDocument()
 
         Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
-        m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
+        m_pWrtShell->StartUndo(SwUndoId::INSATTR);         // valid later
 
         bool bHyphSpecial = xProp.is() && xProp->getIsHyphSpecial();
         bool bSelection = static_cast<SwCursorShell*>(m_pWrtShell)->HasSelection() ||
@@ -477,7 +477,7 @@ void SwView::HyphenateDocument()
         {
             SwHyphWrapper aWrap( this, xHyph, bStart, bOther, bSelection );
             aWrap.SpellDocument();
-            m_pWrtShell->EndUndo(UNDO_INSATTR);
+            m_pWrtShell->EndUndo(SwUndoId::INSATTR);
         }
         pVOpt->SetIdle( bOldIdle );
     }
@@ -504,7 +504,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
     m_pWrtShell->SetInsMode();
 
     m_pWrtShell->StartAllAction();
-    m_pWrtShell->StartUndo(UNDO_DELETE);
+    m_pWrtShell->StartUndo(SwUndoId::DELETE);
 
     if( !bSelection )
     {
@@ -534,7 +534,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
 
     m_pWrtShell->Insert( rSynonmText );
 
-    m_pWrtShell->EndUndo(UNDO_DELETE);
+    m_pWrtShell->EndUndo(SwUndoId::DELETE);
     m_pWrtShell->EndAllAction();
 
     m_pWrtShell->SetInsMode( bOldIns );

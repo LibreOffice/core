@@ -405,7 +405,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
     {
         StartAllAction();
         SwRewriter aRewriter(SwUndoInsertLabel::CreateRewriter(rText));
-        StartUndo(UNDO_INSERTLABEL, &aRewriter);
+        StartUndo(SwUndoId::INSERTLABEL, &aRewriter);
 
         sal_uLong nIdx = 0;
         bool bInnerCntIsFly = false;

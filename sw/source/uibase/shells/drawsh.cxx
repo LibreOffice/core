@@ -137,7 +137,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
                 const bool bAsLink(aDlg.IsAsLink());
                 SdrObject* pResult = &rObject;
 
-                rSh.StartUndo(UNDO_PASTE_CLIPBOARD);
+                rSh.StartUndo(SwUndoId::PASTE_CLIPBOARD);
 
                 if (SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(&rObject))
                 {
@@ -175,7 +175,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
                     rObject.SetMergedItemSetAndBroadcast(aSet);
                 }
 
-                rSh.EndUndo( UNDO_END );
+                rSh.EndUndo( SwUndoId::END );
 
                 if(pResult)
                 {
@@ -232,10 +232,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_OBJECT_HELL:
             if (rSh.IsObjSelected())
             {
-                rSh.StartUndo( UNDO_START );
+                rSh.StartUndo( SwUndoId::START );
                 SetWrapMode(FN_FRAME_WRAPTHRU_TRANSP);
                 rSh.SelectionToHell();
-                rSh.EndUndo( UNDO_END );
+                rSh.EndUndo( SwUndoId::END );
                 rBnd.Invalidate(SID_OBJECT_HEAVEN);
             }
             break;
@@ -243,10 +243,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_OBJECT_HEAVEN:
             if (rSh.IsObjSelected())
             {
-                rSh.StartUndo( UNDO_START );
+                rSh.StartUndo( SwUndoId::START );
                 SetWrapMode(FN_FRAME_WRAPTHRU);
                 rSh.SelectionToHeaven();
-                rSh.EndUndo( UNDO_END );
+                rSh.EndUndo( SwUndoId::END );
                 rBnd.Invalidate(SID_OBJECT_HELL);
             }
             break;
@@ -254,7 +254,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case FN_TOOL_HIERARCHIE:
             if (rSh.IsObjSelected())
             {
-                rSh.StartUndo( UNDO_START );
+                rSh.StartUndo( SwUndoId::START );
                 if (rSh.GetLayerId() == 0)
                 {
                     SetWrapMode(FN_FRAME_WRAPTHRU);
@@ -265,7 +265,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                     SetWrapMode(FN_FRAME_WRAPTHRU_TRANSP);
                     rSh.SelectionToHell();
                 }
-                rSh.EndUndo( UNDO_END );
+                rSh.EndUndo( SwUndoId::END );
                 rBnd.Invalidate( SID_OBJECT_HELL );
                 rBnd.Invalidate( SID_OBJECT_HEAVEN );
             }

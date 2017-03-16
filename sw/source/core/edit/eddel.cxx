@@ -53,7 +53,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         // group the Undo in the table
         if( pUndo && !*pUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+            GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
             *pUndo = true;
         }
         SwPaM aDelPam( *rPam.Start() );
@@ -125,7 +125,7 @@ long SwEditShell::Delete()
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_MULTISEL));
 
-            GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
+            GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
         }
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
@@ -136,7 +136,7 @@ long SwEditShell::Delete()
         // If undo container then close here
         if( bUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, nullptr);
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
         }
         EndAllAction();
         nRet = 1;
@@ -206,7 +206,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     // For block selection this list is filled with the insert positions
     std::list< std::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( !pPos )
@@ -285,7 +285,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
 #endif
 
     // close Undo container here
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     pDestShell->EndAllAction();
 
     pDestShell->SaveTableBoxContent( pDestShell->GetCursor()->GetPoint() );
@@ -308,7 +308,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
@@ -321,7 +321,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         }
 
         // close Undo container here
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         EndAllAction();
     }
     return bRet;

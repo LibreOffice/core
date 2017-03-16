@@ -245,9 +245,9 @@ void SwInputWindow::ShowWin()
                 }
                 if( pWrtShell->SwCursorShell::HasSelection() )
                 {
-                    pWrtShell->StartUndo( UNDO_DELETE );
+                    pWrtShell->StartUndo( SwUndoId::DELETE );
                     pWrtShell->Delete();
-                    if( 0 != pWrtShell->EndUndo( UNDO_DELETE ))
+                    if( SwUndoId::EMPTY != pWrtShell->EndUndo( SwUndoId::DELETE ))
                     {
                         m_bCallUndo = true;
                     }

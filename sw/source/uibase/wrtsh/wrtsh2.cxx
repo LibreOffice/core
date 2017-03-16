@@ -77,7 +77,7 @@ void SwWrtShell::Insert(SwField &rField)
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, rField.GetDescription());
 
-    StartUndo(UNDO_INSERT, &aRewriter);
+    StartUndo(SwUndoId::INSERT, &aRewriter);
 
     bool bDeleted = false;
     std::unique_ptr<SwPaM> pAnnotationTextRange;
@@ -348,12 +348,12 @@ void SwWrtShell::ClickToField( const SwField& rField )
 
             if( nSlotId )
             {
-                StartUndo( UNDO_START );
+                StartUndo( SwUndoId::START );
                 //#97295# immediately select the right shell
                 GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
                             SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
-                EndUndo( UNDO_END );
+                EndUndo( SwUndoId::END );
             }
         }
         break;
@@ -571,10 +571,10 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // the undostack. Then the change of the section don't create
             // any undoobject. -  BUG 69145
             bool bDoesUndo = DoesUndo();
-            SwUndoId nLastUndoId(UNDO_EMPTY);
+            SwUndoId nLastUndoId(SwUndoId::EMPTY);
             if (GetLastUndoInfo(nullptr, & nLastUndoId))
             {
-                if (UNDO_INSSECTION != nLastUndoId)
+                if (SwUndoId::INSSECTION != nLastUndoId)
                 {
                     DoUndo(false);
                 }

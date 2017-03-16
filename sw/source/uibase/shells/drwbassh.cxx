@@ -255,7 +255,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSh->StartAllAction();
 
                             // #i30451#
-                            pSh->StartUndo(UNDO_INSFMTATTR);
+                            pSh->StartUndo(SwUndoId::INSFMTATTR);
 
                             pSdrView->SetGeoAttrToMarked(*pOutSet);
 
@@ -338,7 +338,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             rBind.InvalidateAll(false);
 
                             // #i30451#
-                            pSh->EndUndo( UNDO_INSFMTATTR );
+                            pSh->EndUndo( SwUndoId::INSFMTATTR );
 
                             pSh->EndAllAction();
                         }

@@ -2354,7 +2354,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         if (!bStartedAction)
         {
             pShell->StartAllAction();
-            pShell->StartUndo(bLeftRight ? UNDO_OUTLINE_LR : UNDO_OUTLINE_UD);
+            pShell->StartUndo(bLeftRight ? SwUndoId::OUTLINE_LR : SwUndoId::OUTLINE_UD);
             bStartedAction = true;
         }
         pShell->GotoOutline( nActPos); // If text selection != box selection
@@ -3177,7 +3177,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
 
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, sTable);
-                m_pActiveShell->StartUndo(UNDO_DELETE, &aRewriter);
+                m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
                 m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 m_pActiveShell->DeleteRow();
                 m_pActiveShell->EndUndo();

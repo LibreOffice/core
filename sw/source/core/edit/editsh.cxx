@@ -178,7 +178,7 @@ void SwEditShell::Overwrite(const OUString &rStr)
 long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
 {
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
@@ -187,7 +187,7 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
         GetDoc()->getIDocumentContentOperations().SplitNode( *rPaM.GetPoint(), bCheckTableStart );
     }
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     if( bAutoFormat )
         AutoFormatBySplitNode();
@@ -202,7 +202,7 @@ bool SwEditShell::AppendTextNode()
 {
     bool bRet = false;
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
@@ -210,7 +210,7 @@ bool SwEditShell::AppendTextNode()
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( *rPaM.GetPoint()) || bRet;
     }
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     ClearTableBoxContent();
 
@@ -608,7 +608,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
     if( rFormat.GetValue().isEmpty() || ( rStr.isEmpty() && !HasSelection() ) )
         return false;
     StartAllAction();
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, nullptr);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_INSERT_URLTXT, nullptr);
     bool bInsText = true;
 
     if( !rStr.isEmpty() )
@@ -651,7 +651,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
         ClearMark();
     if( bInsText )
         DontExpandFormat();
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_UI_INSERT_URLTXT, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_INSERT_URLTXT, nullptr );
     EndAllAction();
     return true;
 }
@@ -979,13 +979,13 @@ void SwEditShell::TransliterateText( TransliterationFlags nType )
     SwPaM* pCursor = GetCursor();
     if( pCursor->GetNext() != pCursor )
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             if( rPaM.HasMark() )
                 GetDoc()->getIDocumentContentOperations().TransliterateText( rPaM, aTrans );
         }
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
     }
     else
         GetDoc()->getIDocumentContentOperations().TransliterateText( *pCursor, aTrans );

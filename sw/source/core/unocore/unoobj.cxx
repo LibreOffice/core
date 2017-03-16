@@ -281,13 +281,13 @@ SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
 
     SwTextFormatColl *const pLocal = pStyle->GetCollection();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     SwPaM *pTmpCursor = &rPaM;
     do {
         pDoc->SetTextFormatColl(*pTmpCursor, pLocal);
         pTmpCursor = pTmpCursor->GetNext();
     } while ( pTmpCursor != &rPaM );
-    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 }
 
 bool
@@ -351,7 +351,7 @@ lcl_SetNodeNumStart(SwPaM & rCursor, uno::Any const& rValue)
 
     if( rCursor.GetNext() != &rCursor )         // MultiSelection?
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, nullptr );
+        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
         SwPamRanges aRangeArr( rCursor );
         SwPaM aPam( *rCursor.GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
@@ -360,7 +360,7 @@ lcl_SetNodeNumStart(SwPaM & rCursor, uno::Any const& rValue)
           pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
                     nStt );
         }
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
+        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
     {
@@ -381,7 +381,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
     for (sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
     {
         uno::Any aStyle;
-        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
+        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(),
@@ -392,7 +392,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         SwUnoCursorHelper::SetCursorAttr(rPam, aSet, (nStyle)
                 ? SetAttrMode::DONTREPLACE
                 : SetAttrMode::DEFAULT);
-        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, nullptr);
+        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::START, nullptr);
     }
     return true;
 }
@@ -731,7 +731,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         SwDoc* pDoc = pUnoCursor->GetDoc();
         UnoActionContext aAction(pDoc);
         const sal_Int32 nTextLen = rText.getLength();
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
+        pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
         auto pCurrent = pUnoCursor;
         do
         {
@@ -752,7 +752,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
             }
             pCurrent = static_cast<SwCursor*>(pCurrent->GetNext());
         } while (pCurrent != pUnoCursor);
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
+        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     }
 }
 

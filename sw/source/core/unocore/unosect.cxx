@@ -296,7 +296,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     //das muss jetzt true liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, nullptr );
+    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSSECTION, nullptr );
 
     if (m_pImpl->m_sName.isEmpty())
     {
@@ -400,7 +400,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     if (!pRet) // fdo#42450 text range could partially overlap existing section
     {
         // shouldn't have created an undo object yet
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, nullptr );
+        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSSECTION, nullptr );
         throw lang::IllegalArgumentException(
                 "SwXTextSection::attach(): invalid TextRange",
                 static_cast< ::cppu::OWeakObject*>(this), 0);
@@ -427,7 +427,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 
     // Undo-Klammerung hier beenden
-    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, nullptr );
+    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSSECTION, nullptr );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
 }

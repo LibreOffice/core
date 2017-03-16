@@ -1647,7 +1647,7 @@ void SwTiledRenderingTest::testUndoRepairResult()
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Undo", {}, xListener);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(UNDO_CONFLICT), pResult2->m_nDocRepair);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pResult2->m_nDocRepair);
 
     mxComponent->dispose();
     mxComponent.clear();
@@ -1682,7 +1682,7 @@ void SwTiledRenderingTest::testRedoRepairResult()
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Redo", {}, xListener);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(UNDO_CONFLICT), pResult2->m_nDocRepair);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pResult2->m_nDocRepair);
 
     mxComponent->dispose();
     mxComponent.clear();

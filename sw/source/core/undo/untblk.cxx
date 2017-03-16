@@ -313,12 +313,12 @@ void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )
-    : SwUndoInserts( UNDO_INSDOKUMENT, rPam )
+    : SwUndoInserts( SwUndoId::INSDOKUMENT, rPam )
 {
 }
 
 SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
-    : SwUndoInserts( UNDO_COPY, rPam )
+    : SwUndoInserts( SwUndoId::COPY, rPam )
 {
 }
 

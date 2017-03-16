@@ -780,11 +780,11 @@ void SwTransferable::DeleteSelection()
         return;
     // ask for type of selection before action-bracketing
     const int nSelection = m_pWrtShell->GetSelectionType();
-    m_pWrtShell->StartUndo( UNDO_START );
+    m_pWrtShell->StartUndo( SwUndoId::START );
     if( ( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL ) & nSelection )
         m_pWrtShell->IntelligentCut( nSelection );
     m_pWrtShell->DelRight();
-    m_pWrtShell->EndUndo( UNDO_END );
+    m_pWrtShell->EndUndo( SwUndoId::END );
 }
 
 int SwTransferable::PrepareForCopy( bool bIsCut )
@@ -1250,7 +1250,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         if( bDelSel )
             // #i34830#
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, true ));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, SwUndoId::PASTE_CLIPBOARD, true ));
     }
 
     SwTransferable *pTrans=nullptr, *pTunneledTrans=GetSwTransferable( rData );
@@ -1295,7 +1295,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     {
         if( !pAction )
         {
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, SwUndoId::PASTE_CLIPBOARD));
         }
 
         // in Drag&Drop MessageBoxes must not be showed
@@ -3185,7 +3185,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
             //delete.
 
             m_pWrtShell->StartAllAction();
-            m_pWrtShell->StartUndo( UNDO_UI_DRAG_AND_MOVE );
+            m_pWrtShell->StartUndo( SwUndoId::UI_DRAG_AND_MOVE );
             if ( m_pWrtShell->IsTableMode() )
                 m_pWrtShell->DeleteTableSel();
             else
@@ -3195,7 +3195,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
                     m_pWrtShell->IntelligentCut( m_pWrtShell->GetSelectionType() );
                 m_pWrtShell->DelRight();
             }
-            m_pWrtShell->EndUndo( UNDO_UI_DRAG_AND_MOVE );
+            m_pWrtShell->EndUndo( SwUndoId::UI_DRAG_AND_MOVE );
             m_pWrtShell->EndAllAction();
         }
         else
@@ -3247,7 +3247,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     const int nSelection = rShell.GetSelectionType();
 
-    SwTrnsfrActionAndUndo aAction( &rShell, UNDO_PASTE_CLIPBOARD);
+    SwTrnsfrActionAndUndo aAction( &rShell, SwUndoId::PASTE_CLIPBOARD);
 
     bool bKillPaMs = false;
 
@@ -3391,7 +3391,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     const int nSel = rSrcSh.GetSelectionType();
 
-    SwUndoId eUndoId = bMove ? UNDO_UI_DRAG_AND_MOVE : UNDO_UI_DRAG_AND_COPY;
+    SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
 
     SwRewriter aRewriter;
 

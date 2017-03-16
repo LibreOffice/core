@@ -1235,7 +1235,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
     bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, nullptr );
+        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
     }
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
@@ -1248,7 +1248,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, nullptr );
+        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, nullptr );
     }
 
     return nRet;

@@ -1092,7 +1092,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                               << " " << aCpyPam.GetNode().GetIndex() << ")" );
 #endif
 
-    this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, nullptr );
+    this->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
     this->getIDocumentFieldsAccess().LockExpFields();
 
     // Position where the appended doc starts. Will be filled in later.
@@ -1235,7 +1235,7 @@ else
         }
     }
 
-    this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, nullptr );
+    this->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSGLOSSARY, nullptr );
 
     getIDocumentFieldsAccess().UnlockExpFields();
     getIDocumentFieldsAccess().UpdateFields(false);

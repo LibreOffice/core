@@ -112,12 +112,12 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
 
         // Keep Cursor - so that we're able to set it at
         // the same position for autoformat or autocorrection
-        SwUndoId nLastUndoId(UNDO_EMPTY);
+        SwUndoId nLastUndoId(SwUndoId::EMPTY);
         GetLastUndoInfo(nullptr, & nLastUndoId);
         const bool bRestoreCursor = nCount == 1
-                                  && ( UNDO_AUTOFORMAT == nLastUndoId
-                                       || UNDO_AUTOCORRECT == nLastUndoId
-                                       || UNDO_SETDEFTATTR == nLastUndoId );
+                                  && ( SwUndoId::AUTOFORMAT == nLastUndoId
+                                       || SwUndoId::AUTOCORRECT == nLastUndoId
+                                       || SwUndoId::SETDEFTATTR == nLastUndoId );
         Push();
 
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
@@ -171,9 +171,9 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         SetMark();          // Bound1 and Bound2 in the same Node
         ClearMark();
 
-        SwUndoId nFirstRedoId(UNDO_EMPTY);
+        SwUndoId nFirstRedoId(SwUndoId::EMPTY);
         GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(nullptr, & nFirstRedoId);
-        const bool bRestoreCursor = nCount == 1 && UNDO_SETDEFTATTR == nFirstRedoId;
+        const bool bRestoreCursor = nCount == 1 && SwUndoId::SETDEFTATTR == nFirstRedoId;
         Push();
 
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!

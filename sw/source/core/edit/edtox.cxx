@@ -174,7 +174,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-        pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, nullptr);
+        pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
 
         // create listing stub
         pTOX->Update(pSet);
@@ -189,7 +189,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         // insert page numbering
         pTOX->UpdatePageNum();
 
-        pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, nullptr);
+        pMyDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
 
         ::EndProgress( pDocSh );
         EndAllAction();

@@ -3214,14 +3214,14 @@ void SwUiWriterTest::testShapeAnchorUndo()
     Rectangle aOrigLogicRect(pObject->GetLogicRect());
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    rUndoManager.StartUndo(UNDO_START, nullptr);
+    rUndoManager.StartUndo(SwUndoId::START, nullptr);
 
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100));
     pWrtShell->ChgAnchor(0, true);
 
-    rUndoManager.EndUndo(UNDO_END, nullptr);
+    rUndoManager.EndUndo(SwUndoId::END, nullptr);
 
     CPPUNIT_ASSERT(aOrigLogicRect != pObject->GetLogicRect());
 

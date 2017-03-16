@@ -556,10 +556,10 @@ public:
     void DelAllUndoObj();
 
     /// Undo: set up Undo parenthesis, return nUndoId of this parenthesis.
-    SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = nullptr );
+    SwUndoId StartUndo( SwUndoId eUndoId = SwUndoId::EMPTY, const SwRewriter * pRewriter = nullptr );
 
     /// Closes parenthesis of nUndoId, not used by UI.
-    SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = nullptr );
+    SwUndoId EndUndo( SwUndoId eUndoId = SwUndoId::EMPTY, const SwRewriter * pRewriter = nullptr );
 
     bool     GetLastUndoInfo(OUString *const o_pStr,
                              SwUndoId *const o_pId,

@@ -2591,7 +2591,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case SwKeyState::GlossaryExpand:
             {
                 // replace the word or abbreviation with the auto text
-                rSh.StartUndo( UNDO_START );
+                rSh.StartUndo( SwUndoId::START );
 
                 OUString sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
                 if( aTmpQHD.m_bIsAutoText )
@@ -2616,7 +2616,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     m_pQuickHlpData->m_bAppendSpace = !pACorr ||
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
                 }
-                rSh.EndUndo( UNDO_END );
+                rSh.EndUndo( SwUndoId::END );
             }
             break;
 
@@ -4474,9 +4474,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         }
                         if ( aSttPt != aEndPt )
                         {
-                            rSh.StartUndo( UNDO_UI_DRAG_AND_COPY );
+                            rSh.StartUndo( SwUndoId::UI_DRAG_AND_COPY );
                             rSh.Copy(&rSh, aSttPt, aEndPt);
-                            rSh.EndUndo( UNDO_UI_DRAG_AND_COPY );
+                            rSh.EndUndo( SwUndoId::UI_DRAG_AND_COPY );
                         }
                     }
                     else {
@@ -4730,10 +4730,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             !GetConnectMetaFile() &&
                             rSh.VisArea().IsInside( aDocPt ))
                         {
-                            SwUndoId nLastUndoId(UNDO_EMPTY);
+                            SwUndoId nLastUndoId(SwUndoId::EMPTY);
                             if (rSh.GetLastUndoInfo(nullptr, & nLastUndoId))
                             {
-                                if (UNDO_INS_FROM_SHADOWCRSR == nLastUndoId)
+                                if (SwUndoId::INS_FROM_SHADOWCRSR == nLastUndoId)
                                 {
                                     rSh.Undo();
                                 }

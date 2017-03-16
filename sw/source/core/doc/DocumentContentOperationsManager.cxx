@@ -3559,8 +3559,8 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
             m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
                 RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
-            m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_DELETE, nullptr );
-            pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE );
+            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, nullptr );
+            pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
             m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
@@ -3570,7 +3570,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
         if ( pUndo )
         {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_EMPTY, nullptr );
+            m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
             // ??? why the hell is the AppendUndo not below the
             // CanGrouping, so this hideous cleanup wouldn't be necessary?
             // bah, this is redlining, probably changing this would break it...
@@ -3859,7 +3859,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             m_rDoc.GetDocumentRedlineManager().checkRedlining(eOld);
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
+                m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
@@ -3942,7 +3942,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo *const pUndoRD =
-                    new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE );
+                    new SwUndoRedlineDelete( aDelPam, SwUndoId::REPLACE );
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndoRD);
             }
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
@@ -3951,7 +3951,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 *aDelPam.GetPoint() = *rPam.GetPoint();
-                m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
+                m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );

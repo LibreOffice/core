@@ -399,7 +399,7 @@ void SwIndexMarkPane::Apply()
 // apply changes
 void SwIndexMarkPane::InsertUpdate()
 {
-    pSh->StartUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
+    pSh->StartUndo(bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
     pSh->StartAllAction();
     SwRewriter aRewriter;
 
@@ -423,7 +423,7 @@ void SwIndexMarkPane::InsertUpdate()
     }
 
     pSh->EndAllAction();
-    pSh->EndUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
+    pSh->EndUndo(bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
 
     if((nTypePos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry())) == LISTBOX_ENTRY_NOTFOUND)
         nTypePos = 0;

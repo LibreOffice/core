@@ -1490,7 +1490,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     ::svl::IUndoManager* pUndoManager = GetUndoManager();
     SwWrtShell &rSh = rView.GetWrtShell();
-    SwUndoId nUndoId(UNDO_EMPTY);
+    SwUndoId nUndoId(SwUndoId::EMPTY);
 
     long aOldHeight = rView.GetPostItMgr()->HasActiveSidebarWin()
                       ? rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight()
@@ -1506,7 +1506,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
         case SID_UNDO:
         {
             rSh.GetLastUndoInfo(nullptr, &nUndoId);
-            if (nUndoId == UNDO_CONFLICT)
+            if (nUndoId == SwUndoId::CONFLICT)
             {
                 rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
                 break;
@@ -1537,7 +1537,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
         case SID_REDO:
         {
             (void)rSh.GetFirstRedoInfo(nullptr, &nUndoId);
-            if (nUndoId == UNDO_CONFLICT)
+            if (nUndoId == SwUndoId::CONFLICT)
             {
                 rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
                 break;
@@ -1579,7 +1579,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
         return;
 
     SfxWhichIter aIter(rSet);
-    SwUndoId nUndoId(UNDO_EMPTY);
+    SwUndoId nUndoId(SwUndoId::EMPTY);
     sal_uInt16 nWhich = aIter.FirstWhich();
     ::svl::IUndoManager* pUndoManager = GetUndoManager();
     SfxViewFrame *pSfxViewFrame = rView.GetViewFrame();
@@ -1598,7 +1598,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 {
                     rSet.Put( SfxStringItem( nWhich, rSh.GetDoString(SwWrtShell::UNDO)) );
                 }
-                else if (nUndoId == UNDO_CONFLICT)
+                else if (nUndoId == SwUndoId::CONFLICT)
                 {
                     rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
                 }
@@ -1615,7 +1615,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 {
                     rSet.Put(SfxStringItem( nWhich, rSh.GetDoString(SwWrtShell::REDO)) );
                 }
-                else if (nUndoId == UNDO_CONFLICT)
+                else if (nUndoId == SwUndoId::CONFLICT)
                 {
                     rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
                 }

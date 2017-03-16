@@ -128,7 +128,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         else
         {
             mxDoc->GetIDocumentUndoRedo().ClearRedo();
-            mxDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSDOKUMENT, nullptr );
+            mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSDOKUMENT, nullptr );
         }
     }
     mxDoc->GetIDocumentUndoRedo().DoUndo(false);
@@ -355,7 +355,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
         {
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-            mxDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSDOKUMENT, nullptr );
+            mxDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSDOKUMENT, nullptr );
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
     }
