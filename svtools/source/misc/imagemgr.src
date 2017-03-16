@@ -152,11 +152,6 @@ Bitmap BMP_TABLE_SC
     File = "sx03188.png";
 };
 
-Bitmap BMP_FOLDER_SC
-{
-    File = "sx03189.png";
-};
-
 Bitmap BMP_DXF_SC
 {
     File = "sx03217.png";

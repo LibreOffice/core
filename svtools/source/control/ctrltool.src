@@ -68,16 +68,6 @@ String STR_SVT_FONTMAP_PRINTERONLY
     Text [ en-US ] = "This is a printer font. The screen image may differ." ;
 };
 
-String STR_SVT_FONTMAP_SCREENONLY
-{
-    Text [ en-US ] = "This is a screen font. The printer image may differ." ;
-};
-
-String STR_SVT_FONTMAP_SIZENOTAVAILABLE
-{
-    Text [ en-US ] = "This font size has not been installed. The closest available size will be used.";
-};
-
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
 {
     Text [ en-US ] = "This font style will be simulated or the closest matching style will be used.";
