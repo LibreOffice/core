@@ -42,6 +42,14 @@ static char* opname[] = {       /* For debug and error messages */
   "unary +", "unary -", "~", "!",  "(",  ")", "(none)",
 };
 
+
+char easytolower( char in )
+{
+    if( in<='Z' && in>='A' )
+        return in-('Z'-'z');
+    return in;
+}
+
 /*
  * opdope[] has the operator precedence:
  *     Bits
@@ -667,7 +675,7 @@ static int evalnum(int c)
     {
         c1 = c;
         if (isascii(c) && isupper(c1))
-            c1 = tolower(c1);
+            c1 = easytolower(c1);
         if (c1 >= 'a')
             c1 -= ('a' - 10);
         else
