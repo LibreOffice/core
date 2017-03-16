@@ -117,6 +117,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
+		&& echo 'CrashDirectory=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/crash' \
 		&& echo 'HideEula=1' \
 		&& echo 'Logo=1' \
 		&& echo 'NativeProgress=false' \
@@ -126,13 +127,12 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ProgressSize=444,8' \
 		&& echo 'ProgressTextBaseline=145' \
 		&& echo 'ProgressTextColor=255,255,255' \
-		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
-		&& echo 'SecureUserConfigNumCopies=2' \
-		&& echo 'SecureUserConfigMode=1' \
 		&& echo 'SecureUserConfigExtensions=true' \
-		&& echo 'CrashDirectory=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/crash' \
+		&& echo 'SecureUserConfigMode=1' \
+		&& echo 'SecureUserConfigNumCopies=2' \
+		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :
