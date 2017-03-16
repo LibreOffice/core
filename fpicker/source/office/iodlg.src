@@ -68,10 +68,6 @@ String STR_BUTTONSELECT
 {
     Text [ en-US ] = "~Select";
 };
-String STR_ACTUALVERSION
-{
-    Text [ en-US ] = "Current version";
-};
 String STR_PREVIEW
 {
     Text [ en-US ] = "File Preview";
