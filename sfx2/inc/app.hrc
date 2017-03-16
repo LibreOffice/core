@@ -23,7 +23,6 @@
 
 #define STR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
 #define STR_NO_ABS_URI_REF                      (RID_SFX_APP_START+8)
-#define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
 
 #define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
 #define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
@@ -62,8 +61,6 @@
 #define STR_HELP_BUTTON_NEXT                    (RID_SFX_APP_START+129)
 #define STR_HELP_BUTTON_PRINT                   (RID_SFX_APP_START+130)
 #define STR_HELP_BUTTON_SOURCEVIEW              (RID_SFX_APP_START+131)
-#define STR_HELP_FIRST_MESSAGE                  (RID_SFX_APP_START+132)
-#define STR_HELP_FIRST_HTML                     (RID_SFX_APP_START+133)
 
 #define STR_QUICKSTART_EXIT                     (RID_SFX_APP_START+134)
 #define STR_QUICKSTART_TIP                      (RID_SFX_APP_START+135)
@@ -91,7 +88,6 @@
 #define BMP_HELP_TOOLBOX_L_PRINT                (RID_SFX_APP_START+165)
 #define BMP_HELP_TOOLBOX_L_BOOKMARKS            (RID_SFX_APP_START+166)
 #define BMP_HELP_TOOLBOX_L_SEARCHDIALOG         (RID_SFX_APP_START+167)
-#define BMP_HELP_TOOLBOX_L_COPY                 (RID_SFX_APP_START+168)
 
 #define RID_SECURITY_WARNING_TITLE              (RID_SFX_APP_START + 181)
 

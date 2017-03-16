@@ -26,10 +26,6 @@ String STR_RESET
 {
     Text [ en-US ] = "~Reset" ;
 };
-String STR_APPLY
-{
-    Text [ en-US ] = "Apply";
-};
 String STR_TABPAGE_INVALIDNAME
 {
     Text [ en-US ] = "This name is already in use." ;
@@ -106,11 +102,6 @@ String STR_ERROR_WRONG_CONFIRM
 String STR_PDF_EXPORT_SEND
 {
   Text [ en-US ] = "Send" ;
-};
-
-Bitmap BMP_INFO
-{
-    File = "info.png" ;
 };
 
 String STR_FONT_TABPAGE

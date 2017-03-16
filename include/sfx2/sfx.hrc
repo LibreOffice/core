@@ -76,16 +76,11 @@
 
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
-#define STR_STYLE_FILTER_AUTO               (RID_SFX_START+9)
-#define STR_STYLE_FILTER_USED               (RID_SFX_START+10)
-#define STR_STYLE_FILTER_USERDEF            (RID_SFX_START+11)
-#define STR_STYLE_FILTER_ALL                (RID_SFX_START+12)
 // +13 already used!
 #define STR_STYLE_FILTER_HIERARCHICAL       (RID_SFX_START+1200)
 
 #define STR_NONAME                          (RID_SFX_START+100)
 #define STR_NONE                            (RID_SFX_START+101)
-#define STR_CLOSE                           (RID_SFX_START+103)
 #define STR_STANDARD                        (RID_SFX_START+104)
 #define STR_READONLY                        (RID_SFX_START+105)
 
@@ -124,7 +119,6 @@
 #define STR_SIGNATURE_SHOW                  (RID_SFX_START+140)
 #define STR_SIGNATURE_NOTVALIDATED          (RID_SFX_START+141)
 #define STR_SIGNATURE_PARTIAL_OK            (RID_SFX_START+142)
-#define STR_ACCTITLE_PRODUCTIVITYTOOLS      (RID_SFX_START+157)
 
 #define SFX_THUMBNAIL_TEXT                  (RID_SFX_START+158)
 #define SFX_THUMBNAIL_SHEET                 (RID_SFX_START+159)

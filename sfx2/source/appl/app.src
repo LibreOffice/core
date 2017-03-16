@@ -25,14 +25,6 @@ String STR_NONAME
 {
     Text [ en-US ] = "Untitled" ;
 };
-String STR_CLOSE
-{
-    Text [ en-US ] = "Close" ;
-};
-String STR_STYLE_FILTER_AUTO
-{
-    Text [ en-US ] = "Automatic" ;
-};
 String STR_STANDARD_SHORTCUT
 {
     Text [ en-US ] = "Standard" ;
@@ -196,11 +188,6 @@ String GID_DRAWING
 String GID_CONTROLS
 {
     Text [ en-US ] = "Controls" ;
-};
-
-String STR_ISMODIFIED
-{
-    Text [ en-US ] = "Do you want to save the changes to %1?" ;
 };
 
 String STR_QUITAPP
