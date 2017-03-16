@@ -3727,7 +3727,7 @@ SfxBoolItem HideNote FID_HIDE_NOTE
 
 
 SfxVoidItem DeleteNote SID_DELETE_NOTE
-()
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

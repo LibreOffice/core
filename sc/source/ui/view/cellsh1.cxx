@@ -2310,9 +2310,27 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_DELETE_NOTE:
+        {
+            const SfxPoolItem* pId;
+            // If Id is mentioned, select the appropriate cell first
+            if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_ID, &pId) )
+            {
+                const SvxPostItIdItem* pIdItem = static_cast<const SvxPostItIdItem*>(pId);
+                ScAddress aPos;
+                ScRefFlags nRes = aPos.Parse(pIdItem->GetValue(),
+                                             GetViewData()->GetDocument(),
+                                             ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF));
+                if (nRes & ScRefFlags::VALID)
+                {
+                    pTabViewShell->SetTabNo(aPos.Tab());
+                    pTabViewShell->SetCursor(aPos.Col(), aPos.Row());
+                }
+            }
+
             pTabViewShell->DeleteContents( InsertDeleteFlags::NOTE );      // delete all notes in selection
             rReq.Done();
-            break;
+        }
+        break;
 
         case SID_CHARMAP:
             if( pReqArgs != nullptr )
