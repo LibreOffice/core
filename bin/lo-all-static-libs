@@ -64,6 +64,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
+     $WORKDIR/UnpackedTarball/jpeg-turbo/.libs/*.a \
      $WORKDIR/UnpackedTarball/langtag/liblangtag/.libs/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libabw/src/lib/.libs/*.a \
