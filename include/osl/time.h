@@ -135,7 +135,7 @@ typedef struct _oslDateTime
 
 
 /** Get the current system time as TimeValue.
-    @return false if any error occurs.
+    @retval false if any error occurs.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
         TimeValue* pTimeVal );
