@@ -40,16 +40,6 @@ Bitmap BMP_STR_ERROR
     File = "faperror.png";
 };
 
-String STR_STRUCT_ERR1
-{
-    Text [ en-US ] = "=?" ;
-};
-
-String STR_STRUCT_ERR2
-{
-    Text [ en-US ] = "Error" ;
-};
-
 String STR_TITLE1
 {
     Text [ en-US ] = "Function Wizard" ;
