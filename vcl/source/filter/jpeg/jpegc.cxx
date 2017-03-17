@@ -132,7 +132,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         }
     }
 
-    jpeg_start_decompress( &cinfo );
+    jpeg_calc_output_dimensions(&cinfo);
 
     long nWidth = cinfo.output_width;
     long nHeight = cinfo.output_height;
@@ -161,7 +161,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
             J_COLOR_SPACE best_out_color_space = JCS_RGB;
             ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
             ScanlineFormat eFinalFormat = pAccess->GetScanlineFormat();
-
             if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
             {
                 best_out_color_space = JCS_EXT_BGRA;
@@ -190,9 +189,11 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 cinfo.out_color_space != JCS_GRAYSCALE &&
                 cinfo.out_color_space != best_out_color_space)
             {
-                SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to :" << best_out_color_space);
+                SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to :" << best_out_color_space << " gray ");
                 cinfo.out_color_space = best_out_color_space;
             }
+
+            jpeg_start_decompress(&cinfo);
 
             JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
