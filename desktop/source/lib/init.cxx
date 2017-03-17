@@ -1824,17 +1824,16 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     // Disable callbacks while we are painting.
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    int nView = SfxLokHelper::getView();
-    if (nView < 0)
-        return;
+    const int nOrigViewId = doc_getView(pThis);
 
-    pDocument->mpCallbackFlushHandlers[nView]->setPartTilePainting(true);
+    if (nOrigViewId >= 0)
+        pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(true);
+
     try
     {
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
         const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
-        int nOrigViewId = doc_getView(pThis);
         int nViewId = nOrigViewId;
         if (!isText)
         {
@@ -1878,7 +1877,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Nothing to do but restore the PartTilePainting flag.
     }
 
-    pDocument->mpCallbackFlushHandlers[nView]->setPartTilePainting(false);
+    if (nOrigViewId >= 0)
+        pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(false);
 }
 
 static int doc_getTileMode(LibreOfficeKitDocument* /*pThis*/)
