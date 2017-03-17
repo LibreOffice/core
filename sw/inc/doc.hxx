@@ -791,7 +791,7 @@ public:
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat* pFormat, bool bBroadcast = false);
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const
-        {   return static_cast<SwCharFormat*>(FindFormatByName( (SwFormatsBase&)*mpCharFormatTable, rName )); }
+        {   return static_cast<SwCharFormat*>(FindFormatByName( *mpCharFormatTable, rName )); }
 
     // Formatcollections (styles)
     // TXT
@@ -819,7 +819,7 @@ public:
                        const bool bReset = true,
                        const bool bResetListAttrs = false);
     SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
-        {   return static_cast<SwTextFormatColl*>(FindFormatByName( (SwFormatsBase&)*mpTextFormatCollTable, rName )); }
+        {   return static_cast<SwTextFormatColl*>(FindFormatByName( *mpTextFormatCollTable, rName )); }
 
     void ChkCondColls();
 
