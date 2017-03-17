@@ -826,6 +826,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maActPos            ( Point() ),
     mbNopMode           ( false ),
     mbFillStyleSelected ( false ),
+    mbFillStyleNeedsUpdate ( false ),
     mbClipNeedsUpdate   ( true ),
     mbComplexClip       ( false ),
     mnGfxMode           ( GM_COMPATIBLE ),
@@ -949,9 +950,10 @@ void WinMtfOutput::UpdateFillStyle()
 {
     if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
         maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BkMode::Transparent );
-    if (!( maLatestFillStyle == maFillStyle ) )
+    if (mbFillStyleNeedsUpdate || !( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
+        mbFillStyleNeedsUpdate = false;
         if (maFillStyle.aType == WinMtfFillStyleType::Solid)
             mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
     }
@@ -2242,6 +2244,11 @@ void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
 {
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
+    // the EMF+ comment may contain fillStlye changes
+    // -> therefore, it is save to force an update of fillStlye
+    //    in order to avoid missing/wrong fillStlye information
+    //    like in tdf#101639
+    mbFillStyleNeedsUpdate = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

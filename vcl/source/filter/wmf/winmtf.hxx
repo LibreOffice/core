@@ -466,6 +466,7 @@ class WinMtfOutput final
     WMFRasterOp         mnRop;
     bool            mbNopMode;
     bool            mbFillStyleSelected;
+    bool            mbFillStyleNeedsUpdate;
     bool            mbClipNeedsUpdate;
     bool            mbComplexClip;
 
