@@ -27,7 +27,6 @@
 #endif
 
 #define IDS_SBERR_TERMINATED        IDS_SBERR_START+2000
-#define IDS_SBERR_STOREREF          IDS_SBERR_START+2001
 
 #endif
 

@@ -41,8 +41,6 @@
 // strings
 #define RID_STR_SHRINK                  (RID_STRING_START + 0)
 #define RID_STR_EXPAND                  (RID_STRING_START + 1)
-#define STR_STRUCT_ERR1                 (RID_STRING_START + 2)
-#define STR_STRUCT_ERR2                 (RID_STRING_START + 3)
 #define STR_OPTIONAL                    (RID_STRING_START + 4)
 #define STR_REQUIRED                    (RID_STRING_START + 5)
 #define STR_END                         (RID_STRING_START + 6)
