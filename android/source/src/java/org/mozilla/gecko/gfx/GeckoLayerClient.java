@@ -62,7 +62,6 @@ public class GeckoLayerClient implements PanZoomTarget {
         mForceRedraw = true;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
-        mZoomConstraints = new ZoomConstraints(false);
     }
 
     public void setView(LayerView view) {

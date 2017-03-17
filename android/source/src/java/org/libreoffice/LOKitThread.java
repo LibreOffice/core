@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.ui.LibreOfficeUIActivity;
+import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -196,6 +197,11 @@ class LOKitThread extends Thread {
 
         mInvalidationHandler = new InvalidationHandler(mContext);
         mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filePath);
+
+        // Set min zoom to the page width so that you cannot zoom below page width
+        // applies to all types of document; in the future spreadsheets may be singled out
+        float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
+        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 0.0f, minZoom, 0.0f));
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);

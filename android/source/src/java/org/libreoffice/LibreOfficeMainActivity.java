@@ -33,7 +33,6 @@ import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
 import org.libreoffice.ui.FileUtilities;
 import org.libreoffice.ui.LibreOfficeUIActivity;
-import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
 
@@ -191,7 +190,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         loKitThread.start();
 
         mLayerClient = new GeckoLayerClient(this);
-        mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());

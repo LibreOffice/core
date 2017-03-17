@@ -12,12 +12,12 @@ public final class ZoomConstraints {
     private final float mMinZoom;
     private final float mMaxZoom;
 
-    public ZoomConstraints(boolean allowZoom) {
+    public ZoomConstraints(boolean allowZoom, float defaultZoom, float minZoom, float maxZoom) {
         mAllowZoom = allowZoom;
         mAllowDoubleTapZoom = allowZoom;
-        mDefaultZoom = 0.0f;
-        mMinZoom = 0.0f;
-        mMaxZoom = 0.0f;
+        mDefaultZoom = defaultZoom;
+        mMinZoom = minZoom;
+        mMaxZoom = maxZoom;
     }
 
     public final boolean getAllowZoom() {
