@@ -89,6 +89,7 @@
 
 #include <osl/file.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -159,6 +160,10 @@ bool IsOOoLockFileUsed()
 
 bool IsLockingUsed()
 {
+    // Hack: don't lock files - and do reverse lookups for online
+    // fixed properly on master/online by overlaying a custom config.
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
     return officecfg::Office::Common::Misc::UseLocking::get();
 }
 
