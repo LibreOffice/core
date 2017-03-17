@@ -2494,6 +2494,8 @@ void lcl_createButtons(const uno::Reference< drawing::XShapes>& xPageShapes,
                        awt::Rectangle& rRemainingSpace)
 {
     uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
+    if (!xPivotChartDataProvider.is())
+        return;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
     awt::Size aSize(3000, 700); // size of the button
