@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8044c074",
+        "filename": "include/sfx2/docfac.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-17T19:05:12Z",
+      "side": 1,
+      "message": "this can be \nOUString const \u0026 GetFactoryName()....",
+      "revId": "68e1c1cbe599bc8b889b0385c3d7c65df4c05c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
