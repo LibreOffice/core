@@ -385,7 +385,12 @@ UndoManager::GetLastUndoInfo(
     }
     if (o_pId)
     {
-        *o_pId = static_cast<const SwUndo*>(pAction)->GetId();
+        if (auto pListAction = dynamic_cast<const SfxListUndoAction*>(pAction))
+            *o_pId = (SwUndoId)pListAction->GetId();
+        else if (auto pSwAction = dynamic_cast<const SwUndo*>(pAction))
+            *o_pId = pSwAction->GetId();
+        else
+            *o_pId = SwUndoId::EMPTY;
     }
 
     return true;
