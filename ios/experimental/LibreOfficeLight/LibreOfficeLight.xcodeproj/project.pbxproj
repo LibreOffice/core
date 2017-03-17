@@ -121,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
+				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
 				39B084E21E5F0A9600682A59 /* lo.xcconfig */,
 				397E09071E597BD8001374E0 /* Assets.xcassets */,
 				397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */,
@@ -165,7 +166,6 @@
 		397E08FC1E597BD8001374E0 /* LibreOfficeLight */ = {
 			isa = PBXGroup;
 			children = (
-				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
 				39A83A8E1E5F471D00D0C683 /* lokit.c */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D8571E5B761700BEA987 /* ViewController.swift */,
