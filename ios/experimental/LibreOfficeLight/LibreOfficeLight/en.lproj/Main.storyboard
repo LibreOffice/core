@@ -31,13 +31,20 @@
                                 <action selector="doMenu:" destination="vXZ-lx-hvc" id="sJP-Fp-Kn2"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="BNq-ol-ZVK">
-                            <connections>
-                                <segue destination="IER-X5-Ax8" kind="popoverPresentation" identifier="doShowActions" popoverAnchorBarButtonItem="BNq-ol-ZVK" id="xmZ-1A-ZrW">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="action" id="BNq-ol-ZVK">
+                                <connections>
+                                    <segue destination="IER-X5-Ax8" kind="popoverPresentation" identifier="doShowActions" popoverAnchorBarButtonItem="BNq-ol-ZVK" id="xmZ-1A-ZrW">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" id="0Cf-rp-1Gn">
+                                <connections>
+                                    <segue destination="cip-1Z-62J" kind="show" id="0sd-5x-euH"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
@@ -118,7 +125,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HFd-ah-Xo4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="iOm-U1-ALi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1229.6875" y="1200.5859375"/>
+            <point key="canvasLocation" x="1231" y="1504"/>
         </scene>
         <!--File Manager Actions-->
         <scene sceneID="H5Y-px-61Q">
@@ -320,8 +327,8 @@
                     <connections>
                         <segue destination="h7c-B7-pKT" kind="show" identifier="showProperties" id="dDf-1s-0HH"/>
                         <segue destination="ay1-ce-WHs" kind="show" identifier="showPrintManager" id="BgL-QR-QJ0"/>
-                        <segue destination="cip-1Z-62J" kind="relationship" relationship="rootViewController" id="Arf-4X-z72"/>
-                        <segue destination="vXZ-lx-hvc" kind="show" identifier="showDocument" id="IHH-Cc-Xk7"/>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="ONR-Tq-ptF"/>
+                        <segue destination="cip-1Z-62J" kind="show" identifier="showFileManager" id="MPj-WI-cxX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XfU-3W-Qcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -509,6 +516,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="134" height="210"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="516-b0-K4N">
+                            <rect key="frame" x="0.0" y="210" width="134" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Print..."/>
+                            <connections>
+                                <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="tqe-2K-EJc"/>
+                                <segue destination="ay1-ce-WHs" kind="presentation" id="tJ8-Jt-UeD"/>
+                            </connections>
+                        </button>
                         <sections>
                             <tableViewSection id="iZc-fF-wRk">
                                 <cells>
@@ -520,7 +536,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCx-kB-iUI">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="New"/>
                                                     <connections>
@@ -538,7 +554,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Open..."/>
                                                     <connections>
@@ -556,7 +572,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iva-rO-9V3">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Delete..."/>
                                                     <connections>
@@ -574,7 +590,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Save"/>
                                                     <connections>
@@ -593,9 +609,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ioJ-xc-RrS">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Save as..."/>
+                                                    <state key="normal" title="Save copy"/>
                                                     <connections>
                                                         <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="IhZ-cb-cgC"/>
                                                         <segue destination="gVG-YM-Glc" kind="popoverPresentation" popoverAnchorView="ioJ-xc-RrS" id="5Pw-2I-6DI">
@@ -614,7 +630,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="PDF"/>
                                                     <connections>
@@ -631,17 +647,6 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ly-sz-g0x" id="wVi-tX-eKD">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="516-b0-K4N">
-                                                    <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Print..."/>
-                                                    <connections>
-                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="tqe-2K-EJc"/>
-                                                        <segue destination="ay1-ce-WHs" kind="presentation" id="tJ8-Jt-UeD"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -661,7 +666,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D6j-Ov-CSK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1930" y="303"/>
+            <point key="canvasLocation" x="1929.6875" y="302.9296875"/>
         </scene>
         <!--Save As-->
         <scene sceneID="FH4-dv-F8q">
@@ -714,6 +719,7 @@
         <image name="saveas" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="BgL-QR-QJ0"/>
+        <segue reference="0sd-5x-euH"/>
+        <segue reference="tJ8-Jt-UeD"/>
     </inferredMetricsTieBreakers>
 </document>

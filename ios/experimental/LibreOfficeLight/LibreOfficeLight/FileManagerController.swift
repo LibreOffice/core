@@ -199,11 +199,13 @@ class FileManagerController : UITableViewController, actionsControlDelegate
     // Last stop before displaying popover
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        let vc = segue.destination as! FileManagerActions
-        vc.delegate = self
-        vc.inFileSelect = (selectedRow != nil)
-        vc.inSubDirectory = fileData.isSubDirectory()
-        vc.useCloud = fileData.iCloudEnabled()
+        if segue.identifier == "doShowFileManagerActions" {
+            let vc = segue.destination as! FileManagerActions
+            vc.delegate = self
+            vc.inFileSelect = (selectedRow != nil)
+            vc.inSubDirectory = fileData.isSubDirectory()
+            vc.useCloud = fileData.iCloudEnabled()
+        }
     }
 
     
