@@ -399,7 +399,16 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
     Color* pColor = nullptr;
     Color** ppColor = &pColor;
     if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
-        CPPUNIT_FAIL("GetPreviewString() failed");
+    {
+        rtl::OString aMessage = "GetPreviewString( \"";
+        aMessage += rtl::OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US );
+        aMessage += "\", ";
+        aMessage += rtl::OString::number( fPreviewNumber );
+        aMessage += ", sStr, ppColor, ";
+        aMessage += rtl::OString::number( eLang );
+        aMessage += " ) failed";
+        CPPUNIT_FAIL( aMessage.getStr() );
+    }
     CPPUNIT_ASSERT_EQUAL(sExpected, sStr);
 }
 
@@ -1204,9 +1213,38 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "before 1.2inside3E+0middle4 after";
         checkPreviewString(aFormatter, sCode, 12345.667, eLang, sExpected);
     }
+    {  // tdf#106190: text after fraction bar
+        sCode = "?/ ?";
+        sExpected = "11/ 9";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "?/ 12";
+        sExpected = "15/ 12";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "# ?/\" divisor \"?";
+        sExpected = "1 2/ divisor 9";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "# ?/\"divided by \"?";
+        sExpected = "1 2/divided by 9";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "?/\" \"12";
+        sExpected = "15/ 12";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "?/\\ 12";
+        sExpected = "15/ 12";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "# ?/ ???";
+        sExpected = "3 1/ 2  ";
+        checkPreviewString(aFormatter, sCode, 3.5, eLang, sExpected);
+    }
     {  // Display 1.96 as 2 and not 1 1/1
         sCode = "# ?/?";
         sExpected = "2    ";
+        checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
+        sCode = "# ?/ ?";
+        sExpected = "2     ";
+        checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
+        sCode = "# #/#";
+        sExpected = "2";
         checkPreviewString(aFormatter, sCode, 1.96, eLang, sExpected);
     }
     {  // tdf#79399 tdf#101462 Native Number Formats
