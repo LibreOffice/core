@@ -61,9 +61,7 @@
 namespace OpenStormBento
 {
 
-UtDefClassP(CUtListElmt);
-UtDefClassP(CUtList);
-UtDefClassP(CUtComparableListElmt);
+class CUtList;
 
 class CUtListElmt
 {
@@ -72,16 +70,16 @@ public: // Methods
         : cpNext(nullptr)
         , cpPrev(nullptr)
     {}
-    explicit CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
-    explicit CUtListElmt(pCUtList pList);
+    explicit CUtListElmt(CUtListElmt * pPrev) { InsertAfter(pPrev); }
+    explicit CUtListElmt(CUtList * pList);
     virtual ~CUtListElmt();
     void MakeNotOnList() { cpNext = nullptr; } // Same as Remove but doesn't
                                             // patch up list
-    pCUtListElmt GetNext() const { return cpNext; }
-    void SetNext(pCUtListElmt pNext) { cpNext = pNext; }
-    pCUtListElmt GetPrev() const { return cpPrev; }
-    void SetPrev(pCUtListElmt pPrev) { cpPrev = pPrev; }
-    void InsertAfter(pCUtListElmt pPrev)
+    CUtListElmt * GetNext() const { return cpNext; }
+    void SetNext(CUtListElmt * pNext) { cpNext = pNext; }
+    CUtListElmt * GetPrev() const { return cpPrev; }
+    void SetPrev(CUtListElmt * pPrev) { cpPrev = pPrev; }
+    void InsertAfter(CUtListElmt * pPrev)
     {
         cpNext = pPrev->cpNext;
         cpPrev = pPrev;
@@ -90,8 +88,8 @@ public: // Methods
     }
 
 private: // Data
-    pCUtListElmt cpNext;
-    pCUtListElmt cpPrev;
+    CUtListElmt * cpNext;
+    CUtListElmt * cpPrev;
 };
 
 class CUtList
@@ -100,10 +98,10 @@ public: // Methods
     CUtList() { cDummyElmt.SetNext(&cDummyElmt);
       cDummyElmt.SetPrev(&cDummyElmt); }
     virtual ~CUtList();
-    pCUtListElmt GetFirst() { return cDummyElmt.GetNext(); }
-    pCUtListElmt GetLast() { return cDummyElmt.GetPrev(); }
+    CUtListElmt * GetFirst() { return cDummyElmt.GetNext(); }
+    CUtListElmt * GetLast() { return cDummyElmt.GetPrev(); }
     CUtListElmt& GetTerminating() { return cDummyElmt; }
-    pCUtListElmt GetNextOrNULL(pCUtListElmt pCurr);
+    CUtListElmt * GetNextOrNULL(CUtListElmt * pCurr);
 
     void Destroy();
 

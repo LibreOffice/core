@@ -129,7 +129,7 @@ void    LtcUtBenValueStream::FlushData()
 /**
 *   Construction
 */
-LtcUtBenValueStream::LtcUtBenValueStream(pCBenValue pValue)
+LtcUtBenValueStream::LtcUtBenValueStream(CBenValue * pValue)
 {
     // Calculate the length of the whole value stream
     cCurrentPosition = 0;
