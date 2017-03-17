@@ -25,12 +25,20 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
+// MSVC hack:
+class SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
+protected:
+    SdrGrafModeItem_Base(GraphicDrawMode eMode):
+        SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}
 
-class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem<GraphicDrawMode>
+    SdrGrafModeItem_Base(SvStream& rIn): SfxEnumItem(SDRATTR_GRAFMODE, rIn) {}
+};
+
+class SVX_DLLPUBLIC SdrGrafModeItem : public SdrGrafModeItem_Base
 {
 public:
-                            SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SfxEnumItem( SDRATTR_GRAFMODE, eMode ) {}
-                            SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
+                            SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}
+                            SdrGrafModeItem( SvStream& rIn ) : SdrGrafModeItem_Base( rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
