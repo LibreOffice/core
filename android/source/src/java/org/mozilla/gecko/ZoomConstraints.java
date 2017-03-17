@@ -20,6 +20,14 @@ public final class ZoomConstraints {
         mMaxZoom = 0.0f;
     }
 
+    public ZoomConstraints(boolean allowZoom, float defaultZoom, float minZoom, float maxZoom) {
+        mAllowZoom = allowZoom;
+        mAllowDoubleTapZoom = allowZoom;
+        mDefaultZoom = defaultZoom;
+        mMinZoom = minZoom;
+        mMaxZoom = maxZoom;
+    }
+
     public final boolean getAllowZoom() {
         return mAllowZoom;
     }

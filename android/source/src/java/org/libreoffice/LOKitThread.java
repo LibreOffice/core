@@ -6,6 +6,7 @@ import android.graphics.RectF;
 import android.view.KeyEvent;
 
 import org.libreoffice.canvas.SelectionHandle;
+import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -197,6 +198,10 @@ class LOKitThread extends Thread {
 
         mInvalidationHandler = new InvalidationHandler(mContext);
         mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
+
+        // Set min zoom to the page width so that you cannot zoom below page width
+        float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
+        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 0.0f, minZoom, 0.0f));
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
