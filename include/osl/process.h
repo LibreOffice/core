@@ -140,17 +140,10 @@ typedef void* oslProcess;
     [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
-    @return
-    <dl>
-    <dt>osl_Process_E_None</dt>
-    <dd>on success</dd>
-    <dt>osl_Process_E_NotFound</dt>
-    <dd>if the specified executable could not be found</dd>
-    <dt>osl_Process_E_InvalidError</dt>
-    <dd>if invalid parameters will be detected</dd>
-    <dt>osl_Process_E_Unknown</dt>
-    <dd>if arbitrary other errors occur</dd>
-    </dl>
+    @retval osl_Process_E_None on success
+    @retval osl_Process_E_NotFound if the specified executable could not be found</dd>
+    @retval osl_Process_E_InvalidError if invalid parameters will be detected</dd>
+    @retval osl_Process_E_Unknown if arbitrary other errors occur</dd>
 
     @see oslProcessOption
     @see osl_executeProcess_WithRedirectedIO
@@ -225,17 +218,10 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     the child process standard error device. The returned handle is not random accessible.
     The Handle has to be closed with osl_closeFile if no longer used. This parameter can be NULL.
 
-    @return
-    <dl>
-    <dt>osl_Process_E_None</dt>
-    <dd>on success</dd>
-    <dt>osl_Process_E_NotFound</dt>
-    <dd>if the specified executable could not be found</dd>
-    <dt>osl_Process_E_InvalidError</dt>
-    <dd>if invalid parameters will be detected</dd>
-    <dt>osl_Process_E_Unknown</dt>
-    <dd>if arbitrary other errors occur</dd>
-    </dl>
+    @retval osl_Process_E_None on success
+    @retval osl_Process_E_NotFound if the specified executable could not be found
+    @retval osl_Process_E_InvalidError if invalid parameters will be detected
+    @retval osl_Process_E_Unknown if arbitrary other errors occur
 
     @see oslProcessOption
     @see osl_executeProcess
@@ -287,7 +273,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_freeProcessHandle(
 
 /** Wait for completion of the specified childprocess.
     @param Process [in]
-    @return ols_Process_E_None
+    @retval ols_Process_E_None
     @see osl_executeProcess
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcess(
@@ -303,10 +289,9 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcess(
     A timeout value or NULL for infinite waiting.
     The unit of resolution is second.
 
-    @return
-    osl_Process_E_None on success
-    osl_Process_E_TimedOut waiting for the child process timed out
-    osl_Process_E_Unknown an error occurred or the parameter are invalid
+    @retval osl_Process_E_None on success
+    @retval osl_Process_E_TimedOut waiting for the child process timed out
+    @retval osl_Process_E_Unknown an error occurred or the parameter are invalid
 
     @see osl_executeProcess
 */
@@ -326,7 +311,8 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
                         of the oslProcessInfo structure.
                         on success the Field member holds the (or'ed)
                         retrieved valid information fields.
-    @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
+    @retval osl_Process_E_None on success
+    @retval osl_Process_E_Unknown on failure
  */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
         oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo);

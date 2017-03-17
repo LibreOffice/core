@@ -93,9 +93,8 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
     @param  bEnable [in]
     Enables or disables error reporting.
 
-    @return
-    sal_True if previous state of error reporting was enabled<br>
-    sal_False if previous state of error reporting was disabled<br>
+    @retval sal_True if previous state of error reporting was enabled
+    @retval sal_False if previous state of error reporting was disabled
 */
 
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(

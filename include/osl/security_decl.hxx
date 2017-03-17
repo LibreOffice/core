@@ -26,7 +26,7 @@
 namespace osl
 {
 
-/** capsulate security information for one user.
+/** Encapsulate security information for one user.
     A object of this class is used to execute a process with the rights an
     security options of a scecified user.
     @see Process::executeProcess
@@ -45,8 +45,8 @@ public:
         The underlying operating system is asked for this information.
         @param[in] strName denotes the name of the user
         @param[in] strPasswd denotes the password of this user
-        @return True, if the specified user is known by the underlying operating system,
-        otherwise False
+        @retval True, if the specified user is known by the underlying operating system
+        @retval False unknown user
     */
     inline bool SAL_CALL logonUser(const rtl::OUString& strName,
                                        const rtl::OUString& strPasswd);
@@ -61,8 +61,10 @@ public:
         @param[in] strName denotes the name of the user
         @param[in] strPasswd denotes the password of this user
         @param[in] strFileServer denotes the file server to login to
-        @return True, if the specified user is known by file server and the
-        could be connected, otherwise False
+
+        @retval True if the specified user is known by the file server and they
+        could be connected
+        @retval False if the user is not known by the file server
     */
     inline bool SAL_CALL logonUser(const rtl::OUString & strName,
                                        const rtl::OUString & strPasswd,
@@ -70,7 +72,9 @@ public:
 
     /** get the ident of the logged in user.
         @param[out] strIdent is the OUString which returns the name
-        @return True, if any user is successfully logged in, otherwise False
+
+        @retval True if any user is successfully logged in
+        @retval False no user logged in
     */
     inline bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
 
@@ -78,24 +82,31 @@ public:
         @param[out] strName is the OUString which returns the name
         @param[in] bIncludeDomain Include the Domain name (like "ORG\username"). Affects Windows only.
                                   This parameter is available since LibreOffice 5.2.
-        @return True, if any user is successfully logged in, otherwise False
+
+        @retval True if any user is successfully logged in
+        @retval False if no user is logged in
     */
     inline bool SAL_CALL getUserName( rtl::OUString& strName, bool bIncludeDomain=true ) const;
 
     /** get the home directory of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
-         @return True, if any user is successfully logged in, otherwise False
+
+        @retval True if any user is successfully logged in
+        @retval False if user is not logged in
     */
     inline bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
-        @return True, if any user is successfully logged in, otherwise False
+
+        @retval True if any user is successfully logged in
+        @retval False if user is not logged in
     */
     inline bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
 
     /** Query if the user who is logged in has administrator rights.
-        @return True, if the user has administrator rights, otherwise false.
+        @retval True if the user has administrator rights
+        @retval False if the user does not have admin rights
     */
     inline bool SAL_CALL isAdministrator() const;
 
