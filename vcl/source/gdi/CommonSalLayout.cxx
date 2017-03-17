@@ -330,7 +330,7 @@ namespace vcl {
 
     #include "VerticalOrientationData.cxx"
 
-    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh)
+    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
         uint8_t nRet = 1;
 
@@ -338,6 +338,9 @@ namespace vcl {
         {
             nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
                                   [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
+            // Override fullwidth colon and semi-colon orientation. Tu is preferred.
+            if ((cCh == 0xff1a || cCh == 0xff1b) && rTag.getLanguage() == "zh")
+                nRet = 2;
         }
         else if (cCh < (kVerticalOrientationMaxPlane + 1) * 0x10000)
         {
@@ -516,7 +519,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                    switch (vcl::GetVerticalOrientation(aChar))
+                    switch (vcl::GetVerticalOrientation(aChar, rArgs.maLanguageTag))
                     {
                     case VerticalOrientation::Upright:
                     case VerticalOrientation::TransformedUpright:
