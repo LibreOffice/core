@@ -135,6 +135,15 @@ private class FileStorage
     
     
     
+    func renameFile(_ oldName: String, _ newName: String)
+    {
+        try! filemgr.moveItem(at: currentDir.appendingPathComponent(oldName),
+                              to: currentDir.appendingPathComponent(newName))
+        buildFileList()
+    }
+    
+    
+    
     private func buildFileList()
     {
         currentDirList = []
@@ -190,8 +199,9 @@ class FileManagerController : UITableViewController, actionsControlDelegate
     // Toogle between local and cloud storage
     @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
     {
-        sender.title = fileData.selectStorage(true) ? "iCloud" : "iPad"
+        sender.image = fileData.selectStorage(true) ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
         reloadData()
+        self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
     
     
@@ -199,7 +209,7 @@ class FileManagerController : UITableViewController, actionsControlDelegate
     // Last stop before displaying popover
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        if segue.identifier == "doShowFileManagerActions" {
+        if segue.identifier == "showActions" {
             let vc = segue.destination as! FileManagerActions
             vc.delegate = self
             vc.inFileSelect = (selectedRow != nil)
@@ -230,6 +240,17 @@ class FileManagerController : UITableViewController, actionsControlDelegate
         if selectedRow != nil {
             let currentCell = self.tableView.cellForRow(at: selectedRow!) as! FileManagerCell
             fileData.deleteFileDirectory(currentCell.fileName)
+            reloadData()
+        }
+    }
+    
+    
+    
+    func actionRename(_ name : String)
+    {
+        if selectedRow != nil {
+            let currentCell = tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.renameFile(currentCell.fileName, name)
             reloadData()
         }
     }
@@ -333,6 +354,7 @@ protocol actionsControlDelegate
 {
     func actionOpen()
     func actionDelete()
+    func actionRename(_ name : String)
     func actionUploadDownload()
     func actionLevelUp()
     func actionCreateDirectory(_ name : String)
@@ -354,9 +376,8 @@ class FileManagerActions : UITableViewController
     @IBOutlet weak var buttonUploadDownload: UIButton!
     @IBOutlet weak var buttonDelete: UIButton!
     @IBOutlet weak var buttonOpen: UIButton!
+    @IBOutlet weak var buttonRename: UIButton!
     @IBOutlet weak var buttonLevelUp: UIButton!
-    @IBOutlet weak var buttonCreateDirectory: UIButton!
-    @IBOutlet weak var editDirectoryName: UITextField!
     
     
     // Actions
@@ -389,11 +410,59 @@ class FileManagerActions : UITableViewController
         delegate?.actionLevelUp()
         dismiss(animated: false)
     }
+
     
-    @IBAction func doCreateDirectory(_ sender: UIButton)
+    
+    override func viewDidLoad()
     {
-        if editDirectoryName.text != "type name" {
-            delegate?.actionCreateDirectory(editDirectoryName.text!)
+        super.viewDidLoad()
+        buttonLevelUp.isEnabled = inSubDirectory
+        buttonDelete.isEnabled = inFileSelect
+        buttonOpen.isEnabled = inFileSelect
+        buttonRename.isEnabled = inFileSelect
+        buttonUploadDownload.isEnabled = (inFileSelect && useCloud)
+    }
+    
+    
+    
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        let vc = segue.destination as! setNameAction
+        vc.delegate = self.delegate
+        vc.protocolActionToPerform = (segue.identifier == "showRename") ? 0 : 1
+    }
+}
+
+
+
+// Action popover dialog
+class setNameAction : UIViewController
+    
+{
+    // Pointer to callback class
+    var delegate : actionsControlDelegate?
+    var protocolActionToPerform : Int = -1
+    
+    
+    // Calling class might enable/disable each button
+    @IBOutlet weak var editText: UITextField!
+
+    
+    
+    @IBAction func doOK(_ sender: UIButton)
+    {
+        print("checking \(protocolActionToPerform)")
+        switch protocolActionToPerform
+        {
+            case 0:
+                print("run renameDir")
+                delegate?.actionRename(editText.text!)
+            case 1:
+                print("run createDir")
+                delegate?.actionCreateDirectory(editText.text!)
+            default:
+                break
         }
         dismiss(animated: false)
     }
@@ -403,9 +472,6 @@ class FileManagerActions : UITableViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        buttonLevelUp.isEnabled = inSubDirectory
-        buttonOpen.isEnabled = inFileSelect
-        buttonDelete.isEnabled = inFileSelect
-        buttonUploadDownload.isEnabled = (inFileSelect && useCloud)
     }
 }
+
