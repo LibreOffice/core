@@ -838,7 +838,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if( ! aClip.IsNull() )
         {
             MetricVector aTmp;
-            GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, nIndex, aTmp );
+            GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, aTmp );
 
             bool bInserted = false;
             for( MetricVector::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it, nIndex++ )
@@ -866,7 +866,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         }
         else
         {
-            GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, nIndex, *pVector );
+            GetGlyphBoundRects( rStartPt, rStr, nIndex, nLen, *pVector );
             if( pDisplayText )
                 *pDisplayText += rStr.copy( nIndex, nLen );
         }

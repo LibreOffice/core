@@ -1232,7 +1232,7 @@ public:
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
-                                                    int nLen, int nBase, MetricVector& rVector );
+                                                    int nLen, MetricVector& rVector );
 
     sal_Int32                   HasGlyphs( const vcl::Font& rFont, const OUString& rStr,
                                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;

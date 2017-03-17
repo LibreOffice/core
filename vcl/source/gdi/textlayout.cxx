@@ -205,7 +205,7 @@ namespace vcl
         if ( _pVector && _pDisplayText )
         {
             MetricVector aGlyphBounds;
-            m_rReferenceDevice.GetGlyphBoundRects( _rStartPoint, _rText, _nStartIndex, _nLength, _nStartIndex, aGlyphBounds );
+            m_rReferenceDevice.GetGlyphBoundRects( _rStartPoint, _rText, _nStartIndex, _nLength, aGlyphBounds );
             ::std::copy(
                 aGlyphBounds.begin(), aGlyphBounds.end(),
                 ::std::insert_iterator< MetricVector > ( *_pVector, _pVector->end() ) );
