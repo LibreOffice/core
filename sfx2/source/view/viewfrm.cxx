@@ -2782,9 +2782,9 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_RECORDMACRO :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
+                    const OUString sName{GetObjectShell()->GetFactory().GetFactoryName()};
                     if ( !aMiscOptions.IsMacroRecorderMode() ||
-                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
+                         ( sName!="swriter" && sName!="scalc" ) )
                     {
                         rSet.DisableItem( nWhich );
                         rSet.Put(SfxVisibilityItem(nWhich, false));
@@ -2808,9 +2808,9 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_STOP_RECORDING :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const char* pName = GetObjectShell()->GetFactory().GetShortName();
+                    const OUString sName{GetObjectShell()->GetFactory().GetFactoryName()};
                     if ( !aMiscOptions.IsMacroRecorderMode() ||
-                         ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
+                         ( sName!="swriter" && sName!="scalc" ) )
                     {
                         rSet.DisableItem( nWhich );
                         break;

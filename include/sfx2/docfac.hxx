@@ -53,7 +53,6 @@ public:
 
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
-    const char*     GetShortName() const { return pShortName; }
     OUString        GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
     OUString        GetFactoryName() const { return OUString::createFromAscii(pShortName); }
     OUString        GetModuleName() const;
