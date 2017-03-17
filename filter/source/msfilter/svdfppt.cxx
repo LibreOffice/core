@@ -1837,15 +1837,18 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
             if ( aTmpFile.IsValid() )
             {
-                std::unique_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::TRUNC | StreamMode::WRITE ));
-                if ( pDest )
+                SvStream* pDest = aTmpFile.GetStream(StreamMode::TRUNC | StreamMode::WRITE);
+                if (pDest)
+                {
                     bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
+                }
+                aTmpFile.CloseStream();
             }
             if ( bSuccess )
             {
-                std::unique_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::READ ));
+                SvStream* pDest = aTmpFile.GetStream(StreamMode::READ);
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : nullptr;
-                if ( pObjStor )
+                if (pObjStor)
                 {
                     tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
                     if ( xObjStor.is() && !xObjStor->GetError() )
@@ -1947,6 +1950,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                         }
                     }
                 }
+                aTmpFile.CloseStream();
             }
         }
     }
