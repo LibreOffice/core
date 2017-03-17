@@ -69,7 +69,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         OUString &rText,
         const IntlWrapper *  ) const
 {
-    rText = EE_RESSTR(RID_SVXITEMS_FRMDIR_BEGIN + GetValue());
+    rText = EditResId::GetString(RID_SVXITEMS_FRMDIR_BEGIN + GetValue());
     return true;
 }
 

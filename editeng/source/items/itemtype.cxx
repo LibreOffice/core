@@ -130,7 +130,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
 
 OUString GetSvxString( sal_uInt16 nId )
 {
-    return EE_RESSTR( nId );
+    return EditResId::GetString( nId );
 }
 
 
@@ -155,7 +155,7 @@ OUString GetColorString( const Color& rCol )
     }
 
     if ( nColor < SAL_N_ELEMENTS(aColAry) )
-        sStr = EE_RESSTR( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
+        sStr = EditResId::GetString( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
 
     if ( sStr.isEmpty() )
     {

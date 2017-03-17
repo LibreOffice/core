@@ -2491,12 +2491,12 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_DELCONTENT:
         case EDITUNDO_DELETE:
         case EDITUNDO_CUT:
-            aComment = EE_RESSTR(RID_EDITUNDO_DEL);
+            aComment = EditResId::GetString(RID_EDITUNDO_DEL);
         break;
         case EDITUNDO_MOVEPARAGRAPHS:
         case EDITUNDO_MOVEPARAS:
         case EDITUNDO_DRAGANDDROP:
-            aComment = EE_RESSTR(RID_EDITUNDO_MOVE);
+            aComment = EditResId::GetString(RID_EDITUNDO_MOVE);
         break;
         case EDITUNDO_INSERTFEATURE:
         case EDITUNDO_SPLITPARA:
@@ -2504,27 +2504,27 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_PASTE:
         case EDITUNDO_INSERT:
         case EDITUNDO_READ:
-            aComment = EE_RESSTR(RID_EDITUNDO_INSERT);
+            aComment = EditResId::GetString(RID_EDITUNDO_INSERT);
         break;
         case EDITUNDO_REPLACEALL:
-            aComment = EE_RESSTR(RID_EDITUNDO_REPLACE);
+            aComment = EditResId::GetString(RID_EDITUNDO_REPLACE);
         break;
         case EDITUNDO_ATTRIBS:
         case EDITUNDO_PARAATTRIBS:
-            aComment = EE_RESSTR(RID_EDITUNDO_SETATTRIBS);
+            aComment = EditResId::GetString(RID_EDITUNDO_SETATTRIBS);
         break;
         case EDITUNDO_RESETATTRIBS:
-            aComment = EE_RESSTR(RID_EDITUNDO_RESETATTRIBS);
+            aComment = EditResId::GetString(RID_EDITUNDO_RESETATTRIBS);
         break;
         case EDITUNDO_STYLESHEET:
-            aComment = EE_RESSTR(RID_EDITUNDO_SETSTYLE);
+            aComment = EditResId::GetString(RID_EDITUNDO_SETSTYLE);
         break;
         case EDITUNDO_TRANSLITERATE:
-            aComment = EE_RESSTR(RID_EDITUNDO_TRANSLITERATE);
+            aComment = EditResId::GetString(RID_EDITUNDO_TRANSLITERATE);
         break;
         case EDITUNDO_INDENTBLOCK:
         case EDITUNDO_UNINDENTBLOCK:
-            aComment = EE_RESSTR(RID_EDITUNDO_INDENT);
+            aComment = EditResId::GetString(RID_EDITUNDO_INDENT);
         break;
     }
     return aComment;

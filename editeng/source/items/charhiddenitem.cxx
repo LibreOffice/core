@@ -45,7 +45,7 @@ bool SvxCharHiddenItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_CHARHIDDEN_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 

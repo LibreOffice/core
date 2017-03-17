@@ -483,7 +483,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     OUString aBinName;
 
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
-        aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
+        aBinName = EditResId::GetString( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
         aBinName = mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
 
@@ -899,7 +899,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
     m_pPaperTrayBox->SetUpdateMode( false );
     m_pPaperTrayBox->Clear();
     sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry(
-        EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
+        EditResId::GetString( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     m_pPaperTrayBox->SetEntryData( nEntryPos,
         reinterpret_cast<void*>((sal_uLong)PAPERBIN_PRINTER_SETTINGS) );
     OUString aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );

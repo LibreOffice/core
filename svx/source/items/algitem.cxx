@@ -224,19 +224,19 @@ bool SvxMarginItem::GetPresentation
         {
             rText = SVX_RESSTR(RID_SVXITEMS_MARGIN_LEFT) +
                         GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SVX_RESSTR(RID_SVXITEMS_MARGIN_TOP) +
                         GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SVX_RESSTR(RID_SVXITEMS_MARGIN_RIGHT) +
                         GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SVX_RESSTR(RID_SVXITEMS_MARGIN_BOTTOM) +
                         GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EditResId::GetString(GetMetricId(ePresUnit));
             return true;
         }
         default: ; //prevent warning

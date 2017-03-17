@@ -501,7 +501,7 @@ OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos ) const
         default: ;//prevent warning
     }
 
-    return nId ? EE_RESSTR(nId) : OUString();
+    return nId ? EditResId::GetString(nId) : OUString();
 }
 
 bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -637,7 +637,7 @@ bool SvxWeightItem::GetPresentation
 OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)WEIGHT_BLACK, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_WEIGHT_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_WEIGHT_BEGIN + nPos);
 }
 
 bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1000,7 +1000,7 @@ bool SvxFontHeightItem::GetPresentation
     if( MapUnit::MapRelative != ePropUnit )
     {
         rText = OUString::number( (short)nProp ) +
-                " " + EE_RESSTR( GetMetricId( ePropUnit ) );
+                " " + EditResId::GetString( GetMetricId( ePropUnit ) );
         if( 0 <= (short)nProp )
             rText = "+" + rText;
     }
@@ -1008,7 +1008,7 @@ bool SvxFontHeightItem::GetPresentation
     {
         rText = GetMetricText( (long)nHeight,
                                 eCoreUnit, MapUnit::MapPoint, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
+                " " + EditResId::GetString(GetMetricId(MapUnit::MapPoint));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -1186,7 +1186,7 @@ bool SvxFontWidthItem::GetPresentation
     {
         rText = GetMetricText( (long)nWidth,
                                 eCoreUnit, MapUnit::MapPoint, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
+                " " + EditResId::GetString(GetMetricId(MapUnit::MapPoint));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -1365,7 +1365,7 @@ SfxPoolItem* SvxUnderlineItem::Create(SvStream& rStrm, sal_uInt16) const
 OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_UL_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_UL_BEGIN + nPos);
 }
 
 // class SvxOverlineItem ------------------------------------------------
@@ -1395,7 +1395,7 @@ SfxPoolItem* SvxOverlineItem::Create(SvStream& rStrm, sal_uInt16) const
 OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)LINESTYLE_BOLDWAVE, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_OL_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_OL_BEGIN + nPos);
 }
 
 // class SvxCrossedOutItem -----------------------------------------------
@@ -1467,7 +1467,7 @@ bool SvxCrossedOutItem::GetPresentation
 OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)STRIKEOUT_X, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_STRIKEOUT_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_STRIKEOUT_BEGIN + nPos);
 }
 
 bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1545,7 +1545,7 @@ bool SvxShadowedItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_SHADOWED_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -1590,7 +1590,7 @@ bool SvxAutoKernItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_AUTOKERN_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -1636,7 +1636,7 @@ bool SvxWordLineModeItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_WORDLINE_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -1681,7 +1681,7 @@ bool SvxContourItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_CONTOUR_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -2025,11 +2025,11 @@ bool SvxKerningItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
             rText = GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
+                    " " + EditResId::GetString(GetMetricId(MapUnit::MapPoint));
             return true;
         case SfxItemPresentation::Complete:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_KERNING_COMPLETE);
+            rText = EditResId::GetString(RID_SVXITEMS_KERNING_COMPLETE);
             sal_uInt16 nId = 0;
 
             if ( GetValue() > 0 )
@@ -2038,10 +2038,10 @@ bool SvxKerningItem::GetPresentation
                 nId = RID_SVXITEMS_KERNING_CONDENSED;
 
             if ( nId )
-                rText += EE_RESSTR(nId);
+                rText += EditResId::GetString(nId);
             rText = rText +
                     GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
+                    " " + EditResId::GetString(GetMetricId(MapUnit::MapPoint));
             return true;
         }
         default: ; //prevent warning
@@ -2120,7 +2120,7 @@ bool SvxCaseMapItem::GetPresentation
 OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < (sal_uInt16)SvxCaseMap::End, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_CASEMAP_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_CASEMAP_BEGIN + nPos);
 }
 
 bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -2249,7 +2249,7 @@ bool SvxEscapementItem::GetPresentation
     if ( nEsc != 0 )
     {
         if( DFLT_ESC_AUTO_SUPER == nEsc || DFLT_ESC_AUTO_SUB == nEsc )
-            rText += EE_RESSTR(RID_SVXITEMS_ESCAPEMENT_AUTO);
+            rText += EditResId::GetString(RID_SVXITEMS_ESCAPEMENT_AUTO);
         else
             rText = rText + OUString::number( nEsc ) + "%";
     }
@@ -2260,7 +2260,7 @@ bool SvxEscapementItem::GetPresentation
 OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < (sal_uInt16)SvxEscapement::End, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_ESCAPEMENT_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_ESCAPEMENT_BEGIN + nPos);
 }
 
 
@@ -2597,7 +2597,7 @@ bool SvxBlinkItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_BLINK_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -2642,7 +2642,7 @@ bool SvxEmphasisMarkItem::GetPresentation
 )   const
 {
     FontEmphasisMark nVal = GetEmphasisMark();
-    rText = EE_RESSTR( RID_SVXITEMS_EMPHASIS_BEGIN_STYLE +
+    rText = EditResId::GetString( RID_SVXITEMS_EMPHASIS_BEGIN_STYLE +
                             (sal_uInt16)(FontEmphasisMark)( nVal & FontEmphasisMark::Style ));
     sal_uInt16 nId = ( FontEmphasisMark::PosAbove & nVal )
                     ? RID_SVXITEMS_EMPHASIS_ABOVE_POS
@@ -2650,7 +2650,7 @@ bool SvxEmphasisMarkItem::GetPresentation
                         ? RID_SVXITEMS_EMPHASIS_BELOW_POS
                         : 0;
     if( nId )
-        rText += EE_RESSTR( nId );
+        rText += EditResId::GetString( nId );
     return true;
 }
 
@@ -2828,10 +2828,10 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     if( !GetValue() )
-        rText = EE_RESSTR( RID_SVXITEMS_TWOLINES_OFF );
+        rText = EditResId::GetString( RID_SVXITEMS_TWOLINES_OFF );
     else
     {
-        rText = EE_RESSTR( RID_SVXITEMS_TWOLINES );
+        rText = EditResId::GetString( RID_SVXITEMS_TWOLINES );
         if( GetStartBracket() )
             rText = OUStringLiteral1(GetStartBracket()) + rText;
         if( GetEndBracket() )
@@ -2908,14 +2908,14 @@ bool SvxCharRotateItem::GetPresentation(
         OUString &rText, const IntlWrapper*  ) const
 {
     if( !GetValue() )
-        rText = EE_RESSTR( RID_SVXITEMS_CHARROTATE_OFF );
+        rText = EditResId::GetString( RID_SVXITEMS_CHARROTATE_OFF );
     else
     {
-        rText = EE_RESSTR( RID_SVXITEMS_CHARROTATE );
+        rText = EditResId::GetString( RID_SVXITEMS_CHARROTATE );
         rText = rText.replaceFirst( "$(ARG1)",
                     OUString::number( GetValue() / 10 ));
         if( IsFitToLine() )
-            rText += EE_RESSTR( RID_SVXITEMS_CHARROTATE_FITLINE );
+            rText += EditResId::GetString( RID_SVXITEMS_CHARROTATE_FITLINE );
     }
     return true;
 }
@@ -3047,10 +3047,10 @@ bool SvxCharScaleWidthItem::GetPresentation(
         OUString &rText, const IntlWrapper*  ) const
 {
     if( !GetValue() )
-        rText = EE_RESSTR( RID_SVXITEMS_CHARSCALE_OFF );
+        rText = EditResId::GetString( RID_SVXITEMS_CHARSCALE_OFF );
     else
     {
-        rText = EE_RESSTR( RID_SVXITEMS_CHARSCALE );
+        rText = EditResId::GetString( RID_SVXITEMS_CHARSCALE );
         rText = rText.replaceFirst( "$(ARG1)",
                     OUString::number( GetValue() ));
     }
@@ -3118,7 +3118,7 @@ OUString SvxCharReliefItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE,
                     "enum overflow" );
-    return EE_RESSTR(RID_SVXITEMS_RELIEF_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_RELIEF_BEGIN + nPos);
 }
 
 sal_uInt16 SvxCharReliefItem::GetValueCount() const
