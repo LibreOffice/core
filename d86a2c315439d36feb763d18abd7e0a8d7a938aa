@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_e0f66cd6",
+        "filename": "sw/source/core/undo/docundo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-17T13:10:24Z",
+      "side": 1,
+      "message": "What\u0027s the rationale for using static_cast\u003c\u003e after dynamic_cast\u003c\u003e failed? Sounds like if line 391 is ever hit, that\u0027s always undefined behavior.",
+      "revId": "d86a2c315439d36feb763d18abd7e0a8d7a938aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
