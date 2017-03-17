@@ -93,6 +93,15 @@ exclusionSet = set([
     "PRICING_DEFFUNCNAME_",
     "PRICING_FUNCDESC_",
     "PRICING_FUNCNAME_",
+    "STR_ItemValCAPTION",
+    "STR_ItemValCIRC",
+    "STR_ItemValEDGE",
+    "STR_ItemValFITTOSIZE",
+    "STR_ItemValMEASURE_",
+    "STR_ItemValMEASURETEXT_",
+    "STR_ItemValTEXTANI_",
+    "STR_ItemValTEXTHADJ",
+    "STR_ItemValTEXTVADJ",
     ])
 
 

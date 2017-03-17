@@ -74,62 +74,6 @@ String STR_ObjNamePluralRECT
 {
     Text [ en-US ] = "Rectangles" ;
 };
-String STR_ObjNameSingulQUAD
-{
-    Text [ en-US ] = "Square" ;
-};
-String STR_ObjNamePluralQUAD
-{
-    Text [ en-US ] = "Squares" ;
-};
-String STR_ObjNameSingulPARAL
-{
-    Text [ en-US ] = "Parallelogram" ;
-};
-String STR_ObjNamePluralPARAL
-{
-    Text [ en-US ] = "Parallelograms" ;
-};
-String STR_ObjNameSingulRAUTE
-{
-    Text [ en-US ] = "Rhombus" ;
-};
-String STR_ObjNamePluralRAUTE
-{
-    Text [ en-US ] = "Rhombuses" ;
-};
-String STR_ObjNameSingulRECTRND
-{
-    Text [ en-US ] = "Rounded rectangle" ;
-};
-String STR_ObjNamePluralRECTRND
-{
-    Text [ en-US ] = "Rounded Rectangles" ;
-};
-String STR_ObjNameSingulQUADRND
-{
-    Text [ en-US ] = "rounded square" ;
-};
-String STR_ObjNamePluralQUADRND
-{
-    Text [ en-US ] = "Rounded Squares" ;
-};
-String STR_ObjNameSingulPARALRND
-{
-    Text [ en-US ] = "Rounded Parallelogram" ;
-};
-String STR_ObjNamePluralPARALRND
-{
-    Text [ en-US ] = "Rounded parallelograms" ;
-};
-String STR_ObjNameSingulRAUTERND
-{
-    Text [ en-US ] = "rounded rhombus" ;
-};
-String STR_ObjNamePluralRAUTERND
-{
-    Text [ en-US ] = "Rounded rhombuses" ;
-};
 
 String STR_ObjNameSingulCIRC
 {
@@ -256,18 +200,6 @@ String STR_ObjNameSingulCOMBLINE
 {
     Text [ en-US ] = "Curve" ;
 };
-String STR_ObjNamePluralCOMBLINE
-{
-    Text [ en-US ] = "Curve objects" ;
-};
-String STR_ObjNameSingulCOMBFILL
-{
-    Text [ en-US ] = "Curve" ;
-};
-String STR_ObjNamePluralCOMBFILL
-{
-    Text [ en-US ] = "Curve objects" ;
-};
 
 String STR_ObjNameSingulNATSPLN
 {
@@ -301,22 +233,6 @@ String STR_ObjNameSingulTEXTLNK
 String STR_ObjNamePluralTEXTLNK
 {
     Text [ en-US ] = "Linked text frames" ;
-};
-String STR_ObjNameSingulFITTEXT
-{
-    Text [ en-US ] = "Fit-to-size text object" ;
-};
-String STR_ObjNamePluralFITTEXT
-{
-    Text [ en-US ] = "Fit-to-size text objects" ;
-};
-String STR_ObjNameSingulFITALLTEXT
-{
-    Text [ en-US ] = "Fit-to-size text object" ;
-};
-String STR_ObjNamePluralFITALLTEXT
-{
-    Text [ en-US ] = "Fit-to-size text objects" ;
 };
 String STR_ObjNameSingulTITLETEXT
 {
@@ -423,22 +339,6 @@ String STR_ObjNamePluralCUSTOMSHAPE
 {
     Text [ en-US ] =  "Shapes";
 };
-String STR_ObjNameSingulGRAFMAC
-{
-    Text [ en-US ] = "Mac image" ;
-};
-String STR_ObjNamePluralGRAFMAC
-{
-    Text [ en-US ] = "Mac image" ;
-};
-String STR_ObjNameSingulGRAFMACLNK
-{
-    Text [ en-US ] = "Linked Mac image" ;
-};
-String STR_ObjNamePluralGRAFMACLNK
-{
-    Text [ en-US ] = "Linked Mac image" ;
-};
 
 // Svg support
 
@@ -467,18 +367,6 @@ String STR_ObjNamePluralUno
 {
     Text [ en-US ] = "Controls";
 };
-String STR_ObjNameSingulOLE2LNK
-{
-    Text [ en-US ] = "linked embedded object (OLE)" ;
-};
-String STR_ObjNamePluralOLE2LNK
-{
-    Text [ en-US ] = "Linked embedded objects (OLE)" ;
-};
-String STR_ObjOLE2NamePrefix
-{
-    Text [ en-US ] = "Object" ;
-};
 
 String STR_ObjNameSingulFrame
 {
@@ -487,10 +375,6 @@ String STR_ObjNameSingulFrame
 String STR_ObjNamePluralFrame
 {
     Text [ en-US ] = "Frames" ;
-};
-String STR_ObjFrameNamePrefix
-{
-    Text [ en-US ] = "Frame" ;
 };
 
 String STR_ObjNameSingulEDGE
@@ -534,10 +418,6 @@ String STR_ObjNameNoObj
 {
     Text [ en-US ] = "No draw object" ;
 };
-String STR_ObjNameAnd
-{
-    Text [ en-US ] = "and" ;
-};
 String STR_ObjNameSingulPlural
 {
     Text [ en-US ] = "Draw object(s)" ;
@@ -564,16 +444,6 @@ String STR_ObjNamePluralExtrude3d
     Text [ en-US ] = "Extrusion objects";
 };
 
-String STR_ObjNameSingulLabel3d
-{
-    Text [ en-US ] = "3D text";
-};
-
-String STR_ObjNamePluralLabel3d
-{
-    Text [ en-US ] = "3D texts";
-};
-
 String STR_ObjNameSingulLathe3d
 {
     Text [ en-US ] = "Rotation object";
@@ -592,11 +462,6 @@ String STR_ObjNameSingulObj3d
 String STR_ObjNamePluralObj3d
 {
     Text [ en-US ] = "3D objects";
-};
-
-String STR_ObjNamePluralPoly3d
-{
-    Text [ en-US ] = "3D polygons";
 };
 
 String STR_ObjNameSingulScene3d
@@ -1032,17 +897,9 @@ String STR_UndoMovPage
 {
     Text [ en-US ] = "Change order of pages" ;
 };
-String STR_UndoNewPageMasterDscr
-{
-    Text [ en-US ] = "Assign background page" ;
-};
 String STR_UndoDelPageMasterDscr
 {
     Text [ en-US ] = "Clear background page assignment" ;
-};
-String STR_UndoMovPageMasterDscr
-{
-    Text [ en-US ] = "Move background page assignment" ;
 };
 String STR_UndoChgPageMasterDscr
 {
@@ -1302,238 +1159,8 @@ String STR_ItemValCIRC_ARC
     Text [ en-US ] = "Arc" ;
 };
 
-String STR_ItemNam_SHADOW
-{
-    Text [ en-US ] = "Shadow" ;
-};
-String STR_ItemNam_SHADOWCOLOR
-{
-    Text [ en-US ] = "Shadow color" ;
-};
-String STR_ItemNam_SHADOWXDIST
-{
-    Text [ en-US ] = "Horizontal shadow outline" ;
-};
-String STR_ItemNam_SHADOWYDIST
-{
-    Text [ en-US ] = "Vertical shadow outline" ;
-};
-String STR_ItemNam_SHADOWTRANSPARENCE
-{
-    Text [ en-US ] = "Shadow transparency" ;
-};
-String STR_ItemNam_SHADOW3D
-{
-    Text [ en-US ] = "3D shadow" ;
-};
-String STR_ItemNam_SHADOWPERSP
-{
-    Text [ en-US ] = "Perspective shadow" ;
-};
-String STR_ItemNam_CAPTIONTYPE
-{
-    Text [ en-US ] = "Callout type" ;
-};
-String STR_ItemNam_CAPTIONFIXEDANGLE
-{
-    Text [ en-US ] = "Given angle" ;
-};
-String STR_ItemNam_CAPTIONANGLE
-{
-    Text [ en-US ] = "Angle" ;
-};
-String STR_ItemNam_CAPTIONGAP
-{
-    Text [ en-US ] = "Gap" ;
-};
-String STR_ItemNam_CAPTIONESCDIR
-{
-    Text [ en-US ] = "Exit direction" ;
-};
-String STR_ItemNam_CAPTIONESCISREL
-{
-    Text [ en-US ] = "Relative exit position" ;
-};
-String STR_ItemNam_CAPTIONESCREL
-{
-    Text [ en-US ] = "Exit Position" ;
-};
-String STR_ItemNam_CAPTIONESCABS
-{
-    Text [ en-US ] = "Exit Position" ;
-};
-String STR_ItemNam_CAPTIONLINELEN
-{
-    Text [ en-US ] = "Line length" ;
-};
-String STR_ItemNam_CAPTIONFITLINELEN
-{
-    Text [ en-US ] = "Auto line length" ;
-};
-String STR_ItemNam_ECKENRADIUS
-{
-    Text [ en-US ] = "Corner radius" ;
-};
-String STR_ItemNam_TEXT_LEFTDIST
-{
-    Text [ en-US ] = "Left border spacing" ;
-};
-String STR_ItemNam_TEXT_RIGHTDIST
-{
-    Text [ en-US ] = "Right border spacing" ;
-};
-String STR_ItemNam_TEXT_UPPERDIST
-{
-    Text [ en-US ] = "Upper border spacing" ;
-};
-String STR_ItemNam_TEXT_LOWERDIST
-{
-    Text [ en-US ] = "Lower border spacing" ;
-};
-String STR_ItemNam_TEXT_AUTOGROWHEIGHT
-{
-    Text [ en-US ] = "AutoFit frame height" ;
-};
-String STR_ItemNam_TEXT_MINFRAMEHEIGHT
-{
-    Text [ en-US ] = "Min. frame height" ;
-};
-String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
-{
-    Text [ en-US ] = "Max. frame height" ;
-};
-String STR_ItemNam_TEXT_AUTOGROWWIDTH
-{
-    Text [ en-US ] = "AutoFit frame width" ;
-};
-String STR_ItemNam_TEXT_MINFRAMEWIDTH
-{
-    Text [ en-US ] = "Min. frame width" ;
-};
-String STR_ItemNam_TEXT_MAXFRAMEWIDTH
-{
-    Text [ en-US ] = "Max. frame width" ;
-};
-String STR_ItemNam_TEXT_VERTADJUST
-{
-    Text [ en-US ] = "Vertical text anchor" ;
-};
-String STR_ItemNam_TEXT_HORZADJUST
-{
-    Text [ en-US ] = "Horizontal text anchor" ;
-};
-String STR_ItemNam_TEXT_FITTOSIZE
-{
-    Text [ en-US ] = "Fit text to frame" ;
-};
-
-String STR_ItemNam_GRAFRED
-{
-    Text [ en-US ] = "Red";
-};
-String STR_ItemNam_GRAFGREEN
-{
-    Text [ en-US ] = "Green";
-};
-String STR_ItemNam_GRAFBLUE
-{
-    Text [ en-US ] = "Blue";
-};
-String STR_ItemNam_GRAFLUMINANCE
-{
-    Text [ en-US ] = "Brightness";
-};
-String STR_ItemNam_GRAFCONTRAST
-{
-    Text [ en-US ] = "Contrast";
-};
-String STR_ItemNam_GRAFGAMMA
-{
-    Text [ en-US ] = "Gamma";
-};
-String STR_ItemNam_GRAFTRANSPARENCE
-{
-    Text [ en-US ] = "Transparency";
-};
-String STR_ItemNam_GRAFINVERT
-{
-    Text [ en-US ] = "Invert";
-};
-String STR_ItemNam_GRAFMODE
-{
-    Text [ en-US ] = "Image mode";
-};
-String STR_ItemNam_GRAFRESERVE2 { Text = "" ; };
-String STR_ItemNam_GRAFRESERVE3 { Text = "" ; };
-String STR_ItemNam_GRAFRESERVE4 { Text = "" ; };
-String STR_ItemNam_GRAFRESERVE5 { Text = "" ; };
-String STR_ItemNam_GRAFRESERVE6 { Text = "" ; };
-
-String STR_ItemNam_RESERVE19 { Text = "" ; };
-String STR_ItemNamSET_MISC
-{
-    Text [ en-US ] = "Various attributes" ;
-};
-String STR_ItemNam_OBJMOVEPROTECT
-{
-    Text [ en-US ] = "Position protected" ;
-};
-String STR_ItemNam_OBJSIZEPROTECT
-{
-    Text [ en-US ] = "Size Protection" ;
-};
-String STR_ItemNam_OBJPRINTABLE
-{
-    Text [ en-US ] = "Don't print" ;
-};
-String STR_ItemNam_LAYERID
-{
-    Text [ en-US ] = "Layer Indicator" ;
-};
-String STR_ItemNam_LAYERNAME
-{
-    Text [ en-US ] = "Le~vel" ;
-};
-String STR_ItemNam_OBJECTNAME
-{
-    Text [ en-US ] = "Object name" ;
-};
-String STR_ItemNam_STARTANGLE
-{
-    Text [ en-US ] = "Start angle" ;
-};
-String STR_ItemNam_ENDANGLE
-{
-    Text [ en-US ] = "Final angle" ;
-};
-String STR_ItemNam_POSITIONX
-{
-    Text [ en-US ] = "X Position" ;
-};
-String STR_ItemNam_POSITIONY
-{
-    Text [ en-US ] = "Y Position" ;
-};
-String STR_ItemNam_SIZEWIDTH
-{
-    Text [ en-US ] = "Width" ;
-};
-String STR_ItemNam_SIZEHEIGHT
-{
-    Text [ en-US ] = "Height" ;
-};
-String STR_ItemNam_ROTATEANGLE
-{
-    Text [ en-US ] = "Rotation angle" ;
-};
-String STR_ItemNam_SHEARANGLE
-{
-    Text [ en-US ] = "Shear angle" ;
-};
-
  // Now: bitmaps:
 Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };
-Bitmap BMAP_GrafikDe { File = "grafikde.png" ; };
 
 // Strings for the templates dialog
 String SIP_UNKNOWN_ATTR
@@ -1600,31 +1227,6 @@ String SIP_XA_LINETRANSPARENCE
 String SIP_XA_LINEJOINT
 {
     Text [ en-US ] = "Line joint";
-};
-
-String SIP_XA_LINERESERVED2
-{
-    Text [ en-US ] = "Line reserved for 2";
-};
-
-String SIP_XA_LINERESERVED3
-{
-    Text [ en-US ] = "Line reserved for 3";
-};
-
-String SIP_XA_LINERESERVED4
-{
-    Text [ en-US ] = "Line reserved for 4";
-};
-
-String SIP_XA_LINERESERVED5
-{
-    Text [ en-US ] = "Line reserved for 5";
-};
-
-String SIP_XA_LINERESERVED_LAST
-{
-    Text [ en-US ] = "Line reserved for 6";
 };
 
 String SIP_XATTRSET_LINE
@@ -1717,36 +1319,6 @@ String SIP_XA_FILLBMP_STRETCH
     Text [ en-US ] = "Bitmap scaling";
 };
 
-String SIP_XA_FILLRESERVED3
-{
-    Text [ en-US ] = "Bitmap reserved for 3";
-};
-
-String SIP_XA_FILLRESERVED4
-{
-    Text [ en-US ] = "Bitmap reserved for 4";
-};
-
-String SIP_XA_FILLRESERVED5
-{
-    Text [ en-US ] = "Bitmap reserved for 5";
-};
-
-String SIP_XA_FILLRESERVED6
-{
-    Text [ en-US ] = "Bitmap reserved for 6";
-};
-
-String SIP_XA_FILLRESERVED7
-{
-    Text [ en-US ] = "Bitmap reserved for 7";
-};
-
-String SIP_XA_FILLRESERVED8
-{
-    Text [ en-US ] = "Bitmap reserved for 8";
-};
-
 String SIP_XA_FILLBMP_POSOFFSETX
 {
     Text [ en-US ] = "Tile position X in %";
@@ -1760,21 +1332,6 @@ String SIP_XA_FILLBMP_POSOFFSETY
 String SIP_XA_FILLBACKGROUND
 {
     Text [ en-US ] = "Background fill";
-};
-
-String SIP_XA_FILLRESERVED10
-{
-    Text [ en-US ] = "Fill reserved for 10";
-};
-
-String SIP_XA_FILLRESERVED11
-{
-    Text [ en-US ] = "Fill reserved for 11";
-};
-
-String SIP_XA_FILLRESERVED_LAST
-{
-    Text [ en-US ] = "Fill reserved for 12";
 };
 
 String SIP_XATTRSET_FILL
@@ -1840,31 +1397,6 @@ String SIP_XA_FORMTXTHIDEFORM
 String SIP_XA_FORMTXTSHDWTRANSP
 {
     Text [ en-US ] = "Fontwork shadow transparency";
-};
-
-String SIP_XA_FTRESERVED2
-{
-    Text [ en-US ] = "Fontwork reserved for 2";
-};
-
-String SIP_XA_FTRESERVED3
-{
-    Text [ en-US ] = "Fontwork reserved for 3";
-};
-
-String SIP_XA_FTRESERVED4
-{
-    Text [ en-US ] = "Fontwork reserved for 4";
-};
-
-String SIP_XA_FTRESERVED5
-{
-    Text [ en-US ] = "Fontwork reserved for 5";
-};
-
-String SIP_XA_FTRESERVED_LAST
-{
-    Text [ en-US ] = "Fontwork reserved for 6";
 };
 
 String SIP_SA_SHADOW
@@ -2087,16 +1619,6 @@ String SIP_SA_CHAINNEXTNAME
     Text[ en-US ] = "Next link in text chain";
 };
 
-String SIP_SA_RESERVE18
-{
-    Text [ en-US ] = "SvDraw reserved for 18";
-};
-
-String SIP_SA_RESERVE19
-{
-    Text [ en-US ] = "SvDraw reserved for 19";
-};
-
 String SIP_SA_EDGEKIND
 {
     Text [ en-US ] = "Type of connector";
@@ -2257,21 +1779,6 @@ String SIP_SA_MEASUREDECIMALPLACES
     Text [ en-US ] = "Decimal places";
 };
 
-String SIP_SA_MEASURERESERVE05
-{
-    Text [ en-US ] = "Dimensioning reserved for 5";
-};
-
-String SIP_SA_MEASURERESERVE06
-{
-    Text [ en-US ] = "Dimensioning reserved for 6";
-};
-
-String SIP_SA_MEASURERESERVE07
-{
-    Text [ en-US ] = "Dimensioning reserved for 7";
-};
-
 String SIP_SA_CIRCKIND
 {
     Text [ en-US ] = "Type of circle";
@@ -2285,26 +1792,6 @@ String SIP_SA_CIRCSTARTANGLE
 String SIP_SA_CIRCENDANGLE
 {
     Text [ en-US ] = "End angle";
-};
-
-String SIP_SA_CIRCRESERVE0
-{
-    Text [ en-US ] = "Circle reserved for 0";
-};
-
-String SIP_SA_CIRCRESERVE1
-{
-    Text [ en-US ] = "Circle reserved for 1";
-};
-
-String SIP_SA_CIRCRESERVE2
-{
-    Text [ en-US ] = "Circle reserved for 2";
-};
-
-String SIP_SA_CIRCRESERVE3
-{
-    Text [ en-US ] = "Circle reserved for 3";
 };
 
 String SIP_SA_OBJMOVEPROTECT
@@ -2668,110 +2155,12 @@ String SIP_SA_GRAFCROP
     Text [ en-US ] = "Crop";
 
 };
-String SIP_SA_GRAFRESERVE3 { Text = "" ; };
-String SIP_SA_GRAFRESERVE4 { Text = "" ; };
-String SIP_SA_GRAFRESERVE5 { Text = "" ; };
-String SIP_SA_GRAFRESERVE6 { Text = "" ; };
 
 Bitmap SIP_SA_PAGESHADOW35X35
 {
     File = "pageshadow35x35.png";
 };
 
-Bitmap BMP_MARKER_RECT7_1  { File = "marker-rect7-1.png"; };
-Bitmap BMP_MARKER_RECT7_2  { File = "marker-rect7-2.png"; };
-Bitmap BMP_MARKER_RECT7_3  { File = "marker-rect7-3.png"; };
-Bitmap BMP_MARKER_RECT7_4  { File = "marker-rect7-4.png"; };
-Bitmap BMP_MARKER_RECT7_5  { File = "marker-rect7-5.png"; };
-Bitmap BMP_MARKER_RECT7_6  { File = "marker-rect7-6.png"; };
-Bitmap BMP_MARKER_RECT9_1  { File = "marker-rect9-1.png"; };
-Bitmap BMP_MARKER_RECT9_2  { File = "marker-rect9-2.png"; };
-Bitmap BMP_MARKER_RECT9_3  { File = "marker-rect9-3.png"; };
-Bitmap BMP_MARKER_RECT9_4  { File = "marker-rect9-4.png"; };
-Bitmap BMP_MARKER_RECT9_5  { File = "marker-rect9-5.png"; };
-Bitmap BMP_MARKER_RECT9_6  { File = "marker-rect9-6.png"; };
-Bitmap BMP_MARKER_RECT11_1 { File = "marker-rect11-1.png"; };
-Bitmap BMP_MARKER_RECT11_2 { File = "marker-rect11-2.png"; };
-Bitmap BMP_MARKER_RECT11_3 { File = "marker-rect11-3.png"; };
-Bitmap BMP_MARKER_RECT11_4 { File = "marker-rect11-4.png"; };
-Bitmap BMP_MARKER_RECT11_5 { File = "marker-rect11-5.png"; };
-Bitmap BMP_MARKER_RECT11_6 { File = "marker-rect11-6.png"; };
-Bitmap BMP_MARKER_RECT13_1 { File = "marker-rect13-1.png"; };
-Bitmap BMP_MARKER_RECT13_2 { File = "marker-rect13-2.png"; };
-Bitmap BMP_MARKER_RECT13_3 { File = "marker-rect13-3.png"; };
-Bitmap BMP_MARKER_RECT13_4 { File = "marker-rect13-4.png"; };
-Bitmap BMP_MARKER_RECT13_5 { File = "marker-rect13-5.png"; };
-Bitmap BMP_MARKER_RECT13_6 { File = "marker-rect13-6.png"; };
-
-Bitmap BMP_MARKER_CIRC7_1  { File = "marker-circ7-1.png"; };
-Bitmap BMP_MARKER_CIRC7_2  { File = "marker-circ7-2.png"; };
-Bitmap BMP_MARKER_CIRC7_3  { File = "marker-circ7-3.png"; };
-Bitmap BMP_MARKER_CIRC7_4  { File = "marker-circ7-4.png"; };
-Bitmap BMP_MARKER_CIRC7_5  { File = "marker-circ7-5.png"; };
-Bitmap BMP_MARKER_CIRC7_6  { File = "marker-circ7-6.png"; };
-Bitmap BMP_MARKER_CIRC9_1  { File = "marker-circ9-1.png"; };
-Bitmap BMP_MARKER_CIRC9_2  { File = "marker-circ9-2.png"; };
-Bitmap BMP_MARKER_CIRC9_3  { File = "marker-circ9-3.png"; };
-Bitmap BMP_MARKER_CIRC9_4  { File = "marker-circ9-4.png"; };
-Bitmap BMP_MARKER_CIRC9_5  { File = "marker-circ9-5.png"; };
-Bitmap BMP_MARKER_CIRC9_6  { File = "marker-circ9-6.png"; };
-Bitmap BMP_MARKER_CIRC11_1 { File = "marker-circ11-1.png"; };
-Bitmap BMP_MARKER_CIRC11_2 { File = "marker-circ11-2.png"; };
-Bitmap BMP_MARKER_CIRC11_3 { File = "marker-circ11-3.png"; };
-Bitmap BMP_MARKER_CIRC11_4 { File = "marker-circ11-4.png"; };
-Bitmap BMP_MARKER_CIRC11_5 { File = "marker-circ11-5.png"; };
-Bitmap BMP_MARKER_CIRC11_6 { File = "marker-circ11-6.png"; };
-
-Bitmap BMP_MARKER_ELLI7x9_1  { File = "marker-elli7x9-1.png"; };
-Bitmap BMP_MARKER_ELLI7x9_2  { File = "marker-elli7x9-2.png"; };
-Bitmap BMP_MARKER_ELLI7x9_3  { File = "marker-elli7x9-3.png"; };
-Bitmap BMP_MARKER_ELLI7x9_4  { File = "marker-elli7x9-4.png"; };
-Bitmap BMP_MARKER_ELLI7x9_5  { File = "marker-elli7x9-5.png"; };
-Bitmap BMP_MARKER_ELLI7x9_6  { File = "marker-elli7x9-6.png"; };
-Bitmap BMP_MARKER_ELLI9x11_1 { File = "marker-elli9x11-1.png"; };
-Bitmap BMP_MARKER_ELLI9x11_2 { File = "marker-elli9x11-2.png"; };
-Bitmap BMP_MARKER_ELLI9x11_3 { File = "marker-elli9x11-3.png"; };
-Bitmap BMP_MARKER_ELLI9x11_4 { File = "marker-elli9x11-4.png"; };
-Bitmap BMP_MARKER_ELLI9x11_5 { File = "marker-elli9x11-5.png"; };
-Bitmap BMP_MARKER_ELLI9x11_6 { File = "marker-elli9x11-6.png"; };
-
-Bitmap BMP_MARKER_ELLI9x7_1  { File = "marker-elli9x7-1.png"; };
-Bitmap BMP_MARKER_ELLI9x7_2  { File = "marker-elli9x7-2.png"; };
-Bitmap BMP_MARKER_ELLI9x7_3  { File = "marker-elli9x7-3.png"; };
-Bitmap BMP_MARKER_ELLI9x7_4  { File = "marker-elli9x7-4.png"; };
-Bitmap BMP_MARKER_ELLI9x7_5  { File = "marker-elli9x7-5.png"; };
-Bitmap BMP_MARKER_ELLI9x7_6  { File = "marker-elli9x7-6.png"; };
-Bitmap BMP_MARKER_ELLI11x9_1 { File = "marker-elli11x9-1.png"; };
-Bitmap BMP_MARKER_ELLI11x9_2 { File = "marker-elli11x9-2.png"; };
-Bitmap BMP_MARKER_ELLI11x9_3 { File = "marker-elli11x9-3.png"; };
-Bitmap BMP_MARKER_ELLI11x9_4 { File = "marker-elli11x9-4.png"; };
-Bitmap BMP_MARKER_ELLI11x9_5 { File = "marker-elli11x9-5.png"; };
-Bitmap BMP_MARKER_ELLI11x9_6 { File = "marker-elli11x9-6.png"; };
-
-Bitmap BMP_MARKER_RECTPLUS7_1  { File = "marker-rectplus7-1.png"; };
-Bitmap BMP_MARKER_RECTPLUS7_2  { File = "marker-rectplus7-2.png"; };
-Bitmap BMP_MARKER_RECTPLUS7_3  { File = "marker-rectplus7-3.png"; };
-Bitmap BMP_MARKER_RECTPLUS7_4  { File = "marker-rectplus7-4.png"; };
-Bitmap BMP_MARKER_RECTPLUS7_5  { File = "marker-rectplus7-5.png"; };
-Bitmap BMP_MARKER_RECTPLUS7_6  { File = "marker-rectplus7-6.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_1  { File = "marker-rectplus9-1.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_2  { File = "marker-rectplus9-2.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_3  { File = "marker-rectplus9-3.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_4  { File = "marker-rectplus9-4.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_5  { File = "marker-rectplus9-5.png"; };
-Bitmap BMP_MARKER_RECTPLUS9_6  { File = "marker-rectplus9-6.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_1 { File = "marker-rectplus11-1.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_2 { File = "marker-rectplus11-2.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_3 { File = "marker-rectplus11-3.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_4 { File = "marker-rectplus11-4.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_5 { File = "marker-rectplus11-5.png"; };
-Bitmap BMP_MARKER_RECTPLUS11_6 { File = "marker-rectplus11-6.png"; };
-
-Bitmap BMP_MARKER_ANCHOR           { File = "marker-anchor.png"; };
-Bitmap BMP_MARKER_ANCHOR_PRESSED   { File = "marker-anchor-pressed.png"; };
-Bitmap BMP_MARKER_CROSS            { File = "marker-cross.png"; };
-Bitmap BMP_MARKER_GLUE_SELECTED    { File = "marker-glue-selected.png"; };
-Bitmap BMP_MARKER_GLUE_UNSELECTED  { File = "marker-glue-unselected.png"; };
 
 Bitmap SIP_SA_MARKERS
 {
@@ -2794,14 +2183,6 @@ String STR_ObjNamePluralMEDIA
 
 // drawing layer table strings
 
-String STR_TABLE_ATTR
-{
-    Text [ en-US ] = "Apply table attributes" ;
-};
-String STR_TABLE_AUTOFMT
-{
-    Text [ en-US ] = "AutoFormat table" ;
-};
 String STR_TABLE_INSCOL
 {
     Text [ en-US ] = "Insert column" ;
@@ -2873,10 +2254,6 @@ Bitmap SIP_SA_CROP_MARKERS
 String STR_ObjNameSingulFONTWORK
 {
     Text [ en-US ] = "Font work" ;
-};
-String STR_ObjNamePluralFONTWORK
-{
-    Text [ en-US ] = "Font works" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
