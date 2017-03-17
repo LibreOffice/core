@@ -1338,7 +1338,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
-    const sal_uInt32 nMaxItems(mpColorSet->getMaxRowCount() * mpColorSet->getColumnCount());
+    const sal_uInt32 nMaxItems(SvxColorValueSet::getMaxRowCount() * SvxColorValueSet::getColumnCount());
     Size aSize = mpColorSet->layoutAllVisible(nMaxItems);
     mpColorSet->set_height_request(aSize.Height());
     mpColorSet->set_width_request(aSize.Width());
