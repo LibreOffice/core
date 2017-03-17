@@ -79,8 +79,11 @@ exclusionSet = set([
     "STR_UPDATE_INDEX",
     "STR_UPDATE_LINK",
     "BMP_PLACEHOLDER_",
-    "STR_RPT_HELP_"
-    "STR_TEMPLATE_NAME"
+    "STR_RPT_HELP_",
+    "STR_TEMPLATE_NAME",
+    "UID_BRWEVT_",
+    "HID_EVT_",
+    "HID_PROP_",
     ])
 
 
