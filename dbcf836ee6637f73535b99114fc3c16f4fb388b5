@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_20e5d436",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-03-17T12:32:02Z",
+      "side": 1,
+      "message": "I’d rather pass the language tag to GetVerticalOrientation() and do the \u0027\u003d\u003d \"zh\"\u0027 check there, as bOverrideVO is rather generic variable name.",
+      "revId": "dbcf836ee6637f73535b99114fc3c16f4fb388b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_00e8d00f",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-03-17T12:32:02Z",
+      "side": 1,
+      "message": "Space after comma is missing.",
+      "revId": "dbcf836ee6637f73535b99114fc3c16f4fb388b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
