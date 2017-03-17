@@ -102,7 +102,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     pDocSh->GetDocument().GetLinkManager()->InsertServer( this );
     pDocSh->GetDocument().StartListeningArea( aRange, false, &aForwarder );
 
-    StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
+    StartListening(*pDocSh);           // to notice if DocShell gets deleted
     StartListening(*SfxGetpApp());     // for SfxHintId::ScAreasChanged
 }
 
