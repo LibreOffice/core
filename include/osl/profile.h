@@ -43,7 +43,7 @@ typedef void* oslProfile;
 
 /** Deprecated API.
     Open or create a configuration profile.
-    @return 0 if the profile could not be created, otherwise a handle to the profile.
+    @retval 0 if the profile could not be created, otherwise a handle to the profile.
     @deprecated
 */
 SAL_DLLPUBLIC oslProfile SAL_CALL osl_openProfile(
@@ -112,7 +112,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileIdent(
 
 /** Deprecated API.
     Acquire the mutex, block if already acquired by another thread.
-    @return False if section or entry could not be found.
+    @retval False if section or entry could not be found.
     @deprecated
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
@@ -121,7 +121,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
 
 /** Deprecated API.
     Get all entries belonging to the specified section.
-    @return Pointer to a array of pointers.
+    @returns Pointer to a array of pointers.
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
@@ -130,7 +130,7 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
 
 /** Deprecated API.
     Get all section entries
-    @return Pointer to a array of pointers.
+    @retval Pointer to a array of pointers.
     @deprecated
 */
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSections(

@@ -120,9 +120,8 @@ public:
         On success receives a name which is unused and valid on the actual Operating System and
         File System.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
 
         @see DirectoryItem::getFileStatus()
     */
@@ -149,20 +148,19 @@ public:
         @param ustrAbsoluteFileURL [out]
         On success it receives the full qualified absolute file URL.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_NOTDIR not a directory
-        E_ACCES permission denied
-        E_NOENT no such file or directory
-        E_NAMETOOLONG file name too long
-        E_OVERFLOW value too large for defined data type
-        E_FAULT bad address
-        E_INTR function call was interrupted
-        E_LOOP too many symbolic links encountered
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_NOTDIR not a directory
+        @retval E_ACCES permission denied
+        @retval E_NOENT no such file or directory
+        @retval E_NAMETOOLONG file name too long
+        @retval E_OVERFLOW value too large for defined data type
+        @retval E_FAULT bad address
+        @retval E_INTR function call was interrupted
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
 
         @see DirectoryItem::getFileStatus()
     */
@@ -180,9 +178,8 @@ public:
         @param ustrSystemPath [out]
         On success it receives the system path.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
 
         @see getFileURLFromSystemPath()
     */
@@ -200,9 +197,8 @@ public:
         @param ustrFileURL [out]
         On success it receives the file URL.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
 
         @see getSystemPathFromFileURL()
     */
@@ -230,11 +226,10 @@ public:
         @param ustrFileURL [out]
         On success it receives the full qualified file URL.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOTDIR not a directory
-        E_NOENT no such file or directory not found
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOTDIR not a directory
+        @retval E_NOENT no such file or directory not found
 
         @see getFileURLFromSystemPath()
         @see getSystemPathFromFileURL()
@@ -250,9 +245,8 @@ public:
         @param[out] ustrTempDirURL
         On success receives the URL of system's temporary directory path.
 
-        @return
-        E_None on success
-        E_NOENT no such file or directory not found
+        @retval E_None on success
+        @retval E_NOENT no such file or directory not found
     */
 
     static RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
@@ -294,16 +288,15 @@ public:
         the file name will be returned, the caller is responsible for closing and removing
         the file.<br>
 
-        @return
-        E_None   on success
-        E_INVAL  the format of the parameter is invalid
-        E_NOMEM  not enough memory for allocating structures
-        E_ACCES  Permission denied
-        E_NOENT  No such file or directory
-        E_NOTDIR Not a directory
-        E_ROFS   Read-only file system
-        E_NOSPC  No space left on device
-        E_DQUOT  Quota exceeded
+        @retval E_None   on success
+        @retval E_INVAL  the format of the parameter is invalid
+        @retval E_NOMEM  not enough memory for allocating structures
+        @retval E_ACCES  Permission denied
+        @retval E_NOENT  No such file or directory
+        @retval E_NOTDIR Not a directory
+        @retval E_ROFS   Read-only file system
+        @retval E_NOSPC  No space left on device
+        @retval E_DQUOT  Quota exceeded
 
         @see getTempDirURL()
     */
@@ -384,7 +377,7 @@ public:
 
     /** Get the full qualified URL where a device is mounted to.
 
-           @return
+        @return
         The full qualified URL where the device is mounted to.
     */
     rtl::OUString getMountPath()
@@ -949,32 +942,31 @@ public:
         @param uFlags [in]
         Specifies the open mode.
 
-        @return
-        E_None on success
-        E_NOMEM not enough memory for allocating structures
-        E_INVAL the format of the parameters was not valid
-        E_NAMETOOLONG pathname was too long
-        E_NOENT no such file or directory
-        E_ACCES permission denied
-        E_AGAIN a write lock could not be established
-        E_NOTDIR not a directory
-        E_NXIO no such device or address
-        E_NODEV no such device
-        E_ROFS read-only file system
-        E_TXTBSY text file busy
-        E_FAULT bad address
-        E_LOOP too many symbolic links encountered
-        E_NOSPC no space left on device
-        E_ISDIR is a directory
-        E_MFILE too many open files used by the process
-        E_NFILE too many open files in the system
-        E_DQUOT quota exceeded
-        E_EXIST file exists
-        E_INTR function call was interrupted
-        E_IO on I/O errors
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
-        E_EOVERFLOW value too large for defined data type
+        @retval E_None on success
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NAMETOOLONG pathname was too long
+        @retval E_NOENT no such file or directory
+        @retval E_ACCES permission denied
+        @retval E_AGAIN a write lock could not be established
+        @retval E_NOTDIR not a directory
+        @retval E_NXIO no such device or address
+        @retval E_NODEV no such device
+        @retval E_ROFS read-only file system
+        @retval E_TXTBSY text file busy
+        @retval E_FAULT bad address
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_NOSPC no space left on device
+        @retval E_ISDIR is a directory
+        @retval E_MFILE too many open files used by the process
+        @retval E_NFILE too many open files in the system
+        @retval E_DQUOT quota exceeded
+        @retval E_EXIST file exists
+        @retval E_INTR function call was interrupted
+        @retval E_IO on I/O errors
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
+        @retval E_EOVERFLOW value too large for defined data type
 
         @see close()
         @see setPos()
@@ -992,14 +984,13 @@ public:
 
     /** Close an open file.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_BADF Bad file
-        E_INTR function call was interrupted
-        E_NOLINK link has been severed
-        E_NOSPC no space left on device
-        E_IO on I/O errors
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_BADF Bad file
+        @retval E_INTR function call was interrupted
+        @retval E_NOLINK link has been severed
+        @retval E_NOSPC no space left on device
+        @retval E_IO on I/O errors
 
         @see open()
     */
@@ -1025,10 +1016,9 @@ public:
         @param uPos [in]
         Absolute position from the beginning of the file.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
 
         @see open()
         @see getPos()
@@ -1044,10 +1034,9 @@ public:
         @param uPos [out]
         On success receives the current position of the file pointer.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
 
         @see open()
         @see setPos()
@@ -1065,16 +1054,15 @@ public:
         @param pIsEOF [out]
         Points to a variable that receives the end-of-file status.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_INTR function call was interrupted
-        E_IO on I/O errors
-        E_ISDIR is a directory
-        E_BADF bad file
-        E_FAULT bad address
-        E_AGAIN operation would block
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_INTR function call was interrupted
+        @retval E_IO on I/O errors
+        @retval E_ISDIR is a directory
+        @retval E_BADF bad file
+        @retval E_FAULT bad address
+        @retval E_AGAIN operation would block
+        @retval E_NOLINK link has been severed
 
         @see open()
         @see read()
@@ -1095,10 +1083,9 @@ public:
         @param uSize [in]
         New size in bytes.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_OVERFLOW the resulting file offset would be a value which cannot  be represented correctly for regular files
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_OVERFLOW the resulting file offset would be a value which cannot  be represented correctly for regular files
 
         @see open()
         @see setPos()
@@ -1118,10 +1105,9 @@ public:
         @param rSize [out]
         Current size in bytes.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_OVERFLOW the resulting file offset would be a value which cannot  be represented correctly for regular files
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_OVERFLOW the resulting file offset would be a value which cannot  be represented correctly for regular files
 
         @see open()
         @see setPos()
@@ -1150,16 +1136,15 @@ public:
         @param rBytesRead [out]
         On success the number of bytes which have actually been retrieved.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_INTR function call was interrupted
-        E_IO on I/O errors
-        E_ISDIR is a directory
-        E_BADF bad file
-        E_FAULT bad address
-        E_AGAIN operation would block
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_INTR function call was interrupted
+        @retval E_IO on I/O errors
+        @retval E_ISDIR is a directory
+        @retval E_BADF bad file
+        @retval E_FAULT bad address
+        @retval E_AGAIN operation would block
+        @retval E_NOLINK link has been severed
 
         @see open()
         @see write()
@@ -1186,20 +1171,19 @@ public:
         @param rBytesWritten [out]
         On success the number of bytes which have actually been written.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_FBIG file too large
-        E_DQUOT quota exceeded
-        E_AGAIN operation would block
-        E_BADF bad file
-        E_FAULT bad address
-        E_INTR function call was interrupted
-        E_IO on I/O errosr
-        E_NOLCK no record locks available
-        E_NOLINK link has been severed
-        E_NOSPC no space left on device
-        E_NXIO no such device or address
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_FBIG file too large
+        @retval E_DQUOT quota exceeded
+        @retval E_AGAIN operation would block
+        @retval E_BADF bad file
+        @retval E_FAULT bad address
+        @retval E_INTR function call was interrupted
+        @retval E_IO on I/O errosr
+        @retval E_NOLCK no record locks available
+        @retval E_NOLINK link has been severed
+        @retval E_NOSPC no space left on device
+        @retval E_NXIO no such device or address
 
         @see open()
         @see read()
@@ -1219,16 +1203,15 @@ public:
         @param  aSeq [in/out]
         A reference to a ::rtl::ByteSequence that will hold the line read on success.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_INTR function call was interrupted
-        E_IO on I/O errors
-        E_ISDIR is a directory
-        E_BADF bad file
-        E_FAULT bad address
-        E_AGAIN operation would block
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_INTR function call was interrupted
+        @retval E_IO on I/O errors
+        @retval E_ISDIR is a directory
+        @retval E_BADF bad file
+        @retval E_FAULT bad address
+        @retval E_AGAIN operation would block
+        @retval E_NOLINK link has been severed
 
         @see open()
         @see read()
@@ -1243,33 +1226,22 @@ public:
 
     /** Synchronize the memory representation of a file with that on the physical medium.
 
-    The function ensures that all modified data and attributes of the file associated with
-    the given file handle have been written to the physical medium.
-    In case the hard disk has a write cache enabled, the data may not really be on
-    permanent storage when osl_syncFile returns.
+        The function ensures that all modified data and attributes of the file associated with
+        the given file handle have been written to the physical medium.
+        In case the hard disk has a write cache enabled, the data may not really be on
+        permanent storage when osl_syncFile returns.
 
-    @return
-    <dl>
-    <dt>E_None</dt>
-    <dd>On success</dd>
-    <dt>E_INVAL</dt>
-    <dd>The value of the input parameter is invalid</dd>
-    <br><p><strong>In addition to these error codes others may occur as well, for instance:</strong></p><br>
-    <dt>E_BADF</dt>
-    <dd>The file is not open for writing</dd>
-    <dt>E_IO</dt>
-    <dd>An I/O error occurred</dd>
-    <dt>E_NOSPC</dt>
-    <dd>There is no enough space on the target device</dd>
-    <dt>E_ROFS</dt>
-    <dd>The file is located on a read only file system</dd>
-    <dt>E_TIMEDOUT</dt>
-    <dd>A remote connection timed out. This may happen when a file is on a remote location</dd>
-    </dl>
+        @retval E_None On success
+        @retval E_INVAL The value of the input parameter is invalid
+        @retval E_BADF The file is not open for writing
+        @retval E_IO An I/O error occurred
+        @retval E_NOSPC There is no enough space on the target device
+        @retval E_ROFS The file is located on a read only file system
+        @retval E_TIMEDOUT A remote connection timed out. This may happen when a file is on a remote location
 
-    @see osl_syncFile()
-    @see open()
-    @see write()
+        @see osl_syncFile()
+        @see open()
+        @see write()
     */
     RC sync() const
     {
@@ -1288,16 +1260,15 @@ public:
         @param ustrDestFileURL [in]
         Full qualified URL of the destination file. A directory is NOT a valid destination file!
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_PERM operation not permitted
-        E_NAMETOOLONG file name too long
-        E_NOENT no such file or directory
-        E_ISDIR is a directory
-        E_ROFS read-only file system
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_PERM operation not permitted
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file or directory
+        @retval E_ISDIR is a directory
+        @retval E_ROFS read-only file system
 
         @see move()
         @see remove()
@@ -1319,15 +1290,14 @@ public:
         @param ustrDestFileURL [in]
         Full qualified URL of the destination file. An existing directory is NOT a valid destination !
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_PERM operation not permitted
-        E_NAMETOOLONG file name too long
-        E_NOENT no such file or directory
-        E_ROFS read-only file system
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_PERM operation not permitted
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file or directory
+        @retval E_ROFS read-only file system
 
         @see copy()
     */
@@ -1342,25 +1312,24 @@ public:
         @param ustrFileURL [in]
         Full qualified URL of the file to remove.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_PERM operation not permitted
-        E_NAMETOOLONG file name too long
-        E_NOENT no such file or directory
-        E_ISDIR is a directory
-        E_ROFS read-only file system
-        E_FAULT bad address
-        E_LOOP too many symbolic links encountered
-        E_IO on I/O errors
-        E_BUSY device or resource busy
-        E_INTR function call was interrupted
-        E_LOOP too many symbolic links encountered
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
-        E_TXTBSY text file busy
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_PERM operation not permitted
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file or directory
+        @retval E_ISDIR is a directory
+        @retval E_ROFS read-only file system
+        @retval E_FAULT bad address
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_IO on I/O errors
+        @retval E_BUSY device or resource busy
+        @retval E_INTR function call was interrupted
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
+        @retval E_TXTBSY text file busy
 
         @see open()
     */
@@ -1379,8 +1348,8 @@ public:
         Attributes of the file to be set.
 
         @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
 
         @see FileStatus
     */
@@ -1404,10 +1373,9 @@ public:
         @param rLastWriteTime [in]
         Time of the last modifying of the given file.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOENT no such file or directory not found
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOENT no such file or directory not found
 
         @see FileStatus
     */
@@ -1507,22 +1475,21 @@ public:
         On success it receives a handle which can be used for subsequent calls to osl_getFileStatus().
         The handle has to be released by a call to osl_releaseDirectoryItem().
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_MFILE too many open files used by the process
-        E_NFILE too many open files in the system
-        E_NOENT no such file or directory
-        E_LOOP  too many symbolic links encountered
-        E_NAMETOOLONG the file name is too long
-        E_NOTDIR a component of the path prefix of path is not a directory
-        E_IO on I/O errors
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
-        E_FAULT bad address
-        E_INTR the function call was interrupted
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_MFILE too many open files used by the process
+        @retval E_NFILE too many open files in the system
+        @retval E_NOENT no such file or directory
+        @retval E_LOOP  too many symbolic links encountered
+        @retval E_NAMETOOLONG the file name is too long
+        @retval E_NOTDIR a component of the path prefix of path is not a directory
+        @retval E_IO on I/O errors
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
+        @retval E_FAULT bad address
+        @retval E_INTR the function call was interrupted
 
         @see FileStatus
         @see Directory::getNextItem()
@@ -1545,26 +1512,25 @@ public:
         Reference to a class which receives the information of the file or directory
         represented by this directory item.
 
-        @return
-        E_None on success
-        E_NOMEM not enough memory for allocating structures
-        E_INVAL the format of the parameters was not valid
-        E_LOOP too many symbolic links encountered
-        E_ACCES permission denied
-        E_NOENT no such file or directory
-        E_NAMETOOLONG file name too long
-        E_BADF invalid oslDirectoryItem parameter
-        E_FAULT bad address
-        E_OVERFLOW value too large for defined data type
-        E_INTR function call was interrupted
-        E_NOLINK link has been severed
-        E_MULTIHOP components of path require hopping to multiple remote machines and the file system does not allow it
-        E_MFILE too many open files used by the process
-        E_NFILE too many open files in the system
-        E_NOSPC no space left on device
-        E_NXIO no such device or address
-        E_IO on I/O errors
-        E_NOSYS function not implemented
+        @retval E_None on success
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_ACCES permission denied
+        @retval E_NOENT no such file or directory
+        @retval E_NAMETOOLONG file name too long
+        @retval E_BADF invalid oslDirectoryItem parameter
+        @retval E_FAULT bad address
+        @retval E_OVERFLOW value too large for defined data type
+        @retval E_INTR function call was interrupted
+        @retval E_NOLINK link has been severed
+        @retval E_MULTIHOP components of path require hopping to multiple remote machines and the file system does not allow it
+        @retval E_MFILE too many open files used by the process
+        @retval E_NFILE too many open files in the system
+        @retval E_NOSPC no space left on device
+        @retval E_NXIO no such device or address
+        @retval E_IO on I/O errors
+        @retval E_NOSYS function not implemented
 
         @see get()
         @see Directory::getNextItem()
@@ -1584,9 +1550,8 @@ public:
     @param[in]  pOther
     A directory handle to compare with the underlying object's item
 
-    @return
-    true: if the items point to an identical resource<br>
-    false: if the items point to a different resource, or a fatal error occurred<br>
+    @retval true if the items point to an identical resource<br>
+    @retval false if the items point to a different resource, or a fatal error occurred<br>
 
     @see osl_getDirectoryItem()
 
@@ -1689,17 +1654,16 @@ public:
 
     /** Open a directory for enumerating its contents.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOENT the specified path doesn't exist
-        E_NOTDIR the specified path is not an directory
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_MFILE too many open files used by the process
-        E_NFILE too many open files in the system
-        E_NAMETOOLONG File name too long
-        E_LOOP Too many symbolic links encountered
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOENT the specified path doesn't exist
+        @retval E_NOTDIR the specified path is not an directory
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_MFILE too many open files used by the process
+        @retval E_NFILE too many open files in the system
+        @retval E_NAMETOOLONG File name too long
+        @retval E_LOOP Too many symbolic links encountered
 
         @see getNextItem()
         @see close()
@@ -1714,8 +1678,7 @@ public:
 
         Query if directory is open and so item enumeration is valid.
 
-        @return
-        true if the directory is open else false.
+        @retval true if the directory is open else false.
 
         @see open()
         @see close()
@@ -1725,12 +1688,11 @@ public:
 
     /** Close a directory.
 
-         @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_BADF invalid oslDirectory parameter
-        E_INTR the function call was interrupted
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_BADF invalid oslDirectory parameter
+        @retval E_INTR the function call was interrupted
 
         @see open()
     */
@@ -1751,17 +1713,16 @@ public:
 
     /** Resets the directory item enumeration to the beginning.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOENT the specified path doesn't exist
-        E_NOTDIR the specified path is not an directory
-        E_NOMEM not enough memory for allocating structures
-        E_ACCES permission denied
-        E_MFILE too many open files used by the process
-        E_NFILE too many open files in the system
-        E_NAMETOOLONG File name too long
-        E_LOOP Too many symbolic links encountered
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOENT the specified path doesn't exist
+        @retval E_NOTDIR the specified path is not an directory
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_ACCES permission denied
+        @retval E_MFILE too many open files used by the process
+        @retval E_NFILE too many open files in the system
+        @retval E_NAMETOOLONG File name too long
+        @retval E_LOOP Too many symbolic links encountered
 
         @see open()
     */
@@ -1784,13 +1745,12 @@ public:
         is going to call this function uHint times afterwards. This enables the implementation to
         get the information for more than one file and cache it until the next calls.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_NOENT no more entries in this directory
-        E_BADF invalid oslDirectory parameter
-        E_OVERFLOW the value too large for defined data type
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_NOENT no more entries in this directory
+        @retval E_BADF invalid oslDirectory parameter
+        @retval E_OVERFLOW the value too large for defined data type
 
         @see DirectoryItem
     */
@@ -1817,21 +1777,20 @@ public:
         @param rInfo [out]
         On success it receives information about the volume.
 
-        @return
-        E_None on success
-        E_NOMEM not enough memory for allocating structures
-        E_INVAL the format of the parameters was not valid
-        E_NOTDIR not a directory
-        E_NAMETOOLONG file name too long
-        E_NOENT no such file or directory
-        E_ACCES permission denied
-        E_LOOP too many symbolic links encountered
-        E_FAULT Bad address
-        E_IO on I/O errors
-        E_NOSYS function not implemented
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
-        E_INTR function call was interrupted
+        @retval E_None on success
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOTDIR not a directory
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file or directory
+        @retval E_ACCES permission denied
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_FAULT Bad address
+        @retval E_IO on I/O errors
+        @retval E_NOSYS function not implemented
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
+        @retval E_INTR function call was interrupted
 
         @see FileStatus
         @see VolumeInfo
@@ -1851,24 +1810,23 @@ public:
         Optional flags, see osl_createDirectoryWithFlags for details.  This
         defaulted parameter is new since LibreOffice 4.3.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_EXIST file exists
-        E_ACCES permission denied
-        E_NAMETOOLONG file name too long
-        E_NOENT no such file or directory
-        E_NOTDIR not a directory
-        E_ROFS read-only file system
-        E_NOSPC no space left on device
-        E_DQUOT quota exceeded
-        E_LOOP too many symbolic links encountered
-        E_FAULT bad address
-        E_IO on I/O errors
-        E_MLINK too many links
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_EXIST file exists
+        @retval E_ACCES permission denied
+        @retval E_NAMETOOLONG file name too long
+        @retval E_NOENT no such file or directory
+        @retval E_NOTDIR not a directory
+        @retval E_ROFS read-only file system
+        @retval E_NOSPC no space left on device
+        @retval E_DQUOT quota exceeded
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_FAULT bad address
+        @retval E_IO on I/O errors
+        @retval E_MLINK too many links
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
 
         @see remove()
     */
@@ -1886,25 +1844,24 @@ public:
         @param ustrDirectoryURL [in]
         Full qualified URL of the directory.
 
-        @return
-        E_None on success
-        E_INVAL the format of the parameters was not valid
-        E_NOMEM not enough memory for allocating structures
-        E_PERM operation not permitted
-        E_ACCES permission denied
-        E_NOENT no such file or directory
-        E_NOTDIR not a directory
-        E_NOTEMPTY directory not empty
-        E_FAULT bad address
-        E_NAMETOOLONG file name too long
-        E_BUSY device or resource busy
-        E_ROFS read-only file system
-        E_LOOP too many symbolic links encountered
-        E_BUSY device or resource busy
-        E_EXIST file exists
-        E_IO on I/O errors
-        E_MULTIHOP multihop attempted
-        E_NOLINK link has been severed
+        @retval E_None on success
+        @retval E_INVAL the format of the parameters was not valid
+        @retval E_NOMEM not enough memory for allocating structures
+        @retval E_PERM operation not permitted
+        @retval E_ACCES permission denied
+        @retval E_NOENT no such file or directory
+        @retval E_NOTDIR not a directory
+        @retval E_NOTEMPTY directory not empty
+        @retval E_FAULT bad address
+        @retval E_NAMETOOLONG file name too long
+        @retval E_BUSY device or resource busy
+        @retval E_ROFS read-only file system
+        @retval E_LOOP too many symbolic links encountered
+        @retval E_BUSY device or resource busy
+        @retval E_EXIST file exists
+        @retval E_IO on I/O errors
+        @retval E_MULTIHOP multihop attempted
+        @retval E_NOLINK link has been severed
 
         @see create()
     */
@@ -1918,9 +1875,10 @@ public:
 
         The osl_createDirectoryPath function creates a specified directory path.
         All nonexisting sub directories will be created.
-        <p><strong>PLEASE NOTE:</strong> You cannot rely on getting the error code
-        E_EXIST for existing directories. Programming against this error code is
-        in general a strong indication of a wrong usage of osl_createDirectoryPath.</p>
+
+        @attention You cannot rely on getting the error code E_EXIST for existing
+        directories. Programming against this error code is in general a strong
+        indication of a wrong usage of osl_createDirectoryPath.
 
         @param aDirectoryUrl
         [in] The absolute file URL of the directory path to create.
@@ -1931,37 +1889,20 @@ public:
         be informed about the creation of a directory. The value of this
         parameter may be NULL, in this case notifications will not be sent.
 
-        @return
-        <dl>
-        <dt>E_None</dt>
-        <dd>On success</dd>
-        <dt>E_INVAL</dt>
-        <dd>The format of the parameters was not valid</dd>
-        <dt>E_ACCES</dt>
-        <dd>Permission denied</dd>
-        <dt>E_EXIST</dt>
-        <dd>The final node of the specified directory path already exist</dd>
-        <dt>E_NAMETOOLONG</dt>
-        <dd>The name of the specified directory path exceeds the maximum allowed length</dd>
-        <dt>E_NOTDIR</dt>
-        <dd>A component of the specified directory path already exist as file in any part of the directory path</dd>
-        <dt>E_ROFS</dt>
-        <dd>Read-only file system</dd>
-        <dt>E_NOSPC</dt>
-        <dd>No space left on device</dd>
-        <dt>E_DQUOT</dt>
-        <dd>Quota exceeded</dd>
-        <dt>E_FAULT</dt>
-        <dd>Bad address</dd>
-        <dt>E_IO</dt>
-        <dd>I/O error</dd>
-        <dt>E_LOOP</dt>
-        <dd>Too many symbolic links encountered</dd>
-        <dt>E_NOLINK</dt>
-        <dd>Link has been severed</dd>
-        <dt>E_invalidError</dt>
-        <dd>An unknown error occurred</dd>
-        </dl>
+        @retval E_None On success
+        @retval E_INVAL The format of the parameters was not valid
+        @retval E_ACCES Permission denied
+        @retval E_EXIST The final node of the specified directory path already exist
+        @retval E_NAMETOOLONG The name of the specified directory path exceeds the maximum allowed length
+        @retval E_NOTDIR A component of the specified directory path already exist as file in any part of the directory path
+        @retval E_ROFS Read-only file system
+        @retval E_NOSPC No space left on device
+        @retval E_DQUOT Quota exceeded
+        @retval E_FAULT Bad address
+        @retval E_IO I/O error
+        @retval E_LOOP Too many symbolic links encountered
+        @retval E_NOLINK Link has been severed
+        @retval E_invalidError An unknown error occurred
 
         @see DirectoryCreationObserver
         @see create

@@ -98,7 +98,7 @@ typedef ::std::unordered_set<void const*, VoidPtrHash > VoidPointerSet;
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )
         : m_pName(rTypeInfo.name()), m_nCount(0), m_addresses(),
-          m_bStoreAddresses(osl_detail_ObjectRegistry_storeAddresses(m_pName)){}
+          m_bStoreAddresses(osl_detail_ObjectRegistry_storeAddresses(m_pName)) {}
 
     char const* const m_pName;
     oslInterlockedCount m_nCount;
@@ -148,9 +148,7 @@ private:
 /** Helper class which indicates leaking object(s) of a particular class in
     non-pro builds; use e.g.
 
-    <pre>
     class MyClass : private osl::DebugBase<MyClass> {...};
-    </pre>
 
     Using the environment variable
 

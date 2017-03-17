@@ -32,9 +32,9 @@ extern "C" {
 typedef void* oslCondition;
 
 typedef enum {
-    osl_cond_result_ok,     /* successful completion */
-    osl_cond_result_error,  /* error occurred, check osl_getLastSocketError() for details */
-    osl_cond_result_timeout, /* blocking operation timed out */
+    osl_cond_result_ok,         /* successful completion */
+    osl_cond_result_error,      /* error occurred, check osl_getLastSocketError() for details */
+    osl_cond_result_timeout,    /* blocking operation timed out */
     osl_cond_result_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslConditionResult;
 
@@ -44,7 +44,7 @@ typedef enum {
                 for a more robust and helpful condition.
 
     The condition is in the reset-state.
-    @returns 0 if condition could not be created.
+    @retval 0 if condition could not be created.
 */
 SAL_DLLPUBLIC oslCondition SAL_CALL osl_createCondition(void);
 
@@ -56,13 +56,13 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
 /** Sets condition to True => wait() will not block, check() returns True.
     NOTE: ALL threads waiting on this condition are unblocked!
     @param Condition handle to a created condition.
-    @return False if system-call failed.
+    @retval False if system-call failed.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
 
 /** Sets condition to False => wait() will block, check() returns False
     @param Condition handle to a created condition.
-    @return False if system-call failed.
+    @retval False if system-call failed.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
@@ -77,8 +77,8 @@ SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Conditi
 
 /** Queries the state of the condition without blocking.
     @param Condition handle to a created condition.
-    @return True: condition is set. <BR>
-    False: condition is not set. <BR>
+    @retval True condition is set
+    @retval False condition is not set
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
 

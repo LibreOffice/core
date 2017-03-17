@@ -137,9 +137,8 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
     [out] a pointer to a oslModule that is updated with the requested module handle
     on success.
 
-    @return
-    sal_True if the module handle could be retrieved and has been copied to *pResult.
-    sal_False if the module has not been loaded yet.
+    @retval sal_True if the module handle could be retrieved and has been copied to *pResult.
+    @retval sal_False if the module has not been loaded yet.
 
     @see osl_getFunctionSymbol
     @see osl_getAsciiFunctionSymbol
@@ -170,13 +169,8 @@ SAL_DLLPUBLIC void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSy
     @param ustrFunctionSymbolName
     [in] Name of the function that will be looked up.
 
-    @return
-    <dl>
-    <dt>Function address.</dt>
-    <dd>on success</dd>
-    <dt>NULL</dt>
-    <dd>lookup failed or the parameter are invalid.</dd>
-    </dl>
+    @retval function-address on success
+    @retval NULL lookup failed or the parameter are invalid
 
     @see osl_getSymbol
     @see osl_getAsciiFunctionSymbol
@@ -195,13 +189,8 @@ SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getFunctionSymbol(
     @param pSymbol
     [in] Name of the function that will be looked up.
 
-    @return
-    <dl>
-    <dt>Function address.</dt>
-    <dd>on success</dd>
-    <dt>NULL</dt>
-    <dd>lookup failed or the parameter are invalid.</dd>
-    </dl>
+    @retval function-address on success
+    @retval NULL lookup failed or the parameter are invalid
 
     @see osl_getModuleHandle
     @see osl_getFunctionSymbol
@@ -229,13 +218,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromAddress(
     @param pustrFunctionURL
     [out] receives the URL of the module that is mapped at pf.
 
-    @return
-    <dl>
-    <dt>sal_True</dt>
-    <dd>on success</dd>
-    <dt>sal_False</dt>
-    <dd>no module can be found at the specified function address or parameter is somewhat invalid.</dd>
-    </dl>
+    @retval sal_True on success
+    @retval sal_False no module can be found at the specified function address or parameter is somewhat invalid
 
     @see osl_getModuleURLFromAddress
 */

@@ -44,7 +44,7 @@ namespace osl {
 
     public:
         /** Open or create a configuration profile.
-            @return 0 if the profile could not be created, otherwise a handle to the profile.
+            @retval 0 if the profile could not be created, otherwise a handle to the profile.
         */
         Profile(const rtl::OUString & strProfileName, oslProfileOption Options = Profile_DEFAULT )
         {
@@ -138,7 +138,7 @@ namespace osl {
         /** Remove an entry from a section.
             @param rSection Name of the section.
             @param rEntry Name of the entry to remove.
-            @return False if section or entry could not be found.
+            @retval False if section or entry could not be found.
         */
         bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
         {
