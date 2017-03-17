@@ -18,23 +18,14 @@
  */
 #include <svx/dialogs.hrc>
 
-#define BTN_GEO                 2
-#define BTN_LIGHT               4
-
 // Unterer Teil
 #define CTL_PREVIEW             12
 #define CTL_LIGHT_PREVIEW       13
 
 // Geometry
-#define FT_DEPTH                35
-#define MTR_DEPTH               36
 
 // Depiction/Appearance
-#define FT_SLANT                48
-#define MTR_SLANT               49
-#define FL_SHADOW               50
 #define FT_DISTANCE             51
-#define FL_CAMERA               55
 
 // Lighting
 #define BTN_LIGHT_1             60
@@ -49,6 +40,5 @@
 #define LB_AMBIENTLIGHT         78
 #define BTN_AMBIENT_COLOR       79
 #define FT_AMBIENTLIGHT         80
-#define FL_LIGHT                81
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

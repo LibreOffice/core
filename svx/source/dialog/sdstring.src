@@ -154,40 +154,6 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
 {
     Text [ en-US ] = "Watermark";
 };
-String STR_INSERT_VIDEO_EXTFILTER_IVF
-{
-    Text [ en-US ] = "Intel Indeo Video (*.ivf)" ;
-};
-
-String STR_INSERT_VIDEO_EXTFILTER_AVI
-{
-    Text [ en-US ] = "Video for Windows (*.avi)" ;
-};
-
-String STR_INSERT_VIDEO_EXTFILTER_MOV
-{
-    Text [ en-US ] = "QuickTime Movie (*.mov)" ;
-};
-
-String STR_INSERT_VIDEO_EXTFILTER_MPEG
-{
-    Text [ en-US ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)" ;
-};
-
-String STR_EXTFILTER_ALL
-{
-    Text [ en-US ] = "<All>" ;
-};
-
-String STR_INSERT_SOUND_TITLE
-{
-    Text [ en-US ] = "Insert audio" ;
-};
-
-String STR_INSERT_VIDEO_TITLE
-{
-    Text [ en-US ] = "Insert video" ;
-};
 
 // BM: some additional standard colors
 

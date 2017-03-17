@@ -20,8 +20,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#include "docrecovery.hrc"
-
 String RID_SVXSTR_QUERY_EXIT_RECOVERY
 {
     Text [ en-US ] = "Are you sure you want to discard the %PRODUCTNAME document recovery data?";
