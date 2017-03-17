@@ -64,9 +64,6 @@
 
 // local ids
 
-// FixedLine
-#define FL_FRAME                    6
-
 // Image
 
 #define BMP_TABLE                   ( RID_DIALOG_START + 1 )

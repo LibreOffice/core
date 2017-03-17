@@ -94,9 +94,4 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
 };
 
-Bitmap BMP_HEADERIMAGE
-{
-    file = "addresspilot.bmp";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
