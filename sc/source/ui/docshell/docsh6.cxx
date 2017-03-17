@@ -98,7 +98,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
         }
     }
 
-    //      hier Position anpassen!
+    //      adjust position here!
 
     //  when loading an ole object, the VisArea is set from the document's
     //  view settings and must be used as-is (document content may not be complete yet).
@@ -118,7 +118,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
     //TODO/LATER: formerly in SvInplaceObject
     SfxObjectShell::SetVisArea( aArea );
 
-    if (bIsInplace)                     // Zoom in der InPlace View einstellen
+    if (bIsInplace)                     // adjust zoom in the InPlace View
     {
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if (pViewSh)
@@ -139,7 +139,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
             PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PaintPartFlags::Grid);
 
         //TODO/LATER: currently not implemented
-        //ViewChanged( ASPECT_CONTENT );          // auch im Container anzeigen
+        //ViewChanged( ASPECT_CONTENT );          // show in the container as well
     }
 }
 
@@ -150,8 +150,8 @@ bool ScDocShell::IsOle()
 
 void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
 {
-    //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
-    //  (VisArea wird dann beim Save wieder zurueckgesetzt)
+    //  if it isn't Ole at all, one can be spared the calculations
+    //  (VisArea will then be reset at the save)
 
     if (GetCreateMode() == SfxObjectCreateMode::STANDARD)
         return;
@@ -183,19 +183,19 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
     }
 
     if (aNewArea != aOldArea)
-        SetVisAreaOrSize( aNewArea ); // hier muss auch der Start angepasst werden
+        SetVisAreaOrSize( aNewArea ); // the start must also be adjusted here
 }
 
-//  Style-Krempel fuer Organizer etc.
+//  Style stuff for Organizer, etc.
 
 SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {
     return static_cast<SfxStyleSheetBasePool*>(aDocument.GetStyleSheetPool());
 }
 
-//  nach dem Laden von Vorlagen aus einem anderen Dokument (LoadStyles, Insert)
-//  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
-//  Pool umgesetzt werden, bevor der Quell-Pool geloescht wird.
+//  After loading templates from another document (LoadStyles, Insert), the SetItems
+//  (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) must be converted to the correct pool
+//  before the source pool is deleted.
 
 static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
@@ -230,7 +230,7 @@ void ScDocShell::LoadStyles( SfxObjectShell &rSource )
     aDocument.StylesToNames();
 
     SfxObjectShell::LoadStyles(rSource);
-    lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen
+    lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
 
     aDocument.UpdStlShtPtrsFrmNms();
 
@@ -321,7 +321,7 @@ void ScDocShell::UpdateLinks()
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
     StrSetType aNames;
 
-    // nicht mehr benutzte Links raus
+    // out with the no longer used links
 
     size_t nCount = pLinkManager->GetLinks().size();
     for (size_t k=nCount; k>0; )
@@ -332,7 +332,7 @@ void ScDocShell::UpdateLinks()
         {
             if (pTabLink->IsUsed())
                 aNames.insert(pTabLink->GetFileName());
-            else        // nicht mehr benutzt -> loeschen
+            else        // no longer used -> delete
             {
                 pTabLink->SetAddUndo(true);
                 pLinkManager->Remove(k);
@@ -340,7 +340,7 @@ void ScDocShell::UpdateLinks()
         }
     }
 
-    // neue Links eintragen
+    // enter new links
 
     SCTAB nTabCount = aDocument.GetTableCount();
     for (SCTAB i = 0; i < nTabCount; ++i)
@@ -353,7 +353,7 @@ void ScDocShell::UpdateLinks()
         OUString aOptions = aDocument.GetLinkOpt(i);
         sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
         bool bThere = false;
-        for (SCTAB j = 0; j < i && !bThere; ++j)                // im Dokument mehrfach?
+        for (SCTAB j = 0; j < i && !bThere; ++j)                // several times in the document?
         {
             if (aDocument.IsLinked(j)
                     && aDocument.GetLinkDoc(j) == aDocName
@@ -365,7 +365,7 @@ void ScDocShell::UpdateLinks()
                 bThere = true;
         }
 
-        if (!bThere)                                        // schon als Filter eingetragen?
+        if (!bThere)                                        // already entered as filter?
         {
             if (!aNames.insert(aDocName).second)
                 bThere = true;
@@ -393,11 +393,11 @@ void ScDocShell::ReloadTabLinks()
         ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
         if (ScTableLink* pTabLink = dynamic_cast<ScTableLink*>(pBase))
         {
-//          pTabLink->SetAddUndo(sal_False);        //! Undo's zusammenfassen
+//          pTabLink->SetAddUndo(sal_False);        //! merge Undos
 
             // Painting only after Update() makes no sense:
             // ScTableLink::Refresh() will post a Paint only is bDoPaint is true
-            // pTabLink->SetPaint(false);          //  Paint nur einmal am Ende
+            // pTabLink->SetPaint(false);          //  Paint only once at the end
             pTabLink->Update();
             //pTabLink->SetPaint(true);
 //          pTabLink->SetAddUndo(sal_True);
@@ -407,7 +407,7 @@ void ScDocShell::ReloadTabLinks()
 
     if ( bAny )
     {
-        //  Paint nur einmal
+        //  Paint only once
         PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
                                     PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left );
 

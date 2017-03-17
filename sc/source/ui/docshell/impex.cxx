@@ -897,7 +897,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                     if( bData && nCol <= nEndCol && nRow <= nEndRow )
                         pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell );
                 }
-                else                            // zuviele Spalten/Zeilen
+                else                            // too many columns/rows
                 {
                     if (!ValidRow(nRow))
                         bOverflowRow = true;    // display warning on import
@@ -1369,7 +1369,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 for ( i=0; i<nInfoCount && nCol <= MAXCOL+1; i++ )
                 {
                     sal_uInt8 nFmt = pColFormat[i];
-                    if (nFmt != SC_COL_SKIP)        // sonst auch nCol nicht hochzaehlen
+                    if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
                     {
                         if (nCol > MAXCOL)
                             bOverflowCol = true;    // display warning on import
@@ -1409,10 +1409,10 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     sal_uInt8 nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
                     {
-                        if ( pColStart[i] == nSourceCol + 1 )       // pColStart ist 1-basiert
+                        if ( pColStart[i] == nSourceCol + 1 )       // pColStart is 1-based
                         {
                             nFmt = pColFormat[i];
-                            nInfoStart = i + 1;     // ColInfos sind in Reihenfolge
+                            nInfoStart = i + 1;     // ColInfos are in succession
                             break;  // for
                         }
                     }
@@ -1946,7 +1946,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     eVersion = SylkVersion::SCALC3;
                 bMyDoc = (eVersion <= SylkVersion::OWN);
             }
-            else if( cTag == 'E' )                      // Ende
+            else if( cTag == 'E' )                      // End
                 break;
         }
         if( !bData )

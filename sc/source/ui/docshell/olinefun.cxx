@@ -444,7 +444,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
                                         pUndoDoc, pUndoTab, true ) );
         }
 
-        //  Spalten
+        //  Columns
 
         nMin=MAXCOL;
         nMax=0;
@@ -465,7 +465,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         for ( i=nMin; i<=nMax; i++ )
             rDoc.ShowCol( static_cast<SCCOL>(i), nTab, true );
 
-        //  Zeilen
+        //  Rows
 
         nMin=MAXROW;
         nMax=0;
@@ -560,7 +560,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
                                         pUndoDoc, pUndoTab, false ) );
         }
 
-        //  Spalten
+        //  Columns
 
         nCount = rColArray.GetCount(nColLevel);
         for ( i=0; i<nCount; i++ )
@@ -573,7 +573,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
                 HideOutline( nTab, true, nColLevel, i, false, false );
         }
 
-        //  Zeilen
+        //  Rows
 
         nCount = rRowArray.GetCount(nRowLevel);
         for ( i=0; i<nCount; i++ )
@@ -681,7 +681,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return true;        //! immer ???
+    return true;        //! always ???
 }
 
 bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
@@ -740,7 +740,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return true;        //! immer ???
+    return true;        //! always ???
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
