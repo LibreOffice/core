@@ -51,8 +51,6 @@ public:
     static EditDLL& Get();
 };
 
-#define EE_DLL() EditDLL::Get()
-
 #define EE_RESSTR(x) EditResId(x).toString()
 
 #endif // INCLUDED_EDITENG_EERDLL_HXX
