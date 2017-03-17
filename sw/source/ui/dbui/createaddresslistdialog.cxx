@@ -714,7 +714,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
     {
         for(nPos = nStart; nPos < nEnd; ++nPos)
         {
-            std::vector< OUString> aData = m_pCSVData->aDBData[nPos];
+            std::vector< OUString> const & aData = m_pCSVData->aDBData[nPos];
             if(nColumn >=0)
                 bFound = -1 != aData[(sal_uInt32)nColumn].toAsciiLowerCase().indexOf(sSearch);
             else
