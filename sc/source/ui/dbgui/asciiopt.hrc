@@ -20,6 +20,5 @@
 
 #define BTN_OK                      1
 #define BTN_CANCEL                  2
-#define BTN_HELP                    3
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,14 +24,6 @@
 #include "formula/compiler.hrc"
 
 #define STR_START               (SC_RESOURCE_START+100)
-#define STR_ROWHEIGHT           (STR_START)
-#define STR_ROWHEIGHT_TITLE     (STR_START + 1)
-#define STR_OPT_ROWHEIGHT       (STR_START + 2)
-#define STR_OPT_ROWHEIGHT_TITLE (STR_START + 3)
-#define STR_COLWIDTH            (STR_START + 4)
-#define STR_COLWIDTH_TITLE      (STR_START + 5)
-#define STR_OPT_COLWIDTH        (STR_START + 6)
-#define STR_OPT_COLWIDTH_TITLE  (STR_START + 7)
 #define SCSTR_UNDEFINED         (STR_START + 8)
 #define SCSTR_NONAME            (STR_START + 9)
 #define SCSTR_NONE              (STR_START + 10)
@@ -39,45 +31,25 @@
 #define SCSTR_FILTER_NOTEMPTY   (STR_START + 12)
 #define SCSTR_COLUMN            (STR_START + 13)
 #define SCSTR_ROW               (STR_START + 14)
-#define SCSTR_NEW               (STR_START + 15)
-
-#define SCSTR_REMOVE            (STR_START + 17)
-#define SCSTR_CANCEL            (STR_START + 18)
-
-#define SCSTR_SHOWTABLE         (STR_START + 20)
-#define SCSTR_HIDDENTABLES      (STR_START + 21)
 
 #define SCSTR_TABLE             (STR_START + 24)
 #define SCSTR_NAME              (STR_START + 25)
-#define SCSTR_INSTABLE          (STR_START + 26)
 #define SCSTR_APDTABLE          (STR_START + 27)
 #define SCSTR_RENAMETAB         (STR_START + 28)
 #define STR_INSERTGRAPHIC       (STR_START + 29)
 
-#define SCSTR_NEWTABLE          (STR_START + 37)
-
 #define SCSTR_PROTECTDOC        (STR_START + 39)
 #define SCSTR_UNPROTECTDOC      (STR_START + 40)
-#define SCSTR_PROTECTTAB        (STR_START + 41)
 #define SCSTR_UNPROTECTTAB      (STR_START + 42)
 #define SCSTR_PASSWORD          (STR_START + 43)
 #define SCSTR_PASSWORDOPT       (STR_START + 44)
 #define SCSTR_WRONGPASSWORD     (STR_START + 45)
 
 #define SCSTR_END               (STR_START + 47)
-#define SCSTR_STAT_PRINT        (STR_START + 48)
 
 #define SCSTR_UNKNOWN           (STR_START + 49)
-#define SCSTR_CHAR_ATTRS        (STR_START + 50)
 #define SCSTR_ALL               (STR_START + 51)
 #define SCSTR_STDFILTER         (STR_START + 52)
-
-// Cfg-Item-names
-#define SCSTR_CFG_APP           (STR_START + 53)
-#define SCSTR_CFG_DOC           (STR_START + 54)
-#define SCSTR_CFG_VIEW          (STR_START + 55)
-#define SCSTR_CFG_SPELLCHECK    (STR_START + 56)
-#define SCSTR_CFG_PRINT         (STR_START + 57)
 
 #define SCSTR_CHARSET_USER      (STR_START + 59)
 #define SCSTR_COLUMN_USER       (STR_START + 60)
@@ -85,18 +57,8 @@
 #define SCSTR_TEXTSEP           (STR_START + 62)
 #define SCSTR_MULTIPLE          (STR_START + 63)
 
-#define SCSTR_CFG_INPUT         (STR_START + 65)
-
 #define SCSTR_TOP10FILTER       (STR_START + 66)
 
-#define SCSTR_CFG_NAVIPI        (STR_START + 67)
-
-#define SCSTR_GRFILTER_OPENERROR     (STR_START + 77)
-#define SCSTR_GRFILTER_IOERROR       (STR_START + 78)
-#define SCSTR_GRFILTER_FORMATERROR   (STR_START + 79)
-#define SCSTR_GRFILTER_VERSIONERROR  (STR_START + 80)
-#define SCSTR_GRFILTER_FILTERERROR   (STR_START + 81)
-#define SCSTR_GRFILTER_TOOBIG        (STR_START + 82)
 #define SCSTR_UNDO_GRAFFILTER        (STR_START + 83)
 
 #define SCSTR_COL_LABEL              (STR_START + 84)
@@ -115,25 +77,7 @@
 #define STR_REPLCELLSWARN           (STR_START + 91)
 
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
-#define SCSTR_ALLFILTER             (STR_START + 94)
-#define SCSTR_MOREBTN_MOREOPTIONS   (STR_START + 95)
-#define SCSTR_MOREBTN_FEWEROPTIONS  (STR_START + 96)
 
-// items
-
-#define SCSTR_HOR_JUSTIFY_LEFT      (STR_START + 100)
-#define SCSTR_HOR_JUSTIFY_CENTER    (STR_START + 101)
-#define SCSTR_HOR_JUSTIFY_RIGHT     (STR_START + 102)
-#define SCSTR_HOR_JUSTIFY_BLOCK     (STR_START + 103)
-#define SCSTR_HOR_JUSTIFY_REPEAT    (STR_START + 104)
-#define SCSTR_HOR_JUSTIFY_STANDARD  (STR_START + 105)
-#define SCSTR_VER_JUSTIFY_TOP       (STR_START + 106)
-#define SCSTR_VER_JUSTIFY_CENTER    (STR_START + 107)
-#define SCSTR_VER_JUSTIFY_BOTTOM    (STR_START + 108)
-#define SCSTR_VER_JUSTIFY_STANDARD  (STR_START + 109)
-#define SCSTR_ORIENTATION_TOPBOTTOM (STR_START + 110)
-#define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
-#define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
 //free
 #define SCSTR_UNIT                  (STR_START + 114)
 
@@ -185,17 +129,6 @@
 #define STR_ACC_EDITLINE_NAME       (STR_START + 174)
 #define STR_ACC_EDITLINE_DESCR      (STR_START + 175)
 
-// EditCell
-#define STR_ACC_EDITCELL_NAME       (STR_START + 176)
-#define STR_ACC_EDITCELL_DESCR      (STR_START + 177)
-
-// DataPilot
-#define STR_ACC_DATAPILOT_ROW_DESCR (STR_START + 178)
-#define STR_ACC_DATAPILOT_COL_DESCR (STR_START + 179)
-#define STR_ACC_DATAPILOT_DATA_DESCR (STR_START + 180)
-#define STR_ACC_DATAPILOT_SEL_DESCR (STR_START + 181)
-#define STR_ACC_DATAPILOT_PAGE_DESCR (STR_START + 182)
-
 #define STR_ACC_TOOLBAR_FORMULA     (STR_START + 184)
 #define STR_ACC_DOC_SPREADSHEET     (STR_START + 185)
 #define STR_ACC_DOC_PREVIEW_SUFFIX (STR_START + 186)
@@ -203,8 +136,6 @@
 
 #define SCSTR_SHORT_SCDOC_NAME          (STR_START + 211)
 #define SCSTR_LONG_SCDOC_NAME           (STR_START + 212)
-
-#define SCSTR_CLPBRD_CLEAR              (STR_START + 213)
 
 #define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
 
@@ -260,8 +191,6 @@
 #define SCSTR_VALID_RANGE       (STR_START + 317)
 #define SCSTR_VALID_LIST        (STR_START + 318)
 
-#define SCSTR_SELECT            (STR_START + 319)
-
 // media shell
 #define SCSTR_MEDIASHELL        (STR_START + 401)
 
@@ -307,7 +236,6 @@
 #define STR_NOT_PASS_PROTECTED  (STR_START + 436)
 #define STR_HASH_BAD            (STR_START + 437)
 #define STR_HASH_GOOD           (STR_START + 438)
-#define STR_HASH_REGENERATED    (STR_START + 439)
 #define STR_RETYPE              (STR_START + 440)
 
 #define STR_TITLE_CONFLICT      (STR_START + 441)
