@@ -61,6 +61,7 @@
 
 class XSecParser;
 class XMLDocumentWrapper_XmlSecImpl;
+class SAXEventKeeperImpl;
 
 class InternalSignatureInformation
 {
@@ -118,7 +119,7 @@ private:
     /*
      * the SAX events keeper
      */
-    css::uno::Reference< css::xml::crypto::sax::XSecuritySAXEventKeeper > m_xSAXEventKeeper;
+    rtl::Reference<SAXEventKeeperImpl> m_xSAXEventKeeper;
 
     /*
      * the bridge component which creates/verifies signature

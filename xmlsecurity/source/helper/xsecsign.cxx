@@ -31,6 +31,7 @@
 #include <rtl/uuid.h>
 
 #include "framework/signaturecreatorimpl.hxx"
+#include "framework/saxeventkeeperimpl.hxx"
 
 using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;
@@ -75,7 +76,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     cssu::Sequence<cssu::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= m_xSAXEventKeeper;
+    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
 
     //for nss, the internal module is used for signing, which needs to be improved later
@@ -95,12 +96,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     xSignatureCreationResultBroadcaster->addSignatureCreationResultListener( this );
 
-    cssu::Reference<cssxc::sax::XReferenceResolvedBroadcaster>
-        xReferenceResolvedBroadcaster
-        (m_xSAXEventKeeper,
-        cssu::UNO_QUERY);
-
-    xReferenceResolvedBroadcaster->addReferenceResolvedListener(
+    m_xSAXEventKeeper->addReferenceResolvedListener(
         nIdOfSignatureElementCollector,
         xReferenceResolvedListener);
 
@@ -118,7 +114,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         if ( keeperId != -1)
         {
             m_xSAXEventKeeper->setSecurityId(keeperId, nSecurityId);
-            xReferenceResolvedBroadcaster->addReferenceResolvedListener( keeperId, xReferenceResolvedListener);
+            m_xSAXEventKeeper->addReferenceResolvedListener( keeperId, xReferenceResolvedListener);
             xReferenceCollector->setReferenceId( keeperId );
             nReferenceCount++;
         }
@@ -307,7 +303,7 @@ bool XSecController::WriteSignature(
             /*
              * export the signature template
              */
-            cssu::Reference<cssxs::XDocumentHandler> xSEKHandler( m_xSAXEventKeeper,cssu::UNO_QUERY);
+            cssu::Reference<cssxs::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()),cssu::UNO_QUERY);
 
             int i;
             int sigNum = m_vInternalSignatureInformations.size();
@@ -356,7 +352,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
         try
         {
             // Export the signature template.
-            cssu::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper, uno::UNO_QUERY);
+            cssu::Reference<xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
 
             for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {
