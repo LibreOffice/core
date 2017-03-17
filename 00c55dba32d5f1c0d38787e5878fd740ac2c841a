@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_651d2e73",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-17T10:12:12Z",
+      "side": 1,
+      "message": "Now that we have IDs that grow from 0, is it necessary to change the type here? Sounds like these do not really belong to this patch.",
+      "revId": "00c55dba32d5f1c0d38787e5878fd740ac2c841a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
