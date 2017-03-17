@@ -326,13 +326,13 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
             SwPosition const*const pAPos = rAnchor.GetContentAnchor();
             if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
-                 ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
-                   FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
+                 ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                   RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {
                 bool bSkip = false;
                 aSave.m_bOther = false;
                 aSave.m_nContent = pAPos->nContent.GetIndex();
-                if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
+                if ( RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() )
                 {
                     if( nContent <= aSave.m_nContent )
                     {
@@ -364,7 +364,7 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAu
                 SwFormatAnchor aNew( rFlyAnchor );
                 SwPosition aNewPos( *rFlyAnchor.GetContentAnchor() );
                 rUpdater(aNewPos, aEntry.m_nContent);
-                if ( FLY_AT_CHAR != rFlyAnchor.GetAnchorId() )
+                if ( RndStdIds::FLY_AT_CHAR != rFlyAnchor.GetAnchorId() )
                 {
                     aNewPos.nContent.Assign( nullptr, 0 );
                 }

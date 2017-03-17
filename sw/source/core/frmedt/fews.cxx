@@ -488,7 +488,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
                 SwTextNode *pTextNode = aAnchIdx.GetNode().GetTextNode();
 
-                SwFormatAnchor aAnc(FLY_AS_CHAR);
+                SwFormatAnchor aAnc(RndStdIds::FLY_AS_CHAR);
                 sal_Int32 nInsertPos = bBefore ? pTextNode->Len() : 0;
                 SwPosition aPos(*pTextNode, nInsertPos);
 
@@ -739,12 +739,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     bool bRTL = false;
     bool bVerticalL2R = false;
 
-    if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
+    if ((RndStdIds::FLY_AT_PAGE == _nAnchorId) || (RndStdIds::FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
         const SwFrame* pTmp = pFrame;
         // #i22305#
-        if ((FLY_AT_PAGE == _nAnchorId) ||
-            ((FLY_AT_FLY == _nAnchorId) && !_bFollowTextFlow))
+        if ((RndStdIds::FLY_AT_PAGE == _nAnchorId) ||
+            ((RndStdIds::FLY_AT_FLY == _nAnchorId) && !_bFollowTextFlow))
         {
             pFrame = pPage;
         }
@@ -889,7 +889,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = aRectFnSet.GetPos(pFrame->Frame());
         // #i17567# - allow negative positions
         // for fly frames anchor to paragraph/to character.
-        if ((_nAnchorId == FLY_AT_PARA) || (_nAnchorId == FLY_AT_CHAR))
+        if ((_nAnchorId == RndStdIds::FLY_AT_PARA) || (_nAnchorId == RndStdIds::FLY_AT_CHAR))
         {
             // The rectangle, the fly frame can be positioned in, is determined
             // horizontally by the frame area of the horizontal environment
@@ -979,7 +979,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // fly frame). Thus, assure this.
             const SwTextFrame* pTextFrame( dynamic_cast<const SwTextFrame*>(pFrame) );
             if ( pTextFrame &&
-                 (_nAnchorId == FLY_AT_CHAR) &&
+                 (_nAnchorId == RndStdIds::FLY_AT_CHAR) &&
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||
                    _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
             {
@@ -1026,7 +1026,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
             if ( pTextFrame &&
-                 (_nAnchorId == FLY_AT_CHAR) &&
+                 (_nAnchorId == RndStdIds::FLY_AT_CHAR) &&
                  _eHoriRelOrient == text::RelOrientation::CHAR )
             {
                 SwTwips nLeft = 0L;

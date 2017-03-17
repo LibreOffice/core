@@ -776,7 +776,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
     , m_rFormat( rFormat )
     , m_nOldNodeIndex( rFormat.GetAnchor().GetContentAnchor()->nNode.GetIndex() )
-    , m_nOldContentIndex( (FLY_AT_CHAR == rFormat.GetAnchor().GetAnchorId())
+    , m_nOldContentIndex( (RndStdIds::FLY_AT_CHAR == rFormat.GetAnchor().GetAnchorId())
             ?   rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex()
             :   COMPLETE_STRING )
 {

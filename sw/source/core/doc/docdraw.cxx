@@ -420,7 +420,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
                 SwDrawFrameFormat *pFrameFormat = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
                 if( pFrameFormat &&
-                    FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
+                    RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), true );
                     --i;

@@ -89,7 +89,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         case OBJ_TEXT:
             if( bMarquee )
             {
-                m_pSh->ChgAnchor(FLY_AS_CHAR);
+                m_pSh->ChgAnchor(RndStdIds::FLY_AS_CHAR);
 
                 if( pObj )
                 {

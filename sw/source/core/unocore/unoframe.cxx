@@ -1773,7 +1773,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
                     SwPosition aPos(*pFrame->GetFrameFormat()->GetContent().GetContentIdx());
                     aAnchor.SetAnchor(&aPos);
-                    aAnchor.SetType(FLY_AT_FLY);
+                    aAnchor.SetType(RndStdIds::FLY_AT_FLY);
                     aSet.Put(aAnchor);
                     pDoc->SetFlyFrameAttr( *pFormat, aSet );
                     bDone = true;
@@ -1902,7 +1902,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == nMemberId)
             {
                 SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aSet.Get(pEntry->nWID));
-                if(aAnchor.GetAnchorId() == FLY_AT_FLY)
+                if(aAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
                 {
                     const ::SwPosition* pPosition = aAnchor.GetContentAnchor();
                     SwFrameFormat* pFlyFormat = pPosition ? pPosition->nNode.GetNode().GetFlyFormat() : nullptr;
@@ -1920,7 +1920,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         aSet.Put(aAnchor);
                     }
                 }
-                else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) &&
+                else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) &&
                          !aAnchor.GetContentAnchor())
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
@@ -2629,7 +2629,7 @@ void SwXFrame::dispose()
                ( pObj->GetUserCall() &&
                  !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
         {
-            if (pFormat->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
+            if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
                 SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();
@@ -2653,7 +2653,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
-        if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
+        if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
             (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetContentAnchor());
@@ -2735,18 +2735,18 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const SfxPoolItem* pItem;
-        RndStdIds eAnchorId = FLY_AT_PARA;
+        RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
         if(SfxItemState::SET == aFrameSet.GetItemState(RES_ANCHOR, false, &pItem) )
         {
             eAnchorId = static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId();
-            if( FLY_AT_FLY == eAnchorId &&
+            if( RndStdIds::FLY_AT_FLY == eAnchorId &&
                 !aPam.GetNode().FindFlyStartNode())
             {
                 // framebound only where a frame exists
-                SwFormatAnchor aAnchor(FLY_AT_PARA);
+                SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
                 aFrameSet.Put(aAnchor);
             }
-            else if ((FLY_AT_PAGE == eAnchorId) &&
+            else if ((RndStdIds::FLY_AT_PAGE == eAnchorId) &&
                      0 == static_cast<const SwFormatAnchor*>(pItem)->GetPageNum() )
             {
                 SwFormatAnchor aAnchor( *static_cast<const SwFormatAnchor*>(pItem) );
@@ -2769,10 +2769,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 SwFormatAnchor* pAnchorItem = nullptr;
                 // the frame is inserted bound to page
                 // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
-                if (eAnchorId != FLY_AT_PAGE)
+                if (eAnchorId != RndStdIds::FLY_AT_PAGE)
                 {
                     pAnchorItem = static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone());
-                    aFrameSet.Put( SwFormatAnchor( FLY_AT_PAGE, 1 ));
+                    aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
                 }
 
                 aPam.DeleteMark(); // mark position node will be deleted!
@@ -2793,7 +2793,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
             else
             {
-                pFormat = pDoc->MakeFlySection( FLY_AT_PARA, aPam.GetPoint(),
+                pFormat = pDoc->MakeFlySection( RndStdIds::FLY_AT_PARA, aPam.GetPoint(),
                                          &aFrameSet, pParentFrameFormat );
             }
             if(pFormat)

@@ -503,7 +503,7 @@ void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         SwPageFrame *pOldPage = GetPageFrame();
         AnchorFrame()->RemoveFly( this );
 
-        if ( FLY_AT_PAGE == pAnch->GetAnchorId() )
+        if ( RndStdIds::FLY_AT_PAGE == pAnch->GetAnchorId() )
         {
             sal_uInt16 nPgNum = pAnch->GetPageNum();
             SwRootFrame *pRoot = getRootFrame();
@@ -813,7 +813,7 @@ void SwPageFrame::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
             pFlyFrame->GetVirtDrawObj()->SetOrdNum( nNewNum );
     }
 
-    if ( FLY_AS_CHAR == _rNewObj.GetFrameFormat().GetAnchor().GetAnchorId() )
+    if ( RndStdIds::FLY_AS_CHAR == _rNewObj.GetFrameFormat().GetAnchor().GetAnchorId() )
     {
         return;
     }
@@ -853,7 +853,7 @@ void SwPageFrame::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
         }
         if ( GetUpper() )
         {
-            if (FLY_AS_CHAR !=
+            if (RndStdIds::FLY_AS_CHAR !=
                     _rToRemoveObj.GetFrameFormat().GetAnchor().GetAnchorId())
             {
                 static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();
@@ -1173,7 +1173,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
         const SwDrawContact *pC = static_cast<const SwDrawContact*>(GetUserCall(pSdrObj));
         const SwFrameFormat  *pFormat = pC->GetFormat();
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-        if ( FLY_AS_CHAR == rAnch.GetAnchorId() )
+        if ( RndStdIds::FLY_AS_CHAR == rAnch.GetAnchorId() )
         {
             const SwFrame* pAnchorFrame = pC->GetAnchorFrame( pSdrObj );
             if( !pAnchorFrame )

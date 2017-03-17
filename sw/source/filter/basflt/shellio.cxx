@@ -230,9 +230,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                 {
                     SwPosition const*const pFrameAnchor(
                             rAnchor.GetContentAnchor());
-                    if  (   (FLY_AT_PAGE == rAnchor.GetAnchorId())
+                    if  (   (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
                         ||  (   pFrameAnchor
-                            &&  (   (   (FLY_AT_PARA == rAnchor.GetAnchorId())
+                            &&  (   (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())
                                     &&  (   (pUndoPam->GetPoint()->nNode ==
                                              pFrameAnchor->nNode)
                                         ||  (pUndoPam->GetMark()->nNode ==
@@ -240,7 +240,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                         )
                                     )
                                 // #i97570# also check frames anchored AT char
-                                ||  (   (FLY_AT_CHAR == rAnchor.GetAnchorId())
+                                ||  (   (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
                                     &&  !IsDestroyFrameAnchoredAtChar(
                                               *pFrameAnchor,
                                               *pUndoPam->GetPoint(),
@@ -252,7 +252,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                         )
                     {
                         if( bChkHeaderFooter &&
-                            (FLY_AT_PARA == rAnchor.GetAnchorId()) &&
+                            (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) &&
                             RES_DRAWFRMFMT == pFrameFormat->Which() )
                         {
                             // DrawObjects are not allowed in Headers/Footers!
@@ -278,7 +278,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 pFrameFormat->DelFrames();
                             }
 
-                            if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+                            if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
                             {
                                 if( !rAnchor.GetContentAnchor() )
                                 {

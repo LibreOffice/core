@@ -512,8 +512,8 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
                           GetMaster() == rFly.GetAnchorFrame() ||
-                          ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
-                           (FLY_AT_CHAR != rAnchor.GetAnchorId())
+                          ((RndStdIds::FLY_AT_PARA != rAnchor.GetAnchorId()) &&
+                           (RndStdIds::FLY_AT_CHAR != rAnchor.GetAnchorId())
                           )
                         ) &&
                         // #i68520#
@@ -654,7 +654,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // #i26945#
             const SwFrameFormat& rFrameFormat = _pAnchoredObj->GetFrameFormat();
             const SwFormatAnchor& rNewA = rFrameFormat.GetAnchor();
-            if (FLY_AT_PAGE == rNewA.GetAnchorId())
+            if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
             {
                 if ( bInFootnote )
                     return false;
@@ -700,27 +700,27 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                     // If <mpCurrAnchoredObj> is anchored as character, its content
                     // does not wrap around pNew
-                    if (FLY_AS_CHAR == rCurrA.GetAnchorId())
+                    if (RndStdIds::FLY_AS_CHAR == rCurrA.GetAnchorId())
                         return false;
 
                     // If pNew is anchored to page and <mpCurrAnchoredObj is not anchored
                     // to page, the content of <mpCurrAnchoredObj> does not wrap around pNew
                     // If both pNew and <mpCurrAnchoredObj> are anchored to page, we can do
                     // some more checks
-                    if (FLY_AT_PAGE == rNewA.GetAnchorId())
+                    if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
                     {
-                        if (FLY_AT_PAGE == rCurrA.GetAnchorId())
+                        if (RndStdIds::FLY_AT_PAGE == rCurrA.GetAnchorId())
                         {
                             bEvade = true;
                         }
                         else
                             return false;
                     }
-                    else if (FLY_AT_PAGE == rCurrA.GetAnchorId())
+                    else if (RndStdIds::FLY_AT_PAGE == rCurrA.GetAnchorId())
                         return false; // Page anchored ones only avoid page anchored ones
-                    else if (FLY_AT_FLY == rNewA.GetAnchorId())
+                    else if (RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId())
                         bEvade = true; // Non-page anchored ones avoid frame anchored ones
-                    else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
+                    else if( RndStdIds::FLY_AT_FLY == rCurrA.GetAnchorId() )
                         return false; // Frame anchored ones do not avoid paragraph anchored ones
                     // #i57062#
                     // In order to avoid loop situation, it's decided to adjust
@@ -749,9 +749,9 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         {
             // #i26945#
             const SwFormatAnchor& rNewA = _pAnchoredObj->GetFrameFormat().GetAnchor();
-            OSL_ENSURE( FLY_AS_CHAR != rNewA.GetAnchorId(),
+            OSL_ENSURE( RndStdIds::FLY_AS_CHAR != rNewA.GetAnchorId(),
                     "Don't call GetTop with a FlyInContentFrame" );
-            if (FLY_AT_PAGE == rNewA.GetAnchorId())
+            if (RndStdIds::FLY_AT_PAGE == rNewA.GetAnchorId())
                 return true;  // We always avoid page anchored ones
 
             // If Flys anchored at paragraph are caught in a FlyCnt, then
@@ -805,7 +805,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                      !pHeader->IsFooterFrame() &&
                      pCurrFrame->IsInDocBody() ) ) )
             {
-                if( pHeader || FLY_AT_FLY == rNewA.GetAnchorId() )
+                if( pHeader || RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId() )
                     return true;
 
                 // Compare indices:
@@ -1030,8 +1030,8 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                           ( !rSur.IsAnchorOnly() ||
                             // #i68520#
                             GetMaster() == pAnchoredObj->GetAnchorFrame() ||
-                            ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
-                             (FLY_AT_CHAR != rAnchor.GetAnchorId())) ) )
+                            ((RndStdIds::FLY_AT_PARA != rAnchor.GetAnchorId()) &&
+                             (RndStdIds::FLY_AT_CHAR != rAnchor.GetAnchorId())) ) )
                         || aRect.Top() == FAR_AWAY )
                         continue;
                 }
@@ -1315,8 +1315,8 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
     if( rFlyFormat.IsAnchorOnly() && pAnchoredObj->GetAnchorFrame() != GetMaster() )
     {
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
-            (FLY_AT_CHAR == rAnchor.GetAnchorId()))
+        if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
         {
             return css::text::WrapTextMode_NONE;
         }

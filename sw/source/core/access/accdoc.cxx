@@ -560,7 +560,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             SwFlyFrame *pFlyFrame = pCurrFrame->FindFlyFrame();
             const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
             RndStdIds eAnchorId = rAnchor.GetAnchorId();
-            if(eAnchorId == FLY_AS_CHAR)
+            if(eAnchorId == RndStdIds::FLY_AS_CHAR)
             {
                 const SwFrame *pSwFrame = pFlyFrame->GetAnchorFrame();
                 if(pSwFrame->IsTextFrame())
@@ -584,7 +584,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                 SwFrameFormat* pFormat = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
                 const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                if( FLY_AS_CHAR != rAnchor.GetAnchorId() )
+                if( RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId() )
                     pCurrTextFrame = nullptr;
             }
         }

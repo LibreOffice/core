@@ -3084,7 +3084,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     m_pParentFrame = nullptr;
     m_pFlyOffset = nullptr;
-    m_eNewAnchorType = FLY_AT_PAGE;
+    m_eNewAnchorType = RndStdIds::FLY_AT_PAGE;
     m_nTextTyp = TXT_MAINTEXT;
     m_nStyleBeforeFly = m_nLastFormatId = 0;
     m_pStyAttr = nullptr;
@@ -3516,7 +3516,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_pHFTextBxs(nullptr)
     , m_pParentFrame(nullptr)
     , m_pFlyOffset(nullptr)
-    , m_eNewAnchorType(FLY_AS_CHAR)
+    , m_eNewAnchorType(RndStdIds::FLY_AS_CHAR)
     , m_pFieldMain(nullptr)
     , m_pFieldHdFt(nullptr)
     , m_pFieldFootnote(nullptr)

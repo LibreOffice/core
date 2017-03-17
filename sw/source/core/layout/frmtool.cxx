@@ -894,7 +894,7 @@ SwContentNotify::~SwContentNotify()
             {
                 SwFrameFormat *pFormat = (*pTable)[i];
                 const SwFormatAnchor &rAnch = pFormat->GetAnchor();
-                if ( FLY_AT_PAGE != rAnch.GetAnchorId() ||
+                if ( RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId() ||
                      rAnch.GetContentAnchor() == nullptr )
                 {
                     continue;
@@ -956,7 +956,7 @@ SwContentNotify::~SwContentNotify()
             for (SwAnchoredObject* pAnchoredObj : *pObjs)
             {
                 if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                        == FLY_AT_CHAR )
+                        == RndStdIds::FLY_AT_CHAR )
                 {
                     pAnchoredObj->CheckCharRectAndTopOfLine( !pMasterFrame->IsEmpty() );
                 }
@@ -998,17 +998,17 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
             assert( checkPos != checkFormats.end());
             checkFormats.erase( checkPos );
 #endif
-            const bool bFlyAtFly = rAnch.GetAnchorId() == FLY_AT_FLY; // LAYER_IMPL
+            const bool bFlyAtFly = rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY; // LAYER_IMPL
             //Is a frame or a SdrObject described?
             const bool bSdrObj = RES_DRAWFRMFMT == pFormat->Which();
             // OD 23.06.2003 #108784# - append also drawing objects anchored
             // as character.
             const bool bDrawObjInContent = bSdrObj &&
-                                         (rAnch.GetAnchorId() == FLY_AS_CHAR);
+                                         (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
 
             if( bFlyAtFly ||
-                (rAnch.GetAnchorId() == FLY_AT_PARA) ||
-                (rAnch.GetAnchorId() == FLY_AT_CHAR) ||
+                (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+                (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
                 bDrawObjInContent )
             {
                 SdrObject* pSdrObj = nullptr;
@@ -1084,7 +1084,7 @@ static inline bool lcl_ObjConnected(const SwFrameFormat* pFormat, const SwFrame*
 static inline bool lcl_InHeaderOrFooter(const SwFrameFormat& rFormat)
 {
     const SwFormatAnchor& rAnch = rFormat.GetAnchor();
-    if (rAnch.GetAnchorId() == FLY_AT_PAGE)
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
         return false;
     return rFormat.GetDoc()->IsInHeaderFooter(rAnch.GetContentAnchor()->nNode);
 }
@@ -1100,7 +1100,7 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         const auto& rAnch = pFormat->GetAnchor();
         // Formats can still remain, because we neither use character bound
         // frames nor objects which are anchored to character bounds.
-        if ((rAnch.GetAnchorId() != FLY_AT_PAGE) && (rAnch.GetAnchorId() != FLY_AS_CHAR))
+        if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && (rAnch.GetAnchorId() != RndStdIds::FLY_AS_CHAR))
             vFormatsToConnect.push_back(pFormat);
     }
     const SwFrameFormat* pFirstRequeued(nullptr);
@@ -2304,7 +2304,7 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
         // #115759# - remove also drawing objects from page
         else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
         {
-            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
+            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 pObj->GetPageFrame()->RemoveDrawObjFromPage(
                                 *(static_cast<SwAnchoredDrawObject*>(pObj)) );
@@ -2466,7 +2466,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
         // #115759# - remove also drawing objects from page
         else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
         {
-            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
+            if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 pObj->InvalidateObjPos();
                 _pPage->AppendDrawObjToPage(

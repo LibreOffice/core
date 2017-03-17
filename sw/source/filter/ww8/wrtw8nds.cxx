@@ -355,7 +355,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
-        if (maFlyIter->GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AT_CHAR)
+        if (maFlyIter->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
             ++nPos;
             if (nPos >= nStartPos && nPos <= nMinPos)
@@ -1546,7 +1546,7 @@ SvxFrameDirection MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFl
         {
             pItem = nullptr;
             const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
-            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
+            if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetContentAnchor() )
             {
                 pFlyFormat = pAnchor->GetContentAnchor()->nNode.GetNode().GetFlyFormat();
@@ -1604,7 +1604,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const
         {
             pRet = nullptr;
             const SwFormatAnchor* pAnchor = &pFlyFormat->GetAnchor();
-            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
+            if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetContentAnchor())
             {
                 pFlyFormat =
@@ -2992,13 +2992,13 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
                 aOffset -= aPageRect.Pos();
 
                 m_rWW8Export.m_pFlyOffset = &aOffset;
-                m_rWW8Export.m_eNewAnchorType = FLY_AT_PAGE;
+                m_rWW8Export.m_eNewAnchorType = RndStdIds::FLY_AT_PAGE;
             }
 
             m_rWW8Export.m_pParentFrame = &rFormat;
             if (
                 m_rWW8Export.IsInTable() &&
-                 (FLY_AT_PAGE != rAnch.GetAnchorId()) &&
+                 (RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                  !m_rWW8Export.m_pDoc->GetNodes()[ nStt ]->IsNoTextNode()
                )
             {
@@ -3028,7 +3028,7 @@ void AttributeOutputBase::OutputFlyFrame( const ww8::Frame& rFormat )
     Point aLayPos;
 
     // get the Layout Node-Position
-    if (FLY_AT_PAGE == rFormat.GetFrameFormat().GetAnchor().GetAnchorId())
+    if (RndStdIds::FLY_AT_PAGE == rFormat.GetFrameFormat().GetAnchor().GetAnchorId())
         aLayPos = rNode.FindPageFrameRect().Pos();
     else
         aLayPos = rNode.FindLayoutRect().Pos();

@@ -441,13 +441,13 @@ bool SwFormatAnchor::GetPresentation
     sal_uInt16 nId = 0;
     switch ( GetAnchorId() )
     {
-        case FLY_AT_PARA:
+        case RndStdIds::FLY_AT_PARA:
             nId = STR_FLY_AT_PARA;
             break;
-        case FLY_AS_CHAR:
+        case RndStdIds::FLY_AS_CHAR:
             nId = STR_FLY_AS_CHAR;
             break;
-        case FLY_AT_PAGE:
+        case RndStdIds::FLY_AT_PAGE:
             nId = STR_FLY_AT_PAGE;
             break;
         default:;//prevent warning

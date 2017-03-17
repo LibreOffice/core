@@ -3219,7 +3219,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100));
-    pWrtShell->ChgAnchor(0, true);
+    pWrtShell->ChgAnchor(RndStdIds::FLY_AT_PARA, true);
 
     rUndoManager.EndUndo(SwUndoId::END, nullptr);
 

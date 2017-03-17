@@ -179,7 +179,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     if (!bCouldRead)
         return false;
 
-    SwFormatAnchor aAnchor( FLY_AT_CHAR );
+    SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );
     aAnchor.SetAnchor( m_pPaM->GetPoint() );
     rSet.Put( aAnchor );
 
@@ -2168,7 +2168,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 {
     OSL_ENSURE(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
-        return FLY_AT_PAGE;
+        return RndStdIds::FLY_AT_PAGE;
     bool bCurSectionVertical = m_aSectionManager.CurrentSectionIsVertical();
 
     SvxMSDffImportRec aRecordFromFSPA;
@@ -2220,7 +2220,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     sal_uInt32 nXRelTo = (pRecord->pXRelTo && nCntRelTo > *(pRecord->pXRelTo)) ? *(pRecord->pXRelTo) : 1;
     sal_uInt32 nYRelTo = (pRecord->pYRelTo && nCntRelTo > *(pRecord->pYRelTo)) ? *(pRecord->pYRelTo) : 1;
 
-    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR; // #i43718#
+    RndStdIds eAnchor = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
 
     SwFormatAnchor aAnchor( eAnchor );
     aAnchor.SetAnchor( m_pPaM->GetPoint() );
@@ -2759,7 +2759,7 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
      *
      * Leave to later and set the correct location then.
      */
-    if ((pFormat) && (pFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
+    if ((pFormat) && (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR))
     {
         m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(), pFormat);
     }
@@ -3114,7 +3114,7 @@ void SwWW8ImplReader::GrafikDtor()
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrameFormat *pFormat)
 {
-    OSL_ENSURE(pFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR,
+    OSL_ENSURE(pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR,
         "Don't use fltanchors with inline frames, slap!");
     NewAttr(rPos, SwFltAnchor(pFormat));
 }

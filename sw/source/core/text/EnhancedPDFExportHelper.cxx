@@ -344,9 +344,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         {
             const SwFormatAnchor& rAnchor =
                 static_cast<const SwFlyFrame*>(&rFrame)->GetFormat()->GetAnchor();
-            if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
-                (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
-                (FLY_AT_PAGE == rAnchor.GetAnchorId()))
+            if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()))
             {
                 pKeyFrame = static_cast<const SwFlyFrame&>(rFrame).GetAnchorFrame();
                 bContinue = true;
@@ -1796,7 +1796,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // #i44368# Links in Header/Footer
                         const SwFormatAnchor &rAnch = pFrameFormat->GetAnchor();
-                        if (FLY_AT_PAGE != rAnch.GetAnchorId())
+                        if (RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
                             const SwPosition* pPosition = rAnch.GetContentAnchor();
                             if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )

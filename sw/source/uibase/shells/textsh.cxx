@@ -412,7 +412,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
-            aMgr.InsertFlyFrame(FLY_AT_PARA, aStartPos, aSize);
+            aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aStartPos, aSize);
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
         }
@@ -442,7 +442,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(aMgr.GetSize());
             aSize.Width() = GetShell().GetAnyCurRect(CurRectType::PagePrt).Width();
             Point aPos = aMgr.GetPos();
-            RndStdIds eAnchor = FLY_AT_PARA;
+            RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
                 eAnchor = (RndStdIds)static_cast<const SfxUInt16Item *>(pItem)->GetValue();
             if(pArgs->GetItemState(FN_PARAM_1, false, &pItem)  == SfxItemState::SET)

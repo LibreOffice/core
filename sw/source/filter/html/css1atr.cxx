@@ -1890,8 +1890,8 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
         switch( rAnchor.GetAnchorId() )
         {
-        case FLY_AT_PARA:
-        case FLY_AT_CHAR:
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
                 text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
             {
@@ -1907,8 +1907,8 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
             }
             SAL_FALLTHROUGH;
 
-        case FLY_AT_PAGE:
-        case FLY_AT_FLY:
+        case RndStdIds::FLY_AT_PAGE:
+        case RndStdIds::FLY_AT_FLY:
             {
                 // position
                 OutCSS1_PropertyAscii( sCSS1_P_position, sCSS1_PV_absolute );
@@ -2149,7 +2149,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
     const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
     RndStdIds eAnchorId = rAnchor.GetAnchorId();
     const SwPosition *pAnchorPos = rAnchor.GetContentAnchor();
-    if (FLY_AT_PAGE != eAnchorId && pAnchorPos)
+    if (RndStdIds::FLY_AT_PAGE != eAnchorId && pAnchorPos)
     {
         const SwNode& rNode = pAnchorPos->nNode.GetNode();
         if( rNode.IsContentNode() )

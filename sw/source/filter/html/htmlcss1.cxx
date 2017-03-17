@@ -1960,13 +1960,13 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
                 m_pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
             if( pFlySttNd )
             {
-                aAnchor.SetType( FLY_AT_FLY );
+                aAnchor.SetType( RndStdIds::FLY_AT_FLY );
                 SwPosition aPos( *pFlySttNd );
                 aAnchor.SetAnchor( &aPos );
             }
             else
             {
-                aAnchor.SetType( FLY_AT_PAGE );
+                aAnchor.SetType( RndStdIds::FLY_AT_PAGE );
                 aAnchor.SetPageNum( 1 );
             }
             nHoriPos = rPropInfo.m_nLeft;
@@ -1974,7 +1974,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         }
         else
         {
-            aAnchor.SetType( FLY_AT_PARA );
+            aAnchor.SetType( RndStdIds::FLY_AT_PARA );
             aAnchor.SetAnchor( m_pPam->GetPoint() );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::CHAR;
@@ -2000,14 +2000,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
         if( nContent )
         {
-            aAnchor.SetType( FLY_AT_CHAR );
+            aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
             m_pPam->Move( fnMoveBackward );
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
-            aAnchor.SetType( FLY_AT_PARA );
+            aAnchor.SetType( RndStdIds::FLY_AT_PARA );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::PRINT_AREA;
         }

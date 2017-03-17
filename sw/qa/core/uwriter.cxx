@@ -971,7 +971,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
     //Insert a graphic at X of >>X<< in paragraph 2
     SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-    SwFormatAnchor aAnchor(FLY_AS_CHAR);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
     SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), nullptr, &aFlySet, nullptr, nullptr);
@@ -1000,7 +1000,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be 0 graphics", static_cast<size_t>(0), m_pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
-    //Now, if instead we swap FLY_AS_CHAR (inline graphic) to FLY_AT_CHAR (anchored to character)
+    //Now, if instead we swap RndStdIds::FLY_AS_CHAR (inline graphic) to RndStdIds::FLY_AT_CHAR (anchored to character)
     //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
     //range to which its anchored, which is annoying.
 }

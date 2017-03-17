@@ -362,7 +362,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
         SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
         SwFormatAnchor aAnch( rFormat.GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
-        if ( FLY_AS_CHAR == nAnchorId )
+        if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
             return false;
         if( pOld->IsVertical() )
         {
@@ -384,7 +384,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             }
         }
         switch ( nAnchorId ) {
-            case FLY_AT_PAGE:
+            case RndStdIds::FLY_AT_PAGE:
             {
                 OSL_ENSURE( pOld->IsPageFrame(), "Wrong anchor, page expected." );
                 if( SwMove::UP == nDir )
@@ -398,7 +398,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 }
                 break;
             }
-            case FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_CHAR:
             {
                 OSL_ENSURE( pOld->IsContentFrame(), "Wrong anchor, page expected." );
                 if( SwMove::LEFT == nDir || SwMove::RIGHT == nDir )
@@ -433,7 +433,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                 }
                 SAL_FALLTHROUGH;
             }
-            case FLY_AT_PARA:
+            case RndStdIds::FLY_AT_PARA:
             {
                 OSL_ENSURE( pOld->IsContentFrame(), "Wrong anchor, page expected." );
                 if( SwMove::UP == nDir )
@@ -460,7 +460,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     bRet = false;
                 break;
             }
-            case FLY_AT_FLY:
+            case RndStdIds::FLY_AT_FLY:
             {
                 OSL_ENSURE( pOld->IsFlyFrame(), "Wrong anchor, fly frame expected.");
                 SwPageFrame* pPage = pOld->FindPageFrame();
@@ -753,7 +753,7 @@ void SwFEShell::EndDrag( const Point * )
         // DrawUndo on to flyframes are not stored
         //             The flys change the flag.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
-        ChgAnchor( 0, true );
+        ChgAnchor( RndStdIds::FLY_AT_PARA, true );
 
         EndUndo( SwUndoId::END );
 
@@ -1798,7 +1798,7 @@ bool SwFEShell::ImpEndCreate()
 
             if( bCharBound )
             {
-                aAnch.SetType( FLY_AS_CHAR );
+                aAnch.SetType( RndStdIds::FLY_AS_CHAR );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1872,7 +1872,7 @@ bool SwFEShell::ImpEndCreate()
                 bAtPage = true;
             else
             {
-                aAnch.SetType( FLY_AT_PARA );
+                aAnch.SetType( RndStdIds::FLY_AT_PARA );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1881,7 +1881,7 @@ bool SwFEShell::ImpEndCreate()
         {
             pPage = pAnch ? pAnch->FindPageFrame() : GetLayout()->GetPageAtPos(aPoint);
 
-            aAnch.SetType( FLY_AT_PAGE );
+            aAnch.SetType( RndStdIds::FLY_AT_PAGE );
             aAnch.SetPageNum( pPage->GetPhyPageNum() );
             pAnch = pPage;      // page becomes an anchor
         }
@@ -2008,7 +2008,7 @@ bool SwFEShell::ImpEndCreate()
         }
         SwFormatVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aVert );
-        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(getIDocumentLayoutAccess().MakeLayoutFormat( RND_DRAW_OBJECT, &aSet ));
+        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet ));
         // #i36010# - set layout direction of the position
         pFormat->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
@@ -2020,7 +2020,7 @@ bool SwFEShell::ImpEndCreate()
         pContact->MoveObjToVisibleLayer( &rSdrObj );
         if( bCharBound )
         {
-            OSL_ENSURE( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
+            OSL_ENSURE( aAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR, "wrong AnchorType" );
             SwTextNode *pNd = aAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
             SwFormatFlyCnt aFormat( pFormat );
             pNd->InsertItem(aFormat,
@@ -2177,37 +2177,37 @@ void SwFEShell::BreakMark()
     Imp()->GetDrawView()->BrkMarkObj();
 }
 
-short SwFEShell::GetAnchorId() const
+RndStdIds SwFEShell::GetAnchorId() const
 {
-    short nRet = SHRT_MAX;
+    RndStdIds nRet = (RndStdIds)SHRT_MAX;
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) != nullptr )
             {
-                nRet = -1;
+                nRet = RndStdIds::UNKNOWN;
                 break;
             }
             SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-            short nId = static_cast<short>(pContact->GetFormat()->GetAnchor().GetAnchorId());
-            if ( nRet == SHRT_MAX )
+            RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
+            if ( nRet == (RndStdIds)SHRT_MAX )
                 nRet = nId;
             else if ( nRet != nId )
             {
-                nRet = -1;
+                nRet = RndStdIds::UNKNOWN;
                 break;
             }
         }
     }
-    if ( nRet == SHRT_MAX )
-        nRet = -1;
+    if ( nRet == (RndStdIds)SHRT_MAX )
+        nRet = RndStdIds::UNKNOWN;
     return nRet;
 }
 
-void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
+void SwFEShell::ChgAnchor( RndStdIds eAnchorId, bool bSameOnly, bool bPosCorr )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
@@ -2216,7 +2216,7 @@ void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
     {
         StartAllAction();
 
-        if( GetDoc()->ChgAnchor( rMrkList, (RndStdIds)eAnchorId, bSameOnly, bPosCorr ))
+        if( GetDoc()->ChgAnchor( rMrkList, eAnchorId, bSameOnly, bPosCorr ))
             Imp()->GetDrawView()->UnmarkAll();
 
         EndAllAction();
@@ -2299,7 +2299,7 @@ bool SwFEShell::IsGroupSelected()
             if ( pObj->IsGroupObject() &&
                  // --> #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
-                 FLY_AS_CHAR != static_cast<SwDrawContact*>(GetUserCall(pObj))->
+                 RndStdIds::FLY_AS_CHAR != static_cast<SwDrawContact*>(GetUserCall(pObj))->
                                       GetFormat()->GetAnchor().GetAnchorId() )
             {
                 return true;
@@ -2320,7 +2320,7 @@ namespace
             OSL_FAIL( "<HasSuitableGroupingAnchor> - missing frame format" );
             bSuitable = false;
         }
-        else if (FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId())
+        else if (RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId())
         {
             bSuitable = false;
         }
@@ -2569,7 +2569,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
 
                             // set FlyProtectFlags::Pos if it is a Math object anchored 'as char' and baseline alignment is activated
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
-                                    && FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
+                                    && RndStdIds::FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
                                     && mpDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
                             if ((FlyProtectFlags::Pos & eType) && bProtectMathPos)
                                 nChk |= FlyProtectFlags::Pos;
@@ -2656,7 +2656,7 @@ bool SwFEShell::IsAlignPossible() const
             SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pO));
             OSL_ENSURE( pC, "No SwDrawContact!");
             //only as character bound drawings can be aligned
-            bRet = pC && pC->GetFormat()->GetAnchor().GetAnchorId() == FLY_AS_CHAR;
+            bRet = pC && pC->GetFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();
@@ -2699,7 +2699,7 @@ void SwFEShell::CheckUnboundObjects()
             {
             const SwFrame *pAnch = ::FindAnchor( pPage, aPt, true );
             SwPosition aPos( *static_cast<const SwContentFrame*>(pAnch)->GetNode() );
-            aAnch.SetType( FLY_AT_PARA );
+            aAnch.SetType( RndStdIds::FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
             const_cast<SwRect&>(GetCharRect()).Pos() = aPt;
             }
@@ -2720,7 +2720,7 @@ void SwFEShell::CheckUnboundObjects()
 
             aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
-            SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RND_DRAW_OBJECT, &aSet );
+            SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet );
 
             SwDrawContact *pContact = new SwDrawContact(
                                             static_cast<SwDrawFrameFormat*>(pFormat), pObj );

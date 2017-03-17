@@ -102,7 +102,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     , bFrameChanged(false)
 {
     SwRect aRect;
-    rWrtShell.CalcBoundRect(aRect, FLY_AS_CHAR);
+    rWrtShell.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
     nSelectionWidth = aRect.Width();
 

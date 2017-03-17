@@ -1101,7 +1101,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
         bool bSet = false;
-        if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
+        if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
         {
             long aDiff = aTmp.Top() - aRefPoint.Y();
             if( aDiff > 0 )
@@ -1146,7 +1146,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             aSet.Put( aVert );
             bSet = true;
         }
-        if (bWeb && (FLY_AT_PARA == eAnchorId)
+        if (bWeb && (RndStdIds::FLY_AT_PARA == eAnchorId)
             && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
         {
             SwFormatHoriOrient aHori( static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
@@ -1174,10 +1174,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrameAttr( aSet );
-        bool bSetPos = (FLY_AS_CHAR != eAnchorId);
+        bool bSetPos = (RndStdIds::FLY_AS_CHAR != eAnchorId);
         if(bSetPos && bWeb)
         {
-            if (FLY_AT_PAGE != eAnchorId)
+            if (RndStdIds::FLY_AT_PAGE != eAnchorId)
             {
                 bSetPos = false;
             }
@@ -1278,7 +1278,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
                 const bool bVertAnchor = rSh.IsFrameVertical( true, bDummy1, bDummy2 );
                 bool bHoriMove = !bVertAnchor == !( nDir % 2 );
                 bool bMoveAllowed =
-                    !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
+                    !bHoriMove || (rSh.GetAnchorId() != RndStdIds::FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
                     pSdrView->MoveAllMarked(Size(nX, nY));
@@ -6271,7 +6271,7 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
                     rControl = Footer;
             }
             else
-                bPageAnchored = pFlyFormat->GetAnchor( ).GetAnchorId( ) == FLY_AT_PAGE;
+                bPageAnchored = pFlyFormat->GetAnchor( ).GetAnchorId( ) == RndStdIds::FLY_AT_PAGE;
         }
     }
     else

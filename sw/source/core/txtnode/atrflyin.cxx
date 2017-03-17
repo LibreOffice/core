@@ -104,7 +104,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
     // disable undo while copying attribute
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
-    if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
+    if ((RndStdIds::FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
         (pDoc != pFormat->GetDoc()))   // different documents?
     {
         // JP 03.06.96: dann sorge dafuer, das der koperierte Anker auf
@@ -117,7 +117,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
 
         SwPosition pos = *aAnchor.GetContentAnchor();
         pos.nNode = aIdx;
-        if (FLY_AS_CHAR == aAnchor.GetAnchorId())
+        if (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId())
         {
             pos.nContent.Assign( pCNd, 0 );
         }
@@ -164,7 +164,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         aPos.nNode = *pOldNode;
     }
 
-    aAnchor.SetType( FLY_AS_CHAR );        // default!
+    aAnchor.SetType( RndStdIds::FLY_AS_CHAR );        // default!
     aAnchor.SetAnchor( &aPos );
 
     // beim Ankerwechsel werden immer alle FlyFrames vom Attribut geloescht

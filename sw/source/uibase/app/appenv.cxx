@@ -429,7 +429,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if (rItem.bSend)
         {
             pSh->SttEndDoc(true);
-            aMgr.InsertFlyFrame(FLY_AT_PAGE,
+            aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
 
@@ -445,7 +445,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         // Addressee
         pSh->SttEndDoc(true);
 
-        aMgr.InsertFlyFrame(FLY_AT_PAGE,
+        aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
             Size (nPageW - rItem.lAddrFromLeft - 566, 0));
         pSh->EnterSelFrameMode();

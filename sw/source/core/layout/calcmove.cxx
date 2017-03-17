@@ -1003,7 +1003,7 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                         continue;
                     }
 
-                    if ( FLY_AS_CHAR == rFormat.GetAnchor().GetAnchorId() )
+                    if ( RndStdIds::FLY_AS_CHAR == rFormat.GetAnchor().GetAnchorId() )
                     {
                         nMinWidth = std::max( nMinWidth,
                                          bFly ? rFormat.GetFrameSize().GetWidth()

@@ -1225,7 +1225,7 @@ else
         {
             const SwFrameFormat& rCpyFormat = *pCpyFormat;
             SwFormatAnchor aAnchor( rCpyFormat.GetAnchor() );
-            if (FLY_AT_PAGE != aAnchor.GetAnchorId())
+            if (RndStdIds::FLY_AT_PAGE != aAnchor.GetAnchorId())
                 continue;
             SAL_INFO( "sw.docappend", "PaAn: " << aAnchor.GetPageNum()
                                       << " => " << aAnchor.GetPageNum() + pageOffset );

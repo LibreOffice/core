@@ -326,7 +326,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                 // flow, because then I wouldn't evade it.
                 if ( ::IsFrameInSameKontext( pAnchor, &m_rThis ) )
                 {
-                    if ( rFormat.GetAnchor().GetAnchorId() == FLY_AT_PARA )
+                    if ( rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
                     {
                         // The index of the other one can be retrieved using the anchor attribute.
                         sal_uLong nTmpIndex = rFormat.GetAnchor().GetContentAnchor()->nNode.GetIndex();

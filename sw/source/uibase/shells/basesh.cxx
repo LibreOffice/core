@@ -1052,14 +1052,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_TOOL_ANCHOR_FRAME:
         {
             RndStdIds eSet = nSlot == FN_TOOL_ANCHOR_PAGE
-                                ? FLY_AT_PAGE
+                                ? RndStdIds::FLY_AT_PAGE
                                 : nSlot == FN_TOOL_ANCHOR_PARAGRAPH
-                                    ? FLY_AT_PARA
+                                    ? RndStdIds::FLY_AT_PARA
                                     : nSlot == FN_TOOL_ANCHOR_FRAME
-                                        ? FLY_AT_FLY
+                                        ? RndStdIds::FLY_AT_FLY
                                         : nSlot == FN_TOOL_ANCHOR_CHAR
-                                            ? FLY_AS_CHAR
-                                            : FLY_AT_CHAR;
+                                            ? RndStdIds::FLY_AS_CHAR
+                                            : RndStdIds::FLY_AT_CHAR;
             rSh.StartUndo();
             if (rSh.IsObjSelected())
                 rSh.ChgAnchor(eSet);
@@ -1073,7 +1073,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             // pre-conditions are met then align the formula to the baseline of the text
             const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
             const bool bDoMathBaselineAlignment = xObj.is() && SotExchange::IsMath( xObj->getClassID() )
-                    && FLY_AS_CHAR == eSet && rSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
+                    && RndStdIds::FLY_AS_CHAR == eSet && rSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
             if (bDoMathBaselineAlignment)
                 rSh.AlignFormulaToBaseline( xObj );
 
@@ -1092,8 +1092,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 switch( eSet )
                 {
-                case FLY_AT_FLY:
-                case FLY_AT_PAGE:
+                case RndStdIds::FLY_AT_FLY:
+                case RndStdIds::FLY_AT_PAGE:
                     //Wrap through, left or from left, top, from top
                     if(eSurround != css::text::WrapTextMode_THROUGHT)
                         aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
@@ -1105,7 +1105,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SwFormatHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
-                case FLY_AT_PARA:
+                case RndStdIds::FLY_AT_PARA:
                     // left, from left, right, top, no wrap, wrap left and right
                     if (eSurround != css::text::WrapTextMode_LEFT && eSurround != css::text::WrapTextMode_RIGHT)
                         aSet.Put(SwFormatSurround(css::text::WrapTextMode_LEFT));
@@ -1117,7 +1117,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SwFormatHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
-                case FLY_AT_CHAR:
+                case RndStdIds::FLY_AT_CHAR:
                     // left, from left, right, top, wrap through
                     if(eSurround != css::text::WrapTextMode_THROUGHT)
                         aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
@@ -1625,15 +1625,15 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     RndStdIds eSet = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
-                            (eSet == FLY_AT_PAGE))
+                            (eSet == RndStdIds::FLY_AT_PAGE))
                         || ((nWhich == FN_TOOL_ANCHOR_PARAGRAPH) &&
-                            (eSet == FLY_AT_PARA))
+                            (eSet == RndStdIds::FLY_AT_PARA))
                         || ((nWhich == FN_TOOL_ANCHOR_FRAME) &&
-                            (eSet == FLY_AT_FLY))
+                            (eSet == RndStdIds::FLY_AT_FLY))
                         || ((nWhich == FN_TOOL_ANCHOR_AT_CHAR) &&
-                            (eSet == FLY_AT_CHAR))
+                            (eSet == RndStdIds::FLY_AT_CHAR))
                         || ((nWhich == FN_TOOL_ANCHOR_CHAR) &&
-                            (eSet == FLY_AS_CHAR));
+                            (eSet == RndStdIds::FLY_AS_CHAR));
                     if(nWhich != FN_TOOL_ANCHOR)
                     {
                         if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
@@ -1647,19 +1647,19 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                         switch (eSet)
                         {
-                            case FLY_AT_PAGE:
+                            case RndStdIds::FLY_AT_PAGE:
                                 nSlotId = FN_TOOL_ANCHOR_PAGE;
                             break;
-                            case FLY_AT_PARA:
+                            case RndStdIds::FLY_AT_PARA:
                                 nSlotId = FN_TOOL_ANCHOR_PARAGRAPH;
                             break;
-                            case FLY_AS_CHAR:
+                            case RndStdIds::FLY_AS_CHAR:
                                 nSlotId = FN_TOOL_ANCHOR_CHAR;
                             break;
-                            case FLY_AT_CHAR:
+                            case RndStdIds::FLY_AT_CHAR:
                                 nSlotId = FN_TOOL_ANCHOR_AT_CHAR;
                             break;
-                            case FLY_AT_FLY:
+                            case RndStdIds::FLY_AT_FLY:
                                 nSlotId = FN_TOOL_ANCHOR_FRAME;
                             break;
                             default:
@@ -1688,7 +1688,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
                 {
                     SfxItemSet aSet(GetPool(), RES_OPAQUE, RES_ANCHOR);
-                    int nAnchorType;
+                    RndStdIds nAnchorType;
                     if(bObj)
                     {
                         rSh.GetObjAttr(aSet);
@@ -1707,7 +1707,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     bool bSet = false;
 
                     bool bDisable =
-                        (nAnchorType == - 1) || (nAnchorType == FLY_AS_CHAR);
+                        (nAnchorType == RndStdIds::UNKNOWN) || (nAnchorType == RndStdIds::FLY_AS_CHAR);
                     const bool bHtmlMode =
                         0 != ::GetHtmlMode(GetView().GetDocShell());
 
@@ -1715,9 +1715,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         case FN_FRAME_NOWRAP:
                             bDisable |=
-                                (   (nAnchorType != FLY_AT_PARA)
-                                 && (nAnchorType != FLY_AT_CHAR)
-                                 && (nAnchorType != FLY_AT_PAGE));
+                                (   (nAnchorType != RndStdIds::FLY_AT_PARA)
+                                 && (nAnchorType != RndStdIds::FLY_AT_CHAR)
+                                 && (nAnchorType != RndStdIds::FLY_AT_PAGE));
                             bSet = nSurround == css::text::WrapTextMode_NONE;
                         break;
                         case FN_FRAME_WRAP:
@@ -1730,9 +1730,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         break;
                         case FN_FRAME_WRAPTHRU:
                             bDisable |= (bHtmlMode ||
-                                (   (nAnchorType != FLY_AT_PARA)
-                                 && (nAnchorType != FLY_AT_CHAR)
-                                 && (nAnchorType != FLY_AT_PAGE)));
+                                (   (nAnchorType != RndStdIds::FLY_AT_PARA)
+                                 && (nAnchorType != RndStdIds::FLY_AT_CHAR)
+                                 && (nAnchorType != RndStdIds::FLY_AT_PAGE)));
                             if(bObj)
                                 bSet = nSurround == css::text::WrapTextMode_THROUGHT && rSh.GetLayerId();
                             else
@@ -1771,7 +1771,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         break;
                         case FN_WRAP_ANCHOR_ONLY:
                             bDisable |= (bHtmlMode ||
-                                (nAnchorType != FLY_AT_PARA));
+                                (nAnchorType != RndStdIds::FLY_AT_PARA));
                             bSet = rWrap.IsAnchorOnly();
                         break;
                         case FN_FRAME_WRAP_LEFT:

@@ -179,20 +179,20 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
 
             const SwFormatAnchor &rAnchor = pFlyFormat->GetAnchor();
 
-            if( FLY_AT_FLY == rAnchor.GetAnchorId() )
+            if( RndStdIds::FLY_AT_FLY == rAnchor.GetAnchorId() )
             {
                 // the fly needs to be attached somewhere, so ask it
                 pLayout = static_cast<const SwLayoutFrame*>(static_cast<const SwFlyFrame*>(pLayout)->GetAnchorFrame());
                 continue;
             }
-            else if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
-                     (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
-                     (FLY_AS_CHAR == rAnchor.GetAnchorId()))
+            else if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                     (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                     (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()))
             {
                 OSL_ENSURE( rAnchor.GetContentAnchor(), "no valid position" );
                 rPos = *rAnchor.GetContentAnchor();
                 pTextNode = rPos.nNode.GetNode().GetTextNode();
-                if ( FLY_AT_PARA == rAnchor.GetAnchorId() )
+                if ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() )
                 {
                     const_cast<SwTextNode*>(pTextNode)->MakeStartIndex(
                             &rPos.nContent );

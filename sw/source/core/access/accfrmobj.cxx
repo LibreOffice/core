@@ -157,7 +157,7 @@ bool SwAccessibleChild::IsBoundAsChar() const
     {
         const SwFrameFormat* pFrameFormat = ::FindFrameFormat( mpDrawObj );
         bRet = pFrameFormat
-               && (FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId());
+               && (RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId());
     }
     else if ( mpWindow )
     {
@@ -334,7 +334,7 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
             const SwFlyFrame* pFly = static_cast< const SwFlyFrame *>( mpFrame );
             if( pFly->IsFlyInContentFrame() )
             {
-                // For FLY_AS_CHAR the parent is the anchor
+                // For RndStdIds::FLY_AS_CHAR the parent is the anchor
                 pParent = pFly->GetAnchorFrame();
                 OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
@@ -368,9 +368,9 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
         {
             const SwFrameFormat *pFrameFormat = pContact->GetFormat();
             OSL_ENSURE( pFrameFormat, "frame format is missing" );
-            if( pFrameFormat && FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
+            if( pFrameFormat && RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
             {
-                // For FLY_AS_CHAR the parent is the anchor
+                // For RndStdIds::FLY_AS_CHAR the parent is the anchor
                 pParent = pContact->GetAnchorFrame();
                 OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );

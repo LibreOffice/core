@@ -3416,7 +3416,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     // #i45301# - anchor nested table inside Writer fly frame
     // only at-character, if absolute position object attributes are available.
     // Thus, default anchor type is as-character anchored.
-    RndStdIds eAnchor( FLY_AS_CHAR );
+    RndStdIds eAnchor( RndStdIds::FLY_AS_CHAR );
     if ( m_nInTable )
     {
         WW8_TablePos* pNestedTabPos( nullptr );
@@ -3445,7 +3445,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                     m_nIniFlyDx, m_nIniFlyDy);
 
                 // #i45301# - anchor nested table Writer fly frame at-character
-                eAnchor = FLY_AT_CHAR;
+                eAnchor = RndStdIds::FLY_AT_CHAR;
             }
         }
     }
@@ -3463,7 +3463,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     {
         int nNewInTable = m_nInTable + 1;
 
-        if ((eAnchor == FLY_AT_CHAR)
+        if ((eAnchor == RndStdIds::FLY_AT_CHAR)
             && !m_aTableStack.empty() && !InEqualApo(nNewInTable) )
         {
             m_pTableDesc->m_pParentPos = new SwPosition(*m_pPaM->GetPoint());
@@ -3489,7 +3489,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             if ( pTableWFlyPara && pTableSFlyPara )
             {
                 WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
-                SwFormatAnchor aAnchor( FLY_AT_CHAR );
+                SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );
                 aAnchor.SetAnchor( m_pTableDesc->m_pParentPos );
                 aFlySet.Put( aAnchor );
                 m_pTableDesc->m_pFlyFormat->SetFormatAttr( aFlySet );

@@ -552,7 +552,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 // So the frames will be created when inserting into
                 // existing doc (after setting the anchor!):
                 if(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()
-                   && (FLY_AT_PARA == pFormat->GetAnchor().GetAnchorId()))
+                   && (RndStdIds::FLY_AT_PARA == pFormat->GetAnchor().GetAnchorId()))
                 {
                     pFormat->MakeFrames();
                 }

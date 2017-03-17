@@ -528,7 +528,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
             if( pFormat )
             {
                 const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
-                if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
+                if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                     pAnchor->GetContentAnchor() )
                 {
                     pNd = &pAnchor->GetContentAnchor()->nNode.GetNode();
@@ -551,7 +551,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                                     break;
                                 }
                                 pAnchor = &pFrameFormat->GetAnchor();
-                                if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
+                                if ((RndStdIds::FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                                     !pAnchor->GetContentAnchor() )
                                 {
                                     pFlyNd = nullptr;

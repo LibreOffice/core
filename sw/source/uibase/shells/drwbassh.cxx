@@ -186,7 +186,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         bool bCaption = false;
 
                         // Allowed anchorages:
-                        short nAnchor = pSh->GetAnchorId();
+                        RndStdIds nAnchor = pSh->GetAnchorId();
                         SvxAnchorIds nAllowedAnchors = SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page;
                         sal_uInt16 nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
 
@@ -224,7 +224,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (bCaption)
                             pSdrView->GetAttributes( aSet );
 
-                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
+                        aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, (sal_Int16)nAnchor));
                         bool bRTL;
                         bool bVertL2R;
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrameVertical(true, bRTL, bVertL2R)));
@@ -277,7 +277,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
                             {
                                 if(!bSingleSelection)
-                                    pSh->ChgAnchor(static_cast<const SfxInt16Item*>(pAnchorItem)
+                                    pSh->ChgAnchor((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)
                                             ->GetValue(), false, bPosCorr );
                                 else
                                 {
@@ -433,8 +433,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
                 {   // Do not align objects to each other
-                    sal_uInt16 nAnchor = pSh->GetAnchorId();
-                    if (nAnchor == FLY_AS_CHAR)
+                    RndStdIds nAnchor = pSh->GetAnchorId();
+                    if (nAnchor == RndStdIds::FLY_AS_CHAR)
                     {
                         sal_Int16 nVertOrient = -1;
 
@@ -464,7 +464,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         }
                         break;
                     }
-                    if (nAnchor == FLY_AT_PARA)
+                    if (nAnchor == RndStdIds::FLY_AT_PARA)
                         break;  // Do not align frames of an anchored paragraph
                 }
 
@@ -797,7 +797,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
         rValidation.nWidth = rValidation.nHeight;
         rValidation.nHeight = nTmp;
     }
-    if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
+    if ((eAnchorType == RndStdIds::FLY_AT_PAGE) || (eAnchorType == RndStdIds::FLY_AT_FLY))
     {
         // MinimalPosition
         rValidation.nMinHPos = aBoundRect.Left();
@@ -845,7 +845,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
         rValidation.nMaxVPos   = aBoundRect.Bottom() - rValidation.nHeight;
         rValidation.nMaxWidth  = aBoundRect.Right()  - nH;
     }
-    else if ((eAnchorType == FLY_AT_PARA) || (eAnchorType == FLY_AT_CHAR))
+    else if ((eAnchorType == RndStdIds::FLY_AT_PARA) || (eAnchorType == RndStdIds::FLY_AT_CHAR))
     {
         if (rValidation.nHPos + rValidation.nWidth > aBoundRect.Right())
         {
@@ -906,7 +906,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
         rValidation.nMaxHeight  = rValidation.nMaxVPos + rValidation.nHeight - nV;
         rValidation.nMaxWidth   = rValidation.nMaxHPos + rValidation.nWidth - nH;
     }
-    else if (eAnchorType == FLY_AS_CHAR)
+    else if (eAnchorType == RndStdIds::FLY_AS_CHAR)
     {
         rValidation.nMinHPos = 0;
         rValidation.nMaxHPos = 0;

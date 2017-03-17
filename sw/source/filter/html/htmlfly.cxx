@@ -46,7 +46,7 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
     nAllFlags( nFlags )
 {
     const SwFormatAnchor& rAnchor = rPosFly.GetFormat().GetAnchor();
-    if ((FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
+    if ((RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
         HtmlPosition::Inside == GetOutPos() )
     {
         // Auto-gebundene Rahmen werden ein Zeichen weiter hinten

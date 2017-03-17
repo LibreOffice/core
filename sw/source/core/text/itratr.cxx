@@ -432,8 +432,8 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
 {
     const SwFormatAnchor& rFormatA = pNd->GetAnchor();
 
-    if ((FLY_AT_PARA != rFormatA.GetAnchorId()) &&
-        (FLY_AT_CHAR != rFormatA.GetAnchorId()))
+    if ((RndStdIds::FLY_AT_PARA != rFormatA.GetAnchorId()) &&
+        (RndStdIds::FLY_AT_CHAR != rFormatA.GetAnchorId()))
     {
         return;
     }

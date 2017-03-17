@@ -1820,7 +1820,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
     //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
-    eAnchor = FLY_AT_PARA;
+    eAnchor = RndStdIds::FLY_AT_PARA;
     rIo.m_pLastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
 
     switch (nYBind)
@@ -2107,7 +2107,7 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
         Reader::ResetFrameFormatAttrs(*this);  // remove distance/borders
 
     Put(SvxLRSpaceItem(RES_LR_SPACE)); //inline writer ole2 objects start with 0.2cm l/r
-    SwFormatAnchor aAnchor(FLY_AS_CHAR);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
 
     aAnchor.SetAnchor(pPaM->GetPoint());
     Put(aAnchor);
@@ -2360,7 +2360,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
             m_pWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (FLY_AS_CHAR != m_pSFlyPara->eAnchor && m_pSFlyPara->pFlyFormat)
+        if (RndStdIds::FLY_AS_CHAR != m_pSFlyPara->eAnchor && m_pSFlyPara->pFlyFormat)
         {
             m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(),m_pSFlyPara->pFlyFormat);
         }
@@ -3228,7 +3228,7 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
+    RndStdIds::FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     SwFrameFormat *pRet=nullptr;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
@@ -3246,7 +3246,7 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
         const SwFormatFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
         SwFrameFormat *pFlyFormat = rFly.GetFrameFormat();
         if (pFlyFormat &&
-            (FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()))
+            (RndStdIds::FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()))
         {
             pRet = pFlyFormat;
         }
@@ -3261,7 +3261,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
+    RndStdIds::FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     bool bIsGraphicPlacementHack = false;
     sal_uInt16 nPos;

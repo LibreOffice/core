@@ -1271,13 +1271,13 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) )
             {
-                aSet.Put( SwFormatAnchor( FLY_AS_CHAR ));
+                aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ));
                 aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
             }
             else
             {
-                aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
+                aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
                 aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ) );
                 aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
@@ -1301,7 +1301,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLFRM_GRAPHIC:
     case RES_POOLFRM_OLE:
         {
-            aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_DYNAMIC ));
@@ -1309,14 +1309,14 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
     case RES_POOLFRM_FORMEL:
         {
-            aSet.Put( SwFormatAnchor( FLY_AS_CHAR ) );
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
         {
-            aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
@@ -1328,7 +1328,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
     case RES_POOLFRM_WATERSIGN:
         {
-            aSet.Put( SwFormatAnchor( FLY_AT_PAGE ));
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( RES_OPAQUE, false ));
@@ -1337,7 +1337,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
     case RES_POOLFRM_LABEL:
         {
-            aSet.Put( SwFormatAnchor( FLY_AS_CHAR ) );
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 

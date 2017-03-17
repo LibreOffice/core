@@ -152,7 +152,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrameSet.Put( aULItem );
     }
 
-    SwFormatAnchor aAnchor( FLY_AS_CHAR );
+    SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
     if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.m_ePosition &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.m_eLeftType &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.m_eTopType )
@@ -162,13 +162,13 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
 
         if( pFlySttNd )
         {
-            aAnchor.SetType( FLY_AT_FLY );
+            aAnchor.SetType( RndStdIds::FLY_AT_FLY );
             SwPosition aPos( *pFlySttNd );
             aAnchor.SetAnchor( &aPos );
         }
         else
         {
-            aAnchor.SetType( FLY_AT_PAGE );
+            aAnchor.SetType( RndStdIds::FLY_AT_PAGE );
         }
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.m_nLeft + nLeftSpace,
@@ -178,7 +178,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     else if( SvxAdjust::Left == rCSS1PropInfo.m_eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )
     {
-        aAnchor.SetType( FLY_AT_PARA );
+        aAnchor.SetType( RndStdIds::FLY_AT_PARA );
         aFrameSet.Put( SwFormatSurround(css::text::WrapTextMode_RIGHT) );
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
@@ -188,11 +188,11 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrameSet.Put( SwFormatVertOrient( 0, eVertOri ) );
     }
 
-    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
+    if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
         aAnchor.SetPageNum( 1 );
     }
-    else if( FLY_AT_FLY != aAnchor.GetAnchorId() )
+    else if( RndStdIds::FLY_AT_FLY != aAnchor.GetAnchorId() )
     {
         aAnchor.SetAnchor( m_pPam->GetPoint() );
     }

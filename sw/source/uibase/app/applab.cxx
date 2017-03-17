@@ -90,7 +90,7 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
     //anchor frame to page
-    aSet.Put( SwFormatAnchor( FLY_AT_PAGE, nPhyPageNum ) );
+    aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, nPhyPageNum ) );
     aSet.Put( SwFormatHoriOrient( rItem.m_lLeft + static_cast<SwTwips>(nCol) * rItem.m_lHDist,
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,
@@ -127,7 +127,7 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
     //anchor frame to page
-    aSet.Put( SwFormatAnchor( FLY_AT_PAGE, nPhyPageNum ) );
+    aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, nPhyPageNum ) );
     aSet.Put( SwFormatHoriOrient( rItem.m_lLeft + static_cast<SwTwips>(nCol) * rItem.m_lHDist,
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,

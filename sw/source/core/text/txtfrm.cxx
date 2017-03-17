@@ -515,7 +515,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
 {
     bool bRet( true );
 
-    if (_eAnchorType == FLY_AT_CHAR)
+    if (_eAnchorType == RndStdIds::FLY_AT_CHAR)
     {
         const IDocumentSettingAccess* pIDSA = _rFrame.GetTextNode()->getIDocumentSettingAccess();
         if ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
@@ -582,7 +582,7 @@ void SwTextFrame::HideAndShowObjects()
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const sal_Int32 nObjAnchorPos = pContact->GetContentAnchorIndex().GetIndex();
-                if ((eAnchorType != FLY_AT_CHAR) ||
+                if ((eAnchorType != RndStdIds::FLY_AT_CHAR) ||
                     sw_HideObj( *this, eAnchorType, nObjAnchorPos,
                                  i ))
                 {
@@ -609,12 +609,12 @@ void SwTextFrame::HideAndShowObjects()
                 // Determine anchor type only once
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
 
-                if (eAnchorType == FLY_AT_PARA)
+                if (eAnchorType == RndStdIds::FLY_AT_PARA)
                 {
                     pContact->MoveObjToVisibleLayer( pObj );
                 }
-                else if ((eAnchorType == FLY_AT_CHAR) ||
-                         (eAnchorType == FLY_AS_CHAR))
+                else if ((eAnchorType == RndStdIds::FLY_AT_CHAR) ||
+                         (eAnchorType == RndStdIds::FLY_AS_CHAR))
                 {
                     sal_Int32 nHiddenStart;
                     sal_Int32 nHiddenEnd;
@@ -1686,7 +1686,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                             // i#28701 - consider all
                             // to-character anchored objects
                             if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                                    == FLY_AT_CHAR )
+                                    == RndStdIds::FLY_AT_CHAR )
                             {
                                 bFormat = true;
                                 break;

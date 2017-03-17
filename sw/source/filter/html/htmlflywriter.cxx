@@ -307,12 +307,12 @@ void SwHTMLWriter::CollectFlyFrames()
         sal_Int16 eHoriRel = rFrameFormat.GetHoriOrient().GetRelationOrient();
         switch( rAnchor.GetAnchorId() )
         {
-        case FLY_AT_PAGE:
-        case FLY_AT_FLY:
+        case RndStdIds::FLY_AT_PAGE:
+        case RndStdIds::FLY_AT_FLY:
             nMode = aHTMLOutFramePageFlyTable[eType][m_nExportMode];
             break;
 
-        case FLY_AT_PARA:
+        case RndStdIds::FLY_AT_PARA:
             // frames that are anchored to a paragraph are only placed
             // before the paragraph, if the paragraph has a
             // spacing.
@@ -331,7 +331,7 @@ void SwHTMLWriter::CollectFlyFrames()
             nMode = aHTMLOutFrameParaPrtAreaTable[eType][m_nExportMode];
             break;
 
-        case FLY_AT_CHAR:
+        case RndStdIds::FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
                 nMode = aHTMLOutFrameParaPrtAreaTable[eType][m_nExportMode];
             else
@@ -561,7 +561,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     const sal_Char *pStr = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOpts & HtmlFrmOpts::Align) &&
-        ((FLY_AT_PARA == eAnchorId) || (FLY_AT_CHAR == eAnchorId)) )
+        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) )
     {
         // MIB 12.3.98: Wouldn't it be more clever to left-align frames that
         // are anchored to a paragraph if necessary, instead of inserting them
@@ -578,7 +578,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     }
     if( (nFrameOpts & HtmlFrmOpts::Align) && !pStr &&
         ( !(nFrameOpts & HtmlFrmOpts::SAlign) ||
-          (FLY_AS_CHAR == eAnchorId) ) &&
+          (RndStdIds::FLY_AS_CHAR == eAnchorId) ) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
     {
         switch( static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
@@ -737,8 +737,8 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     // Insert wrap for graphics that are anchored to a paragraph as
     // <BR CLEAR=...> in the string
     if( (nFrameOpts & HtmlFrmOpts::BrClear) &&
-        ((FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
-         (FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
+        ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
+         (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
     {
         const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
@@ -832,7 +832,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     const sal_Char* pAlignString = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOptions & HtmlFrmOpts::Align) &&
-        ((FLY_AT_PARA == eAnchorId) || (FLY_AT_CHAR == eAnchorId)) )
+        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) )
     {
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         if( !(nFrameOptions & HtmlFrmOpts::SAlign) ||
@@ -846,7 +846,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
     if( (nFrameOptions & HtmlFrmOpts::Align) && !pAlignString &&
         ( !(nFrameOptions & HtmlFrmOpts::SAlign) ||
-          (FLY_AS_CHAR == eAnchorId) ) &&
+          (RndStdIds::FLY_AS_CHAR == eAnchorId) ) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
     {
         switch( static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
@@ -998,8 +998,8 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     // <BR CLEAR=...> in the string
 
     if( (nFrameOptions & HtmlFrmOpts::BrClear) &&
-        ((FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
-         (FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
+        ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
+         (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
     {
         const sal_Char* pSurroundString = nullptr;

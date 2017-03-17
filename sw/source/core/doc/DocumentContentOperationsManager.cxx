@@ -94,10 +94,10 @@ namespace
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
             SwPosition const*const pAPos = pAnchor->GetContentAnchor();
             if (pAPos &&
-                ((FLY_AS_CHAR == pAnchor->GetAnchorId()) ||
-                 (FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
-                 (FLY_AT_FLY  == pAnchor->GetAnchorId()) ||
-                 (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
+                ((RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_FLY  == pAnchor->GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId())) &&
                 nSttNd <= pAPos->nNode.GetIndex() &&
                 pAPos->nNode.GetIndex() < nEndNd )
             {
@@ -1889,8 +1889,8 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
                 SwPosition const*const pAPos = pAnchor->GetContentAnchor();
                 if (pAPos &&
-                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     aRg.aStart <= pAPos->nNode && pAPos->nNode <= aRg.aEnd )
                 {
                     m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
@@ -2734,7 +2734,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     // Didn't set the Anchor yet?
     // DrawObjecte must never end up in the Header/Footer!
     RndStdIds eAnchorId = pAnchor != nullptr ? pAnchor->GetAnchorId() : pFormat->GetAnchor().GetAnchorId();
-    const bool bIsAtContent = (FLY_AT_PAGE != eAnchorId);
+    const bool bIsAtContent = (RndStdIds::FLY_AT_PAGE != eAnchorId);
 
     const SwNodeIndex* pChkIdx = nullptr;
     if ( pAnchor == nullptr )
@@ -2753,7 +2753,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         && m_rDoc.IsInHeaderFooter( *pChkIdx ) )
     {
         // apply at-page anchor format
-        eAnchorId = FLY_AT_PAGE;
+        eAnchorId = RndStdIds::FLY_AT_PAGE;
         pFormat->SetFormatAttr( SwFormatAnchor( eAnchorId ) );
     }
     else if( pAnchor == nullptr
@@ -2763,7 +2763,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         // apply anchor format
         SwFormatAnchor aAnch( pAnchor != nullptr ? *pAnchor : pFormat->GetAnchor() );
         eAnchorId = aAnch.GetAnchorId();
-        if ( eAnchorId == FLY_AT_FLY )
+        if ( eAnchorId == RndStdIds::FLY_AT_FLY )
         {
             SwPosition aPos( *rRg.GetNode().FindFlyStartNode() );
             aAnch.SetAnchor( &aPos );
@@ -2771,9 +2771,9 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         else
         {
             aAnch.SetAnchor( rRg.GetPoint() );
-            if ( eAnchorId == FLY_AT_PAGE )
+            if ( eAnchorId == RndStdIds::FLY_AT_PAGE )
             {
-                eAnchorId = dynamic_cast<const SdrUnoObj*>( &rDrawObj) !=  nullptr ? FLY_AS_CHAR : FLY_AT_PARA;
+                eAnchorId = dynamic_cast<const SdrUnoObj*>( &rDrawObj) !=  nullptr ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_PARA;
                 aAnch.SetType( eAnchorId );
             }
         }
@@ -2781,7 +2781,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     }
 
     // insert text attribute for as-character anchored drawing object
-    if ( eAnchorId == FLY_AS_CHAR )
+    if ( eAnchorId == RndStdIds::FLY_AS_CHAR )
     {
         bool bAnchorAtPageAsFallback = true;
         const SwFormatAnchor& rDrawObjAnchorFormat = pFormat->GetAnchor();
@@ -2801,7 +2801,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         if ( bAnchorAtPageAsFallback )
         {
             OSL_ENSURE( false, "DocumentContentOperationsManager::InsertDrawObj(..) - missing content anchor for as-character anchored drawing object --> anchor at-page" );
-            pFormat->SetFormatAttr( SwFormatAnchor( FLY_AT_PAGE ) );
+            pFormat->SetFormatAttr( SwFormatAnchor( RndStdIds::FLY_AT_PAGE ) );
         }
     }
 
@@ -3267,21 +3267,21 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         SwFrameFormat* pFormat = (*m_rDoc.GetSpzFrameFormats())[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-        bool bAtContent = (pAnchor->GetAnchorId() == FLY_AT_PARA);
+        bool bAtContent = (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA);
         if ( !pAPos )
             continue;
         sal_uLong nSkipAfter = pAPos->nNode.GetIndex();
         sal_uLong nStart = rRg.aStart.GetIndex();
         switch ( pAnchor->GetAnchorId() )
         {
-            case FLY_AT_FLY:
+            case RndStdIds::FLY_AT_FLY:
                 if(bCopyFlyAtFly)
                     ++nSkipAfter;
                 else if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
                     ++nStart;
             break;
-            case FLY_AT_CHAR:
-            case FLY_AT_PARA:
+            case RndStdIds::FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_PARA:
                 if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
                     ++nStart;
             break;
@@ -3364,8 +3364,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         // method <SwNodes::CopyNodes(..)>.
         // Thus, the new anchor position in the destination document is found
         // by counting the text nodes.
-        if ((aAnchor.GetAnchorId() == FLY_AT_PARA) ||
-            (aAnchor.GetAnchorId() == FLY_AT_CHAR) )
+        if ((aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+            (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR) )
         {
             // First, determine number of anchor text node in the copied range.
             // Note: The anchor text node *have* to be inside the copied range.
@@ -3429,7 +3429,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             newPos.nNode = aIdx;
         }
         // Set the character bound Flys back at the original character
-        if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
+        if ((RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              newPos.nNode.GetNode().IsTextNode() )
         {
             newPos.nContent.Assign( newPos.nNode.GetNode().GetTextNode(), newPos.nContent.GetIndex() );
@@ -4068,7 +4068,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsNoTextNode( const SwPosit
     SwFlyFrameFormat *pFormat = nullptr;
     if( pNode )
     {
-        pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, FLY_AT_PARA,
+        pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, RndStdIds::FLY_AT_PARA,
                                 pFlyAttrSet, pFrameFormat );
         if( pGrfAttrSet )
             pNode->SetAttr( *pGrfAttrSet );

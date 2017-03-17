@@ -167,7 +167,7 @@ namespace
 {
     void lcl_CollectFrameAtNodeWithLayout(const SwContentFrame* pCFrame,
             FrameClientSortList_t& rFrames,
-            const sal_uInt16 nAnchorType)
+            const RndStdIds nAnchorType)
     {
         auto pObjs = pCFrame->GetDrawObjs();
         if(!pObjs)
@@ -202,8 +202,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
     // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    const auto nChkType = static_cast< sal_uInt16 >((bAtCharAnchoredObjs)
-            ? FLY_AT_CHAR : FLY_AT_PARA);
+    const auto nChkType = bAtCharAnchoredObjs ? RndStdIds::FLY_AT_CHAR : RndStdIds::FLY_AT_PARA;
     const SwContentFrame* pCFrame;
     const SwContentNode* pCNd;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&

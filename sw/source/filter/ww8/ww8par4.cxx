@@ -266,7 +266,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         if (!m_bNewDoc)
             Reader::ResetFrameFormatAttrs( *pTempSet );
 
-        SwFormatAnchor aAnchor( FLY_AS_CHAR );
+        SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
         aAnchor.SetAnchor( m_pPaM->GetPoint() );
         pTempSet->Put( aAnchor );
 
