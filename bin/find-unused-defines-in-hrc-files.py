@@ -146,6 +146,8 @@ with a.stdout as txt:
                 if "reportdesign/" in line2 and idName.startswith("HID_RPT_PROP_"): found_reason_to_exclude = True
                 if "reportdesign/" in line2 and idName.startswith("RID_STR_"): found_reason_to_exclude = True
                 if "forms/" in line2 and idName.startswith("PROPERTY_"): found_reason_to_exclude = True
+                if "svx/source/tbxctrls/extrusioncontrols.hrc:" in line2 and idName.startswith("DIRECTION_"): found_reason_to_exclude = True
+                if "svx/source/tbxctrls/extrusioncontrols.hrc:" in line2 and idName.startswith("FROM_"): found_reason_to_exclude = True
                 # if we see more than 2 lines then it's probably one of the BASE/START/BEGIN things
                 cnt = cnt + 2
                 if cnt > 3: found_reason_to_exclude = True

@@ -20,11 +20,6 @@
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
 
-Bitmap BMP_SPACE3
-{
-    File = "symphony/spacing3.png";
-};
-
 Bitmap BMP_INDENT_HANG
 {
     File = "symphony/Indent_Hanging.png";

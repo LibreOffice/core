@@ -38,11 +38,8 @@
 #define MID_INTER_SPACE         0x37
 
 #define MID_LOWER               0x3d
-#define MID_POS                 0x43
 #define MID_RIGHT               0x46
-#define MID_SIZE                0x4a
 #define MID_UPPER               0x4b
-#define MID_USExxx              0x4c
 
 #define MID_HLINK_NAME          0x6f
 #define MID_HLINK_URL           0x70
@@ -129,7 +126,6 @@
 #define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
 #define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
 #define SID_BASICIDE_NEWJAVAMODULE          ( SID_BASICIDE_START + 41 )
-#define SID_BASICIDE_IMAGESTART             ( SID_BASICIDE_START + 50 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
 // StarBase-Id's
