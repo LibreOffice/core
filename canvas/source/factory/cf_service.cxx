@@ -43,6 +43,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <unotools/configmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -123,76 +124,79 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_bCacheHasUseAcceleratedEntry(),
     m_bCacheHasUseAAEntry()
 {
-    try
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
-        // read out configuration for preferred services:
-        Reference<lang::XMultiServiceFactory> xConfigProvider(
-            configuration::theDefaultProvider::get( m_xContext ) );
-
-        Any propValue(
-            Any( beans::PropertyValue(
-                         "nodepath", -1,
-                         Any( OUString("/org.openoffice.Office.Canvas") ),
-                         beans::PropertyState_DIRECT_VALUE ) ) );
-
-        m_xCanvasConfigNameAccess.set(
-            xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
-                Sequence<Any>( &propValue, 1 ) ),
-            UNO_QUERY_THROW );
-
-        propValue <<=
-            beans::PropertyValue(
-                "nodepath", -1,
-                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
-                beans::PropertyState_DIRECT_VALUE );
-
-        Reference<container::XNameAccess> xNameAccess(
-            xConfigProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationAccess",
-                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
-        Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
-            xNameAccess, UNO_QUERY_THROW);
-
-        Sequence<OUString> serviceNames = xNameAccess->getElementNames();
-        const OUString* pCurr = serviceNames.getConstArray();
-        const OUString* const pEnd = pCurr + serviceNames.getLength();
-        while( pCurr != pEnd )
+        try
         {
-            Reference<container::XNameAccess> xEntryNameAccess(
-                xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
-                UNO_QUERY );
+            // read out configuration for preferred services:
+            Reference<lang::XMultiServiceFactory> xConfigProvider(
+                configuration::theDefaultProvider::get( m_xContext ) );
 
-            if( xEntryNameAccess.is() )
+            Any propValue(
+                Any( beans::PropertyValue(
+                             "nodepath", -1,
+                             Any( OUString("/org.openoffice.Office.Canvas") ),
+                             beans::PropertyState_DIRECT_VALUE ) ) );
+
+            m_xCanvasConfigNameAccess.set(
+                xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess",
+                    Sequence<Any>( &propValue, 1 ) ),
+                UNO_QUERY_THROW );
+
+            propValue <<=
+                beans::PropertyValue(
+                    "nodepath", -1,
+                    Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                    beans::PropertyState_DIRECT_VALUE );
+
+            Reference<container::XNameAccess> xNameAccess(
+                xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess",
+                    Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+            Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
+                xNameAccess, UNO_QUERY_THROW);
+
+            Sequence<OUString> serviceNames = xNameAccess->getElementNames();
+            const OUString* pCurr = serviceNames.getConstArray();
+            const OUString* const pEnd = pCurr + serviceNames.getLength();
+            while( pCurr != pEnd )
             {
-                Sequence<OUString> implementationList;
-                if( (xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList) )
+                Reference<container::XNameAccess> xEntryNameAccess(
+                    xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                    UNO_QUERY );
+
+                if( xEntryNameAccess.is() )
                 {
-                    m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
-                }
-                if( (xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList) )
-                {
-                    m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
-                }
-                if( (xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList) )
-                {
-                    m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                    Sequence<OUString> implementationList;
+                    if( (xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList) )
+                    {
+                        m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                    }
+                    if( (xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList) )
+                    {
+                        m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                    }
+                    if( (xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList) )
+                    {
+                        m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                    }
+
                 }
 
+                ++pCurr;
             }
-
-            ++pCurr;
+        }
+        catch (const RuntimeException &)
+        {
+            throw;
+        }
+        catch (const Exception&)
+        {
         }
     }
-    catch (const RuntimeException &)
-    {
-        throw;
-    }
-    catch (const Exception&)
-    {
-    }
 
-    if( m_aAvailableImplementations.empty() )
+    if (m_aAvailableImplementations.empty())
     {
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
