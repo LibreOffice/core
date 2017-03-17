@@ -43,6 +43,7 @@ extern "C" {
     compiler errors), though, and you should always call this macro at the
     right places then:
 
+    @code{.cpp}
       static T * pInstance = 0;
 
       T * p = pInstance;
@@ -60,6 +61,7 @@ extern "C" {
       else
           OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
       return p;
+    @endcode
 
     One extra advantage of this macro is that it makes it easier to find all
     places where double-checked locking is used.
