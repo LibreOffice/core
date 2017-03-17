@@ -42,11 +42,7 @@ struct TextDDInfo;
 namespace com { namespace sun { namespace star {
     namespace datatransfer { namespace clipboard {
         class XClipboard;
-    } }
-    namespace util {
-        struct SearchOptions;
-    }
-}}}
+}}}}}
 namespace i18nutil {
     struct SearchOptions;
 }

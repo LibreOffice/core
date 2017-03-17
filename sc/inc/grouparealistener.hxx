@@ -14,7 +14,6 @@
 #include <calcmacros.hxx>
 
 #include <svl/listener.hxx>
-#include <vector>
 
 #include <vector>
 

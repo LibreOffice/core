@@ -26,8 +26,6 @@
 #include "tabbgcolor.hxx"
 
 #include <memory>
-
-#include <memory>
 #include <vector>
 
 class ScDocShell;

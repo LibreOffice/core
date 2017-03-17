@@ -29,7 +29,6 @@
 enum ImplEESdrPageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
 class ImplEESdrWriter;
-class ImplEESdrWriter;
 class SdrObject;
 class SdrPage;
 

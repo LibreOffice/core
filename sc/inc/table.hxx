@@ -110,7 +110,6 @@ class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
-struct ScColWidthParam;
 class ScRangeName;
 class ScDBData;
 class ScDocumentImport;
