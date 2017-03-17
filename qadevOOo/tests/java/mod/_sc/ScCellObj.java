@@ -161,7 +161,7 @@ public class ScCellObj extends TestCase {
         tEnv.addObjRelation("XTextFieldsSupplier.MAKEENTRY", Boolean.TRUE);
         tEnv.addObjRelation("MAKEENTRYINCELL", cell);
 
-        // for XSearchable amd XReplaceable interface test
+        // for XSearchable and XReplaceable interface test
         tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", cell);
         tEnv.addObjRelation("EXCLUDEFINDNEXT", Boolean.TRUE);
 
