@@ -886,9 +886,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             aPopupMenu->InsertSeparator();
             OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
             OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
-            OUString aWordStr( EE_RESSTR( RID_STR_WORD ) );
+            OUString aWordStr( EditResId::GetString( RID_STR_WORD ) );
             aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
-            OUString aParaStr( EE_RESSTR( RID_STR_PARAGRAPH ) );
+            OUString aParaStr( EditResId::GetString( RID_STR_PARAGRAPH ) );
             aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
             aPopupMenu->InsertItem( MN_WORDLANGUAGE, aWordStr );
             aPopupMenu->SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );

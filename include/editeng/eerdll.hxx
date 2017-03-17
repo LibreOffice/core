@@ -20,20 +20,22 @@
 #ifndef INCLUDED_EDITENG_EERDLL_HXX
 #define INCLUDED_EDITENG_EERDLL_HXX
 
+#include <tools/resid.hxx>
+#include <editeng/editengdllapi.h>
+#include <memory>
+
 class GlobalEditData;
 namespace editeng
 {
     class SharedVclResources;
 }
 
-#include <tools/resid.hxx>
-#include <editeng/editengdllapi.h>
-#include <memory>
-
 class EDITENG_DLLPUBLIC EditResId: public ResId
 {
 public:
     EditResId( sal_uInt16 nId );
+    static OUString GetString(sal_uInt16 nId)
+        { return EditResId(nId).toString(); }
 };
 
 class EditDLL
@@ -50,8 +52,6 @@ public:
     std::shared_ptr<editeng::SharedVclResources> GetSharedVclResources();
     static EditDLL& Get();
 };
-
-#define EE_RESSTR(x) EditResId(x).toString()
 
 #endif // INCLUDED_EDITENG_EERDLL_HXX
 

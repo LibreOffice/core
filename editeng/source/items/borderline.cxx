@@ -663,11 +663,11 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
     if ( (int)m_nStyle < int(SAL_N_ELEMENTS(aStyleIds)) )
     {
         sal_uInt16 nResId = aStyleIds[(int)m_nStyle];
-        aStr += EE_RESSTR(nResId);
+        aStr += EditResId::GetString(nResId);
     }
     else
     {
-        OUString sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
+        OUString sMetric = EditResId::GetString(GetMetricId( eDestUnit ));
         aStr += GetMetricText( (long)GetInWidth(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;

@@ -432,7 +432,7 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)SvxAdjust::BlockLine, "enum overflow!" );
-    return EE_RESSTR(RID_SVXITEMS_ADJUST_BEGIN + nPos);
+    return EditResId::GetString(RID_SVXITEMS_ADJUST_BEGIN + nPos);
 }
 
 
@@ -530,13 +530,13 @@ bool SvxWidowsItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EditResId::GetString(RID_SVXITEMS_LINES);
             break;
         }
 
         case SfxItemPresentation::Complete:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EditResId::GetString(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EditResId::GetString(RID_SVXITEMS_LINES);
             break;
         }
 
@@ -591,13 +591,13 @@ bool SvxOrphansItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EditResId::GetString(RID_SVXITEMS_LINES);
             break;
         }
 
         case SfxItemPresentation::Complete:
         {
-            rText = EE_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
+            rText = EditResId::GetString(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EditResId::GetString(RID_SVXITEMS_LINES);
             break;
         }
 
@@ -708,12 +708,12 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bHyphen )
                 nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EE_RESSTR(nId) + cpDelimTmp;
+            rText = EditResId::GetString(nId) + cpDelimTmp;
             nId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
                 nId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText = rText + EE_RESSTR(nId) + cpDelimTmp +
+            rText = rText + EditResId::GetString(nId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
                     OUString::number( nMaxHyphens );
@@ -725,19 +725,19 @@ bool SvxHyphenZoneItem::GetPresentation
 
             if ( bHyphen )
                 nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EE_RESSTR(nId) + cpDelimTmp;
+            rText = EditResId::GetString(nId) + cpDelimTmp;
             nId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
                 nId = RID_SVXITEMS_PAGE_END_TRUE;
             rText = rText +
-                    EE_RESSTR(nId) +
+                    EditResId::GetString(nId) +
                     cpDelimTmp +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
+                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
+                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
                     cpDelimTmp +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
+                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
             return true;
         }
         default: ;//prevent warning
@@ -1038,7 +1038,7 @@ bool SvxTabStopItem::GetPresentation
                 ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
             if ( SfxItemPresentation::Complete == ePres )
             {
-                rText += " " + EE_RESSTR(GetMetricId(ePresUnit));
+                rText += " " + EditResId::GetString(GetMetricId(ePresUnit));
             }
             bComma = true;
         }
@@ -1186,7 +1186,7 @@ bool SvxFormatSplitItem::GetPresentation
 
     if ( GetValue() )
         nId = RID_SVXITEMS_FMTSPLIT_TRUE;
-    rText = EE_RESSTR(nId);
+    rText = EditResId::GetString(nId);
     return true;
 }
 
@@ -1255,7 +1255,7 @@ bool SvxPageModelItem::GetPresentation
         case SfxItemPresentation::Complete:
             if ( bSet )
             {
-                rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
+                rText = EditResId::GetString(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
             }
             return true;
         default: ;//prevent warning
@@ -1296,7 +1296,7 @@ bool SvxScriptSpaceItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EE_RESSTR( !GetValue()
+    rText = EditResId::GetString( !GetValue()
                             ? RID_SVXITEMS_SCRPTSPC_OFF
                             : RID_SVXITEMS_SCRPTSPC_ON );
     return true;
@@ -1336,7 +1336,7 @@ bool SvxHangingPunctuationItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EE_RESSTR( !GetValue()
+    rText = EditResId::GetString( !GetValue()
                             ? RID_SVXITEMS_HNGPNCT_OFF
                             : RID_SVXITEMS_HNGPNCT_ON );
     return true;
@@ -1376,7 +1376,7 @@ bool SvxForbiddenRuleItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EE_RESSTR( !GetValue()
+    rText = EditResId::GetString( !GetValue()
                             ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
                             : RID_SVXITEMS_FORBIDDEN_RULE_ON );
     return true;
@@ -1429,7 +1429,7 @@ bool SvxParaVertAlignItem::GetPresentation(
         case Align::Bottom:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
         default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
     }
-    rText = EE_RESSTR( nTmp );
+    rText = EditResId::GetString( nTmp );
     return true;
 }
 
@@ -1493,8 +1493,8 @@ bool SvxParaGridItem::GetPresentation(
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = GetValue() ?
-            EE_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
-            EE_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_OFF );
+            EditResId::GetString( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
+            EditResId::GetString( RID_SVXITEMS_PARASNAPTOGRID_OFF );
 
     return true;
 }
