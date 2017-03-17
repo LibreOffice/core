@@ -162,10 +162,6 @@ String IDS_SBERR_TERMINATED
 {
     Text [ en-US ] = "The macro running has been interrupted" ;
 };
-String IDS_SBERR_STOREREF
-{
-    Text [ en-US ] = "Reference will not be saved: ";
-};
 String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
 {
     Text [ en-US ] = "Error loading library '$(ARG1)'." ;

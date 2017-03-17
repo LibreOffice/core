@@ -24,11 +24,6 @@ String STR_MENU_ADDONS
     Text [ en-US ] = "Add-Ons" ;
 };
 
-String STR_MENU_ADDONHELP
-{
-    Text [ en-US ] = "Add-~On Help" ;
-};
-
 String STR_MENU_HEADFOOTALL
 {
     Text [ en-US ] = "All" ;
@@ -184,19 +179,9 @@ String STR_LANGSTATUS_MORE
     Text [ en-US ] = "More..." ;
 };
 
-String STR_SET_LANGUAGE_FOR_SELECTION
-{
-    Text [ en-US ] = "Set Language for Selection" ;
-};
-
 String STR_SET_LANGUAGE_FOR_PARAGRAPH
 {
     Text [ en-US ] = "Set Language for Paragraph" ;
-};
-
-String STR_SET_LANGUAGE_FOR_ALL_TEXT
-{
-    Text [ en-US ] = "Set Language for all Text" ;
 };
 
 String STR_LANGSTATUS_HINT
