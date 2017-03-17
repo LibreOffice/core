@@ -37,10 +37,9 @@ protected:
     oslSecurity m_handle;
 
 public:
-    /// constructor
     inline Security();
-    /// destructor
     inline ~Security();
+
     /** get the security information for one user.
         The underlying operating system is asked for this information.
         @param[in] strName denotes the name of the user
@@ -50,6 +49,7 @@ public:
     */
     inline bool SAL_CALL logonUser(const rtl::OUString& strName,
                                        const rtl::OUString& strPasswd);
+
     /** get the security information for one user.
 
         @verbatim
@@ -58,6 +58,7 @@ public:
         could be connected by this user, the methos will return true and getHomeDir
         will return \\server\username.
         @endverbatim
+
         @param[in] strName denotes the name of the user
         @param[in] strPasswd denotes the password of this user
         @param[in] strFileServer denotes the file server to login to
