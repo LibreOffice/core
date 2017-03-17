@@ -958,7 +958,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                     case sdbc::DataType::DATE:
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                            // zwischen 0 Wert und 0 kein Wert unterscheiden
+                            // no value differentiation between 0 value and 0
                             bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );

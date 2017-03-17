@@ -581,7 +581,7 @@ bool ScDocFunc::DeleteContents(
     ScRange aMarkRange;
 
     ScMarkData aMultiMark = rMark;
-    aMultiMark.SetMarking(false);       // fuer MarkToMulti
+    aMultiMark.SetMarking(false);       // for MarkToMulti
 
     std::unique_ptr<ScDocument> pUndoDoc;
     bool bMulti = aMultiMark.IsMultiMarked();
@@ -640,7 +640,7 @@ bool ScDocFunc::DeleteContents(
     if (!AdjustRowHeight( aExtendedRange ))
         rDocShell.PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
-        lcl_PaintAbove( rDocShell, aExtendedRange );    // fuer Linien ueber dem Bereich
+        lcl_PaintAbove( rDocShell, aExtendedRange );    // for lines above the range
 
     aModificator.SetDocumentModified();
 
@@ -2112,7 +2112,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         delete pRefUndoDoc;
         delete pUndoData;
         if (!bApi)
-            rDocShell.ErrorMessage(STR_INSERT_FULL);        // Spalte/Zeile voll
+            rDocShell.ErrorMessage(STR_INSERT_FULL);        // column/row full
     }
 
     aModificator.SetDocumentModified();
@@ -3082,14 +3082,14 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
     SCTAB nTabCount = rDoc.GetTableCount();
     bool bAppend = ( nTab >= nTabCount );
     if ( bAppend )
-        nTab = nTabCount;       // wichtig fuer Undo
+        nTab = nTabCount;       // important for Undo
 
     if (rDoc.InsertTab( nTab, rName ))
     {
         if (bRecord)
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoInsertTab( &rDocShell, nTab, bAppend, rName));
-        //  Views updaten:
+        //  Update views:
         // Only insert vba modules if vba mode ( and not currently importing XML )
         if( bInsertDocModule )
         {
@@ -3173,7 +3173,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }
-        //  Views updaten:
+        //  Update views:
         if( bVbaEnabled )
         {
             OUString sCodeName;
@@ -5021,7 +5021,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 if (aOldStr != aContent)
                 {
                     if (bApi)
-                        bInsert = true;     // per API nicht nachfragen
+                        bInsert = true;     // don't check via API
                     else
                     {
                         OUString aTemplate = ScGlobal::GetRscString( STR_CREATENAME_REPLACE );
@@ -5062,7 +5062,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
 bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi, SCTAB aTab )
 {
     if (!nFlags)
-        return false;       // war nix
+        return false;       // was nothing
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -5222,7 +5222,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             {
                 ScRangeData* pData = ppSortArray[j];
                 pData->GetName(aName);
-                // relative Referenzen Excel-konform auf die linke Spalte anpassen:
+                // adjust relative references to the left column in Excel-compliant way:
                 pData->UpdateSymbol(aContent, ScAddress( nStartCol, nOutRow, nTab ));
                 aFormula = "=" + aContent.toString();
                 ScSetStringParam aParam;

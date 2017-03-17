@@ -991,7 +991,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if (rHint.GetId() == SfxHintId::TitleChanged) // Without parameter
     {
         aDocument.SetName( SfxShell::GetName() );
-        //  RegisterNewTargetNames gibts nicht mehr
+        //  RegisterNewTargetNames doesn't exist any longer
         SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDocNameChanged )); // Navigator
     }
 }
@@ -3203,7 +3203,7 @@ void ScDocShell::SetChangeRecording( bool bActivate )
     if (bOldChangeRecording != IsChangeRecording())
     {
         UpdateAcceptChangesDialog();
-        // Slots invalidieren
+        // invalidate slots
         SfxBindings* pBindings = GetViewBindings();
         if (pBindings)
             pBindings->InvalidateAll(false);
