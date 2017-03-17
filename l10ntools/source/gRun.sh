@@ -338,7 +338,7 @@ ${MYCMD} --files sc/source/ui/navipi/navipi.src
 
 ${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.src NumberFormatPropertyPanel.src
 
-${MYCMD} --base sc/source/ui/src --files condformatdlg.src filter.src globstr.src iconsets.src sc.src scerrors.src scfuncs.src scstring.src scwarngs.src toolbox.src
+${MYCMD} --base sc/source/ui/src --files condformatdlg.src globstr.src iconsets.src sc.src scerrors.src scfuncs.src scstring.src scwarngs.src toolbox.src
 
 ${MYCMD} --files sc/source/ui/StatisticsDialogs/StatisticsDialogs.src
 

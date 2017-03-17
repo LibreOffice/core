@@ -32,7 +32,6 @@
 #include "typedstrdata.hxx"
 
 #include "scres.hrc"
-#include "filter.hrc"
 #include "globstr.hrc"
 
 #include "pfiltdlg.hxx"

@@ -34,7 +34,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/sc.src \
     sc/source/ui/src/scerrors.src \
     sc/source/ui/src/scstring.src \
-    sc/source/ui/src/filter.src \
     sc/source/ui/cctrl/checklistmenu.src \
     sc/source/ui/navipi/navipi.src \
     sc/source/ui/styleui/scstyles.src \

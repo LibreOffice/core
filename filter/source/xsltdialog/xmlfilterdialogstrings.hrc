@@ -30,8 +30,6 @@
 #define STR_EXPORT_ONLY                         (RID_XSLT_DIALOG_START + 5)
 
 #define STR_WARN_DELETE                         (RID_XSLT_DIALOG_START + 10)
-#define STR_NO_ERRORS_FOUND                     (RID_XSLT_DIALOG_START + 11)
-#define STR_NOT_SPECIFIED                       (RID_XSLT_DIALOG_START + 12)
 
 #define STR_DEFAULT_FILTER_NAME                 (RID_XSLT_DIALOG_START + 13)
 #define STR_DEFAULT_EXTENSION                   (RID_XSLT_DIALOG_START + 14)

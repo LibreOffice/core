@@ -87,6 +87,12 @@ exclusionSet = set([
     "STR_VOBJ_MODE_",
     "STR_COND_",
     "SCSTR_CONTENT_",
+    "DATE_FUNCDESC_",
+    "DATE_FUNCNAME_",
+    "DATE_DEFFUNCNAME_",
+    "PRICING_DEFFUNCNAME_",
+    "PRICING_FUNCDESC_",
+    "PRICING_FUNCNAME_",
     ])
 
 
@@ -131,7 +137,7 @@ with a.stdout as txt:
                         # is the constant being used as an identifier by entries in .src files
                         if ".src:" in line2 and "HelpId = " in line2: found_reason_to_exclude = True
                 # is it being used as a constant in an ItemList  in .src files?
-                if ".src:" in line2 and ";> ;" in line2: found_reason_to_exclude = True
+                if ".src:" in line2 and (";> ;" in line2 or "; >;" in line2): found_reason_to_exclude = True
                 # these are used in calculations in other .hrc files
                 if "sw/inc/rcid.hrc:" in line2: found_reason_to_exclude = True
                 # calculations

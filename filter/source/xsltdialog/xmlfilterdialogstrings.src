@@ -119,16 +119,6 @@ String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
     Text [ en-US ]  = "The given import template cannot be found. Please enter a valid path.";
 };
 
-String STR_NOT_SPECIFIED
-{
-    Text [ en-US ]      = "Not specified";
-};
-
-String STR_NO_ERRORS_FOUND
-{
-    Text                = "No errors found.";
-};
-
 String STR_DEFAULT_FILTER_NAME
 {
     Text [ en-US ]  = "New Filter";

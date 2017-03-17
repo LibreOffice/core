@@ -31,11 +31,6 @@ String RID_SAVE_PASSWORD
     Text [ en-US ] = "~Remember password";
 };
 
-String STR_WARNING_BROKENSIGNATURE_TITLE
-{
-    Text [ en-US ] = "Invalid Document Signature" ;
-};
-
 String STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE
 {
     Text [ en-US ] = "Non-Encrypted Streams" ;
