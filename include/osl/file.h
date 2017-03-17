@@ -1054,7 +1054,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_syncFile( oslFileHandle Handle );
     @param Handle [in]
     Handle to a file received by a previous call to osl_openFile().
 
-    @return
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
     @retval osl_File_E_BADF Bad file
@@ -1074,7 +1073,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
     @param pustrDirectoryURL [in]
     Full qualified URL of the directory to create.
 
-    @return
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
     @retval osl_File_E_NOMEM not enough memory for allocating structures
@@ -1120,7 +1118,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
     @param pustrDirectoryURL [in]
     Full qualified URL of the directory.
 
-    @return
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
     @retval osl_File_E_NOMEM not enough memory for allocating structures
