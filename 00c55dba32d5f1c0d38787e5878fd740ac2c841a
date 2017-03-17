@@ -16,6 +16,24 @@
       "revId": "00c55dba32d5f1c0d38787e5878fd740ac2c841a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c03a48cd",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-03-17T10:33:19Z",
+      "side": 1,
+      "message": "Yes, they grow from 1, but they are not continous. We can just have two redlines in the document, and the second redline will have a much larger identifier. Using a 16 bit sounds good when they were array indices (and continous), but one could quite easily exhaust all of it in current approach, hence I bumped the type.",
+      "parentUuid": "9a57fde8_651d2e73",
+      "revId": "00c55dba32d5f1c0d38787e5878fd740ac2c841a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
