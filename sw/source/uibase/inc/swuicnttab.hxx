@@ -40,8 +40,14 @@
 #include <cnttab.hxx>
 #include <vector>
 
+class IndexEntryResource;
+class IndexEntrySupplierWrapper;
+class SwTOXEdit;
+class SwTOXButton;
+class SwTOXEntryTabPage;
+class SwOneExampleFrame;
 class SwWrtShell;
-class SwTOXMgr;
+
 namespace com{namespace sun{namespace star{
     namespace text{
         class XTextSection;
@@ -54,10 +60,6 @@ struct SwIndexSections_Impl
     css::uno::Reference< css::text::XTextSection >    xContainerSection;
     css::uno::Reference< css::text::XDocumentIndex >    xDocumentIndex;
 };
-
-class SwOneExampleFrame;
-
-struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
@@ -124,9 +126,6 @@ public:
 
     static bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
 };
-
-class IndexEntryResource;
-class IndexEntrySupplierWrapper;
 
 class SwTOXSelectTabPage : public SfxTabPage
 {
@@ -237,10 +236,6 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-class SwTOXEdit;
-class SwTOXButton;
-class SwTOXEntryTabPage;
-
 class SwTokenWindow : public VclHBox, public VclBuilderContainer
 {
     typedef std::vector<VclPtr<Control> >::iterator ctrl_iterator;
@@ -320,8 +315,6 @@ public:
 private:
     sal_uInt32 GetControlIndex(FormTokenType eType) const;
 };
-
-class SwTOXEntryTabPage;
 
 class SwIdxTreeListBox : public SvTreeListBox
 {

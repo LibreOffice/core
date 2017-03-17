@@ -26,7 +26,6 @@
 
 class SvtDefaultOptions_Impl;
 
-class SvtDefaultOptions_Impl;
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDefaultOptions : public utl::detail::Options
 {
 private:

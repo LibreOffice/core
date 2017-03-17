@@ -13,6 +13,10 @@
 #include <filter/msfilter/mstoolbar.hxx>
 #include <memory>
 
+
+class SfxObjectShell;
+class SwCTBWrapper;
+
 class Xst : public TBBase
 {
     OUString sString;
@@ -25,8 +29,6 @@ public:
     virtual void Print( FILE* fp ) override;
 #endif
 };
-
-class SwCTBWrapper;
 
 class SwTBC : public TBBase
 {
@@ -112,8 +114,6 @@ public:
     bool Read(SvStream &rS) override;
 };
 
-class SwCTBWrapper;
-
 class Customization : public TBBase
 {
     friend class SwCTBWrapper;
@@ -137,8 +137,6 @@ public:
 #endif
     SwCTB*  GetCustomizationData() { return customizationDataCTB.get(); };
 };
-
-class SfxObjectShell;
 
 class SwCTBWrapper : public Tcg255SubStruct
 {

@@ -34,6 +34,12 @@ namespace writerfilter
 {
 namespace rtftok
 {
+class RTFParserState;
+class RTFDocumentImpl;
+class RTFTokenizer;
+class RTFSdrImport;
+struct TableRowBuffer;
+
 enum class RTFBorderState
 {
     NONE,
@@ -87,8 +93,6 @@ enum class RTFFieldStatus
     INSTRUCTION,
     RESULT
 };
-
-struct TableRowBuffer;
 
 /// A buffer storing dmapper calls.
 typedef std::tuple<RTFBufferTypes, RTFValue::Pointer_t,
@@ -183,9 +187,6 @@ public:
     RTFBmpStyle eStyle;
 };
 
-class RTFParserState;
-class RTFDocumentImpl;
-
 /// Stores the properties of a frame
 class RTFFrame
 {
@@ -208,8 +209,6 @@ public:
     /// If we got tokens indicating we're in a frame.
     bool inFrame();
 };
-
-class RTFDocumentImpl;
 
 /// State of the parser, which gets saved / restored when changing groups.
 class RTFParserState
@@ -371,9 +370,6 @@ bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
 bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties, const OUString& rName);
 RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId);
 OString DTTM22OString(long nDTTM);
-
-class RTFTokenizer;
-class RTFSdrImport;
 
 /// Implementation of the RTFDocument interface.
 class RTFDocumentImpl

@@ -20,7 +20,6 @@
 #include <svl/SfxBroadcaster.hxx>
 
 #include <svl/hint.hxx>
-#include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <tools/debug.hxx>
 

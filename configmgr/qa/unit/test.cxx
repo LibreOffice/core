@@ -57,7 +57,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
-#include <comphelper/configurationlistener.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <officecfg/Office/Math.hxx>
 

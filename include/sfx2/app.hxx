@@ -57,6 +57,7 @@ class SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
 class SfxObjectShellArr_Impl;
+class SfxObjectShellLock;
 class SfxProgress;
 class SfxSlotPool;
 class SfxStbCtrlFactArr_Impl;
@@ -68,7 +69,6 @@ class SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
 class SfxFilterMatcher;
-class SfxModule;
 class SfxModule;
 namespace vcl { class Window; }
 struct SfxChildWinFactory;
@@ -111,8 +111,6 @@ public:
     const Link<SfxPoolItem*, void>&
                              GetValue() const { return aLink; }
 };
-
-class SfxObjectShellLock;
 
 class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {

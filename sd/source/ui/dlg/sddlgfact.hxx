@@ -91,7 +91,6 @@ class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual OUString    GetText() const override;
 };
 
-class SfxTabDialog;
 class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
 {
     DECL_ABSTDLG_BASE( AbstractBulletDialog_Impl,SfxTabDialog )

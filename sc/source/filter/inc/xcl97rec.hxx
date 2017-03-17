@@ -28,6 +28,8 @@
 class XclObj;
 class XclExpMsoDrawing;
 class SdrCaptionObj;
+class SdrTextObj;
+class XclTxo;
 
 class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {
@@ -82,9 +84,6 @@ private:
 };
 
 // --- class XclObj --------------------------------------------------
-
-class XclTxo;
-class SdrTextObj;
 
 class XclObj : public XclExpRecord
 {
@@ -193,8 +192,6 @@ public:
 };
 
 // --- class XclTxo --------------------------------------------------
-
-class SdrTextObj;
 
 class XclTxo : public ExcRecord
 {

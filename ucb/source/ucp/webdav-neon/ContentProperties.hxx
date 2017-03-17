@@ -75,8 +75,6 @@ typedef std::unordered_map
 >
 PropertyValueMap;
 
-struct DAVResource;
-
 class ContentProperties
 {
 public:

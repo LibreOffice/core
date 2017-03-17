@@ -25,7 +25,6 @@
 class Edit;
 class PopupMenu;
 class TemplateLocalView;
-class TemplateLocalView;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
