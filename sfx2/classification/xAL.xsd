@@ -457,7 +457,7 @@
 					</xs:sequence>
 					<xs:attribute name="Meridian" type="MeridianCodeList">
 						<xs:annotation>
-							<xs:documentation>The collection of the coordinate numeric values for latitude amd longtitude depends on the agreed position of the meridian. Declaration of the meridian is necessary as it cannot be assumed in the data</xs:documentation>
+							<xs:documentation>The collection of the coordinate numeric values for latitude and longtitude depends on the agreed position of the meridian. Declaration of the meridian is necessary as it cannot be assumed in the data</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="MeridianCodeType" type="ct:String">
