@@ -64,11 +64,11 @@ namespace OpenStormBento
 // String constants
 extern const char gsBenMagicBytes[];
 
-pCBenNamedObject FindNamedObject(pCUtList pList, const char * sName,
-  pCUtListElmt * ppPrev);
+CBenNamedObject * FindNamedObject(CUtList * pList, const char * sName,
+  CUtListElmt ** ppPrev);
 
-pCBenIDListElmt FindID(pCUtList pList, BenObjectID ObjectID,
-  pCUtListElmt * ppPrev);
+CBenIDListElmt * FindID(CUtList * pList, BenObjectID ObjectID,
+  CUtListElmt ** ppPrev);
 } // end namespace
 
 // Private headers

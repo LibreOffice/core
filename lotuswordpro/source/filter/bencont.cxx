@@ -70,7 +70,7 @@ const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 *   @param  pointer to pointer of Bento Container object
 *   @return error code
 */
-sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer)
+sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer)
 {
     BenError Err;
 
@@ -81,7 +81,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
         return BenErr_ContainerWithNoObjects;
     }
 
-    pLtcBenContainer pContainer = new LtcBenContainer(pStream);
+    LtcBenContainer * pContainer = new LtcBenContainer(pStream);
     if ((Err = pContainer->Open()) != BenErr_OK) // delete two inputs
     {
         delete pContainer;
@@ -110,21 +110,21 @@ LtcBenContainer::Open() // delete two inputs
 
 void
 LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
-  pCBenPropertyName * ppPropertyName)
+  CBenPropertyName ** ppPropertyName)
 {
-    pCUtListElmt pPrevNamedObjectListElmt;
-    pCBenNamedObject pNamedObject = FindNamedObject(&cNamedObjects,
+    CUtListElmt * pPrevNamedObjectListElmt;
+    CBenNamedObject * pNamedObject = FindNamedObject(&cNamedObjects,
       sPropertyName, &pPrevNamedObjectListElmt);
 
     if (pNamedObject != nullptr)
     {
         if (! pNamedObject->IsPropertyName())
             return;
-        else *ppPropertyName = static_cast<pCBenPropertyName>(pNamedObject);
+        else *ppPropertyName = static_cast<CBenPropertyName *>(pNamedObject);
     }
     else
     {
-        pCUtListElmt pPrevObject;
+        CUtListElmt * pPrevObject;
         if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != nullptr)
             return;
 
@@ -134,14 +134,14 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     }
 }
 
-pCBenObject
-LtcBenContainer::GetNextObject(pCBenObject pCurrObject)
+CBenObject *
+LtcBenContainer::GetNextObject(CBenObject * pCurrObject)
 {
-    return static_cast<pCBenObject>(cObjects.GetNextOrNULL(pCurrObject));
+    return static_cast<CBenObject *>(cObjects.GetNextOrNULL(pCurrObject));
 }
 
-pCBenObject
-LtcBenContainer::FindNextObjectWithProperty(pCBenObject pCurrObject,
+CBenObject *
+LtcBenContainer::FindNextObjectWithProperty(CBenObject * pCurrObject,
   BenObjectID PropertyID)
 {
     while ((pCurrObject = GetNextObject(pCurrObject)) != nullptr)

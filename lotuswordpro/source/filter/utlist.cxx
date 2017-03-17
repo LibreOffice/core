@@ -58,7 +58,7 @@
 namespace OpenStormBento
 {
 
-CUtListElmt::CUtListElmt(pCUtList pList)
+CUtListElmt::CUtListElmt(CUtList * pList)
     : cpNext(nullptr)
     , cpPrev(nullptr)
 {
@@ -78,9 +78,9 @@ CUtListElmt::~CUtListElmt()
 CUtList::~CUtList()
 {
     CUtListElmt& rTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != &rTerminating; )
+    for (CUtListElmt * pCurr = GetFirst(); pCurr != &rTerminating; )
     {
-        pCUtListElmt pNext = pCurr->GetNext();
+        CUtListElmt * pNext = pCurr->GetNext();
         pCurr->MakeNotOnList();
         pCurr = pNext;
     }
@@ -91,10 +91,10 @@ CUtList::~CUtList()
 // If pCurr is NULL, returns first item in list.  Otherwise, returns item
 // in list after pCurr or NULL if no more items in list.  Terminating item
 // is never returned
-pCUtListElmt
-CUtList::GetNextOrNULL(pCUtListElmt pCurr)
+CUtListElmt *
+CUtList::GetNextOrNULL(CUtListElmt * pCurr)
 {
-    pCUtListElmt pNext;
+    CUtListElmt * pNext;
 
     if (pCurr == nullptr)
         pNext = GetFirst();
@@ -108,9 +108,9 @@ void
 CUtList::Destroy()
 {
     CUtListElmt& rTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != &rTerminating; )
+    for (CUtListElmt * pCurr = GetFirst(); pCurr != &rTerminating; )
     {
-        pCUtListElmt pNext = pCurr->GetNext();
+        CUtListElmt * pNext = pCurr->GetNext();
         delete pCurr;
         pCurr = pNext;
     }
