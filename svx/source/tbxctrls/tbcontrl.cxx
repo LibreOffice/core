@@ -1324,10 +1324,9 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mpPaletteListBox->SelectEntry( aPaletteName );
-    if (mpPaletteListBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-    {
-        SelectPaletteHdl( *mpPaletteListBox );
-    }
+    const sal_Int32 nSelectedEntry(mpPaletteListBox->GetSelectEntryPos());
+    if (nSelectedEntry != LISTBOX_ENTRY_NOTFOUND)
+        mrPaletteManager.SetPalette(nSelectedEntry);
 
     mpButtonAutoColor->SetClickHdl( LINK( this, SvxColorWindow, AutoColorClickHdl ) );
     mpButtonNoneColor->SetClickHdl( LINK( this, SvxColorWindow, AutoColorClickHdl ) );
@@ -1339,11 +1338,13 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
-    mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
+    const sal_uInt32 nMaxItems(mpColorSet->getMaxRowCount() * mpColorSet->getColumnCount());
+    Size aSize = mpColorSet->layoutAllVisible(nMaxItems);
+    mpColorSet->set_height_request(aSize.Height());
+    mpColorSet->set_width_request(aSize.Width());
 
     mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
-    mpRecentColorSet->SetLineCount( 1 );
-    Size aSize = mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
+    aSize = mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
     mpRecentColorSet->set_height_request(aSize.Height());
     mpRecentColorSet->set_width_request(aSize.Width());
 

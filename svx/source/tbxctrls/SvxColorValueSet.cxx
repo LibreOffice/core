@@ -122,10 +122,7 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
 
 void SvxColorValueSet::Resize()
 {
-    vcl::Window *pParent = GetParent();
-    //don't do this for the drop down color palettes
-    if (pParent && pParent->GetType() != WindowType::FLOATINGWINDOW)
-        layoutToGivenHeight(GetOutputSizePixel().Height(), GetItemCount());
+    layoutToGivenHeight(GetSizePixel().Height(), GetItemCount());
     ValueSet::Resize();
 }
 
@@ -136,7 +133,7 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
         nEntryCount++;
     }
 
-    const Size aItemSize(getEntryEdgeLength(), getEntryEdgeLength());
+    const Size aItemSize(getEntryEdgeLength() - 2, getEntryEdgeLength() - 2);
     const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
 
     // get size with all fields disabled

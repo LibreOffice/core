@@ -590,7 +590,7 @@ public:
     sal_uInt16                      GetColorValueSetColumnCount() const;
 
     // maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
-    // be used. Default is 40.
+    // be used.
     sal_uInt16                      GetColorValueSetMaximumRowCount() const;
 
     const Size&                     GetListBoxPreviewDefaultPixelSize() const;
