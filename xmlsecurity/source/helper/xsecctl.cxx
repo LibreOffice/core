@@ -146,19 +146,14 @@ void XSecController::createXSecComponent( )
      * SAXEventKeeper created successfully.
      */
     {
-        cssu::Reference< cssl::XInitialization > xInitialization(m_xSAXEventKeeper,  cssu::UNO_QUERY);
-
         cssu::Sequence <cssu::Any> arg(1);
         arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
-        xInitialization->initialize(arg);
+        m_xSAXEventKeeper->initialize(arg);
 
-        cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>
-            xSAXEventKeeperStatusChangeBroadcaster(m_xSAXEventKeeper, cssu::UNO_QUERY);
         cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >
             xStatusChangeListener = this;
 
-        xSAXEventKeeperStatusChangeBroadcaster
-            ->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
+        m_xSAXEventKeeper->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
 
         m_eStatusOfSecurityComponents = InitializationState::INITIALIZED;
     }
@@ -222,7 +217,7 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
              */
             m_xSAXEventKeeper->setNextHandler( nullptr );
 
-            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
+            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
 
             /*
              * connects the previous document handler on the SAX chain
@@ -485,7 +480,7 @@ void XSecController::clearSAXChainConnector()
      */
     if (m_xElementStackKeeper.is() && m_xSAXEventKeeper.is())
     {
-        cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
+        cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
         m_xElementStackKeeper->retrieve(xSEKHandler, true);
     }
 
@@ -533,12 +528,7 @@ void XSecController::endMission()
      * free the status change listener reference to this object
      */
     if (m_xSAXEventKeeper.is())
-    {
-        cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>
-            xSAXEventKeeperStatusChangeBroadcaster(m_xSAXEventKeeper, cssu::UNO_QUERY);
-        xSAXEventKeeperStatusChangeBroadcaster
-            ->addSAXEventKeeperStatusChangeListener( nullptr );
-    }
+        m_xSAXEventKeeper->addSAXEventKeeperStatusChangeListener( nullptr );
 }
 
 namespace

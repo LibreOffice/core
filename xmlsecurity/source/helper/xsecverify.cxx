@@ -22,6 +22,7 @@
 #include "xsecparser.hxx"
 #include "ooxmlsecparser.hxx"
 #include "framework/signatureverifierimpl.hxx"
+#include "framework/saxeventkeeperimpl.hxx"
 
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
@@ -66,7 +67,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     cssu::Sequence<cssu::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= m_xSAXEventKeeper;
+    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
     args[3] <<= m_xSecurityContext;
     args[4] <<= m_xXMLSignature;
@@ -77,11 +78,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     signatureVerifyResultBroadcaster->addSignatureVerifyResultListener( this );
 
-    cssu::Reference<cssxc::sax::XReferenceResolvedBroadcaster> xReferenceResolvedBroadcaster
-        (m_xSAXEventKeeper,
-        cssu::UNO_QUERY);
-
-    xReferenceResolvedBroadcaster->addReferenceResolvedListener(
+    m_xSAXEventKeeper->addReferenceResolvedListener(
         nIdOfSignatureElementCollector,
         xReferenceResolvedListener);
 
@@ -370,15 +367,11 @@ void XSecController::collectToVerify( const OUString& referenceId )
                     sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
                         cssxc::sax::ElementMarkPriority_BEFOREMODIFY, false );
 
-                    cssu::Reference<cssxc::sax::XReferenceResolvedBroadcaster> xReferenceResolvedBroadcaster
-                        (m_xSAXEventKeeper,
-                        cssu::UNO_QUERY );
-
                     cssu::Reference<cssxc::sax::XReferenceCollector> xReferenceCollector
                         ( isi.xReferenceResolvedListener, cssu::UNO_QUERY );
 
                     m_xSAXEventKeeper->setSecurityId(nKeeperId, isi.signatureInfor.nSecurityId);
-                    xReferenceResolvedBroadcaster->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
+                    m_xSAXEventKeeper->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
                     xReferenceCollector->setReferenceId( nKeeperId );
 
                     isi.vKeeperIds[j] = nKeeperId;
@@ -389,7 +382,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
         if ( bJustChainingOn )
         {
-            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper, cssu::UNO_QUERY);
+            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
             if (m_xElementStackKeeper.is())
             {
                 m_xElementStackKeeper->retrieve(xSEKHandler, true);
