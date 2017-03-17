@@ -756,7 +756,7 @@ public:
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const override;
-    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) override;
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;

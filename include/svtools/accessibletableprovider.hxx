@@ -111,7 +111,7 @@ public:
     virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice
-    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) = 0;
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;

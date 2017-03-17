@@ -181,7 +181,6 @@ namespace vclcanvas
             maText.Text,
             ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
             ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
             aMetricVector))
         {
             aBoundingBoxes.realloc(aMetricVector.size());

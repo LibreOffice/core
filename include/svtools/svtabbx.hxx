@@ -229,7 +229,7 @@ public:
     virtual void                    GrabTableFocus() override;
 
     // OutputDevice
-    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) override;
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
