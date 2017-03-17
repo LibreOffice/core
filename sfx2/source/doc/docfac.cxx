@@ -85,15 +85,14 @@ SfxObjectFactory::SfxObjectFactory
 (
     const SvGlobalName&     rName,
     SfxObjectShellFlags     nFlagsP,
-    const char*             pName
-) :    pShortName( pName ),
+    const OUString&         sName
+) :    m_sFactoryName( sName ),
        pImpl( new SfxObjectFactory_Impl ),
        nFlags( nFlagsP )
 {
-    pImpl->pFilterContainer = new SfxFilterContainer( OUString::createFromAscii( pName ) );
+    pImpl->pFilterContainer = new SfxFilterContainer( m_sFactoryName );
 
-    OUString aShortName( OUString::createFromAscii( pShortName ) );
-    aShortName = aShortName.toAsciiLowerCase();
+    const OUString aShortName( m_sFactoryName.toAsciiLowerCase() );
     pImpl->aClassName = rName;
     if ( aShortName == "swriter" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SW );
@@ -307,7 +306,7 @@ OUString SfxObjectFactory::GetStandardTemplate( const OUString& rServiceName )
 std::shared_ptr<const SfxFilter> SfxObjectFactory::GetTemplateFilter() const
 {
     sal_uInt16 nVersion=0;
-    SfxFilterMatcher aMatcher ( OUString::createFromAscii( pShortName ) );
+    SfxFilterMatcher aMatcher ( m_sFactoryName );
     SfxFilterMatcherIter aIter( aMatcher );
     std::shared_ptr<const SfxFilter> pFilter;
     std::shared_ptr<const SfxFilter> pTemp = aIter.First();
@@ -342,10 +341,7 @@ const SvGlobalName& SfxObjectFactory::GetClassId() const
 
 OUString SfxObjectFactory::GetFactoryURL() const
 {
-    OUStringBuffer aURLComposer;
-    aURLComposer.append("private:factory/");
-    aURLComposer.appendAscii(pShortName);
-    return aURLComposer.makeStringAndClear();
+    return "private:factory/" + m_sFactoryName;
 }
 
 OUString SfxObjectFactory::GetModuleName() const

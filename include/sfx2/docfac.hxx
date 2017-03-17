@@ -43,18 +43,18 @@ typedef void (*SfxVoidFunc)();
 class SFX2_DLLPUBLIC SfxObjectFactory
 {
 private:
-    const char*             pShortName;
+    const OUString          m_sFactoryName;
     std::unique_ptr<SfxObjectFactory_Impl> pImpl;      // Additional Data
     SfxObjectShellFlags     nFlags;
 
 public:
-    SfxObjectFactory( const SvGlobalName &rName, SfxObjectShellFlags nFlags, const char* pShortName );
+    SfxObjectFactory( const SvGlobalName &rName, SfxObjectShellFlags nFlags, const OUString& sFactoryName );
     ~SfxObjectFactory();
 
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
     OUString        GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    OUString        GetFactoryName() const { return OUString::createFromAscii(pShortName); }
+    OUString        GetFactoryName() const { return m_sFactoryName; }
     OUString        GetModuleName() const;
     SfxFilterContainer *GetFilterContainer() const;
 
