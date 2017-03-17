@@ -845,13 +845,11 @@ class JavaPanZoomController
 
         synchronized (mTarget.getLock()) {
             float newZoomFactor = getMetrics().zoomFactor * spanRatio;
-            float minZoomFactor = 0.0f;
+            float minZoomFactor = 0.0f; // deliberately set to zero to allow big zoom in
             float maxZoomFactor = MAX_ZOOM;
 
             ZoomConstraints constraints = mTarget.getZoomConstraints();
 
-            if (constraints.getMinZoom() > 0)
-                minZoomFactor = constraints.getMinZoom();
             if (constraints.getMaxZoom() > 0)
                 maxZoomFactor = constraints.getMaxZoom();
 
