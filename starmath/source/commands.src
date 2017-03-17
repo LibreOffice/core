@@ -85,6 +85,26 @@ String RID_XOVERY_HELP
 {
     Text [ en-US ] = "Division (Fraction)" ;
 };
+String RID_XODIVIDEY        { Text = "<?> odivide <?> " ; };
+String RID_XODIVIDEY_HELP
+{
+    Text [ en-US ] = "Circled Slash" ;
+};
+String RID_XODOTY           { Text = "<?> odot <?> " ; };
+String RID_XODOTY_HELP
+{
+    Text [ en-US ] = "Circled Dot" ;
+};
+String RID_XOMINUSY         { Text = "<?> ominus <?> " ; };
+String RID_XOMINUSY_HELP
+{
+    Text [ en-US ] = "Circled Minus" ;
+};
+String RID_XOPLUSY          { Text = "<?> oplus <?> " ; };
+String RID_XOPLUSY_HELP
+{
+    Text [ en-US ] = "Circled Plus" ;
+};
 String RID_XOTIMESY         { Text = "<?> otimes <?> " ; };
 String RID_XOTIMESY_HELP
 {
@@ -150,6 +170,11 @@ String RID_XGGY_HELP
 {
     Text [ en-US ] = "Is Much Greater Than" ;
 };
+String RID_XDEFY            { Text = "<?> def <?> " ; };
+String RID_XDEFY_HELP
+{
+    Text [ en-US ] = "Is Defined As" ;
+};
 String RID_XEQUIVY          { Text = "<?> equiv <?> " ; };
 String RID_XEQUIVY_HELP
 {
@@ -189,6 +214,16 @@ String RID_XTOWARDY         { Text = "<?> toward <?> " ; };
 String RID_XTOWARDY_HELP
 {
     Text [ en-US ] = "Toward" ;
+};
+String RID_XTRANSLY         { Text = "<?> transl <?> " ; };
+String RID_XTRANSLY_HELP
+{
+    Text [ en-US ] = "Corresponds To (Left)" ;
+};
+String RID_XTRANSRY         { Text = "<?> transr <?> " ; };
+String RID_XTRANSRY_HELP
+{
+    Text [ en-US ] = "Corresponds To (Right)" ;
 };
 String RID_XINY             { Text = "<?> in <?> " ; };
 String RID_XINY_HELP
@@ -465,6 +500,46 @@ String RID_LIM_FROMTOX_HELP
 {
     Text [ en-US ] = "Limes Sup/Sub script" ;
 };
+String RID_LIMINFX          { Text = "liminf <?> " ; };
+String RID_LIMINFX_HELP
+{
+    Text [ en-US ] = "Limit Inferior" ;
+};
+String RID_LIMINF_FROMX     { Text = "liminf from{<?>} <?> " ; };
+String RID_LIMINF_FROMX_HELP
+{
+    Text [ en-US ] = "Limit Inferior Subscript Bottom" ;
+};
+String RID_LIMINF_TOX       { Text = "liminf to{<?>} <?> " ; };
+String RID_LIMINF_TOX_HELP
+{
+    Text [ en-US ] = "Limit Inferior Superscript Top" ;
+};
+String RID_LIMINF_FROMTOX   { Text = "liminf from{<?>} to{<?>} <?> " ; };
+String RID_LIMINF_FROMTOX_HELP
+{
+    Text [ en-US ] = "Limit Inferior Sup/Sub script" ;
+};
+String RID_LIMSUPX          { Text = "limsup <?> " ; };
+String RID_LIMSUPX_HELP
+{
+    Text [ en-US ] = "Limit Superior" ;
+};
+String RID_LIMSUP_FROMX     { Text = "limsup from{<?>} <?> " ; };
+String RID_LIMSUP_FROMX_HELP
+{
+    Text [ en-US ] = "Limit Superior Subscript Bottom" ;
+};
+String RID_LIMSUP_TOX       { Text = "limsup to{<?>} <?> " ; };
+String RID_LIMSUP_TOX_HELP
+{
+    Text [ en-US ] = "Limit Superior Superscript Top" ;
+};
+String RID_LIMSUP_FROMTOX   { Text = "limsup from{<?>} to{<?>} <?> " ; };
+String RID_LIMSUP_FROMTOX_HELP
+{
+    Text [ en-US ] = "Limit Superior Sup/Sub script" ;
+};
 String RID_EXISTS           { Text = "exists " ; };
 String RID_EXISTS_HELP
 {
@@ -561,24 +636,40 @@ String RID_LINT_FROMTOX_HELP
     Text [ en-US ] = "Curve Integral Sup/Sub script" ;
 };
 String RID_LLINTX           { Text = "llint <?> " ; };
+String RID_LLINTX_HELP
+{
+    Text [ en-US ] = "Double Curve Integral" ;
+};
 String RID_LLINT_FROMX      { Text = "llint from{<?>} <?> " ; };
 String RID_LLINT_FROMX_HELP
 {
     Text [ en-US ] = "Double Curve Integral Subscript Bottom" ;
 };
 String RID_LLINT_TOX        { Text = "llint to{<?>} <?> " ; };
+String RID_LLINT_TOX_HELP
+{
+    Text [ en-US ] = "Double Curve Integral Superscript Top" ;
+};
 String RID_LLINT_FROMTOX    { Text = "llint from{<?>} to{<?>} <?> " ; };
 String RID_LLINT_FROMTOX_HELP
 {
     Text [ en-US ] = "Double Curve Integral Sup/Sub script" ;
 };
 String RID_LLLINTX          { Text = "lllint <?> " ; };
+String RID_LLLINTX_HELP
+{
+    Text [ en-US ] = "Triple Curve Integral" ;
+};
 String RID_LLLINT_FROMX     { Text = "lllint from{<?>} <?> " ; };
 String RID_LLLINT_FROMX_HELP
 {
     Text [ en-US ] = "Triple Curve Integral Subscript Bottom" ;
 };
 String RID_LLLINT_TOX       { Text = "lllint to{<?>} <?> " ; };
+String RID_LLLINT_TOX_HELP
+{
+    Text [ en-US ] = "Triple Curve Integral Superscript Top" ;
+};
 String RID_LLLINT_FROMTOX   { Text = "lllint from{<?>} to{<?>} <?> " ; };
 String RID_LLLINT_FROMTOX_HELP
 {
