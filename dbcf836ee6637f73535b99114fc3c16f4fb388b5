@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a57fde8_a0462421",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-03-17T12:38:27Z",
+      "side": 1,
+      "message": "Just do the check at the end right before the return, so that it is obvious and don’t get inadvertently dropped when we switch to ICU API in the future.",
+      "revId": "dbcf836ee6637f73535b99114fc3c16f4fb388b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_20e5d436",
         "filename": "vcl/source/gdi/CommonSalLayout.cxx",
         "patchSetId": 2
