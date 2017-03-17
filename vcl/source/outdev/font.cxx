@@ -1465,7 +1465,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
 }
 
 bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
-                                           int nIndex, int nLen, int nBase, MetricVector& rVector )
+                                           int nIndex, int nLen, MetricVector& rVector )
 {
     rVector.clear();
 
@@ -1480,7 +1480,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
     {
-        if( !GetTextBoundRect( aRect, rStr, nBase, nIndex + i, 1 ) )
+        if( !GetTextBoundRect( aRect, rStr, nIndex, nIndex + i, 1 ) )
             break;
         aRect.Move( rOrigin.X(), rOrigin.Y() );
         rVector.push_back( aRect );
