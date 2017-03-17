@@ -86,6 +86,7 @@ exclusionSet = set([
     "HID_PROP_",
     "STR_VOBJ_MODE_",
     "STR_COND_",
+    "SCSTR_CONTENT_",
     ])
 
 

@@ -39,11 +39,6 @@ String STR_HASH_GOOD
     Text [ en-US ] = "Hash compatible" ;
 };
 
-String STR_HASH_REGENERATED
-{
-    Text [ en-US ] = "Hash re-generated" ;
-};
-
 String STR_RETYPE
 {
     Text [ en-US ] = "Re-type" ;
