@@ -546,10 +546,8 @@ namespace osl
         if( pSenderAddr )
         {
             // TODO : correct the out-parameter pSenderAddr outparameter
-              nByteRead = osl_receiveFromSocket( m_handle, pSenderAddr->getHandle() , pBuffer,
+            nByteRead = osl_receiveFromSocket( m_handle, pSenderAddr->getHandle() , pBuffer,
                                                  BufferSize, Flag);
-//              nByteRead = osl_receiveFromSocket( m_handle, *(oslSocketAddr**) &pSenderAddr , pBuffer,
-//                                                 BufferSize, Flag);
         }
         else
         {
