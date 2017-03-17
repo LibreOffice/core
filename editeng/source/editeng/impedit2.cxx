@@ -4295,13 +4295,13 @@ rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTabl
 {
     rtl::Reference<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
     if ( !xF.is() )
-        xF = EE_DLL().GetGlobalData()->GetForbiddenCharsTable();
+        xF = EditDLL::Get().GetGlobalData()->GetForbiddenCharsTable();
     return xF;
 }
 
 void ImpEditEngine::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
-    EE_DLL().GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
+    EditDLL::Get().GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
 
 svtools::ColorConfig& ImpEditEngine::GetColorConfig()
