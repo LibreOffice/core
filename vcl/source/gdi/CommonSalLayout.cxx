@@ -305,13 +305,16 @@ namespace vcl {
 
     #include "VerticalOrientationData.cxx"
 
-    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh)
+    VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh,bool bOverride)
     {
         uint8_t nRet = 1;
 
         if (cCh < 0x10000)
         {
-            nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
+            if (bOverride && (cCh == 0xff1a || cCh == 0xff1b))
+                nRet = 2; // TransformedUpright
+            else
+                nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
                                   [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
         }
         else if (cCh < (kVerticalOrientationMaxPlane + 1) * 0x10000)
@@ -436,6 +439,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     const int nLength = rArgs.mrStr.getLength();
     const sal_Unicode *pStr = rArgs.mrStr.getStr();
+    bool bOverrideVO = rArgs.maLanguageTag.getLanguage() == "zh";
 
     std::unique_ptr<vcl::TextLayoutCache> pNewScriptRun;
     vcl::TextLayoutCache const* pTextLayout;
@@ -499,7 +503,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                    VerticalOrientation aVo = vcl::GetVerticalOrientation(aChar);
+                    VerticalOrientation aVo = vcl::GetVerticalOrientation(aChar,bOverrideVO);
 
                     sal_UCS4 aVariationSelector = 0;
                     if (nIdx < nEndRunPos)
