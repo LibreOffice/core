@@ -32,7 +32,6 @@
 #include "foptmgr.hxx"
 
 #include "globstr.hrc"
-#include "filter.hrc"
 
 #include "filtdlg.hxx"
 #include <vcl/msgbox.hxx>
