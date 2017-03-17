@@ -553,13 +553,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             {
                 SfxMedium *pMedium = xOldObj->GetMedium();
 
-                // Remove Frameset before the FramesetView may disappear
-                OUString aURL;
-                if (pURLItem)
-                    aURL = pURLItem->GetValue();
-                else
-                    aURL = pMedium->GetName();
-
                 bool bHandsOff =
                     ( pMedium->GetURLObject().GetProtocol() == INetProtocol::File && !xOldObj->IsDocShared() );
 
@@ -628,7 +621,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pNewSet, SID_DOC_SALVAGE, false);
                 if( pSalvageItem )
                 {
-                    aURL = pSalvageItem->GetValue();
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
