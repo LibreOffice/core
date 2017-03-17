@@ -176,7 +176,6 @@ namespace osl
         return m_handle != NULL;
     }
 
-    // (static method)______________________________________________________________
     inline ::rtl::OUString SAL_CALL SocketAddr::getLocalHostname( oslSocketResult *pResult )
     {
         ::rtl::OUString hostname;
@@ -186,14 +185,12 @@ namespace osl
         return hostname;
     }
 
-    // (static method)______________________________________________________________
     inline void SAL_CALL SocketAddr::resolveHostname(
         const ::rtl::OUString & strHostName, SocketAddr &Addr)
     {
         Addr = SocketAddr( osl_resolveHostname( strHostName.pData ) , SAL_NO_COPY );
     }
 
-    // (static method)______________________________________________________________
     inline sal_Int32 SAL_CALL SocketAddr::getServicePort(
             const ::rtl::OUString& strServiceName,
             const ::rtl::OUString & strProtocolName )
