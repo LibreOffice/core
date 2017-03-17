@@ -148,7 +148,9 @@ private:
 /** Helper class which indicates leaking object(s) of a particular class in
     non-pro builds; use e.g.
 
+    @code{.cpp}
     class MyClass : private osl::DebugBase<MyClass> {...};
+    @endcode
 
     Using the environment variable
 
