@@ -179,10 +179,6 @@ String STR_UNDO_REPEATDB+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Refresh range" ;
 };
-String STR_UNDO_GRAFEDIT+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Edit Image" ;
-};
 String STR_UNDO_LISTNAMES+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "List names" ;
@@ -383,14 +379,6 @@ String STR_MSSG_IMPORTDATA_0+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Error while importing data!" ;
 };
-String STR_DATABASE_NOTFOUND+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "The database '#' could not be opened." ;
-};
-String STR_QUERY_NOTFOUND+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "The query '#' could not be opened." ;
-};
 String STR_PROGRESS_IMPORT+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "# records imported..." ;
@@ -406,10 +394,6 @@ String STR_MSSG_REMOVEOUTLINE_0+RID_GLOBSTR_OFFSET
 String STR_MSSG_PASTEFROMCLIP_0+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Insert into multiple selection not possible" ;
-};
-String STR_MSSG_PASTEFROMCLIP_1+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Cell merge not possible if cells already merged!" ;
 };
 String STR_MSSG_MOVEBLOCKTO_0+RID_GLOBSTR_OFFSET
 {
@@ -479,17 +463,9 @@ String STR_MOVE_TO_END+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "- move to end position -" ;
 };
-String STR_BOX_YNI+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Not implemented in this build." ;
-};
 String STR_NO_REF_TABLE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "#REF!" ;
-};
-String STR_PIVOT_INVALID_DBAREA+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "The data range must contain at least one row." ;
 };
 String STR_PIVOT_NODATA+RID_GLOBSTR_OFFSET
 {
@@ -503,10 +479,6 @@ String STR_PIVOT_ERROR+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Error creating the pivot table." ;
 };
-String STR_PIVOT_OVERLAP+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Pivot tables can not overlap." ;
-};
 String STR_PIVOT_NOTEMPTY+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "The destination range is not empty. Overwrite existing contents?" ;
@@ -514,10 +486,6 @@ String STR_PIVOT_NOTEMPTY+RID_GLOBSTR_OFFSET
 String STR_DATAPILOT_SUBTOTAL+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-};
-String STR_PIVOT_PROGRESS+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Create Pivot Table" ;
 };
 String STR_PIVOT_TOTAL+RID_GLOBSTR_OFFSET
 {
@@ -530,10 +498,6 @@ String STR_PIVOT_DATA+RID_GLOBSTR_OFFSET
 String STR_PIVOT_GROUP+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Group" ;
-};
-String STR_TABLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Sheet" ;
 };
 String STR_ROWCOL_SELCOUNT+RID_GLOBSTR_OFFSET
 {
@@ -567,10 +531,6 @@ String STR_SAVE_DOC+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Save document" ;
 };
-String STR_ERR_INVALID_TABREF+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "<unknown table reference>" ;
-};
 String STR_AREA_ALREADY_INSERTED+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "This range has already been inserted." ;
@@ -594,10 +554,6 @@ String STR_NOMULTISELECT+RID_GLOBSTR_OFFSET
 String STR_FILL_SERIES_PROGRESS+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Fill Row..." ;
-};
-String STR_UNKNOWN_FILTER+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Unknown filter: " ;
 };
 String STR_UNDO_THESAURUS+RID_GLOBSTR_OFFSET
 {
@@ -768,11 +724,6 @@ String STR_ERROR_STR+RID_GLOBSTR_OFFSET
     Text [ en-US ] = "Err:" ;
 };
 /* BEGIN defined ERROR.TYPE() values. */
-/* ERROR.TYPE( #NULL! ) == 1 */
-String STR_LONG_ERR_NULL+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Error: Ranges do not intersect" ;
-};
 /* ERROR.TYPE( #DIV/0! ) == 2 */
 String STR_LONG_ERR_DIV_ZERO+RID_GLOBSTR_OFFSET
 {
@@ -879,10 +830,6 @@ String STR_GRIDCOLOR+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Grid color" ;
 };
-String STR_MERGE_NOTEMPTY+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Should the contents of the hidden cells be moved into the first cell?" ;
-};
 String STR_CELL_FILTER+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Filter" ;
@@ -894,10 +841,6 @@ String STR_TARGETNOTFOUND+RID_GLOBSTR_OFFSET
 String STR_INVALID_EPS+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Invalid increment" ;
-};
-String STR_TABLE_OP+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "MULTIPLE.OPERATIONS" ;
 };
 String STR_UNDO_TABOP+RID_GLOBSTR_OFFSET
 {
@@ -939,10 +882,6 @@ String STR_INVALID_AFAREA+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
 };
-String STR_CASCADE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "(nested)" ;
-};
 String STR_OPTIONAL+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "(optional)" ;
@@ -950,14 +889,6 @@ String STR_OPTIONAL+RID_GLOBSTR_OFFSET
 String STR_REQUIRED+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "(required)" ;
-};
-String STR_INVALID+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "invalid" ;
-};
-String STR_EDITFUNCTION+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Edit Function" ;
 };
 String STR_NOTES+RID_GLOBSTR_OFFSET
 {
@@ -970,18 +901,6 @@ String STR_QUERY_DELTAB+RID_GLOBSTR_OFFSET
 String STR_QUERY_DELSCENARIO+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Are you sure you want to delete the selected scenario?" ;
-};
-String STR_EXPORT_ASCII_WARNING+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Thesaurus is not available" ;
-};
-String STR_IMPORT_ERROR+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Spellcheck not available" ;
-};
-String STR_IMPORT_ASCII+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Import text files" ;
 };
 String STR_EXPORT_ASCII+RID_GLOBSTR_OFFSET
 {
@@ -1030,14 +949,6 @@ String STR_STYLENAME_HEADLINE1+RID_GLOBSTR_OFFSET
 String STR_STYLENAME_REPORT+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Report" ;
-};
-String STR_STYLENAME_REPORT1+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Report1" ;
-};
-String STR_IMPORT_EXCEL_WARNING+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install \nthe desired language if necessary" ;
 };
 String STR_THESAURUS_NO_STRING+RID_GLOBSTR_OFFSET
 {
@@ -1106,30 +1017,6 @@ String STR_UNDO_HIDETABS+RID_GLOBSTR_OFFSET
 String STR_UNDO_TAB_RTL+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Flip sheet" ;
-};
-String STR_UNDO_TAB_R1C1+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Toggle the use of R1C1 notation" ;
-};
-String STR_CHART_MAINTITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Main Title" ;
-};
-String STR_CHART_SUBTITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Subtitle" ;
-};
-String STR_CHART_XTITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "X axis title" ;
-};
-String STR_CHART_YTITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Y axis title" ;
-};
-String STR_CHART_ZTITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Z axis title" ;
 };
 String STR_ABSREFLOST+RID_GLOBSTR_OFFSET
 {
@@ -1271,29 +1158,9 @@ String STR_DOC_INFO+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Doc.Information" ;
 };
-String STR_DOC_CREATED+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Created" ;
-};
-String STR_DOC_MODIFIED+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Modified" ;
-};
 String STR_DOC_PRINTED+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Printed" ;
-};
-String STR_DOC_THEME+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Subject" ;
-};
-String STR_DOC_KEYWORDS+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Key words" ;
-};
-String STR_DOC_COMMENT+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Comments" ;
 };
 String STR_BY+RID_GLOBSTR_OFFSET
 {
@@ -1310,10 +1177,6 @@ String STR_RELOAD_TABLES+RID_GLOBSTR_OFFSET
 String STR_REIMPORT_AFTER_LOAD+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?" ;
-};
-String STR_FILTER_TOOMANY+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Too many conditions" ;
 };
 String STR_INSERT_FULL+RID_GLOBSTR_OFFSET
 {
@@ -1342,10 +1205,6 @@ String STR_PASTE_BIGGER+RID_GLOBSTR_OFFSET
 String STR_ERR_NOREF+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "No cell references are found in the selected cells." ;
-};
-String STR_ERR_LINKOVERLAP+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Source and destination must not overlap." ;
 };
 String STR_GRAPHICNAME+RID_GLOBSTR_OFFSET
 {
@@ -1456,10 +1315,6 @@ String STR_TIP_HIDE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Hide" ;
 };
-String STR_ERR_INSERTOBJ+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "The object could not be inserted." ;
-};
 String STR_CHANGED_BLANK+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "<empty>" ;
@@ -1480,10 +1335,6 @@ String STR_CHANGED_MOVE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Range moved from #1 to #2" ;
 };
-String STR_END_REDLINING_TITLE+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Exit Recording" ;
-};
 String STR_END_REDLINING
 {
     Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
@@ -1499,10 +1350,6 @@ String STR_UNDO_RESIZEMATRIX+RID_GLOBSTR_OFFSET
 String STR_TIP_RESIZEMATRIX+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Array formula  %1 R x %2 C";
-};
-String STR_MACRO_WARNING+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "This document contains macro function calls.\nDo you want to run them?";
 };
 
 String STR_UNDO_HANGULHANJA+RID_GLOBSTR_OFFSET
@@ -1636,11 +1483,6 @@ String STR_SHAPE_OVAL+RID_GLOBSTR_OFFSET
     Text [ en-US ] = "Oval";
 };
 
-String STR_SHAPE_TEXTBOX+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Text Box";
-};
-
 String STR_FORM_BUTTON+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Button";
@@ -1697,14 +1539,6 @@ String STR_STYLE_FAMILY_PAGE+RID_GLOBSTR_OFFSET
 String STR_ERR_DATAPILOTSOURCE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Pivot table source data is invalid.";
-};
-String STR_PIVOT_FIRSTROWEMPTYERR+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "One or more fields appear to have an empty name. Check the first row of the data source to ensure there are no empty cells." ;
-};
-String STR_PIVOT_ONLYONEROWERR+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Pivot table needs at least two rows of data to create or refresh." ;
 };
 String STR_OPTIONS_WARN_SEPARATORS+RID_GLOBSTR_OFFSET
 {
