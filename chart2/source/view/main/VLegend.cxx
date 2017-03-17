@@ -769,9 +769,11 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel, long& nUsedHeight)
 {
-    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
-
     std::vector<std::shared_ptr<VButton>> aButtons;
+
+    uno::Reference<chart2::data::XPivotChartDataProvider> xPivotChartDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
+    if (!xPivotChartDataProvider.is())
+        return aButtons;
 
     if (!xPivotChartDataProvider->getColumnFields().hasElements())
         return aButtons;
