@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c05ec844",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-17T19:10:18Z",
+      "side": 1,
+      "message": "and once you\u0027ve changed the signature of GetFactoryName(), then this can be :\nconst OUString\u0026 sName\nand the same below",
+      "revId": "51a6a5996aa647f9da1ed5dff2ceae6b3bc75ab4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
