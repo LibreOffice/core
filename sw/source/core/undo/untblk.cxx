@@ -58,7 +58,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
                 SwFormatAnchor const*const  pAnchor = &pFormat->GetAnchor();
                 const SwPosition* pAPos = pAnchor->GetContentAnchor();
                 if (pAPos &&
-                    (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
+                    (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
                      nSttNode == pAPos->nNode.GetIndex() )
                 {
                     if( !pFrameFormats )
@@ -111,7 +111,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
             SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
             SwPosition const*const pAPos = pAnchor->GetContentAnchor();
             if (pAPos &&
-                (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
+                (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
                 nSttNode == pAPos->nNode.GetIndex() )
             {
                 std::vector<SwFrameFormat*>::iterator it;

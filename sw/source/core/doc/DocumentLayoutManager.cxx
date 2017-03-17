@@ -115,16 +115,16 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
 
     switch ( eRequest )
     {
-    case RND_STD_HEADER:
-    case RND_STD_HEADERL:
-    case RND_STD_HEADERR:
+    case RndStdIds::HEADER:
+    case RndStdIds::HEADERL:
+    case RndStdIds::HEADERR:
         {
             bHeader = true;
             SAL_FALLTHROUGH;
         }
-    case RND_STD_FOOTER:
-    case RND_STD_FOOTERL:
-    case RND_STD_FOOTERR:
+    case RndStdIds::FOOTER:
+    case RndStdIds::FOOTERL:
+    case RndStdIds::FOOTERR:
         {
             pFormat = new SwFrameFormat( m_rDoc.GetAttrPool(),
                                  (bHeader ? "Right header" : "Right footer"),
@@ -136,14 +136,14 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
                 ( aTmpIdx,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
                   m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(static_cast<sal_uInt16>( bHeader
-                                     ? ( eRequest == RND_STD_HEADERL
+                                     ? ( eRequest == RndStdIds::HEADERL
                                          ? RES_POOLCOLL_HEADERL
-                                         : eRequest == RND_STD_HEADERR
+                                         : eRequest == RndStdIds::HEADERR
                                          ? RES_POOLCOLL_HEADERR
                                          : RES_POOLCOLL_HEADER )
-                                     : ( eRequest == RND_STD_FOOTERL
+                                     : ( eRequest == RndStdIds::FOOTERL
                                          ? RES_POOLCOLL_FOOTERL
-                                         : eRequest == RND_STD_FOOTERR
+                                         : eRequest == RndStdIds::FOOTERR
                                          ? RES_POOLCOLL_FOOTERR
                                          : RES_POOLCOLL_FOOTER )
                                      ) ) );
@@ -159,7 +159,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
         }
         break;
 
-    case RND_DRAW_OBJECT:
+    case RndStdIds::DRAW_OBJECT:
         {
             pFormat = m_rDoc.MakeDrawFrameFormat( OUString(), m_rDoc.GetDfltFrameFormat() );
             if( pSet )      // Set a few more attributes
@@ -174,11 +174,11 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
         break;
 
 #if OSL_DEBUG_LEVEL > 0
-    case FLY_AT_PAGE:
-    case FLY_AT_CHAR:
-    case FLY_AT_FLY:
-    case FLY_AT_PARA:
-    case FLY_AS_CHAR:
+    case RndStdIds::FLY_AT_PAGE:
+    case RndStdIds::FLY_AT_CHAR:
+    case RndStdIds::FLY_AT_FLY:
+    case RndStdIds::FLY_AT_PARA:
+    case RndStdIds::FLY_AS_CHAR:
         OSL_FAIL( "use new interface instead: SwDoc::MakeFlySection!" );
         break;
 #endif
@@ -269,7 +269,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                     {
                         SwFrameFormat* pTmpFormat = (*pTable)[i];
                         const SwFormatAnchor &rAnch = pTmpFormat->GetAnchor();
-                        if ( rAnch.GetAnchorId() == FLY_AT_FLY &&
+                        if ( rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY &&
                              rAnch.GetContentAnchor()->nNode.GetIndex() == nNodeIdxOfFlyFormat )
                         {
                             aToDeleteFrameFormats.push_back( pTmpFormat );
@@ -298,7 +298,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
 
         // Delete the character for FlyFrames anchored as char (if necessary)
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetContentAnchor())
+        if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetContentAnchor())
         {
             const SwPosition* pPos = rAnchor.GetContentAnchor();
             SwTextNode *pTextNd = pPos->nNode.GetNode().GetTextNode();
@@ -354,7 +354,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         rSource.CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
         bMayNotCopy =
             bCheckControlLayer &&
-            ((FLY_AT_PARA == rNewAnchor.GetAnchorId()) || (FLY_AT_FLY  == rNewAnchor.GetAnchorId()) || (FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_FLY  == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
             pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->nNode);
     }
 
@@ -463,7 +463,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         }
     }
 
-    if (bSetTextFlyAtt && (FLY_AS_CHAR == rNewAnchor.GetAnchorId()))
+    if (bSetTextFlyAtt && (RndStdIds::FLY_AS_CHAR == rNewAnchor.GetAnchorId()))
     {
         const SwPosition* pPos = rNewAnchor.GetContentAnchor();
         SwFormatFlyCnt aFormat( pDest );
@@ -478,13 +478,13 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT))
     {
         SwFormatAnchor boxAnchor(rNewAnchor);
-        if (FLY_AS_CHAR == boxAnchor.GetAnchorId())
+        if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
         {
             // AS_CHAR *must not* be set on textbox fly-frame
-            boxAnchor.SetType(FLY_AT_CHAR);
+            boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
         }
         // presumably these anchors are supported though not sure
-        assert(FLY_AT_CHAR == boxAnchor.GetAnchorId() || FLY_AT_PARA == boxAnchor.GetAnchorId());
+        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId());
         SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
                 boxAnchor, bSetTextFlyAtt, bMakeFrames);
         SwAttrSet aSet(pDest->GetAttrSet());

@@ -2227,7 +2227,7 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
             if (pTextNd)
             {
                 pTextNd->RemoveFromList();
-                // remove FLY_AS_CHAR *before* adjusting SwNodeIndex
+                // remove RndStdIds::FLY_AS_CHAR *before* adjusting SwNodeIndex
                 // so their anchor still points to correct node when deleted!
                 // NOTE: this will call RemoveNode() recursively!
                 // so adjust our indexes to account for removed nodes

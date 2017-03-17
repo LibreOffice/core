@@ -353,7 +353,7 @@ bool SwAutoFormat::HasObjects( const SwNode& rNd )
     for( auto pFrameFormat : rFormats )
     {
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
+        if ((RndStdIds::FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
             rAnchor.GetContentAnchor() &&
             &rAnchor.GetContentAnchor()->nNode.GetNode() == &rNd )
         {

@@ -136,22 +136,25 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // The former Rendevouz-IDs live on:
 // There are IDs for the anchors (SwFormatAnchor) and some others
 // that are only of importance for interfaces (SwDoc).
-enum RndStdIds
+enum class RndStdIds
 {
-    FLY_AT_PARA,        // Anchored at paragraph.
+    UNKNOWN = -1,       // return value used by SwFEShell::GetAnchorId
+
+    // the following 5 values are deliberately the same as the values in css::text::TextContentAnchorType
+    FLY_AT_PARA = 0,    // Anchored at paragraph.
     FLY_AS_CHAR,        // Anchored as character.
     FLY_AT_PAGE,        // Anchored at page.
     FLY_AT_FLY,         // Anchored at frame.
     FLY_AT_CHAR,        // Anchored at character.
 
-    RND_STD_HEADER,
-    RND_STD_FOOTER,
-    RND_STD_HEADERL,
-    RND_STD_HEADERR,
-    RND_STD_FOOTERL,
-    RND_STD_FOOTERR,
+    HEADER,
+    FOOTER,
+    HEADERL,
+    HEADERR,
+    FOOTERL,
+    FOOTERR,
 
-    RND_DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
+    DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };
 
 extern ResMgr* pSwResMgr;

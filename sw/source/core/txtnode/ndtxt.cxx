@@ -1116,7 +1116,7 @@ void SwTextNode::Update(
         {
             const SwFormatAnchor& rAnchor = (*pFormat)->GetAnchor();
             const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
-            if (rAnchor.GetAnchorId() == FLY_AT_CHAR && pContentAnchor)
+            if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
             {
                 // The fly is at-char anchored and has an anchor position.
                 SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);
@@ -1137,7 +1137,7 @@ void SwTextNode::Update(
             SwFrameFormat const*const pFormat = (*pFlys)[i];
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
-            if (rAnchor.GetAnchorId() == FLY_AT_CHAR && pContentAnchor)
+            if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
             {
                 // The fly is at-char anchored and has an anchor position.
                 SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);

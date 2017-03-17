@@ -561,8 +561,8 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
             SwPosition const*const pAPos = pAnchor->GetContentAnchor();
             if (pAPos &&
-                ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                 (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                 aInsIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
             {
                 pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );

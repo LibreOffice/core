@@ -421,8 +421,8 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&
-            ((FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
-             (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+             (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId())) &&
             nTableStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nTableEnd )
         {

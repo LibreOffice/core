@@ -336,13 +336,13 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                     sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {
-                        if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
+                        if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                         {
                             if( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
                                 if( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) )
                                     return true;
                         }
-                        else if( rAnchor.GetAnchorId() == FLY_AT_PARA )
+                        else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                         {
                             if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                 && (nHere < nEndIndex ) )

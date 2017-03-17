@@ -2898,7 +2898,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         SwFrameFormat *pFrameFormat = m_aMoveFlyFrames[ --n ];
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        OSL_ENSURE( FLY_AT_PARA == rAnchor.GetAnchorId(),
+        OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Nur Auto-Rahmen brauchen eine Spezialbehandlung" );
         const SwPosition *pFlyPos = rAnchor.GetContentAnchor();
         sal_uLong nFlyParaIdx = pFlyPos->nNode.GetIndex();
@@ -2923,7 +2923,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             pAttrPam->GetPoint()->nContent.Assign( pAttrPam->GetContentNode(),
                                                    m_aMoveFlyCnts[n] );
             SwFormatAnchor aAnchor( rAnchor );
-            aAnchor.SetType( FLY_AT_CHAR );
+            aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
             aAnchor.SetAnchor( pAttrPam->GetPoint() );
             pFrameFormat->SetFormatAttr( aAnchor );
 
@@ -4456,8 +4456,8 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
         //     Umlauf besitzt
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&
-            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             pAPos->nNode == rNodeIdx )
         {
             if( !(bNoSurroundOnly || bSurroundOnly) )
@@ -5091,8 +5091,8 @@ void SwHTMLParser::InsertLineBreak()
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
                 SwPosition const*const pAPos = pAnchor->GetContentAnchor();
                 if (pAPos &&
-                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == rNodeIdx &&
                     pFormat->GetSurround().GetSurround() != css::text::WrapTextMode_NONE )
                 {

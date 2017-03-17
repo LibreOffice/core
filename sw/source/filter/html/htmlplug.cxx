@@ -442,7 +442,7 @@ void SwHTMLParser::InsertEmbed()
     }
     else
     {
-        SwFormatAnchor aAnchor( FLY_AT_PARA );
+        SwFormatAnchor aAnchor( RndStdIds::FLY_AT_PARA );
         aAnchor.SetAnchor( m_pPam->GetPoint() );
         aFrameSet.Put( aAnchor );
         aFrameSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
@@ -1047,7 +1047,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sOut.append('\"');
         }
 
-        if ((FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) &&
+        if ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) &&
             css::text::WrapTextMode_THROUGHT == rFrameFormat.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN

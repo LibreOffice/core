@@ -290,7 +290,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_SURROUND, RES_SURROUND,
                         0 );
-    aSet.Put(SwFormatAnchor(FLY_AT_PAGE, 1));
+    aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, 1));
     if(bAlignLeft)
         aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else

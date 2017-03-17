@@ -557,7 +557,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 pAnchor = &pFormat->GetAnchor();
                 switch( pAnchor->GetAnchorId() )
                 {
-                case FLY_AS_CHAR:
+                case RndStdIds::FLY_AS_CHAR:
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         (( DelContentType::CheckNoCntnt & nDelContentType )
                         ? ( pStt->nNode <= pAPos->nNode &&
@@ -576,7 +576,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
                     break;
-                case FLY_AT_PARA:
+                case RndStdIds::FLY_AT_PARA:
                     {
                         pAPos =  pAnchor->GetContentAnchor();
                         if( pAPos )
@@ -624,7 +624,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         }
                     }
                     break;
-                case FLY_AT_CHAR:
+                case RndStdIds::FLY_AT_CHAR:
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {
@@ -654,7 +654,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         }
                     }
                     break;
-                case FLY_AT_FLY:
+                case RndStdIds::FLY_AT_FLY:
 
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         pStt->nNode == pAPos->nNode )

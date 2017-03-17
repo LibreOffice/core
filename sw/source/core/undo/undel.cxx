@@ -58,7 +58,7 @@ static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedI
         {
             SwFrameFormat * pFormat = rSpzArr[n];
             const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
-            if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
+            if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
             {
                 const SwPosition* pAPos = pAnchor->GetContentAnchor();
                 if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
@@ -730,7 +730,7 @@ static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, SwPos
         {
             pFormat = static_cast<SwFlyFrameFormat*>(rSpzArr[n]);
             pAnchor = &pFormat->GetAnchor();
-            if (pAnchor->GetAnchorId() == FLY_AT_PARA)
+            if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
             {
                 pAPos =  pAnchor->GetContentAnchor();
                 if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )

@@ -302,7 +302,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // determine relative position of drawing object and set it
         switch ( pDrawContact->GetAnchorId() )
         {
-            case FLY_AS_CHAR:
+            case RndStdIds::FLY_AS_CHAR:
             {
                 // indicate that position will be valid after positioning is performed
                 mbValidPos = true;
@@ -310,16 +310,16 @@ void SwAnchoredDrawObject::MakeObjPos()
                 // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
             }
             break;
-            case FLY_AT_PARA:
-            case FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_PARA:
+            case RndStdIds::FLY_AT_CHAR:
             {
                 // --> #i32795# - move intrinsic positioning to
                 // helper method <MakeObjPosAnchoredAtPara()>
                 MakeObjPosAnchoredAtPara();
             }
             break;
-            case FLY_AT_PAGE:
-            case FLY_AT_FLY:
+            case RndStdIds::FLY_AT_PAGE:
+            case RndStdIds::FLY_AT_FLY:
             {
                 // --> #i32795# - move intrinsic positioning to
                 // helper method <MakeObjPosAnchoredAtLayout()>
@@ -529,7 +529,7 @@ void SwAnchoredDrawObject::InvalidatePage_( SwPageFrame* _pPageFrame )
         {
             // --> #i35007# - correct invalidation for as-character
             // anchored objects.
-            if ( GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR )
+            if ( GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR )
             {
                 _pPageFrame->InvalidateFlyInCnt();
             }
@@ -569,7 +569,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             // --> #i44559# - assure, that text hint is already
             // existing in the text frame
             if ( dynamic_cast< const SwTextFrame* >(GetAnchorFrame()) !=  nullptr &&
-                 (GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+                 (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
             {
                 SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
                 if ( pAnchorTextFrame->GetTextNode()->GetpSwpHints() &&

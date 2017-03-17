@@ -580,8 +580,8 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
     // which will be on the next page.
     if ( !bAnchorIsMovedForward &&
          _bAnchoredAtMasterBeforeFormatAnchor &&
-        ((_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AT_CHAR) ||
-         (_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AT_PARA)))
+        ((_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
+         (_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA)))
     {
         SwFrame* pAnchorFrame = _rAnchoredObj.GetAnchorFrameContainingAnchPos();
         OSL_ENSURE( pAnchorFrame->IsTextFrame(),

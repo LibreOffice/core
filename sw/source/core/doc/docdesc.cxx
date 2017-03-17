@@ -257,7 +257,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         const SwFormatHeader &rFormatHead = rDescFrameFormat.GetHeader();
         if ( !rFormatHead.IsActive() )
         {
-            SwFormatHeader aHead( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_HEADERL, nullptr ) );
+            SwFormatHeader aHead( getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::HEADERL, nullptr ) );
             rDescFrameFormat.SetFormatAttr( aHead );
             // take over additional attributes (margins, borders ...)
             ::lcl_DescSetAttr( *rHead.GetHeaderFormat(), *aHead.GetHeaderFormat(), false);
@@ -330,7 +330,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
         const SwFormatFooter &rFormatFoot = rDescFrameFormat.GetFooter();
         if ( !rFormatFoot.IsActive() )
         {
-            SwFormatFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFormat( RND_STD_FOOTER, nullptr ) );
+            SwFormatFooter aFoot( getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::FOOTER, nullptr ) );
             rDescFrameFormat.SetFormatAttr( aFoot );
             // Take over additional attributes (margins, borders ...).
             ::lcl_DescSetAttr( *rFoot.GetFooterFormat(), *aFoot.GetFooterFormat(), false);

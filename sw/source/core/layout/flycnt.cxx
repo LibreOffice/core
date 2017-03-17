@@ -70,7 +70,7 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
     SwFlyFreeFrame( pFormat, pSib, pAnch )
 {
     m_bAtCnt = true;
-    m_bAutoPosition = (FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
+    m_bAutoPosition = (RndStdIds::FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
 }
 
 // #i28701#

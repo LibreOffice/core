@@ -714,7 +714,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
             // By changing the flow of frame-bound Frames, a vertical alignment
             // can be activated/deactivated => MakeFlyPos
-            if( FLY_AT_FLY == GetFormat()->GetAnchor().GetAnchorId() )
+            if( RndStdIds::FLY_AT_FLY == GetFormat()->GetAnchor().GetAnchorId() )
                 rInvFlags |= 0x09;
 
             // Delete contour in the Node if necessary
@@ -1068,12 +1068,12 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
         // #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
         const RndStdIds eAnchorType = GetFrameFormat().GetAnchor().GetAnchorId();
-        if ( eAnchorType == FLY_AT_PAGE )
+        if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
         {
             aVert.SetVertOrient( text::VertOrientation::NONE );
             aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
         }
-        else if ( eAnchorType == FLY_AT_FLY )
+        else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
         {
             aVert.SetVertOrient( text::VertOrientation::NONE );
             aVert.SetRelationOrient( text::RelOrientation::FRAME );
@@ -1120,13 +1120,13 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
             SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
             // #i34948# - handle also at-page and at-fly anchored
             // Writer fly frames
-            if ( eAnchorType == FLY_AT_PAGE )
+            if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
             {
                 aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                 aHori.SetPosToggle( false );
             }
-            else if ( eAnchorType == FLY_AT_FLY )
+            else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
             {
                 aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aHori.SetRelationOrient( text::RelOrientation::FRAME );
@@ -1469,7 +1469,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                     // When on auto position, we can only set it to
                                     // flow through
                                     if ((rFormat.GetAnchor().GetAnchorId() ==
-                                            FLY_AT_CHAR) &&
+                                            RndStdIds::FLY_AT_CHAR) &&
                                         (css::text::WrapTextMode_PARALLEL ==
                                             aAttr.GetSurround()))
                                     {
@@ -2121,7 +2121,7 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
         {
             if ( _bNoInvaOfAsCharAnchoredObjs &&
                  (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                    == FLY_AS_CHAR) )
+                    == RndStdIds::FLY_AS_CHAR) )
             {
                 continue;
             }

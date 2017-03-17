@@ -1689,8 +1689,8 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
         SwPosition const*const pAPos = rAnchor.GetContentAnchor();
         if (pAPos &&
-            ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
-             (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             nStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEnd )
         {

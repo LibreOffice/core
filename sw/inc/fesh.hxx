@@ -512,9 +512,9 @@ public:
 
     void EndTextEdit();             ///< Deletes object if required.
 
-    /** Anchor type of selected object, -1 if ambiguous or in case of frame selection.
-     Else FLY_AT_PAGE or FLY_AT_PARA resp. from frmatr.hxx. */
-    short GetAnchorId() const;
+    /** Anchor type of selected object, RndStdIds::UNKNOWN if ambiguous or in case of frame selection.
+     Else RndStdIds::FLY_AT_PAGE or RndStdIds::FLY_AT_PARA. */
+    RndStdIds GetAnchorId() const;
 
     /** Process of creating draw objects. At the beginning object type is passed.
      At the end a Cmd can be passed. Here, SDRCREATE_RESTRAINTEND for end
@@ -549,7 +549,7 @@ public:
     /** frmatr.hxx. Here no enum because of dependencies.
      bool value only for internal use! Anchor is newly set according
      to current document position. Anchor is not re-set. */
-    void ChgAnchor( int eAnchorId, bool bSameOnly = false,
+    void ChgAnchor( RndStdIds eAnchorId, bool bSameOnly = false,
                                    bool bPosCorr = true );
 
     bool SetDrawingAttr( SfxItemSet &rSet );

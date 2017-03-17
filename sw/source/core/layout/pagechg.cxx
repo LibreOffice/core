@@ -373,7 +373,7 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
         {
             if( rAnch.GetContentAnchor() )
             {
-                if (FLY_AT_PAGE == rAnch.GetAnchorId())
+                if (RndStdIds::FLY_AT_PAGE == rAnch.GetAnchorId())
                 {
                     SwFormatAnchor aAnch( rAnch );
                     aAnch.SetAnchor( nullptr );
@@ -1518,7 +1518,7 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
                 SwFrameFormat& rFormat = (*pPage->GetSortedObjs())[i]->GetFrameFormat();
                 const SwFormatAnchor &rAnch = rFormat.GetAnchor();
                 const sal_uInt16 nPg = rAnch.GetPageNum();
-                if ((rAnch.GetAnchorId() == FLY_AT_PAGE) &&
+                if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE) &&
                      nPg != pPage->GetPhyPageNum() )
                 {
                     SAL_INFO( "sw.pageframe", nPg << " " << pPage->GetPhyPageNum() );
@@ -1661,11 +1661,11 @@ void SwRootFrame::ImplCalcBrowseWidth()
                 long nWidth = 0;
                 switch ( rFormat.GetAnchor().GetAnchorId() )
                 {
-                    case FLY_AS_CHAR:
+                    case RndStdIds::FLY_AS_CHAR:
                         nWidth = bFly ? rFormat.GetFrameSize().GetWidth() :
                                         pAnchoredObj->GetObjRect().Width();
                         break;
-                    case FLY_AT_PARA:
+                    case RndStdIds::FLY_AT_PARA:
                         {
                             // #i33170#
                             // Reactivated old code because
@@ -1812,7 +1812,7 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
         // all except from the as character anchored objects are moved
         // when processing the page frame:
-        if ( !bPage && (rAnchor.GetAnchorId() != FLY_AS_CHAR) )
+        if ( !bPage && (rAnchor.GetAnchorId() != RndStdIds::FLY_AS_CHAR) )
             continue;
 
         SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );

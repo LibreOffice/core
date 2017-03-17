@@ -108,8 +108,8 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
         SwFormatAnchor const*const pAnchor = &pFly->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&
-            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             aSttIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
         {
             pClpDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFly );
@@ -139,13 +139,13 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
         SwFrameFormat* pFlyFormat = pFly->GetFormat();
         SwFormatAnchor aAnchor( pFlyFormat->GetAnchor() );
 
-        if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-            (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-            (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
-            (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+        if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
         {
             SwPosition aPos( aSttIdx );
-            if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
+            if ( RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId() )
             {
                 aPos.nContent.Assign( pTextNd, 0 );
             }
@@ -165,7 +165,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
             assert( !inserted && "Fly not contained in Spz-Array" );
         }
 
-        if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
+        if ( RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId() )
         {
             // JP 13.02.99  Bug 61863: if a frameselection is passed to the
             //              clipboard, it should be found at pasting. Therefore
@@ -196,7 +196,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
             {
                 SfxItemSet aSet( pClpDoc->GetAttrPool(), aFrameFormatSetRange );
 
-                SwFormatAnchor aAnchor( FLY_AT_PARA );
+                SwFormatAnchor aAnchor( RndStdIds::FLY_AT_PARA );
                 aAnchor.SetAnchor( &aPos );
                 aSet.Put( aAnchor );
 
@@ -211,10 +211,10 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
                 SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
                 SwFrameFormat *pFormat = pContact->GetFormat();
                 SwFormatAnchor aAnchor( pFormat->GetAnchor() );
-                if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-                    (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-                    (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
-                    (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+                if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                    (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                    (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+                    (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
                 {
                     aAnchor.SetAnchor( &aPos );
                 }
@@ -263,7 +263,7 @@ static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame
     {
         bRet = false;
     }
-    else if ( FLY_AT_FLY == rAnchor.GetAnchorId() )
+    else if ( RndStdIds::FLY_AT_FLY == rAnchor.GetAnchorId() )
     {
         if( pTmpFly )
         {
@@ -274,7 +274,7 @@ static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame
         }
         else
         {
-            rAnchor.SetType( FLY_AT_PAGE );
+            rAnchor.SetType( RndStdIds::FLY_AT_PAGE );
             rAnchor.SetPageNum( rDestShell.GetPageNumber( rInsPt ) );
             const SwFrame *pPg = pTmpFrame->FindPageFrame();
             rNewPos = pPg->Frame().Pos();
@@ -321,7 +321,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             // insert into the group, when it belongs to an entered group
             // or when the object is not anchored as a character
             if( pSrcDrwView->IsGroupEntered() ||
-                (FLY_AS_CHAR != rAnchor.GetAnchorId()) )
+                (RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
             {
                 SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
@@ -337,10 +337,10 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             SwFormatAnchor aAnchor( rAnchor );
             Point aNewAnch;
 
-            if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-                (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-                (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
-                (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+            if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+                (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
             {
                 if ( this == pDestShell )
                 {
@@ -370,7 +370,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                                 aNewAnch, false );
                 }
             }
-            else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
+            else if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
             {
                 aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
                 const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
@@ -397,7 +397,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 if ( pFormat )
                 {
                     SdrObject* pNew = pFormat->FindSdrObject();
-                    if ( FLY_AS_CHAR != aAnchor.GetAnchorId() )
+                    if ( RndStdIds::FLY_AS_CHAR != aAnchor.GetAnchorId() )
                     {
                         Point aPos( rInsPt );
                         aPos -= aNewAnch;
@@ -482,10 +482,10 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         bRet = true;
         Point aNewAnch;
 
-        if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-            (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-            (FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
-            (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+        if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_FLY  == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
         {
             if ( this == pDestShell )
             {
@@ -524,7 +524,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                                     aNewAnch, GetDoc() == pDestShell->GetDoc());
             }
         }
-        else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
+        else if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
         {
             aAnchor.SetPageNum( pDestShell->GetPageNumber( rInsPt ) );
             const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
@@ -541,7 +541,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             SwFrameFormat *pOldFormat = pFlyFormat;
             pFlyFormat = pDestShell->GetDoc()->getIDocumentLayoutAccess().CopyLayoutFormat( *pFlyFormat, aAnchor, true, true );
 
-            if ( FLY_AS_CHAR != aAnchor.GetAnchorId() )
+            if ( RndStdIds::FLY_AS_CHAR != aAnchor.GetAnchorId() )
             {
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
@@ -908,7 +908,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
 
                     if( Imp()->GetDrawView()->IsGroupEntered() &&
                         RES_DRAWFRMFMT == pCpyFormat->Which() &&
-                        (FLY_AS_CHAR != pCpyFormat->GetAnchor().GetAnchorId()) )
+                        (RndStdIds::FLY_AS_CHAR != pCpyFormat->GetAnchor().GetAnchorId()) )
                     {
                         const SdrObject* pSdrObj = pCpyFormat->FindSdrObject();
                         if( pSdrObj )
@@ -956,9 +956,9 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                     if( bInsWithFormat  )
                     {
                         SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
-                        if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-                            (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-                            (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+                        if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+                            (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+                            (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
                         {
                             SwPosition* pPos = rPaM.GetPoint();
                             // allow shapes (no controls) in header/footer
@@ -976,11 +976,11 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
 
                             aAnchor.SetAnchor( pPos );
                         }
-                        else if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
+                        else if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
                         {
                             aAnchor.SetPageNum( GetPhyPageNum() );
                         }
-                        else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
+                        else if( RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() )
                         {
                             Point aPt;
                             (void)lcl_SetAnchor( *rPaM.GetPoint(), rPaM.GetNode(),
@@ -1171,7 +1171,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         for ( auto pCpyFormat : *GetDoc()->GetSpzFrameFormats() )
         {
             SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
-            if ((FLY_AT_PAGE == aAnchor.GetAnchorId()) &&
+            if ((RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId()) &&
                     aAnchor.GetPageNum() >= nStartPage && aAnchor.GetPageNum() <= nEndPage)
             {
                 aAnchor.SetPageNum( aAnchor.GetPageNum() - nStartPage + 1);

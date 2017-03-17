@@ -373,7 +373,7 @@ SwFlyFrameFormat* SwWW8ImplReader::MakeGrafNotInContent(const WW8PicDesc& rPD,
 
     // So the frames are generated when inserted in an existing doc:
     if (m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
-        (FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()))
+        (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()))
     {
         pFlyFormat->MakeFrames();
     }
@@ -511,7 +511,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             // current PaM point is after the position if it is anchored in
             // content; because this anchor add a character into the textnode.
             // #i2806#
-            if (FLY_AS_CHAR ==
+            if (RndStdIds::FLY_AS_CHAR ==
                 m_pFlyFormatOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {
                 aFlySet.ClearItem( RES_ANCHOR );

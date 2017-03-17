@@ -58,7 +58,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();
     const SvxULSpaceItem &rUL = rFrameFormat.GetULSpace();
 
-    const bool bFlyAtFly = FLY_AT_FLY == rFrameFormat.GetAnchor().GetAnchorId();
+    const bool bFlyAtFly = RndStdIds::FLY_AT_FLY == rFrameFormat.GetAnchor().GetAnchorId();
 
     // determine position.
     // 'vertical' and 'horizontal' position are calculated separately

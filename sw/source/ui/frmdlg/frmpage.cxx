@@ -914,7 +914,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     if (SfxItemState::SET == rSet->GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
         m_bIsMathBaselineAlignment = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
-            && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
+            && RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) );
 
     if (m_bFormat)
     {
@@ -924,7 +924,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     }
     else
     {
-        if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
+        if (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_FLY && !pSh->IsFlyInFly())
             m_pAnchorAtFrameRB->Hide();
         if ( pSh->IsFrameVertical( true, m_bIsInRightToLeft, m_bIsVerticalL2R ) )
         {
@@ -1002,11 +1002,11 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     // general initialisation part
     switch(rAnchor.GetAnchorId())
     {
-        case FLY_AT_PAGE: m_pAnchorAtPageRB->Check(); break;
-        case FLY_AT_PARA: m_pAnchorAtParaRB->Check(); break;
-        case FLY_AT_CHAR: m_pAnchorAtCharRB->Check(); break;
-        case FLY_AS_CHAR: m_pAnchorAsCharRB->Check(); break;
-        case FLY_AT_FLY: m_pAnchorAtFrameRB->Check();break;
+        case RndStdIds::FLY_AT_PAGE: m_pAnchorAtPageRB->Check(); break;
+        case RndStdIds::FLY_AT_PARA: m_pAnchorAtParaRB->Check(); break;
+        case RndStdIds::FLY_AT_CHAR: m_pAnchorAtCharRB->Check(); break;
+        case RndStdIds::FLY_AS_CHAR: m_pAnchorAsCharRB->Check(); break;
+        case RndStdIds::FLY_AT_FLY: m_pAnchorAtFrameRB->Check();break;
         default:; //prevent warning
     }
 
@@ -1143,7 +1143,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             // vertical position
             // recalculate offset for character bound frames
             SwTwips nY = static_cast< SwTwips >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
-            if (eAnchorId == FLY_AS_CHAR)
+            if (eAnchorId == RndStdIds::FLY_AS_CHAR)
             {
                 nY *= -1;
             }
@@ -1291,19 +1291,19 @@ void SwFramePage::InitPos(RndStdIds eId,
     }
 
     bool bEnable = true;
-    if ( eId == FLY_AT_PAGE )
+    if ( eId == RndStdIds::FLY_AT_PAGE )
     {
         m_pVMap = m_bHtmlMode ? aVPageHtmlMap : aVPageMap;
         m_pHMap = m_bHtmlMode ? aHPageHtmlMap : aHPageMap;
     }
-    else if ( eId == FLY_AT_FLY )
+    else if ( eId == RndStdIds::FLY_AT_FLY )
     {
         // own vertical alignment map for to frame
         // anchored objects.
         m_pVMap = m_bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         m_pHMap = m_bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
     }
-    else if ( eId == FLY_AT_PARA )
+    else if ( eId == RndStdIds::FLY_AT_PARA )
     {
         if(m_bHtmlMode)
         {
@@ -1316,7 +1316,7 @@ void SwFramePage::InitPos(RndStdIds eId,
             m_pHMap = aHParaMap;
         }
     }
-    else if ( eId == FLY_AT_CHAR )
+    else if ( eId == RndStdIds::FLY_AT_CHAR )
     {
         if(m_bHtmlMode)
         {
@@ -1329,7 +1329,7 @@ void SwFramePage::InitPos(RndStdIds eId,
             m_pHMap = aHCharMap;
         }
     }
-    else if ( eId == FLY_AS_CHAR )
+    else if ( eId == RndStdIds::FLY_AS_CHAR )
     {
         m_pVMap = m_bHtmlMode ? aVAsCharHtmlMap     : aVAsCharMap;
         m_pHMap = nullptr;
@@ -1357,7 +1357,7 @@ void SwFramePage::InitPos(RndStdIds eId,
     nMapPos = FillPosLB(m_pVMap, nV, nVRel, *m_pVerticalDLB);
     FillRelLB(m_pVMap, nMapPos, nV, nVRel, *m_pVertRelationLB, *m_pVertRelationFT);
 
-    bEnable = nH == text::HoriOrientation::NONE && eId != FLY_AS_CHAR;
+    bEnable = nH == text::HoriOrientation::NONE && eId != RndStdIds::FLY_AS_CHAR;
     if (!bEnable)
     {
         m_pAtHorzPosED->SetValue( 0, FUNIT_TWIP );
@@ -1381,7 +1381,7 @@ void SwFramePage::InitPos(RndStdIds eId,
     }
     else
     {
-        if ( eId == FLY_AS_CHAR )
+        if ( eId == RndStdIds::FLY_AS_CHAR )
         {
             if ( nY == LONG_MAX )
                 nY = 0;
@@ -1708,22 +1708,22 @@ sal_Int32 SwFramePage::GetMapPos( const FrameMap *pMap, ListBox &rAlignLB )
 
 RndStdIds SwFramePage::GetAnchor()
 {
-    RndStdIds nRet = FLY_AT_PAGE;
+    RndStdIds nRet = RndStdIds::FLY_AT_PAGE;
     if(m_pAnchorAtParaRB->IsChecked())
     {
-        nRet = FLY_AT_PARA;
+        nRet = RndStdIds::FLY_AT_PARA;
     }
     else if(m_pAnchorAtCharRB->IsChecked())
     {
-        nRet = FLY_AT_CHAR;
+        nRet = RndStdIds::FLY_AT_CHAR;
     }
     else if(m_pAnchorAsCharRB->IsChecked())
     {
-        nRet = FLY_AS_CHAR;
+        nRet = RndStdIds::FLY_AS_CHAR;
     }
     else if(m_pAnchorAtFrameRB->IsChecked())
     {
-        nRet = FLY_AT_FLY;
+        nRet = RndStdIds::FLY_AT_FLY;
     }
     return nRet;
 }
@@ -1911,9 +1911,9 @@ void SwFramePage::RangeModifyHdl()
     if ( aVal.nHPos != nAtHorzPosVal )
         m_pAtHorzPosED->SetValue(m_pAtHorzPosED->Normalize(aVal.nHPos), FUNIT_TWIP);
 
-    const SwTwips nUpperOffset = (aVal.nAnchorType == FLY_AS_CHAR)
+    const SwTwips nUpperOffset = (aVal.nAnchorType == (sal_Int16)RndStdIds::FLY_AS_CHAR)
         ? m_nUpperBorder : 0;
-    const SwTwips nLowerOffset = (aVal.nAnchorType == FLY_AS_CHAR)
+    const SwTwips nLowerOffset = (aVal.nAnchorType == (sal_Int16)RndStdIds::FLY_AS_CHAR)
         ? m_nLowerBorder : 0;
 
     m_pAtVertPosED->SetMin(m_pAtVertPosED->Normalize(aVal.nMinVPos + nLowerOffset + nUpperOffset), FUNIT_TWIP);
@@ -1946,7 +1946,7 @@ IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, Button*, void)
     }
 
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
-            && FLY_AS_CHAR == eId) );
+            && RndStdIds::FLY_AS_CHAR == eId) );
 }
 
 IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
@@ -1994,7 +1994,7 @@ IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
         m_bAtVertPosModified = true;
 
     // special treatment for HTML-Mode with horizonal-vertical-dependencies
-    if(m_bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
+    if(m_bHtmlMode && (RndStdIds::FLY_AT_CHAR == GetAnchor()))
     {
         bool bSet = false;
         if(bHori)
@@ -2062,7 +2062,7 @@ IMPL_LINK( SwFramePage, RelHdl, ListBox&, rLB, void )
     else
         m_bAtVertPosModified = true;
 
-    if (m_bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
+    if (m_bHtmlMode && (RndStdIds::FLY_AT_CHAR == GetAnchor()))
     {
         if(bHori)
         {
@@ -2282,7 +2282,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
         m_nOldV    = rVert.GetVertOrient();
         m_nOldVRel = rVert.GetRelationOrient();
 
-        if (eAnchorId == FLY_AT_PAGE)
+        if (eAnchorId == RndStdIds::FLY_AT_PAGE)
         {
             if (m_nOldHRel == text::RelOrientation::FRAME)
                 m_nOldHRel = text::RelOrientation::PAGE_FRAME;

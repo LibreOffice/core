@@ -373,12 +373,12 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
 
     sal_Int32 nContent = 0;
     switch( rAnchor.GetAnchorId() ) {
-    case FLY_AS_CHAR:
-    case FLY_AT_CHAR:
+    case RndStdIds::FLY_AS_CHAR:
+    case RndStdIds::FLY_AT_CHAR:
         nContent = rAnchor.GetContentAnchor()->nContent.GetIndex();
         SAL_FALLTHROUGH;
-    case FLY_AT_PARA:
-    case FLY_AT_FLY:
+    case RndStdIds::FLY_AT_PARA:
+    case RndStdIds::FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetContentAnchor()->nNode.GetIndex();
         break;
     default:
@@ -401,10 +401,10 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         static_cast<const SwFormatAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
 
     SwFormatAnchor aNewAnchor( rAnchor.GetAnchorId() );
-    if (FLY_AT_PAGE != rAnchor.GetAnchorId()) {
+    if (RndStdIds::FLY_AT_PAGE != rAnchor.GetAnchorId()) {
         SwNode* pNd = pDoc->GetNodes()[ m_nNodeIndex  ];
 
-        if (  (FLY_AT_FLY == rAnchor.GetAnchorId())
+        if (  (RndStdIds::FLY_AT_FLY == rAnchor.GetAnchorId())
               ? ( !pNd->IsStartNode() || (SwFlyStartNode !=
                                           static_cast<SwStartNode*>(pNd)->GetStartNodeType()) )
               : !pNd->IsTextNode() ) {
@@ -414,8 +414,8 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
 
         SwPosition aPos( *pNd );
-        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
-            (FLY_AT_CHAR == rAnchor.GetAnchorId())) {
+        if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) {
             aPos.nContent.Assign( static_cast<SwTextNode*>(pNd), rAnchor.GetPageNum() );
             if ( aPos.nContent.GetIndex() > pNd->GetTextNode()->GetText().getLength()) {
                 // #i35443# - invalid position.
@@ -447,7 +447,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     const SwFormatAnchor &rOldAnch = pFrameFormat->GetAnchor();
     // #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
-    if (FLY_AS_CHAR == rOldAnch.GetAnchorId()) {
+    if (RndStdIds::FLY_AS_CHAR == rOldAnch.GetAnchorId()) {
         // With InContents it's tricky: the text attribute needs to be deleted.
         // Unfortunately, this not only destroys the Frames but also the format.
         // To prevent that, first detach the connection between attribute and
@@ -491,7 +491,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         m_pOldSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y()));
     }
 
-    if (FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
+    if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
         const SwPosition* pPos = aNewAnchor.GetContentAnchor();
         SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "no Text Node at position." );

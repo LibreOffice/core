@@ -884,8 +884,8 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             const SwPosition* pAPos = rAnchor.GetContentAnchor();
             if (pAPos &&
-                ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
+                ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
                 nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
                 nIdx < nEndIdx )
             {

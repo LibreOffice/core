@@ -1352,7 +1352,7 @@ void SwHTMLWriter::GetControls()
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         const SwPosition *pPos = rAnchor.GetContentAnchor();
-        if ((FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pPos)
+        if ((RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pPos)
             continue;
 
         const SdrObject *pSdrObj =

@@ -3818,15 +3818,15 @@ void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
         sal_uInt8 nP = 0;
         switch ( rAnchor.GetAnchorId() )
         {
-            case FLY_AT_PAGE:
+            case RndStdIds::FLY_AT_PAGE:
                 // Vert: Page | Horz: Page
                 nP |= (1 << 4) | (2 << 6);
                 break;
             // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
-            case FLY_AT_FLY:
-            case FLY_AT_CHAR:
-            case FLY_AT_PARA:
-            case FLY_AS_CHAR:
+            case RndStdIds::FLY_AT_FLY:
+            case RndStdIds::FLY_AT_CHAR:
+            case RndStdIds::FLY_AT_PARA:
+            case RndStdIds::FLY_AS_CHAR:
                 // Vert: Page | Horz: Page
                 nP |= (2 << 4) | (0 << 6);
                 break;

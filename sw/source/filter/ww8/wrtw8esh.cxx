@@ -827,7 +827,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
             sal_uInt16 nFlags=0;
             //If nFlags isn't 0x14 its overridden by the escher properties
-            if (FLY_AT_PAGE == rFormat.GetAnchor().GetAnchorId())
+            if (RndStdIds::FLY_AT_PAGE == rFormat.GetAnchor().GetAnchorId())
                 nFlags = 0x0000;
             else
                 nFlags = 0x0014;        // x-rel to text,  y-rel to text
@@ -2505,7 +2505,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
 {
     const RndStdIds eAnchor = _rFrameFormat.GetAnchor().GetAnchorId();
 
-    if ( (FLY_AS_CHAR == eAnchor) || (FLY_AT_FLY == eAnchor) )
+    if ( (RndStdIds::FLY_AS_CHAR == eAnchor) || (RndStdIds::FLY_AT_FLY == eAnchor) )
     {
         // no conversion for as-character or at frame anchored objects
         return false;
@@ -2519,7 +2519,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
     // the fact, that the object is anchored at a paragraph, which has a "column
     // break before" attribute
     bool bConvDueToAnchoredAtColBreakPara( false );
-    if ( ( (eAnchor == FLY_AT_PARA) || (eAnchor == FLY_AT_CHAR) ) &&
+    if ( ( (eAnchor == RndStdIds::FLY_AT_PARA) || (eAnchor == RndStdIds::FLY_AT_CHAR) ) &&
          _rFrameFormat.GetAnchor().GetContentAnchor() &&
          _rFrameFormat.GetAnchor().GetContentAnchor()->nNode.GetNode().IsTextNode() )
     {
@@ -2699,7 +2699,7 @@ bool WinwordAnchoring::ConvertPosition( SwFormatHoriOrient& _iorHoriOri,
 void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
 {
     const RndStdIds eAnchor = rFormat.GetAnchor().GetAnchorId();
-    mbInline = (eAnchor == FLY_AS_CHAR);
+    mbInline = (eAnchor == RndStdIds::FLY_AS_CHAR);
 
     SwFormatHoriOrient rHoriOri = rFormat.GetHoriOrient();
     SwFormatVertOrient rVertOri = rFormat.GetVertOrient();
@@ -2781,13 +2781,13 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
         case text::RelOrientation::FRAME:
         case text::RelOrientation::FRAME_LEFT: //:-(
         case text::RelOrientation::FRAME_RIGHT: //:-(
-            if (eAnchor == FLY_AT_PAGE)
+            if (eAnchor == RndStdIds::FLY_AT_PAGE)
                 mnXRelTo = 1;
             else
                 mnXRelTo = 2;
             break;
         case text::RelOrientation::PRINT_AREA:
-            if (eAnchor == FLY_AT_PAGE)
+            if (eAnchor == RndStdIds::FLY_AT_PAGE)
                 mnXRelTo = 0;
             else
                 mnXRelTo = 2;
@@ -2809,13 +2809,13 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
             mnYRelTo = 1;
             break;
         case text::RelOrientation::PRINT_AREA:
-            if (eAnchor == FLY_AT_PAGE)
+            if (eAnchor == RndStdIds::FLY_AT_PAGE)
                 mnYRelTo = 0;
             else
                 mnYRelTo = 2;
             break;
         case text::RelOrientation::FRAME:
-            if (eAnchor == FLY_AT_PAGE)
+            if (eAnchor == RndStdIds::FLY_AT_PAGE)
                 mnYRelTo = 1;
             else
                 mnYRelTo = 2;

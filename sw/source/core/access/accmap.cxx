@@ -1152,7 +1152,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
                 const SwPosition *pPos = rAnchor.GetContentAnchor();
 
-                if(rAnchor.GetAnchorId() == FLY_AT_PAGE)
+                if(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                 {
                     uno::Reference < XAccessible > xAcc( (*aIter).second );
                     if(xAcc.is())
@@ -1189,7 +1189,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                                 if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                                 {
-                                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
+                                    if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                                     {
                                         if( ( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
                                             &&( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) ) )
@@ -1205,7 +1205,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                                 static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
-                                    else if( rAnchor.GetAnchorId() == FLY_AT_PARA )
+                                    else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                                     {
                                         if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
                                             && (nHere < nEndIndex ) )
@@ -1272,7 +1272,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                         if (pFrameFormat)
                         {
                             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                            if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
+                            if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                             {
                                 uno::Reference< XAccessible > xAccParent = pAccFrame->getAccessibleParent();
                                 if (xAccParent.is())
@@ -1543,7 +1543,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
                 if (pFrameFormat)
                 {
                     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
+                    if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                     {
                         uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
                         if (xPara.is())

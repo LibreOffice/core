@@ -273,7 +273,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                     pAnchoredObj->ClearCharRectAndTopOfLine();
                     pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
                     if ( pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                            == FLY_AS_CHAR )
+                            == RndStdIds::FLY_AS_CHAR )
                     {
                         pAnchoredObj->AnchorFrame()
                                 ->Prepare( PREP_FLY_ATTR_CHG,
@@ -3683,7 +3683,7 @@ long CalcHeightWithFlys( const SwFrame *pFrame )
                     // the text flow have to be considered.
                     const SwFrameFormat& rFrameFormat = pAnchoredObj->GetFrameFormat();
                     const bool bConsiderObj =
-                        (rFrameFormat.GetAnchor().GetAnchorId() != FLY_AS_CHAR) &&
+                        (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) &&
                             pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
                             rFrameFormat.GetFollowTextFlow().GetValue() &&
                             pAnchoredObj->GetPageFrame() == pTmp->FindPageFrame();
@@ -4675,7 +4675,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
                              !( pTabFrame->IsFollow() &&
                                 pTabFrame->FindMaster()->IsRebuildLastLine() ) &&
                             (pAnchoredObj->GetFrameFormat().GetAnchor().GetAnchorId()
-                                                            != FLY_AS_CHAR))
+                                                            != RndStdIds::FLY_AS_CHAR))
                         {
                             SwPageFrame* pPageFrame = pAnchoredObj->GetPageFrame();
                             SwPageFrame* pPageOfAnchor = pFrame->FindPageFrame();

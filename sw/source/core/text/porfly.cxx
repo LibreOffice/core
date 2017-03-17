@@ -157,7 +157,7 @@ void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 n
             // Consider changed type of <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
-            if (rAnch.GetAnchorId() == FLY_AS_CHAR)
+            if (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 const SwPosition* pPos = rAnch.GetContentAnchor();
                 const sal_Int32 nIdx = pPos->nContent.GetIndex();
@@ -346,7 +346,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     SwFrameFormat* pShape = FindFrameFormat(pSdrObj);
     const SwFormatAnchor& rAnchor(pShape->GetAnchor());
-    if (rAnchor.GetAnchorId() == FLY_AS_CHAR)
+    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
     {
         // This is an inline draw shape, see if it has a textbox.
         SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);

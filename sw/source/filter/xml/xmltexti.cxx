@@ -106,7 +106,7 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         rItemSet.Put( SwFormatFrameSize( ATT_FIX_SIZE, nWidth, nHeight ) );
     }
 
-    SwFormatAnchor aAnchor( FLY_AT_CHAR );
+    SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );
     rItemSet.Put( aAnchor );
 
     if( pTwipWidth )

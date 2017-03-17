@@ -400,7 +400,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
 
     const SwFrameFormat &rFlyFormat = rFrame.GetFrameFormat();
     const RndStdIds eAn = rFlyFormat.GetAttrSet().GetAnchor(false).GetAnchorId();
-    if (eAn == FLY_AS_CHAR)
+    if (eAn == RndStdIds::FLY_AS_CHAR)
     {
         sal_Int16 eVert = rFlyFormat.GetVertOrient().GetVertOrient();
         if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
@@ -448,8 +448,8 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ((eAn == FLY_AT_PARA)) ||
-           (eAn == FLY_AT_PAGE)) )
+         ( ((eAn == RndStdIds::FLY_AT_PARA)) ||
+           (eAn == RndStdIds::FLY_AT_PAGE)) )
     {
         WriteChar( (char)0x0d ); // close the surrounding frame with CR
 

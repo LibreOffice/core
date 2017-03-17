@@ -106,10 +106,10 @@ protected:
     // but the width will not be re-evaluated based on the attributes.
     bool m_bFormatHeightOnly :1;
 
-    bool m_bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
-    bool m_bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
-    bool m_bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    bool m_bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
+    bool m_bInCnt :1;        ///< RndStdIds::FLY_AS_CHAR, anchored as character
+    bool m_bAtCnt :1;        ///< RndStdIds::FLY_AT_PARA, anchored at paragraph
+    bool m_bLayout :1;       ///< RndStdIds::FLY_AT_PAGE, RndStdIds::FLY_AT_FLY, at page or at frame
+    bool m_bAutoPosition :1; ///< RndStdIds::FLY_AT_CHAR, anchored at character
 
     friend class SwNoTextFrame; // is allowed to call NotifyBackground
 

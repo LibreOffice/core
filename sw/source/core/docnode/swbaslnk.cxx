@@ -439,10 +439,10 @@ const SwNode* SwBaseLink::GetAnchor() const
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
             SwPosition const*const pAPos = rAnchor.GetContentAnchor();
             if (pAPos &&
-                ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_PARA == rAnchor.GetAnchorId())))
+                ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
+                 (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())))
             {
                     return &pAPos->nNode.GetNode();
             }

@@ -379,8 +379,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                 SwPosition const*const pAPos =
                                     pAnchor->GetContentAnchor();
                                 if (pAPos &&
-                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {

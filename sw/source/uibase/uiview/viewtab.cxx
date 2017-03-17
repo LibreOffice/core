@@ -306,7 +306,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 if(aSize.GetWidthPercent())
                 {
                     SwRect aRect;
-                    rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
+                    rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
                     long nPrtWidth = aRect.Width();
                     aSize.SetWidthPercent(sal_uInt8((nPageWidth - aLongLR.GetLeft() - aLongLR.GetRight()) * 100 /nPrtWidth));
                 }
@@ -455,7 +455,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 if(aSize.GetHeightPercent())
                 {
                     SwRect aRect;
-                    rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
+                    rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
                     long nPrtHeight = aRect.Height();
                     aSize.SetHeightPercent(sal_uInt8(nHeight * 100 /nPrtHeight));
                 }

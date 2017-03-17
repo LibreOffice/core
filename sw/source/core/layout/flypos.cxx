@@ -40,7 +40,7 @@ SwPosFlyFrame::SwPosFlyFrame(const SwNodeIndex& rIdx, const SwFrameFormat* pForm
     : m_pFrameFormat(pFormat), m_pNodeIndex(const_cast<SwNodeIndex*>(&rIdx)), m_nOrdNum(SAL_MAX_UINT32)
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-    if(FLY_AT_PAGE == rAnchor.GetAnchorId())
+    if(RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
         m_pNodeIndex = new SwNodeIndex(rIdx);
     else if(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell())
         pFormat->CallSwClientNotify(sw::GetZOrderHint(m_nOrdNum));
@@ -54,7 +54,7 @@ SwPosFlyFrame::SwPosFlyFrame(const SwNodeIndex& rIdx, const SwFrameFormat* pForm
 SwPosFlyFrame::~SwPosFlyFrame()
 {
     const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
-    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+    if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
     {
         delete m_pNodeIndex;
     }

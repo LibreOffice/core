@@ -1751,7 +1751,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
 
     switch ( pAnch->GetAnchorId() )
     {
-        case FLY_AT_PAGE:
+        case RndStdIds::FLY_AT_PAGE:
                 {
                 sal_uInt16 nPgNum = pAnch->GetPageNum();
                 SwViewShell *pShell = pDrawFrameFormat->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -1775,12 +1775,12 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 }
                 break;
 
-        case FLY_AT_CHAR:
-        case FLY_AT_PARA:
-        case FLY_AT_FLY:
-        case FLY_AS_CHAR:
+        case RndStdIds::FLY_AT_CHAR:
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AT_FLY:
+        case RndStdIds::FLY_AS_CHAR:
             {
-                if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
+                if ( pAnch->GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                 {
                     ClrContourCache( GetMaster() );
                 }
@@ -1792,7 +1792,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 SwModify *pModify = nullptr;
                 if( pAnch->GetContentAnchor() )
                 {
-                    if ( pAnch->GetAnchorId() == FLY_AT_FLY )
+                    if ( pAnch->GetAnchorId() == RndStdIds::FLY_AT_FLY )
                     {
                         SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
                         SwContentNode* pCNd = pDrawFrameFormat->GetDoc()->GetNodes().GoNext( &aIdx );
@@ -1844,14 +1844,14 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
 
                     if( bAdd )
                     {
-                        if ( FLY_AT_FLY == pAnch->GetAnchorId() && !pFrame->IsFlyFrame() )
+                        if ( RndStdIds::FLY_AT_FLY == pAnch->GetAnchorId() && !pFrame->IsFlyFrame() )
                         {
                             pFrame = pFrame->FindFlyFrame();
                             assert(pFrame);
                         }
 
                         // find correct follow for as character anchored objects
-                        if ((pAnch->GetAnchorId() == FLY_AS_CHAR) &&
+                        if ((pAnch->GetAnchorId() == RndStdIds::FLY_AS_CHAR) &&
                              pFrame->IsTextFrame() )
                         {
                             pFrame = lcl_GetFlyInContentAnchor(
@@ -1869,7 +1869,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                         {
                             // append 'virtual' drawing object
                             SwDrawVirtObj* pDrawVirtObj = AddVirtObj();
-                            if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
+                            if ( pAnch->GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                             {
                                 ClrContourCache( pDrawVirtObj );
                             }
@@ -1878,7 +1878,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                             pDrawVirtObj->ActionChanged();
                         }
 
-                        if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
+                        if ( pAnch->GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                         {
                             pFrame->InvalidatePrt();
                         }

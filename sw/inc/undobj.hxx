@@ -40,6 +40,7 @@ class SwNodeRange;
 class SwRedlineData;
 class SwRedlineSaveDatas;
 enum class RedlineFlags;
+enum class RndStdIds;
 
 namespace sw {
     class UndoRedoContext;
@@ -268,7 +269,7 @@ protected:
     SwFrameFormat* pFrameFormat;          // The saved FlyFormat.
     sal_uLong nNdPgPos;
     sal_Int32 nCntPos;         // Page at/in paragraph.
-    sal_uInt16 nRndId;
+    RndStdIds nRndId;
     bool bDelFormat;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);

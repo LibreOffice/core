@@ -969,7 +969,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     bool bOnlyContainsAsCharAnchoredObj =
             !IsFollow() && nStrLen == 1 &&
             GetDrawObjs() && GetDrawObjs()->size() == 1 &&
-            (*GetDrawObjs())[0]->GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR;
+            (*GetDrawObjs())[0]->GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
 
     // Still try split text frame if we have columns.
     if (FindColFrame())

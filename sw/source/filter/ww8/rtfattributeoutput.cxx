@@ -3177,12 +3177,12 @@ void RtfAttributeOutput::FormatAnchor(const SwFormatAnchor& rAnchor)
         m_aRunText->append(static_cast<sal_Int32>(eId));
         switch (eId)
         {
-        case FLY_AT_PAGE:
+        case RndStdIds::FLY_AT_PAGE:
             m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYPAGE);
             m_aRunText->append(static_cast<sal_Int32>(rAnchor.GetPageNum()));
             break;
-        case FLY_AT_PARA:
-        case FLY_AS_CHAR:
+        case RndStdIds::FLY_AT_PARA:
+        case RndStdIds::FLY_AS_CHAR:
             m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYCNTNT);
             break;
         default:

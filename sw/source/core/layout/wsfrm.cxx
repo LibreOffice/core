@@ -3741,8 +3741,8 @@ void SwRootFrame::InvalidateAllObjPos()
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
                 const SwFormatAnchor& rAnch = pAnchoredObj->GetFrameFormat().GetAnchor();
-                if ((rAnch.GetAnchorId() != FLY_AT_PARA) &&
-                    (rAnch.GetAnchorId() != FLY_AT_CHAR))
+                if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA) &&
+                    (rAnch.GetAnchorId() != RndStdIds::FLY_AT_CHAR))
                 {
                     // only to paragraph and to character anchored objects are considered.
                     continue;

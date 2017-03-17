@@ -64,9 +64,9 @@ namespace
 {
     int GetAnchorWeight(RndStdIds eAnchor)
     {
-        if (eAnchor == FLY_AT_CHAR)
+        if (eAnchor == RndStdIds::FLY_AT_CHAR)
             return 0;
-        if (eAnchor == FLY_AS_CHAR)
+        if (eAnchor == RndStdIds::FLY_AS_CHAR)
             return 1;
         return 2;
     }
@@ -86,36 +86,36 @@ struct ObjAnchorOrder
         const SwFormatAnchor* pAnchorNew = &(rFormatNew.GetAnchor());
 
         // check for to-page anchored objects
-        if ((pAnchorListed->GetAnchorId() == FLY_AT_PAGE) &&
-            (pAnchorNew   ->GetAnchorId() != FLY_AT_PAGE))
+        if ((pAnchorListed->GetAnchorId() == RndStdIds::FLY_AT_PAGE) &&
+            (pAnchorNew   ->GetAnchorId() != RndStdIds::FLY_AT_PAGE))
         {
             return true;
         }
-        else if ((pAnchorListed->GetAnchorId() != FLY_AT_PAGE) &&
-                 (pAnchorNew   ->GetAnchorId() == FLY_AT_PAGE))
+        else if ((pAnchorListed->GetAnchorId() != RndStdIds::FLY_AT_PAGE) &&
+                 (pAnchorNew   ->GetAnchorId() == RndStdIds::FLY_AT_PAGE))
         {
             return false;
         }
-        else if ((pAnchorListed->GetAnchorId() == FLY_AT_PAGE) &&
-                 (pAnchorNew   ->GetAnchorId() == FLY_AT_PAGE))
+        else if ((pAnchorListed->GetAnchorId() == RndStdIds::FLY_AT_PAGE) &&
+                 (pAnchorNew   ->GetAnchorId() == RndStdIds::FLY_AT_PAGE))
         {
             return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
         }
 
         // Both objects aren't anchored to page.
         // Thus, check for to-fly anchored objects
-        if ((pAnchorListed->GetAnchorId() == FLY_AT_FLY) &&
-            (pAnchorNew   ->GetAnchorId() != FLY_AT_FLY))
+        if ((pAnchorListed->GetAnchorId() == RndStdIds::FLY_AT_FLY) &&
+            (pAnchorNew   ->GetAnchorId() != RndStdIds::FLY_AT_FLY))
         {
             return true;
         }
-        else if ((pAnchorListed->GetAnchorId() != FLY_AT_FLY) &&
-                 (pAnchorNew   ->GetAnchorId() == FLY_AT_FLY))
+        else if ((pAnchorListed->GetAnchorId() != RndStdIds::FLY_AT_FLY) &&
+                 (pAnchorNew   ->GetAnchorId() == RndStdIds::FLY_AT_FLY))
         {
             return false;
         }
-        else if ((pAnchorListed->GetAnchorId() == FLY_AT_FLY) &&
-                 (pAnchorNew   ->GetAnchorId() == FLY_AT_FLY))
+        else if ((pAnchorListed->GetAnchorId() == RndStdIds::FLY_AT_FLY) &&
+                 (pAnchorNew   ->GetAnchorId() == RndStdIds::FLY_AT_FLY))
         {
             return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
         }
@@ -136,9 +136,9 @@ struct ObjAnchorOrder
         // if not anchored at-paragraph
         if (pContentAnchorListed && pContentAnchorNew)
         {
-            sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != FLY_AT_PARA ?
+            sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
                 pContentAnchorListed->nContent.GetIndex() : 0;
-            sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != FLY_AT_PARA ?
+            sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
                 pContentAnchorNew->nContent.GetIndex() : 0;
             if (nListedIndex != nNewIndex)
             {

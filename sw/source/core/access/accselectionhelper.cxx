@@ -292,7 +292,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                 if (pFrameFormat)
                 {
                     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                    if( rAnchor.GetAnchorId() == FLY_AS_CHAR )
+                    if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                     {
                         const SwFrame *pParaFrame = SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview() );
                         aChild = pParaFrame;

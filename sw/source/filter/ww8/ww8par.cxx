@@ -2241,10 +2241,10 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     m_pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0);
 
-    SwFlyFrameFormat *pFrame = m_rDoc.MakeFlySection(FLY_AT_PARA, m_pPaM->GetPoint());
+    SwFlyFrameFormat *pFrame = m_rDoc.MakeFlySection(RndStdIds::FLY_AT_PARA, m_pPaM->GetPoint());
 
     SwFormatAnchor aAnch( pFrame->GetAnchor() );
-    aAnch.SetType( FLY_AT_PARA );
+    aAnch.SetType( RndStdIds::FLY_AT_PARA );
     pFrame->SetFormatAttr( aAnch );
     SwFormatFrameSize aSz(ATT_MIN_SIZE, nPageWidth, MINLAY);
     SwFrameSize eFrameSize = ATT_MIN_SIZE;

@@ -307,7 +307,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
         // Filter for at-paragraph anchored draw frames.
         const SwFrameFormat& rFrameFormat = pPosFlyFrame->GetFormat();
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
-        if (rAnchor.GetAnchorId() != FLY_AT_PARA || rFrameFormat.Which() != RES_DRAWFRMFMT)
+        if (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA || rFrameFormat.Which() != RES_DRAWFRMFMT)
             continue;
 
         // Does the shape have matching text?

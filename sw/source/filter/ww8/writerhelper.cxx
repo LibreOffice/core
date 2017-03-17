@@ -200,7 +200,7 @@ namespace ww8
         , meWriterType(eTextBox)
         , mpStartFrameContent(nullptr)
         // #i43447# - move to initialization list
-        , mbIsInline( (rFormat.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+        , mbIsInline( (rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
         // #i120928# - handle graphic of bullet within existing implementation
         , mbForBullet(false)
         , maGrf()
@@ -543,7 +543,7 @@ namespace sw
                 }
                 else
                 {   // these don't need to be corrected, they're not in redlines
-                    assert(FLY_AT_PAGE == rAnchor.GetAnchorId());
+                    assert(RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId());
                 }
             }
         }

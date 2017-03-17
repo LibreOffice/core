@@ -115,7 +115,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                             0   );
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
-            rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
+            rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
             long nWidth = aRect.Width();
             aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));

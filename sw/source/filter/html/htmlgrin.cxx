@@ -185,7 +185,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            bool bDontAppend )
 {
     bool bMoveBackward = false;
-    SwFormatAnchor aAnchor( FLY_AS_CHAR );
+    SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
     if( text::HoriOrientation::NONE != eHoriOri )
@@ -244,14 +244,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
         if( nContent )
         {
-            aAnchor.SetType( FLY_AT_CHAR );
+            aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
             bMoveBackward = true;
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
-            aAnchor.SetType( FLY_AT_PARA );
+            aAnchor.SetType( RndStdIds::FLY_AT_PARA );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::PRINT_AREA;
         }
@@ -278,7 +278,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
     // automatisch verankerte Rahmen muessen noch um eine Position
     // nach vorne verschoben werden.
     if( RES_DRAWFRMFMT != pFlyFormat->Which() &&
-        (FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
+        (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
         css::text::WrapTextMode_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
     {
         m_aMoveFlyFrames.push_back( pFlyFormat );
@@ -781,7 +781,7 @@ IMAGE_SETEVENT:
             }
         }
 
-        if ((FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()) &&
+        if ((RndStdIds::FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()) &&
             m_aAttrTab.pINetFormat->GetSttPara() ==
                         m_pPam->GetPoint()->nNode &&
             m_aAttrTab.pINetFormat->GetSttCnt() ==
@@ -1352,8 +1352,8 @@ void SwHTMLParser::StripTrailingPara()
                 SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
                 SwPosition const*const pAPos = pAnchor->GetContentAnchor();
                 if (pAPos &&
-                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == nNodeIdx )
 
                     return;     // den Knoten duerfen wir nicht loeschen

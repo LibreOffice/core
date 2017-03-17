@@ -1287,7 +1287,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     nInsMode |= SetAttrMode::NOTXTATRCHR;
 
                     if (pAnchor &&
-                        (FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
+                        (RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
                         pAnchor->GetContentAnchor() &&
                         pAnchor->GetContentAnchor()->nNode == *this &&
                         pAnchor->GetContentAnchor()->nContent == aIdx )

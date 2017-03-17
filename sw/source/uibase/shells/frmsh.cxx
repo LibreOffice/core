@@ -792,7 +792,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             if (nWhich != FN_FRAME_ALIGN_VERT_TOP &&
                                     nWhich != SID_OBJECT_ALIGN_UP )
                             {
-                                if (aMgr.GetAnchor() == FLY_AT_FLY)
+                                if (aMgr.GetAnchor() == RndStdIds::FLY_AT_FLY)
                                 {
                                     const SwFrameFormat* pFormat = rSh.IsFlyInFly();
                                     if (pFormat)

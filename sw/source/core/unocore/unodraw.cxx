@@ -130,7 +130,7 @@ public:
         {
             if(bCreate && !pAnchor)
             {
-                pAnchor = new SwFormatAnchor(FLY_AS_CHAR);
+                pAnchor = new SwFormatAnchor(RndStdIds::FLY_AS_CHAR);
             }
             return pAnchor;
         }
@@ -598,7 +598,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                                         RES_FRMATR_END-1 );
-    SwFormatAnchor aAnchor( FLY_AS_CHAR );
+    SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
     bool bOpaque = false;
     if( pDesc )
     {
@@ -675,12 +675,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         pInternalPam = new SwUnoInternalPaM(*pDoc);
         if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
         {
-            if(FLY_AT_FLY == aAnchor.GetAnchorId() &&
+            if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() &&
                                 !pInternalPam->GetNode().FindFlyStartNode())
             {
-                        aAnchor.SetType(FLY_AS_CHAR);
+                        aAnchor.SetType(RndStdIds::FLY_AS_CHAR);
             }
-            else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
+            else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
             {
                 aAnchor.SetAnchor(pInternalPam->Start());
             }
@@ -688,7 +688,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         else
             throw uno::RuntimeException();
     }
-    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
+    else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
@@ -700,7 +700,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     }
     else
     {
-        aAnchor.SetType(FLY_AT_PAGE);
+        aAnchor.SetType(RndStdIds::FLY_AT_PAGE);
 
         // #i32349# - adjustment of vertical positioning
         // attributes no longer needed, because its already got a default.
@@ -749,7 +749,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 for ( size_t i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
                 {
                     const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-                    if (FLY_AS_CHAR == ::FindFrameFormat(const_cast<SdrObject*>(
+                    if (RndStdIds::FLY_AS_CHAR == ::FindFrameFormat(const_cast<SdrObject*>(
                                             pObj))->GetAnchor().GetAnchorId())
                     {
                         bFlyInCnt = true;
@@ -765,7 +765,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor(
                         pPage->GetDrawView()->GetMarkedObjectList(),
-                        FLY_AT_PARA,
+                        RndStdIds::FLY_AT_PARA,
                         true, false );
 
                     pPage->GetDrawView()->UnmarkAll();
@@ -799,7 +799,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeG
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
-                        FLY_AT_PARA,
+                        RndStdIds::FLY_AT_PARA,
                         true, false );
             pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             pPage->RemovePageView();
@@ -1080,7 +1080,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aItemSet.Get(pEntry->nWID));
                             SwPosition aPos(*pFrame->GetFrameFormat()->GetContent().GetContentIdx());
                             aAnchor.SetAnchor(&aPos);
-                            aAnchor.SetType(FLY_AT_FLY);
+                            aAnchor.SetType(RndStdIds::FLY_AT_FLY);
                             aItemSet.Put(aAnchor);
                             pFormat->SetFormatAttr(aItemSet);
                             bDone = true;
@@ -1117,7 +1117,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 else if ( FN_TEXT_RANGE == pEntry->nWID )
                 {
                     SwFormatAnchor aAnchor( static_cast<const SwFormatAnchor&>(aSet.Get( RES_ANCHOR )) );
-                    if (aAnchor.GetAnchorId() == FLY_AT_PAGE)
+                    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                     {
                         // set property <TextRange> not valid for to-page anchored shapes
                         throw lang::IllegalArgumentException();
@@ -1130,7 +1130,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         aValue >>= xRg;
                         if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
                         {
-                            if (aAnchor.GetAnchorId() == FLY_AS_CHAR)
+                            if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                             {
                                 //delete old SwFormatFlyCnt
                                 //With AnchorAsCharacter the current TextAttribute has to be deleted.
@@ -1259,7 +1259,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         SwFrameFormat *pFlyFormat = FindFrameFormat( pObj );
                         pFlyFormat->DelFrames();
                         if( text::TextContentAnchorType_AS_CHARACTER != eNewAnchor &&
-                            (FLY_AS_CHAR == eOldAnchorId))
+                            (RndStdIds::FLY_AS_CHAR == eOldAnchorId))
                         {
                             //With AnchorAsCharacter the current TextAttribute has to be deleted.
                             //Tbis removes the frame format too.
@@ -1282,7 +1282,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             pTextNode->DeleteAttributes(RES_TXTATR_FLYCNT, nIdx);
                         }
                         else if( text::TextContentAnchorType_AT_PAGE != eNewAnchor &&
-                                (FLY_AT_PAGE == eOldAnchorId))
+                                (RndStdIds::FLY_AT_PAGE == eOldAnchorId))
                         {
                             SwFormatAnchor aNewAnchor( dynamic_cast< const SwFormatAnchor& >( aSet.Get( RES_ANCHOR ) ) );
                             //if the fly has been anchored at page then it needs to be connected
@@ -1306,7 +1306,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             bSetAttr = false;
                         }
                         if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
-                            (FLY_AS_CHAR != eOldAnchorId))
+                            (RndStdIds::FLY_AS_CHAR != eOldAnchorId))
                         {
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
                             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
@@ -1484,7 +1484,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 else if ( FN_TEXT_RANGE == pEntry->nWID )
                 {
                     const SwFormatAnchor aAnchor = pFormat->GetAnchor();
-                    if (aAnchor.GetAnchorId() == FLY_AT_PAGE)
+                    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                     {
                         // return nothing, because property <TextRange> isn't
                         // valid for to-page anchored shapes
@@ -2086,7 +2086,7 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor()
         const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
-        if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
+        if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
             (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
@@ -2125,7 +2125,7 @@ void SwXShape::dispose()
              !pObj->GetUpGroup() &&
              pObj->IsInserted() )
         {
-            if (pFormat->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
+            if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
                 SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();

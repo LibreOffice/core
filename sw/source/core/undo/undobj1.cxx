@@ -44,7 +44,7 @@ SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
     , pFrameFormat(pFormat)
     , nNdPgPos(0)
     , nCntPos(0)
-    , nRndId(0)
+    , nRndId(RndStdIds::FLY_AT_PARA)
     , bDelFormat(false)
 {
 }
@@ -69,7 +69,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 
     SwFormatAnchor aAnchor( (RndStdIds)nRndId );
 
-    if (FLY_AT_PAGE == nRndId)
+    if (RndStdIds::FLY_AT_PAGE == nRndId)
     {
         aAnchor.SetPageNum( (sal_uInt16)nNdPgPos );
     }
@@ -77,7 +77,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     {
         SwPosition aNewPos(pDoc->GetNodes().GetEndOfContent());
         aNewPos.nNode = nNdPgPos;
-        if ((FLY_AS_CHAR == nRndId) || (FLY_AT_CHAR == nRndId))
+        if ((RndStdIds::FLY_AS_CHAR == nRndId) || (RndStdIds::FLY_AT_CHAR == nRndId))
         {
             aNewPos.nContent.Assign( aNewPos.nNode.GetNode().GetContentNode(),
                                     nCntPos );
@@ -98,7 +98,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     // Set InContentAttribute not until there is content!
     // Otherwise the layout would format the Fly beforehand but would not find
     // content; this happened with graphics from the internet.
-    if (FLY_AS_CHAR == nRndId)
+    if (RndStdIds::FLY_AS_CHAR == nRndId)
     {
         // there must be at least the attribute in a TextNode
         SwContentNode* pCNd = aAnchor.GetContentAnchor()->nNode.GetNode().GetContentNode();
@@ -119,23 +119,24 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 
     switch( nRndId )
     {
-    case FLY_AS_CHAR:
-    case FLY_AT_CHAR:
+    case RndStdIds::FLY_AS_CHAR:
+    case RndStdIds::FLY_AT_CHAR:
         {
             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
             nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
             nCntPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
         }
         break;
-    case FLY_AT_PARA:
-    case FLY_AT_FLY:
+    case RndStdIds::FLY_AT_PARA:
+    case RndStdIds::FLY_AT_FLY:
         {
             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
             nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
         }
         break;
-    case FLY_AT_PAGE:
+    case RndStdIds::FLY_AT_PAGE:
         break;
+    default: break;
     }
     bDelFormat =  false;
 }
@@ -167,8 +168,8 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
     const SwPosition* pPos = rAnchor.GetContentAnchor();
     // The positions in Nodes array got shifted.
-    nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
-    if (FLY_AS_CHAR == nRndId)
+    nRndId = rAnchor.GetAnchorId();
+    if (RndStdIds::FLY_AS_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
@@ -185,12 +186,12 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
             pTextNd->EraseText( aIdx, 1 );
         }
     }
-    else if (FLY_AT_CHAR == nRndId)
+    else if (RndStdIds::FLY_AT_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
     }
-    else if ((FLY_AT_PARA == nRndId) || (FLY_AT_FLY == nRndId))
+    else if ((RndStdIds::FLY_AT_PARA == nRndId) || (RndStdIds::FLY_AT_FLY == nRndId))
     {
         nNdPgPos = pPos->nNode.GetIndex();
     }
@@ -212,19 +213,19 @@ SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeI
     mnCursorSaveIndexPara( nNodeIdx ), mnCursorSaveIndexPos( nCntIdx )
 {
     const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-    nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
+    nRndId = rAnchor.GetAnchorId();
     bDelFormat = false;
     switch( nRndId )
     {
-    case FLY_AT_PAGE:
+    case RndStdIds::FLY_AT_PAGE:
         nNdPgPos = rAnchor.GetPageNum();
         break;
-    case FLY_AT_PARA:
-    case FLY_AT_FLY:
+    case RndStdIds::FLY_AT_PARA:
+    case RndStdIds::FLY_AT_FLY:
         nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
         break;
-    case FLY_AS_CHAR:
-    case FLY_AT_CHAR:
+    case RndStdIds::FLY_AS_CHAR:
+    case RndStdIds::FLY_AT_CHAR:
         {
             const SwPosition* pPos = rAnchor.GetContentAnchor();
             nCntPos = pPos->nContent.GetIndex();
@@ -281,18 +282,18 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     // get anchor and reset it
     SwFormatAnchor aAnchor( pFrameFormat->GetAnchor() );
-    if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-        (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-        (FLY_AS_CHAR == aAnchor.GetAnchorId()))
+    if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+        (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+        (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
     {
         SwPosition aPos( *rContext.GetRepeatPaM().GetPoint() );
-        if (FLY_AT_PARA == aAnchor.GetAnchorId())
+        if (RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId())
         {
             aPos.nContent.Assign( nullptr, 0 );
         }
         aAnchor.SetAnchor( &aPos );
     }
-    else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
+    else if( RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() )
     {
         SwStartNode const*const pSttNd =
             rContext.GetRepeatPaM().GetNode().FindFlyStartNode();
@@ -306,7 +307,7 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
             return ;
         }
     }
-    else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
+    else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
         aAnchor.SetPageNum( pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
@@ -443,7 +444,7 @@ SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat
                                 rFlyFormat.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
     nOldContent( 0 ), nNewContent( 0 ),
-    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( false )
+    nOldAnchorTyp( RndStdIds::FLY_AT_PARA ), nNewAnchorTyp( RndStdIds::FLY_AT_PARA ), bAnchorChgd( false )
 {
 }
 
@@ -470,11 +471,11 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
                                 sal_uLong nNode, sal_Int32 nContent )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
-    if (FLY_AT_PAGE != nAnchorTyp)
+    if (RndStdIds::FLY_AT_PAGE != nAnchorTyp)
     {
         SwNode* pNd = pFrameFormat->GetDoc()->GetNodes()[ nNode ];
 
-        if( FLY_AT_FLY == nAnchorTyp
+        if( RndStdIds::FLY_AT_FLY == nAnchorTyp
                 ? ( !pNd->IsStartNode() || SwFlyStartNode !=
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
                 : !pNd->IsTextNode() )
@@ -484,8 +485,8 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
         else
         {
             SwPosition aPos( *pNd );
-            if ((FLY_AS_CHAR == nAnchorTyp) ||
-                (FLY_AT_CHAR == nAnchorTyp))
+            if ((RndStdIds::FLY_AS_CHAR == nAnchorTyp) ||
+                (RndStdIds::FLY_AT_CHAR == nAnchorTyp))
             {
                 if (nContent > pNd->GetTextNode()->GetText().getLength())
                 {
@@ -505,7 +506,7 @@ void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
         if( !pNd )
         {
             // invalid position - assign first page
-            rAnchor.SetType( FLY_AT_PAGE );
+            rAnchor.SetType( RndStdIds::FLY_AT_PAGE );
             rAnchor.SetPageNum( 1 );
         }
     }
@@ -544,7 +545,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
         if( bAnchorChgd )
         {
             const SwFormatAnchor& rOldAnch = pFrameFormat->GetAnchor();
-            if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
+            if (RndStdIds::FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
                 // With InContents it's tricky: the text attribute needs to be
                 // deleted. Unfortunately, this not only destroys the Frames but
@@ -572,7 +573,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             GetAnchor( aNewAnchor, nOldNode, nOldContent );
             pFrameFormat->SetFormatAttr( aNewAnchor );
 
-            if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
+            if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId())
             {
                 const SwPosition* pPos = aNewAnchor.GetContentAnchor();
                 SwFormatFlyCnt aFormat( pFrameFormat );
@@ -622,14 +623,14 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             bAnchorChgd = true;
 
             const SwFormatAnchor* pAnchor = static_cast<const SwFormatAnchor*>(pItem);
-            switch( nOldAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
+            switch( nOldAnchorTyp = pAnchor->GetAnchorId() )
             {
-            case FLY_AS_CHAR:
-            case FLY_AT_CHAR:
+            case RndStdIds::FLY_AS_CHAR:
+            case RndStdIds::FLY_AT_CHAR:
                 nOldContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
                 SAL_FALLTHROUGH;
-            case FLY_AT_PARA:
-            case FLY_AT_FLY:
+            case RndStdIds::FLY_AT_PARA:
+            case RndStdIds::FLY_AT_FLY:
                 nOldNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
                 break;
 
@@ -638,14 +639,14 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             }
 
             pAnchor = &pFrameFormat->GetAnchor();
-            switch( nNewAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
+            switch( nNewAnchorTyp = pAnchor->GetAnchorId() )
             {
-            case FLY_AS_CHAR:
-            case FLY_AT_CHAR:
+            case RndStdIds::FLY_AS_CHAR:
+            case RndStdIds::FLY_AT_CHAR:
                 nNewContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
                 SAL_FALLTHROUGH;
-            case FLY_AT_PARA:
-            case FLY_AT_FLY:
+            case RndStdIds::FLY_AT_PARA:
+            case RndStdIds::FLY_AT_FLY:
                 nNewNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
                 break;
 

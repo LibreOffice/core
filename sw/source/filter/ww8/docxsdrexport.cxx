@@ -292,7 +292,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     }
     else
     {
-        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR;
     }
 
     // Count effectExtent values, their value is needed before dist{T,B,L,R} is written.
@@ -745,7 +745,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
     }
     else
     {
-        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR;
     }
     m_pImpl->m_pSerializer->endElementNS(XML_wp, isAnchor ? XML_anchor : XML_inline);
 

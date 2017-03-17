@@ -193,7 +193,7 @@ class SwUndoSetFlyFormat : public SwUndo, public SwClient
     std::unique_ptr<SfxItemSet> pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
     sal_Int32 nOldContent, nNewContent;
-    sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
+    RndStdIds nOldAnchorTyp, nNewAnchorTyp;
     bool bAnchorChgd;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );

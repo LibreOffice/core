@@ -193,7 +193,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.
-        mbAnchorToChar = (FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId());
+        mbAnchorToChar = (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId());
         if ( mbAnchorToChar )
         {
             const SwFormatAnchor& rAnch = rFrameFormat.GetAnchor();

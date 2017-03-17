@@ -94,8 +94,8 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&
-            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
             SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
@@ -137,8 +137,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
         const SwPosition* pAPos = pAnchor->GetContentAnchor();
         const SwNodeIndex* pContentIdx;
         if (pAPos &&
-            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
+            ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             // do not move if the InsPos is in the ContentArea of the Fly
             ( nullptr == ( pContentIdx = pFormat->GetContent().GetContentIdx() ) ||
               !( *pContentIdx < rInsPos &&
@@ -194,8 +194,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
         SwPosition const*const pAPos = rAnch.GetContentAnchor();
         if (pAPos &&
-            ((rAnch.GetAnchorId() == FLY_AT_PARA) ||
-             (rAnch.GetAnchorId() == FLY_AT_CHAR)) &&
+            ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
+             (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
             ( bDelFwrd
                 ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
                 : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))

@@ -218,7 +218,7 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
          GetAnchorFrame()->IsTextFrame() )
     {
         const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
-        if ( (rAnch.GetAnchorId() == FLY_AT_CHAR) &&
+        if ( (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) &&
              rAnch.GetContentAnchor() )
         {
             // --> if requested, assure that anchor frame,
@@ -425,8 +425,8 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     else if ( rObjFormat.getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
     {
         const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
-        if ( ((rAnchor.GetAnchorId() == FLY_AT_CHAR) ||
-              (rAnchor.GetAnchorId() == FLY_AT_PARA)) &&
+        if ( ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
+              (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)) &&
              rObjFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGHT )
         {
             // --> #i34520# - text also wraps around anchored
@@ -652,7 +652,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
         AnchorFrame()->GetDrawObjs()->Update( *this );
         // update its position in the sorted object list of its page frame
         // note: as-character anchored object aren't registered at a page frame
-        if ( GetFrameFormat().GetAnchor().GetAnchorId() != FLY_AS_CHAR )
+        if ( GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR )
         {
             GetPageFrame()->GetSortedObjs()->Update( *this );
         }
@@ -711,8 +711,8 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
     if ( mpAnchorFrame )
     {
         const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
-        if ((rAnch.GetAnchorId() == FLY_AT_CHAR) ||
-            (rAnch.GetAnchorId() == FLY_AS_CHAR))
+        if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
+            (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
         {
             pAnchorCharFrame = &(static_cast<SwTextFrame*>(AnchorFrame())->
                         GetFrameAtOfst( rAnch.GetContentAnchor()->nContent.GetIndex() ));
