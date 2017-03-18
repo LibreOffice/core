@@ -71,13 +71,13 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
     {
         if ( xJob == null )
         {
-            System.out.println( "No mainthreadexecutor is provided to BimapPainter on init!" );
+            System.out.println( "No mainthreadexecutor is provided to BitmapPainter on init!" );
             throw new com.sun.star.uno.RuntimeException();
         }
 
         if ( xWindow == null )
         {
-            System.out.println( "No window is provided to BimapPainter on init!" );
+            System.out.println( "No window is provided to BitmapPainter on init!" );
             throw new com.sun.star.uno.RuntimeException();
         }
 
