@@ -66,7 +66,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
-/** Blocks if condition is not set<BR>
+/** Blocks if condition is not set
     If condition has been destroyed prematurely, wait() will
     return with False.
     @param Condition handle to a created condition.
