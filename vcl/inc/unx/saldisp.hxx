@@ -327,7 +327,7 @@ public:
     OUString        GetKeyName( sal_uInt16 nKeyCode ) const;
     sal_uInt16      GetKeyCode( KeySym keysym, char*pcPrintable ) const;
     KeySym          GetKeySym( XKeyEvent      *pEvent,
-                               unsigned char  *pPrintable,
+                               char           *pPrintable,
                                int            *pLen,
                                KeySym         *pUnmodifiedKeySym,
                                Status         *pStatus,
