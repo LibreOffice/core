@@ -24,7 +24,7 @@
 #include <list>
 
 #include <comphelper/solarmutex.hxx>
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 
 #ifdef MACOSX
@@ -73,7 +73,7 @@ public:
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
     osl::Mutex                              maUserEventListMutex;
-    oslCondition                            maWaitingYieldCond;
+    osl::Condition                          maWaitingYieldCond;
 
     static std::list<const ApplicationEvent*> aAppEventList;
 

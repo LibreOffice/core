@@ -349,6 +349,7 @@ void DestroySalInstance( SalInstance* pInst )
 
 AquaSalInstance::AquaSalInstance()
  : maUserEventListMutex()
+ , maWaitingYieldCond()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
@@ -356,7 +357,6 @@ AquaSalInstance::AquaSalInstance()
     maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
     mnActivePrintJobs = 0;
-    maWaitingYieldCond = osl_createCondition();
 }
 
 AquaSalInstance::~AquaSalInstance()
@@ -364,7 +364,6 @@ AquaSalInstance::~AquaSalInstance()
     ::comphelper::SolarMutex::setSolarMutex( nullptr );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
-    osl_destroyCondition( maWaitingYieldCond );
 }
 
 void AquaSalInstance::wakeupYield()
@@ -600,7 +599,7 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
         if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
         {
             aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
-            osl_setCondition( maWaitingYieldCond );
+            maWaitingYieldCond.set();
             // return if only one event is asked for
             if( ! bHandleAllCurrentEvents )
                 return SalYieldResult::EVENT;
@@ -683,17 +682,17 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 (*it)->maInvalidRect.SetEmpty();
             }
         }
-        osl_setCondition( maWaitingYieldCond );
+        maWaitingYieldCond.set();
     }
     else if( bWait )
     {
         // #i103162#
         // wait until any thread (most likely the main thread)
         // has dispatched an event, cop out at 200 ms
-        osl_resetCondition( maWaitingYieldCond );
+        maWaitingYieldCond.reset();
         TimeValue aVal = { 0, 200000000 };
         sal_uLong nCount = ReleaseYieldMutex();
-        osl_waitCondition( maWaitingYieldCond, &aVal );
+        maWaitingYieldCond.wait( &aVal );
         AcquireYieldMutex( nCount );
     }
 
