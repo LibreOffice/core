@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_f469cd8c",
+        "filename": "include/vcl/threadex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-18T05:32:52Z",
+      "side": 1,
+      "message": "no need to create these on the stack, you can create them inline a\n    osl::Condition m_aStart;",
+      "revId": "b0156e841da0cb5b68e3457e1d0d2e01ba185530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
