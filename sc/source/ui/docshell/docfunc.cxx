@@ -1807,7 +1807,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
     if (bRecord)
     {
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (pViewSh)
             nViewShellId = pViewSh->GetViewShellId();
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
@@ -2253,7 +2253,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
     {
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
@@ -5274,7 +5274,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
         {
-            int nViewShellId = -1;
+            ViewShellId nViewShellId(1);
             if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                 nViewShellId = pViewSh->GetViewShellId();
             rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
@@ -5331,7 +5331,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                 {
                     // group all remove and the insert action
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
-                    int nViewShellId = -1;
+                    ViewShellId nViewShellId(-1);
                     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                         nViewShellId = pViewSh->GetViewShellId();
                     rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
@@ -5531,7 +5531,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
 void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
 {
     OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
-    int nViewShellId = -1;
+    ViewShellId nViewShellId(-1);
     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
         nViewShellId = pViewSh->GetViewShellId();
     rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );

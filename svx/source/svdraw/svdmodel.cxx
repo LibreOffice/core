@@ -467,7 +467,7 @@ void SdrModel::BegUndo()
 {
     if( mpImpl->mpUndoManager )
     {
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction("","",0,nViewShellId);
@@ -491,7 +491,7 @@ void SdrModel::BegUndo(const OUString& rComment)
 {
     if( mpImpl->mpUndoManager )
     {
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction( rComment, "", 0, nViewShellId );
@@ -516,7 +516,7 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         {
             aComment = aComment.replaceFirst("%1", rObjDescr);
         }
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             nViewShellId = pViewShell->GetViewShellId();
         mpImpl->mpUndoManager->EnterListAction( aComment,"",0,nViewShellId );

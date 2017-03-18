@@ -1486,7 +1486,7 @@ int SfxViewShell::getPart() const
     return 0;
 }
 
-sal_uInt32 SfxViewShell::GetViewShellId() const
+ViewShellId SfxViewShell::GetViewShellId() const
 {
     return pImpl->m_nViewShellId;
 }
@@ -1509,7 +1509,7 @@ void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SfxViewShell"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number((sal_Int32)GetViewShellId()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
