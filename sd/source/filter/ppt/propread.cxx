@@ -569,26 +569,25 @@ void PropRead::Read()
 
     if ( mbStatus )
     {
-        sal_uInt32  nSections;
-        sal_uInt32  nSectionOfs;
-        sal_uInt32  nCurrent;
         mpSvStream->ReadUInt16( mnByteOrder ).ReadUInt16( mnFormat ).ReadUInt16( mnVersionLo ).ReadUInt16( mnVersionHi );
         if ( mnByteOrder == 0xfffe )
         {
-            std::unique_ptr<sal_uInt8[]> pSectCLSID( new sal_uInt8[ 16 ] );
+            std::vector<sal_uInt8> aSectCLSID(16);
             mpSvStream->ReadBytes(mApplicationCLSID, 16);
-            mpSvStream->ReadUInt32( nSections );
+            sal_uInt32 nSections(0);
+            mpSvStream->ReadUInt32(nSections);
             if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
             {
                 mbStatus = false;
             }
             else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {
-                mpSvStream->ReadBytes(pSectCLSID.get(), 16);
+                mpSvStream->ReadBytes(aSectCLSID.data(), aSectCLSID.size());
+                sal_uInt32 nSectionOfs(0);
                 mpSvStream->ReadUInt32( nSectionOfs );
-                nCurrent = mpSvStream->Tell();
+                sal_uInt32 nCurrent = mpSvStream->Tell();
                 mpSvStream->Seek( nSectionOfs );
-                Section aSection( pSectCLSID.get() );
+                Section aSection(aSectCLSID.data());
                 aSection.Read( mpSvStream.get() );
                 maSections.push_back( o3tl::make_unique<Section>( aSection ) );
                 mpSvStream->Seek( nCurrent );
