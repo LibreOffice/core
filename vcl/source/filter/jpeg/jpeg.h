@@ -48,7 +48,7 @@ bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                   Size const & previewSize );
 
-long    Transform( void* pInputStream, void* pOutputStream, long nAngle );
+void    Transform(void* pInputStream, void* pOutputStream, long nAngle);
 
 /* Expanded data source object for stdio input */
 

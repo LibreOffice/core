@@ -371,7 +371,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     return true;
 }
 
-long Transform(void* pInputStream, void* pOutputStream, long nAngle)
+void Transform(void* pInputStream, void* pOutputStream, long nAngle)
 {
     try
     {
@@ -449,9 +449,7 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     }
     catch (const css::uno::RuntimeException&)
     {
-        return 0;
     }
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
