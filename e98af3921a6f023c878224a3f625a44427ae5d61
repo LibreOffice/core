@@ -16,6 +16,74 @@
       "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_74179d51",
+        "filename": "solenv/inc/doxygen.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-03-18T19:14:34Z",
+      "side": 1,
+      "message": "tab vs space",
+      "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_940c0144",
+        "filename": "solenv/inc/doxygen.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-03-18T19:14:34Z",
+      "side": 1,
+      "message": "tab vs space and trailing space",
+      "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b4090534",
+        "filename": "solenv/inc/doxygen.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-03-18T19:14:34Z",
+      "side": 1,
+      "message": "as a reminder doxygen.cfg is used for generating the api doc iirc... so all these changes are worring to me",
+      "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_17ff3302",
+        "filename": "solenv/inc/doxygen.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-03-18T19:14:34Z",
+      "side": 1,
+      "message": "generally too many random change which seems unrelated to the problem at hand.",
+      "revId": "e98af3921a6f023c878224a3f625a44427ae5d61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
