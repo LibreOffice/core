@@ -51,7 +51,7 @@ protected:
 // [properties]         for all EditingFields
     css::uno::Any           m_aDefault;
     OUString                m_aDefaultText;             // default value
-    bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
+    bool                    m_bEmptyIsNull : 1;         // empty string will be interpreted as NULL when committing
     bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
 // [properties]
 

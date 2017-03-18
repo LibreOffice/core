@@ -188,7 +188,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * Because it's a oneway method we start a thread as reaction. This thread call
      * us back and we can do necessary things there.
      * But we shouldn't start such action - if it's not really necessary.
-     * So we check before, if we are intereested on this event really.
+     * So we check before, if we are interested on this event really.
      *
      * @see #impl_frameAction
      *

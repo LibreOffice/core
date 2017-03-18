@@ -647,7 +647,7 @@
 <!ATTLIST style:properties dr3d:normals-direction (normal|inverse) #IMPLIED>
 <!ATTLIST style:properties dr3d:texture-generation-mode-x (object|parallel|sphere) #IMPLIED>
 <!ATTLIST style:properties dr3d:texture-generation-mode-y (object|parallel|sphere) #IMPLIED>
-<!ATTLIST style:properties dr3d:texture-kind (luminance|intesity|color) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-kind (luminance|intensity|color) #IMPLIED>
 <!ATTLIST style:properties dr3d:texture-filter (enabled|disabled) #IMPLIED>
 <!ATTLIST style:properties dr3d:texture-mode (replace|modulate|blend) #IMPLIED>
 <!ATTLIST style:properties dr3d:ambient-color %color; #IMPLIED>

@@ -133,7 +133,7 @@ class VCSFileInfo:
         raise NotImplementedError
 
 class CVSFileInfo(VCSFileInfo):
-    """ A class to maintiain version information for files in a CVS repository.
+    """ A class to maintain version information for files in a CVS repository.
         Derived from VCSFileInfo. """
 
     def __init__(self, file, srcdir):

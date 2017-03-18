@@ -467,7 +467,7 @@ public:
     css::uno::Reference< css::datatransfer::XTransferable >
                     CreateTransferable( const ESelection& rSelection ) const;
 
-    // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, musst be compatible in SRC638, change later...
+    // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, must be compatible in SRC638, change later...
     void            SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
     void            SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
     void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );

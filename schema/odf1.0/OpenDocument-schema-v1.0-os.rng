@@ -16412,7 +16412,7 @@
         <attribute name="dr3d:texture-kind">
             <choice>
                 <value>luminance</value>
-                <value>intesity</value>
+                <value>intensity</value>
                 <value>color</value>
             </choice>
         </attribute>
