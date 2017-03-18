@@ -82,6 +82,96 @@ Property Get ObjectType() As String
 End Property		&apos;	ObjectType (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnFocusGained() As Variant
+	OnFocusGained = _PropertyGet(&quot;OnFocusGained&quot;)
+End Property		&apos;	OnFocusGained (get)
+
+Property Let OnFocusGained(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnFocusGained&quot;, pvValue)
+End Property		&apos;	OnFocusGained (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnFocusLost() As Variant
+	OnFocusLost = _PropertyGet(&quot;OnFocusLost&quot;)
+End Property		&apos;	OnFocusLost (get)
+
+Property Let OnFocusLost(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnFocusLost&quot;, pvValue)
+End Property		&apos;	OnFocusLost (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnKeyPressed() As Variant
+	OnKeyPressed = _PropertyGet(&quot;OnKeyPressed&quot;)
+End Property		&apos;	OnKeyPressed (get)
+
+Property Let OnKeyPressed(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnKeyPressed&quot;, pvValue)
+End Property		&apos;	OnKeyPressed (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnKeyReleased() As Variant
+	OnKeyReleased = _PropertyGet(&quot;OnKeyReleased&quot;)
+End Property		&apos;	OnKeyReleased (get)
+
+Property Let OnKeyReleased(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnKeyReleased&quot;, pvValue)
+End Property		&apos;	OnKeyReleased (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseDragged() As Variant
+	OnMouseDragged = _PropertyGet(&quot;OnMouseDragged&quot;)
+End Property		&apos;	OnMouseDragged (get)
+
+Property Let OnMouseDragged(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseDragged&quot;, pvValue)
+End Property		&apos;	OnMouseDragged (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseEntered() As Variant
+	OnMouseEntered = _PropertyGet(&quot;OnMouseEntered&quot;)
+End Property		&apos;	OnMouseEntered (get)
+
+Property Let OnMouseEntered(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseEntered&quot;, pvValue)
+End Property		&apos;	OnMouseEntered (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseExited() As Variant
+	OnMouseExited = _PropertyGet(&quot;OnMouseExited&quot;)
+End Property		&apos;	OnMouseExited (get)
+
+Property Let OnMouseExited(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseExited&quot;, pvValue)
+End Property		&apos;	OnMouseExited (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseMoved() As Variant
+	OnMouseMoved = _PropertyGet(&quot;OnMouseMoved&quot;)
+End Property		&apos;	OnMouseMoved (get)
+
+Property Let OnMouseMoved(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseMoved&quot;, pvValue)
+End Property		&apos;	OnMouseMoved (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMousePressed() As Variant
+	OnMousePressed = _PropertyGet(&quot;OnMousePressed&quot;)
+End Property		&apos;	OnMousePressed (get)
+
+Property Let OnMousePressed(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMousePressed&quot;, pvValue)
+End Property		&apos;	OnMousePressed (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnMouseReleased() As Variant
+	OnMouseReleased = _PropertyGet(&quot;OnMouseReleased&quot;)
+End Property		&apos;	OnMouseReleased (get)
+
+Property Let OnMouseReleased(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;OnMouseReleased&quot;, pvValue)
+End Property		&apos;	OnMouseReleased (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
 &apos;	Return either an error or an object of type OPTIONGROUP based on its name
 &apos;	A group is determined by the successive TabIndexes of the radio button
@@ -543,12 +633,32 @@ End Function		&apos;	Terminate
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- PRIVATE FUNCTIONS 								        														---
 REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _GetListener(ByVal psProperty As String) As String
+&apos;	Return the X...Listener corresponding with the property in argument
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;)
+			_GetListener = &quot;XFocusListener&quot;
+		Case UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;)
+			_GetListener = &quot;XKeyListener&quot;
+		Case UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseMoved&quot;)
+			_GetListener = &quot;XMouseMotionListener&quot;
+		Case UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			_GetListener = &quot;XMouseListener&quot;
+	End Select
+	
+End Function	&apos;	_GetListener	V1.7.0
+
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
 
 	If IsLoaded Then
 		_PropertiesList =  Array(&quot;Caption&quot;, &quot;Height&quot;, &quot;IsLoaded&quot;, &quot;Name&quot; _
-										, &quot;ObjectType&quot;, &quot;Page&quot;, &quot;Visible&quot;, &quot;Width&quot; _
+									, &quot;OnFocusGained&quot;, &quot;OnFocusLost&quot;, &quot;OnKeyPressed&quot;, &quot;OnKeyReleased&quot;, &quot;OnMouseDragged&quot; _
+									, &quot;OnMouseEntered&quot;, &quot;OnMouseExited&quot;, &quot;OnMouseMoved&quot;, &quot;OnMousePressed&quot;, &quot;OnMouseReleased&quot; _
+									, &quot;ObjectType&quot;, &quot;Page&quot;, &quot;Visible&quot;, &quot;Width&quot; _
 									)
 	Else
 		 _PropertiesList = Array(&quot;IsLoaded&quot;, &quot;Name&quot; _
@@ -563,7 +673,9 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Dialog.get&quot; &amp; psProperty)
-	
+
+Dim oDialogEvents As Object, sEventName As String
+
 &apos;Execute
 	_PropertyGet = EMPTY
 
@@ -583,6 +695,16 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 			_PropertyGet = _Name
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			Set oDialogEvents = unoDialog.Model.getEvents()
+			sEventName = &quot;com.sun.star.awt.&quot; &amp; _GetListener(psProperty) &amp; &quot;::&quot; &amp; Utils._GetEventName(psProperty)
+			If oDialogEvents.hasByName(sEventName) Then
+				_PropertyGet = oDialogEvents.getByName(sEventName).ScriptCode
+			Else
+				_PropertyGet = &quot;&quot;
+			End If
 		Case UCase(&quot;Page&quot;)
 			_PropertyGet = UnoDialog.Model.Step
 		Case UCase(&quot;Visible&quot;)
@@ -617,6 +739,8 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	_PropertySet = True
 
+Dim oDialogEvents As Object, sEventName As String, oEvent As Object, sListener As String, sEvent As String
+
 &apos;Execute
 Dim iArgNr As Integer
 
@@ -629,6 +753,23 @@ Dim iArgNr As Integer
 		Case UCase(&quot;Height&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 			UnoDialog.setPosSize(0, 0, 0, pvValue, com.sun.star.awt.PosSize.HEIGHT)
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			Set oDialogEvents = unoDialog.Model.getEvents()
+			sListener = _GetListener(psProperty)
+			sEvent = Utils._GetEventName(psProperty)
+			sEventName = &quot;com.sun.star.awt.&quot; &amp; sListener &amp; &quot;::&quot; &amp; sEvent
+			If oDialogEvents.hasByName(sEventName) Then oDialogEvents.removeByName(sEventName)
+			Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
+			With oEvent
+				.ListenerType = sListener
+				.EventMethod = sEvent
+				.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
+				.ScriptCode = pvValue
+			End With
+			oDialogEvents.insertByName(sEventName, oEvent)
 		Case UCase(&quot;Page&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 			If pvValue &lt; 0 Then Goto Trace_Error_Value

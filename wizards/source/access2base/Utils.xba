@@ -299,6 +299,15 @@ Dim oDialogLib As Object
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetEventName(ByVal psProperty As String) As String
+&apos;	Return the LO internal event name
+&apos;	Corrects the typo on ErrorOccur(r?)ed
+
+	_GetEventName = Replace(LCase(Mid(psProperty, 3, 1)) &amp; Right(psProperty, Len(psProperty) - 3), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
+	
+End Function	&apos;	_GetEventName	V1.7.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _GetEventScriptCode(poObject As Object _
 					, ByVal psEvent As String _
 					, ByVal psName As String _
@@ -447,15 +456,6 @@ Dim sComponents() As String, sSubComponents() As String
 	End Select
 	
 End Function	&apos;	FinalProperty
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _GetEventName(ByVal psProperty As String) As String
-&apos;	Return the LO internal event name
-&apos;	Corrects the typo on ErrorOccur(r?)ed
-
-	_GetEventName = Replace(LCase(Mid(psProperty, 3, 1)) &amp; Right(psProperty, Len(psProperty) - 3), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
-	
-End Function	&apos;	_GetEventName	V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _GetProductName(ByVal Optional psFlag As String) as String
