@@ -22,11 +22,15 @@
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
+#include <o3tl/strong_int.hxx>
 
 #include <limits>
 #include <memory>
 
 struct MarkedUndoAction;
+
+struct ViewShellIdTag;
+typedef o3tl::strong_int<sal_Int32, ViewShellIdTag> ViewShellId;
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
@@ -60,7 +64,7 @@ public:
     virtual OUString    GetComment() const;
     virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     /// ID of the view shell that created this undo action.
-    virtual sal_Int32 GetViewShellId() const;
+    virtual ViewShellId GetViewShellId() const;
     /// Timestamp when this undo item was created.
     const DateTime& GetDateTime() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
@@ -148,7 +152,7 @@ public:
 
     virtual OUString        GetComment() const override;
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
     virtual sal_uInt16      GetId() const;
 

@@ -70,7 +70,7 @@ OUString SfxUndoAction::GetComment() const
 }
 
 
-sal_Int32 SfxUndoAction::GetViewShellId() const
+ViewShellId SfxUndoAction::GetViewShellId() const
 {
     return -1;
 }
@@ -132,7 +132,7 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(GetViewShellId()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number((sal_Int32)GetViewShellId()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dateTime"), BAD_CAST(utl::toISO8601(m_aDateTime.GetUNODateTime()).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
@@ -1289,7 +1289,7 @@ boost::property_tree::ptree lcl_ActionToJson(size_t nIndex, SfxUndoAction* pActi
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);
     aRet.put("comment", pAction->GetComment().toUtf8().getStr());
-    aRet.put("viewId", pAction->GetViewShellId());
+    aRet.put("viewId", (sal_Int32)pAction->GetViewShellId());
     aRet.put("dateTime", utl::toISO8601(pAction->GetDateTime().GetUNODateTime()).toUtf8().getStr());
     return aRet;
 }
@@ -1352,7 +1352,7 @@ OUString SfxListUndoAction::GetComment() const
     return mpImpl->maComment;
 }
 
-sal_Int32 SfxListUndoAction::GetViewShellId() const
+ViewShellId SfxListUndoAction::GetViewShellId() const
 {
     return mpImpl->mnViewShellId;
 }

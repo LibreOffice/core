@@ -73,7 +73,7 @@ public:
     virtual void SdrRepeat(SdrView& rView);
 
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 };
 
 /**

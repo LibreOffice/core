@@ -34,11 +34,11 @@ public:
     virtual OUString        GetComment() const override { return maComment; }
     virtual SdUndoAction*   Clone() const { return nullptr; }
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 
 protected:
     SdDrawDocument* mpDoc;
-    sal_Int32 mnViewShellId;
+    ViewShellId mnViewShellId;
 private:
     OUString maComment;
 };

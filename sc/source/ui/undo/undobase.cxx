@@ -44,7 +44,7 @@ ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
         mnViewShellId = pViewShell->GetViewShellId();
 }
 
-sal_Int32 ScSimpleUndo::GetViewShellId() const
+ViewShellId ScSimpleUndo::GetViewShellId() const
 {
     return mnViewShellId;
 }
@@ -630,7 +630,7 @@ OUString ScUndoWrapper::GetComment() const
     return OUString();
 }
 
-sal_Int32 ScUndoWrapper::GetViewShellId() const
+ViewShellId ScUndoWrapper::GetViewShellId() const
 {
     return mnViewShellId;
 }

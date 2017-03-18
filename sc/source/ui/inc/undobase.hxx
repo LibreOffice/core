@@ -47,13 +47,13 @@ public:
 
     virtual bool    Merge( SfxUndoAction *pNextAction ) override;
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 
 protected:
     ScDocShell*     pDocShell;
     std::unique_ptr<SfxUndoAction>
                     pDetectiveUndo;
-    sal_Int32       mnViewShellId;
+    ViewShellId     mnViewShellId;
 
     bool            IsPaintLocked() const { return pDocShell->IsPaintLocked(); }
 
@@ -167,7 +167,7 @@ private:
 class ScUndoWrapper: public SfxUndoAction           // for manual merging of actions
 {
     std::unique_ptr<SfxUndoAction>  pWrappedUndo;
-    sal_Int32                       mnViewShellId;
+    ViewShellId                     mnViewShellId;
 
 public:
                             ScUndoWrapper( SfxUndoAction* pUndo );
@@ -184,7 +184,7 @@ public:
     virtual OUString        GetComment() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 };
 
 #endif

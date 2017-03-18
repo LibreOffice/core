@@ -286,7 +286,7 @@ OUString SwUndo::GetComment() const
     return aResult;
 }
 
-sal_Int32 SwUndo::GetViewShellId() const
+ViewShellId SwUndo::GetViewShellId() const
 {
     return m_nViewShellId;
 }
