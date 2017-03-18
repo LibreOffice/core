@@ -101,7 +101,7 @@ enum class VerticalOrientation {
 
 namespace vcl {
 
-    VerticalOrientation GetVerticalOrientation(uint32_t cCh);
+    VerticalOrientation GetVerticalOrientation(uint32_t cCh, const LanguageTag& rTag);
 
 } // namespace vcl
 
