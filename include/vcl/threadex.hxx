@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_THREADEX_HXX
 #define INCLUDED_VCL_THREADEX_HXX
 
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <osl/thread.h>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
@@ -33,8 +33,8 @@ namespace vcl
 {
     class VCL_DLLPUBLIC SolarThreadExecutor
     {
-        oslCondition            m_aStart;
-        oslCondition            m_aFinish;
+        osl::Condition          m_aStart;
+        osl::Condition          m_aFinish;
         long                    m_nReturn;
         bool                    m_bTimeout;
 
