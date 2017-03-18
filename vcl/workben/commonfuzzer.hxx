@@ -81,6 +81,7 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     setenv("JPEGMEM", "1024M", 1);
     setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
     setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
+    setenv("SAL_NO_FONT_LOOPUP", "1", 1);
 
     osl_setCommandArgs(*argc, *argv);
 
