@@ -1023,7 +1023,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             case SwAccessibleEvent_Impl::DISPOSE:
                 // DISPOSE events overwrite all others. They are not stored
                 // but executed immediately to avoid broadcasting of
-                // defunctional objects. So what needs to be done here is to
+                // nonfunctional objects. So what needs to be done here is to
                 // remove all events for the frame in question.
                 bAppendEvent = false;
                 break;
