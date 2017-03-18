@@ -169,6 +169,7 @@ applet-name
 application-data
 application-xml
 apply
+apply-design-mode
 apply-style-name
 aqua
 arc
@@ -199,6 +200,7 @@ auto-text-indent
 auto-update
 automatic
 automatic-find-labels
+automatic-focus
 automatic-order
 automatic-styles
 automatic-update
