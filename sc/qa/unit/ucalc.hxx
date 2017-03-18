@@ -155,6 +155,7 @@ public:
     void testFormulaRefUpdateName();
     void testFormulaRefUpdateNameMove();
     void testFormulaRefUpdateNameExpandRef();
+    void testFormulaRefUpdateNameExpandRef2();
     void testFormulaRefUpdateNameDeleteRow();
     void testFormulaRefUpdateNameCopySheet();
     void testFormulaRefUpdateNameCopySheetCheckTab( SCTAB Tab, bool bCheckNames );
@@ -553,6 +554,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateName);
     CPPUNIT_TEST(testFormulaRefUpdateNameMove);
     CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef);
+    CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef2);
     CPPUNIT_TEST(testFormulaRefUpdateNameDeleteRow);
     CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
     CPPUNIT_TEST(testFormulaRefUpdateNameDelete);

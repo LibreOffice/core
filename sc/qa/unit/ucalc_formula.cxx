@@ -2901,6 +2901,33 @@ void Test::testFormulaRefUpdateNameExpandRef()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNameExpandRef2()
+{
+    setExpandRefs(true);
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$A$1:$B$3");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Insert a new row at row 4, which should expand the named range to A1:A4.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Insert a new column at column 3, which should expand the named
+    rFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true);
+    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    OUString aSymbol;
+    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$C$3"), aSymbol);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateNameDeleteRow()
 {
     m_pDoc->InsertTab(0, "Test");
