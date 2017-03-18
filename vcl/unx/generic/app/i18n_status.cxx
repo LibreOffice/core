@@ -20,7 +20,6 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
-#include <sal/alloca.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -561,7 +560,8 @@ void I18NStatus::setStatusText( const OUString& rText )
          *  #93614# convert fullwidth ASCII forms to ascii
          */
         int nChars = rText.getLength();
-        sal_Unicode* pBuffer = static_cast<sal_Unicode*>(alloca( nChars*sizeof( sal_Unicode ) ));
+        rtl_uString *pStr = rtl_uString_alloc(nChars);
+        sal_Unicode *pBuffer = pStr->buffer;
         for( int i = 0; i < nChars; i++ )
         {
             if( rText[i] >=0xff00 && rText[i] <= 0xff5f )
@@ -569,7 +569,7 @@ void I18NStatus::setStatusText( const OUString& rText )
             else
                 pBuffer[i] = rText[i];
         }
-        OUString aText( pBuffer, nChars );
+        OUString aText(pBuffer, SAL_NO_ACQUIRE);
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
 
