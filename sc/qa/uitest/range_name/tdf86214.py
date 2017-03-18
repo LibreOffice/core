@@ -21,7 +21,12 @@ class InvalidNames(UITestCase):
 
         xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-        invalid_names = ["A1", "12", "1.2", "A1:B2" ]
+        invalid_names = ["A1", "12", "1.2", "A1:B2", "test.a", \
+                "test+", "test-", "test*", "test!abc", "test#", \
+                "test^", "test°", "test$", "test§", "test%", \
+                "test&", "test/", "test(", "test)", "test[", "test]", \
+                "test\\", "test`", "test´", "test'", "test~", "test<", \
+                "tst>", "test|", "test:t", "test;z"]
 
         xLabel = xAddNameDlg.getChild("label")
         xAddBtn = xAddNameDlg.getChild("add")
