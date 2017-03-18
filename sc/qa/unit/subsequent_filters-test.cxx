@@ -230,6 +230,7 @@ public:
     void testHiddenSheetsXLSX();
     void testRelFormulaValidationXLS();
     void testColumnStyle2XLSX();
+    void testAutofilterXLSX();
 
     void testBnc762542();
 
@@ -344,6 +345,7 @@ public:
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRelFormulaValidationXLS);
     CPPUNIT_TEST(testColumnStyle2XLSX);
+    CPPUNIT_TEST(testAutofilterXLSX);
 
     CPPUNIT_TEST(testBnc762542);
 
@@ -3771,6 +3773,21 @@ void ScFiltersTest::testHiddenSheetsXLSX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("1st sheet should be hidden", false, rDoc.IsVisible(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet should be visible", true, rDoc.IsVisible(1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("3rd sheet should be hidden", false, rDoc.IsVisible(2));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testAutofilterXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("autofilter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScDBData* pData = rDoc.GetDBCollection()->GetDBNearCursor(0,0,0);
+    CPPUNIT_ASSERT(pData);
+    ScRange aRange;
+    pData->GetArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,2,4,0), aRange);
 
     xDocSh->DoClose();
 }
