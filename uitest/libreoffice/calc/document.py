@@ -26,4 +26,15 @@ def get_cell_by_position(document, tab, column, row):
     sheet = get_sheet_from_doc(document, tab)
     return sheet.getCellByPosition(column, row)
 
+def get_column(document, column, tab = 0):
+    """ Get the column object through the column index
+
+    Keyword arguments:
+    document -- The document that should be used
+    tab -- The 0-based sheet number
+    column -- The 0-based column number
+    """
+    sheet = get_sheet_from_doc(document, tab)
+    return sheet.getColumns().getByIndex(column)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
