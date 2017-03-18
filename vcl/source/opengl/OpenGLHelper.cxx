@@ -36,7 +36,7 @@
 #include "salinst.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
@@ -812,7 +812,7 @@ void OpenGLZone::leave() { gnLeaveCount++; }
 
 namespace {
     static volatile bool gbWatchdogFiring = false;
-    static oslCondition gpWatchdogExit = nullptr;
+    static osl::Condition* gpWatchdogExit = nullptr;
     static WatchdogTimings gWatchdogTimings;
     static rtl::Reference<OpenGLWatchdogThread> gxWatchdog;
 }
@@ -840,7 +840,7 @@ void OpenGLWatchdogThread::execute()
     do {
         sal_uInt64 nLastEnters = OpenGLZone::gnEnterCount;
 
-        osl_waitCondition(gpWatchdogExit, &aQuarterSecond);
+        gpWatchdogExit->wait(&aQuarterSecond);
 
         if (OpenGLZone::isInZone())
         {
@@ -897,13 +897,13 @@ void OpenGLWatchdogThread::execute()
         {
             nUnchanged = 0;
         }
-    } while (!osl_checkCondition(gpWatchdogExit));
+    } while (!gpWatchdogExit->check());
 }
 
 void OpenGLWatchdogThread::start()
 {
     assert (gxWatchdog == nullptr);
-    gpWatchdogExit = osl_createCondition();
+    gpWatchdogExit = new osl::Condition();
     gxWatchdog.set(new OpenGLWatchdogThread());
     gxWatchdog->launch();
 }
@@ -914,7 +914,7 @@ void OpenGLWatchdogThread::stop()
         return; // in watchdog thread
 
     if (gpWatchdogExit)
-        osl_setCondition(gpWatchdogExit);
+        gpWatchdogExit->set();
 
     if (gxWatchdog.is())
     {
@@ -923,7 +923,7 @@ void OpenGLWatchdogThread::stop()
     }
 
     if (gpWatchdogExit)
-        osl_destroyCondition(gpWatchdogExit);
+        delete gpWatchdogExit;
     gpWatchdogExit = nullptr;
 }
 
