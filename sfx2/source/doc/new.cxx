@@ -73,7 +73,7 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rect
     rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1, 1);
-    DBG_ASSERT(aTmpSize.Height() != 0 && aTmpSize.Width() != 0, "size of first page is 0, override GetFirstPageSize or set vis-area!");
+    DBG_ASSERT(aTmpSize.Height() != 0 && aTmpSize.Width() != 0, "size of first page is 0, override GetFirstPageSize or set visible-area!");
 
 #define FRAME 4
 
@@ -161,7 +161,6 @@ public:
 
     // Returns sal_False if '- No -' is set as a template
     // Template name can only be obtained if IsTemplate() is TRUE
-    // erfragt werden
     bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 

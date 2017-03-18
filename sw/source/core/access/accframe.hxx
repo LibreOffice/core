@@ -102,7 +102,7 @@ protected:
                        bool bIsPagePreview );
     virtual ~SwAccessibleFrame();
 
-    // MT: Move to private area?
+    // Move to private area?
     bool m_bIsAccDocUse;
 public:
     // Return the SwFrame this context is attached to.
@@ -115,8 +115,8 @@ public:
                              const sw::access::SwAccessibleChild& rChild ) const;
 
 protected:
-    // Return the bounding box of the frame clipped to the vis area. If
-    // no frame is specified, use this' frame.
+    // Return the bounding box of the frame clipped to the visible area.
+    // If no frame is specified, use this' frame.
     SwRect GetBounds( const SwAccessibleMap& rAccMap,
                       const SwFrame *pFrame = nullptr );
 

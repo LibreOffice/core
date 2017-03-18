@@ -467,7 +467,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             rReq.Done();
         }
         break;
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         case SID_MAIL_SENDDOCASMS:
         case SID_MAIL_SENDDOCASOOO:

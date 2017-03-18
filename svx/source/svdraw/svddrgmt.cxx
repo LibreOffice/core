@@ -1288,7 +1288,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     }
 
     if (!DragStat().CheckMinMoved(rNoSnapPnt))
-        // Not moved by the minimum threshold.  Nothing to do.
+        // Not moved by the minimum threshold. Nothing to do.
         return;
 
     Hide();
@@ -1311,7 +1311,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     mpClone = pObj->getFullDragClone();
     mpClone->applySpecialDrag(DragStat());
 
-    // #120999# AutoGrowWidth may change for SdrTextObj due to the automatism used
+    // AutoGrowWidth may change for SdrTextObj due to the automatism used
     // with bDisableAutoWidthOnDragging, so not only geometry changes but
     // also this (pretty indirect) property change is possible. If it gets
     // changed, it needs to be copied to the original since nothing will
@@ -3597,7 +3597,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     SdrObject* pSdrObject = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-    // tdf 34555: in order to implement visual crop in Writer, we need to handle two
+    // tdf#34555: in order to implement visual crop in Writer, we need to handle two
     // cases:
     // EndSdrDrag when called in Impress/Draw/...: pSdrObject is a SdrGrafObj
     // EndSdrDrag when called in Writer: pSdrObject is a SwVirtFlyDrawObj
@@ -3800,7 +3800,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // get transformation from object
     pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
 
-    {   // TTTT correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
+    {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
         basegfx::B2DTuple aScale;
         basegfx::B2DTuple aTranslate;
         double fRotate(0.0), fShearX(0.0);
@@ -3891,7 +3891,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     if(bShearCorrected)
     {
-        // TTTT back-correct shear
+        // back-correct shear
         basegfx::B2DTuple aScale;
         basegfx::B2DTuple aTranslate;
         double fRotate(0.0), fShearX(0.0);
@@ -3966,7 +3966,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     if(pObj->IsMirrored())
     {
         // mirrored X or Y, for old stuff, exchange X
-        // TTTT: check for aw080
+        // check for aw080
         sal_Int32 nTmp(nDiffLeft);
         nDiffLeft = -nDiffRight;
         nDiffRight = -nTmp;

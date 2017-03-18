@@ -57,7 +57,7 @@ enum class SvxIconChoiceCtrlTextMode
 
 enum class SvxIconChoiceCtrlPositionMode
 {
-    Free,                // Free pixel-perfekt positioning
+    Free,                // Free pixel-perfect positioning
     AutoArrange,         // Auto arrange
 };
 
@@ -74,7 +74,7 @@ class SvxIconChoiceCtrlEntry
     friend class EntryList_Impl;
     friend class IcnGridMap_Impl;
 
-    Rectangle               aRect;              // Bounding-Rect of the entry
+    Rectangle               aRect;              // Bounding-Rectangle of the entry
     Rectangle               aGridRect;          // Only valid in Grid-mode
     sal_Int32               nPos;
 
@@ -157,7 +157,7 @@ public:
         WB_NOHSCROLL
         WB_NOVSCROLL
         WB_NOSELECTION
-        WB_SMART_ARRANGE    // Keep Vis-Area at arrange
+        WB_SMART_ARRANGE    // Keep Visible-Area at arrange
         WB_ALIGN_TOP        // Align line vy line LTR
         WB_ALIGN_LEFT       // Align columns from top to bottom
         WB_NODRAGSELECTION  // No selection with tracking rectangle

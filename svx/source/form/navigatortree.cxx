@@ -1493,7 +1493,7 @@ namespace svxform
         {
             SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
             if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-                // normaly, we have to test, if the node is expanded,
+                // normally, we have to test, if the node is expanded,
                 // but there is no method for this either in base class nor the model
                 // the base class should tolerate it anyway
                 Expand(pToExpand);
