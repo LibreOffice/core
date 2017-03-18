@@ -18,7 +18,6 @@
  */
 
 #include <vcl/strhelper.hxx>
-#include "sal/alloca.h"
 
 namespace  {
 
@@ -108,7 +107,8 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
         return OUString();
 
     int nActualToken = 0;
-    sal_Unicode* pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*( nLen + 1 ) ));
+    rtl_uString *pStr = rtl_uString_alloc(nLen);
+    sal_Unicode *pBuffer = pStr->buffer;
     const sal_Unicode* pRun = rLine.getStr();
     sal_Unicode* pLeap = nullptr;
 
@@ -148,7 +148,7 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
 
     *pLeap = 0;
 
-    return OUString(pBuffer);
+    return OUString(pStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 OString GetCommandLineToken(int nToken, const OString& rLine)
@@ -158,7 +158,8 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
         return rLine;
 
     int nActualToken = 0;
-    char* pBuffer = static_cast<char*>(alloca( nLen + 1 ));
+    rtl_String *pStr = rtl_string_alloc(nLen);
+    char *pBuffer = pStr->buffer;
     const char* pRun = rLine.getStr();
     char* pLeap = nullptr;
 
@@ -198,7 +199,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
 
     *pLeap = 0;
 
-    return OString(pBuffer);
+    return OString(pStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 int GetCommandLineTokenCount(const OUString& rLine)
@@ -257,7 +258,8 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     if( ! nLen )
         return OUString();
 
-    sal_Unicode *pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*(nLen + 1) ));
+    rtl_uString *pStr = rtl_uString_alloc(nLen);
+    sal_Unicode *pBuffer = pStr->buffer;
     const sal_Unicode *pRun = rLine.getStr();
     sal_Unicode *pLeap = pBuffer;
 
@@ -304,7 +306,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
+    return OUString(*pBuffer == ' ' ? pStr+1 : pStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 OString WhitespaceToSpace(const OString& rLine)
@@ -313,7 +315,8 @@ OString WhitespaceToSpace(const OString& rLine)
     if (!nLen)
         return rLine;
 
-    char *pBuffer = static_cast<char*>(alloca( nLen + 1 ));
+    rtl_String *pStr = rtl_string_alloc(nLen);
+    char *pBuffer = pStr->buffer;
     const char *pRun = rLine.getStr();
     char *pLeap = pBuffer;
 
@@ -360,7 +363,7 @@ OString WhitespaceToSpace(const OString& rLine)
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    return OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
+    return OString(*pBuffer == ' ' ? pStr+1 : pStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 } // namespace
