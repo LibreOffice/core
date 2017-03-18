@@ -42,7 +42,9 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
 		mkdir -p $(dir $(call gb_UITest_get_target,$*)) && \
 		$(if $(gb_UITest__interactive),, \
-		    rm -fr $@.core && mkdir $@.core && cd $@.core && ) \
+		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
+		$(if $(gb_UITest_use_config), \
+		    cp $(gb_UITest_use_config) $(dir $(call gb_UITest_get_target,$*))user/. && ) \
 		($(gb_UITest_PRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
@@ -98,6 +100,10 @@ endef
 define gb_UITest_use_customtarget
 $(call gb_UITest_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(2))
 
+endef
+
+define gb_UITest_use_configuration
+$(call gb_UITest_get_target,$(1)) : gb_UITest_use_config := $(2)
 endef
 
 
