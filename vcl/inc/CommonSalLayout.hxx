@@ -99,11 +99,6 @@ enum class VerticalOrientation {
     TransformedRotated = 3
 };
 
-namespace vcl {
-
-    VerticalOrientation GetVerticalOrientation(uint32_t cCh);
-
-} // namespace vcl
 
 #endif // INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
