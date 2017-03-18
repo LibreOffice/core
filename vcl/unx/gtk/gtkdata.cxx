@@ -405,10 +405,10 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
 GtkData::GtkData( SalInstance *pInstance )
     : SalGenericData( SAL_DATA_GTK, pInstance )
     , m_aDispatchMutex()
+    , m_aDispatchCondition()
     , blockIdleTimeout( false )
 {
     m_pUserEvent = nullptr;
-    m_aDispatchCondition = osl_createCondition();
 }
 
 static XIOErrorHandler aOrigXIOErrorHandler = nullptr;
@@ -432,7 +432,7 @@ GtkData::~GtkData()
 
      // sanity check: at this point nobody should be yielding, but wake them
      // up anyway before the condition they're waiting on gets destroyed.
-    osl_setCondition( m_aDispatchCondition );
+    m_aDispatchCondition.set();
 
     osl::MutexGuard g( m_aDispatchMutex );
     if (m_pUserEvent)
@@ -441,7 +441,6 @@ GtkData::~GtkData()
         g_source_unref (m_pUserEvent);
         m_pUserEvent = nullptr;
     }
-    osl_destroyCondition( m_aDispatchCondition );
     XSetIOErrorHandler(aOrigXIOErrorHandler);
 }
 
@@ -491,9 +490,9 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
              * workaround: timeout of 1 second a emergency exit
              */
             // we are the dispatch thread
-            osl_resetCondition( m_aDispatchCondition );
+            m_aDispatchCondition.reset();
             TimeValue aValue = { 1, 0 };
-            osl_waitCondition( m_aDispatchCondition, &aValue );
+            m_aDispatchCondition.wait( &aValue );
         }
     }
 
@@ -501,7 +500,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     {
         m_aDispatchMutex.release();
         if( bWasEvent )
-            osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
+            m_aDispatchCondition.set(); // trigger non dispatch thread yields
     }
     blockIdleTimeout = false;
 

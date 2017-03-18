@@ -29,7 +29,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include "saltimer.hxx"
 #include <o3tl/enumarray.hxx>
 
@@ -94,11 +94,11 @@ public:
 
 class GtkData : public SalGenericData
 {
-    GSource*     m_pUserEvent;
-    osl::Mutex   m_aDispatchMutex;
-    oslCondition m_aDispatchCondition;
-    css::uno::Any m_aException;
-    bool         blockIdleTimeout;
+    GSource*        m_pUserEvent;
+    osl::Mutex      m_aDispatchMutex;
+    osl::Condition  m_aDispatchCondition;
+    css::uno::Any   m_aException;
+    bool            blockIdleTimeout;
 
 public:
     GtkData( SalInstance *pInstance );
