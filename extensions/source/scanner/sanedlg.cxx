@@ -396,6 +396,7 @@ void SaneDlg::InitFields()
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
+                assert(pDouble);
                 if( nValue )
                 {
                     mpReslBox->SetMin( (long)pDouble[0] );
