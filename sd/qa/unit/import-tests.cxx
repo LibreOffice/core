@@ -916,8 +916,8 @@ void SdImportTest::testBnc591147()
     //uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropSet( getShape( 0, xPage ) );
     OUString sVideoURL("emptyURL");
-    bool bSucess = xPropSet->getPropertyValue("MediaURL") >>= sVideoURL;
-    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+    bool bSuccess = xPropSet->getPropertyValue("MediaURL") >>= sVideoURL;
+    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSuccess );
     CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
 
     // Second page has audio file inserted
@@ -926,8 +926,8 @@ void SdImportTest::testBnc591147()
 
     xPropSet.set( getShape( 0, xPage ) );
     OUString sAudioURL("emptyURL");
-    bSucess = xPropSet->getPropertyValue("MediaURL") >>= sAudioURL;
-    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+    bSuccess = xPropSet->getPropertyValue("MediaURL") >>= sAudioURL;
+    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSuccess );
     CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sAudioURL.isEmpty());
 
     CPPUNIT_ASSERT_MESSAGE( "sAudioURL and sVideoURL should not be equal", sAudioURL != sVideoURL );
