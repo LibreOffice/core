@@ -38,7 +38,6 @@
 
 #include <osl/thread.h>
 #include <osl/security.hxx>
-#include <sal/alloca.h>
 #include <sal/macros.h>
 
 #include <algorithm>
@@ -55,21 +54,18 @@ namespace psp
 bool
 AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer)
 {
-    sal_uInt32 nBlockSize = nBLOCKSIZE;
+    assert(pBuffer);
     if ((pDst == nullptr) || (pSrc == nullptr))
         return false;
 
     if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
         return false;
 
-    if (pBuffer == nullptr)
-        pBuffer = static_cast<unsigned char*>(alloca (nBlockSize));
-
     sal_uInt64 nIn = 0;
     sal_uInt64 nOut = 0;
     do
     {
-        pSrc->read  (pBuffer, nBlockSize, nIn);
+        pSrc->read  (pBuffer, nBLOCKSIZE, nIn);
         if (nIn > 0)
             nOut = fwrite (pBuffer, 1, sal::static_int_cast<sal_uInt32>(nIn), pDst);
     }
