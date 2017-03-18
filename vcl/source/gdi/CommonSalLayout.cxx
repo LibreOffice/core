@@ -307,15 +307,16 @@ namespace vcl {
 
     VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
+        // Override fullwidth colon and semi-colon orientation. Tu is preferred.
+        if ((cCh == 0xff1a || cCh == 0xff1b) && rTag.getLanguage() == "zh")
+            return VerticalOrientation::TransformedUpright;
+
         uint8_t nRet = 1;
 
         if (cCh < 0x10000)
         {
             nRet = sVerticalOrientationValues[sVerticalOrientationPages[0][cCh >> kVerticalOrientationCharBits]]
                                   [cCh & ((1 << kVerticalOrientationCharBits) - 1)];
-            // Override fullwidth colon and semi-colon orientation. Tu is preferred.
-            if ((cCh == 0xff1a || cCh == 0xff1b) && rTag.getLanguage() == "zh")
-                nRet = 2;
         }
         else if (cCh < (kVerticalOrientationMaxPlane + 1) * 0x10000)
         {
