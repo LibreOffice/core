@@ -1421,7 +1421,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
 }
 
 KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
-                                    unsigned char    *pPrintable,
+                                    char             *pPrintable,
                                     int              *pLen,
                                     KeySym           *pUnmodifiedKeySym,
                                     Status           *pStatusReturn,
@@ -1442,17 +1442,17 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     {
         // XmbLookupString must not be called for KeyRelease events
         // Cannot enter space in c locale problem #89616# #88978# btraq #4478197
-        *pLen = XLookupString( pEvent, reinterpret_cast<char*>(pPrintable), 1, &nKeySym, nullptr );
+        *pLen = XLookupString( pEvent, pPrintable, 1, &nKeySym, nullptr );
     }
     else
     {
         *pLen = XmbLookupString( aInputContext,
-                        pEvent, reinterpret_cast<char*>(pPrintable), *pLen - 1, &nKeySym, pStatusReturn );
+                        pEvent, pPrintable, *pLen - 1, &nKeySym, pStatusReturn );
 
         // Lookup the string again, now with appropriate size
         if ( *pStatusReturn == XBufferOverflow )
         {
-            pPrintable[ 0 ] = (char)0;
+            pPrintable[ 0 ] = '\0';
             return 0;
         }
 
