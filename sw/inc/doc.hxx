@@ -944,7 +944,7 @@ public:
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, bool bInReadOnly );
 
-    // Insert/Renew table/indes
+    // Insert/Renew table/index
     SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = nullptr,

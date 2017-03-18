@@ -172,7 +172,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
     &SbiRuntime::StepERASE,         // delete TOS
     // branch
     &SbiRuntime::StepSTOP,          // program end
-    &SbiRuntime::StepINITFOR,   // intitialize FOR-Variable
+    &SbiRuntime::StepINITFOR,   // initialize FOR-Variable
     &SbiRuntime::StepNEXT,      // increment FOR-Variable
     &SbiRuntime::StepCASE,      // beginning CASE
     &SbiRuntime::StepENDCASE,   // end CASE

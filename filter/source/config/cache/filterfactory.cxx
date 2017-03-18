@@ -385,7 +385,7 @@ class stlcomp_removeIfMatchFlags
 
                 bool bMatch = false;
                 if (m_bIFlags)
-                    // IFlags are interpeted as ALL_FLAGS_MUST_MATCH !
+                    // IFlags are interpreted as ALL_FLAGS_MUST_MATCH !
                     bMatch = ((nFlags & m_nFlags) == m_nFlags);
                 else
                     // EFlags are interpreted as ATE_LEAST_ONE_FLAG_MUST_MATCH !

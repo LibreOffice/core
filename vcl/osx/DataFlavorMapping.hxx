@@ -56,7 +56,7 @@ typedef std::unique_ptr<DataProvider> DataProviderPtr_t;
 class DataFlavorMapper
 {
 public:
-  /* Initialialize a DataFavorMapper instance. Throws a RuntimeException in case the XMimeContentTypeFactory service
+  /* Initialize a DataFavorMapper instance. Throws a RuntimeException in case the XMimeContentTypeFactory service
      cannot be created.
    */
   DataFlavorMapper();

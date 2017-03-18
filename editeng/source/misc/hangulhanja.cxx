@@ -566,7 +566,7 @@ namespace editeng
                 if( m_pConversionDialog )
                     m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
 
-                // do not look for the next convertible: We have to wait for the user to interactivly
+                // do not look for the next convertible: We have to wait for the user to interactively
                 // decide what happens with the current convertible
                 return false;
             }
