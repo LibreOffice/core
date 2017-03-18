@@ -38,7 +38,7 @@ namespace framework{
                     If you wish to implement thread safe classes you should use this feature to protect
                     your code against calls at wrong time. e.g. you are not full initialized but somewhere
                     call an interface method (initialize phase means startup time from creating object till
-                    calling specified first method e.g. XInitialization::initialze()!) then you should refuse
+                    calling specified first method e.g. XInitialization::initialize()!) then you should refuse
                     this call. The same for closing/disposing the object!
 *//*-*************************************************************************************************************/
 enum EWorkingMode

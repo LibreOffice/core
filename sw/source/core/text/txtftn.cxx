@@ -1051,7 +1051,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
     // A remark on QuoVadis/ErgoSum:
     // We use the Font set for the Paragraph for these texts.
-    // Thus, we initialze:
+    // Thus, we initialize:
     // TODO: ResetFont();
     FeedInf( rInf );
     SeekStartAndChg( rInf, true );

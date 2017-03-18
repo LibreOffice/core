@@ -49,7 +49,7 @@ private:
 /** Contains all view settings for a single sheet.
 
     Usage:
-    1)  When import filter starts reading a worksheet substream, inizialize an
+    1)  When import filter starts reading a worksheet substream, initialize an
         instance of this class with the Initialize() function. This will set
         all view options to Excel default values.
     2)  Read all view related records using the Read*() functions.

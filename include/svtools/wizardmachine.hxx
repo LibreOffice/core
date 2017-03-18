@@ -72,7 +72,7 @@ namespace svt
         // i.e., when it's already decided which page is the next.
         // We may have situations where the next page depends on the state of the current, which needs
         // to be committed for this.
-        // So initializePage and commitPage are designated to initialitzing/committing data on the page.
+        // So initializePage and commitPage are designated to initializing/committing data on the page.
         virtual void        initializePage() = 0;
         virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
 

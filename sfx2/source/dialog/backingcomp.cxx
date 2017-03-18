@@ -635,10 +635,10 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
 
 
 /**
-    force initialiation for this component.
+    force initialization for this component.
 
     Inside attachFrame() we created our component window. But it was not allowed there, to
-    initialitze it. E.g. the menu must be set at the container window of the frame, which
+    initialize it. E.g. the menu must be set at the container window of the frame, which
     is our parent window. But may at that time another component used it.
     That's why our creator has to inform us, when it's time to initialize us really.
     Currently only calling of this method must be done. But further implementations

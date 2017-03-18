@@ -343,7 +343,7 @@ class AgendaDocument(TextDocument):
             except Exception:
                 traceback.print_exc()
                 raise AttributeError (
-                    "Fatal Error while initialilzing \
+                    "Fatal Error while initializing \
                     Template: items table in section " + i)
 
 

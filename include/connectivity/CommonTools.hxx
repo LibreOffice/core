@@ -93,7 +93,7 @@ namespace connectivity
 
     };
 
-    // class ORowVector incudes refcounting and initialze himself
+    // class ORowVector includes refcounting and initialize himself
     // with at least one element. This first element is reserved for
     // the bookmark
     template< class VectorVal > class ORowVector : public  ORefVector< VectorVal >

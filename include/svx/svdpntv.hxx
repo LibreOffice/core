@@ -370,7 +370,7 @@ public:
     /// Draw Help line of the Page or not
     bool IsHlplVisible() const { return mbHlplVisible; }
 
-    /// Draw Help line in fron of the objects or beging them
+    /// Draw Help line in front of the objects or behind them
     bool IsHlplFront() const { return mbHlplFront  ; }
 
     const Color& GetGridColor() const { return maGridColor;}

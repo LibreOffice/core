@@ -1867,7 +1867,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
         if( pESh )
         {
             pESh->KillPams();
-            // FIXME: Actually we should be interating over all Shells!
+            // FIXME: actually we should be iterating over all Shells!
         }
 
         FndBox_* pFndBox = &aFndBox;

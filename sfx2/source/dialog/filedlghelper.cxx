@@ -531,7 +531,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
 
     if( bInit )
     {
-        // in case of inintialization previous state is not interesting
+        // in case of initialization previous state is not interesting
         if( mbIsPwdEnabled )
         {
             uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );

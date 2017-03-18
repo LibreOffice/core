@@ -54,7 +54,7 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
 
 CAsyncEventNotifier::~CAsyncEventNotifier()
 {
-    OSL_ENSURE(nullptr == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
+    OSL_ENSURE(nullptr == m_hThread,"Thread not stopped, destroying this instance leads to disaster");
 
     CloseHandle(m_hEvents[0]);
     CloseHandle(m_hEvents[1]);

@@ -396,7 +396,7 @@ static void suppress_decorations(struct splash* splash)
 }
 
 /**
- * Connects to the display and initiales splash with the screen details
+ * Connects to the display and initializes splash with the screen details
  *
  * @return Success: 1; Failure: 0
  */

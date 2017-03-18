@@ -1236,7 +1236,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
         catch( const Exception& e )
         {
             throw RuntimeException(
-                    "[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n" + e.Message );
+                    "[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialize() error message: \n" + e.Message );
         }
     }
 }

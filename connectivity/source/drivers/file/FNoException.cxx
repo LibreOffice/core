@@ -69,13 +69,13 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    DBG_ASSERT(pParseNode != nullptr,"OResultSet: interner Fehler: ungueltiger ParseNode");
+    DBG_ASSERT(pParseNode != nullptr,"OResultSet: internal error: invalid ParseNode");
 
     // found parameter Name-Rule?
     if (SQL_ISRULE(pParseNode,parameter))
     {
-        DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
-        DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQLNodeType::Punctuation,"OResultSet: Parse Tree fehlerhaft");
+        DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: faulty Parse Tree");
+        DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQLNodeType::Punctuation,"OResultSet: faulty Parse Tree");
 
         _rParaNodes.push_back(pParseNode);
         // Further descend not necessary
