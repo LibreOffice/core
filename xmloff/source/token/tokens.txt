@@ -170,6 +170,7 @@ application-data
 application-xml
 apply
 apply-style-name
+apply-design-mode
 aqua
 arc
 arccos
@@ -199,6 +200,7 @@ auto-text-indent
 auto-update
 automatic
 automatic-find-labels
+automatic-focus
 automatic-order
 automatic-styles
 automatic-update
