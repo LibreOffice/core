@@ -51,7 +51,13 @@ void TestImportOLE2(SvStream &rStream, size_t nSize)
 {
     tools::SvRef<SotStorage> xRootStorage(new SotStorage(&rStream, false));
     std::vector<unsigned char> aTmpBuf(nSize);
-    traverse(xRootStorage, aTmpBuf);
+    try
+    {
+        traverse(xRootStorage, aTmpBuf);
+    }
+    catch (...)
+    {
+    }
 }
 
 }
