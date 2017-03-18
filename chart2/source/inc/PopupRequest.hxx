@@ -12,8 +12,8 @@
 
 #include "MutexContainer.hxx"
 #include <cppuhelper/compbase.hxx>
-#include <com/sun/star/chart2/data/XPopupRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/XRequestCallback.hpp>
 
 namespace chart
 {
