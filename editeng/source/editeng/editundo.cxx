@@ -151,7 +151,7 @@ OUString EditUndo::GetComment() const
     return aComment;
 }
 
-sal_Int32 EditUndo::GetViewShellId() const
+ViewShellId EditUndo::GetViewShellId() const
 {
     return mnViewShellId;
 }

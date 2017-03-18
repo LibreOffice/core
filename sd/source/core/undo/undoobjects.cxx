@@ -38,7 +38,7 @@ SdUndoAction::SdUndoAction(SdDrawDocument* pSdDrawDocument)
         mnViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
 }
 
-sal_Int32 SdUndoAction::GetViewShellId() const
+ViewShellId SdUndoAction::GetViewShellId() const
 {
     return mnViewShellId;
 }

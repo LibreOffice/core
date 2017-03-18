@@ -112,7 +112,7 @@ namespace rptui
         UndoContext( SfxUndoManager& i_undoManager, const OUString& i_undoTitle )
             :m_rUndoManager( i_undoManager )
         {
-            m_rUndoManager.EnterListAction( i_undoTitle, OUString(), 0, -1 );
+            m_rUndoManager.EnterListAction( i_undoTitle, OUString(), 0, ViewShellId(-1) );
         }
 
         ~UndoContext()

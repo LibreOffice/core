@@ -318,7 +318,7 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 IMPL_LINK_NOARG( OSectionWindow, StartSplitHdl, Splitter*, void)
 {
     const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
-    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString(), 0, -1 );
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
 }
 
 IMPL_LINK_NOARG( OSectionWindow, EndSplitHdl, Splitter*, void )

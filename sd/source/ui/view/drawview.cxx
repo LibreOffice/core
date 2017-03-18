@@ -520,7 +520,7 @@ void DrawView::DeleteMarked()
     {
         OUString aUndo(SVX_RESSTR(STR_EditDelete));
         aUndo = aUndo.replaceFirst("%1", GetDescriptionOfMarkedObjects());
-        sal_Int32 nViewShellId = mpDrawViewShell ? mpDrawViewShell->GetViewShellBase().GetViewShellId() : -1;
+        ViewShellId nViewShellId = mpDrawViewShell ? mpDrawViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
         pUndoManager->EnterListAction(aUndo, aUndo, 0, nViewShellId);
     }
 

@@ -1848,7 +1848,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 {
                     if (pViewShell->getPart() == nPart)
                     {
-                        nViewId = pViewShell->GetViewShellId();
+                        nViewId = (sal_Int32)pViewShell->GetViewShellId();
                         doc_setView(pThis, nViewId);
                         break;
                     }

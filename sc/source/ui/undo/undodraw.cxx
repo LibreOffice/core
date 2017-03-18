@@ -44,7 +44,7 @@ OUString ScUndoDraw::GetComment() const
     return OUString();
 }
 
-sal_Int32 ScUndoDraw::GetViewShellId() const
+ViewShellId ScUndoDraw::GetViewShellId() const
 {
     return mnViewShellId;
 }

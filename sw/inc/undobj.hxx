@@ -50,8 +50,8 @@ class SwUndo
     : public SfxUndoAction
 {
     SwUndoId const m_nId;
-    RedlineFlags nOrigRedlineFlags;
-    sal_Int32 m_nViewShellId;
+    RedlineFlags   nOrigRedlineFlags;
+    ViewShellId    m_nViewShellId;
 
 protected:
     bool bCacheComment;
@@ -81,7 +81,7 @@ public: // should not be public, but ran into trouble in untbl.cxx
 
 private:
     /// Try to obtain the view shell ID of the current view.
-    static sal_Int32 CreateViewShellId(const SwDoc* pDoc);
+    static ViewShellId CreateViewShellId(const SwDoc* pDoc);
     // SfxUndoAction
     virtual void Undo() override;
     virtual void Redo() override;
@@ -108,7 +108,7 @@ public:
     virtual OUString GetComment() const override;
 
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 
     // UndoObject remembers which mode was turned on.
     // In Undo/Redo/Repeat this remembered mode is switched on.

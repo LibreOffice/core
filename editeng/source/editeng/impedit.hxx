@@ -691,7 +691,7 @@ private:
 
     SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
     /// Obtains a view shell ID from the active EditView.
-    sal_Int32 CreateViewShellId();
+    ViewShellId CreateViewShellId();
 
     ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool);
     void InitDoc(bool bKeepParaAttribs);
