@@ -5820,6 +5820,19 @@ SvxFieldItem* PPTPortionObj::GetTextField()
     return nullptr;
 }
 
+namespace
+{
+    sal_uInt16 sanitizeForMaxPPTLevels(sal_uInt16 nDepth)
+    {
+        if (nDepth >= nMaxPPTLevels)
+        {
+            SAL_WARN("filter.ms", "Para Style Sheet depth " << nDepth << " but " << nMaxPPTLevels - 1 << " is max possible");
+            nDepth = nMaxPPTLevels - 1;
+        }
+        return nDepth;
+    }
+}
+
 PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt16 nDepth ) :
     PPTNumberFormatCreator  ( nullptr ),
     mrStyleSheet            ( rStyleSheet ),
@@ -5827,9 +5840,7 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nIn
     mbTab                   ( true ),      // style sheets always have to get the right tabulator setting
     mnCurrentObject         ( 0 )
 {
-    if ( nDepth > 4 )
-        nDepth = 4;
-    pParaSet->mnDepth = nDepth;
+    pParaSet->mnDepth = sanitizeForMaxPPTLevels(nDepth);
 }
 
 PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
@@ -5894,7 +5905,9 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         }
         // if we do not have a hard attributed fontheight, the fontheight is taken from the style
         if ( !nFontHeight )
-            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
+        {
+            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(pParaSet->mnDepth)].mnFontHeight;
+        }
         nBulletRelSize = nFontHeight ? ((-((sal_Int16)nBulletRelSize)) * 100 ) / nFontHeight : 100;
     }
 }
@@ -5912,13 +5925,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
 
     bool bIsHardAttribute = ( ( pParaSet->mnAttrSet & nMask ) != 0 );
 
-    sal_uInt16 nDepth = pParaSet->mnDepth;
-
-    if (nDepth >= nMaxPPTLevels)
-    {
-        SAL_WARN("filter.ms", "Para Style Sheet depth " << nDepth << " but " << nMaxPPTLevels - 1 << " is max possible");
-        nDepth = nMaxPPTLevels - 1;
-    }
+    sal_uInt16 nDepth = sanitizeForMaxPPTLevels(pParaSet->mnDepth);
 
     if ( bIsHardAttribute )
     {
@@ -6198,12 +6205,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                 if ( pRule )
                 {
                     pRule->SetLevel( pParaSet->mnDepth, aNumberFormat );
-                    sal_uInt16 i, n;
-                    for ( i = 0; i < pRule->GetLevelCount(); i++ )
+                    for (sal_uInt16 i = 0; i < pRule->GetLevelCount(); ++i)
                     {
                         if ( i != pParaSet->mnDepth )
                         {
-                            n = i > 4 ? 4 : i;
+                            sal_uInt16 n = sanitizeForMaxPPTLevels(i);
 
                             SvxNumberFormat aNumberFormat2( pRule->GetLevel( i ) );
                             const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
