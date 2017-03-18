@@ -158,7 +158,7 @@
 #define SDRATTR_CIRCENDANGLE            (SDRATTR_CIRC_FIRST+ 2)    /*   1174 */ /* Pool V4+ */
 #define SDRATTR_CIRC_LAST               (SDRATTR_CIRCENDANGLE)     /*   1178 */ /* Pool V4+ */
 
-// Only for Interfaceing, not yet implemented. / * + * V4 /
+// Only for Interfacing, not yet implemented. / * + * V4 /
 #define SDRATTR_NOTPERSIST_FIRST    (SDRATTR_CIRC_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
 #define SDRATTR_OBJMOVEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  sal_Bool,   def=sal_False */
 #define SDRATTR_OBJSIZEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  sal_Bool,   def=sal_False */

@@ -741,7 +741,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppvOb
     return S_OK;
 }
 //M-------------------------------------------------------------------------
-//  Method:     COooFilterCF::AddRef            (IUknown::AddRef)
+//  Method:     COooFilterCF::AddRef            (IUnknown::AddRef)
 //  Summary:    Increments interface refcount
 //  Arguments:  void
 //  Returns:    Value of incremented interface refcount

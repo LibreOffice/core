@@ -787,7 +787,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
 For the old table model, ::GetMergeSel(..) is called only,
 for the new table model, PrepareMerge does the main work.
-It modifices all cells to merge (width, border, rowspan etc.) and collects
+It modifies all cells to merge (width, border, rowspan etc.) and collects
 the cells which have to be deleted by Merge(..) afterwards.
 If there are superfluous rows, these cells are put into the deletion list as well.
 

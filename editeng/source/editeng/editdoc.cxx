@@ -2695,7 +2695,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
                 // If (...)
                 // It needs to be examined on exactly the same attribute at the
                 // break point, which is quite expensive.
-                // Since optimazation is done when inserting the  attributes
+                // Since optimization is done when inserting the attributes
                 // this case does not appear so fast...
                 // So based on the need for speed:
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );

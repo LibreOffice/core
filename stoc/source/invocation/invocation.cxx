@@ -247,7 +247,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 
     if( aType  == cppu::UnoType<XExactName>::get())
     {
-        // Ivocation does not support XExactName, if direct object supports
+        // Invocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && _xENIntrospection.is()))

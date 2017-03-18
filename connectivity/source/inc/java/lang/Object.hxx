@@ -151,7 +151,7 @@ namespace connectivity
 
     };
 }
-#endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_
+#endif //_CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

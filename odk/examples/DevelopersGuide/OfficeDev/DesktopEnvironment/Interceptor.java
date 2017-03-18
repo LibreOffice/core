@@ -117,8 +117,8 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * start working as frame action listener really.
      * We will be frame action listener here. In case
      * we get a frame action which indicates, that we should
-     * update our interception. Because such using of an interecptor
-     * isn't guaranteed - in case a newer one was registered ...
+     * update our interception. Because such using of an interceptor
+     * isn't guaranteed - in case a newer one was registered...
      */
     public void startListening()
     {
