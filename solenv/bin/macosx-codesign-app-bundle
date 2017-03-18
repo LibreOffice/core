@@ -26,7 +26,7 @@ for V in \
 done
 
 APP_BUNDLE="$1"
-
+entitlements=
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # In a sandboxed build executables need the entitlements
     entitlements="--entitlements $BUILDDIR/lo.xcent"
@@ -48,7 +48,11 @@ fi
 find -d "$APP_BUNDLE" \( -name '*.jnilib' \) ! -type l |
     while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
+    codesign --verbose --force --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" > "/tmp/codesign_$(basename "$file").log" 2>&1
+    if [ "$?" != "0" ] ; then
+	exit 1
+    fi
+    rm "/tmp/codesign_$(basename "$file").log"
 done
 
 # Sign dylibs
@@ -63,7 +67,11 @@ find "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \
         $other_files \) ! -type l |
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
+    codesign --verbose --force --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" > "/tmp/codesign_$(basename "$file").log" 2>&1
+    if [ "$?" != "0" ] ; then
+	exit 1
+    fi
+    rm "/tmp/codesign_$(basename "$file").log"
 done
 
 # Sign included bundles. First .app ones (i.e. the Python.app inside
@@ -75,7 +83,11 @@ while read app; do
     fn=${fn%.*}
     # Assume the app has a XML (and not binary) Info.plist
     id=`grep -A 1 '<key>CFBundleIdentifier</key>' $app/Contents/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-    codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" || exit 1
+    codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" > "/tmp/codesign_${fn}.log" 2>&1
+    if [ "$?" != "0" ] ; then
+	exit 1
+    fi
+    rm "/tmp/codesign_${fn}.log"
 done
 
 # Then .framework ones. Again, be generic just for kicks.
@@ -88,8 +100,12 @@ while read framework; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
 	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-            codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" || exit 1
-        fi
+            codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" > "/tmp/codesign_${fn}.log" 2>&1
+	    if [ "$?" != "0" ] ; then
+		exit 1
+	    fi
+	    rm "/tmp/codesign_${fn}.log"
+	fi
     done
 done
 
@@ -97,7 +113,11 @@ done
 
 find "$APP_BUNDLE" -name '*.mdimporter' -type d |
 while read bundle; do
-    codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle" || exit 1
+    codesign --verbose --force --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle" > "/tmp/codesign_$(basename "${bundle}").log" 2>&1
+    if [ "$?" != "0" ] ; then
+	exit 1
+    fi
+    rm "/tmp/codesign_$(basename "${bundle}").log"
 done
 
 # Sign executables
@@ -109,7 +129,11 @@ while read file; do
 	    ;;
 	*)
 	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-	    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
+	    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"  > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.${id}.log" 2>&1
+	    if [ "$?" != "0" ] ; then
+		exit 1
+	    fi
+	    rm "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.${id}.log"
 	    ;;
     esac
 done
@@ -128,6 +152,9 @@ done
 
 id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
-
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" > "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.log" 2>&1
+if [ "$?" != "0" ] ; then
+    exit 1
+fi
+rm "/tmp/codesign_${MACOSX_BUNDLE_IDENTIFIER}.log"
 exit 0
