@@ -92,6 +92,7 @@ public:
     void testTdf62176();
     void testTransparentBackground();
     void testEmbeddedPdf();
+    void testAuthorField();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
+    CPPUNIT_TEST(testAuthorField);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -550,6 +552,23 @@ void SdExportTest::testEmbeddedPdf()
     CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
     xShell->DoClose();
 #endif
+}
+
+void SdExportTest::testAuthorField()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/author_fixed.odp"), ODP);
+
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+
+    uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    uno::Reference< beans::XPropertySet > xPropSet( xField, uno::UNO_QUERY_THROW );
+    bool bFixed = false;
+    xPropSet->getPropertyValue("IsFixed") >>= bFixed;
+    CPPUNIT_ASSERT_MESSAGE("Author field is not fixed", bFixed);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
