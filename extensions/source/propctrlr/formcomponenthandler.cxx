@@ -2193,7 +2193,7 @@ namespace pcr
     bool FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow( const Property& _rProperty ) const
     {
         OSL_ENSURE( _rProperty.Handle == m_pInfoService->getPropertyId( _rProperty.Name ),
-            "FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow: insonsistency in the property!" );
+            "FormComponentPropertyHandler::impl_shouldExcludeProperty_nothrow: inconsistency in the property!" );
 
         if ( _rProperty.Handle == PROPERTY_ID_CONTROLLABEL )
             // prevent that this is caught below

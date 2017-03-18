@@ -32,7 +32,7 @@ I.e. "MESSAGE\n\n" or "MESSAGE\nDATA\nDATA2...\n\n"
 You must keep reading a message until an empty line (i.e. double
 new-line) is reached to allow for future protocol extension.
 
-Intialisation
+Initialisation
 -------------
 
 Once connected the server sends "LO_SERVER_SERVER_PAIRED".

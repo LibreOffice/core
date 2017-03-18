@@ -452,8 +452,8 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     INetURLObject aURL(sURL);
     aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL);
 
-    /* set the right UI state for this item to NOT_RECOVERED_YET ... because nDocState shows the state of
-       the last emergency save operation before and is interessting for the used recovery core service only ...
+    /* set the right UI state for this item to NOT_RECOVERED_YET... because nDocState shows the state of
+       the last emergency save operation before and is interesting for the used recovery core service only...
        for now! But if there is a further notification for this item (see lines above!) we must
        map the doc state to an UI state. */
     aNew.RecoveryState = E_NOT_RECOVERED_YET;

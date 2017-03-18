@@ -364,7 +364,7 @@ bool GIFReader::ReadExtension()
                                 bRet = NO_PENDING( rIStm );
                                 bOverreadDataBlocks = false;
 
-                                // Netscape interpretes the loop count
+                                // Netscape interprets the loop count
                                 // as pure number of _repeats_;
                                 // here it is the total number of loops
                                 if( nLoops )

@@ -1076,6 +1076,6 @@ g_ImplementationHelper.addImplementation( \
      "com.sun.star.script.provider.ScriptProviderFor"+ LANGUAGENAME,),)
 
 
-log.debug( "pythonscript finished intializing" )
+log.debug( "pythonscript finished initializing" )
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

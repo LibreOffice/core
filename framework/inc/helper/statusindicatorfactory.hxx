@@ -249,7 +249,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
             @descr  By default we show the parent window automatically
                     if this progress is used.
                     If that isn't a valid operation, the user of this
-                    progress can suppress this feature by initializaing
+                    progress can suppress this feature by initializing
                     us with a special parameter.
 
             @seealso    initialize()

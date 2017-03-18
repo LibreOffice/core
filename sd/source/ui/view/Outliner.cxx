@@ -114,7 +114,7 @@ public:
 
     /** Provide in the member mpOutlineView an instance of OutlinerView that
         is either taken from the ViewShell, when it is an OutlineViewShell,
-        or is created.  When an OutlinerView already exists it is initialied.
+        or is created.  When an OutlinerView already exists it is initialized.
     */
     void ProvideOutlinerView (
         Outliner& rOutliner,
