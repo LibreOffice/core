@@ -20,6 +20,10 @@
 #ifndef INCLUDED_OSL_CONDITN_HXX
 #define INCLUDED_OSL_CONDITN_HXX
 
+#ifdef MACOSX
+#define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
+#endif
+
 #include <sal/config.h>
 
 #include <cstddef>
