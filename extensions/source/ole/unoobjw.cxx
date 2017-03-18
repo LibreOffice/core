@@ -1060,7 +1060,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         {
             bHandled= true;
             if( !pvarResult)
-                ret= E_POINTER;
+                return E_POINTER;
             CComObject< JScriptValue>* pValue;
             if( SUCCEEDED( CComObject<JScriptValue>::CreateInstance( &pValue)))
             {
@@ -1104,7 +1104,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         {
             bHandled= true;
             if( !pvarResult)
-                ret= E_POINTER;
+                return E_POINTER;
             // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
             CComVariant arg;
             if( pdispparams->cArgs != 1)
