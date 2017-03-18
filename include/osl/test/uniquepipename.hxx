@@ -26,16 +26,19 @@
 namespace osl {
 namespace test {
 
-OUString uniquePipeName(OUString const & name) {
+OUString uniquePipeName(OUString const & name)
+{
     oslProcessInfo info;
     info.Size = sizeof info;
+
     CPPUNIT_ASSERT_EQUAL(
         osl_Process_E_None,
         osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &info));
+
     return name + OUString::number(info.Ident);
 }
 
-}
-}
+} // test namespace
+} // osl namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
