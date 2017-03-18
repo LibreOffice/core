@@ -131,7 +131,7 @@ void SmEditWindow::dispose()
     // available for those classes.
     if (mxAccessible.is())
     {
-        mxAccessible->ClearWin();    // make Accessible defunctional
+        mxAccessible->ClearWin();    // make Accessible nonfunctional
         mxAccessible.clear();
     }
 

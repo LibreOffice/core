@@ -364,7 +364,7 @@ public:
     {                                                    \
         css::uno::Reference < ifc > xThis( ths );        \
         css::lang::DisposedException aExcept(            \
-            "object is defunctional",        \
+            "object is nonfunctional",        \
             xThis );                                     \
         throw aExcept;                                   \
     }

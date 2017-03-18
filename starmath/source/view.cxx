@@ -122,7 +122,7 @@ SmGraphicWindow::~SmGraphicWindow()
 void SmGraphicWindow::dispose()
 {
     if (mxAccessible.is())
-        mxAccessible->ClearWin();    // make Accessible defunctional
+        mxAccessible->ClearWin();    // make Accessible nonfunctional
     CaretBlinkStop();
     ScrollableWindow::dispose();
 }
