@@ -234,6 +234,10 @@ protected:
     virtual void StartElement(
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
 
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const OUString& sAttrValue ) override;
+
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
