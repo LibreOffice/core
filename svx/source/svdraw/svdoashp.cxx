@@ -49,6 +49,7 @@
 #include "svx/svdstr.hrc"
 #include <editeng/eeitem.hxx>
 #include "editeng/editstat.hxx"
+#include <editeng/adjustitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
@@ -2699,7 +2700,14 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
             // else the alignment is wanted.
             if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
             {
-                eHAdj = SDRTEXTHORZADJUST_CENTER;
+                SvxAdjust eAdjust = static_cast<const SvxAdjustItem&>(GetObjectItemSet().Get(EE_PARA_JUST)).GetAdjust();
+                switch (eAdjust)
+                {
+                    case SvxAdjust::Left:   eHAdj = SDRTEXTHORZADJUST_LEFT; break;
+                    case SvxAdjust::Right:  eHAdj = SDRTEXTHORZADJUST_RIGHT; break;
+                    case SvxAdjust::Center: eHAdj = SDRTEXTHORZADJUST_CENTER; break;
+                    default: break;
+                }
             }
         }
 
