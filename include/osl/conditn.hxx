@@ -28,6 +28,11 @@
 
 #include <osl/conditn.h>
 
+#if defined(MACOSX) && defined(__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES)
+#   if __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES == 1
+#       undef check
+#   endif
+#endif
 
 namespace osl
 {
