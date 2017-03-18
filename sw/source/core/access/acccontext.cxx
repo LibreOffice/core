@@ -301,10 +301,10 @@ void SwAccessibleContext::ScrolledWithin( const SwRect& rOldVisArea )
 void SwAccessibleContext::ScrolledIn()
 {
     // This accessible should be freshly created, because it
-    // was not visible before. Therefore, its vis area must already
+    // was not visible before. Therefore, its visible area must already
     // reflect the scrolling.
     OSL_ENSURE( GetVisArea() == GetMap()->GetVisArea(),
-            "Vis area of child is wrong. Did it exist already?" );
+            "Visible area of child is wrong. Did it exist already?" );
 
     // Send child event at parent. That's all we have to do here.
     const SwFrame* pParent = GetParent();
@@ -341,8 +341,8 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     // all children that are existing only if they are visible. They
     // are not disposed by the recursive Dispose call that follows later on,
     // because this call will only dispose children that are in the
-    // new vis area. The children we want to dispose however are in the
-    // old vis area all.
+    // new visible area. The children we want to dispose however are in the
+    // old visible area all.
     ChildrenScrolled( GetFrame(), rOldVisArea );
 
     // Broadcast a state changed event for the showing state.
@@ -860,7 +860,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
+    SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip relative to document root
     Rectangle aPixBounds( 0, 0, 0, 0 );
     if( GetFrame()->IsPageFrame() &&
         static_cast < const SwPageFrame * >( GetFrame() )->IsEmptyPage() )
@@ -1036,7 +1036,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
 
     OSL_ENSURE( GetFrame() && GetMap(), "already disposed" );
     OSL_ENSURE( GetMap()->GetVisArea() == GetVisArea(),
-                "invalid vis area for dispose" );
+                "invalid visible area for dispose" );
 
     m_isDisposing = true;
 

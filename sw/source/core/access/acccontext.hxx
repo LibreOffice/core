@@ -130,7 +130,7 @@ protected:
     SwCursorShell* GetCursorShell();
     const SwCursorShell* GetCursorShell() const;
 
-    // Notify all children that the vis area has changed.
+    // Notify all children that the visible area has changed.
     // The SwFrame might belong to the current object or to any other child or
     // grandchild.
     void ChildrenScrolled( const SwFrame *pFrame, const SwRect& rOldVisArea );
@@ -139,13 +139,13 @@ protected:
     // exist even if they aren't visible.
     void Scrolled( const SwRect& rOldVisArea );
 
-    // A child has been moved while setting the vis area
+    // A child has been moved while setting the visible area
     void ScrolledWithin( const SwRect& rOldVisArea );
 
-    // The has been added while setting the vis area
+    // The has been added while setting the visible area
     void ScrolledIn();
 
-    // The context has to be removed while setting the vis area
+    // The context has to be removed while setting the visible area
     void ScrolledOut( const SwRect& rOldVisArea );
 
     // Invalidate the states of all children of the specified SwFrame. The

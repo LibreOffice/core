@@ -1071,7 +1071,7 @@ void SwAccessibleMap::InvalidateCursorPosition(
     {
         FireEvents();
         // While firing events the current frame might have
-        // been disposed because it moved out of the vis area.
+        // been disposed because it moved out of the visible area.
         // Setting the cursor for such frames is useless and even
         // causes asserts.
         if( pAccImpl->GetFrame() )

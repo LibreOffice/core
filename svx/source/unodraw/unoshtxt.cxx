@@ -99,7 +99,7 @@ private:
     bool                            mbNeedsUpdate;
     bool                            mbOldUndoMode;
     bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
-    bool                            mbShapeIsEditMode;          // #104157# only true, if SdrHintKind::BeginEdit was received
+    bool                            mbShapeIsEditMode;          // only true, if SdrHintKind::BeginEdit was received
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     SvxUnoTextRangeBaseList         maTextRanges;
@@ -225,7 +225,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     if( mpObject )
         mpObject->AddObjectUser( *this );
 
-    // #104157# Init edit mode state from shape info (IsTextEditActive())
+    // Init edit mode state from shape info (IsTextEditActive())
     mbShapeIsEditMode = IsEditMode();
 }
 
@@ -339,17 +339,16 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {
             case SdrHintKind::ObjectChange:
             {
-                mbDataValid = false;                        // Text muss neu geholt werden
+                mbDataValid = false;                        // Text has to be get again
 
                 if( HasView() )
                 {
-                    // #104157# Update maTextOffset, object has changed
-                    // #105196#, #105203#: Cannot call that // here,
-                    // since TakeTextRect() (called from there)
+                    // Update maTextOffset, object has changed
+                    // Cannot call that here, since TakeTextRect() (called from there)
                     // changes outliner content.
                     // UpdateOutliner();
 
-                    // #101029# Broadcast object changes, as they might change visible attributes
+                    // Broadcast object changes, as they might change visible attributes
                     SvxViewChangedHint aHint;
                     Broadcast( aHint );
                 }
@@ -393,7 +392,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     if( mpView && mpView->GetTextEditOutliner() )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
-                    // #104157# Only now we're really in edit mode
+                    // Only now we're really in edit mode
                     mbShapeIsEditMode = true;
 
                     Broadcast( *pSdrHint );
@@ -405,7 +404,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     Broadcast( *pSdrHint );
 
-                    // #104157# We're no longer in edit mode
+                    // We're no longer in edit mode
                     mbShapeIsEditMode = false;
 
                     // remove as listener - outliner might outlive ourselves
@@ -418,7 +417,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     delete mpViewForwarder;
                     mpViewForwarder = nullptr;
 
-                    // #100424# Invalidate text forwarder, we might
+                    // Invalidate text forwarder, we might
                     // not be called again before entering edit mode a
                     // second time! Then, the old outliner might be
                     // invalid.
@@ -511,7 +510,7 @@ void SvxTextEditSourceImpl::SetupOutliner()
             Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
 
-            // #101029# calc text offset from shape anchor
+            // calc text offset from shape anchor
             maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
         }
     }
@@ -532,7 +531,7 @@ void SvxTextEditSourceImpl::UpdateOutliner()
             Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
 
-            // #101029# calc text offset from shape anchor
+            // calc text offset from shape anchor
             maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
         }
     }
@@ -543,7 +542,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 {
     bool bCreated = false;
 
-    // #99840#: prevent EE/Outliner notifications during setup
+    // prevent EE/Outliner notifications during setup
     mbNotificationsDisabled = true;
 
     if (!mpTextForwarder)
@@ -557,10 +556,10 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
             mpOutliner = mpModel->createOutliner( nOutlMode );
 
-            // #109151# Do the setup after outliner creation, would be useless otherwise
+            // Do the setup after outliner creation, would be useless otherwise
             if( HasView() )
             {
-                // #101029#, #104157# Setup outliner _before_ filling it
+                // Setup outliner _before_ filling it
                 SetupOutliner();
             }
 
@@ -611,7 +610,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         {
             mpOutliner->SetText( *pOutlinerParaObject );
 
-            // #91254# put text to object and set EmptyPresObj to FALSE
+            // put text to object and set EmptyPresObj to FALSE
             if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
             {
                 mpObject->SetEmptyPresObj( false );
@@ -668,7 +667,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
     }
 
-    // #99840#: prevent EE/Outliner notifications during setup
+    // prevent EE/Outliner notifications during setup
     mbNotificationsDisabled = false;
 
     return mpTextForwarder;
@@ -920,7 +919,7 @@ Rectangle SvxTextEditSourceImpl::GetVisArea()
 
 Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode )
 {
-    // #101029#: The responsibilities of ViewForwarder happen to be
+    // The responsibilities of ViewForwarder happen to be
     // somewhat mixed in this case. On the one hand, we need the
     // different interface queries on the SvxEditSource interface,
     // since we need both VisAreas. On the other hand, if an
@@ -951,7 +950,7 @@ Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& r
 
 Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMapMode )
 {
-    // #101029#: The responsibilities of ViewForwarder happen to be
+    // The responsibilities of ViewForwarder happen to be
     // somewhat mixed in this case. On the one hand, we need the
     // different interface queries on the SvxEditSource interface,
     // since we need both VisAreas. On the other hand, if an

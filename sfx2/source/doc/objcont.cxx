@@ -152,7 +152,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     xFile->SetPrefSize( aTmpSize );
     DBG_ASSERT( aTmpSize.Height() != 0 && aTmpSize.Width() != 0,
-        "size of first page is 0, override GetFirstPageSize or set vis-area!" );
+        "size of first page is 0, override GetFirstPageSize or set visible-area!" );
 
     xFile->Record( pDevice );
 
@@ -179,7 +179,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
 {
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
 
-    // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
+    // clear user data if recommend (see 'Tools - Options - LibreOffice - Security')
     if ( SvtSecurityOptions().IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) )
     {
@@ -236,7 +236,7 @@ void SfxObjectShell::UpdateTime_Impl(
     sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
     tools::Time        nAddTime    (0)         ;   // Value to add on aOldTime
 
-    // Safe impossible cases!
+    // Save impossible cases!
     // User has changed time to the past between last editing and now ... it's not possible!!!
     DBG_ASSERT( !(aNow.GetDate()<pImpl->nTime.GetDate()), "Timestamp of last change is in the past ?!..." );
 
@@ -340,7 +340,7 @@ void SfxObjectShell::LoadStyles
         {
             pDest = &pMyPool->Make( pSource->GetName(),
                     pSource->GetFamily(), pSource->GetMask());
-            // Setting of Parents, the next style
+            // Setting of parents, the next style
         }
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
@@ -513,7 +513,7 @@ bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
 {
-    // only care about resetting this data for openoffice formats otherwise
+    // only care about resetting this data for LibreOffice formats otherwise
     if ( IsOwnStorageFormat( *GetMedium())  )
     {
         uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());

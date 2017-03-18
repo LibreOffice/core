@@ -161,7 +161,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
             if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
             {
                 // have SwOleClient::FormatChanged() to align the modified formula properly
-                // even if the vis area does not change (e.g. when formula text changes from
+                // even if the visible area does not change (e.g. when formula text changes from
                 // "{a over b + c} over d" to "d over {a over b + c}"
                 SfxGetpApp()->NotifyEvent(SfxEventHint( SfxEventHintId::VisAreaChanged, GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
 
@@ -1249,7 +1249,7 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 
     //TODO/LATER: it's unclear how this interacts with the SFX code
     // If outplace editing, then don't resize the OutplaceWindow. But the
-    // ObjectShell has to resize. Bug 56470
+    // ObjectShell has to resize.
     bool bUnLockFrame;
     if( GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !IsInPlaceActive() && GetFrame() )
     {
