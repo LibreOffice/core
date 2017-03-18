@@ -2774,7 +2774,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_RECORDMACRO :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const OUString sName{GetObjectShell()->GetFactory().GetFactoryName()};
+                    const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
                     if ( !aMiscOptions.IsMacroRecorderMode() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {
@@ -2800,7 +2800,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_STOP_RECORDING :
                 {
                     SvtMiscOptions aMiscOptions;
-                    const OUString sName{GetObjectShell()->GetFactory().GetFactoryName()};
+                    const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
                     if ( !aMiscOptions.IsMacroRecorderMode() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {

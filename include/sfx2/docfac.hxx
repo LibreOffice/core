@@ -54,7 +54,7 @@ public:
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
     OUString        GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    OUString        GetFactoryName() const { return m_sFactoryName; }
+    const OUString& GetFactoryName() const { return m_sFactoryName; }
     OUString        GetModuleName() const;
     SfxFilterContainer *GetFilterContainer() const;
 
