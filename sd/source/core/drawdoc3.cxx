@@ -484,7 +484,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
-        sal_Int32 nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
         pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "", 0, nViewShellId);
@@ -1414,7 +1414,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if (bUndo)
     {
-        sal_Int32 nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
         pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, nViewShellId);

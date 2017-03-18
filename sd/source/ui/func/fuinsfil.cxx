@@ -630,7 +630,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         nNewPages = 0;
 
-        int nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : -1;
+        ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
         rDocliner.GetUndoManager().EnterListAction(
                                     SD_RESSTR(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
 

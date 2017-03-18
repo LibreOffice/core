@@ -939,7 +939,7 @@ bool OSelectionBrowseBox::SaveModified()
                         strOldCellContents = pEntry->GetField();
                         bListAction = true;
                         if ( !m_bInUndoMode )
-                            rController.GetUndoManager().EnterListAction(OUString(),OUString(),0,-1);
+                            rController.GetUndoManager().EnterListAction(OUString(),OUString(),0,ViewShellId(-1));
 
                         sal_Int32 nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         OUString aAliasName = pEntry->GetAlias();
@@ -2447,7 +2447,7 @@ void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue, const OUS
         if ( !_bListAction )
         {
             _bListAction = true;
-            static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().EnterListAction(OUString(),OUString(),0,-1);
+            static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().EnterListAction(OUString(),OUString(),0,ViewShellId(-1));
         }
         appendUndoAction(_rOldValue,_rNewValue,_nRow);
     }

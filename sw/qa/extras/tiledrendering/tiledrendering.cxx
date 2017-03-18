@@ -36,6 +36,11 @@
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
+static std::ostream& operator<<(std::ostream& os, ViewShellId id)
+{
+    os << (int)id; return os;
+}
+
 /// Testsuite for the SwXTextDocument methods implementing the vcl::ITiledRenderable interface.
 class SwTiledRenderingTest : public SwModelTestBase
 {
@@ -1252,7 +1257,7 @@ void SwTiledRenderingTest::testShapeTextUndoShells()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     // This was -1: the view shell id for the undo action wasn't known.
-    CPPUNIT_ASSERT_EQUAL(nView1, rUndoManager.GetUndoAction()->GetViewShellId());
+    CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), rUndoManager.GetUndoAction()->GetViewShellId());
 
     mxComponent->dispose();
     mxComponent.clear();
@@ -1284,7 +1289,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rUndoManager.GetUndoActionCount());
     // This was -1: the view shell id for the (top) undo list action wasn't known.
-    CPPUNIT_ASSERT_EQUAL(nView1, rUndoManager.GetUndoAction()->GetViewShellId());
+    CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), rUndoManager.GetUndoAction()->GetViewShellId());
 
     // Create an editeng text selection in the first view.
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();

@@ -256,7 +256,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aOldSet.Put( pOV->GetAttribs() );
 
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
-            int nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : -1;
+            ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
             rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
                                      "", 0, nViewShellId );
             pOV->InsertText(aChars, true);

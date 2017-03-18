@@ -34,7 +34,7 @@ class SD_DLLPUBLIC UndoManager : public SdrUndoManager
 public:
     UndoManager();
 
-    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId) override;
+    virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, ViewShellId nViewShellId) override;
 
     virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) override;
     size_t GetUndoActionCount(const bool bCurrentLevel = true) const override;

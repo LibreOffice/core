@@ -40,6 +40,11 @@
 
 using namespace css;
 
+std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
+{
+    os << (int)id; return os;
+}
+
 namespace
 {
 
@@ -669,7 +674,7 @@ void ScTiledRenderingTest::testUndoShells()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1: ScSimpleUndo did not remember what view shell created it.
-    CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
+    CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

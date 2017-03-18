@@ -102,7 +102,7 @@ OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
     return OUString();
 }
 
-sal_Int32 SdrUndoAction::GetViewShellId() const
+ViewShellId SdrUndoAction::GetViewShellId() const
 {
     return m_nViewShellId;
 }

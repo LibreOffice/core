@@ -202,7 +202,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if (bUndo)
                             {
                                 OUString aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
-                                int nViewShellId = -1;
+                                ViewShellId nViewShellId(-1);
                                 if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                                     nViewShellId = pViewSh->GetViewShellId();
                                 GetUndoManager()->EnterListAction( aStrImport, aStrImport, 0, nViewShellId );

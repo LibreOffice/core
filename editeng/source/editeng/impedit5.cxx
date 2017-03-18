@@ -224,9 +224,9 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
     return pUndo;
 }
 
-sal_Int32 ImpEditEngine::CreateViewShellId()
+ViewShellId ImpEditEngine::CreateViewShellId()
 {
-    sal_Int32 nRet = -1;
+    ViewShellId nRet(-1);
 
     const EditView* pEditView = pEditEngine ? pEditEngine->GetActiveView() : nullptr;
     const OutlinerViewShell* pViewShell = pEditView ? pEditView->GetImpEditView()->GetViewShell() : nullptr;

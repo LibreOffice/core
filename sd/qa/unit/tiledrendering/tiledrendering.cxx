@@ -52,6 +52,11 @@ using namespace css;
 
 static const char* const DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 
+static std::ostream& operator<<(std::ostream& os, ViewShellId id)
+{
+    os << (int)id; return os;
+}
+
 class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools
 {
 public:
@@ -460,7 +465,7 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     CPPUNIT_ASSERT(pListAction);
     for (size_t i = 0; i < pListAction->aUndoActions.size(); ++i)
         // The second item was -1 here, view shell ID wasn't known.
-        CPPUNIT_ASSERT_EQUAL(nView1, pListAction->aUndoActions.GetUndoAction(i)->GetViewShellId());
+        CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pListAction->aUndoActions.GetUndoAction(i)->GetViewShellId());
 
     Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
@@ -486,7 +491,7 @@ void SdTiledRenderingTest::testUndoShells()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1, SdUndoGroup did not track what view shell created it.
-    CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
+    CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
 }
 
 void SdTiledRenderingTest::testResetSelection()

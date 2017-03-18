@@ -28,7 +28,7 @@ class ScUndoDraw: public SfxUndoAction
 {
     std::unique_ptr<SfxUndoAction>  pDrawUndo;
     ScDocShell*     pDocShell;
-    sal_Int32       mnViewShellId;
+    ViewShellId     mnViewShellId;
 
     void            UpdateSubShell();
 
@@ -46,7 +46,7 @@ public:
     virtual OUString        GetComment() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
     /// See SfxUndoAction::GetViewShellId().
-    sal_Int32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
 };
 
 #endif

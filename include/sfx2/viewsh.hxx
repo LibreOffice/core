@@ -332,7 +332,7 @@ public:
     virtual int getPart() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
-    sal_uInt32 GetViewShellId() const override;
+    ViewShellId GetViewShellId() const override;
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().

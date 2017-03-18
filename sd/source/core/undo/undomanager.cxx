@@ -30,7 +30,7 @@ UndoManager::UndoManager()
 {
 }
 
-void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId)
+void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, ViewShellId nViewShellId)
 {
     if( !IsDoing() )
     {
@@ -66,7 +66,7 @@ size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
         return nRet;
 
     // If an other view created the last undo action, prevent undoing it from this view.
-    sal_Int32 nViewShellId = mpViewShell->GetViewShellId();
+    ViewShellId nViewShellId = mpViewShell->GetViewShellId();
     if (pAction->GetViewShellId() != nViewShellId)
         nRet = 0;
 
@@ -87,7 +87,7 @@ size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
         return nRet;
 
     // If an other view created the first redo action, prevent redoing it from this view.
-    sal_Int32 nViewShellId = mpViewShell->GetViewShellId();
+    ViewShellId nViewShellId = mpViewShell->GetViewShellId();
     if (pAction->GetViewShellId() != nViewShellId)
         nRet = 0;
 
