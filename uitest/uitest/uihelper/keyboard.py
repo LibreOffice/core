@@ -1,0 +1,13 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+from libreoffice.uno.propertyvalue import convert_property_values_to_dict, mkPropertyValues
+
+def select_all(ui_object):
+    ui_object.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
