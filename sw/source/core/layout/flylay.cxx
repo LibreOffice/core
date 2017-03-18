@@ -587,9 +587,9 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
         if ( !m_pSortedObjs )
             m_pSortedObjs = new SwSortedObjs();
 
-        const bool bSucessInserted = m_pSortedObjs->Insert( *pNew );
-        OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
-        (void) bSucessInserted;
+        const bool bSuccessInserted = m_pSortedObjs->Insert( *pNew );
+        OSL_ENSURE( bSuccessInserted, "Fly not inserted in Sorted." );
+        (void) bSuccessInserted;
 
         // #i87493#
         OSL_ENSURE( pNew->GetPageFrame() == nullptr || pNew->GetPageFrame() == this,
@@ -736,9 +736,9 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
     if ( !pDest->GetSortedObjs() )
         pDest->m_pSortedObjs = new SwSortedObjs();
 
-    const bool bSucessInserted = pDest->GetSortedObjs()->Insert( *pToMove );
-    OSL_ENSURE( bSucessInserted, "Fly not inserted in Sorted." );
-    (void) bSucessInserted;
+    const bool bSuccessInserted = pDest->GetSortedObjs()->Insert( *pToMove );
+    OSL_ENSURE( bSuccessInserted, "Fly not inserted in Sorted." );
+    (void) bSuccessInserted;
 
     // #i28701# - use new method <SetPageFrame(..)>
     pToMove->SetPageFrame( pDest );
