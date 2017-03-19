@@ -2694,7 +2694,7 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
     {
         mpWindowImpl->mnActivateMode = nMode;
 
-        // possibly trigger Decativate/Activate
+        // possibly trigger Deactivate/Activate
         if ( mpWindowImpl->mnActivateMode != ActivateModeFlags::NONE )
         {
             if ( (mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW)) &&

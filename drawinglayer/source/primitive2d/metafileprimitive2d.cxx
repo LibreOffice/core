@@ -2742,7 +2742,7 @@ namespace
                         rPropertyHolders.Current().setTextColor(rFontColor.getBColor());
                     }
 
-                    // caution: do NOT decativate here on transparet, see
+                    // caution: do NOT deactivate here on transparent, see
                     // OutputDevice::SetFont(..) for more info
                     // rPropertyHolders.Current().setTextColorActive(bActivate);
 

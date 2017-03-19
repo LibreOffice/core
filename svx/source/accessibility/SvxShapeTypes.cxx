@@ -155,7 +155,7 @@ void RegisterDrawShapeTypes()
 
     };
 
-    // Crash while inserting callout with activated accesibility (#i37790#)
+    // Crash while inserting callout with activated accessibility (#i37790#)
     ShapeTypeHandler::Instance().AddShapeTypeList ( DRAWING_END, aSvxShapeTypeList);
 }
 
