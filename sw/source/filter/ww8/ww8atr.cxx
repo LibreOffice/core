@@ -399,7 +399,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     const SfxPoolItem* pItem=nullptr;
     const SwFormatPageDesc *pPgDesc=nullptr;
 
-    //Output a sectionbreak if theres a new pagedesciptor.  otherwise output a
+    //Output a sectionbreak if there's a new pagedescriptor. Otherwise output a
     //pagebreak if there is a pagebreak here, unless the new page (follow
     //style) is different to the current one, in which case plump for a
     //section.

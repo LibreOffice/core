@@ -178,7 +178,7 @@ namespace svx
         static MapString2PropertyEntry s_aProperties;
         if ( s_aProperties.empty() )
         {
-            static PropertyMapEntry const s_aDesriptorProperties[] =
+            static PropertyMapEntry const s_aDescriptorProperties[] =
             {
                 { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,            },
                 { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,     },
@@ -196,8 +196,8 @@ namespace svx
                 { OUString("Selection"),          DataAccessDescriptorProperty::Selection,             }
             };
 
-            for (unsigned i=0; i<SAL_N_ELEMENTS(s_aDesriptorProperties); ++i)
-                s_aProperties[ s_aDesriptorProperties[i].maName ] = &s_aDesriptorProperties[i];
+            for (unsigned i=0; i<SAL_N_ELEMENTS(s_aDescriptorProperties); ++i)
+                s_aProperties[ s_aDescriptorProperties[i].maName ] = &s_aDescriptorProperties[i];
         }
 
         return s_aProperties;

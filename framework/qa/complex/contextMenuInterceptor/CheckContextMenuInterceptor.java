@@ -190,7 +190,7 @@ public class CheckContextMenuInterceptor
     {
         XInterface toolkit = null;
 
-        System.out.println("get accesibility...");
+        System.out.println("get accessibility...");
         try
         {
             toolkit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
