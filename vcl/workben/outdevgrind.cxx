@@ -138,7 +138,7 @@ void setupMethodStubs( functor_vector_type& res )
     const BitmapEx    aBitmapExAlpha( aBitmap, aBitmapAlien );
     const BitmapEx    aBitmapExAlphaAlien( aBitmapAlien, aBitmapAlien );
 
-#ifdef NEEDS_QUALIY_PARAMTER
+#ifdef NEEDS_QUALITY_PARAMETER
     const Image       aImage( aBitmapEx );
 #endif
     const Gradient    aGradient(GradientStyle::Elliptical,aBlackColor,aWhiteColor);
@@ -274,7 +274,7 @@ void setupMethodStubs( functor_vector_type& res )
         "CopyArea",
         [&] (OutputDevice * pDev) { return pDev->CopyArea(aPt1, aPt3, aRect2.GetSize()); } );
 
-#ifdef NEEDS_QUALIY_PARAMTER
+#ifdef NEEDS_QUALITY_PARAMETER
     /* void DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
     */
@@ -509,7 +509,7 @@ void setupMethodStubs( functor_vector_type& res )
             return pDev->DrawImage(aPt1, aRect.GetSize(), aImage, static_cast<sal_uInt16>(0)));
         });
 
-#endif // NEEDS_QUALITY_PARAMATER
+#endif // NEEDS_QUALITY_PARAMETER
 
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
