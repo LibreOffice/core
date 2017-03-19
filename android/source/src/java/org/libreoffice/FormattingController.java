@@ -105,6 +105,12 @@ import org.libreoffice.kit.Document;
                     case Document.ALIGN_JUSTIFY:
                         buttonId = R.id.button_align_justify;
                         break;
+                    case Document.BULLET_LIST:
+                        buttonId = R.id.button_insertFormatListBullets;
+                        break;
+                    case Document.NUMBERED_LIST:
+                        buttonId = R.id.button_insertFormatListNumbering;
+                        break;
                     default:
                         Log.e(LOGTAG, "Uncaptured state change type: " + type);
                         return;
