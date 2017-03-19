@@ -91,14 +91,5 @@ public:
     bool                    IsKashidaPosValid(int nCharPos) const final override;
 };
 
-// these must match the values in vcl/source/gdi/VerticalOrientationData.cxx
-enum class VerticalOrientation {
-    Upright            = 0,
-    Rotated            = 1,
-    TransformedUpright = 2,
-    TransformedRotated = 3
-};
-
-
 #endif // INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -302,8 +302,18 @@ namespace vcl {
             }
         }
     };
+} // namespace vcl
 
+namespace {
     #include "VerticalOrientationData.cxx"
+
+    // These must match the values in the file included above.
+    enum class VerticalOrientation {
+        Upright            = 0,
+        Rotated            = 1,
+        TransformedUpright = 2,
+        TransformedRotated = 3
+    };
 
     VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
@@ -333,7 +343,7 @@ namespace vcl {
         return VerticalOrientation(nRet);
     }
 
-} // namespace vcl
+} // namespace
 
 std::shared_ptr<vcl::TextLayoutCache> CommonSalLayout::CreateTextLayoutCache(OUString const& rString) const
 {
@@ -509,7 +519,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
-                    VerticalOrientation aVo = vcl::GetVerticalOrientation(aChar, rArgs.maLanguageTag);
+                    VerticalOrientation aVo = GetVerticalOrientation(aChar, rArgs.maLanguageTag);
 
                     sal_UCS4 aVariationSelector = 0;
                     if (nIdx < nEndRunPos)
