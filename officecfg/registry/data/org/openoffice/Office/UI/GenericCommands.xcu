@@ -6090,7 +6090,7 @@
       </node>
       <node oor:name=".uno:FontDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Character...</value>
+          <value xml:lang="en-US">C~haracter...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
