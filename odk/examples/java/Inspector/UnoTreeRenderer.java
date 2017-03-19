@@ -68,7 +68,7 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
             m_oInterfaceIcon = new ImageIcon("images/interfaces_16.png");
             m_oContentIcon = new ImageIcon("images/content_16.png");
         } catch (RuntimeException e) {
-            System.out.println("Sorry, could not locate resourecs, treecell icons will not be displayed.");
+            System.out.println("Sorry, could not locate resources, treecell icons will not be displayed.");
         }
     }
 

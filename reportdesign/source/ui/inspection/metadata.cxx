@@ -101,7 +101,7 @@ namespace rptui
         static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*
-        DEF_INFO_?( propname and id,   resoure id,         help id,           flags ),
+        DEF_INFO_?( propname and id,   resource id,         help id,           flags ),
         */
              DEF_INFO_1( FORCENEWPAGE,                  FORCENEWPAGE,               FORCENEWPAGE,               Composeable )
             ,DEF_INFO_1( NEWROWORCOL,                   NEWROWORCOL,                NEWROWORCOL,                Composeable )

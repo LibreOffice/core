@@ -57,7 +57,7 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
-    // constructor/destuctor
+    // constructor/destructor
     GraphicPropertyPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

@@ -1105,13 +1105,13 @@
 			<xsl:element name="office:text">
 				<xsl:call-template name="GenerateTrackChanges"/>
 				<text:sequence-decls>
-					<xsl:call-template name="default_seqence_declaration"/>
+					<xsl:call-template name="default_sequence_declaration"/>
 				</text:sequence-decls>
 				<xsl:apply-templates/>
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>
-	<xsl:template name="default_seqence_declaration">
+	<xsl:template name="default_sequence_declaration">
 		<text:sequence-decl text:display-outline-level="0" text:name="Illustration">
 			</text:sequence-decl>
 		<text:sequence-decl text:display-outline-level="0" text:name="Table">

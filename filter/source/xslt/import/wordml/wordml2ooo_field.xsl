@@ -669,7 +669,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template name="default_seqence_declaration">
+    <xsl:template name="default_sequence_declaration">
         <text:sequence-decl text:display-outline-level="0" text:name="Illustration">
 			</text:sequence-decl>
         <text:sequence-decl text:display-outline-level="0" text:name="Table">

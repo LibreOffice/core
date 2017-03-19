@@ -199,11 +199,11 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
                               const OUString& rSetRef, sal_uInt16 nSubTyp,
-                              sal_uInt16 nSeqenceNo, sal_uLong nFormat )
+                              sal_uInt16 nSequenceNo, sal_uLong nFormat )
     : SwField( pFieldType, nFormat ),
       sSetRefName( rSetRef ),
       nSubType( nSubTyp ),
-      nSeqNo( nSeqenceNo )
+      nSeqNo( nSequenceNo )
 {
 }
 

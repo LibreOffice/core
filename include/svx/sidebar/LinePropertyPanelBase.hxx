@@ -73,7 +73,7 @@ public:
     void SetWidthIcon(int n);
     void SetWidthIcon();
 
-    // constructor/destuctor
+    // constructor/destructor
     LinePropertyPanelBase(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);

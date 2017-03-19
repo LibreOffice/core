@@ -497,7 +497,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D :
                 {
-                    // HiddenGeometryPrimitive2D; the default decomposition would return an empty seqence,
+                    // HiddenGeometryPrimitive2D; the default decomposition would return an empty sequence,
                     // so force this primitive to process its children directly if the switch is set
                     // (which is the default). Else, ignore invisible content
                     const primitive2d::HiddenGeometryPrimitive2D& rHiddenGeometry(static_cast< const primitive2d::HiddenGeometryPrimitive2D& >(rCandidate));

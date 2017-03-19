@@ -45,7 +45,7 @@ module com { module sun { module star { module resource {
 interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
 {
     /**
-        Resolves the passed ResoureID for the current locale. This
+        Resolves the passed ResourceID for the current locale. This
         locale is set during initialization of the object implementing
         this interface or - in case that also the interface
         com::sun::star::resource::XStringResourceManager
@@ -66,7 +66,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
         raises( com::sun::star::resource::MissingResourceException );
 
 
-    /** Resolves the passed ResoureID for a specific locale.
+    /** Resolves the passed ResourceID for a specific locale.
 
         It's not recommended to use this method to get the best
         performance as the implementation may be optimized for

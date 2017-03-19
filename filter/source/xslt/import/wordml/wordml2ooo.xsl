@@ -230,7 +230,7 @@
             <xsl:element name="office:text">
                 <!-- to add the sequence variable declaration at the beginning of the office:body  G.Y.-->
                 <text:sequence-decls>
-                    <xsl:call-template name="default_seqence_declaration"/>
+                    <xsl:call-template name="default_sequence_declaration"/>
                     <xsl:apply-templates select="/w:wordDocument/w:body//w:instrText[substring(normalize-space(text()),1,3) = 'SEQ' ] | /w:wordDocument/w:body//w:fldSimple[substring(normalize-space(@w:instr),1,3) = 'SEQ' ]  " mode="sequence_declare"/>
                 </text:sequence-decls>
                 <!--  add the user field variables declare for Docproperty fields importing G.Y.-->

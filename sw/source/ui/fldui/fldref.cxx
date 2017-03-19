@@ -977,7 +977,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 }
             }
         }
-        else                                // SeqenceFields
+        else                                // SequenceFields
         {
             // get fields for Seq-FieldType:
             SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(

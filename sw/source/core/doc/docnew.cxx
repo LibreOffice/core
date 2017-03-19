@@ -533,7 +533,7 @@ SwDoc::~SwDoc()
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // On load, SwDBManager::setEmbeddedName() may register a data source.
-    // If we have an embedded one, then sDataSoure points to the registered name, so revoke it here.
+    // If we have an embedded one, then sDataSource points to the registered name, so revoke it here.
     if (!mpDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
     {
         // Remove the revoke listener here first, so that we don't remove the data source from the document.

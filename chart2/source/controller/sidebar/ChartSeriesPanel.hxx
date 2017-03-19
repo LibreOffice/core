@@ -66,7 +66,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
-    // constructor/destuctor
+    // constructor/destructor
     ChartSeriesPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

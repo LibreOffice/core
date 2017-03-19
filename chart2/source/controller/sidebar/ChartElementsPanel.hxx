@@ -56,7 +56,7 @@ public:
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
 
-    // constructor/destuctor
+    // constructor/destructor
     ChartElementsPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
