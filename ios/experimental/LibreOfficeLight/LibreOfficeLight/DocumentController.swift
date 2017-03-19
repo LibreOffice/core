@@ -9,8 +9,87 @@ import UIKit
 
 
 
-class DocumentController: UIViewController
+class DocumentController: UIViewController, DocumentActionsControlDelegate
 {
+    @IBAction func returned(segue: UIStoryboardSegue)
+    {
+        print("I returned")
+    }
+
+
+
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.identifier == "showActions" {
+            let vc = segue.destination as! DocumentActions
+            vc.delegate = self
+
+            // JIX, TO BE CHANGED
+            vc.isDocActive = true
+        }
+    }
+
+
+
+    func actionNew(_ name : String)
+    {
+        // JIX Close active documents if any
+        // Start new (with default name
+
+        // Only interact with DocumentBrowser
+
+    }
+
+
+
+    func actionOpen()
+    {
+        // JIX Close active documents if any
+        // Present FileManager
+        performSegue(withIdentifier: "showFileManager", sender: self)
+
+        // start DocumentBrowser with new document
+    }
+
+
+
+    func actionDelete()
+    {
+        // JIX Close active documents if any
+        // Delete document
+    }
+
+
+
+    func actionSave()
+    {
+        // call save in DocumentBrowser
+
+    }
+
+
+
+    func actionSaveAs(_ name : String)
+    {
+        // call saveas in DocumentBrowser
+
+    }
+
+
+
+    func actionPDF()
+    {
+        // call savePDF in documentBrowser
+    }
+
+
+
+    func actionPrint()
+    {
+        // call print in DocumentBrowser
+    }
+
 
 
     override func viewDidLoad()
@@ -20,49 +99,105 @@ class DocumentController: UIViewController
     }
 
 
-    @IBAction func returned(segue: UIStoryboardSegue) {
-        print("I returned")
-    }
 
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
 
 
+
+// Protocol for action popover callback
+protocol DocumentActionsControlDelegate
+{
+    func actionNew(_ name : String)
+    func actionOpen()
+    func actionDelete()
+    func actionSave()
+    func actionSaveAs(_ name : String)
+    func actionPDF()
+    func actionPrint()
 }
 
 
 
 class DocumentActions: UITableViewController
 {
+    // Pointer to callback class
+    var delegate  : DocumentActionsControlDelegate?
+    var isDocActive : Bool = false
 
-    @IBAction func doOpen(_ sender: UIButton) {
+    // Calling class might enable/disable each button
+    @IBOutlet weak var buttonNew: UIButton!
+    @IBOutlet weak var buttonOpen: UIButton!
+    @IBOutlet weak var buttonDelete: UIButton!
+    @IBOutlet weak var buttonSave: UIButton!
+    @IBOutlet weak var buttonSaveAs: UIButton!
+    @IBOutlet weak var buttonPDF: UIButton!
+    @IBOutlet weak var buttonPrint: UIButton!
+
+
+    // Actions
+    @IBAction func doOpen(_ sender: UIButton)
+    {
+        delegate?.actionOpen()
+        dismiss(animated: false)
     }
 
-    @IBAction func doNew(_ sender: UIButton) {
+
+
+    @IBAction func doDelete(_ sender: UIButton)
+    {
+        delegate?.actionDelete()
+        dismiss(animated: false)
     }
 
-    @IBAction func doSave(_ sender: UIButton) {
+
+
+    @IBAction func doSave(_ sender: UIButton)
+    {
+        delegate?.actionSave()
+        dismiss(animated: false)
     }
 
-    @IBAction func doPDF(_ sender: UIButton) {
+
+
+    @IBAction func doPDF(_ sender: UIButton)
+    {
+        delegate?.actionPDF()
+        dismiss(animated: false)
     }
+
+
+
+    @IBAction func doPrint(_ sender: UIButton)
+    {
+        delegate?.actionPrint()
+        dismiss(animated: false)
+    }
+
+
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        buttonDelete.isEnabled = isDocActive
+        buttonSave.isEnabled = isDocActive
+        buttonSaveAs.isEnabled = isDocActive
+        buttonPDF.isEnabled = isDocActive
+        buttonPrint.isEnabled = isDocActive
     }
 
 
 
-    override func didReceiveMemoryWarning()
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        let vc = segue.destination as! setNameAction
+        vc.delegateDoc = self.delegate
+        vc.protocolActionToPerform = (segue.identifier == "showNew") ? 2 : 3
     }
-
-
 }
 
