@@ -239,7 +239,7 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
                 else
                 {
                     // the binary format
-                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), OUString( "com.sun.star.text.TextDocument"  ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
+                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), pFilter->GetServiceName()=="com.sun.star.text.TextDocument" ) == nPasswordHash );
                 }
             }
             else
@@ -718,7 +718,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                            aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
+                            aSet.Put( SfxStringItem( SID_TARGETNAME, "_blank" ) );
                             if ( pSavedOptions )
                                 aSet.Put( *pSavedOptions );
                             if ( pSavedReferer )
@@ -924,30 +924,18 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_CLEARHISTORY );
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
-    {
-        OUString aTmp(SvtResId(STR_UNDO).toString());
-        aTmp+= pShUndoMgr->GetUndoActionComment();
-        rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
-    }
+        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO).toString()+pShUndoMgr->GetUndoActionComment() ) );
     else
         rSet.DisableItem( SID_UNDO );
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
-    {
-        OUString aTmp(SvtResId(STR_REDO).toString());
-        aTmp += pShUndoMgr->GetRedoActionComment();
-        rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
-    }
+        rSet.Put( SfxStringItem( SID_REDO, SvtResId(STR_REDO).toString()+pShUndoMgr->GetRedoActionComment() ) );
     else
         rSet.DisableItem( SID_REDO );
+
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
-    if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
-         pShUndoMgr->CanRepeat(*pTarget) )
-    {
-        OUString aTmp(SvtResId(STR_REPEAT).toString());
-        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget);
-        rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
-    }
+    if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() && pShUndoMgr->CanRepeat(*pTarget) )
+        rSet.Put( SfxStringItem( SID_REPEAT, SvtResId(STR_REPEAT).toString()+pShUndoMgr->GetRepeatActionComment(*pTarget) ) );
     else
         rSet.DisableItem( SID_REPEAT );
 }
@@ -1171,7 +1159,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
                 InfoBarType aInfoBarType(InfoBarType::Info);
-                OUString sMessage("");
+                OUString sMessage;
 
                 switch (nSignatureState)
                 {
@@ -2370,9 +2358,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         else
             nEndPos++;
 
-        OUString aEndStr = rStr.copy( nEndPos );
-        rStr = rStr.copy( 0, nStartPos );
-        rStr += aEndStr;
+        rStr = rStr.copy( 0, nStartPos ) + rStr.copy( nEndPos );
     }
     if ( bEraseTrailingEmptyLines && nStartPos != -1 )
     {
@@ -2382,11 +2368,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
             n++;
 
         if ( n > nStartPos )
-        {
-            OUString aEndStr = rStr.copy( n );
-            rStr = rStr.copy( 0, nStartPos );
-            rStr += aEndStr;
-        }
+            rStr = rStr.copy( 0, nStartPos ) + rStr.copy( n );
     }
 }
 
@@ -2493,29 +2475,26 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 xLibCont,
                 css::uno::UNO_QUERY);
 
-        OUString sLib( aLibName );
         css::uno::Reference< css::container::XNameAccess > xLib;
-        if(xRoot->hasByName(sLib))
+        if(xRoot->hasByName(aLibName))
         {
             // library must be loaded
-            aTemp = xRoot->getByName(sLib);
-            xLibCont->loadLibrary(sLib);
+            aTemp = xRoot->getByName(aLibName);
+            xLibCont->loadLibrary(aLibName);
             aTemp >>= xLib;
         }
         else
         {
-            xLib.set( xLibCont->createLibrary(sLib), css::uno::UNO_QUERY);
+            xLib.set( xLibCont->createLibrary(aLibName), css::uno::UNO_QUERY);
         }
 
         // pack the macro as direct usable "sub" routine
         OUString sCode;
         OUStringBuffer sRoutine(10000);
-        OUString sMacroName( aMacroName );
         bool bReplace = false;
 
         // get module
-        OUString sModule( aModuleName );
-        if(xLib->hasByName(sModule))
+        if(xLib->hasByName(aModuleName))
         {
             if ( !aOUSource.isEmpty() )
             {
@@ -2523,7 +2502,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
             }
             else
             {
-                aTemp = xLib->getByName(sModule);
+                aTemp = xLib->getByName(aModuleName);
                 aTemp >>= sCode;
                 sRoutine.append( sCode );
             }
@@ -2533,7 +2512,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         // append new method
         sRoutine.append( "\nsub " );
-        sRoutine.append(sMacroName);
+        sRoutine.append(aMacroName);
         sRoutine.append( "\n" );
         sRoutine.append(sMacro);
         sRoutine.append( "\nend sub\n" );
@@ -2545,14 +2524,14 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
             css::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
                 css::uno::UNO_QUERY);
-            xModulCont->replaceByName(sModule,aTemp);
+            xModulCont->replaceByName(aModuleName,aTemp);
         }
         else
         {
             css::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
                 css::uno::UNO_QUERY);
-            xModulCont->insertByName(sModule,aTemp);
+            xModulCont->insertByName(aModuleName,aTemp);
         }
 
         // #i17355# update the Basic IDE
@@ -2586,7 +2565,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
-            OUString sProperty("DispatchRecorderSupplier");
+            const OUString sProperty("DispatchRecorderSupplier");
             css::uno::Reference< css::frame::XFrame > xFrame(
                     GetFrame().GetFrameInterface(),
                     css::uno::UNO_QUERY);
@@ -2667,7 +2646,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
             if ( xLayoutManager.is() )
             {
-                OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
+                const OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
                 // Evaluate parameter.
                 const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
                 bool bShow( true );
@@ -2783,12 +2762,11 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    OUString sProperty("DispatchRecorderSupplier");
                     css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
@@ -2808,12 +2786,11 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    OUString sProperty("DispatchRecorderSupplier");
                     css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
 
-                    css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
                     css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
@@ -2832,8 +2809,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         rSet.Put( SfxBoolItem( nWhich, false ));
                     else
                     {
-                        OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
-                        bool bShow = xLayoutManager->isElementVisible( aStatusbarResString );
+                        bool bShow = xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" );
                         rSet.Put( SfxBoolItem( nWhich, bShow ));
                     }
                     break;
