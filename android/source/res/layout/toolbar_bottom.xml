@@ -1,191 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar_bottom"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_alignParentBottom="true"
-    android:elevation="3dp"
     android:background="@color/toolbar_background"
+    android:elevation="3dp"
+    android:orientation="vertical"
     app:popupTheme="@style/LibreOfficeTheme.Toolbar"
     app:theme="@style/LibreOfficeTheme.Toolbar"
     tools:showIn="@layout/activity_main">
 
-        <LinearLayout
-            android:id="@+id/formatting_toolbar"
+    <LinearLayout
+        android:id="@+id/formatting_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TabHost
+            android:id="@+id/toolbarTabHost"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/button_bold"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_bold"/>
-
-                <ImageButton
-                    android:id="@+id/button_italic"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_italic"/>
-
-                <ImageButton
-                    android:id="@+id/button_underlined"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_underlined"/>
-
-                <ImageButton
-                    android:id="@+id/button_strikethrough"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_strikethrough"/>
-
-                <ImageButton
-                    android:id="@+id/button_insertFormatListNumbering"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_numbering"/>
-
-                <ImageButton
-                    android:id="@+id/button_insertFormatListBullets"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_bullets"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/button_align_left"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_align_left"/>
-
-                <ImageButton
-                    android:id="@+id/button_align_center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_align_center"/>
-
-                <ImageButton
-                    android:id="@+id/button_align_right"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_align_right"/>
-
-                <ImageButton
-                    android:id="@+id/button_align_justify"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/image_button_background"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:src="@drawable/ic_format_align_justify"/>
-            </LinearLayout>
-
-            <Spinner
-                android:id="@+id/font_name_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="50dip"/>
-
-            <Spinner
-                android:id="@+id/font_size_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="50dip"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/search_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/search_string"
+                <TabWidget
+                    android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-                <ImageButton
-                    android:id="@+id/button_search_up"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.6"
-                    android:background="@drawable/image_button_background"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_search_direction_down"/>
+                </TabWidget>
 
-                <ImageButton
-                    android:id="@+id/button_search_down"
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.6"
-                    android:background="@drawable/image_button_background"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_search_direction_up"/>
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/tab_character"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/toolbar_height">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.25"
+                                    android:orientation="horizontal">
+
+                                    <ImageButton
+                                        android:id="@+id/button_bold"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_bold" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_italic"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_italic" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_underlined"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_underlined" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_strikethrough"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_strikethrough" />
+
+                                </LinearLayout>
+
+                                <Spinner
+                                    android:id="@+id/font_name_spinner"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:minHeight="50dip" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <Spinner
+                                        android:id="@+id/font_size_spinner"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.80"
+                                        android:minHeight="50dip" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_font_shrink"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.10"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_shrink" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_font_grow"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.10"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_grow" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </ScrollView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab_paragraph"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/toolbar_height">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <ImageButton
+                                        android:id="@+id/button_align_left"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_align_left" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_align_center"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_align_center" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_align_right"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_align_right" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_align_justify"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_align_justify" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <ImageButton
+                                        android:id="@+id/button_insertFormatListNumbering"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_numbering" />
+
+                                    <ImageButton
+                                        android:id="@+id/button_insertFormatListBullets"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.25"
+                                        android:background="@drawable/image_button_background"
+                                        android:paddingBottom="12dp"
+                                        android:paddingTop="12dp"
+                                        android:src="@drawable/ic_format_bullets" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </ScrollView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab_insert"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/toolbar_height">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.25"
+                                android:orientation="horizontal">
+
+                                <ImageButton
+                                    android:id="@+id/button_insert_line"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.25"
+                                    android:background="@drawable/image_button_background"
+                                    android:paddingBottom="12dp"
+                                    android:paddingTop="12dp"
+                                    android:src="@drawable/ic_line" />
+
+                                <ImageButton
+                                    android:id="@+id/button_insert_rect"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.25"
+                                    android:background="@drawable/image_button_background"
+                                    android:paddingBottom="12dp"
+                                    android:paddingTop="12dp"
+                                    android:src="@drawable/ic_rect" />
+                            </LinearLayout>
+                        </ScrollView>
+                    </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
-        </LinearLayout>
+        </TabHost>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:inputType="" />
+
+        <ImageButton
+            android:id="@+id/button_search_up"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_search_direction_down" />
+
+        <ImageButton
+            android:id="@+id/button_search_down"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_search_direction_up" />
+    </LinearLayout>
 
 </LinearLayout>

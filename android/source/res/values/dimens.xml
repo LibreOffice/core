@@ -8,4 +8,5 @@
     <dimen name="file_icon_margin_end">8dp</dimen>
     <dimen name="list_item_margin">8dp</dimen>
     <dimen name="file_icon_width">32dp</dimen>
+    <dimen name="toolbar_height">256dp</dimen>
 </resources>

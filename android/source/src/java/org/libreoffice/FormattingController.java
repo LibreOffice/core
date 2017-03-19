@@ -15,7 +15,6 @@ import org.libreoffice.kit.Document;
         mContext = context;
 
         mContext.findViewById(R.id.button_insertFormatListBullets).setOnClickListener(this);
-
         mContext.findViewById(R.id.button_insertFormatListNumbering).setOnClickListener(this);
 
         mContext.findViewById(R.id.button_bold).setOnClickListener(this);
@@ -27,6 +26,12 @@ import org.libreoffice.kit.Document;
         mContext.findViewById(R.id.button_align_center).setOnClickListener(this);
         mContext.findViewById(R.id.button_align_right).setOnClickListener(this);
         mContext.findViewById(R.id.button_align_justify).setOnClickListener(this);
+
+        mContext.findViewById(R.id.button_insert_line).setOnClickListener(this);
+        mContext.findViewById(R.id.button_insert_rect).setOnClickListener(this);
+
+        mContext.findViewById(R.id.button_font_shrink).setOnClickListener(this);
+        mContext.findViewById(R.id.button_font_grow).setOnClickListener(this);
     }
 
     @Override
@@ -72,6 +77,18 @@ import org.libreoffice.kit.Document;
                 break;
             case R.id.button_align_justify:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:JustifyPara"));
+                break;
+            case R.id.button_insert_line:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Line"));
+                break;
+            case R.id.button_insert_rect:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Rect"));
+                break;
+            case R.id.button_font_shrink:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Shrink"));
+                break;
+            case R.id.button_font_grow:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Grow"));
                 break;
         }
     }
