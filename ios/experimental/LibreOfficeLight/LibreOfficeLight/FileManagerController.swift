@@ -1,477 +1,479 @@
 //
-//ThisfileispartoftheLibreOfficeproject.
+// This file is part of the LibreOffice project.
 //
-//ThisSourceCodeFormissubjecttothetermsoftheMozillaPublic
-//License,v.2.0.IfacopyoftheMPLwasnotdistributedwiththis
-//file,Youcanobtainoneathttp://mozilla.org/MPL/2.0/.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v.2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-importUIKit
+import UIKit
 
 
-privateclassFileStorage
+private class FileStorage
 {
-//housekeepingvariables
-privateletfilemgr:FileManager=FileManager.default
-privatevarstorageIsLocal:Bool=true
+    // house keeping variables
+    private let filemgr          : FileManager = FileManager.default
+    private var storageIsLocal   : Bool = true
 
-//Startpathforthe2storagelocations
-privateletbaseLocalDocPath:URL
-privateletbaseCloudDocPath:URL?
-privatevarcurrentDocPath:URL?{
-get{
-returnstorageIsLocal?baseLocalDocPath:baseCloudDocPath
-}
-}
+    // Start path for the 2 storage locations
+    private let baseLocalDocPath : URL
+    private let baseCloudDocPath : URL?
+    private var currentDocPath  : URL? {
+        get {
+            return storageIsLocal ? baseLocalDocPath : baseCloudDocPath
+        }
+    }
 
-//makeaccesstocurrentdirindependentofstorageselection
-privatevarlocalDir:URL
-privatevarcloudDir:URL?
-privatevarcurrentDir:URL{
-get{
-returnstorageIsLocal?localDir:cloudDir!
-}
-set(newDir){
-ifstorageIsLocal{
-localDir=newDir
-}else{
-cloudDir=newDir
-}
-}
-}
-
-
-
-//contentofcurrentdirectory
-varcurrentFileList:[String]=[]
-varcurrentDirList:[String]=[]
+    // make access to current dir independent of storage selection
+    private var localDir  : URL
+    private var cloudDir  : URL?
+    private var currentDir : URL {
+        get {
+            return storageIsLocal ? localDir : cloudDir!
+        }
+        set(newDir) {
+            if storageIsLocal {
+               localDir = newDir
+            } else {
+               cloudDir = newDir
+            }
+        }
+    }
 
 
 
-//Supportfunctions
-funciCloudEnabled()->Bool
-{
-returnfilemgr.ubiquityIdentityToken!=nil
-}
-
-
-funcisSubDirectory()->Bool
-{
-returncurrentDir!=currentDocPath
-}
+    // content of current directory
+    var currentFileList : [String] = []
+    var currentDirList  : [String] = []
 
 
 
-funcselectStorage(_doSwitch:Bool)->Bool
-{
-ifdoSwitch{
-storageIsLocal=!storageIsLocal
-buildFileList()
-}
-returnstorageIsLocal
-}
+    // Support functions
+    func iCloudEnabled() -> Bool
+    {
+        return filemgr.ubiquityIdentityToken != nil
+    }
+
+
+    func isSubDirectory() -> Bool
+    {
+        return currentDir != currentDocPath
+    }
 
 
 
-funcenterDirectory(_name:String)
-{
-//simpleadddirectory
-currentDir=currentDir.appendingPathComponent(name)
-filemgr.changeCurrentDirectoryPath(name)
-buildFileList()
-}
-
-
-funcleaveDirectory()
-{
-//stepupforactivestorage,andonlyifnotinroot
-ifisSubDirectory(){
-currentDir=currentDir.deletingLastPathComponent()
-buildFileList()
-}
-}
+    func selectStorage(_ doSwitch : Bool) -> Bool
+    {
+        if doSwitch {
+            storageIsLocal = !storageIsLocal
+            buildFileList()
+        }
+        return storageIsLocal
+    }
 
 
 
-funccreateDirectory(_name:String)
-{
-letnewDir=currentDir.appendingPathComponent(name)
-try!filemgr.createDirectory(at:newDir,withIntermediateDirectories:true,attributes:nil)
-currentDir=currentDir.appendingPathComponent(name)
-buildFileList()
-}
+    func enterDirectory(_ name: String)
+    {
+        // simple add directory
+        currentDir = currentDir.appendingPathComponent(name)
+        filemgr.changeCurrentDirectoryPath(name)
+        buildFileList()
+    }
+
+
+    func leaveDirectory()
+    {
+        // step up for active storage, and only if not in root
+        if isSubDirectory() {
+            currentDir = currentDir.deletingLastPathComponent()
+            buildFileList()
+        }
+    }
 
 
 
-funcdeleteFileDirectory(_name:String)
-{
-letdelDir=currentDir.appendingPathComponent(name)
-try!filemgr.removeItem(at:delDir)
-buildFileList()
-}
+    func createDirectory(_ name: String)
+    {
+        let newDir = currentDir.appendingPathComponent(name)
+        try! filemgr.createDirectory(at: newDir, withIntermediateDirectories: true, attributes: nil)
+        currentDir = currentDir.appendingPathComponent(name)
+        buildFileList()
+    }
 
 
 
-funcgetFileURL(_name:String)->URL
-{
-returncurrentDir.appendingPathComponent(name)
-}
+    func deleteFileDirectory(_ name: String)
+    {
+        let delDir = currentDir.appendingPathComponent(name)
+        try! filemgr.removeItem(at: delDir)
+        buildFileList()
+    }
 
 
 
-funccopyFile(_name:String)
-{
-try!filemgr.copyItem(at:currentDir.appendingPathComponent(name),
-to:(storageIsLocal?cloudDir!:localDir).appendingPathComponent(name))
-}
+    func getFileURL(_ name: String) -> URL
+    {
+        return currentDir.appendingPathComponent(name)
+    }
 
 
 
-funcmoveFile(_name:String)
-{
-try!filemgr.moveItem(at:currentDir.appendingPathComponent(name),
-to:(storageIsLocal?localDir:cloudDir!).appendingPathComponent(name))
-buildFileList()
-}
+    func copyFile(_ name: String)
+    {
+        try! filemgr.copyItem(at: currentDir.appendingPathComponent(name),
+                              to: (storageIsLocal ? cloudDir! : localDir).appendingPathComponent(name))
+    }
 
 
 
-funcrenameFile(_oldName:String,_newName:String)
-{
-try!filemgr.moveItem(at:currentDir.appendingPathComponent(oldName),
-to:currentDir.appendingPathComponent(newName))
-buildFileList()
-}
+    func moveFile(_ name: String)
+    {
+        try! filemgr.moveItem(at: currentDir.appendingPathComponent(name),
+                              to: (storageIsLocal ? localDir : cloudDir!).appendingPathComponent(name))
+        buildFileList()
+    }
 
 
 
-privatefuncbuildFileList()
-{
-currentDirList=[]
-currentFileList=[]
-letrawFileList=try!filemgr.contentsOfDirectory(at:currentDir,
-includingPropertiesForKeys:[URLResourceKey.isDirectoryKey])
-forrawFileinrawFileList{
-varisDir:ObjCBool=false
-filemgr.fileExists(atPath:rawFile.path,isDirectory:&isDir)
-ifisDir.boolValue{
-currentDirList.append(rawFile.lastPathComponent)
-}else{
-currentFileList.append(rawFile.lastPathComponent)
-}
-}
-}
+    func renameFile(_ oldName: String, _ newName: String)
+    {
+        try! filemgr.moveItem(at: currentDir.appendingPathComponent(oldName),
+                              to: currentDir.appendingPathComponent(newName))
+        buildFileList()
+    }
 
 
 
-init()
-{
-baseLocalDocPath=filemgr.urls(for:.documentDirectory,in:.userDomainMask)[0]
-localDir=baseLocalDocPath
-
-letcloudUrl=filemgr.url(forUbiquityContainerIdentifier:nil)
-baseCloudDocPath=(cloudUrl==nil)?nil:cloudUrl?.appendingPathComponent("Documents")
-cloudDir=baseCloudDocPath
-buildFileList()
-}
-}
-
-
-
-classFileManagerController:UITableViewController,actionsControlDelegate
-
-{
-//Housekeepingvariables
-privatevarfileData=FileStorage()
-privatevarselectedRow:IndexPath?
+    private func buildFileList()
+    {
+        currentDirList = []
+        currentFileList = []
+        let rawFileList = try! filemgr.contentsOfDirectory(at: currentDir,
+                                                           includingPropertiesForKeys: [URLResourceKey.isDirectoryKey])
+        for rawFile in rawFileList {
+            var isDir: ObjCBool = false
+            filemgr.fileExists(atPath: rawFile.path, isDirectory: &isDir)
+            if isDir.boolValue {
+                currentDirList.append(rawFile.lastPathComponent)
+            } else {
+                currentFileList.append(rawFile.lastPathComponent)
+            }
+        }
+    }
 
 
 
-//selectStorageisonlyenabledwheniCloudisactive
-@IBOutletweakvarbuttonSelectStorage:UIBarButtonItem!
-overridefuncviewDidLoad()
-{
-super.viewDidLoad()
-buttonSelectStorage.isEnabled=fileData.iCloudEnabled()
+    init()
+    {
+        baseLocalDocPath = filemgr.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        localDir         = baseLocalDocPath
+
+        let cloudUrl     = filemgr.url(forUbiquityContainerIdentifier: nil)
+        baseCloudDocPath = (cloudUrl == nil) ? nil : cloudUrl?.appendingPathComponent("Documents")
+        cloudDir         = baseCloudDocPath
+        buildFileList()
+    }
 }
 
 
 
-//Tooglebetweenlocalandcloudstorage
-@IBActionfuncdoSelectStorage(_sender:UIBarButtonItem)
-{
-sender.image=fileData.selectStorage(true)?#imageLiteral(resourceName:"iCloudDrive"):#imageLiteral(resourceName:"iPhone")
-reloadData()
-self.presentedViewController?.dismiss(animated:true,completion:nil)
-}
-
-
-
-//Laststopbeforedisplayingpopover
-overridefuncprepare(forsegue:UIStoryboardSegue,sender:Any?)
-{
-ifsegue.identifier=="showActions"{
-letvc=segue.destinationas!FileManagerActions
-vc.delegate=self
-vc.inFileSelect=(selectedRow!=nil)
-vc.inSubDirectory=fileData.isSubDirectory()
-vc.useCloud=fileData.iCloudEnabled()
-}
-}
-
-
-
-funcactionOpen()
-{
-ifselectedRow!=nil{
-letcurrentCell=tableView.cellForRow(at:selectedRow!)as!FileManagerCell
-ifcurrentCell.isDirectory{
-fileData.enterDirectory(currentCell.fileName)
-reloadData()
-}else{
-//JIXdelegatetoDocument
-}
-}
-}
-
-
-
-funcactionDelete()
-{
-ifselectedRow!=nil{
-letcurrentCell=self.tableView.cellForRow(at:selectedRow!)as!FileManagerCell
-fileData.deleteFileDirectory(currentCell.fileName)
-reloadData()
-}
-}
-
-
-
-funcactionRename(_name:String)
-{
-ifselectedRow!=nil{
-letcurrentCell=tableView.cellForRow(at:selectedRow!)as!FileManagerCell
-fileData.renameFile(currentCell.fileName,name)
-reloadData()
-}
-}
-
-
-
-funcactionUploadDownload()
-{
-ifselectedRow!=nil{
-letcurrentCell=self.tableView.cellForRow(at:selectedRow!)as!FileManagerCell
-fileData.copyFile(currentCell.fileName)
-reloadData()
-}
-}
-
-
-
-funcactionLevelUp()
-{
-fileData.leaveDirectory()
-reloadData()
-}
-
-
-
-funcactionCreateDirectory(_name:String)
-{
-fileData.createDirectory(name)
-reloadData()
-}
-
-
-
-//Tablehandlingfunctions
-overridefuncnumberOfSections(intableView:UITableView)->Int
-{
-return1
-}
-
-
-
-overridefunctableView(_tableView:UITableView,numberOfRowsInSectionsection:Int)->Int
-{
-returnfileData.currentDirList.count+fileData.currentFileList.count
-}
-
-
-
-overridefunctableView(_tableView:UITableView,cellForRowAtindexPath:IndexPath)->UITableViewCell
-{
-letcell=self.tableView.dequeueReusableCell(withIdentifier:"fileEntry",for:indexPath)as!FileManagerCell
-letrow=indexPath.row
-
-ifrow<fileData.currentDirList.count{
-cell.fileName=fileData.currentDirList[row]
-cell.fileLabel.text=cell.fileName+"/"
-cell.isDirectory=true
-}else{
-letinx=row-fileData.currentDirList.count
-cell.fileName=fileData.currentFileList[inx]
-cell.fileLabel.text=cell.fileName
-cell.isDirectory=false
-}
-returncell
-}
-
-
-
-//Selectarow(file)andshowactions
-overridefunctableView(_tableView:UITableView,didSelectRowAtindexPath:IndexPath)
-{
-selectedRow=indexPath
-performSegue(withIdentifier:"showActions",sender:self)
-}
-
-
-
-//Supportfunction
-funcreloadData()
-{
-selectedRow=nil
-tableView.reloadData()
-}
-
-}
-
-
-
-//Spaceholderforextrainformationneededtodotherightthingforeachaction
-classFileManagerCell:UITableViewCell{
-
-@IBOutletweakvarfileLabel:UILabel!
-varisDirectory:Bool=false
-varfileName:String=""
-}
-
-
-
-//Protocolforactionpopovercallback
-protocolactionsControlDelegate
-{
-funcactionOpen()
-funcactionDelete()
-funcactionRename(_name:String)
-funcactionUploadDownload()
-funcactionLevelUp()
-funcactionCreateDirectory(_name:String)
-}
-
-
-
-//Actionpopoverdialog
-classFileManagerActions:UITableViewController
+class FileManagerController : UITableViewController, FileActionsControlDelegate
 
 {
-//Pointertocallbackclass
-vardelegate:actionsControlDelegate?
-varinSubDirectory:Bool=false
-varinFileSelect:Bool=false
-varuseCloud:Bool=false
-
-//Callingclassmightenable/disableeachbutton
-@IBOutletweakvarbuttonUploadDownload:UIButton!
-@IBOutletweakvarbuttonDelete:UIButton!
-@IBOutletweakvarbuttonOpen:UIButton!
-@IBOutletweakvarbuttonRename:UIButton!
-@IBOutletweakvarbuttonLevelUp:UIButton!
+    // Housekeeping variables
+    private var fileData = FileStorage()
+    private var selectedRow : IndexPath?
 
 
-//Actions
-@IBActionfuncdoOpen(_sender:UIButton)
-{
-delegate?.actionOpen()
-dismiss(animated:false)
+
+    // selectStorage is only enabled when iCloud is active
+    @IBOutlet weak var buttonSelectStorage: UIBarButtonItem!
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        buttonSelectStorage.isEnabled = fileData.iCloudEnabled()
+    }
+
+
+
+    // Toogle between local and cloud storage
+    @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
+    {
+        sender.image = fileData.selectStorage(true) ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
+        reloadData()
+        self.presentedViewController?.dismiss(animated: true, completion: nil)
+    }
+
+
+
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.identifier == "showActions" {
+            let vc = segue.destination as! FileManagerActions
+            vc.delegate = self
+            vc.inFileSelect = (selectedRow != nil)
+            vc.inSubDirectory = fileData.isSubDirectory()
+            vc.useCloud = fileData.iCloudEnabled()
+        }
+    }
+
+
+
+    func actionOpen()
+    {
+        if selectedRow != nil {
+            let currentCell = tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            if currentCell.isDirectory {
+                fileData.enterDirectory(currentCell.fileName)
+                reloadData()
+            } else {
+                // JIX delegate to Document
+            }
+        }
+    }
+
+
+
+    func actionDelete()
+    {
+        if selectedRow != nil {
+            let currentCell = self.tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.deleteFileDirectory(currentCell.fileName)
+            reloadData()
+        }
+    }
+
+
+
+    func actionRename(_ name : String)
+    {
+        if selectedRow != nil {
+            let currentCell = tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.renameFile(currentCell.fileName, name)
+            reloadData()
+        }
+    }
+
+
+
+    func actionUploadDownload()
+    {
+        if selectedRow != nil {
+            let currentCell = self.tableView.cellForRow(at: selectedRow!) as! FileManagerCell
+            fileData.copyFile(currentCell.fileName)
+            reloadData()
+        }
+    }
+
+
+
+    func actionLevelUp()
+    {
+        fileData.leaveDirectory()
+        reloadData()
+    }
+
+
+
+    func actionCreateDirectory(_ name : String)
+    {
+        fileData.createDirectory(name)
+        reloadData()
+    }
+
+
+
+    // Table handling functions
+    override func numberOfSections(in tableView: UITableView) -> Int
+    {
+        return 1
+    }
+
+
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return fileData.currentDirList.count + fileData.currentFileList.count
+    }
+
+
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "fileEntry", for: indexPath) as! FileManagerCell
+        let row  = indexPath.row
+
+        if row < fileData.currentDirList.count {
+            cell.fileName = fileData.currentDirList[row]
+            cell.fileLabel.text = cell.fileName + "/"
+            cell.isDirectory  = true
+        } else {
+            let inx = row - fileData.currentDirList.count
+            cell.fileName = fileData.currentFileList[inx]
+            cell.fileLabel.text = cell.fileName
+            cell.isDirectory  = false
+        }
+        return cell
+    }
+
+
+
+    // Select a row (file) and show actions
+    override  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        selectedRow = indexPath
+        performSegue(withIdentifier: "showActions", sender: self)
+    }
+
+
+
+    // Support function
+    func reloadData()
+    {
+        selectedRow = nil
+        tableView.reloadData()
+    }
+
 }
 
 
 
-@IBActionfuncdoDelete(_sender:UIButton)
-{
-delegate?.actionDelete()
-dismiss(animated:false)
+// Space holder for extra information needed to do the right thing for each action
+class FileManagerCell: UITableViewCell {
+
+    @IBOutlet weak var fileLabel: UILabel!
+    var isDirectory : Bool = false
+    var fileName    : String = ""
 }
 
 
 
-@IBActionfuncdoUploadDownload(_sender:UIButton)
+// Protocol for action popover callback
+protocol FileActionsControlDelegate
 {
-delegate?.actionUploadDownload()
-dismiss(animated:false)
+    func actionOpen()
+    func actionDelete()
+    func actionRename(_ name : String)
+    func actionUploadDownload()
+    func actionLevelUp()
+    func actionCreateDirectory(_ name : String)
 }
 
 
 
-@IBActionfuncdoLevelUp(_sender:UIButton)
+// Action popover dialog
+class FileManagerActions : UITableViewController
+
 {
-delegate?.actionLevelUp()
-dismiss(animated:false)
+    // Pointer to callback class
+    var delegate : FileActionsControlDelegate?
+    var inSubDirectory : Bool = false
+    var inFileSelect   : Bool = false
+    var useCloud       : Bool = false
+
+    // Calling class might enable/disable each button
+    @IBOutlet weak var buttonUploadDownload: UIButton!
+    @IBOutlet weak var buttonDelete: UIButton!
+    @IBOutlet weak var buttonOpen: UIButton!
+    @IBOutlet weak var buttonRename: UIButton!
+    @IBOutlet weak var buttonLevelUp: UIButton!
+
+
+    // Actions
+    @IBAction func doOpen(_ sender: UIButton)
+    {
+        delegate?.actionOpen()
+        dismiss(animated: false)
+    }
+
+
+
+    @IBAction func doDelete(_ sender: UIButton)
+    {
+        delegate?.actionDelete()
+        dismiss(animated: false)
+    }
+
+
+
+    @IBAction func doUploadDownload(_ sender: UIButton)
+    {
+        delegate?.actionUploadDownload()
+        dismiss(animated: false)
+    }
+
+
+
+    @IBAction func doLevelUp(_ sender: UIButton)
+    {
+        delegate?.actionLevelUp()
+        dismiss(animated: false)
+    }
+
+
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        buttonLevelUp.isEnabled = inSubDirectory
+        buttonDelete.isEnabled = inFileSelect
+        buttonOpen.isEnabled = inFileSelect
+        buttonRename.isEnabled = inFileSelect
+        buttonUploadDownload.isEnabled = (inFileSelect && useCloud)
+    }
+
+
+
+    // Last stop before displaying popover
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        let vc = segue.destination as! setNameAction
+        vc.delegateFile = self.delegate
+        vc.protocolActionToPerform = (segue.identifier == "showRename") ? 0 : 1
+    }
 }
 
 
 
-overridefuncviewDidLoad()
-{
-super.viewDidLoad()
-buttonLevelUp.isEnabled=inSubDirectory
-buttonDelete.isEnabled=inFileSelect
-buttonOpen.isEnabled=inFileSelect
-buttonRename.isEnabled=inFileSelect
-buttonUploadDownload.isEnabled=(inFileSelect&&useCloud)
-}
-
-
-
-//Laststopbeforedisplayingpopover
-overridefuncprepare(forsegue:UIStoryboardSegue,sender:Any?)
-{
-letvc=segue.destinationas!setNameAction
-vc.delegate=self.delegate
-vc.protocolActionToPerform=(segue.identifier=="showRename")?0:1
-}
-}
-
-
-
-//Actionpopoverdialog
-classsetNameAction:UIViewController
+// Action popover dialog
+class setNameAction : UIViewController
 
 {
-//Pointertocallbackclass
-vardelegate:actionsControlDelegate?
-varprotocolActionToPerform:Int=-1
+    // Pointer to callback class
+    var delegateFile : FileActionsControlDelegate?
+    var delegateDoc  : DocumentActionsControlDelegate?
+    var protocolActionToPerform : Int = -1
 
 
-//Callingclassmightenable/disableeachbutton
-@IBOutletweakvareditText:UITextField!
-
-
-
-@IBActionfuncdoOK(_sender:UIButton)
-{
-print("checking\(protocolActionToPerform)")
-switchprotocolActionToPerform
-{
-case0:
-print("runrenameDir")
-delegate?.actionRename(editText.text!)
-case1:
-print("runcreateDir")
-delegate?.actionCreateDirectory(editText.text!)
-default:
-break
-}
-dismiss(animated:false)
-}
+    // Calling class might enable/disable each button
+    @IBOutlet weak var editText: UITextField!
 
 
 
-overridefuncviewDidLoad()
-{
-super.viewDidLoad()
-}
+    @IBAction func doOK(_ sender: UIButton)
+    {
+        switch protocolActionToPerform
+        {
+            case 0: // renameDir
+                delegateFile?.actionRename(editText.text!)
+            case 1: // createDir
+                delegateFile?.actionCreateDirectory(editText.text!)
+            case 2: // New
+                delegateDoc?.actionNew(editText.text!)
+            case 3: // SaveAs
+                delegateDoc?.actionSaveAs(editText.text!)
+            default:
+                break
+        }
+        dismiss(animated: false)
+    }
+
+
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+    }
 }
 
