@@ -240,13 +240,12 @@ bool EmbeddedObjectContainer::HasEmbeddedObjects()
 bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 {
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
-    if ( aIt == pImpl->maObjectContainer.end() )
-    {
-        uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
-        return xAccess->hasByName(rName);
-    }
-    else
+    if (aIt != pImpl->maObjectContainer.end())
         return true;
+    uno::Reference <container::XNameAccess> xAccess(pImpl->mxStorage, uno::UNO_QUERY);
+    if (!xAccess.is())
+        return false;
+    return xAccess->hasByName(rName);
 }
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
