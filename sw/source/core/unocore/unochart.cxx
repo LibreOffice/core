@@ -2345,7 +2345,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             //Actually, the former design of SwClient will disconnect itself
             //from the notification list in its destructor.
 
-            //But the SwCharDataSeqence won't be destructed but disposed in code
+            //But the SwCharDataSequence won't be destructed but disposed in code
             //(the data member SwChartDataSequence::bDisposed will be set to
             //TRUE), the relationship between client and modification is not
             //released.

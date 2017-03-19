@@ -82,7 +82,7 @@ public:
     void SetGradient (const XGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex() const;
 
-    // constructor/destuctor
+    // constructor/destructor
     AreaPropertyPanelBase(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);

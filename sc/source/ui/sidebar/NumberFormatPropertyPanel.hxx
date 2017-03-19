@@ -56,7 +56,7 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
-    // constructor/destuctor
+    // constructor/destructor
     NumberFormatPropertyPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

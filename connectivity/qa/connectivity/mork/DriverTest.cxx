@@ -89,7 +89,7 @@ void MorkDriverTest::setUp()
     m_xConnection = xDriver->connect(url, info);
     if (!m_xConnection.is())
     {
-        CPPUNIT_ASSERT_MESSAGE("cannot connect to address book data soure!", m_xConnection.is());
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to address book data source!", m_xConnection.is());
     }
 }
 

@@ -115,7 +115,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         // docking and further functions
         bool dockToolbar( const OUString& rResourceURL, css::ui::DockingArea eDockingArea, const css::awt::Point& aPos );
         bool dockAllToolbars();
-        bool floatToolbar( const OUString& rResoureURL );
+        bool floatToolbar( const OUString& rResourceURL );
         bool lockToolbar( const OUString& rResourceURL );
         bool unlockToolbar( const OUString& rResourceURL );
         void setToolbarPos( const OUString& rResourceURL, const css::awt::Point& aPos );

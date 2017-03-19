@@ -60,7 +60,7 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
-    // constructor/destuctor
+    // constructor/destructor
     AlignmentPropertyPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

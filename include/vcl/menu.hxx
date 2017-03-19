@@ -451,7 +451,7 @@ public:
     //  - by default a menubar is displayable
     //  - if a menubar is not displayable, its MenuBarWindow will never be shown
     //    and it will be hidden if it was visible before
-    //  - note: if a menubar is diplayable, this does not necessarily mean that it is currently visible
+    //  - note: if a menubar is displayable, this does not necessarily mean that it is currently visible
     void SetDisplayable( bool bDisplayable );
     bool IsDisplayable() const                       { return mbDisplayable; }
 

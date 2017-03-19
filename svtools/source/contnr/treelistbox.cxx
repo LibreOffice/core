@@ -491,7 +491,7 @@ TriState SvTreeListBox::NotifyMoving(
     SvTreeListEntry*& rpNewParent,   // new target parent
     sal_uLong&        rNewChildPos)  // position in childlist of target parent
 {
-    DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?");
+    DBG_ASSERT(pEntry,"NotifyMoving:SourceEntry?");
     if( !pTarget )
     {
         rpNewParent = nullptr;

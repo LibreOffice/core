@@ -107,7 +107,7 @@ namespace pcr
         static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*
-        DEF_INFO_?( propname and id,   resoure id,         pos, help id,           flags ),
+        DEF_INFO_?( propname and id,   resource id,         pos, help id,           flags ),
         */
         DEF_INFO_3( NAME,              NAME,                 0, NAME,              FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( TITLE,             TITLE,                1, TITLE,             FORM_VISIBLE, DIALOG_VISIBLE ),

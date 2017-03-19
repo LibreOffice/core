@@ -241,7 +241,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(
         DataSeriesHelper::getDataSource( comphelper::containerToSequence(aSeriesVector) ) );
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeqences( xSeriesSource->getDataSequences() );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
@@ -250,11 +250,11 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
         aResultVector.push_back( xXValues );
 
     //add all other sequences now without x-values
-    for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
+    for( sal_Int32 nN=0; nN<aDataSequences.getLength(); nN++ )
     {
-        OUString aRole = DataSeriesHelper::getRole(aDataSeqences[nN]);
+        OUString aRole = DataSeriesHelper::getRole(aDataSequences[nN]);
         if( aRole != "values-x" )
-            aResultVector.push_back( aDataSeqences[nN] );
+            aResultVector.push_back( aDataSequences[nN] );
     }
 
     return new DataSource( comphelper::containerToSequence(aResultVector) );

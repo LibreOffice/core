@@ -221,7 +221,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndepende
 {
     // This is the default implementation and should never be called (see header). If this is called,
     // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
-    // providing a seqence of primitives -> which cannot be correct.
+    // providing a sequence of primitives -> which cannot be correct.
     // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
     // hairline polygon with a default size of (1000, 1000, 5000, 3000)
     OSL_FAIL("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");

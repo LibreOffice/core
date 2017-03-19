@@ -56,7 +56,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
-    // constructor/destuctor
+    // constructor/destructor
     ChartAreaPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

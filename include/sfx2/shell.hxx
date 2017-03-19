@@ -310,7 +310,7 @@ public:
         On the given <SfxUndoManager> is automatically the current
         Max-Undo-Action-Count setting set form the options.
 
-        'pNewUndoMgr' must exist until the Destuctor of SfxShell instance is called
+        'pNewUndoMgr' must exist until the Destructor of SfxShell instance is called
         or until the next 'SetUndoManager()'.
         */
     void                        SetUndoManager( ::svl::IUndoManager *pNewUndoMgr );
