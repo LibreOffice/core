@@ -2404,7 +2404,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
 
             bool bImport = false;
-            if (nNumElemVert)
+            if (nNumElemVert && nElemSizeVert)
             {
                 //sanity check that the stream is long enough to fulfill nNumElemVert * nElemSizeVert;
                 bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
