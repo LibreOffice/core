@@ -11,7 +11,7 @@ $(eval $(call gb_JunitTest_JunitTest,connectivity_complex))
 
 $(eval $(call gb_JunitTest_set_defs,connectivity_complex,\
 	$$(DEFS) \
-	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/connectivity/qa/scenearios.sce \
+	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/connectivity/qa/scenarios.sce \
 ))
 
 $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
