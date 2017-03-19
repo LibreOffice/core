@@ -48,10 +48,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Ure,
-            gid_Brand_Dir_Share_Ure_Etc,
             gid_Brand_Dir_Share_Ure_Share,
-            gid_Brand_Dir_Share_Glade,
-            gid_Brand_Dir_Share_Labels,
             gid_Brand_Dir_Share_Registry,
             gid_Brand_Dir_Share_Xdg);
     Files = (auto_brand_ALL,
@@ -96,15 +93,6 @@ Directory gid_Brand_Dir_Program
 #endif
 End
 
-Directory gid_Brand_Dir_Program_Shell
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_Share;
-#else
-    ParentID = gid_Brand_Dir_Program;
-#endif
-    DosName = "shell";
-End
-
 Directory gid_Brand_Dir_Readme
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents_Resources;
@@ -128,271 +116,6 @@ Directory gid_Brand_Dir_Share_Config
     DosName = "config";
 End
 
-Directory gid_Brand_Dir_Share_Extensions
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "extensions";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Af
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-af";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_An
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-an";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ar
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ar";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Be
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-be";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Bg
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-bg";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Bn
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-bn";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Bo
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-bo";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Br
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-br";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Bs
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-bs";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ca
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ca";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Cs
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-cs";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Da
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-da";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_De
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_En
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-en";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_El
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-el";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Es
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-es";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Et
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-et";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Fr
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-fr";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Gd
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-gd";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Gl
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-gl";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Gu
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-gu";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_He
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-he";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Hi
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-hi";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Hu
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-hu";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Hr
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-hr";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Is
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-is";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_It
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-it";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Kmr_Latn
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-kmr-Latn";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Lo
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-lo";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Lt
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-lt";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Lv
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-lv";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ne
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ne";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Nl
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-nl";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_No
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-no";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Oc
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-oc";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Pl
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-pl";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Br
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-pt-BR";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-pt-PT";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ro
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ro";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Ru
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-ru";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Si
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-si";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Sk
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-sk";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Sl
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-sl";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Sr
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-sr";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Sv
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-sv";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Sw
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-sw";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Te
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-te";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Th
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-th";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Uk
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-uk";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Vi
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-vi";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_Zu
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-zu";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Oooimprovement
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "OOoImprovement";
-End
-
 Directory gid_Brand_Dir_Share_Uno_Packages
     ParentID = gid_Brand_Dir_Share;
     DosName = "uno_packages";
@@ -411,26 +134,11 @@ Directory gid_Brand_Dir_Share_Uno_Packages_Cache_Uno_Packages
     Styles = (CREATE);
 End
 
-Directory gid_Brand_Dir_Share_Glade
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "glade";
-End
-
-Directory gid_Brand_Dir_Share_Labels
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "labels";
-End
-
 #if defined MACOSX
 
 Directory gid_Brand_Dir_Share_Ure
     ParentID = gid_Brand_Dir_Share;
     DosName = "ure";
-End
-
-Directory gid_Brand_Dir_Share_Ure_Etc
-    ParentID = gid_Brand_Dir_Share_Ure;
-    DosName = "etc";
 End
 
 Directory gid_Brand_Dir_Share_Ure_Share
