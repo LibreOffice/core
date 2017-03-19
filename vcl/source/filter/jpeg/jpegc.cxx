@@ -171,7 +171,14 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 J_COLOR_SPACE best_out_color_space = JCS_RGB;
                 ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
                 ScanlineFormat eFinalFormat = pAccess->GetScanlineFormat();
-                if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
+
+                if (bGray)
+                {
+                    best_out_color_space = JCS_GRAYSCALE;
+                    eScanlineFormat = ScanlineFormat::N8BitPal;
+                    nPixelSize = 1;
+                }
+                else if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
                 {
                     best_out_color_space = JCS_EXT_BGRA;
                     eScanlineFormat = eFinalFormat;
@@ -190,42 +197,22 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                     nPixelSize = 4;
                 }
 
-                if ( cinfo.jpeg_color_space == JCS_YCbCr )
-                    cinfo.out_color_space = best_out_color_space;
-                else if ( cinfo.jpeg_color_space == JCS_YCCK )
+                if (cinfo.jpeg_color_space == JCS_YCCK)
                     cinfo.out_color_space = JCS_CMYK;
 
-                if (cinfo.out_color_space != JCS_CMYK &&
-                    cinfo.out_color_space != JCS_GRAYSCALE &&
-                    cinfo.out_color_space != best_out_color_space)
-                {
-                    SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to :" << best_out_color_space << " gray ");
+                if (cinfo.out_color_space != JCS_CMYK)
                     cinfo.out_color_space = best_out_color_space;
-                }
 
                 jpeg_start_decompress(&cinfo);
 
                 JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
-                std::vector<sal_uInt8> pScanLineBuffer(nWidth * (bGray ? 1 : nPixelSize));
+                std::vector<sal_uInt8> pScanLineBuffer(nWidth * nPixelSize);
                 std::vector<sal_uInt8> pCYMKBuffer;
 
                 if (cinfo.out_color_space == JCS_CMYK)
                 {
                     pCYMKBuffer.resize(nWidth * 4);
-                }
-
-                std::unique_ptr<BitmapColor[]> pCols;
-
-                if (bGray)
-                {
-                    pCols.reset(new BitmapColor[256]);
-
-                    for (sal_uInt16 n = 0; n < 256; n++)
-                    {
-                        const sal_uInt8 cGray = n;
-                        pCols[n] = pAccess->GetBestMatchingColor(BitmapColor(cGray, cGray, cGray));
-                    }
                 }
 
                 for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
@@ -235,15 +222,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                     sal_uInt8* p = (cinfo.out_color_space == JCS_CMYK) ? pCYMKBuffer.data() : pScanLineBuffer.data();
                     jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
 
-                    if (bGray)
-                    {
-                        for (long x = 0; x < nWidth; ++x)
-                        {
-                            sal_uInt8 nColorGray = pScanLineBuffer[x];
-                            pAccess->SetPixel(yIndex, x, pCols[nColorGray]);
-                        }
-                    }
-                    else if (cinfo.out_color_space == JCS_CMYK)
+                    if (cinfo.out_color_space == JCS_CMYK)
                     {
                         // convert CMYK to RGB
                         for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
