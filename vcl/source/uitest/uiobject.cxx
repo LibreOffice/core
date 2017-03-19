@@ -69,6 +69,11 @@ OUString UIObject::dumpHierarchy() const
     return OUString();
 }
 
+OUString UIObject::get_action(VclEventId /*nEvent*/) const
+{
+    return OUString();
+}
+
 namespace {
 
 bool isDialogWindow(vcl::Window* pWindow)
@@ -469,6 +474,31 @@ OUString WindowUIObject::dumpHierarchy() const
     std::unique_ptr<UIObject> pParentWrapper =
         pDialogParent->GetUITestFactory()(pDialogParent);
     return pParentWrapper->dumpState();
+}
+
+OUString WindowUIObject::get_action(VclEventId nEvent) const
+{
+
+    OUString aActionName;
+    switch (nEvent)
+    {
+        case VclEventId::ControlGetFocus:
+        case VclEventId::ControlLoseFocus:
+            return OUString();
+
+        case VclEventId::ButtonClick:
+        case VclEventId::CheckboxToggle:
+            aActionName = "CLICK";
+        break;
+
+        case VclEventId::EditModify:
+            aActionName = "TYPE";
+        break;
+        default:
+            aActionName = OUString::number(static_cast<int>(nEvent));
+    }
+
+    return "Action on element: " + mxWindow->get_id() + " with action : " + aActionName;
 }
 
 std::unique_ptr<UIObject> WindowUIObject::create(vcl::Window* pWindow)

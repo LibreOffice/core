@@ -92,6 +92,11 @@ public:
      *
      */
     virtual OUString dumpHierarchy() const;
+
+    /**
+     * Gets the corresponding Action string for the event.
+     */
+    virtual OUString get_action(VclEventId nEvent) const;
 };
 
 class UITEST_DLLPUBLIC WindowUIObject : public UIObject
@@ -116,6 +121,8 @@ public:
     virtual OUString dumpState() const override;
 
     virtual OUString dumpHierarchy() const override;
+
+    virtual OUString get_action(VclEventId nEvent) const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
