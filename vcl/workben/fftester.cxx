@@ -105,7 +105,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         setenv("JPEGMEM", "1024M", 1);
         setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
         setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
-        setenv("SAL_NO_FONT_LOOPUP", "1", 1);
+        setenv("SAL_NO_FONT_LOOKUP", "1", 1);
 
 try_again:
 
