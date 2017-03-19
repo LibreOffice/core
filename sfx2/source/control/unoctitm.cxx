@@ -53,7 +53,7 @@
 #include <osl/mutex.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/bootstrap.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -609,16 +609,7 @@ void collectUIInformation(const util::URL& rURL, const uno::Sequence<beans::Prop
     if (!pFile)
         return;
 
-    OUString aCommand = rURL.Protocol + rURL.Path;
-
-    OUString aDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/uitest/");
-    rtl::Bootstrap::expandMacros(aDirPath);
-    osl::Directory::createPath(aDirPath);
-    OUString aFilePath = aDirPath + OUString::fromUtf8(pFile);
-
-    SvFileStream aFile(aFilePath, StreamMode::STD_READWRITE);
-    aFile.Seek(aFile.Tell() + aFile.remainingSize());
-    aFile.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
+    UITestLogger::getInstance().logCommand(rURL.Protocol + rURL.Path);
 }
 
 }
