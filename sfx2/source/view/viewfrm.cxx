@@ -2416,9 +2416,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 aMacroName = aName.getToken( 0, cTok, nIndex );
 
             // get location
-            OUString aLocKey("location");
-            if ( xUrl->hasParameter( aLocKey ) )
-                aLocation = xUrl->getParameter( aLocKey );
+            aLocation = xUrl->getParameter( "location" );
         }
 
         BasicManager* pBasMgr = nullptr;
