@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
@@ -52,6 +53,7 @@
 #include <osl/mutex.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -601,6 +603,24 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
     theUsageInfo::get().increment(aCommand);
 }
 
+void collectUIInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& /*rArgs*/)
+{
+    static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
+    if (!pFile)
+        return;
+
+    OUString aCommand = rURL.Protocol + rURL.Path;
+
+    OUString aDirPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/uitest/");
+    rtl::Bootstrap::expandMacros(aDirPath);
+    osl::Directory::createPath(aDirPath);
+    OUString aFilePath = aDirPath + OUString::fromUtf8(pFile);
+
+    SvFileStream aFile(aFilePath, StreamMode::STD_READWRITE);
+    aFile.Seek(aFile.Tell() + aFile.remainingSize());
+    aFile.WriteLine(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8));
+}
+
 }
 
 void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
@@ -608,6 +628,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     collectUsageInformation(aURL, aArgs);
+    collectUIInformation(aURL, aArgs);
 
     SolarMutexGuard aGuard;
     if (
