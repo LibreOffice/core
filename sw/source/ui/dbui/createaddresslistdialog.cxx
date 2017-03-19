@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <swtypes.hxx>
 #include <createaddresslistdialog.hxx>
 #include <customizeaddresslistdialog.hxx>
@@ -79,7 +83,7 @@ public:
 
     void        SetCurrentDataSet(sal_uInt32 nSet);
     sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet;}
-    void        SetCursorTo(sal_uInt32 nElement);
+    void        SetCursorTo(std::size_t nElement);
     virtual void Resize() override;
 };
 
@@ -310,7 +314,7 @@ IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit&, rEdit, void)
     }
 }
 
-void SwAddressControl_Impl::SetCursorTo(sal_uInt32 nElement)
+void SwAddressControl_Impl::SetCursorTo(std::size_t nElement)
 {
     if(nElement < m_aEdits.size())
     {
@@ -708,7 +712,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
     bool bFound = false;
     sal_uInt32 nStart = nCurrent + 1;
     sal_uInt32 nEnd = m_pCSVData->aDBData.size();
-    sal_uInt32 nElement = 0;
+    std::size_t nElement = 0;
     sal_uInt32 nPos = 0;
     for(short nTemp = 0; nTemp < 2 && !bFound; nTemp++)
     {
@@ -724,7 +728,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
                     bFound = -1 != aData[nElement].toAsciiLowerCase().indexOf(sSearch);
                     if(bFound)
                     {
-                        nColumn = nElement;
+                        nColumn = nElement; //TODO: std::size_t -> sal_Int32!
                         break;
                     }
                 }
