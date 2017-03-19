@@ -12,7 +12,7 @@ from org.libreoffice.unotest import UnoInProcess
 
 
 # @unittest.skip("that seems to work")
-class TestSetExpresion(unittest.TestCase):
+class TestSetExpression(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
