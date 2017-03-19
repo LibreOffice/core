@@ -1256,14 +1256,15 @@ void SmParser::DoPower()
 
 SmBlankNode *SmParser::DoBlank()
 {
-    OSL_ENSURE(TokenInGroup(TG::Blank), "Sm : wrong token");
+    assert(TokenInGroup(TG::Blank));
     std::unique_ptr<SmBlankNode> pBlankNode(new SmBlankNode(m_aCurToken));
 
-    while (TokenInGroup(TG::Blank))
+    do
     {
         pBlankNode->IncreaseBy(m_aCurToken);
         NextToken();
     }
+    while (TokenInGroup(TG::Blank));
 
     // Ignore trailing spaces, if corresponding option is set
     if ( m_aCurToken.eType == TNEWLINE ||
