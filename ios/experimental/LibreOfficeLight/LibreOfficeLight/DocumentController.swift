@@ -11,9 +11,41 @@ import UIKit
 
 class DocumentController: UIViewController, DocumentActionsControlDelegate
 {
-    @IBAction func returned(segue: UIStoryboardSegue)
+    // Show sidemenu (part of documentcontroller)
+    @IBAction func doMenu(_ sender: UIBarButtonItem)
     {
-        print("I returned")
+        if (sender.tag == 10) {
+            sender.tag = 0;
+
+            let viewMenuBack : UIView = view.subviews.last!
+
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                var frameMenu : CGRect = viewMenuBack.frame
+                frameMenu.origin.x = -1 * UIScreen.main.bounds.size.width
+                viewMenuBack.frame = frameMenu
+                viewMenuBack.layoutIfNeeded()
+                viewMenuBack.backgroundColor = UIColor.clear
+                }, completion: { (finished) -> Void in
+                    viewMenuBack.removeFromSuperview()
+                })
+            return
+        }
+
+        sender.isEnabled = false
+        sender.tag = 10
+
+        let sidebar : SidebarController = self.storyboard!.instantiateViewController(withIdentifier: "SidebarController") as! SidebarController
+        view.addSubview(sidebar.view)
+        addChildViewController(sidebar)
+        sidebar.view.layoutIfNeeded()
+
+
+        sidebar.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
+
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            sidebar.view.frame=CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
+            sender.isEnabled = true
+            }, completion:nil)
     }
 
 
@@ -51,6 +83,16 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate
 
         // start DocumentBrowser with new document
     }
+
+
+
+    // Called when returning from filemanager
+    @IBAction func returned(segue: UIStoryboardSegue)
+    {
+        // JIX actually open document
+        print("I returned")
+    }
+
 
 
 

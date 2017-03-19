@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 {
     var window: UIWindow?
 
-    
+
 
     // MARK: - AppDelegate functions
 
@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        LOinterface.Initialize()
-        
+        LOkit_Init()
+
         // Get version info
         let appInfo = Bundle.main.infoDictionary as! Dictionary<String,AnyObject>
         let applicationVersion = (appInfo["CFBundleShortVersionString"] as! String) + "." +
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let defaults = UserDefaults.standard
         defaults.set(applicationVersion, forKey: "application_version")
         defaults.synchronize()
-        
+
         // Override point for customization after application launch.
         return true
     }
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     {
         // Called as part of the transition from the background to the active state;
         // here you can undo many of the changes made on entering the background.
-        
+
         //JIX add code to check iCloud again
     }
 
