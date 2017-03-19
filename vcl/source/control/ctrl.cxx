@@ -26,6 +26,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/logger.hxx>
 
 #include <textlayout.hxx>
 #include <svdata.hxx>
@@ -300,6 +301,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function<void()> const & callHandler )
 {
     VclPtr<Control> xThis(this);
+    UITestLogger::getInstance().logAction(xThis, nEvent);
 
     CallEventListeners( nEvent );
 
