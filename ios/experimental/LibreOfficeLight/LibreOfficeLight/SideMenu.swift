@@ -10,60 +10,60 @@ import UIKit
 
 class SidebarController: UIViewController
 {
-    @IBAction func menuOpen(_ sender: Any)
-    {
-        loadController("FileManager")
-    }
-
-
-
-    @IBAction func menuNew(_ sender: Any)
+    // Temp. functions
+    @IBAction func doStyle1(_ sender: UIButton)
     {
         loadController("Document")
     }
 
 
 
-    @IBAction func menuSave(_ sender: Any)
+    @IBAction func doStyle2(_ sender: UIButton)
     {
         loadController("Document")
     }
 
 
 
-    @IBAction func menuSaveAs(_ sender: Any)
-    {
-        loadController("FileManager")
-    }
-
-
-
-    @IBAction func menuPDF(_ sender: Any)
+    @IBAction func doStyle3(_ sender: UIButton)
     {
         loadController("Document")
     }
 
 
 
-    @IBAction func menuProperties(_ sender: Any)
+    @IBAction func doStyle4(_ sender: UIButton)
     {
-        loadController("Properties")
+        loadController("Document")
     }
 
 
 
-    @IBAction func menuPrint(_ sender: Any)
+    @IBAction func doStyle5(_ sender: UIButton)
     {
-        loadController("PrintManager")
+        loadController("Document")
     }
 
-    
-    
+
+
+    @IBAction func doStyle6(_ sender: UIButton)
+    {
+        loadController("Document")
+    }
+
+
+    @IBAction func doStyle7(_ sender: UIButton)
+    {
+        loadController("Document")
+    }
+
+
+
     func loadController(_ name:String)
     {
         let destController : UIViewController = self.storyboard!.instantiateViewController(withIdentifier: name)
         self.navigationController!.pushViewController(destController, animated: true)
-        
+
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.view.frame = CGRect(x: -UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width,height: UIScreen.main.bounds.size.height)
             self.view.layoutIfNeeded()
