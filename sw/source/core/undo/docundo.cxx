@@ -112,7 +112,7 @@ size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
     if (!m_bRepair)
     {
         // If an other view created the last undo action, prevent undoing it from this view.
-        sal_Int32 nViewShellId = m_pView->GetViewShellId();
+        ViewShellId nViewShellId = m_pView->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
             nRet = 0;
     }
@@ -136,7 +136,7 @@ size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
     if (m_pView && !m_bRepair)
     {
         // If an other view created the first redo action, prevent redoing it from this view.
-        sal_Int32 nViewShellId = m_pView->GetViewShellId();
+        ViewShellId nViewShellId = m_pView->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
             nRet = 0;
     }
@@ -282,7 +282,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         comment = pRewriter->Apply(comment);
     }
 
-    int nViewShellId = -1;
+    ViewShellId nViewShellId(-1);
     if (m_pDocShell)
     {
         if (const SwView* pView = m_pDocShell->GetView())
@@ -368,7 +368,7 @@ UndoManager::GetLastUndoInfo(
     if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
     {
         // If an other view created the undo action, prevent undoing it from this view.
-        sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
+        ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
         {
             if (o_pId)
@@ -426,7 +426,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
     if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
     {
         // If an other view created the undo action, prevent redoing it from this view.
-        sal_Int32 nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
+        ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
         if (pAction->GetViewShellId() != nViewShellId)
         {
             if (o_pId)
@@ -654,7 +654,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     SwUndoId const nId(static_cast<const SwUndo*>(pRepeatAction)->GetId());
     if (DoesUndo())
     {
-        int nViewShellId = -1;
+        ViewShellId nViewShellId(-1);
         if (m_pDocShell)
         {
             if (const SwView* pView = m_pDocShell->GetView())

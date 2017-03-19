@@ -81,7 +81,7 @@ public: // should not be public, but ran into trouble in untbl.cxx
 
 private:
     /// Try to obtain the view shell ID of the current view.
-    static sal_Int32 CreateViewShellId(const SwDoc* pDoc);
+    static ViewShellId CreateViewShellId(const SwDoc* pDoc);
     // SfxUndoAction
     virtual void Undo() override;
     virtual void Redo() override;

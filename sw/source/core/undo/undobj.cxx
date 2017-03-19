@@ -164,9 +164,9 @@ SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
 {
 }
 
-sal_Int32 SwUndo::CreateViewShellId(const SwDoc* pDoc)
+ViewShellId SwUndo::CreateViewShellId(const SwDoc* pDoc)
 {
-    sal_Int32 nRet = -1;
+    ViewShellId nRet(-1);
 
     if (const SwDocShell* pDocShell = pDoc->GetDocShell())
     {

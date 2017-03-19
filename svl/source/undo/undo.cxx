@@ -72,7 +72,7 @@ OUString SfxUndoAction::GetComment() const
 
 ViewShellId SfxUndoAction::GetViewShellId() const
 {
-    return -1;
+    return ViewShellId(-1);
 }
 
 const DateTime& SfxUndoAction::GetDateTime() const
@@ -988,7 +988,7 @@ void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
  */
 void SfxUndoManager::EnterListAction( const OUString& rComment,
                                       const OUString &rRepeatComment, sal_uInt16 nId,
-                                      sal_Int32 nViewShellId )
+                                      ViewShellId nViewShellId )
 {
     UndoManagerGuard aGuard( *m_xData );
 
@@ -1333,12 +1333,12 @@ OUString SfxUndoManager::GetRedoActionsInfo() const
 struct SfxListUndoAction::Impl
 {
     sal_uInt16 mnId;
-    sal_Int32 mnViewShellId;
+    ViewShellId mnViewShellId;
 
     OUString maComment;
     OUString maRepeatComment;
 
-    Impl( sal_uInt16 nId, sal_Int32 nViewShellId, const OUString& rComment, const OUString& rRepeatComment ) :
+    Impl( sal_uInt16 nId, ViewShellId nViewShellId, const OUString& rComment, const OUString& rRepeatComment ) :
         mnId(nId), mnViewShellId(nViewShellId), maComment(rComment), maRepeatComment(rRepeatComment) {}
 };
 
@@ -1371,7 +1371,7 @@ SfxListUndoAction::SfxListUndoAction(
     const OUString &rComment,
     const OUString &rRepeatComment,
     sal_uInt16 nId,
-    sal_Int32 nViewShellId,
+    ViewShellId nViewShellId,
     SfxUndoArray *pFather ) :
     mpImpl(new Impl(nId, nViewShellId, rComment, rRepeatComment))
 {

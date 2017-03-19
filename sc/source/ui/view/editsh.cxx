@@ -135,7 +135,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->SetUpdateMode(false);
 
     OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
-    int nViewShellId = -1;
+    ViewShellId nViewShellId(-1);
     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
         nViewShellId = pViewSh->GetViewShellId();
     pEngine->GetUndoManager().EnterListAction( aName, aName, 0, nViewShellId );

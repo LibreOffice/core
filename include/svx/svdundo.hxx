@@ -54,8 +54,8 @@ class OutlinerParaObject;
 class SVX_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
 protected:
-    SdrModel&                   rMod;
-    sal_Int32 m_nViewShellId;
+    SdrModel&     rMod;
+    ViewShellId   m_nViewShellId;
 
 protected:
     SdrUndoAction(SdrModel& rNewMod);

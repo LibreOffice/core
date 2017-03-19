@@ -32,7 +32,7 @@ int SfxLokHelper::createView()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
         return -1;
-    return pViewShell->GetViewShellId();
+    return (sal_Int32)pViewShell->GetViewShellId();
 }
 
 void SfxLokHelper::destroyView(int nId)
@@ -41,12 +41,12 @@ void SfxLokHelper::destroyView(int nId)
     if (!pApp)
         return;
 
-    unsigned nViewShellId = nId;
+    int nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
-        if (pViewShell->GetViewShellId() == nViewShellId)
+        if ((sal_Int32)pViewShell->GetViewShellId() == nViewShellId)
         {
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
@@ -62,12 +62,12 @@ void SfxLokHelper::setView(int nId)
     if (!pApp)
         return;
 
-    unsigned nViewShellId = nId;
+    int nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
-        if (pViewShell->GetViewShellId() == nViewShellId)
+        if ((sal_Int32)pViewShell->GetViewShellId() == nViewShellId)
         {
             if (pViewShell == SfxViewShell::Current())
                 return;
@@ -93,7 +93,7 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
     if (!pViewShell)
         return -1;
 
-    return pViewShell->GetViewShellId();
+    return (sal_Int32)pViewShell->GetViewShellId();
 }
 
 std::size_t SfxLokHelper::getViewsCount()
@@ -115,7 +115,7 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        pArray[i] = pViewShell->GetViewShellId();
+        pArray[i] = (sal_Int32)pViewShell->GetViewShellId();
     }
     return true;
 }
