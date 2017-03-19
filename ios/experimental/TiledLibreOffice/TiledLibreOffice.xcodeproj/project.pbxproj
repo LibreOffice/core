@@ -850,7 +850,7 @@
 		BED5316F193738D800830918 /* polypolyaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polypolyaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/polypolyaction.cxx; sourceTree = SOURCE_ROOT; };
 		BED53170193738D800830918 /* textaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/textaction.cxx; sourceTree = SOURCE_ROOT; };
 		BED53171193738D800830918 /* transparencygroupaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transparencygroupaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/transparencygroupaction.cxx; sourceTree = SOURCE_ROOT; };
-		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = "../../../../ios-work/workdir/ios/generated/lo.xcconfig"; sourceTree = SOURCE_ROOT; };
+		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = "../../../workdir/ios/generated/lo.xcconfig"; sourceTree = SOURCE_ROOT; };
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../../ioswork/ios/resources/program; sourceTree = SOURCE_ROOT; };
 		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../ioswork/ios/resources/share; sourceTree = SOURCE_ROOT; };
 		BEEE02D01860ABB700FBDE67 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../ioswork/ios/resources/services; sourceTree = SOURCE_ROOT; };
