@@ -124,13 +124,13 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     //Get minVersion
-    OString sExpresion = OString(
+    OString sExpression = OString(
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:minVersion");
 
     CXPathObjectPtr xPathObjectMin;
     xPathObjectMin =
-        xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpresion.getStr()),
+        xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMin->nodesetval))
     {
@@ -148,11 +148,11 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     }
 
     //Get maxVersion
-    sExpresion = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
+    sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:maxVersion");
     CXPathObjectPtr xPathObjectMax;
     xPathObjectMax = xmlXPathEvalExpression(
-        reinterpret_cast<xmlChar const *>(sExpresion.getStr()),
+        reinterpret_cast<xmlChar const *>(sExpression.getStr()),
         m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMax->nodesetval))
     {
@@ -170,11 +170,11 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     }
 
     //Get excludeVersions
-    sExpresion = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
+    sExpression = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:excludeVersions/jf:version");
     CXPathObjectPtr xPathObjectVersions;
     xPathObjectVersions =
-        xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpresion.getStr()),
+        xmlXPathEvalExpression(reinterpret_cast<xmlChar const *>(sExpression.getStr()),
                                m_xmlPathContextVendorSettings);
     if (!xmlXPathNodeSetIsEmpty(xPathObjectVersions->nodesetval))
     {
