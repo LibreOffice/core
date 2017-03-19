@@ -790,6 +790,7 @@ sub run {
                 $modulesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_modules($modulesinproductlanguageresolvedarrayref);
 
                 $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_files($filesinproductlanguageresolvedarrayref);
+                $directoriesforepmarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_files($directoriesforepmarrayref);
             }
 
             installer::scriptitems::changing_name_of_language_dependent_keys($modulesinproductlanguageresolvedarrayref);
