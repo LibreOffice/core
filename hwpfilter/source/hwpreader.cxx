@@ -118,21 +118,28 @@ HwpReader::~HwpReader()
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(SvStream &rStream)
 {
-    std::unique_ptr<HStream> stream(new HStream);
-    byte aData[32768];
-    std::size_t nRead, nBlock = 32768;
-
-    while (true)
+    try
     {
-        nRead = rStream.ReadBytes(aData, nBlock);
-        if (nRead == 0)
-            break;
-        stream->addData(aData, (int)nRead);
-    }
+        std::unique_ptr<HStream> stream(new HStream);
+        byte aData[32768];
+        std::size_t nRead, nBlock = 32768;
 
-    HWPFile hwpfile;
-    if (hwpfile.ReadHwpFile(stream.release()))
-          return false;
+        while (true)
+        {
+            nRead = rStream.ReadBytes(aData, nBlock);
+            if (nRead == 0)
+                break;
+            stream->addData(aData, (int)nRead);
+        }
+
+        HWPFile hwpfile;
+        if (hwpfile.ReadHwpFile(stream.release()))
+            return false;
+    }
+    catch (...)
+    {
+        return false;
+    }
     return true;
 }
 

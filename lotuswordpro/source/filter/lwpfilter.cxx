@@ -215,13 +215,12 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHa
         //Reset all static objects,because this function may be called many times.
         XFGlobalReset();
         reader.Read();
-
-        return 0;
     }
     catch (...)
     {
         return 1;
     }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
