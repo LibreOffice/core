@@ -31,6 +31,7 @@
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
+#include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/time.h>
@@ -405,24 +406,18 @@ RTLFUNC(CurDir)
             StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
             return;
         }
-        else
+        auto c = rtl::toAsciiUpperCase(aDrive[0]);
+        if ( !rtl::isAsciiUpperCase( c ) )
         {
-            nCurDir = (int)aDrive[0];
-            if ( !isalpha( nCurDir ) )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                return;
-            }
-            else
-            {
-                nCurDir -= ( 'A' - 1 );
-            }
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            return;
         }
+        nCurDir = c - 'A' + 1;
     }
-    char pBuffer[ _MAX_PATH ];
-    if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
+    wchar_t pBuffer[ _MAX_PATH ];
+    if ( _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
-        rPar.Get(0)->PutString( OUString::createFromAscii( pBuffer ) );
+        rPar.Get(0)->PutString( OUString( pBuffer ) );
     }
     else
     {
