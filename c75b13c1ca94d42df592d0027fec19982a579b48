@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0a18ea83",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T19:05:48Z",
+      "side": 1,
+      "message": "because of this line, this patch is not going to work - it changes the outcome of the code\n\nBefore, we were creating an OUString that ended at the null written here. Afterwards, we are creating an OUString of length nLen with an embedded null character\n\nProbably the easiest way to fix that is just to use std::unique_ptr to allocate the temporary buffer",
+      "revId": "c75b13c1ca94d42df592d0027fec19982a579b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
