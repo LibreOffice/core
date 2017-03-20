@@ -388,24 +388,27 @@ void GtkSalFrame::doKeyCallback( guint state,
     vcl::DeletionListener aDel( this );
 
 #if 0
-    // shift-zero forces a re-draw and event is swallowed
-    if (keyval == GDK_KEY_0)
+    if (bDown)
     {
-        fprintf( stderr, "force widget_queue_draw\n");
-        gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
-        return;
-    }
-    else if (keyval == GDK_KEY_1)
-    {
-        fprintf( stderr, "force repaint all\n");
-        TriggerPaintEvent();
-        return;
-    }
-    else if (keyval == GDK_KEY_2)
-    {
-        dumpframes = !dumpframes;
-        fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
-        return;
+        // shift-zero forces a re-draw and event is swallowed
+        if (keyval == GDK_KEY_0)
+        {
+            fprintf( stderr, "force widget_queue_draw\n");
+            gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
+            return;
+        }
+        else if (keyval == GDK_KEY_1)
+        {
+            fprintf( stderr, "force repaint all\n");
+            TriggerPaintEvent();
+            return;
+        }
+        else if (keyval == GDK_KEY_2)
+        {
+            dumpframes = !dumpframes;
+            fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+            return;
+        }
     }
 #endif
 
@@ -453,7 +456,7 @@ void GtkSalFrame::doKeyCallback( guint state,
 
     aEvent.mnCode   |= GetKeyModCode( state );
 
-    if( bDown )
+    if (bDown)
     {
         bool bHandled = CallCallbackExc( SalEvent::KeyInput, &aEvent );
         // #i46889# copy AlternateKeyCode handling from generic plugin
