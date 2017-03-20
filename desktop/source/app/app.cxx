@@ -2080,11 +2080,12 @@ void Desktop::OpenClients()
     // need some time, where the user won't see any results and wait for finishing the office startup...
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
 
+#if !defined ANDROID
     // Enter safe mode if requested
     if (Application::IsSafeModeEnabled()) {
         handleSafeMode();
     }
-
+#endif
 
 #if HAVE_FEATURE_BREAKPAD
     if (crashReportInfoExists())
