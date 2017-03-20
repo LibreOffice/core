@@ -1201,8 +1201,21 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         if (nFlags & SalInvert::N50)
         {
             cairo_pattern_t *pattern = create_stipple();
-            cairo_mask(cr, pattern);
+            cairo_surface_t* surface = cairo_surface_create_similar(m_pSurface,
+                                                                    cairo_surface_get_content(m_pSurface),
+                                                                    extents.getWidth() * m_fScale,
+                                                                    extents.getHeight() * m_fScale);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+            cairo_surface_set_device_scale(surface, m_fScale, m_fScale);
+#endif
+            cairo_t* stipple_cr = cairo_create(surface);
+            cairo_set_source_rgb(stipple_cr, 1.0, 1.0, 1.0);
+            cairo_mask(stipple_cr, pattern);
             cairo_pattern_destroy(pattern);
+            cairo_destroy(stipple_cr);
+            cairo_mask_surface(cr, surface, extents.getMinX(), extents.getMinY());
+            cairo_surface_destroy(surface);
         }
         else
         {
