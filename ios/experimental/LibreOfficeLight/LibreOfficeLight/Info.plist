@@ -8,14 +8,122 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>ODF-Document</string>
+			<string>DOCX Microsoft Word</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.odf.doc</string>
-				<string>com.odf.calc</string>
-				<string>com.odf.impress</string>
+				<string>com.jani.Editors.docx</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>DOC Microsoft Word</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.doc</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>XLSX Microsoft Excel</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.xlsx</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>XLS Microsoft Excel</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.xls</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PPTX Microsoft PowerPoint</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.pptx</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PPT Microsoft PowerPoint</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.ppt</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PDF Adobe pdf</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.pdf</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>ODT LibreOffice writer</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.odt</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>ODS LibreOffice calc</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.ods</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>ODP LibeOffice Impress</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.jani.Editors.odp</string>
 			</array>
 		</dict>
 	</array>
@@ -30,11 +138,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.3</string>
+	<string>0.4.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.business</string>
 	<key>LSMultipleInstancesProhibited</key>
@@ -82,6 +190,179 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>XLSX Microsoft Excel</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.xlsx</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>xlsx</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>XLS Microsoft Excel</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.xls</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>xls</string>
+				<key>public.mime-type</key>
+				<string>iapplication/vnd.ms-excel</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOCX Microsoft Word</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.docx</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>docx</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.openxmlformats-officedocument.wordprocessingml.document</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOC Microsoft Word</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.doc</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>doc</string>
+				<key>public.mime-type</key>
+				<string>application/msword</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PPTX Microsoft Powerpoint</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.pptx</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>pptx</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.openxmlformats-officedocument.presentationml.presentation</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PPT Microsoft Powerpoint</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.ppt</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>ppt</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.ms-powerpoint</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PDF Adobe pdf</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.pdf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>pdf</string>
+				<key>public.mime-type</key>
+				<string>application/pdf</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>ODT LibreOffice Writer</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.odt</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>odt</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.oasis.opendocument.text</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>ODS LibreOffice calc</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.ods</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>ods</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.oasis.opendocument.spreadsheet</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>ODP LibreOffice Impress</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.jani.Editors.odp</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>odp</string>
+				<key>public.mime-type</key>
+				<string>application/vnd.oasis.opendocument.presentation</string>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>
