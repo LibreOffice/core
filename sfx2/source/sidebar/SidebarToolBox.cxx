@@ -319,7 +319,10 @@ class NotebookbarToolBox : public SidebarToolBox
 {
 public:
     explicit NotebookbarToolBox(vcl::Window* pParentWindow)
-        : SidebarToolBox(pParentWindow) {}
+    : SidebarToolBox(pParentWindow)
+    {
+        SetToolboxButtonSize(GetDefaultButtonSize());
+    }
 
     virtual ToolBoxButtonSize GetDefaultButtonSize() const override
     {
