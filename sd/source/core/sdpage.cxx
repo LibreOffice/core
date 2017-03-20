@@ -50,6 +50,8 @@
 #include <svx/svditer.hxx>
 #include <svx/svdlayer.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XTimeContainer.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
@@ -137,6 +139,33 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     }
 }
 
+namespace
+{
+    void clearChildNodes(css::uno::Reference<css::animations::XAnimationNode>& rAnimationNode)
+    {
+        css::uno::Reference<css::container::XEnumerationAccess > xEnumerationAccess(rAnimationNode, UNO_QUERY);
+        if (!xEnumerationAccess.is())
+            return;
+        css::uno::Reference<css::container::XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(), UNO_QUERY);
+        if (!xEnumeration.is())
+            return;
+        while (xEnumeration->hasMoreElements())
+        {
+            css::uno::Reference<css::animations::XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
+            if (!xChildNode.is())
+                continue;
+            clearChildNodes(xChildNode);
+            css::uno::Reference<css::animations::XTimeContainer> xAnimationNode(rAnimationNode, UNO_QUERY);
+            if (!xAnimationNode.is())
+            {
+                SAL_WARN("sd.core", "can't remove node child, possible leak");
+                continue;
+            }
+            xAnimationNode->removeChild(xChildNode);
+        }
+    }
+}
+
 /*************************************************************************
 |*
 |* Dtor
@@ -149,9 +178,7 @@ SdPage::~SdPage()
 
     EndListenOutlineText();
 
-    fprintf(stderr, "on dtor %p, have %p\n", this, mxAnimationNode.get());
-
-    mxAnimationNode.clear();
+    clearChildNodes(mxAnimationNode);
 
     delete mpItems;
 
