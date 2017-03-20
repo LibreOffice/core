@@ -159,7 +159,7 @@ bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
     sal_Int32 nXNum(0), nXDenom(0), nYNum(0), nYDenom(0);
     rIStm.ReadInt32(nXNum).ReadInt32(nXDenom).ReadInt32(nYNum).ReadInt32(nYDenom);
 
-    if (!rIStm.good() || nXDenom < 0 || nYDenom < 0 || nXNum < 0 || nYNum < 0)
+    if (!rIStm.good() || nXDenom <= 0 || nYDenom <= 0 || nXNum <= 0 || nYNum <= 0)
     {
         SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode fraction");
         return false;
