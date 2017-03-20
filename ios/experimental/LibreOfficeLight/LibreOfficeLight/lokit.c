@@ -7,9 +7,7 @@
 //
 #include <stdio.h>
 #define LOK_USE_UNSTABLE_API
-#define IOS_SWIFTCBRIDGE
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
-#undef  IOS_SWIFTCBRIDGE
 
 // pointers to our instance
 static LibreOfficeKit* kit;

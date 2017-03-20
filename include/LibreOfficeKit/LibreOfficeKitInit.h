@@ -42,12 +42,7 @@ extern "C"
     #endif
     #define SEPARATOR         '/'
 
-#ifndef __OBJC__
-#ifndef IOS_SWIFTCBRIDGE
-    inline
-#endif
-#endif
-    void *lok_loadlib(const char *pFN)
+    static void *lok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
 #if defined LOK_LOADLIB_GLOBAL
@@ -56,42 +51,22 @@ extern "C"
                       );
     }
 
-#ifndef __OBJC__
-#ifndef IOS_SWIFTCBRIDGE
-    inline
-#endif
-#endif
-    char *lok_dlerror(void)
+    static char *lok_dlerror(void)
     {
         return dlerror();
     }
 
-#ifndef __OBJC__
-#ifndef IOS_SWIFTCBRIDGE
-    inline
-#endif
-#endif
-    void *lok_dlsym(void *Hnd, const char *pName)
+    static void *lok_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
-#ifndef __OBJC__
-#ifndef IOS_SWIFTCBRIDGE
-    inline
-#endif
-#endif
-    int lok_dlclose(void *Hnd)
+    static int lok_dlclose(void *Hnd)
     {
         return dlclose(Hnd);
     }
 
-#ifndef __OBJC__
-#ifndef IOS_SWIFTCBRIDGE
-    inline
-#endif
-#endif
-    void extendUnoPath(const char *pPath)
+    static void extendUnoPath(const char *pPath)
     {
         (void)pPath;
     }
@@ -104,29 +79,29 @@ extern "C"
     #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
 
-    void *lok_loadlib(const char *pFN)
+    static void *lok_loadlib(const char *pFN)
     {
         return (void *) LoadLibraryA(pFN);
     }
 
-    char *lok_dlerror(void)
+    static char *lok_dlerror(void)
     {
         LPSTR buf = NULL;
         FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
         return buf;
     }
 
-    void *lok_dlsym(void *Hnd, const char *pName)
+    static void *lok_dlsym(void *Hnd, const char *pName)
     {
         return reinterpret_cast<void *>(GetProcAddress((HINSTANCE) Hnd, pName));
     }
 
-    int lok_dlclose(void *Hnd)
+    static int lok_dlclose(void *Hnd)
     {
         return FreeLibrary((HINSTANCE) Hnd);
     }
 
-    void extendUnoPath(const char *pPath)
+    static void extendUnoPath(const char *pPath)
     {
         if (!pPath)
             return;
