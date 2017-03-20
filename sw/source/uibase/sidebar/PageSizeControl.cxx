@@ -204,7 +204,7 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
         bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
 
         std::unique_ptr<SvxSizeItem> pPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) );
-        Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, (MapUnit)(eUnit) );
+        Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, eUnit );
         if ( bLandscape )
         {
             Swap( aPageSize );

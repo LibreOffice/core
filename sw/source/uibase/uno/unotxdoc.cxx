@@ -907,7 +907,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             bool bCancel;
             nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->m_bStyles,
                         eStart, eEnd, bCancel,
-                        (FindRanges)eRanges,
+                        eRanges,
                         !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr );
         }
         else if(pSearch->m_bStyles)
@@ -918,7 +918,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             bool bCancel;
             nResult = (sal_Int32)pUnoCursor->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
-                        (FindRanges)eRanges, pReplaceColl );
+                        eRanges, pReplaceColl );
         }
         else
         {
@@ -927,7 +927,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             bool bCancel;
             nResult = (sal_Int32)pUnoCursor->Find( aSearchOpt, bSearchInNotes,
                     eStart, eEnd, bCancel,
-                    (FindRanges)eRanges );
+                    eRanges );
         }
         if(nResult || (eRanges&(FindRanges::InSelAll|FindRanges::InOther)))
             break;

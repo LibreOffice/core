@@ -103,6 +103,16 @@ TypeCheck TypeCheck::Pointer() const {
     return TypeCheck();
 }
 
+TerminalCheck TypeCheck::Enum() const {
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::EnumType>();
+        if (t != nullptr) {
+            return TerminalCheck(true);
+        }
+    }
+    return TerminalCheck(false);
+}
+
 TypeCheck TypeCheck::Typedef() const {
     if (!type_.isNull()) {
         if (auto const t = type_->getAs<clang::TypedefType>()) {

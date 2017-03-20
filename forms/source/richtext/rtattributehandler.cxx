@@ -330,7 +330,7 @@ namespace frm
             {
                 nHeight = OutputDevice::LogicToLogic(
                     Size( 0, nHeight ),
-                    MapMode( (MapUnit)( _rAttribs.GetPool()->GetMetric( getWhich() ) ) ),
+                    MapMode(  _rAttribs.GetPool()->GetMetric( getWhich() ) ),
                     MapMode( MapUnit::MapTwip )
                 ).Height();
             }
@@ -358,8 +358,8 @@ namespace frm
             {
                 nHeight = OutputDevice::LogicToLogic(
                     Size( 0, nHeight ),
-                    MapMode( (MapUnit)( MapUnit::MapTwip ) ),
-                    MapMode( (MapUnit)( _rNewAttribs.GetPool()->GetMetric( getWhich() ) ) )
+                    MapMode( MapUnit::MapTwip ),
+                    MapMode( _rNewAttribs.GetPool()->GetMetric( getWhich() ) )
                 ).Height();
             }
 

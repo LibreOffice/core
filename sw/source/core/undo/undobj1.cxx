@@ -67,7 +67,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
         pFrameFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREP_INSERT_FLY));
 
-    SwFormatAnchor aAnchor( (RndStdIds)nRndId );
+    SwFormatAnchor aAnchor( nRndId );
 
     if (RndStdIds::FLY_AT_PAGE == nRndId)
     {
@@ -569,7 +569,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             }
 
             // reposition anchor
-            SwFormatAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
+            SwFormatAnchor aNewAnchor( nOldAnchorTyp );
             GetAnchor( aNewAnchor, nOldNode, nOldContent );
             pFrameFormat->SetFormatAttr( aNewAnchor );
 
@@ -597,7 +597,7 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( bAnchorChgd )
         {
-            SwFormatAnchor aNewAnchor( (RndStdIds) nNewAnchorTyp );
+            SwFormatAnchor aNewAnchor( nNewAnchorTyp );
             GetAnchor( aNewAnchor, nNewNode, nNewContent );
             SfxItemSet aSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
             aSet.Put( aNewAnchor );

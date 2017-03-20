@@ -174,7 +174,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
     nCaptionType = (SdrCaptionType) (m_pCT_CAPTTYPE->GetSelectItemId()-1);
 
-    _rOutAttrs->Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
+    _rOutAttrs->Put( SdrCaptionTypeItem( nCaptionType ) );
 
     if( m_pMF_ABSTAND->IsValueModified() )
     {

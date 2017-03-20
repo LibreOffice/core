@@ -53,6 +53,8 @@ public:
 
     TypeCheck Pointer() const;
 
+    TerminalCheck Enum() const;
+
     TypeCheck LvalueReference() const;
 
     template<std::size_t N> inline ContextCheck Class(char const (& id)[N])

@@ -239,7 +239,7 @@ sal_uLong SwHTMLWriter::WriteStream()
             m_nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
     }
 
-    m_eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
+    m_eCSS1Unit = SW_MOD()->GetMetric( pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
 
     bool bWriteUTF8 = bWriteClipboardDoc;
     m_eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();

@@ -3604,7 +3604,7 @@ ScVbaRange::End( ::sal_Int32 Direction )
         }
         if ( pDispatcher )
         {
-            pDispatcher->Execute( nSID, (SfxCallMode)SfxCallMode::SYNCHRON, aArgs );
+            pDispatcher->Execute( nSID, SfxCallMode::SYNCHRON, aArgs );
         }
     }
 

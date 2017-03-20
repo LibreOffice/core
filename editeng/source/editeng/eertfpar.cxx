@@ -305,7 +305,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary
-    const MapUnit eDestUnit = (MapUnit)(mpEditEngine->GetEditDoc().GetItemPool().GetMetric(0));
+    const MapUnit eDestUnit = mpEditEngine->GetEditDoc().GetItemPool().GetMetric(0);
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {

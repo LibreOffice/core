@@ -541,7 +541,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                     case MirrorGraph::Both: nMirror = MirrorGraph::Vertical;
                                                 break;
                     }
-                aMirror.SetValue( (MirrorGraph)nMirror );
+                aMirror.SetValue( nMirror );
                 aGrfSet.ClearItem();
                 aGrfSet.Put( aMirror );
             }

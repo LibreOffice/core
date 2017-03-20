@@ -138,6 +138,8 @@ public:
 
     bool VisitCXXDeleteExpr(CXXDeleteExpr const * expr);
 
+    bool VisitCStyleCastExpr(CStyleCastExpr const * expr);
+
     bool VisitBinSub(BinaryOperator const * expr)
     { return visitBinOp(expr); }
 
@@ -284,6 +286,24 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
         break;
     default:
         break;
+    }
+    return true;
+}
+
+bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(expr->getLocStart()))) {
+        return true;
+    }
+    auto t1 = getSubExprAsWritten(expr)->getType();
+    auto t2 = expr->getTypeAsWritten();
+    if (loplugin::TypeCheck(t1).Enum() && loplugin::TypeCheck(t2).Enum() && t1 == t2) {
+        report(
+            DiagnosticsEngine::Warning,
+            "redundant cstyle enum cast from %0 to %1", expr->getExprLoc())
+            << t1 << t2 << expr->getSourceRange();
     }
     return true;
 }

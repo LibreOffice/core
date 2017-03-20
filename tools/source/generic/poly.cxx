@@ -842,9 +842,9 @@ PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::GetFlags(): nPos >= nPoints" );
-    return( mpImplPolygon->mpFlagAry ?
-            (PolyFlags) mpImplPolygon->mpFlagAry[ nPos ] :
-            PolyFlags::Normal );
+    return mpImplPolygon->mpFlagAry
+           ? mpImplPolygon->mpFlagAry[ nPos ]
+           : PolyFlags::Normal;
 }
 
 bool Polygon::HasFlags() const

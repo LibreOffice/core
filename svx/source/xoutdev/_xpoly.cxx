@@ -474,7 +474,7 @@ bool XPolygon::operator==( const XPolygon& rXPoly ) const
 PolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 {
     pImpXPolygon->CheckPointDelete();
-    return (PolyFlags) pImpXPolygon->pFlagAry[nPos];
+    return pImpXPolygon->pFlagAry[nPos];
 }
 
 /// set the flags for the point at the given position
@@ -487,13 +487,13 @@ void XPolygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 /// short path to read the CONTROL flag directly (TODO: better explain what the sense behind this flag is!)
 bool XPolygon::IsControl(sal_uInt16 nPos) const
 {
-    return ( (PolyFlags) pImpXPolygon->pFlagAry[nPos] == PolyFlags::Control );
+    return pImpXPolygon->pFlagAry[nPos] == PolyFlags::Control;
 }
 
 /// short path to read the SMOOTH and SYMMTR flag directly (TODO: better explain what the sense behind these flags is!)
 bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 {
-    PolyFlags eFlag = (PolyFlags) pImpXPolygon->pFlagAry[nPos];
+    PolyFlags eFlag = pImpXPolygon->pFlagAry[nPos];
     return ( eFlag == PolyFlags::Smooth || eFlag == PolyFlags::Symmetric );
 }
 

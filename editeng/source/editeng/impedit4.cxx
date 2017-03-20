@@ -1224,7 +1224,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     if (rTextObject.mpImpl->HasMetric())
     {
         eSourceUnit = (MapUnit)rTextObject.mpImpl->GetMetric();
-        eDestUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
+        eDestUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertMetricOfItems = true;
     }

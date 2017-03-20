@@ -69,12 +69,12 @@ bool SwView::IsDocumentBorder()
         return false;
 
     return m_pWrtShell->GetViewOptions()->getBrowseMode() ||
-           SvxZoomType::PAGEWIDTH_NOBORDER == (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType();
+           SvxZoomType::PAGEWIDTH_NOBORDER == m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
 inline long GetLeftMargin( SwView &rView )
 {
-    SvxZoomType eType = (SvxZoomType)rView.GetWrtShell().GetViewOptions()->GetZoomType();
+    SvxZoomType eType = rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();
     return eType == SvxZoomType::PERCENT   ? lRet + DOCUMENTBORDER :
            eType == SvxZoomType::PAGEWIDTH || eType == SvxZoomType::PAGEWIDTH_NOBORDER ? 0 :
@@ -1117,7 +1117,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( m_pWrtShell->GetViewOptions()->GetZoomType() != SvxZoomType::PERCENT &&
              !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-            SetZoom_( aEditSz, (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
+            SetZoom_( aEditSz, m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
         m_pWrtShell->EndAction();
 
         bRepeat = bScroll1 != m_pVScrollbar->IsVisible(true);

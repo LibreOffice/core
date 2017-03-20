@@ -171,7 +171,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         }
 
                         nSelectedPage = (short) nWhatPage;
-                        mePageKind    = (PageKind) nWhatKind;
+                        mePageKind    = nWhatKind;
                     }
                 }
                 else

@@ -763,20 +763,20 @@ void SwXViewSettings::_postSetValues()
     if( pView )
     {
         if(mbApplyZoom )
-            pView->SetZoom( (SvxZoomType)mpViewOption->GetZoomType(),
+            pView->SetZoom( mpViewOption->GetZoomType(),
                             mpViewOption->GetZoom(), true );
         if(mbApplyHRulerMetric)
-            pView->ChangeTabMetric((FieldUnit)eHRulerUnit);
+            pView->ChangeTabMetric(eHRulerUnit);
         if(mbApplyVRulerMetric)
-            pView->ChangeVRulerMetric((FieldUnit)eVRulerUnit);
+            pView->ChangeVRulerMetric(eVRulerUnit);
 
     }
     else
     {
         if(mbApplyHRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, true, false );
+            SW_MOD()->ApplyRulerMetric( eHRulerUnit, true, false );
         if(mbApplyVRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, false, false );
+            SW_MOD()->ApplyRulerMetric( eVRulerUnit, false, false );
     }
 
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? SvViewOpt::DestViewOnly

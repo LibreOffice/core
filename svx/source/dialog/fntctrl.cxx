@@ -890,8 +890,8 @@ void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, S
     if (GetWhich(rSet, nSlot, nWhich))
     {
         nH = LogicToLogic(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)).GetHeight(),
-                            (MapUnit) rSet.GetPool()->GetMetric(nWhich),
-                            MapUnit::MapTwip);
+                          rSet.GetPool()->GetMetric(nWhich),
+                          MapUnit::MapTwip);
     }
     else
         nH = 240;// as default 12pt
@@ -1107,7 +1107,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>( rSet.Get( nWhich ) );
         short nKern = ( short )
-                        LogicToLogic( rItem.GetValue(), ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ), MapUnit::MapTwip );
+                        LogicToLogic( rItem.GetValue(), rSet.GetPool()->GetMetric( nWhich ), MapUnit::MapTwip );
         rFont.SetFixKerning( nKern );
         rCJKFont.SetFixKerning( nKern );
         rCTLFont.SetFixKerning( nKern );
@@ -1351,7 +1351,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>( rSet.Get( nWhich ) );
         short nKern = ( short )
-                        LogicToLogic( rItem.GetValue(), ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ), MapUnit::MapTwip );
+                        LogicToLogic( rItem.GetValue(), rSet.GetPool()->GetMetric( nWhich ), MapUnit::MapTwip );
         rFont.SetFixKerning( nKern );
         rCJKFont.SetFixKerning( nKern );
         rCTLFont.SetFixKerning( nKern );

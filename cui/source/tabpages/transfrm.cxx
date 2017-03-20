@@ -253,7 +253,7 @@ void SvxAngleTabPage::Construct()
 
     // take UI units into account
     sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
-    TransfrmHelper::ConvertRect(maRange, nDigits, (MapUnit)ePoolUnit, eDlgUnit);
+    TransfrmHelper::ConvertRect(maRange, nDigits, ePoolUnit, eDlgUnit);
 
     if(!pView->IsRotateAllowed())
     {

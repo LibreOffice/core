@@ -931,10 +931,10 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper *) const
 {
     long nValue=GetValue();
-    SdrFormatter aFmt((MapUnit)eCoreMetric,(MapUnit)ePresMetric);
+    SdrFormatter aFmt(eCoreMetric,ePresMetric);
     aFmt.TakeStr(nValue,rText);
     OUString aStr;
-    SdrFormatter::TakeUnitStr((MapUnit)ePresMetric,aStr);
+    SdrFormatter::TakeUnitStr(ePresMetric,aStr);
     rText += " " + aStr;
     if (ePres==SfxItemPresentation::Complete) {
         OUString aStr2;
@@ -1320,11 +1320,11 @@ bool SdrTextAniAmountItem::GetPresentation(
     }
     else
     {
-        SdrFormatter aFmt((MapUnit)eCoreMetric, (MapUnit)ePresMetric);
+        SdrFormatter aFmt(eCoreMetric, ePresMetric);
         OUString aStr;
 
         aFmt.TakeStr(nValue, rText);
-        SdrFormatter::TakeUnitStr((MapUnit)ePresMetric, aStr);
+        SdrFormatter::TakeUnitStr(ePresMetric, aStr);
         rText += aStr;
     }
 

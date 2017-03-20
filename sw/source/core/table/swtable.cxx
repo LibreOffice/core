@@ -214,7 +214,7 @@ SwTable::SwTable()
     m_bNewModel( true )
 {
     // default value set in the options
-    m_eTableChgMode = (TableChgMode)GetTableChgDefaultMode();
+    m_eTableChgMode = GetTableChgDefaultMode();
 }
 
 SwTable::SwTable( const SwTable& rTable )

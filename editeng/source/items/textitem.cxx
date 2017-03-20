@@ -752,7 +752,7 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
     }
 
     SvxFontHeightItem* pItem = new SvxFontHeightItem( nsize, 100, Which() );
-    pItem->SetProp( nprop, (MapUnit)nPropUnit );
+    pItem->SetProp( nprop, nPropUnit );
     return pItem;
 }
 

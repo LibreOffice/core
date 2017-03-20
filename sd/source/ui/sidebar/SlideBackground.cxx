@@ -788,7 +788,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
     Paper ePaper =  mpPaperSizeBox->GetSelection();
-    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
+    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
     if(mpPaperOrientation->GetSelectEntryPos() == 0)
         Swap(aSize);

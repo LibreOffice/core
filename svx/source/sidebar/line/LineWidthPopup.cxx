@@ -116,7 +116,7 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
     sal_uInt16 iPos = m_xVSWidth->GetSelectItemId();
     if (iPos >= 1 && iPos <= 8)
     {
-        sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, (MapUnit)m_eMapUnit);
+        sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, m_eMapUnit);
         nVal = m_xMFWidth->Denormalize(nVal);
         XLineWidthItem aWidthItem( nVal );
         m_rParent.setLineWidth(aWidthItem);
@@ -130,7 +130,7 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
         //modified
         if (m_bCustom)
         {
-            long nVal = LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, (MapUnit)m_eMapUnit);
+            long nVal = LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
             nVal = m_xMFWidth->Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             m_rParent.setLineWidth(aWidthItem);
@@ -165,7 +165,7 @@ IMPL_LINK(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
         m_xVSWidth->StartSelection();
     }
     long nTmp = static_cast<long>(m_xMFWidth->GetValue());
-    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, (MapUnit)m_eMapUnit );
+    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
     sal_Int32 nNewWidth = (short)m_xMFWidth->Denormalize( nVal );
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
@@ -208,7 +208,7 @@ void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUni
 
     if (bValuable)
     {
-        sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, (MapUnit) eMapUnit, MapUnit::Map100thMM );
+        sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, eMapUnit, MapUnit::Map100thMM );
         nVal = m_xMFWidth->Normalize(nVal);
         m_xMFWidth->SetValue( nVal, FUNIT_100TH_MM );
     }

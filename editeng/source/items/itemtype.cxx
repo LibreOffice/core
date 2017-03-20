@@ -44,8 +44,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         case MapUnit::MapMM:
         case MapUnit::MapCM:
         {
-            nRet = (long)OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)MapUnit::Map100thMM );
+            nRet = (long)OutputDevice::LogicToLogic( nVal, eSrcUnit, MapUnit::Map100thMM );
 
             switch ( eDestUnit )
             {
@@ -62,8 +61,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         case MapUnit::Map10thInch:
         case MapUnit::MapInch:
         {
-            nRet = OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)MapUnit::Map1000thInch );
+            nRet = OutputDevice::LogicToLogic( nVal, eSrcUnit, MapUnit::Map1000thInch );
 
             switch ( eDestUnit )
             {
@@ -79,7 +77,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
         case MapUnit::MapTwip:
         case MapUnit::MapPixel:
             return OUString::number( (long)OutputDevice::LogicToLogic(
-                        nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
+                        nVal, eSrcUnit, eDestUnit ));
 
         default:
             OSL_FAIL( "not supported mapunit" );
