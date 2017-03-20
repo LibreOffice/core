@@ -123,46 +123,35 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) ImportJPEG(aFileStream, aGraphic, nullptr, GraphicFilterImportFlags::NONE);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "gif") == 0)
             {
                 SvFileStream aFileStream(out, StreamMode::READ);
                 Graphic aGraphic;
                 ret = (int) ImportGIF(aFileStream, aGraphic);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "xbm") == 0)
             {
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) ImportXBM(aFileStream, aGraphic);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "xpm") == 0)
             {
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) ImportXPM(aFileStream, aGraphic);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "png") == 0)
             {
                 SvFileStream aFileStream(out, StreamMode::READ);
                 vcl::PNGReader aReader(aFileStream);
-                BitmapEx aTarget = aReader.Read();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "bmp") == 0)
             {
                 Bitmap aTarget;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) ReadDIB(aTarget, aFileStream, true);
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "svm") == 0)
             {
@@ -185,8 +174,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "dxf") == 0)
             {
@@ -202,8 +189,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "met") == 0)
             {
@@ -219,8 +204,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
             {
@@ -236,8 +219,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "psd") == 0)
             {
@@ -253,8 +234,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "eps") == 0)
             {
@@ -270,8 +249,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "pct") == 0)
             {
@@ -287,8 +264,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "pcx") == 0)
             {
@@ -304,8 +279,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "ras") == 0)
             {
@@ -321,8 +294,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "tga") == 0)
             {
@@ -338,8 +309,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if (strcmp(argv[2], "tif") == 0)
             {
@@ -355,8 +324,6 @@ try_again:
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream, aGraphic, nullptr);
-                BitmapEx aTarget = aGraphic.GetBitmapEx();
-                aTarget.Convert(BmpConversion::N24Bit);
             }
             else if ( (strcmp(argv[2], "doc") == 0) ||
                       (strcmp(argv[2], "ww8") == 0) ||
