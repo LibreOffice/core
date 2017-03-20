@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_6af896e6",
+        "filename": "vcl/unx/generic/app/i18n_status.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:19:27Z",
+      "side": 1,
+      "message": "you\u0027re supposed to pass in the pStr when you do this",
+      "revId": "e1f26ff2e41b3142010dddee45398ce82d507d49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
