@@ -74,9 +74,9 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
-		&& echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
-		&& echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
-		&& echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
+		&& echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' \
+		&& echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' \
+		&& echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc' \
 		&& echo 'BAK_EXTENSIONS=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bak' \
 		&& echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/$(LIBO_SHARE_FOLDER)/extensions' \
 		&& echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bundled' \
