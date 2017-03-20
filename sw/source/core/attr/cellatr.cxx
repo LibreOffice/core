@@ -32,7 +32,7 @@
 #include <swtable.hxx>
 
 SwTableBoxNumFormat::SwTableBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
-    : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
+    : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), m_bAuto( bFlag )
 {
 }
 
@@ -40,12 +40,12 @@ bool SwTableBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return GetValue() == static_cast<const SwTableBoxNumFormat&>(rAttr).GetValue() &&
-           bAuto == static_cast<const SwTableBoxNumFormat&>(rAttr).bAuto;
+           m_bAuto == static_cast<const SwTableBoxNumFormat&>(rAttr).m_bAuto;
 }
 
 SfxPoolItem* SwTableBoxNumFormat::Clone( SfxItemPool* ) const
 {
-    return new SwTableBoxNumFormat( GetValue(), bAuto );
+    return new SwTableBoxNumFormat( GetValue(), m_bAuto );
 }
 
 SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
