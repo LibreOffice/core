@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8a969a92",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "you don\u0027t need the +1 for the null-terminating zero, it does that itself",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aa935ea2",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ca90a298",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ea8d667c",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "this can\u0027t work, you are passing it a pointer into the rtl_uString ?",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0ae9ca1a",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "don\u0027t need +1",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2aee8e22",
+        "filename": "vcl/source/helper/strhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-20T07:13:47Z",
+      "side": 1,
+      "message": "can\u0027t do this either",
+      "revId": "d164f6470634b2b2393e2e1ee5ac19a73fb31d19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
