@@ -72,6 +72,7 @@ public:
     void testDocumentTypes( Office* pOffice );
     void testImpressSlideNames( Office* pOffice );
     void testCalcSheetNames( Office* pOffice );
+    void testPaintPartTile( Office* pOffice );
 #if 0
     void testOverlay( Office* pOffice );
 #endif
@@ -98,6 +99,7 @@ void TiledRenderingTest::runAllTests()
     testDocumentTypes( pOffice.get() );
     testImpressSlideNames( pOffice.get() );
     testCalcSheetNames( pOffice.get() );
+    testPaintPartTile( pOffice.get() );
 #if 0
     testOverlay( pOffice.get() );
 #endif
@@ -184,6 +186,36 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
     CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
     CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), std::string(pDocument->getPartName(1)));
     CPPUNIT_ASSERT_EQUAL(std::string("Sheet3"), std::string(pDocument->getPartName(2)));
+}
+
+void TiledRenderingTest::testPaintPartTile(Office* pOffice)
+{
+    const string sTextDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
+    const string sTextLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+
+    // FIXME: same comment as below wrt lockfile removal.
+    remove(sTextLockFile.c_str());
+
+    std::unique_ptr<Document> pDocument(pOffice->documentLoad( sTextDocPath.c_str()));
+    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+
+    // Create two views.
+    pDocument->getView();
+    pDocument->createView();
+
+    int nView2 = pDocument->getView();
+
+    // Destroy the current view
+    pDocument->destroyView(nView2);
+
+    int nCanvasWidth = 256;
+    int nCanvasHeight = 256;
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+
+    // And try to paintPartTile() - this used to crash when the current viewId
+    // was destroyed
+    pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
 }
 
 #if 0
