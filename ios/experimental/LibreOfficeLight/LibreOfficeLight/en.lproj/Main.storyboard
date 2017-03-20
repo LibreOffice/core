@@ -48,7 +48,7 @@
             </objects>
             <point key="canvasLocation" x="1231" y="304"/>
         </scene>
-        <!--File Manager-->
+        <!--Local - /-->
         <scene sceneID="2JR-NV-Eo3">
             <objects>
                 <tableViewController id="cip-1Z-62J" customClass="FileManagerController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
@@ -93,7 +93,7 @@
                             <outlet property="delegate" destination="cip-1Z-62J" id="uyZ-lZ-r0j"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="File Manager" id="fBX-vO-7Rj">
+                    <navigationItem key="navigationItem" title="Local - /" id="fBX-vO-7Rj">
                         <leftBarButtonItems>
                             <barButtonItem image="back" id="q43-8I-nlC">
                                 <connections>

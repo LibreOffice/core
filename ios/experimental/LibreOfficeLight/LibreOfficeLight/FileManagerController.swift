@@ -92,6 +92,15 @@ private class FileStorage
 
 
 
+    func getDirectory() -> String
+    {
+        let myCurDir = currentDir.path
+        let myLen    = currentDocPath!.path.endIndex
+        return (myLen == myCurDir.endIndex) ? "/" : myCurDir.substring(from: myLen)
+    }
+
+
+
     func createDirectory(_ name: String)
     {
         let newDir = currentDir.appendingPathComponent(name)
@@ -331,10 +340,9 @@ class FileManagerController : UITableViewController, FileActionsControlDelegate
     // Support function
     func reloadData()
     {
-        selectedRow = nil
+        title = (fileData.selectStorage(false) ? "Local - " : "iCloud - ") + fileData.getDirectory()
         tableView.reloadData()
     }
-
 }
 
 
