@@ -1822,11 +1822,27 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
-    // Disable callbacks while we are painting.
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    const int nOrigViewId = doc_getView(pThis);
+    int nOrigViewId = doc_getView(pThis);
 
-    if (nOrigViewId >= 0)
+    if (nOrigViewId < 0)
+    {
+        // tile painting always needs a SfxViewShell::Current(), but actually
+        // it does not really matter which one - all of them should paint the
+        // same thing.
+        int viewCount = doc_getViewsCount(pThis);
+        if (viewCount == 0)
+            return;
+
+        std::vector<int> viewIds(viewCount);
+        doc_getViewIds(pThis, viewIds.data(), viewCount);
+
+        nOrigViewId = viewIds[0];
+        doc_setView(pThis, nOrigViewId);
+    }
+
+    // Disable callbacks while we are painting.
+    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
         pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(true);
 
     try
@@ -1877,7 +1893,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Nothing to do but restore the PartTilePainting flag.
     }
 
-    if (nOrigViewId >= 0)
+    if (nOrigViewId >= 0 && pDocument->mpCallbackFlushHandlers[nOrigViewId])
         pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(false);
 }
 
