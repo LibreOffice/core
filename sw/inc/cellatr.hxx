@@ -30,7 +30,7 @@ namespace rtl { class OUString; }
 
 class SW_DLLPUBLIC SwTableBoxNumFormat : public SfxUInt32Item
 {
-    bool bAuto;     ///< automatically given flag
+    bool m_bAuto;     ///< automatically given flag
 public:
     SwTableBoxNumFormat( sal_uInt32 nFormat = css::util::NumberFormat::TEXT,
                         bool bAuto = false );
@@ -42,7 +42,7 @@ public:
     SwTableBoxNumFormat& operator=( const SwTableBoxNumFormat& rAttr )
     {
         SetValue( rAttr.GetValue() );
-        bAuto = rAttr.bAuto;
+        m_bAuto = rAttr.m_bAuto;
         return *this;
     }
 };
