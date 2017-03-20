@@ -6216,9 +6216,11 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             int n = n_;
             int i = 0;
             while (n > 0) { --n; ++i; }
+            assert(i >= 0);
             return i == 0;
         }
     };
+    constexpr auto v2 = S{10}.f();
     ]])], [cxx14_constexpr=yes], [cxx14_constexpr=no])
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
