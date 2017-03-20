@@ -30,6 +30,8 @@ public:
 
     void log(const OUString& rString);
 
+    void logKeyInput(VclPtr<vcl::Window>& xUIElement, const KeyEvent& rEvent);
+
     static UITestLogger& getInstance();
 
 };

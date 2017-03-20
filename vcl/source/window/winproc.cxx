@@ -38,6 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lazydelete.hxx>
 #include <touch/touch.h>
+#include <vcl/uitest/logger.hxx>
 
 #include <svdata.hxx>
 #include <salwtype.hxx>
@@ -986,6 +987,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     {
         if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
         {
+            UITestLogger::getInstance().logKeyInput(pChild, aKeyEvt);
             pChild->ImplGetWindowImpl()->mbKeyInput = false;
             pChild->KeyInput( aKeyEvt );
         }
