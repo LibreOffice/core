@@ -67,6 +67,76 @@ void UITestLogger::log(const OUString& rString)
     maStream.WriteLine(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
 }
 
+void UITestLogger::logKeyInput(VclPtr<vcl::Window>& xUIElement, const KeyEvent& rEvent)
+{
+    if (!mbValid)
+        return;
+
+    const OUString& rID = xUIElement->get_id();
+    if (rID.isEmpty())
+        return;
+
+    sal_Unicode nChar = rEvent.GetCharCode();
+    sal_uInt16 nKeyCode = rEvent.GetKeyCode().GetCode();
+    bool bShift = rEvent.GetKeyCode().IsShift();
+    bool bMod1 = rEvent.GetKeyCode().IsMod1();
+    bool bMod2 = rEvent.GetKeyCode().IsMod1();
+    bool bMod3 = rEvent.GetKeyCode().IsMod1();
+
+    std::map<OUString, sal_uInt16> aKeyMap = {
+        {"ESC", KEY_ESCAPE},
+        {"TAB", KEY_TAB},
+        {"DOWN", KEY_DOWN},
+        {"UP", KEY_UP},
+        {"LEFT", KEY_LEFT},
+        {"RIGHT", KEY_RIGHT},
+        {"DELETE", KEY_DELETE},
+        {"INSERT", KEY_INSERT},
+        {"BACKSPACE", KEY_BACKSPACE},
+        {"RETURN", KEY_RETURN},
+        {"HOME", KEY_HOME},
+        {"END", KEY_END},
+        {"PAGEUP", KEY_PAGEUP},
+        {"PAGEDOWN", KEY_PAGEDOWN}
+    };
+
+    OUString aFound;
+    for (auto& itr : aKeyMap)
+    {
+        if (itr.second == nKeyCode)
+        {
+            aFound = itr.first;
+            break;
+        }
+    }
+
+    OUString aKeyCode;
+    if (!aFound.isEmpty() || bShift || bMod1 || bMod2 || bMod3)
+    {
+        aKeyCode = "{\"KEYCODE\": \"";
+        if (bShift)
+            aKeyCode += "SHIFT+";
+
+        if (bMod1)
+            aKeyCode += "CTRL+";
+
+        if (bMod2)
+            aKeyCode += "ALT+";
+
+        if (aFound.isEmpty())
+            aKeyCode += OUStringLiteral1(nChar) + "\"}";
+        else
+            aKeyCode += aFound + "\"}";
+    }
+    else
+    {
+        aKeyCode = "{\"TEXT\": \"" + OUStringLiteral1(nChar) + "\"}";
+    }
+
+    OUString aContent = "Action on element: " + rID + " with action: TYPE and content: " + aKeyCode;
+    maStream.WriteLine(OUStringToOString(aContent, RTL_TEXTENCODING_UTF8));
+}
+
 UITestLogger& UITestLogger::getInstance()
 {
     static UITestLogger aInstance;
