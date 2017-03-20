@@ -50,6 +50,9 @@ void UITestLogger::logAction(VclPtr<Control>& xUIElement, VclEventId nEvent)
     if (xUIElement->get_id().isEmpty())
         return;
 
+    if (!xUIElement->HasFocus())
+        return;
+
     std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());
     OUString aAction = pUIObject->get_action(nEvent);
     if (!aAction.isEmpty())
