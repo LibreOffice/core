@@ -7598,7 +7598,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
     Reference< XTable > xTable( pTable->getTable() );
 
     if (aRows.empty())
-        return pRet;
+        return pTable;
 
     try
     {
