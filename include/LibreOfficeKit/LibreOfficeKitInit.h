@@ -43,7 +43,7 @@ extern "C"
     #define SEPARATOR         '/'
 
 #ifndef __OBJC__
-#ifdef __cplusplus
+#ifndef IOS_SWIFTCBRIDGE
     inline
 #endif
 #endif
@@ -57,7 +57,7 @@ extern "C"
     }
 
 #ifndef __OBJC__
-#ifdef __cplusplus
+#ifndef IOS_SWIFTCBRIDGE
     inline
 #endif
 #endif
@@ -67,7 +67,7 @@ extern "C"
     }
 
 #ifndef __OBJC__
-#ifdef __cplusplus
+#ifndef IOS_SWIFTCBRIDGE
     inline
 #endif
 #endif
@@ -77,7 +77,7 @@ extern "C"
     }
 
 #ifndef __OBJC__
-#ifdef __cplusplus
+#ifndef IOS_SWIFTCBRIDGE
     inline
 #endif
 #endif
@@ -87,7 +87,7 @@ extern "C"
     }
 
 #ifndef __OBJC__
-#ifdef __cplusplus
+#ifndef IOS_SWIFTCBRIDGE
     inline
 #endif
 #endif
