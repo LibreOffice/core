@@ -45,6 +45,7 @@
 
 #include <o3tl/make_unique.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
@@ -902,49 +903,52 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 
     css::uno::Reference< css::uno::XInterface > xCfg;
 
-    try
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
-
-        ::std::vector< css::uno::Any > lParams;
-        css::beans::NamedValue aParam;
-
-        // set root path
-        aParam.Name = "nodepath";
-        aParam.Value <<= sRoot;
-        lParams.push_back(css::uno::makeAny(aParam));
-
-        // enable "all locales mode" ... if required
-        if (bLocalesMode)
+        try
         {
-            aParam.Name = "locale";
-            aParam.Value <<= OUString("*");
+            css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
+                css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
+
+            ::std::vector< css::uno::Any > lParams;
+            css::beans::NamedValue aParam;
+
+            // set root path
+            aParam.Name = "nodepath";
+            aParam.Value <<= sRoot;
             lParams.push_back(css::uno::makeAny(aParam));
+
+            // enable "all locales mode" ... if required
+            if (bLocalesMode)
+            {
+                aParam.Name = "locale";
+                aParam.Value <<= OUString("*");
+                lParams.push_back(css::uno::makeAny(aParam));
+            }
+
+            // open it
+            if (bReadOnly)
+                xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONACCESS,
+                        comphelper::containerToSequence(lParams));
+            else
+                xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS,
+                        comphelper::containerToSequence(lParams));
+
+            // If configuration could not be opened ... but factory method does not throwed an exception
+            // trigger throwing of our own CorruptedFilterConfigurationException.
+            // Let message empty. The normal exception text show enough information to the user.
+            if (! xCfg.is())
+                throw css::uno::Exception(
+                        "Got NULL reference on opening configuration file ... but no exception.",
+                        css::uno::Reference< css::uno::XInterface >());
         }
-
-        // open it
-        if (bReadOnly)
-            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONACCESS,
-                    comphelper::containerToSequence(lParams));
-        else
-            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS,
-                    comphelper::containerToSequence(lParams));
-
-        // If configuration could not be opened ... but factory method does not throwed an exception
-        // trigger throwing of our own CorruptedFilterConfigurationException.
-        // Let message empty. The normal exception text show enough information to the user.
-        if (! xCfg.is())
-            throw css::uno::Exception(
-                    "Got NULL reference on opening configuration file ... but no exception.",
-                    css::uno::Reference< css::uno::XInterface >());
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        throw css::document::CorruptedFilterConfigurationException(
-                "filter configuration, caught: " + ex.Message,
-                css::uno::Reference< css::uno::XInterface >(),
-                ex.Message);
+        catch(const css::uno::Exception& ex)
+        {
+            throw css::document::CorruptedFilterConfigurationException(
+                    "filter configuration, caught: " + ex.Message,
+                    css::uno::Reference< css::uno::XInterface >(),
+                    ex.Message);
+        }
     }
 
     return xCfg;
