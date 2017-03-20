@@ -53,6 +53,18 @@ struct TimeValue {
                 duration).count() % 1000000000)
     {}
 
+    std::chrono::nanoseconds toChrono()
+    {
+        return std::chrono::nanoseconds((Seconds * 1000000000) + Nanosec);
+    }
+
+    static std::chrono::nanoseconds TimeValueToChrono( TimeValue& aTime )
+    {
+        std::chrono::nanoseconds nNanosecs { (aTime.Seconds * 1000000000) + aTime.Nanosec };
+
+        return nNanosecs;
+    }
+
     sal_uInt32 Seconds;
     sal_uInt32 Nanosec;
 };
@@ -171,6 +183,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
  */
 
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
+
 
 #ifdef __cplusplus
 }
