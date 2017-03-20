@@ -50,6 +50,7 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
@@ -587,6 +588,7 @@ void Dialog::dispose()
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
+    UITestLogger::getInstance().log("DialogClosed");
 
     SystemWindow::dispose();
 }
@@ -701,6 +703,7 @@ void Dialog::StateChanged( StateChangedType nType )
         css::document::DocumentEvent aObject;
         aObject.EventName = "ModelessDialogVisible";
         xEventBroadcaster->documentEventOccured(aObject);
+        UITestLogger::getInstance().log("Modeless Dialog Visible");
     }
 }
 
@@ -904,6 +907,7 @@ short Dialog::Execute()
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
+    UITestLogger::getInstance().log("DialogExecute");
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
     while ( !xWindow->IsDisposed() && mbInExecute )
