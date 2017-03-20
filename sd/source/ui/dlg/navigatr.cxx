@@ -81,6 +81,9 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
 
     maTlbObjects->SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
 
+    maTlbObjects->SetDoubleClickHdl(LINK(this, SdNavigatorWin, ClickObjectHdl));
+    maTlbObjects->SetSelectionMode(SelectionMode::Single);
+
     maToolbox->SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     maToolbox->SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
     const sal_uInt16 nDragTypeId = maToolbox->GetItemId("dragmode");
