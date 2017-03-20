@@ -125,7 +125,7 @@ void TextCharacterSpacingControl::Initialize()
     if(eState >= SfxItemState::DEFAULT)
     {
         MapUnit eUnit = GetCoreMetric();
-        MapUnit eOrgUnit = (MapUnit)eUnit;
+        MapUnit eOrgUnit = eUnit;
         MapUnit ePntUnit(MapUnit::MapPoint);
         long nBig = maEditKerning->Normalize(nKerning);
         nKerning = LogicToLogic(nBig, eOrgUnit, ePntUnit);
@@ -150,7 +150,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClo
     long nSign = (nValue < 0) ? -1 : 1;
     nValue = nValue * nSign;
 
-    long nVal = LogicToLogic(nValue, MapUnit::MapPoint, (MapUnit)eUnit);
+    long nVal = LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
     short nKern = (nValue == 0) ? 0 : (short)maEditKerning->Denormalize(nVal);
 
     SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);

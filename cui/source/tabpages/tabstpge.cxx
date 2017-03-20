@@ -221,7 +221,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
 
     FillUpWithDefTabs_Impl(nDefDist, aNewTabs);
     SfxItemPool* pPool = rSet->GetPool();
-    MapUnit eUnit = (MapUnit)pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
+    MapUnit eUnit = pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
     const SfxPoolItem* pOld = GetOldItem(*rSet, SID_ATTR_TABSTOP);
 
     if (MapUnit::Map100thMM != eUnit)
@@ -271,7 +271,7 @@ VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(vcl::Window* pParent, const SfxIt
 void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
 {
     SfxItemPool* pPool = rSet->GetPool();
-    MapUnit eUnit = (MapUnit)pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
+    MapUnit eUnit = pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
 
     // Current tabs
     const SfxPoolItem* pItem = GetItem(*rSet, SID_ATTR_TABSTOP);
@@ -372,7 +372,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     if (GetItemSet().GetItemState(SID_ATTR_TABSTOP_OFFSET, true, &pItem) == SfxItemState::SET)
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric(GetWhich(SID_ATTR_TABSTOP));
+        MapUnit eUnit = GetItemSet().GetPool()->GetMetric(GetWhich(SID_ATTR_TABSTOP));
         nOffset = OutputDevice::LogicToLogic(nOffset, eUnit, MapUnit::Map100thMM);
     }
 
@@ -478,7 +478,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
          SfxItemState::SET )
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+        MapUnit eUnit = GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MapUnit::Map100thMM  );
     }
     const long nReal = nVal - nOffset;

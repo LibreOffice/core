@@ -153,8 +153,8 @@ inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
-    pJobSetup->SetOrientation( (Orientation)(rData.m_eOrientation == orientation::Landscape ?
-        Orientation::Landscape : Orientation::Portrait));
+    pJobSetup->SetOrientation( rData.m_eOrientation == orientation::Landscape ?
+        Orientation::Landscape : Orientation::Portrait );
 
     // copy page size
     OUString aPaper;

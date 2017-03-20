@@ -362,7 +362,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if ( bNullTab )
     {
-        MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+        MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         if ( MapUnit::Map100thMM != eUnit )
         {
 

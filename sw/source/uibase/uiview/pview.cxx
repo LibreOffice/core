@@ -764,8 +764,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             {
                 SfxItemSet aCoreSet(GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
                 const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
-                SvxZoomItem aZoom( (SvxZoomType)pVOpt->GetZoomType(),
-                                            pVOpt->GetZoom() );
+                SvxZoomItem aZoom( pVOpt->GetZoomType(), pVOpt->GetZoom() );
                 aZoom.SetValueSet(
                         SvxZoomEnableFlags::N50|
                         SvxZoomEnableFlags::N75|
@@ -1024,8 +1023,7 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
         case FN_STAT_ZOOM:
             {
                     const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
-                    SvxZoomItem aZoom((SvxZoomType)pVOpt->GetZoomType(),
-                                        pVOpt->GetZoom());
+                    SvxZoomItem aZoom(pVOpt->GetZoomType(), pVOpt->GetZoom());
                     aZoom.SetValueSet(
                             SvxZoomEnableFlags::N50|
                             SvxZoomEnableFlags::N75|

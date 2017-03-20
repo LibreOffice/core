@@ -1587,10 +1587,10 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
         case sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE:
         case sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE:
         case sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE:
-            nFormat = pSource->GetData()->GetNumberFormatByIdx( (NfIndexTableOffset)NF_PERCENT_DEC2 );
+            nFormat = pSource->GetData()->GetNumberFormatByIdx( NF_PERCENT_DEC2 );
             break;
         case sheet::DataPilotFieldReferenceType::INDEX:
-            nFormat = pSource->GetData()->GetNumberFormatByIdx( (NfIndexTableOffset)NF_NUMBER_SYSTEM );
+            nFormat = pSource->GetData()->GetNumberFormatByIdx( NF_NUMBER_SYSTEM );
             break;
         default:
             break;

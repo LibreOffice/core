@@ -2879,13 +2879,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
-        MapUnit eOrgUnit = (MapUnit)eUnit;
+        MapUnit eOrgUnit = eUnit;
         MapUnit ePntUnit( MapUnit::MapPoint );
         long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
         // set Kerning at the Font, convert into Twips before
-        long nKern = LogicToLogic( rItem.GetValue(), (MapUnit)eUnit, MapUnit::MapTwip );
+        long nKern = LogicToLogic( rItem.GetValue(), eUnit, MapUnit::MapTwip );
         rFont.SetFixKerning( (short)nKern );
         rCJKFont.SetFixKerning( (short)nKern );
         rCTLFont.SetFixKerning( (short)nKern );
@@ -3054,7 +3054,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
     long nTmp = static_cast<long>(m_pKerningMF->GetValue());
-    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, (MapUnit)eUnit );
+    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, eUnit );
     nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );

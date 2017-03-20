@@ -213,7 +213,7 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeFieldmark:
                     {
                         const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
-                        bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmark && formFieldmarkName!=nullptr); //@TODO handle abbreviation cases..
+                        bool bImportAsField = (nTmp==TypeFieldmark && formFieldmarkName!=nullptr); //@TODO handle abbreviation cases..
                         // export point bookmark
                         const Reference<XInterface> xContent(
                             CreateAndInsertMark(GetImport(),
@@ -221,7 +221,7 @@ void XMLTextMarkImportContext::EndElement()
                                 m_sBookmarkName,
                                 m_rHelper.GetCursorAsRange()->getStart(),
                                 m_sXmlId) );
-                        if ((lcl_MarkType)nTmp==TypeFieldmark) {
+                        if (nTmp==TypeFieldmark) {
                             if (xContent.is() && bImportAsField) {
                                 // setup fieldmark...
                                 Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);
@@ -311,7 +311,7 @@ void XMLTextMarkImportContext::EndElement()
                             // create a file with subsequence
                             // start/end elements
 
-                            bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
+                            bool bImportAsField = (nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
 
                             // fdo#86795 check if it's actually a checkbox first
                             bool isInvalid(false);
@@ -349,7 +349,7 @@ void XMLTextMarkImportContext::EndElement()
                                 }
                             }
 
-                            if ((lcl_MarkType)nTmp==TypeFieldmarkEnd) {
+                            if (nTmp==TypeFieldmarkEnd) {
                                 if (xContent.is() && bImportAsField) {
                                     // setup fieldmark...
                                     Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);

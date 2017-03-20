@@ -1012,7 +1012,7 @@ SfxStyleFamily SwDocShell::DoWaterCan(const OUString &rName, SfxStyleFamily nFam
     if(bWaterCan)
     {
         SwDocStyleSheet* pStyle =
-            static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, (SfxStyleFamily)nFamily) );
+            static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, nFamily) );
 
         SAL_WARN_IF( !pStyle, "sw.ui", "Where's the StyleSheet" );
 
@@ -1055,7 +1055,7 @@ SfxStyleFamily SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFa
     assert( pCurrWrtShell );
 
     SwDocStyleSheet* pStyle =
-        static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, (SfxStyleFamily)nFamily) );
+        static_cast<SwDocStyleSheet*>( m_xBasePool->Find(rName, nFamily) );
 
     if(!pStyle)
         return nFamily;
@@ -1153,7 +1153,7 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( m_xBasePool->Find(
-                                            rName, (SfxStyleFamily)nFamily ) );
+                                            rName, nFamily ) );
     if(!pStyle)
     {
         // preserve the current mask of PI, then the new one is
@@ -1164,7 +1164,7 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
             nMask |= SFXSTYLEBIT_USERDEF;
 
         pStyle = static_cast<SwDocStyleSheet*>( &m_xBasePool->Make(rName,
-                                (SfxStyleFamily)nFamily, nMask ) );
+                                nFamily, nMask ) );
     }
 
     switch(nFamily)

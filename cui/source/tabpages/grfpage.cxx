@@ -218,7 +218,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         aPageSize = OutputDevice::LogicToLogic(
                         Size( CM_1_TO_TWIP,  CM_1_TO_TWIP ),
                         MapMode( MapUnit::MapTwip ),
-                        MapMode( (MapUnit)rSet->GetPool()->GetMetric( nW ) ) );
+                        MapMode( rSet->GetPool()->GetMetric( nW ) ) );
     }
 
     bool bFound = false;

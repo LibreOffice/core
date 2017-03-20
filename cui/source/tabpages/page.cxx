@@ -510,7 +510,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_pBspWin->SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
 
-    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, (MapUnit)eUnit, MapUnit::Map100thMM);
+    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, eUnit, MapUnit::Map100thMM);
     if ( bLandscape )
         Swap( aPaperSize );
 
@@ -749,7 +749,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     {
         if ( nOld != nPos || m_pLandscapeBtn->IsValueChangedFromSaved() )
         {
-            Size aSize( SvxPaperInfo::GetPaperSize( ePaper, (MapUnit)eUnit ) );
+            Size aSize( SvxPaperInfo::GetPaperSize( ePaper, eUnit ) );
 
             if ( bChecked )
                 Swap( aSize );
@@ -997,7 +997,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
     MapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, true );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit, true );
 
     m_pPaperSizeBox->SetSelection( ePaper );
     UpdateExample_Impl( true );

@@ -8077,7 +8077,7 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
         return true;
     sal_uInt16 i;
     static bool bRet = false;
-    UBlockCode block = (UBlockCode)ublock_getCode((sal_uInt32)currentChar);
+    UBlockCode block = ublock_getCode((sal_uInt32)currentChar);
     for ( i = 0; i < scriptListCount; i++) {
         if (block <= scriptList[i].to) break;
     }

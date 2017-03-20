@@ -10,6 +10,8 @@
 void f1(char *) {}
 void f2(char const *) {}
 
+enum Enum1 { X };
+
 int main() {
     char * p1;
     char const * p2;
@@ -27,6 +29,9 @@ int main() {
     f2(const_cast<char * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'char *', result is implictly cast to 'const char *' [loplugin:redundantcast]}}
     f2(const_cast<char const *>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *' [loplugin:redundantcast]}}
     f2(const_cast<char const * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *const' [loplugin:redundantcast]}}
+
+    Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle enum cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
+    (void)e;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -704,7 +704,7 @@ void LinePropertyPanelBase::SetWidthIcon()
         return;
     }
 
-    long nVal = LogicToLogic(mnWidthCoreValue * 10,(MapUnit)meMapUnit , MapUnit::MapPoint);
+    long nVal = LogicToLogic(mnWidthCoreValue * 10, meMapUnit, MapUnit::MapPoint);
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
 
     if(nVal <= 6)

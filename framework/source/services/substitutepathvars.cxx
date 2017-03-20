@@ -366,13 +366,13 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
                 if ( nIndex == PREDEFVAR_WORK && !bWorkRetrieved )
                 {
                     // Transient value, retrieve it again
-                    m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = GetWorkVariableValue();
+                    m_aPreDefVars.m_FixedVar[ nIndex ] = GetWorkVariableValue();
                     bWorkRetrieved = true;
                 }
                 else if ( nIndex == PREDEFVAR_WORKDIRURL && !bWorkDirURLRetrieved )
                 {
                     // Transient value, retrieve it again
-                    m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ] = GetWorkPath();
+                    m_aPreDefVars.m_FixedVar[ nIndex ] = GetWorkPath();
                     bWorkDirURLRetrieved = true;
                 }
 
@@ -380,9 +380,9 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
                 // 1. A path variable can only be substituted if it follows a ';'!
                 // 2. It's located exactly at the start of the string being substituted!
                 if (( aFixedVarTable[ int( nIndex ) ].bAbsPath && (( nPosition == 0 ) || (( nPosition > 0 ) && ( aWorkText[nPosition-1] == ';')))) ||
-            ( !aFixedVarTable[ int( nIndex ) ].bAbsPath ))
-        {
-                    aReplacement = m_aPreDefVars.m_FixedVar[ (PreDefVariable)nIndex ];
+                    ( !aFixedVarTable[ int( nIndex ) ].bAbsPath ))
+                {
+                    aReplacement = m_aPreDefVars.m_FixedVar[ nIndex ];
                     nReplaceLength = nLength;
                 }
             }

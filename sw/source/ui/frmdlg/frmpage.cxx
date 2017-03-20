@@ -1075,7 +1075,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOldItem = nullptr;
 
-    RndStdIds eAnchorId = (RndStdIds)GetAnchor();
+    RndStdIds eAnchorId = GetAnchor();
 
     if ( !m_bFormat )
     {
@@ -1753,7 +1753,7 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
         //the original. But for the other pages we need the current anchor.
         SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
                             : getFrameDlgParentShell();
-        RndStdIds eAnchorId = (RndStdIds)GetAnchor();
+        RndStdIds eAnchorId = GetAnchor();
         SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
         _pSet->Put( aAnc );
     }
@@ -2269,7 +2269,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
     SwFormatCol aCol( static_cast<const SwFormatCol&>(rSet.Get(RES_COL)) );
     ::FitToActualSize( aCol, (sal_uInt16)rSize.GetWidth() );
 
-    RndStdIds eAnchorId = (RndStdIds)GetAnchor();
+    RndStdIds eAnchorId = GetAnchor();
 
     if ( m_bNew && !m_bFormat )
         InitPos(eAnchorId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);

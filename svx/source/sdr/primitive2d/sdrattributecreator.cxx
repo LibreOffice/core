@@ -655,7 +655,7 @@ namespace drawinglayer
             }
 
             // convert size and MapMode to destination logical size and MapMode
-            const MapUnit aDestinationMapUnit((MapUnit)rSet.GetPool()->GetMetric(0));
+            const MapUnit aDestinationMapUnit(rSet.GetPool()->GetMetric(0));
             basegfx::B2DVector aGraphicLogicSize(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height());
 
             if(aGraphic.GetPrefMapMode() != aDestinationMapUnit)

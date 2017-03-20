@@ -111,7 +111,7 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit )
 
 void SetMetricValue( MetricField& rField, long nCoreValue, MapUnit eUnit )
 {
-    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MapUnit::Map100thMM );
+    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, eUnit, MapUnit::Map100thMM );
     nVal = rField.Normalize( nVal );
     rField.SetValue( nVal, FUNIT_100TH_MM );
 
@@ -136,7 +136,7 @@ long GetCoreValue( const MetricField& rField, MapUnit eUnit )
     }
     if( bRoundBefore )
         nVal = rField.Denormalize( nVal );
-    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MapUnit::Map100thMM, (MapUnit)eUnit );
+    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MapUnit::Map100thMM, eUnit );
     if( ! bRoundBefore )
         nUnitVal = rField.Denormalize( nUnitVal );
     return static_cast<long>(nUnitVal);

@@ -59,7 +59,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
                 rLangString = aOption.GetString();
                 HTMLScriptLanguage nLang;
                 if( aOption.GetEnum( nLang, aScriptLangOptEnums ) )
-                    rLang = (HTMLScriptLanguage)nLang;
+                    rLang = nLang;
                 else
                     rLang = HTMLScriptLanguage::Unknown;
             }

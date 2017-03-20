@@ -1434,7 +1434,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             }
             if ( pToolBox )
             {
-                pToolBox->SetButtonType( (ButtonType)rElement.m_nStyle );
+                pToolBox->SetButtonType( rElement.m_nStyle );
                 if ( rElement.m_bNoClose )
                     pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
             }
