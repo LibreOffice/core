@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_ea73a64b",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-20T11:42:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_bf6803bc",
+      "revId": "935571a6aea1a30b5e667447553e4cbecbef6af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_dface7ef",
         "filename": "sc/source/ui/view/cellsh1.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-03-15T11:34:54Z",
       "side": 1,
       "message": "If we do this for only selected sheets, like I commented for cellsh.cxx, then a new function ScDocument::GetAllNoteEntries(SCTAB,vector) should be introduced that acts on one ScTable::GetAllNoteEntries(), and iterate over selected sheets.",
+      "revId": "935571a6aea1a30b5e667447553e4cbecbef6af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0a8f0a24",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-20T11:42:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_dface7ef",
       "revId": "935571a6aea1a30b5e667447553e4cbecbef6af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
