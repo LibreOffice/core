@@ -1090,6 +1090,7 @@ void handleCrashReport()
 }
 #endif
 
+#if !defined ANDROID
 void handleSafeMode()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -1103,6 +1104,7 @@ void handleSafeMode()
     bool bRet = false;
     aRet >>= bRet;
 }
+#endif
 
 /** @short  check if recovery must be started or not.
 
