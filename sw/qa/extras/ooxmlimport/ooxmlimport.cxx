@@ -1235,6 +1235,31 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST( testTdf106606, "tdf106606.docx" )
+{
+    auto FindGraphicBitmapPropertyInNumStyle = [&]( OUString rStyleName )
+    {
+        uno::Reference<beans::XPropertySet>     xPropertySet( getStyles( "NumberingStyles" )->getByName( rStyleName ), uno::UNO_QUERY );
+        uno::Reference<container::XIndexAccess> xLevels( xPropertySet->getPropertyValue( "NumberingRules" ), uno::UNO_QUERY );
+        uno::Sequence<beans::PropertyValue>     aProps;
+        xLevels->getByIndex( 0 ) >>= aProps; // 1st level
+
+        for ( int i = 0; i < aProps.getLength(); ++i )
+        {
+            const beans::PropertyValue& rProp = aProps[i];
+
+            // If the image was prematurely removed from cache when processed for previous numbering list, then the sequence hasn't the property.
+            if ( rProp.Name == "GraphicBitmap" )
+                return true;
+        }
+        return false;
+    };
+
+    // The document has two numbering lists with a picture
+    CPPUNIT_ASSERT( FindGraphicBitmapPropertyInNumStyle("WWNum1") );
+    CPPUNIT_ASSERT( FindGraphicBitmapPropertyInNumStyle("WWNum2") );
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
