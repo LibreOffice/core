@@ -31,22 +31,45 @@ NSTimer* AquaSalTimer::pRunningTimer = nil;
 
 static void ImplSalStopTimer();
 
-static inline void ImplPostEvent( short nEventId, bool bAtStart, int nUserData = 0 )
+void ImplNSAppPostEvent( short nEventId, BOOL bAtStart, int nUserData )
 {
-    SalData::ensureThreadAutoreleasePool();
+    ReleasePoolHolder aPool;
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
     NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
 SAL_WNODEPRECATED_DECLARATIONS_POP
                                location: NSZeroPoint
                                modifierFlags: 0
-                               timestamp: [NSDate timeIntervalSinceReferenceDate]
+                               timestamp: 0
                                windowNumber: 0
                                context: nil
                                subtype: nEventId
                                data1: nUserData
-                               data2: 0 ];
+                               data2: 0];
     assert( pEvent );
+    if ( nil == pEvent )
+        return;
+    if ( NO == bAtStart )
+    {
+        // nextEventMatchingMask has to run in the main thread!
+        assert([NSThread isMainThread]);
+
+        // Posting an event to the end of an empty queue fails,
+        // so we peek the queue and post to the start, if empty.
+        // Some Qt bugs even indicate nextEvent without dequeue
+        // sometimes blocks, so we dequeue and re-add the event.
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+// 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
+        NSEvent* pPeekEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
+SAL_WNODEPRECATED_DECLARATIONS_POP
+                               untilDate: nil
+                               inMode: NSDefaultRunLoopMode
+                               dequeue: YES];
+        if ( nil == pPeekEvent )
+            bAtStart = YES;
+        else
+            [NSApp postEvent: pPeekEvent atStart: YES];
+    }
     [NSApp postEvent: pEvent atStart: bAtStart];
 }
 
@@ -54,14 +77,18 @@ static void ImplSalStartTimer( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
 
-    if ( 0 == nMS )
+    if( !pSalData->mpFirstInstance->IsMainThread() )
     {
-        ImplSalStopTimer();
-        ImplPostEvent( AquaSalInstance::DispatchTimerEvent, false );
+        ImplNSAppPostEvent( AquaSalInstance::AppStartTimerEvent, YES, nMS );
         return;
     }
 
-    if( pSalData->mpFirstInstance->IsMainThread() )
+    if ( 0 == nMS )
+    {
+        ImplSalStopTimer();
+        ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, NO );
+    }
+    else
     {
         NSTimeInterval aTI = double(nMS) / 1000.0;
         if( AquaSalTimer::pRunningTimer != nil )
@@ -89,8 +116,6 @@ static void ImplSalStartTimer( sal_uLong nMS )
             [[NSRunLoop currentRunLoop] addTimer: AquaSalTimer::pRunningTimer forMode: NSEventTrackingRunLoopMode];
         }
     }
-    else
-        ImplPostEvent( AquaSalInstance::AppStartTimerEvent, true, nMS );
 }
 
 static void ImplSalStopTimer()
