@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_6d5d10e9",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-21T09:18:27Z",
+      "side": 1,
+      "message": "Why -3, why not -1? Also you need an sHint.getLength() \u003e\u003d 2 check there in case the field is intentionally malformed (like \u0027\"foo\u0027).\n\nLast, OUString::match() will match any substring, you probably want startsWith() here?",
+      "revId": "fd4cd23fd26bf49385aecadeb8e92f1966596bed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
