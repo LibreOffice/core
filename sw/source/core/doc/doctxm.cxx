@@ -154,26 +154,38 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     SwTextNode& rTextNd = const_cast<SwTextNode&>(pTextTOXMark->GetTextNode());
     OSL_ENSURE( rTextNd.GetpSwpHints(), "cannot be deleted" );
 
-    std::unique_ptr<SwRegHistory> aRHst;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if (pTextTOXMark->HasDummyChar())
     {
-        // save attributes for Undo
-        SwUndoResetAttr* pUndo = new SwUndoResetAttr(
-            SwPosition( rTextNd, SwIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
-            RES_TXTATR_TOXMARK );
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        // tdf#106377 don't use SwUndoResetAttr, it uses NOTXTATRCHR
+        SwPaM tmp(rTextNd, pTextTOXMark->GetStart(),
+                  rTextNd, pTextTOXMark->GetStart()+1);
+        assert(rTextNd.GetText()[pTextTOXMark->GetStart()] == CH_TXTATR_INWORD);
+        getIDocumentContentOperations().DeleteRange(tmp);
+    }
+    else
+    {
+        std::unique_ptr<SwRegHistory> aRHst;
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            // save attributes for Undo
+            SwUndoResetAttr* pUndo = new SwUndoResetAttr(
+                SwPosition( rTextNd, SwIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
+                RES_TXTATR_TOXMARK );
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
 
-        aRHst.reset(new SwRegHistory(rTextNd, &pUndo->GetHistory()));
-        rTextNd.GetpSwpHints()->Register(aRHst.get());
+            aRHst.reset(new SwRegHistory(rTextNd, &pUndo->GetHistory()));
+            rTextNd.GetpSwpHints()->Register(aRHst.get());
+        }
+
+        rTextNd.DeleteAttribute( const_cast<SwTextTOXMark*>(pTextTOXMark) );
+
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            if( rTextNd.GetpSwpHints() )
+                rTextNd.GetpSwpHints()->DeRegister();
+        }
     }
 
-    rTextNd.DeleteAttribute( const_cast<SwTextTOXMark*>(pTextTOXMark) );
-
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        if( rTextNd.GetpSwpHints() )
-            rTextNd.GetpSwpHints()->DeRegister();
-    }
     getIDocumentState().SetModified();
 }
 
