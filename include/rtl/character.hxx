@@ -57,6 +57,13 @@ inline bool isAscii(sal_uInt32 code)
     return code <= 0x7F;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAscii(char) = delete;
+bool isAscii(signed char) = delete;
+template<typename T> inline bool isAscii(T code)
+{ return isAscii(sal_uInt32(code)); }
+#endif
+
 /** Check for ASCII lower case character.
 
     @param code  A Unicode code point.
@@ -71,6 +78,13 @@ inline bool isAsciiLowerCase(sal_uInt32 code)
     assert(isUnicodeCodePoint(code));
     return code >= 'a' && code <= 'z';
 }
+
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiLowerCase(char) = delete;
+bool isAsciiLowerCase(signed char) = delete;
+template<typename T> inline bool isAsciiLowerCase(T code)
+{ return isAsciiLowerCase(sal_uInt32(code)); }
+#endif
 
 /** Check for ASCII upper case character.
 
@@ -87,6 +101,13 @@ inline bool isAsciiUpperCase(sal_uInt32 code)
     return code >= 'A' && code <= 'Z';
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiUpperCase(char) = delete;
+bool isAsciiUpperCase(signed char) = delete;
+template<typename T> inline bool isAsciiUpperCase(T code)
+{ return isAsciiUpperCase(sal_uInt32(code)); }
+#endif
+
 /** Check for ASCII alphabetic character.
 
     @param code  A Unicode code point.
@@ -101,6 +122,13 @@ inline bool isAsciiAlpha(sal_uInt32 code)
     assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) || isAsciiUpperCase(code);
 }
+
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiAlpha(char) = delete;
+bool isAsciiAlpha(signed char) = delete;
+template<typename T> inline bool isAsciiAlpha(T code)
+{ return isAsciiAlpha(sal_uInt32(code)); }
+#endif
 
 /** Check for ASCII digit character.
 
@@ -117,6 +145,13 @@ inline bool isAsciiDigit(sal_uInt32 code)
     return code >= '0' && code <= '9';
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiDigit(char) = delete;
+bool isAsciiDigit(signed char) = delete;
+template<typename T> inline bool isAsciiDigit(T code)
+{ return isAsciiDigit(sal_uInt32(code)); }
+#endif
+
 /** Check for ASCII alphanumeric character.
 
     @param code  A Unicode code point.
@@ -131,6 +166,13 @@ inline bool isAsciiAlphanumeric(sal_uInt32 code)
     assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || isAsciiAlpha(code);
 }
+
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiAlphanumeric(char) = delete;
+bool isAsciiAlphanumeric(signed char) = delete;
+template<typename T> inline bool isAsciiAlphanumeric(T code)
+{ return isAsciiAlphanumeric(sal_uInt32(code)); }
+#endif
 
 /** Check for ASCII canonic hexadecimal digit character.
 
@@ -147,6 +189,13 @@ inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
     return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiCanonicHexDigit(char) = delete;
+bool isAsciiCanonicHexDigit(signed char) = delete;
+template<typename T> inline bool isAsciiCanonicHexDigit(T code)
+{ return isAsciiCanonicHexDigit(sal_uInt32(code)); }
+#endif
+
 /** Check for ASCII hexadecimal digit character.
 
     @param code  A Unicode code point.
@@ -162,6 +211,13 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiHexDigit(char) = delete;
+bool isAsciiHexDigit(signed char) = delete;
+template<typename T> inline bool isAsciiHexDigit(T code)
+{ return isAsciiHexDigit(sal_uInt32(code)); }
+#endif
+
 /** Check for ASCII octal digit character.
 
     @param code  A Unicode code point.
@@ -176,6 +232,12 @@ inline bool isAsciiOctalDigit(sal_uInt32 code)
     return code >= '0' && code <= '7';
 }
 
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiOctalDigit(char) = delete;
+bool isAsciiOctalDigit(signed char) = delete;
+template<typename T> inline bool isAsciiOctalDigit(T code)
+{ return isAsciiOctalDigit(sal_uInt32(code)); }
+#endif
 
 /** Convert a character, if ASCII, to upper case.
 
@@ -191,6 +253,13 @@ inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
     return isAsciiLowerCase(code) ? code - 32 : code;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+sal_uInt32 toAsciiUpperCase(char) = delete;
+sal_uInt32 toAsciiUpperCase(signed char) = delete;
+template<typename T> inline sal_uInt32 toAsciiUpperCase(T code)
+{ return toAsciiUpperCase(sal_uInt32(code)); }
+#endif
+
 /** Convert a character, if ASCII, to lower case.
 
     @param code  A Unicode code point.
@@ -204,6 +273,13 @@ inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
     assert(isUnicodeCodePoint(code));
     return isAsciiUpperCase(code) ? code + 32 : code;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+sal_uInt32 toAsciiLowerCase(char) = delete;
+sal_uInt32 toAsciiLowerCase(signed char) = delete;
+template<typename T> inline sal_uInt32 toAsciiLowerCase(T code)
+{ return toAsciiLowerCase(sal_uInt32(code)); }
+#endif
 
 /** Compare two characters ignoring ASCII case.
 

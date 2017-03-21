@@ -375,7 +375,7 @@ bool isdigitAsciiString(const OUString &rString)
 {
     return std::all_of(
         rString.getStr(), rString.getStr() + rString.getLength(),
-        rtl::isAsciiDigit);
+        [](sal_Unicode c){ return rtl::isAsciiDigit(c); });
 }
 
 namespace

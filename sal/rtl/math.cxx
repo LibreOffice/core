@@ -918,8 +918,12 @@ double SAL_CALL rtl_math_stringToDouble(sal_Char const * pBegin,
                                         sal_Char const ** pParsedEnd)
     SAL_THROW_EXTERN_C()
 {
-    return stringToDouble(pBegin, pEnd, cDecSeparator, cGroupSeparator, pStatus,
-                          pParsedEnd);
+    return stringToDouble(
+        reinterpret_cast<unsigned char const *>(pBegin),
+        reinterpret_cast<unsigned char const *>(pEnd),
+        static_cast<unsigned char>(cDecSeparator),
+        static_cast<unsigned char>(cGroupSeparator), pStatus,
+        reinterpret_cast<unsigned char const **>(pParsedEnd));
 }
 
 double SAL_CALL rtl_math_uStringToDouble(sal_Unicode const * pBegin,

@@ -321,7 +321,7 @@ void SbiSymDef::SetType( SbxDataType t )
         sal_Unicode cu = aName[0];
         if( cu < 256 )
         {
-            char ch = (char)cu;
+            unsigned char ch = (unsigned char)cu;
             if( ch == '_' )
             {
                 ch = 'Z';

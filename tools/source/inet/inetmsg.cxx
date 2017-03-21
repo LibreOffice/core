@@ -57,7 +57,9 @@ static const sal_Char *months[12] =
 static sal_uInt16 ParseNumber(const OString& rStr, sal_Int32& nIndex)
 {
     sal_Int32 n = nIndex;
-    while ((n < rStr.getLength()) && rtl::isAsciiDigit(rStr[n])) n++;
+    while ((n < rStr.getLength())
+           && rtl::isAsciiDigit(static_cast<unsigned char>(rStr[n])))
+        n++;
 
     OString aNum(rStr.copy(nIndex, (n - nIndex)));
     nIndex = n;
@@ -68,7 +70,9 @@ static sal_uInt16 ParseNumber(const OString& rStr, sal_Int32& nIndex)
 static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)
 {
     sal_Int32 n = nIndex;
-    while ((n < rStr.getLength()) && rtl::isAsciiAlpha(rStr[n])) n++;
+    while ((n < rStr.getLength())
+           && rtl::isAsciiAlpha(static_cast<unsigned char>(rStr[n])))
+        n++;
 
     OString aMonth(rStr.copy(nIndex, 3));
     nIndex = n;
@@ -99,7 +103,7 @@ bool INetMIMEMessage::ParseDateField (
 
         while (
             (nIndex < aDateField.getLength()) &&
-            (rtl::isAsciiAlpha (aDateField[nIndex]) ||
+            (rtl::isAsciiAlpha (static_cast<unsigned char>(aDateField[nIndex])) ||
              (aDateField[nIndex] == ',')     ))
             nIndex++;
 
@@ -107,7 +111,7 @@ bool INetMIMEMessage::ParseDateField (
                (aDateField[nIndex] == ' '))
             nIndex++;
 
-        if (rtl::isAsciiAlpha (aDateField[nIndex]))
+        if (rtl::isAsciiAlpha (static_cast<unsigned char>(aDateField[nIndex])))
         {
             // Format: ctime().
             if ((aDateField.getLength() - nIndex) < 20) return false;

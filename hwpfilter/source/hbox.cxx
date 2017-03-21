@@ -581,7 +581,8 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
             ptr = buf;
             while (*ptr)
             {
-                *ptr = sal::static_int_cast<char>(rtl::toAsciiUpperCase(*ptr));
+                *ptr = sal::static_int_cast<char>(
+                    rtl::toAsciiUpperCase(static_cast<unsigned char>(*ptr)));
                 ptr++;
             }
         }
@@ -683,7 +684,7 @@ hchar_string Outline::GetUnicode() const
                                 char *ptr = dest;
                                 while( *ptr )
                                 {
-                                    *ptr = sal::static_int_cast<char>(rtl::toAsciiUpperCase(*ptr));
+                                    *ptr = sal::static_int_cast<char>(rtl::toAsciiUpperCase(static_cast<unsigned char>(*ptr)));
                                     ptr++;
                                 }
                             }

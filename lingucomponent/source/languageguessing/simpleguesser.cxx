@@ -61,7 +61,8 @@ static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &
                 min = s2.length();
 
             for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
-                    ret =   rtl::toAsciiUpperCase(s1[i]) -  rtl::toAsciiUpperCase(s2[i]);
+                    ret = rtl::toAsciiUpperCase(static_cast<unsigned char>(s1[i]))
+                        -  rtl::toAsciiUpperCase(static_cast<unsigned char>(s2[i]));
                     if(s1[i] == '.' || s2[i] == '.') {ret = 0;}    //. is a neutral character
             }
         return ret;

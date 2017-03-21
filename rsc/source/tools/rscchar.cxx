@@ -110,7 +110,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         {
                             if( isdigit( *pStr ) )
                                 nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'0';
-                            else if( rtl::isAsciiUpperCase( *pStr ) )
+                            else if( rtl::isAsciiUpperCase( static_cast<unsigned char>(*pStr) ) )
                                 nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'A' +10;
                             else
                                 nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'a' +10;

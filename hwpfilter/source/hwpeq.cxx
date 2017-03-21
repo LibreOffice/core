@@ -418,15 +418,16 @@ void make_keyword( char *keyword, const char *token)
     memcpy(keyword, token, len);
     keyword[len] = 0;
 
-    if( (token[0] & 0x80) || rtl::isAsciiLowerCase(token[0]) || strlen(token) < 2 )
+    if( (token[0] & 0x80) || rtl::isAsciiLowerCase(static_cast<unsigned char>(token[0])) || strlen(token) < 2 )
         return;
 
-    bool capital = rtl::isAsciiUpperCase(keyword[1]);
+    bool capital = rtl::isAsciiUpperCase(
+        static_cast<unsigned char>(keyword[1]));
     for( ptr = keyword + 2; *ptr && result; ptr++ )
     {
         if( (*ptr & 0x80) ||
-            (!capital && rtl::isAsciiUpperCase(*ptr)) ||
-            (capital && rtl::isAsciiLowerCase(*ptr)) )
+            (!capital && rtl::isAsciiUpperCase(static_cast<unsigned char>(*ptr))) ||
+            (capital && rtl::isAsciiLowerCase(static_cast<unsigned char>(*ptr))) )
         {
             result = false;
         }
@@ -437,8 +438,9 @@ void make_keyword( char *keyword, const char *token)
         ptr = keyword;
         while( *ptr )
         {
-            if( rtl::isAsciiUpperCase(*ptr) )
-                *ptr = sal::static_int_cast<char>(rtl::toAsciiLowerCase(*ptr));
+            if( rtl::isAsciiUpperCase(static_cast<unsigned char>(*ptr)) )
+                *ptr = sal::static_int_cast<char>(
+                    rtl::toAsciiLowerCase(static_cast<unsigned char>(*ptr)));
             ptr++;
         }
     }
@@ -689,8 +691,10 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
         key[0] = '\\';
         strcpy(key + 1, eq->key);
       }
-      if( (eq->flag & EQ_CASE) && rtl::isAsciiUpperCase(token[0]) )
-        key[1] = sal::static_int_cast<char>(rtl::toAsciiUpperCase(key[1]));
+      if( (eq->flag & EQ_CASE)
+          && rtl::isAsciiUpperCase(static_cast<unsigned char>(token[0])) )
+        key[1] = sal::static_int_cast<char>(
+            rtl::toAsciiUpperCase(static_cast<unsigned char>(key[1])));
       token = key;
     }
 
