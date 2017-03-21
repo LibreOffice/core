@@ -150,6 +150,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
             perror("Memory Allocation: cshape\n");
             return false;
         }
+        memset(cshapep, 0, nch * sizeof(CharShape));
 
         for (ii = 0; ii < nch; ii++)
         {
