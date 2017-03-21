@@ -58,34 +58,34 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_TABLE_VERT_CENTER
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_TABLE_VERT_BOTTOM
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_SET_COL_WIDTH // status( final|play )
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_ULSPACE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_LRSPACE // status(final|play)
@@ -93,27 +93,27 @@ interface BaseTextTable
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_TABLE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_DELETE_COL  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_DELETE_ROW  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_TABLE_DELETE_TABLE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_GOTO_NEXT_CELL // status(final|play)
     [
@@ -142,7 +142,7 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     // 2015/06 Deprecated, replaced by INSERT_COL_AFTER
@@ -150,35 +150,35 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_INSERT_COL_AFTER // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_INSERT_COL_DLG  // status(final|play)
     [
         Export = FALSE ;
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_INSERT_ROW_BEFORE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_INSERT_ROW_AFTER // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     // 2015/06 Deprecated, replaced by INSERT_ROW_AFTER
@@ -186,7 +186,7 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_INSERT_ROW_DLG  // status(final|play)
@@ -194,19 +194,19 @@ interface BaseTextTable
         Export = FALSE ;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_MERGE_CELLS  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_OPTIMIZE_TABLE
     [
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         StateMethod = GetState ;
     ]
 
@@ -214,21 +214,21 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_BALANCE_CELLS  // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_BALANCE_ROWS  // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_SELECT_ALL // status(final|play)
@@ -252,46 +252,46 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_TABLE_SET_ROW_HEIGHT // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
         FN_TABLE_ROW_SPLIT
         [
                 ExecMethod = Execute ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
         FN_TABLE_OPTIMAL_HEIGHT // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_SPLIT_CELLS // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_SPLIT_TABLE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_MERGE_TABLE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_UNSET_READ_ONLY_CELLS // status()
@@ -304,7 +304,7 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_BORDER // status()
@@ -312,7 +312,7 @@ interface BaseTextTable
         ExecMethod = Execute ;
         StateMethod = GetFrameBorderState ;
         GroupId = GID_TABLE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_LINESTYLE // status()
@@ -320,14 +320,14 @@ interface BaseTextTable
         ExecMethod = ExecTableStyle ;
         StateMethod = GetLineStyleState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_LINECOLOR // status(play)
     [
         ExecMethod = ExecTableStyle ;
         StateMethod = GetLineStyleState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_TABLE_MODE_FIX
@@ -351,50 +351,50 @@ interface BaseTextTable
     FN_NUMBER_FORMAT
     [
         ExecMethod = ExecNumberFormat;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_NUMBER_STANDARD
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_TWODEC
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_SCIENTIFIC
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_DATE
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_TIME
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_CURRENCY
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_NUMBER_PERCENT
     [
         ExecMethod = ExecNumberFormat;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 // Slots ohne Export
 
@@ -403,25 +403,25 @@ interface BaseTextTable
         Export = FALSE ;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_TABLE_HEADLINE_REPEAT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_TABLE_SELECT_CELL
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_TABLE_DELETE_TABLE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

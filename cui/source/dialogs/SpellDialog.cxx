@@ -743,7 +743,7 @@ bool SpellDialog::Close()
     // Execute() does not work here when we are in a document with protected
     // section - in that case, the cursor can move from the editable field to
     // the protected area, and the slots get disabled because of
-    // SW_DISABLE_ON_PROTECTED_CURSOR (see FN_SPELL_GRAMMAR_DIALOG in .sdi).
+    // SfxDisableFlags::SwOnProtectedCursor (see FN_SPELL_GRAMMAR_DIALOG in .sdi).
     SfxViewFrame::Current()->ToggleChildWindow(rParent.GetType());
 
     return true;

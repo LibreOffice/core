@@ -625,16 +625,16 @@ void SwView::CheckReadonlyState()
 
 void SwView::CheckReadonlySelection()
 {
-    sal_uInt32 nDisableFlags = 0;
+    SfxDisableFlags nDisableFlags = SfxDisableFlags::NONE;
     SfxDispatcher &rDis = GetDispatcher();
 
     if( m_pWrtShell->HasReadonlySel(m_bAnnotationMode) &&
         ( !m_pWrtShell->GetDrawView() ||
             !m_pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount() ))
-        nDisableFlags |= SW_DISABLE_ON_PROTECTED_CURSOR;
+        nDisableFlags |= SfxDisableFlags::SwOnProtectedCursor;
 
-    if( (SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags ) !=
-        (SW_DISABLE_ON_PROTECTED_CURSOR & rDis.GetDisableFlags() ) )
+    if( (SfxDisableFlags::SwOnProtectedCursor & nDisableFlags ) !=
+        (SfxDisableFlags::SwOnProtectedCursor & rDis.GetDisableFlags() ) )
     {
         // Additionally move at the Window the InputContext, so that
         // in japanese / chinese versions the external input will be
@@ -655,7 +655,7 @@ void SwView::CheckReadonlySelection()
 //         text formatting and the correct font will be build together.
 
                 InputContext aCntxt( GetEditWin().GetInputContext() );
-                aCntxt.SetOptions( SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags
+                aCntxt.SetOptions( SfxDisableFlags::SwOnProtectedCursor & nDisableFlags
                                     ? (aCntxt.GetOptions() & ~
                                             InputContextFlags( InputContextFlags::Text |
                                                 InputContextFlags::ExtText ))

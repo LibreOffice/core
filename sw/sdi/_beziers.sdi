@@ -21,13 +21,13 @@ interface _Bezier : Base
     SID_DELETE
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_BACKSPACE
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_ESCAPE // api:
@@ -40,7 +40,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_INSERT
@@ -48,7 +48,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_DELETE
@@ -56,7 +56,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_CUTLINE
@@ -64,7 +64,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_CONVERT
@@ -72,7 +72,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_EDGE
@@ -80,7 +80,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_SMOOTH
@@ -88,7 +88,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_SYMMTR
@@ -96,7 +96,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_CLOSE
@@ -104,7 +104,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_BEZIER_ELIMINATE_POINTS
@@ -112,7 +112,7 @@ interface _Bezier : Base
         Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

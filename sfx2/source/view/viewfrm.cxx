@@ -1027,7 +1027,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         }
     }
 
-    GetDispatcher()->SetDisableFlags( 0 );
+    GetDispatcher()->SetDisableFlags( SfxDisableFlags::NONE );
 }
 
 bool SfxViewFrame::Close()

@@ -22,28 +22,28 @@ interface StarWriter
     [
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
 
     FN_LABEL  // status(final|play)
     [
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
 
     FN_BUSINESS_CARD // status()
     [
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
 
     FN_XFORMS_INIT  // #i31958#
     [
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
 
     SID_ATTR_METRIC // status(final|play)

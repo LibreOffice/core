@@ -123,6 +123,16 @@ namespace o3tl
     template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x3ffd> {};
 }
 
+/* Flags that are being used in the slot definitions for the disable-features */
+enum class SfxDisableFlags {
+    NONE,
+    SwOnProtectedCursor = 0x0001,
+    SwOnMailboxEditor   = 0x0002,
+};
+namespace o3tl {
+    template<> struct typed_flags<SfxDisableFlags> : is_typed_flags<SfxDisableFlags, 0x0003> {};
+}
+
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);
 typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
 
@@ -453,8 +463,8 @@ public:
     void                        SetHelpId(sal_uIntPtr nId);
     sal_uIntPtr                     GetHelpId() const;
     virtual SfxObjectShell*     GetObjectShell();
-    void                        SetDisableFlags( sal_uIntPtr nFlags );
-    sal_uIntPtr                     GetDisableFlags() const;
+    void                        SetDisableFlags( SfxDisableFlags nFlags );
+    SfxDisableFlags             GetDisableFlags() const;
 
     virtual SfxItemSet*         CreateItemSet( sal_uInt16 nId );
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );

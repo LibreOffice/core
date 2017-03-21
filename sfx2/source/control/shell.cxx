@@ -61,7 +61,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxViewFrame*               pFrame;        // Frame, if  <UI-active>
     SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;
-    sal_uIntPtr                 nDisableFlags;
+    SfxDisableFlags             nDisableFlags;
     sal_uIntPtr                 nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
@@ -75,7 +75,7 @@ struct SfxShell_Impl: public SfxBroadcaster
         , pFrame(nullptr)
         , pRepeatTarget(nullptr)
         , bActive(false)
-        , nDisableFlags(0)
+        , nDisableFlags(SfxDisableFlags::NONE)
         , nHelpId(0)
         , pExecuter(nullptr)
         , pUpdater(nullptr)
@@ -684,12 +684,12 @@ void SfxShell::UIFeatureChanged()
     }
 }
 
-void SfxShell::SetDisableFlags( sal_uIntPtr nFlags )
+void SfxShell::SetDisableFlags( SfxDisableFlags nFlags )
 {
     pImpl->nDisableFlags = nFlags;
 }
 
-sal_uIntPtr SfxShell::GetDisableFlags() const
+SfxDisableFlags SfxShell::GetDisableFlags() const
 {
     return pImpl->nDisableFlags;
 }

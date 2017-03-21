@@ -21,19 +21,19 @@ interface BaseTextMedia
     SID_DELETE
     [
         ExecMethod = ExecMedia;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_BACKSPACE
     [
         ExecMethod = ExecMedia;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_AVMEDIA_TOOLBOX // status(final|play|rec)
     [
         ExecMethod = ExecMedia;
         StateMethod = GetMediaState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }

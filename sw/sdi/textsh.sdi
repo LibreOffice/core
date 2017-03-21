@@ -22,7 +22,7 @@ interface Text : BaseText
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
      // Here should the slots be integrated, which are not supported
      // in StarWriter/WEB
@@ -33,7 +33,7 @@ interface Text : BaseText
     [
         ExecMethod = ExecField ;
         StateMethod = StateField ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ReadOnlyDoc = FALSE ;
     ]
 
