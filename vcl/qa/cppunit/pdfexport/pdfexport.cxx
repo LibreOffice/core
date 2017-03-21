@@ -18,7 +18,7 @@
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
-#include <xmlsecurity/pdfio/pdfdocument.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
 
 using namespace ::com::sun::star;
@@ -90,21 +90,21 @@ void PdfExportTest::testTdf106059()
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // Assert that the XObject in the page resources dictionary is a reference XObject.
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
-    xmlsecurity::pdfio::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
     CPPUNIT_ASSERT(pResources);
-    auto pXObjects = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
     CPPUNIT_ASSERT(pXObjects);
     // The page has one image.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
-    xmlsecurity::pdfio::PDFObjectElement* pReferenceXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    vcl::filter::PDFObjectElement* pReferenceXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
     CPPUNIT_ASSERT(pReferenceXObject);
     // The image is a reference XObject.
     // This dictionary key was missing, so the XObject wasn't a reference one.
@@ -126,18 +126,18 @@ void PdfExportTest::testTdf105461()
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // The document has one page.
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
 
     // The page has a stream.
-    xmlsecurity::pdfio::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
     CPPUNIT_ASSERT(pContents);
-    xmlsecurity::pdfio::PDFStreamElement* pStream = pContents->GetStream();
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
     CPPUNIT_ASSERT(pStream);
     SvMemoryStream& rObjectStream = pStream->GetMemory();
     // Uncompress it.
@@ -172,32 +172,32 @@ void PdfExportTest::testTdf105093()
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // The document has one page.
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
 
     // Get page annotations.
-    auto pAnnots = dynamic_cast<xmlsecurity::pdfio::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
     CPPUNIT_ASSERT(pAnnots);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
-    auto pAnnotReference = dynamic_cast<xmlsecurity::pdfio::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    auto pAnnotReference = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
     CPPUNIT_ASSERT(pAnnotReference);
-    xmlsecurity::pdfio::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
     CPPUNIT_ASSERT(pAnnot);
-    CPPUNIT_ASSERT_EQUAL(OString("Annot"), static_cast<xmlsecurity::pdfio::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(OString("Annot"), static_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
 
     // Get the Action -> Rendition -> MediaClip -> FileSpec.
-    auto pAction = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+    auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
     CPPUNIT_ASSERT(pAction);
-    auto pRendition = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pAction->LookupElement("R"));
+    auto pRendition = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAction->LookupElement("R"));
     CPPUNIT_ASSERT(pRendition);
-    auto pMediaClip = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pRendition->LookupElement("C"));
+    auto pMediaClip = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pRendition->LookupElement("C"));
     CPPUNIT_ASSERT(pMediaClip);
-    auto pFileSpec = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pMediaClip->LookupElement("D"));
+    auto pFileSpec = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pMediaClip->LookupElement("D"));
     CPPUNIT_ASSERT(pFileSpec);
     // Make sure the filespec refers to an embedded file.
     // This key was missing, the embedded video was handled as a linked one.
@@ -219,18 +219,18 @@ void PdfExportTest::testTdf106206()
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // The document has one page.
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
 
     // The page has a stream.
-    xmlsecurity::pdfio::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
     CPPUNIT_ASSERT(pContents);
-    xmlsecurity::pdfio::PDFStreamElement* pStream = pContents->GetStream();
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
     CPPUNIT_ASSERT(pStream);
     SvMemoryStream& rObjectStream = pStream->GetMemory();
     // Uncompress it.

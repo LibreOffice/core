@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmlsecurity_pdfsigning, \
 	unotest \
 	utl \
 	xmlsecurity \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 

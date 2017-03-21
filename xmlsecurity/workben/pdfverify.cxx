@@ -177,7 +177,7 @@ int pdfVerify(int nArgc, char** pArgv)
         bRemoveSignature = true;
 
     SvFileStream aStream(aInURL, StreamMode::READ);
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(aStream))
     {
         SAL_WARN("xmlsecurity.pdfio", "failed to read the document");
@@ -187,7 +187,7 @@ int pdfVerify(int nArgc, char** pArgv)
     if (bRemoveSignature)
     {
         std::cerr << "removing the last signature" << std::endl;
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         if (aSignatures.empty())
         {
             std::cerr << "found no signatures" << std::endl;
@@ -214,7 +214,7 @@ int pdfVerify(int nArgc, char** pArgv)
     if (aOutURL.isEmpty())
     {
         std::cerr << "verifying signatures" << std::endl;
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         if (aSignatures.empty())
             std::cerr << "found no signatures" << std::endl;
         else
