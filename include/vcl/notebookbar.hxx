@@ -15,6 +15,7 @@
 #include <vcl/EnumContext.hxx>
 #include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
+#include <vector>
 
 class SystemWindow;
 
@@ -41,7 +42,7 @@ public:
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
-    NotebookbarContextControl* m_pContextContainer;
+    std::vector<NotebookbarContextControl*> m_pContextContainers;
 
     void UpdateBackground();
 };

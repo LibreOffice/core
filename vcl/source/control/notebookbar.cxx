@@ -39,7 +39,21 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
 
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
-    m_pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>("ContextContainer"));
+    // or "ContextContainerX" where X is a number >= 1
+    NotebookbarContextControl* pContextContainer = nullptr;
+    int i = 0;
+    do
+    {
+        OUString aName = "ContextContainer";
+        if (i)
+            aName += OUString::number(i);
+
+        pContextContainer = dynamic_cast<NotebookbarContextControl*>(m_pUIBuilder->get<Window>(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8)));
+        if (pContextContainer)
+            m_pContextContainers.push_back(pContextContainer);
+        i++;
+    }
+    while( pContextContainer != nullptr );
 
     UpdateBackground();
 }
@@ -51,6 +65,7 @@ NotebookBar::~NotebookBar()
 
 void NotebookBar::dispose()
 {
+    m_pContextContainers.clear();
     if (m_pSystemWindow && m_pSystemWindow->ImplIsInTaskPaneList(this))
         m_pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
     m_pSystemWindow.clear();
@@ -131,8 +146,11 @@ void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
 
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
 {
-    if (mpParent && mpParent->m_pContextContainer)
-        mpParent->m_pContextContainer->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
+    if (mpParent && mpParent->m_pContextContainers.size() > 0)
+    {
+        for (NotebookbarContextControl* pControl : mpParent->m_pContextContainers)
+            pControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
+    }
 }
 
 
