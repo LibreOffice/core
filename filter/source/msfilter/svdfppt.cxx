@@ -1901,14 +1901,18 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
 
                                     // object is not an own object
-                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, StreamMode::READWRITE );
-                                    if ( xObjStor.is() && xTarget.is() )
+                                    const css::uno::Reference < css::embed::XStorage >& rStorage = pOe->pShell->GetStorage();
+                                    if (rStorage.is())
                                     {
-                                        xObjStor->CopyTo( xTarget.get() );
-                                        if( !xTarget->GetError() )
-                                            xTarget->Commit();
+                                        tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
+                                        if (xObjStor.is() && xTarget.is())
+                                        {
+                                            xObjStor->CopyTo(xTarget.get());
+                                            if (!xTarget->GetError())
+                                                xTarget->Commit();
+                                        }
+                                        xTarget.clear();
                                     }
-                                    xTarget.clear();
 
                                     uno::Reference < embed::XEmbeddedObject > xObj =
                                         pOe->pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
