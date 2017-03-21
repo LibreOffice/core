@@ -28,6 +28,9 @@
 #include <limits.h>
 #include <algorithm>
 #include <cmath>
+#if defined(_MSC_VER)
+#include <intsafe.h>
+#endif
 
 #include <boost/rational.hpp>
 
@@ -170,21 +173,40 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     return *this;
 }
 
+#ifdef __has_builtin
+#define has_builtin(x) __has_builtin(x)
+#else
+#define has_builtin(x) 0
+#endif
+
 namespace
 {
-    template<typename T> void multiply_by(boost::rational<T>& i, const boost::rational<T>& r)
+    bool checked_multiply_by(boost::rational<sal_Int64>& i, const boost::rational<sal_Int64>& r)
     {
         // Protect against self-modification
-        T num = r.numerator();
-        T den = r.denominator();
+        sal_Int64 num = r.numerator();
+        sal_Int64 den = r.denominator();
 
         // Avoid overflow and preserve normalization
-        T gcd1 = boost::integer::gcd(i.numerator(), den);
-        T gcd2 = boost::integer::gcd(num, i.denominator());
+        sal_Int64 gcd1 = boost::integer::gcd(i.numerator(), den);
+        sal_Int64 gcd2 = boost::integer::gcd(num, i.denominator());
+
+        auto a = i.numerator() / gcd1;
+        auto b = num / gcd2;
+        bool fail = false;
+#if (defined __GNUC__ && __GNUC__ >= 5) || has_builtin(__builtin_mul_overflow)
+        fail |= __builtin_mul_overflow(a, b, &num);
+        fail |= __builtin_mul_overflow(i.denominator() / gcd2, den / gcd1, &den);
+#elif defined(_MSC_VER)
+        fail |= Int64Mult(a, b, &num) != S_OK;
+        fail |= Int64Mult(i.denominator() / gcd2, den / gcd1, &den) != S_OK;
+#else
         num = (i.numerator() / gcd1) * (num / gcd2);
         den = (i.denominator() / gcd2) * (den / gcd1);
-
+#endif
         i.assign(num, den);
+
+        return fail;
     }
 }
 
@@ -199,9 +221,9 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
         return *this;
     }
 
-    multiply_by(mpImpl->value, rVal.mpImpl->value);
+    bool bFail = checked_multiply_by(mpImpl->value, rVal.mpImpl->value);
 
-    if (HasOverflowValue())
+    if (bFail || HasOverflowValue())
     {
         mpImpl->valid = false;
     }
