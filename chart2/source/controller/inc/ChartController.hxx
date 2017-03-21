@@ -102,7 +102,6 @@ class ChartController   : public ::cppu::WeakImplHelper <
         >
 {
     friend class DrawCommandDispatch;
-    friend class ShapeController;
 
 public:
     ChartController() = delete;
@@ -322,13 +321,13 @@ public:
 
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
+    DrawViewWrapper* GetDrawViewWrapper();
+    VclPtr<ChartWindow> GetChartWindow();
+    bool isAdditionalShapeSelected();
 
     DECL_LINK( NotifyUndoActionHdl, SdrUndoAction*, void );
 
     css::uno::Reference<css::uno::XInterface> const & getChartView();
-
-private:
-    DrawViewWrapper* GetDrawViewWrapper();
 
 private:
     class TheModelRef;
