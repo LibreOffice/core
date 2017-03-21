@@ -254,8 +254,6 @@ class XMLSECURITY_DLLPUBLIC PDFDocument
     SvMemoryStream m_aEditBuffer;
 
     static int AsHex(char ch);
-    /// Decode a hex dump.
-    static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
@@ -277,6 +275,8 @@ public:
     PDFDocument(const PDFDocument&) = delete;
     /// @name Low-level functions, to be used by PDFElement subclasses.
     //@{
+    /// Decode a hex dump.
+    static std::vector<unsigned char> DecodeHexString(PDFHexStringElement* pElement);
     static OString ReadKeyword(SvStream& rStream);
     static size_t FindStartXRef(SvStream& rStream);
     void ReadXRef(SvStream& rStream);
@@ -309,16 +309,17 @@ public:
     bool Write(SvStream& rStream);
     /// Get a list of signatures embedded into this document.
     std::vector<PDFObjectElement*> GetSignatureWidgets();
-    /**
-     * @param rInformation The actual result.
-     * @param bLast If this is the last signature in the file, so it covers the whole file physically.
-     * @return If we can determinate a result.
-     */
-    static bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast);
     /// Remove the nth signature from read document in the edit buffer.
     bool RemoveSignature(size_t nPosition);
     //@}
 };
+
+/**
+ * @param rInformation The actual result.
+ * @param bLast If this is the last signature in the file, so it covers the whole file physically.
+ * @return If we can determinate a result.
+ */
+XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast);
 
 } // namespace pdfio
 } // namespace xmlsecurity

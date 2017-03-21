@@ -2157,7 +2157,7 @@ bool VerifyNonDetachedSignature(SvStream& rStream, std::vector<std::pair<size_t,
 #endif
 }
 
-bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
+bool ValidateSignature(SvStream& rStream, PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
 {
     PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
