@@ -279,7 +279,10 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         if (!m_sGraphicURL.isEmpty())
             aNumberingProperties.push_back(lcl_makePropVal(PROP_GRAPHIC_URL, m_sGraphicURL));
         if (m_sGraphicBitmap.is())
+        {
             aNumberingProperties.push_back(lcl_makePropVal(PROP_GRAPHIC_BITMAP, m_sGraphicBitmap));
+            aNumberingProperties.push_back(lcl_makePropVal(PROP_GRAPHIC_SIZE, m_aGraphicSize));
+        }
     }
 
     aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, m_nTabstop));
@@ -867,19 +870,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             {
                 uno::Reference<drawing::XShape> xShape = m_rDMapper.PopPendingShape();
 
-                // Respect only the aspect ratio of the picture, not its size.
-                awt::Size aPrefSize = xShape->getSize();
-                // See SwDefBulletConfig::InitFont(), default height is 14.
-                const int nFontHeight = 14;
-                // Point -> mm100.
-                const int nHeight = nFontHeight * 35;
-                if (aPrefSize.Height * aPrefSize.Width != 0)
-                {
-                    int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
-                    awt::Size aSize(nWidth, nHeight);
-                    xShape->setSize(aSize);
-                }
-
                 m_pCurrentNumPicBullet->SetShape(xShape);
             }
             break;
@@ -911,6 +901,25 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                         m_pCurrentDefinition->GetCurrentLevel()->SetGraphicBitmap( gr );
                     } catch(const beans::UnknownPropertyException&)
                     {}
+
+                    // Respect only the aspect ratio of the picture, not its size.
+                    awt::Size aPrefSize = xShape->getSize();
+                    // See SwDefBulletConfig::InitFont(), default height is 14.
+                    const int nFontHeight = 14;
+                    // Point -> mm100.
+                    const int nHeight = nFontHeight * 35;
+                    if ( aPrefSize.Height * aPrefSize.Width != 0 )
+                    {
+                        int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
+
+                        awt::Size aSize( convertMm100ToTwip(nWidth), convertMm100ToTwip(nHeight) );
+                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicSize( aSize );
+                    }
+                    else
+                    {
+                        awt::Size aSize( convertMm100ToTwip(aPrefSize.Width), convertMm100ToTwip(aPrefSize.Height) );
+                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicSize( aSize );
+                    }
                 }
             }
             break;
