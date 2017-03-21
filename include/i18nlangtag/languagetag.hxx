@@ -11,6 +11,7 @@
 #define INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
 
 #include <sal/config.h>
+#include <rtl/locale.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <i18nlangtag/i18nlangtagdllapi.h>
@@ -18,9 +19,6 @@
 
 #include <memory>
 #include <vector>
-
-typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
-
 
 /** The ISO 639-2 code reserved for local use used to indicate that a
     css::Locale contains a BCP 47 string in its Variant field. The
