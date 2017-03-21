@@ -892,7 +892,9 @@ bool equalIgnoreCase(const sal_Char * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
+            || (rtl::toAsciiUpperCase(static_cast<unsigned char>(*pBegin1++))
+                != rtl::toAsciiUpperCase(
+                    static_cast<unsigned char>(*pString2++))))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -1154,7 +1156,9 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
+            || (rtl::toAsciiUpperCase(*pBegin1++)
+                != rtl::toAsciiUpperCase(
+                    static_cast<unsigned char>(*pString2++))))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -1317,7 +1321,9 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
                             default:
                                 if (pLanguageBegin != nullptr
-                                    && (!rtl::isAsciiAlpha(cChar) || ++nAlphaCount > 8))
+                                    && (!rtl::isAsciiAlpha(
+                                            static_cast<unsigned char>(cChar))
+                                        || ++nAlphaCount > 8))
                                     pLanguageBegin = nullptr;
                                 break;
                         }
