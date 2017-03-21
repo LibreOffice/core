@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg952"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_printlayout.svg">
+  <defs
+     id="defs954" />
+  <metadata
+     id="metadata957">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(1,-1029.3622)">
+    <path
+       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       d="M 5 4 L 5 20 L 6 20 L 11 20 L 11 19 L 6 19 L 6 5 L 14 5 L 14 9 L 18 9 L 18 11 L 19 11 L 19 8 L 15 4 L 6 4 L 5 4 z M 13 12 L 13 14 L 12 14 L 12 19 L 14 19 L 14 20 L 18 20 L 18 19 L 20 19 L 20 14 L 19 14 L 19 12 L 13 12 z M 14 13 L 18 13 L 18 14 L 14 14 L 14 13 z M 13 15 L 19 15 L 19 18 L 13 18 L 13 15 z M 16 16 L 16 17 L 18 17 L 18 16 L 16 16 z "
+       transform="translate(-1,1029.3622)"
+       id="rect4139" />
+  </g>
+</svg>
