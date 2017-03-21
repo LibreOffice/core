@@ -911,10 +911,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                         m_pCurrentDefinition->GetCurrentLevel()->SetGraphicBitmap( gr );
                     } catch(const beans::UnknownPropertyException&)
                     {}
-
-                    // Now that we saved the URL of the graphic, remove it from the document.
-                    uno::Reference<lang::XComponent> xShapeComponent(xShape, uno::UNO_QUERY);
-                    xShapeComponent->dispose();
                 }
             }
             break;
