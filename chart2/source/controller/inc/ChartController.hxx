@@ -330,8 +330,6 @@ public:
     css::uno::Reference<css::uno::XInterface> const & getChartView();
 
 private:
-    class TheModelRef;
-    friend class ChartController::TheModelRef;
     class TheModel : public salhelper::SimpleReferenceObject
     {
         public:
