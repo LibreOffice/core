@@ -384,12 +384,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                         {
                             SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
                             pDrawViewWrapper->InsertObjectAtView( pObj, *pPageView );
-                            Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
-                            if ( xShape.is() )
-                            {
-                                m_pChartController->m_aSelection.setSelection( xShape );
-                                m_pChartController->m_aSelection.applySelection( pDrawViewWrapper );
-                            }
+                            m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
                             if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
                             {
                                 m_pChartController->StartTextEdit();
