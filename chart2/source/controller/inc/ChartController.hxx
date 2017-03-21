@@ -101,8 +101,6 @@ class ChartController   : public ::cppu::WeakImplHelper <
         ,css::frame::XLayoutManagerListener
         >
 {
-    friend class DrawCommandDispatch;
-
 public:
     ChartController() = delete;
     explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -324,6 +322,8 @@ public:
     DrawViewWrapper* GetDrawViewWrapper();
     VclPtr<ChartWindow> GetChartWindow();
     bool isAdditionalShapeSelected();
+    void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
+    void StartTextEdit( const Point* pMousePixel = nullptr );
 
     DECL_LINK( NotifyUndoActionHdl, SdrUndoAction*, void );
 
@@ -369,7 +369,6 @@ private:
             ::osl::Mutex&             m_rModelMutex;
     };
 
-private:
     mutable ::apphelper::LifeTimeManager m_aLifeTimeManager;
 
     bool m_bSuspended;
@@ -412,9 +411,6 @@ private:
     ChartDrawMode m_eDrawMode;
 
     rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
-
-private:
-    //private methods
 
     bool impl_isDisposedOrSuspended() const;
     ReferenceSizeProvider* impl_createReferenceSizeProvider();
@@ -476,7 +472,6 @@ private:
     void executeDispatch_SourceData();
     void executeDispatch_MoveSeries( bool bForward );
 
-    void StartTextEdit( const Point* pMousePixel = nullptr );
     bool EndTextEdit();
 
     void executeDispatch_View3D();
