@@ -75,21 +75,20 @@ public:
     }
 };
 
-ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
-    mbTerminate( false )
+ThreadPool::ThreadPool(sal_Int32 nWorkers)
+    : mbTerminate(true)
+    , mnWorkers(nWorkers)
 {
-    std::unique_lock< std::mutex > aGuard( maMutex );
-
-    for( sal_Int32 i = 0; i < nWorkers; i++ )
-        maWorkers.push_back( new ThreadWorker( this ) );
-
-    for(rtl::Reference<ThreadWorker> & rpWorker : maWorkers)
-        rpWorker->launch();
 }
 
 ThreadPool::~ThreadPool()
 {
-    shutdown();
+    // note: calling shutdown from global variable dtor blocks forever on Win7
+    // note2: there isn't enough MSVCRT left on exit to call assert() properly
+    // so these asserts just print something to stderr but exit status is
+    // still 0, but hopefully they will be more helpful on non-WNT platforms
+    assert(mbTerminate);
+    assert(maTasks.empty());
 }
 
 struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
@@ -136,7 +135,11 @@ void ThreadPool::shutdown()
         return;
 
     std::unique_lock< std::mutex > aGuard( maMutex );
+    shutdownLocked(aGuard);
+}
 
+void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
+{
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
         ThreadTask *pTask;
@@ -172,6 +175,14 @@ void ThreadPool::shutdown()
 void ThreadPool::pushTask( ThreadTask *pTask )
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
+
+    mbTerminate = false;
+
+    if (maWorkers.size() < mnWorkers && maWorkers.size() <= maTasks.size())
+    {
+        maWorkers.push_back( new ThreadWorker( this ) );
+        maWorkers.back()->launch();
+    }
 
     pTask->mpTag->onTaskPushed();
     maTasks.insert( maTasks.begin(), pTask );
@@ -217,6 +228,14 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
     }
 
     rTag->waitUntilDone();
+
+    {
+        std::unique_lock< std::mutex > aGuard( maMutex );
+        if (maTasks.empty()) // check if there are still tasks from another tag
+        {
+            shutdownLocked(aGuard);
+        }
+    }
 }
 
 std::shared_ptr<ThreadTaskTag> ThreadPool::createThreadTaskTag()
