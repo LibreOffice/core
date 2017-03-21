@@ -1445,6 +1445,18 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
     return m_pDrawViewWrapper;
 }
 
+
+VclPtr<ChartWindow> ChartController::GetChartWindow()
+{
+    return m_pChartWindow;
+}
+
+bool ChartController::isAdditionalShapeSelected()
+{
+    return m_aSelection.isAdditionalShapeSelected();
+}
+
+
 uno::Reference< XAccessible > ChartController::CreateAccessible()
 {
     uno::Reference< XAccessible > xResult = new AccessibleChartView( GetDrawViewWrapper() );
