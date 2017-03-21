@@ -600,7 +600,7 @@ OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& 
     throw uno::RuntimeException();
 }
 
-bool getModifier( char c, sal_uInt16& mod )
+bool getModifier( sal_Unicode c, sal_uInt16& mod )
 {
     if ( c == '+' ) {
         mod |= KEY_SHIFT;
@@ -616,17 +616,17 @@ bool getModifier( char c, sal_uInt16& mod )
 }
 
 /// @throws uno::RuntimeException
-sal_uInt16 parseChar( char c )
+sal_uInt16 parseChar( sal_Unicode c )
 {
     sal_uInt16 nVclKey = 0;
-    // do we care about locale here for isupper etc. ? probably not
-    if ( isalpha( c ) )
+    // do we care about locale here for letters/digits? probably not
+    if ( rtl::isAsciiAlpha( c ) )
     {
         nVclKey |= ( rtl::toAsciiUpperCase( c ) - 'A' ) + KEY_A;
         if ( rtl::isAsciiUpperCase( c ) )
             nVclKey |= KEY_SHIFT;
     }
-    else if ( isdigit( c ) )
+    else if ( rtl::isAsciiDigit( c ) )
         nVclKey |= ( c  - '0' ) + KEY_0;
     else if ( c == '~' ) // special case
         nVclKey = KEY_RETURN;
@@ -707,8 +707,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key )
     // else it should be just one char of ( 'a-z,A-Z,0-9' )
     if ( sKeyCode.getLength() == 1 ) // ( a single char )
     {
-        char c = (char)( sKeyCode[ 0 ] );
-        nVclKey |= parseChar( c );
+        nVclKey |= parseChar( sKeyCode[ 0 ] );
     }
     else // key should be enclosed in '{}'
     {
@@ -718,7 +717,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key )
         sKeyCode = sKeyCode.copy(1, sKeyCode.getLength() - 2 );
 
         if ( sKeyCode.getLength() == 1 )
-            nVclKey |= parseChar( (char)( sKeyCode[ 0 ] ) );
+            nVclKey |= parseChar( sKeyCode[ 0 ] );
         else
         {
             auto it = s_KeyCodes.find( sKeyCode );
