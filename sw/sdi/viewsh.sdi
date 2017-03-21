@@ -47,31 +47,31 @@ interface TextEditView : BaseTextEditView
     [
         StateMethod = GetState ;
         Export = FALSE ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_INSERT_CAPTION // status()
     [
         ExecMethod = ExecDlgExt ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_EDIT_FOOTNOTE // status(final|play)
     [
         ExecMethod = ExecDlgExt ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_HYPHENATE_OPT_DLG // status(final|play)
     [
         ExecMethod = ExecLingu ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_CHANGE_PAGENUM // status(final)
     [
         ExecMethod = ExecDlg ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_INSERT_DRAW // status()
     [
@@ -264,12 +264,12 @@ interface TextEditView : BaseTextEditView
     SID_FM_CREATE_CONTROL // status()
     [
         ExecMethod = ExecDraw ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_FM_CREATE_FIELDCONTROL
     [
         ExecMethod = ExecDraw ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

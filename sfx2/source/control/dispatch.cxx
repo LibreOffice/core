@@ -141,7 +141,7 @@ struct SfxDispatcher_Impl
                                           // 2==ReadOnlyDoc overturned
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
-    sal_uInt32           nDisableFlags;
+    SfxDisableFlags      nDisableFlags;
     bool                 bFlushed;
     std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
 };
@@ -437,7 +437,7 @@ void SfxDispatcher::Construct_Impl()
     xImp->nFilterEnabling = SfxSlotFilterState::DISABLED;
     xImp->nFilterCount = 0;
     xImp->pFilterSIDs = nullptr;
-    xImp->nDisableFlags = 0;
+    xImp->nDisableFlags = SfxDisableFlags::NONE;
 
     xImp->pParent = nullptr;
 
@@ -1540,7 +1540,7 @@ void SfxDispatcher::FlushImpl()
                 DBG_ASSERT( !xImp->aStack.empty(), "popping from empty stack" );
                 pPopped = xImp->aStack.back();
                 xImp->aStack.pop_back();
-                pPopped->SetDisableFlags( 0 );
+                pPopped->SetDisableFlags( SfxDisableFlags::NONE );
                 bFound = (pPopped == i->pCluster);
 
                 // Mark the moved Shell
@@ -1807,7 +1807,8 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
         SfxInterface *pIFace = pObjShell->GetInterface();
         const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
 
-        if ( pSlot && pSlot->nDisableFlags && ( pSlot->nDisableFlags & pObjShell->GetDisableFlags() ) != 0 )
+        if ( pSlot && pSlot->nDisableFlags != SfxDisableFlags::NONE &&
+             ( (int)pSlot->nDisableFlags & (int)pObjShell->GetDisableFlags() ) != 0 )
             return false;
 
         if ( pSlot && !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )
@@ -2148,7 +2149,7 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
         if ( xImp->aStack[n] == &rShell )
         {
             xImp->aStack.erase( xImp->aStack.begin() + n );
-            rShell.SetDisableFlags( 0 );
+            rShell.SetDisableFlags( SfxDisableFlags::NONE );
             rShell.DoDeactivate_Impl(xImp->pFrame, true);
             break;
         }
@@ -2192,14 +2193,14 @@ bool SfxDispatcher::IsUpdated_Impl() const
     return xImp->bUpdated;
 }
 
-void SfxDispatcher::SetDisableFlags( sal_uInt32 nFlags )
+void SfxDispatcher::SetDisableFlags( SfxDisableFlags nFlags )
 {
     xImp->nDisableFlags = nFlags;
     for ( SfxShellStack_Impl::reverse_iterator it = xImp->aStack.rbegin(); it != xImp->aStack.rend(); ++it )
         (*it)->SetDisableFlags( nFlags );
 }
 
-sal_uInt32 SfxDispatcher::GetDisableFlags() const
+SfxDisableFlags SfxDispatcher::GetDisableFlags() const
 {
     return xImp->nDisableFlags;
 }

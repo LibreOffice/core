@@ -4135,7 +4135,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
 
     // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
-    pViewFrame->GetDispatcher()->SetDisableFlags( 0 );
+    pViewFrame->GetDispatcher()->SetDisableFlags( SfxDisableFlags::NONE );
     pViewFrame->SetViewShell_Impl( pViewShell );
 
     // remember ViewID

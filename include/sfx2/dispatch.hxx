@@ -165,8 +165,8 @@ public:
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( sal_uInt16 nSID, css::uno::Any& rAny );
 
-    void                SetDisableFlags( sal_uInt32 nFlags );
-    sal_uInt32          GetDisableFlags() const;
+    void                SetDisableFlags( SfxDisableFlags nFlags );
+    SfxDisableFlags     GetDisableFlags() const;
 
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE void Update_Impl( bool bForce = false ); // ObjectBars etc.

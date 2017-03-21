@@ -23,7 +23,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_COLOR
@@ -31,7 +31,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_GRADIENT
@@ -39,7 +39,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_HATCH
@@ -47,7 +47,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_BITMAP
@@ -55,7 +55,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_TRANSPARENCE
@@ -63,7 +63,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_FILL_FLOATTRANSPARENCE
@@ -71,7 +71,7 @@ interface BaseTextFrame
         Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_COLOR_TABLE
@@ -117,112 +117,112 @@ interface BaseTextFrame
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_BOTTOM  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_TOP   // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_ROW_CENTER  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_ROW_BOTTOM // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_ROW_TOP  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_CHAR_CENTER // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_CHAR_BOTTOM  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_VERT_CHAR_TOP  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_HORZ_CENTER  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_HORZ_RIGHT // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_ALIGN_HORZ_LEFT // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_TO_TOP // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_TO_BOTTOM  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_UP  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FRAME_DOWN // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_TRANSFORM
@@ -233,24 +233,24 @@ interface BaseTextFrame
     SID_ATTR_TRANSFORM_WIDTH
     [
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_TRANSFORM_HEIGHT
     [
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_TRANSFORM_PROTECT_SIZE
     [
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_ULSPACE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_LRSPACE // status(final|play)
@@ -258,20 +258,20 @@ interface BaseTextFrame
         ExecMethod = Execute ;
         StateMethod = GetState ;
         GroupId = GID_FRAME;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FORMAT_FRAME_DLG   // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_DRAW_WRAP_DLG // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_LINESTYLE // status()
@@ -279,55 +279,55 @@ interface BaseTextFrame
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FRAME_LINECOLOR // status(final|play)
     [
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_OBJECT_ALIGN_CENTER  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_OBJECT_ALIGN_RIGHT // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_OBJECT_ALIGN_LEFT // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_OBJECT_ALIGN_UP // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_OBJECT_ALIGN_MIDDLE  // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_OBJECT_ALIGN_DOWN   // status(play|final)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_FORMAT_FOOTNOTE_DLG // status()
@@ -354,14 +354,14 @@ interface BaseTextFrame
         [
                 ExecMethod = Execute ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
         // tdf#103268
         FN_NAME_SHAPE
         [
                 ExecMethod = Execute ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
 // Abfragefunktionen fuer ImageMaps
@@ -372,7 +372,7 @@ interface BaseTextFrame
         ExecMethod = Execute ;
         StateMethod = StateInsert ;
         Export = False;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_BORDER // status()
@@ -381,13 +381,13 @@ interface BaseTextFrame
         StateMethod = GetLineStyleState ;
         GroupId = GID_FRAME;
         Export = False;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_HYPERLINK_SETLINK  // status()
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_HYPERLINK_GETLINK  // status()
@@ -398,7 +398,7 @@ interface BaseTextFrame
     FN_FRAME_MIRROR_ON_EVEN_PAGES // status(final|play|rec)
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

@@ -41,7 +41,7 @@ interface BaseTextEditView
     [
         ExecMethod = ExecFormatPaintbrush ;
         StateMethod = StateFormatPaintbrush ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_CLEARHISTORY // status(final|play)
     [
@@ -107,62 +107,62 @@ interface BaseTextEditView
     [
         ExecMethod = Execute;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_ON // status()
     [
         ExecMethod = Execute;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_SHOW // status()
     [
         ExecMethod = Execute;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_ACCEPT // status(play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_ACCEPT_DIRECT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_REJECT_DIRECT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_NEXT_CHANGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_REDLINE_PREV_CHANGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
 
     SID_DOCUMENT_COMPARE // status(play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     SID_DOCUMENT_MERGE // status(play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     FN_ESCAPE // status(final|play|rec)
     [
@@ -187,103 +187,103 @@ interface BaseTextEditView
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
         GroupId = GID_EDIT ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_ULSPACE
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_LONG_LRSPACE // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_LONG_ULSPACE // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PARA_LRSPACE // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PARA_LRSPACE_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_BORDERS // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_BORDERS_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_BORDER_DISTANCE // status()
     [
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_PAGE_POS // status()
     [
         ExecMethod = NoExec ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_TEXT_RIGHT_TO_LEFT
     [
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_LR_MIN_MAX // status()
     [
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_PROTECT // status()
     [
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_ROWS // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RULER_ROWS_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_EDIT_LINK_DLG // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_SPELL_GRAMMAR_DIALOG
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_RECHECK_DOCUMENT
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_LINE_NUMBERING_DLG // status()
     [
@@ -315,7 +315,7 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
      //From here the statusbar
@@ -393,7 +393,7 @@ interface BaseTextEditView
     SID_ATTR_BORDER_SHADOW // status()
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     // Properties Page Format
@@ -432,14 +432,14 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin;
         StateMethod = StateTabWin;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_PARASPACE_DECREASE
     [
         ExecMethod = ExecTabWin;
         StateMethod = StateTabWin;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PAGE_COLUMN
@@ -516,37 +516,37 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PAGE_LRSPACE
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PAGE_MARGIN
     [
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_THESAURUS // status(final|play)
     [
         ExecMethod = ExecLingu ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
         SID_HANGUL_HANJA_CONVERSION // status(final|play)
         [
                 ExecMethod = ExecLingu ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
         SID_CHINESE_CONVERSION
         [
                 ExecMethod = ExecLingu ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
     /* search and replace */
@@ -576,19 +576,19 @@ interface BaseTextEditView
     FID_SEARCH_REPLACESET // status()
     [
         ExecMethod = ExecSearch ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_TABSTOP // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_TABSTOP_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     // from here  Export = FALSE;
     FID_SEARCH_ON // status()
@@ -611,28 +611,28 @@ interface BaseTextEditView
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_CJK_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_CTL_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_JUMPTOMARK
@@ -656,7 +656,7 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_GALLERY
     [
@@ -688,7 +688,7 @@ interface BaseTextEditView
     FN_QRY_MERGE  // status()
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
     SID_ALIGN_ANY_LEFT
     [
@@ -734,7 +734,7 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_AUTOSPELL_CHECK
     [
@@ -770,7 +770,7 @@ interface BaseTextEditView
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_VIEW_BOUNDS // status()
@@ -841,7 +841,7 @@ interface BaseTextEditView
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
         Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_HSCROLLBAR // status()
@@ -862,7 +862,7 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRACK_CHANGES_BAR
     [

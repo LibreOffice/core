@@ -23,10 +23,6 @@
 #include <sfx2/sfx.hrc>
 #include <unomid.h>
 
-/* Flags that are being used in the slot definitions for the disable-features */
-#define SW_DISABLE_ON_PROTECTED_CURSOR  0x00000001
-#define SW_DISABLE_ON_MAILBOX_EDITOR    0x00000002
-
 #define FN_FILE                 SID_SW_START
 #define FN_EDIT                 (SID_SW_START +  100)
 #define FN_VIEW                 (SID_SW_START +  200)

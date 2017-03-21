@@ -28,7 +28,7 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_COPY // api:
@@ -41,19 +41,19 @@ interface TextDrawText
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
         SID_CLIPBOARD_FORMAT_ITEMS  // api:
         [
                 StateMethod = StateClpbrd ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
     FN_ESCAPE // api:
@@ -94,117 +94,117 @@ interface TextDrawText
     [
         ExecMethod = ExecDraw ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_CHARMAP // api:
     [
         ExecMethod = ExecDraw ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_EMOJI_CONTROL
     [
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_INSERT_STRING
     [
             ExecMethod = ExecDraw ;
             StateMethod = NoState ;
-            DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+            DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_INSERT_SOFT_HYPHEN // status(final|play)
         [
                 ExecMethod = ExecDraw ;
                 StateMethod = NoState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
         FN_INSERT_HARDHYPHEN // status()
         [
                 ExecMethod = ExecDraw ;
                 StateMethod = NoState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
         FN_INSERT_HARD_SPACE // status(final|play)
         [
                 ExecMethod = ExecDraw ;
                 StateMethod = NoState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
     SID_INSERT_RLM
     [
                 ExecMethod = ExecDraw ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_INSERT_LRM
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_INSERT_ZWSP
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_INSERT_ZWNBSP
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_WEIGHT // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_POSTURE // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_UNDERLINE // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_OVERLINE // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_CONTOUR
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_SHADOWED
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_STRIKEOUT
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_LRSPACE  //for indent
@@ -217,14 +217,14 @@ interface TextDrawText
     [
         ExecMethod = Execute;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_PARASPACE_DECREASE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_LINESPACE // api:
@@ -243,235 +243,235 @@ interface TextDrawText
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_ADJUST_CENTER // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_ADJUST_RIGHT // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_ADJUST_BLOCK // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_LINESPACE_10 // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_LINESPACE_15 // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_PARA_LINESPACE_20 // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PARA_LEFT_TO_RIGHT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_PARA_RIGHT_TO_LEFT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
         SID_TEXTDIRECTION_LEFT_TO_RIGHT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TEXTDIRECTION_TOP_TO_BOTTOM
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_VERTICALTEXT_STATE
     [
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_CTLFONT_STATE
     [
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_CHAR_DLG  // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_CHAR_DLG_EFFECT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_CHAR_DLG_FOR_PARAGRAPH
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_PARA_DLG // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_SET_SUPER_SCRIPT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_SET_SUB_SCRIPT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FONTWORK  // api:
     [
         ExecMethod = ExecFontWork ;
         StateMethod = StateFontWork ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_STYLE // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_ADJUST  // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_DISTANCE // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_START  // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_MIRROR // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_HIDEFORM   // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_OUTLINE // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_SHADOW  // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_SHDWCOLOR // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_SHDWXVAL  // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_FORMTEXT_SHDWYVAL  // api:
     [
         ExecMethod = ExecFormText ;
         StateMethod = GetFormTextState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_THESAURUS // api:
     [
         ExecMethod = ExecDrawLingu ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
         SID_HANGUL_HANJA_CONVERSION  // api:
         [
                 ExecMethod = ExecDrawLingu ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
         SID_CHINESE_CONVERSION  // api:
         [
                 ExecMethod = ExecDrawLingu ;
                 StateMethod = GetState ;
-                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+                DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
     FN_DRAWTEXT_ATTR_DLG
     [
         ExecMethod = ExecDraw ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_AUTOSPELL_CHECK
@@ -488,7 +488,7 @@ interface TextDrawText
     SID_HYPERLINK_SETLINK  // status()
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_HYPERLINK_GETLINK // status()
@@ -499,75 +499,75 @@ interface TextDrawText
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_TITLE_CASE
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_TOGGLE_CASE
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_ROTATE_CASE
     [
         ExecMethod = ExecRotateTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_UPPER
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_LOWER
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_HALFWIDTH
     [
         ExecMethod = ExecTransliteration;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_FULLWIDTH
     [
         ExecMethod = ExecTransliteration;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_HIRAGANA
     [
         ExecMethod = ExecTransliteration;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TRANSLITERATE_KATAGANA
     [
         ExecMethod = ExecTransliteration;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_LANGUAGE_STATUS
     [
         ExecMethod = Execute;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";  // e.g. disable for read-only documents
     ]
 
     SID_THES
     [
         ExecMethod = Execute;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";  // e.g. disable for read-only documents
     ]
 
        FN_FORMAT_FOOTNOTE_DLG // status()
@@ -608,32 +608,32 @@ interface TextDrawText
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetStatePropPanelAttr ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TABLE_VERT_CENTER
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetStatePropPanelAttr ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_TABLE_VERT_BOTTOM
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetStatePropPanelAttr ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     FN_GROW_FONT_SIZE
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_SHRINK_FONT_SIZE
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 
@@ -643,71 +643,71 @@ interface TextDrawFont
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_FONTHEIGHT // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_COLOR // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_BACK_COLOR // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_RELIEF
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_LANGUAGE // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_KERNING // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_AUTOKERN // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTextCtrlState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_CHAR_SCALEWIDTH // status()
     [
         ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

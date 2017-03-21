@@ -25,21 +25,21 @@ interface TextSelection : BaseTextSelection
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_CONTOUR_DLG
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_CONTOUR_EXEC
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
 }  // end interface Base

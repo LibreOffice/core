@@ -30,7 +30,7 @@ shell SwDrawBaseShell: SwBaseShell
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
 

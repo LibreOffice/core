@@ -156,7 +156,7 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
                  0, 0, \
-                 &a##aShellClass##Args_Impl[nArg0], nArgs, 0, Name \
+                 &a##aShellClass##Args_Impl[nArg0], nArgs, SfxDisableFlags::NONE, Name \
                }
 
 #define SFX_SLOT( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass ) \
@@ -220,7 +220,7 @@ public:
 
     const SfxFormalArgument*  pFirstArgDef;  // first formal Argument-Definition
     sal_uInt16                nArgDefCount;  // Number of formal Arguments
-    long                      nDisableFlags; // DisableFlags that need to be
+    SfxDisableFlags           nDisableFlags; // DisableFlags that need to be
                                              // present, so that the Slot
                                              // can be enabled
     const char*     pUnoName;      // UnoName for the Slots

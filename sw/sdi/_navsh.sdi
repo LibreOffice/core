@@ -13,14 +13,14 @@ interface _Navigation
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
 }
