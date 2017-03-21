@@ -56,7 +56,7 @@ enum StackVarEnum
     svJump,
     svExternal,                         // Byte + String
     svFAP,                              // FormulaAutoPilot only, ever exported
-    svJumpMatrix,                       // 2003-07-02
+    svJumpMatrix,
     svRefList,                          // ocUnion result
     svEmptyCell,                        // Result is an empty cell, e.g. in LOOKUP()
 
