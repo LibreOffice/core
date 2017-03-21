@@ -814,6 +814,17 @@ OUString ListBoxUIObject::get_name() const
     return OUString("ListBoxUIObject");
 }
 
+OUString ListBoxUIObject::get_action(VclEventId nEvent) const
+{
+    if (nEvent == VclEventId::ListboxSelect)
+    {
+        sal_Int32 nPos = mxListBox->GetSelectEntryPos();
+        return "Action on element: " + mxListBox->get_id() + " with action : SELECT and content {\"POS\": \"" + OUString::number(nPos) + "\"}";
+    }
+    else
+        return WindowUIObject::get_action(nEvent);
+}
+
 std::unique_ptr<UIObject> ListBoxUIObject::create(vcl::Window* pWindow)
 {
     ListBox* pListBox = dynamic_cast<ListBox*>(pWindow);
