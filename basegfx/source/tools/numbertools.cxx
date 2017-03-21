@@ -12,7 +12,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 
 #include <utility>
@@ -27,8 +27,8 @@ namespace basegfx { namespace tools
         // }
         // config here
 
-        rtl::OUStringBuffer aNum;
-        rtl::math::doubleToUStringBuffer(aNum,
+        rtl::OStringBuffer aNum;
+        rtl::math::doubleToStringBuffer(aNum,
                                          fValue,
                                          rtl_math_StringFormat_F,
                                          nDecPlaces, '.',

@@ -988,6 +988,30 @@ public:
         return *this;
     }
 
+    /** Allows access to the internal data of this OStringBuffer, for effective
+        manipulation.
+
+        This function should be used with care.  After you have called this
+        function, you may use the returned pInternalData and pInternalCapacity
+        only as long as you make no other calls on this OUStringBuffer.
+
+        @param pInternalData
+        This output parameter receives a pointer to the internal data
+        (rtl_String pointer).  pInternalData itself must not be null.
+
+        @param pInternalCapacity
+        This output parameter receives a pointer to the internal capacity.
+        pInternalCapacity itself must not be null.
+
+        @since LibreOffice 5.4
+    */
+    void accessInternals(
+        rtl_String *** pInternalData, sal_Int32 ** pInternalCapacity)
+    {
+        *pInternalData = &pData;
+        *pInternalCapacity = &nCapacity;
+    }
+
 private:
     /**
         A pointer to the data structure which contains the data.

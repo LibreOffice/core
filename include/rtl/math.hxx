@@ -21,6 +21,7 @@
 #define INCLUDED_RTL_MATH_HXX
 
 #include <rtl/math.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -61,6 +62,42 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
     rtl_math_doubleToString(&aResult.pData, NULL, 0, fValue, eFormat, nDecPlaces,
                             cDecSeparator, NULL, 0, bEraseTrailingDecZeros);
     return aResult;
+}
+
+/** A wrapper around rtl_math_doubleToString that appends to an
+    rtl::OStringBuffer.
+
+    @since LibreOffice 5.4
+*/
+inline void doubleToStringBuffer(
+    rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,
+    sal_Int32 nDecPlaces, sal_Char cDecSeparator, sal_Int32 const * pGroups,
+    sal_Char cGroupSeparator, bool bEraseTrailingDecZeros = false)
+{
+    rtl_String ** pData;
+    sal_Int32 * pCapacity;
+    rBuffer.accessInternals(&pData, &pCapacity);
+    rtl_math_doubleToString(
+        pData, pCapacity, rBuffer.getLength(), fValue, eFormat, nDecPlaces,
+        cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
+}
+
+/** A wrapper around rtl_math_doubleToString that appends to an
+    rtl::OStringBuffer, with no grouping.
+
+    @since LibreOffice 5.4
+*/
+inline void doubleToStringBuffer(
+    rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,
+    sal_Int32 nDecPlaces, sal_Char cDecSeparator,
+    bool bEraseTrailingDecZeros = false)
+{
+    rtl_String ** pData;
+    sal_Int32 * pCapacity;
+    rBuffer.accessInternals(&pData, &pCapacity);
+    rtl_math_doubleToString(
+        pData, pCapacity, rBuffer.getLength(), fValue, eFormat, nDecPlaces,
+        cDecSeparator, NULL, 0, bEraseTrailingDecZeros);
 }
 
 /** A wrapper around rtl_math_doubleToUString.
