@@ -292,6 +292,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_IS_WIDTH_RELATIVE: sName = "IsWidthRelative"; break;
         case PROP_GRAPHIC_URL: sName = "GraphicURL"; break;
         case PROP_GRAPHIC_BITMAP: sName = "GraphicBitmap"; break;
+        case PROP_GRAPHIC_SIZE: sName = "GraphicSize"; break;
         case PROP_CHAR_SHADING_VALUE: sName = "CharShadingValue"; break;
         case PROP_CHAR_SHADING_MARKER: sName = "CharShadingMarker"; break;
         case PROP_LABEL_CATEGORY: sName = "LabelCategory"; break;
