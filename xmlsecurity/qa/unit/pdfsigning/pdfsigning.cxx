@@ -131,7 +131,7 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     {
         SignatureInformation aInfo(i);
         bool bLast = i == aSignatures.size() - 1;
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, bLast));
         aRet.push_back(aInfo);
 
         if (!rExpectedSubFilter.isEmpty())
@@ -233,7 +233,7 @@ void PDFSigningTest::testPDFRemove()
         std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
         SignatureInformation aInfo(0);
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[0], aInfo, /*bLast=*/true));
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[0], aInfo, /*bLast=*/true));
     }
 
     // Remove the signature and write out the result as remove.pdf.

@@ -224,7 +224,7 @@ int pdfVerify(int nArgc, char** pArgv)
             {
                 SignatureInformation aInfo(i);
                 bool bLast = i == aSignatures.size() - 1;
-                if (!xmlsecurity::pdfio::PDFDocument::ValidateSignature(aStream, aSignatures[i], aInfo, bLast))
+                if (!xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, bLast))
                 {
                     SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
                     return 1;
