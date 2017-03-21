@@ -398,7 +398,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
             }
 
             // Allow two-char commands to peek ahead to the next character
-            char nextChar = '\0';
+            sal_Unicode nextChar = '\0';
             if (i+1 < rPath.getLength())
                 nextChar = rPath[i+1];
 

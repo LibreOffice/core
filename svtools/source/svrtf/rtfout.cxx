@@ -120,11 +120,11 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
             case '\\':
             case '}':
             case '{':
-                rStream.WriteChar( '\\' ).WriteChar( c );
+                rStream.WriteChar( '\\' ).WriteChar( char(c) );
                 break;
             default:
                 if (c >= ' ' && c <= '~')
-                    rStream.WriteChar( c );
+                    rStream.WriteChar( char(c) );
                 else
                 {
                     //If we can't convert to the dest encoding, or if
