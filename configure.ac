@@ -3451,10 +3451,13 @@ if test "$_os" = "WINNT"; then
     fi
 
     # Find the version of devenv.exe
-    DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
+    # MSVC 2017 devenv does not start properly from a DOS 8.3 path
+    DEVENV=$(cygpath -lm "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe")
     if test ! -e "$DEVENV"; then
         AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
     fi
+    # add quotes around it, this is an ugly hack for convenience
+    DEVENV=\"${DEVENV}\"
 
     dnl ===========================================================
     dnl  Check for the corresponding mspdb*.dll
