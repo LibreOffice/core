@@ -1036,9 +1036,18 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     switch ( nSlot )
     {
         case SID_NUMBER_TWODEC:
-            pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER, 4 );       // Standard+4 = #.##0,00
+        {
+            const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+            sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+
+            if ((nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4)
+                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER, 4 );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
-            break;
+        }
+        break;
         case SID_NUMBER_SCIENTIFIC:
             if ((nType & css::util::NumberFormat::SCIENTIFIC))
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
@@ -2596,6 +2605,13 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 break;
             case SID_NUMBER_TIME:
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::TIME)) );
+                break;
+            case SID_NUMBER_TWODEC:
+                {
+                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                    sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4 ) );
+                }
                 break;
         }
         nWhich = aIter.NextWhich();

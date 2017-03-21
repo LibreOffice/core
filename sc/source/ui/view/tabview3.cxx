@@ -319,6 +319,7 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_NUMBER_DATE );
     rBindings.Invalidate( SID_NUMBER_CURRENCY );
     rBindings.Invalidate( SID_NUMBER_PERCENT );
+    rBindings.Invalidate( SID_NUMBER_TWODEC );
     rBindings.Invalidate( SID_NUMBER_TIME );
 }
 
