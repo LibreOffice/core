@@ -49,10 +49,10 @@ void traverse(const tools::SvRef<SotStorage>& rStorage, std::vector<unsigned cha
 
 void TestImportOLE2(SvStream &rStream, size_t nSize)
 {
-    tools::SvRef<SotStorage> xRootStorage(new SotStorage(&rStream, false));
-    std::vector<unsigned char> aTmpBuf(nSize);
     try
     {
+        tools::SvRef<SotStorage> xRootStorage(new SotStorage(&rStream, false));
+        std::vector<unsigned char> aTmpBuf(nSize);
         traverse(xRootStorage, aTmpBuf);
     }
     catch (...)
