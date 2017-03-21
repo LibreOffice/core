@@ -1072,7 +1072,7 @@ void Outliner::ProvideNextTextObject()
             maCurrentPosition = *maObjectIterator;
 
             // LOK: do not descent to notes or master pages when searching
-            bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
+            bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PK_STANDARD || maCurrentPosition.meEditMode != EM_PAGE);
 
             // Switch to the current object only if it is a valid text object.
             if (!bForbiddenPage && IsValidTextObject(maCurrentPosition))
