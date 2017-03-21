@@ -1311,12 +1311,14 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
     OStringBuffer aBuf;
     char ch;
     rStream.ReadChar(ch);
+    if (rStream.IsEof())
+        return OString();
     while (isalpha(ch))
     {
         aBuf.append(ch);
         rStream.ReadChar(ch);
         if (rStream.IsEof())
-            break;
+            return aBuf.toString();
     }
     rStream.SeekRel(-1);
     return aBuf.toString();
