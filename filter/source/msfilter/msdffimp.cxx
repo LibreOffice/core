@@ -29,6 +29,7 @@
 
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -6951,7 +6952,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             xStorage->Commit();
             xStorage.clear();
             OUString aType = SfxFilter::GetTypeFromStorage( rSrcStg );
-            if ( aType.getLength() )
+            if (aType.getLength() && !utl::ConfigManager::IsAvoidConfig())
                 pFilter = aMatch.GetFilter4EA( aType );
         }
 
