@@ -188,7 +188,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
                 if( isdigit( *pStr ) )
                     nFirst = nFirst * 16 + (*pStr - '0');
                 else
-                    nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+                    nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -202,7 +202,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
                 if( isdigit( *pStr ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
-                    nSec = nSec * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+                    nSec = nSec * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -216,7 +216,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
                 if( isdigit( *pStr ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
-                    nThird = nThird * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+                    nThird = nThird * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -231,7 +231,7 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
                 if( isdigit( *pStr ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
-                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
+                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
             else
                 return false;
             pStr++;

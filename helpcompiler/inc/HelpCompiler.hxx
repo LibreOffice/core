@@ -238,7 +238,8 @@ private:
 
 inline char tocharlower(char c)
 {
-    return static_cast<char>(rtl::toAsciiLowerCase(c));
+    return static_cast<char>(
+        rtl::toAsciiLowerCase(static_cast<unsigned char>(c)));
 }
 
 #endif

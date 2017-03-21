@@ -460,7 +460,7 @@ bool HelpCompiler::compile()
     std::string appl = module.substr(1);
     for (char & i : appl)
     {
-        i=rtl::toAsciiUpperCase(i);
+        i=rtl::toAsciiUpperCase(static_cast<unsigned char>(i));
     }
     xmlNodePtr docResolved = clone(xmlDocGetRootElement(docResolvedOrg), appl);
     myparser aparser(documentId, fileName, title);
