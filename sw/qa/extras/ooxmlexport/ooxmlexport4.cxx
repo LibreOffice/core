@@ -350,7 +350,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:7.9pt;height:7.9pt");
+    // tdf#106849 NumPicBullet xShape should not to be resized.
+    assertXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style", "width:6.4pt;height:6.4pt");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
