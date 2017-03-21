@@ -42,6 +42,24 @@ void UITestLogger::logCommand(const OUString& rAction)
     maStream.WriteLine(OUStringToOString(rAction, RTL_TEXTENCODING_UTF8));
 }
 
+namespace {
+
+// most likely this should be recursive
+bool child_windows_have_focus(VclPtr<Control>& xUIElement)
+{
+    sal_Int32 nCount = xUIElement->GetChildCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        if (xUIElement->GetChild(i)->HasFocus())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+}
+
 void UITestLogger::logAction(VclPtr<Control>& xUIElement, VclEventId nEvent)
 {
     if (!mbValid)
@@ -50,11 +68,13 @@ void UITestLogger::logAction(VclPtr<Control>& xUIElement, VclEventId nEvent)
     if (xUIElement->get_id().isEmpty())
         return;
 
-    if (!xUIElement->HasFocus())
-        return;
-
     std::unique_ptr<UIObject> pUIObject = xUIElement->GetUITestFactory()(xUIElement.get());
     OUString aAction = pUIObject->get_action(nEvent);
+    if (!xUIElement->HasFocus() && !child_windows_have_focus(xUIElement))
+    {
+        return;
+    }
+
     if (!aAction.isEmpty())
         maStream.WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
 }
