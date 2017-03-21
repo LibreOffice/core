@@ -748,7 +748,7 @@ SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::
                                             uno::makeAny( OUString(  "application/vnd.sun.star.oleobject"  ) ) );
         }
 
-           pStream = utl::UcbStreamHelper::CreateStream( xStream );
+        pStream = utl::UcbStreamHelper::CreateStream( xStream );
     }
     catch ( uno::Exception& )
     {
