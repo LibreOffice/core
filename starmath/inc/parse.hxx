@@ -67,14 +67,14 @@ class SmParser
     void    DoRelation();
     void    DoSum();
     void    DoProduct();
-    void    DoSubSup(TG nActiveGroup);
+    SmNode *DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
     void    DoOpSubSup();
     void    DoPower();
     SmBlankNode *DoBlank();
     SmNode *DoTerm(bool bGroupNumberIdent);
     SmNode *DoEscape();
     SmOperNode *DoOperator();
-    void    DoOper();
+    SmNode *DoOper();
     SmStructureNode *DoUnOper();
     void    DoAlign();
     SmStructureNode *DoFontAttribut();
