@@ -460,6 +460,58 @@ inline double tan(double d)
     return d;
 }
 
+#if defined(_MSC_VER)
+
+#include <intsafe.h>
+
+inline bool checked_multiply(sal_Int64 a, sal_Int64 b, sal_Int64& res)
+{
+    return LongLongMult(a, b, &num) != S_OK;
+}
+
+inline bool checked_multiply(sal_Int32 a, sal_Int32 b, sal_Int32& res)
+{
+    return LongMult(a, b, &num) != S_OK;
+}
+
+inline bool checked_multiply(sal_Int16 a, sal_Int16 b, sal_Int16& res)
+{
+    return ShortMult(a, b, &num) != S_OK;
+}
+
+inline bool checked_multiply(sal_uInt64 a, sal_uInt64 b, sal_uInt64& res)
+{
+    return ULongLongMult(a, b, &num) != S_OK;
+}
+
+inline bool checked_multiply(sal_uInt32 a, sal_uInt32 b, sal_uInt32& res)
+{
+    return ULongMult(a, b, &num) != S_OK;
+}
+
+inline bool checked_multiply(sal_uInt16 a, sal_uInt16 b, sal_uInt16& res)
+{
+    return UShortMult(a, b, &num) != S_OK;
+}
+
+#else
+
+#ifndef __has_builtin
+#   define __has_builtin(x) 0
+#endif
+
+template<typename T> inline bool checked_multiply(T a, T b, T& res)
+{
+#if (defined __GNUC__ && __GNUC__ >= 5) || (__has_builtin(__builtin_mul_overflow))
+    return __builtin_mul_overflow(a, b, &res);
+#else
+    res = a * b;
+    return false;
+#endif
+}
+
+#endif
+
 }
 
 }
