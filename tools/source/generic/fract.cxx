@@ -170,6 +170,24 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     return *this;
 }
 
+namespace
+{
+    template<typename T> void multiply_by(boost::rational<T>& i, const boost::rational<T>& r)
+    {
+        // Protect against self-modification
+        T num = r.numerator();
+        T den = r.denominator();
+
+        // Avoid overflow and preserve normalization
+        T gcd1 = boost::integer::gcd(i.numerator(), den);
+        T gcd2 = boost::integer::gcd(num, i.denominator());
+        num = (i.numerator() / gcd1) * (num / gcd2);
+        den = (i.denominator() / gcd2) * (den / gcd1);
+
+        i.assign(num, den);
+    }
+}
+
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
     if ( !rVal.mpImpl->valid )
@@ -181,9 +199,9 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
         return *this;
     }
 
-    mpImpl->value *= rVal.mpImpl->value;
+    multiply_by(mpImpl->value, rVal.mpImpl->value);
 
-    if ( HasOverflowValue() )
+    if (HasOverflowValue())
     {
         mpImpl->valid = false;
     }
