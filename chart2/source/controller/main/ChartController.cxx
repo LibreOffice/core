@@ -66,6 +66,7 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
@@ -1455,6 +1456,16 @@ bool ChartController::isAdditionalShapeSelected()
 {
     return m_aSelection.isAdditionalShapeSelected();
 }
+
+void ChartController::SetAndApplySelection(const Reference<drawing::XShape>& rxShape)
+{
+    if(rxShape.is())
+    {
+        m_aSelection.setSelection(rxShape);
+        m_aSelection.applySelection(GetDrawViewWrapper());
+    }
+}
+
 
 
 uno::Reference< XAccessible > ChartController::CreateAccessible()
