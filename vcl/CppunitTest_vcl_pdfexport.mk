@@ -24,7 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
 	unotest \
 	utl \
 	tl \
-	xmlsecurity \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 

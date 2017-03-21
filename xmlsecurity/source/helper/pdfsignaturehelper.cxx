@@ -35,14 +35,14 @@ bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputS
     }
 
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(*pStream))
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");
         return false;
     }
 
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+    std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
     if (aSignatures.empty())
         return true;
 
@@ -117,7 +117,7 @@ void PDFSignatureHelper::SetDescription(const OUString& rDescription)
 bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStream, bool bAdES)
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(*pStream))
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");
@@ -144,7 +144,7 @@ bool PDFSignatureHelper::Sign(const uno::Reference<io::XInputStream>& xInputStre
 bool PDFSignatureHelper::RemoveSignature(const uno::Reference<io::XInputStream>& xInputStream, sal_uInt16 nPosition)
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(*pStream))
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");

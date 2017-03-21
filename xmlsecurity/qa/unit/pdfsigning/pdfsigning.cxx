@@ -123,9 +123,9 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     std::vector<SignatureInformation> aRet;
 
     SvFileStream aStream(rURL, StreamMode::READ);
-    xmlsecurity::pdfio::PDFDocument aVerifyDocument;
+    vcl::filter::PDFDocument aVerifyDocument;
     CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
-    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
+    std::vector<vcl::filter::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
     CPPUNIT_ASSERT_EQUAL(nCount, aSignatures.size());
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
@@ -136,9 +136,9 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
 
         if (!rExpectedSubFilter.isEmpty())
         {
-            xmlsecurity::pdfio::PDFObjectElement* pValue = aSignatures[i]->LookupObject("V");
+            vcl::filter::PDFObjectElement* pValue = aSignatures[i]->LookupObject("V");
             CPPUNIT_ASSERT(pValue);
-            auto pSubFilter = dynamic_cast<xmlsecurity::pdfio::PDFNameElement*>(pValue->Lookup("SubFilter"));
+            auto pSubFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pValue->Lookup("SubFilter"));
             CPPUNIT_ASSERT(pSubFilter);
             CPPUNIT_ASSERT_EQUAL(rExpectedSubFilter, pSubFilter->GetValue());
         }
@@ -152,11 +152,11 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
     // Make sure that input has nOriginalSignatureCount signatures.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     {
         SvFileStream aStream(rInURL, StreamMode::READ);
         CPPUNIT_ASSERT(aDocument.Read(aStream));
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         CPPUNIT_ASSERT_EQUAL(nOriginalSignatureCount, aSignatures.size());
     }
 
@@ -224,13 +224,13 @@ void PDFSigningTest::testPDFRemove()
     // Make sure that good.pdf has 1 valid signature.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-    xmlsecurity::pdfio::PDFDocument aDocument;
+    vcl::filter::PDFDocument aDocument;
     {
         OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
         OUString aInURL = aSourceDir + "good.pdf";
         SvFileStream aStream(aInURL, StreamMode::READ);
         CPPUNIT_ASSERT(aDocument.Read(aStream));
-        std::vector<xmlsecurity::pdfio::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
+        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
         SignatureInformation aInfo(0);
         CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[0], aInfo, /*bLast=*/true));
@@ -400,7 +400,7 @@ void PDFSigningTest::testTokenize()
     for (const auto& rName : aNames)
     {
         SvFileStream aStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, StreamMode::READ);
-        xmlsecurity::pdfio::PDFDocument aDocument;
+        vcl::filter::PDFDocument aDocument;
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
     }
