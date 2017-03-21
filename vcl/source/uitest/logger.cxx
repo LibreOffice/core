@@ -29,7 +29,7 @@ UITestLogger::UITestLogger():
         osl::Directory::createPath(aDirPath);
         OUString aFilePath = aDirPath + OUString::fromUtf8(pFile);
 
-        maStream.Open(aFilePath, StreamMode::READWRITE);
+        maStream.Open(aFilePath, StreamMode::READWRITE | StreamMode::TRUNC);
         mbValid = true;
     }
 }
