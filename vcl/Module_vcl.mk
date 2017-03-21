@@ -179,6 +179,12 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_timer \
+))
+endif
+
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,vcl,\
     CppunitTest_vcl_dialogs_test \
