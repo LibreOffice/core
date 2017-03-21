@@ -5449,9 +5449,15 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
         case msword::PageBreak:
             if ( pSectionInfo )
             {
+                // Detect when the current node is the last node in the
+                // document: the last section is written explicitly in
+                // DocxExport::WriteMainText(), don't duplicate that here.
+                SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetNode());
+                SwNodeIndex aLastNode(m_rExport.m_pDoc->GetNodes().GetEndOfContent(), -1);
+
                 // don't add section properties if this will be the first
                 // paragraph in the document
-                if ( !m_bParagraphOpened && !m_bIsFirstParagraph)
+                if ( !m_bParagraphOpened && !m_bIsFirstParagraph && aCurrentNode != aLastNode)
                 {
                     // Create a dummy paragraph if needed
                     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );

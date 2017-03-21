@@ -420,6 +420,13 @@ DECLARE_OOXMLEXPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // This was 4: an additional sectPr was added to the document.
+        assertXPath(pXmlDoc, "//w:sectPr", 3);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
