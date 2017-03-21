@@ -74,24 +74,23 @@ SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_register(
 
 /**
     Common method of getting the current default Locale.
-    Used for the presentation: menus, dialogs, etc.
-    Generally set once when your applet or application is initialized,
-    then never reset. (If you do reset the default locale, you
-    probably want to reload your GUI, so that the change is reflected
-    in your interface.)
-    <p>More advanced programs will allow users to use different locales
-    for different fields, e.g. in a spreadsheet.
-    <BR>Note that the initial setting will match the host system.
+
+    @deprecated  LibreOffice itself does not use this anymore, and client code
+    should not have good use for it either.  It may eventually be removed.
  */
 SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
 
 /**
     Sets the default.
-    Normally set once at the beginning of applet or application,
-    then never reset. <code>setDefault</code> does not reset the host locale.
+
+    <code>setDefault</code> does not reset the host locale.
+
     @param language lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @param country uppercase two-letter ISO-3166 code.
     @param variant vendor and browser specific code. See class description.
+
+    @deprecated  LibreOffice itself does not use this anymore, and client code
+    should not have good use for it either.  It may eventually be removed.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_locale_setDefault(
         const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant );
