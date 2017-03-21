@@ -149,10 +149,10 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
 void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     const SwTextTOXMark* pTextTOXMark = pTOXMark->GetTextTOXMark();
-    OSL_ENSURE( pTextTOXMark, "No TextTOXMark, cannot be deleted" );
+    assert(pTextTOXMark);
 
     SwTextNode& rTextNd = const_cast<SwTextNode&>(pTextTOXMark->GetTextNode());
-    OSL_ENSURE( rTextNd.GetpSwpHints(), "cannot be deleted" );
+    assert(rTextNd.GetpSwpHints());
 
     if (pTextTOXMark->HasDummyChar())
     {
