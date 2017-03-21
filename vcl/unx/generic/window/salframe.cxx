@@ -3009,7 +3009,10 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                                         &nStatus, mpInputContext->GetContext() );
         if ( nStatus == XBufferOverflow )
         {
-            nLen *= 2;
+            // In case of overflow, XmbLookupString (called by GetKeySym)
+            // returns required size
+            // TODO : check if +1 is needed for 0 terminator
+            nLen += 1;
             pPrintable = static_cast<char*>(alloca( nLen ));
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                                             &nUnmodifiedKeySym,
