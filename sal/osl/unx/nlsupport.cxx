@@ -643,22 +643,17 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    char * locale;
-
-    /* basic thread safeness */
-    pthread_mutex_lock( &aLocalMutex );
-
-    /* set the locale defined by the env vars */
-    locale = setlocale( LC_CTYPE, "" );
-
-    /* fallback to the current locale */
-    if( nullptr == locale )
-        locale = setlocale( LC_CTYPE, nullptr );
-
-    /* return the LC_CTYPE locale */
-    *ppLocale = parse_locale( locale );
-
-    pthread_mutex_unlock( &aLocalMutex );
+    char const * locale = getenv("LC_ALL");
+    if (locale == nullptr || *locale == '\0') {
+        locale = getenv("LC_CTYPE");
+        if (locale == nullptr || *locale == '\0') {
+            locale = getenv("LANG");
+            if (locale == nullptr || *locale == '\0') {
+                locale = "C";
+            }
+        }
+    }
+    *ppLocale = parse_locale(locale);
 }
 
 /*****************************************************************************
