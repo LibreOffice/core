@@ -371,20 +371,7 @@ void AquaSalInstance::wakeupYield()
 {
     // wakeup :Yield
     if( mbWaitingYield )
-    {
-        SalData::ensureThreadAutoreleasePool();
-        NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                                   location: NSZeroPoint
-                                   modifierFlags: 0
-                                   timestamp: 0
-                                   windowNumber: 0
-                                   context: nil
-                                   subtype: AquaSalInstance::YieldWakeupEvent
-                                   data1: 0
-                                   data2: 0 ];
-        if( pEvent )
-            [NSApp postEvent: pEvent atStart: NO];
-    }
+        ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, YES );
 }
 
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData )
@@ -554,14 +541,6 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     };
 }
 
-class ReleasePoolHolder
-{
-    NSAutoreleasePool* mpPool;
-    public:
-    ReleasePoolHolder() : mpPool( [[NSAutoreleasePool alloc] init] ) {}
-    ~ReleasePoolHolder() { [mpPool release]; }
-};
-
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
@@ -625,8 +604,12 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
         {
             sal_uLong nCount = ReleaseYieldMutex();
 
-            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: nil
-                            inMode: NSDefaultRunLoopMode dequeue: YES];
+    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
+            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
+                            untilDate: nil
+                            inMode: NSDefaultRunLoopMode
+                            dequeue: YES];
+
             if( pEvent )
             {
                 [NSApp sendEvent: pEvent];
@@ -643,8 +626,11 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             sal_uLong nCount = ReleaseYieldMutex();
 
             NSDate* pDt = AquaSalTimer::pRunningTimer ? [AquaSalTimer::pRunningTimer fireDate] : [NSDate distantFuture];
-            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: pDt
-                            inMode: NSDefaultRunLoopMode dequeue: YES];
+    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
+            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
+                            untilDate: pDt
+                            inMode: NSDefaultRunLoopMode
+                            dequeue: YES];
             if( pEvent )
                 [NSApp sendEvent: pEvent];
             [NSApp updateWindows];
