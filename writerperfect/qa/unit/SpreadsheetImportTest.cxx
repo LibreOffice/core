@@ -84,9 +84,11 @@ void SpreadsheetImportFilter::generate(librevenge::RVNGSpreadsheetInterface &rDo
     rDocument.openSheet(RVNGPropertyList());
     rDocument.openSheetRow(RVNGPropertyList());
     rDocument.openSheetCell(RVNGPropertyList());
+    rDocument.openParagraph(RVNGPropertyList());
     rDocument.openSpan(RVNGPropertyList());
     rDocument.insertText("My hovercraft is full of eels.");
     rDocument.closeSpan();
+    rDocument.closeParagraph();
     rDocument.closeSheetCell();
     rDocument.closeSheetRow();
     rDocument.closeSheet();
@@ -124,10 +126,8 @@ void SpreadsheetImportTest::test()
     CPPUNIT_ASSERT(xSheet.is());
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
     CPPUNIT_ASSERT(xCell.is());
-#if 0 // broken by commit 8154953add163554c00935486a1cf5677cef2609
     CPPUNIT_ASSERT_EQUAL(table::CellContentType_TEXT, xCell->getType());
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels"), xCell->getFormula());
-#endif
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xCell->getFormula());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpreadsheetImportTest);
