@@ -1171,14 +1171,10 @@ void SmParser::DoProduct()
     }
 }
 
-void SmParser::DoSubSup(TG nActiveGroup)
+SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
 {
-    OSL_ENSURE(nActiveGroup == TG::Power  ||  nActiveGroup == TG::Limit,
-               "Sm: wrong token group");
-
-    if (!TokenInGroup(nActiveGroup))
-        // already finish
-        return;
+    assert(nActiveGroup == TG::Power || nActiveGroup == TG::Limit);
+    assert(m_aCurToken.nGroup == nActiveGroup);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
     //! Of course 'm_aCurToken' is just the first sub-/supscript token.
@@ -1190,7 +1186,7 @@ void SmParser::DoSubSup(TG nActiveGroup)
 
     // initialize subnodes array
     SmNodeArray aSubNodes(1 + SUBSUP_NUM_ENTRIES, nullptr);
-    aSubNodes[0] = popOrZero(m_aNodeStack);
+    aSubNodes[0] = pGivenNode;
 
     // process all sub-/supscripts
     int  nIndex = 0;
@@ -1232,26 +1228,31 @@ void SmParser::DoSubSup(TG nActiveGroup)
     }
 
     pNode->SetSubNodes(aSubNodes);
-    m_aNodeStack.push_front(std::move(pNode));
+    return pNode.release();
 }
 
 void SmParser::DoOpSubSup()
 {
-    // push operator symbol
-    m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+    // get operator symbol
+    auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
     // skip operator token
     NextToken();
     // get sub- supscripts if any
-    if (TokenInGroup(TG::Power))
-        DoSubSup(TG::Power);
+    if (m_aCurToken.nGroup == TG::Power)
+        m_aNodeStack.emplace_front(DoSubSup(TG::Power, pNode.release()));
+    else
+        m_aNodeStack.push_front(std::move(pNode));
 }
 
 void SmParser::DoPower()
 {
     // get body for sub- supscripts on top of stack
-    m_aNodeStack.emplace_front(DoTerm(false));
+    SmNode *pNode = DoTerm(false);
 
-    DoSubSup(TG::Power);
+    if (m_aCurToken.nGroup == TG::Power)
+        m_aNodeStack.emplace_front(DoSubSup(TG::Power, pNode));
+    else
+        m_aNodeStack.emplace_front(pNode);
 }
 
 SmBlankNode *SmParser::DoBlank()
@@ -1544,12 +1545,12 @@ SmOperNode *SmParser::DoOperator()
 
     auto pSNode = o3tl::make_unique<SmOperNode>(m_aCurToken);
 
-    // put operator on top of stack
-    DoOper();
+    // get operator
+    SmNode *pOperator = DoOper();
 
-    if (TokenInGroup(TG::Limit) || TokenInGroup(TG::Power))
-        DoSubSup(m_aCurToken.nGroup);
-    SmNode *pOperator = popOrZero(m_aNodeStack);
+    if ( m_aCurToken.nGroup == TG::Limit ||
+         m_aCurToken.nGroup == TG::Power )
+        pOperator = DoSubSup(m_aCurToken.nGroup, pOperator);
 
     // get argument
     DoPower();
@@ -1558,7 +1559,7 @@ SmOperNode *SmParser::DoOperator()
     return pSNode.release();
 }
 
-void SmParser::DoOper()
+SmNode *SmParser::DoOper()
 {
     SmTokenType  eType (m_aCurToken.eType);
     std::unique_ptr<SmNode> pNode;
@@ -1607,9 +1608,9 @@ void SmParser::DoOper()
         default :
             assert(false && "unknown case");
     }
-    m_aNodeStack.push_front(std::move(pNode));
 
     NextToken();
+    return pNode.release();
 }
 
 SmStructureNode *SmParser::DoUnOper()
