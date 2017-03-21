@@ -106,8 +106,8 @@ interface FormatForSelection
     SID_CTLFONT_STATE               [ StateMethod = GetTextDirectionState ; Export = FALSE; ]
 
     SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
-    SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
-    SID_NUMBER_TWODEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_TWODEC       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_SCIENTIFIC   [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_DATE         [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_CURRENCY     [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
