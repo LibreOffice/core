@@ -35,6 +35,8 @@ else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
 gb_CppunitTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
 gb_CppunitTest_GDBTRACE := $(subst lldb,lldb -s $$lo_dyldpathfile,$(CPPUNITTRACE))
 gb_CppunitTest_POSTGDBTRACE := rm $$lo_dyldpathfile
+else
+gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 endif
 gb_CppunitTest__interactive := $(true)
 endif
