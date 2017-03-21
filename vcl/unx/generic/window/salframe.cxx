@@ -3006,7 +3006,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                                         &nStatus, mpInputContext->GetContext() );
         if ( nStatus == XBufferOverflow )
         {
-            nLen *= 2;
+            nLen = nKeySym + 1;
             pPrintable = static_cast<char*>(alloca( nLen ));
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                                             &nUnmodifiedKeySym,

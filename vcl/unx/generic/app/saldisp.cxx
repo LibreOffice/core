@@ -1452,8 +1452,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
         // Lookup the string again, now with appropriate size
         if ( *pStatusReturn == XBufferOverflow )
         {
-            pPrintable[ 0 ] = '\0';
-            return 0;
+            return *pLen;
         }
 
         switch ( *pStatusReturn )
