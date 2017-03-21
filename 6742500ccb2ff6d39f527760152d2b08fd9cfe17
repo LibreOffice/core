@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0ddd6414",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-21T13:02:51Z",
+      "side": 0,
+      "message": "why remove all of these doxygen markers that were added by some easyhack?",
+      "revId": "6742500ccb2ff6d39f527760152d2b08fd9cfe17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
