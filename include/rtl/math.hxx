@@ -460,6 +460,33 @@ inline double tan(double d)
     return d;
 }
 
+#if defined(_MSC_VER)
+
+#include <safeint.h>
+
+template<typename T> inline bool checked_multiply(T a, T b, T& res)
+{
+    return !SafeMultiply(a, b, res);
+}
+
+#else
+
+#ifndef __has_builtin
+#   define __has_builtin(x) 0
+#endif
+
+template<typename T> inline bool checked_multiply(T a, T b, T& res)
+{
+#if (defined __GNUC__ && __GNUC__ >= 5) || (__has_builtin(__builtin_mul_overflow))
+    return __builtin_mul_overflow(a, b, &res);
+#else
+    res = a * b;
+    return false;
+#endif
+}
+
+#endif
+
 }
 
 }
