@@ -4543,9 +4543,15 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     if ( pNumRuleToPropagate != nullptr )
     {
-        // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
-        pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
-                          aListIdToPropagate, true, true );
+        // tdf#105550
+        if ( !bOneNode )
+        {
+            pCopyPam->GetPoint()->nNode--;
+            pCopyPam->GetMark()->nNode++;
+            // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
+            pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
+                              aListIdToPropagate, true, false );
+        }
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
