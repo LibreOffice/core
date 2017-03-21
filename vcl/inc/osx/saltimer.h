@@ -26,10 +26,24 @@
 
 #include "saltimer.hxx"
 
+/**
+ * if NO == bAtStart, then it has to be run in the main thread,
+ * e.g. via performSelectorOnMainThread!
+ **/
+void ImplNSAppPostEvent( short nEventId, BOOL bAtStart, int nUserData = 0 );
+
+class ReleasePoolHolder
+{
+    NSAutoreleasePool* mpPool;
+
+public:
+    ReleasePoolHolder() : mpPool( [[NSAutoreleasePool alloc] init] ) {}
+    ~ReleasePoolHolder() { [mpPool release]; }
+};
+
 class AquaSalTimer : public SalTimer
 {
-  public:
-
+public:
     AquaSalTimer();
     virtual ~AquaSalTimer() override;
 
