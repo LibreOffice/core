@@ -1227,6 +1227,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST( testTdf106606, "tdf106606.docx" )
+{
+    CPPUNIT_ASSERT_EQUAL( OUString( "POR_GRFNUM" ), parseDump( "/root/page[1]/body/txt[9]/Special", "nType" ) );
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
