@@ -632,6 +632,8 @@ The following structure describes the permissions used in PDF security
         PDFWriter::ColorMode            ColorMode;
         css::uno::Reference< css::security::XCertificate> SignCertificate;
         OUString                        SignTSA;
+        /// Use reference XObject markup for PDF images.
+        bool                            UseReferenceXObject;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -661,7 +663,8 @@ The following structure describes the permissions used in PDF security
                 DPIx( 0 ),
                 DPIy( 0 ),
                 ColorMode( PDFWriter::DrawColor ),
-                SignCertificate( nullptr )
+                SignCertificate( nullptr ),
+                UseReferenceXObject( false )
         {}
     };
 

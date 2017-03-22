@@ -10859,7 +10859,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 
 void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 {
-    if (rEmit.m_nFormObject <= 0 || rEmit.m_nEmbeddedObject <= 0)
+    if (rEmit.m_nFormObject <= 0)
         return;
 
     OStringBuffer aLine;
@@ -10899,10 +10899,13 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
     aLine.append(aSize.Height());
     aLine.append(" ]\n");
 
-    // Write the reference dictionary.
-    aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
-    aLine.append(rEmit.m_nEmbeddedObject);
-    aLine.append(" 0 R >> >> /Page 0 >>\n");
+    if (m_aContext.UseReferenceXObject && rEmit.m_nEmbeddedObject > 0)
+    {
+        // Write the reference dictionary.
+        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
+        aLine.append(rEmit.m_nEmbeddedObject);
+        aLine.append(" 0 R >> >> /Page 0 >>\n");
+    }
 
     aLine.append("/Length ");
 
@@ -11251,13 +11254,17 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     if (!rGraphic.getPdfData().hasElements())
         return;
 
-    // Store the original PDF data as an embedded file.
-    m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
-    m_aEmbeddedFiles.back().m_nObject = createObject();
-    m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+    if (m_aContext.UseReferenceXObject)
+    {
+        // Store the original PDF data as an embedded file.
+        m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
+        m_aEmbeddedFiles.back().m_nObject = createObject();
+        m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+
+        rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
+    }
 
     rEmit.m_nFormObject = createObject();
-    rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
 }
 

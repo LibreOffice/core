@@ -47,6 +47,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "pdfexport.hxx"
 #include "impdialog.hxx"
@@ -776,6 +777,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignPassword = msSignPassword;
             aContext.SignCertificate = maSignCertificate;
             aContext.SignTSA = msSignTSA;
+            // Not using reference XObjects is experimental for now.
+            aContext.UseReferenceXObject = !officecfg::Office::Common::Misc::ExperimentalMode::get();
 
             // all context data set, time to create the printing device
             std::unique_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));
