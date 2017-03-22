@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_282cd649",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-22T09:37:21Z",
+      "side": 1,
+      "message": "this is broken because _WIN32 is also defined on 64-bit windows so the _WIN64 must be checked first",
+      "revId": "9143dd4ebe37b608e43d04434cf831624bf55b65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
