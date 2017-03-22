@@ -27,6 +27,7 @@
 #include <sstream>
 #include <iomanip>
 
+#include <rtl/character.hxx>
 
 /* Converts ISO 8601 conform date/time
    represenation to the representation
@@ -120,7 +121,7 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     for (/**/; iter != iter_end; ++iter)
     {
-        if (isdigit(*iter))
+        if (rtl::isAsciiDigit(*iter)) // wchar_t is unsigned under MSVC
         {
             num += *iter;
         }
