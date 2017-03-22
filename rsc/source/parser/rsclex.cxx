@@ -223,7 +223,8 @@ int MakeToken( YYSTYPE * pTokenVal )
         Atom        nHashId;
         OStringBuffer aBuf( 256 );
 
-        while( isalnum (c) || (c == '_') || (c == '-') || (c == ':'))
+        while( rtl::isAsciiAlphanumeric (static_cast<unsigned char>(c))
+               || (c == '_') || (c == '-') || (c == ':'))
         {
             aBuf.append( sal_Char(c) );
             c = pFI->GetFastChar();
