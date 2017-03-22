@@ -157,18 +157,20 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
 
     maTasksChanged.notify_all();
 
-    while( !maWorkers.empty() )
+    decltype(maWorkers) aWorkers;
+    std::swap(maWorkers, aWorkers);
+    aGuard.unlock();
+
+    while (!aWorkers.empty())
     {
-        rtl::Reference< ThreadWorker > xWorker = maWorkers.back();
-        maWorkers.pop_back();
-        assert(std::find(maWorkers.begin(), maWorkers.end(), xWorker)
-                == maWorkers.end());
-        aGuard.unlock();
+        rtl::Reference<ThreadWorker> xWorker = aWorkers.back();
+        aWorkers.pop_back();
+        assert(std::find(aWorkers.begin(), aWorkers.end(), xWorker)
+                == aWorkers.end());
         {
             xWorker->join();
             xWorker.clear();
         }
-        aGuard.lock();
     }
 }
 
