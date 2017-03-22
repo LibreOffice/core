@@ -396,11 +396,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessWorkingDir(
 
 /** Get the locale the process is currently running in.
 
-    The unix implementation caches the value it returns, so if you have to change the locale
-    your are running in, you will have to use osl_setProcessLocale
-
     @param  ppLocale [out] a pointer that receives the currently selected locale structure
-    @see osl_setProcessLocale
 */
 
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
@@ -409,7 +405,9 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
 /** Change the locale of the process.
 
     @param  pLocale [in] a pointer to the locale to be set
-    @see osl_getProcessLocale
+
+    @deprecated  LibreOffice itself does not use this, and client code should
+    not have good use for it either.  It may eventually be removed.
 */
 
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(

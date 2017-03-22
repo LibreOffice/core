@@ -460,19 +460,13 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
  *********************************************/
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
-    oslProcessError result = osl_Process_E_Unknown;
-
     OSL_PRECOND(pLocale, "osl_setProcessLocale(): Invalid parameter.");
 
     pthread_mutex_lock(&(g_process_locale.m_mutex));
-    if (imp_setProcessLocale (pLocale) == 0)
-    {
-        g_process_locale.m_pLocale = pLocale;
-        result = osl_Process_E_None;
-    }
+    g_process_locale.m_pLocale = pLocale;
     pthread_mutex_unlock (&(g_process_locale.m_mutex));
 
-    return result;
+    return osl_Process_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,6 @@
 #if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
     defined(DRAGONFLY)
-#include <pthread.h>
 #if !defined(MACOSX) && !defined(IOS)
 #include <locale.h>
 #include <langinfo.h>
@@ -555,8 +554,6 @@ static const Pair nl_language_list[] = {
 
 #endif /* ifdef __sun LINUX FREEBSD NETBSD OPENBSD */
 
-static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
-
 /*****************************************************************************
  return the text encoding corresponding to the given locale
  *****************************************************************************/
@@ -638,29 +635,6 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
         }
     }
     *ppLocale = parse_locale(locale);
-}
-
-/*****************************************************************************
- set the current process locale
- *****************************************************************************/
-
-int imp_setProcessLocale( rtl_Locale * pLocale )
-{
-    char  locale_buf[64] = "";
-    int   ret = 0;
-
-    /* convert rtl_Locale to locale string */
-    compose_locale( pLocale, locale_buf, 64 );
-
-    /* basic thread safeness */
-    pthread_mutex_lock( &aLocalMutex );
-
-    /* try to set LC_ALL locale */
-    if( nullptr == setlocale( LC_ALL, locale_buf ) )
-        ret = -1;
-
-    pthread_mutex_unlock( &aLocalMutex );
-    return ret;
 }
 
 #else /* ifdef LINUX || __sun || MACOSX || NETBSD */
@@ -890,37 +864,6 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     *ppLocale = parse_locale( locale );
 }
 #endif
-
-/*****************************************************************************
- set the current process locale
- *****************************************************************************/
-
-static int
-imp_setenv (const char* name, const char* value)
-{
-    return setenv (name, value, 1);
-}
-
-int imp_setProcessLocale( rtl_Locale * pLocale )
-{
-    char locale_buf[64];
-
-    /* convert rtl_Locale to locale string */
-    if( nullptr != compose_locale( pLocale, locale_buf, 64 ) )
-    {
-        /* only change env vars that exist already */
-        if( getenv( "LC_ALL" ) )
-            imp_setenv( "LC_ALL", locale_buf );
-
-        if( getenv( "LC_CTYPE" ) )
-            imp_setenv("LC_CTYPE", locale_buf );
-
-        if( getenv( "LANG" ) )
-            imp_setenv( "LANG", locale_buf );
-    }
-
-    return 0;
-}
 
 #endif /* ifdef LINUX || __sun || MACOSX || NETBSD || AIX */
 
