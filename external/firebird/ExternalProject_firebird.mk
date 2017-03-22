@@ -26,7 +26,7 @@ ifneq ($(OS),WNT)
 INVOKE_FPA:="CPU=\$$(EMPTY) $${FB_CPU_ARG}"
 endif
 
-MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)
+MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib) LC_ALL=C
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
