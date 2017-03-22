@@ -231,10 +231,7 @@ static rtl_Locale * parse_locale( const char * locale )
  * nl_langinfo() is supported only on Linux, Solaris,
  * >= NetBSD 1.6 and >= FreeBSD 4.4
  *
- * This routine is SLOW because of the setlocale call, so
- * grab the result and cache it.
- *
- * XXX this code has the usual mt problems aligned with setlocale() XXX
+ * XXX this code has the usual mt problems aligned with nl_langinfo_l() XXX
  */
 
 #ifdef LINUX
@@ -573,7 +570,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     char  locale_buf[64] = "";
     char  codeset_buf[64];
 
-    char *ctype_locale = nullptr;
     char *codeset      = nullptr;
 
     /* default to process locale if pLocale == NULL */
@@ -583,16 +579,10 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* convert rtl_Locale to locale string */
     compose_locale( pLocale, locale_buf, 64 );
 
-    /* basic thread safeness */
-    pthread_mutex_lock( &aLocalMutex );
-
-    /* remember the charset as indicated by the LC_CTYPE locale */
-    ctype_locale = setlocale( LC_CTYPE, nullptr );
-
-    /* set the desired LC_CTYPE locale */
-    if( nullptr == setlocale( LC_CTYPE, locale_buf ) )
+    locale_t ctype_locale = newlocale(
+        LC_CTYPE_MASK, locale_buf, static_cast<locale_t>(0));
+    if (ctype_locale == static_cast<locale_t>(0))
     {
-        pthread_mutex_unlock(&aLocalMutex);
         return RTL_TEXTENCODING_DONTKNOW;
     }
 
@@ -600,7 +590,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 #if defined(NETBSD) && !defined(CODESET)
     codeset = NULL;
 #else
-    codeset = nl_langinfo( CODESET );
+    codeset = nl_langinfo_l(CODESET, ctype_locale);
 #endif
 
     if ( codeset != nullptr )
@@ -611,11 +601,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         codeset = codeset_buf;
     }
 
-    /* restore the original value of locale */
-    if ( ctype_locale != nullptr )
-        setlocale( LC_CTYPE, ctype_locale );
-
-    pthread_mutex_unlock( &aLocalMutex );
+    freelocale(ctype_locale);
 
     /* search the codeset in our language list */
     if ( codeset != nullptr )
