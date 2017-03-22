@@ -518,13 +518,13 @@ bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage>& xOleStg,
 {
     if ( xOleStg.is() )
     {
-        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream( "\3OCXNAME");
+        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME", StreamMode::READ);
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
 
-        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream( "contents");
+        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents", StreamMode::READ);
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
 
-        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj");
+        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj", StreamMode::READ);
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
 
