@@ -795,7 +795,8 @@ static inline void print_fullpaths(char* line)
         end = token;
         /* hard to believe that in this day and age drive letters still exist */
         if (*end && (':' == *(end+1)) &&
-            (('\\' == *(end+2)) || ('/' == *(end+2))) && isalpha(*end))
+            (('\\' == *(end+2)) || ('/' == *(end+2))) &&
+            isalpha((unsigned char)*end))
         {
             end = end + 3; /* only one cross, err drive letter per filename */
         }
