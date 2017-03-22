@@ -144,8 +144,10 @@ public:
 
     void testCeilingFloor( sal_uLong nFormatType );
     void testCeilingFloorXLSX();
+    void testCeilingFloorODSToXLSX();
     void testCeilingFloorXLS();
     void testCeilingFloorODS();
+
 
 #if !defined _WIN32
     void testRelativePathsODS();
@@ -239,6 +241,7 @@ public:
     CPPUNIT_TEST(testFunctionsExcel2010XLS);
     CPPUNIT_TEST(testFunctionsExcel2010ODS);
     CPPUNIT_TEST(testCeilingFloorXLSX);
+    CPPUNIT_TEST(testCeilingFloorODSToXLSX);
     CPPUNIT_TEST(testCeilingFloorXLS);
     CPPUNIT_TEST(testCeilingFloorODS);
 #if !defined(_WIN32)
@@ -2723,6 +2726,20 @@ void ScExportTest::testCeilingFloorXLSX()
     testCeilingFloor(FORMAT_XLSX);
 }
 
+void ScExportTest::testCeilingFloorODSToXLSX()
+{
+    // tdf#100011 - Cannot open sheet containg FLOOR/CEILING functions by MS Excel, after export to .xlsx
+    ScDocShellRef xShell = loadDoc("ceiling-floor.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/workbook.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // there shouldn't be any defined names during export of FLOOR and CEILING functions to .xlsx
+    assertXPath(pSheet, "/x:workbook/x:definedNames", 0);
+}
+
 void ScExportTest::testCeilingFloorXLS()
 {
     testCeilingFloor(FORMAT_XLS);
@@ -2732,6 +2749,7 @@ void ScExportTest::testCeilingFloorODS()
 {
     testCeilingFloor(FORMAT_ODS);
 }
+
 
 #if !defined _WIN32
 void ScExportTest::testRelativePathsODS()
