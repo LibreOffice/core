@@ -19,6 +19,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 #include <filter/msfilter/mscodec.hxx>
+#include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -131,7 +132,7 @@ bad_data:
     do
     {
         PRUint32 decimal = 0;
-        while (len > 0 && isdigit(*from))
+        while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from)))
         {
             PRUint32 addend = (*from++ - '0');
             --len;
