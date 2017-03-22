@@ -26,7 +26,7 @@
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING);
 ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
-sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
+InsertContentsFlags ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
 ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
@@ -74,7 +74,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     {
         ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
         ScInsertContentsDlg::bPreviousAllCheck = false;
-        ScInsertContentsDlg::nPreviousChecks2 = 0;
+        ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
     }
 
     mpBtnInsAll->Check     ( ScInsertContentsDlg::bPreviousAllCheck );
@@ -109,9 +109,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
         case INS_CELLSRIGHT: mpRbMoveRight->Check(); break;
     }
 
-    mpBtnSkipEmptyCells->Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_NOEMPTY ) != 0);
-    mpBtnTranspose->Check( ( ScInsertContentsDlg::nPreviousChecks2    & INS_CONT_TRANS ) != 0);
-    mpBtnLink->Check( ( ScInsertContentsDlg::nPreviousChecks2             & INS_CONT_LINK  ) != 0);
+    mpBtnSkipEmptyCells->Check( bool( ScInsertContentsDlg::nPreviousChecks2 & InsertContentsFlags::NoEmpty ));
+    mpBtnTranspose->Check( bool( ScInsertContentsDlg::nPreviousChecks2    & InsertContentsFlags::Trans ));
+    mpBtnLink->Check( bool( ScInsertContentsDlg::nPreviousChecks2             & InsertContentsFlags::Link  ));
 
     DisableChecks( mpBtnInsAll->IsChecked() );
 
@@ -349,13 +349,13 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
 
 void ScInsertContentsDlg::dispose()
 {
-    ScInsertContentsDlg::nPreviousChecks2 = 0;
+    ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
     if(mpBtnSkipEmptyCells->IsChecked())
-        ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_NOEMPTY;
+        ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::NoEmpty;
     if( mpBtnTranspose->IsChecked())
-        ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_TRANS;
+        ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::Trans;
     if( mpBtnLink->IsChecked() )
-        ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_LINK;
+        ScInsertContentsDlg::nPreviousChecks2 |= InsertContentsFlags::Link;
 
     if (!bFillMode)     // in FillMode, None is checked and all three options are disabled
     {

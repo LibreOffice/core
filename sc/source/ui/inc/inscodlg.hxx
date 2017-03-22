@@ -89,7 +89,7 @@ private:
 
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
-    static sal_uInt16   nPreviousChecks2;
+    static InsertContentsFlags nPreviousChecks2;
     static ScPasteFunc  nPreviousFormulaChecks;
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
