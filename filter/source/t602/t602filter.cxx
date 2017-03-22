@@ -678,7 +678,7 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     *ch = Readchar602();
     if (!*ch) return tnode::EEND;
     if (*ch=='\n') return tnode::EOL;
-    if (!isalpha(*ch)) return (*ch<32) ? tnode::SETCH : tnode::WRITE;
+    if (!rtl::isAsciiAlpha(*ch)) return (*ch<32) ? tnode::SETCH : tnode::WRITE;
 
     // warning: uChar -> char
     pcmd[1] = (char) rtl::toAsciiUpperCase(*ch); inschr(*ch);
@@ -749,7 +749,7 @@ void T602ImportFilter::Read602()
         case tnode::POCMD: inschr('.');
             ch = Readchar602();
             if(ch == 0) node = tnode::EEND;
-            else if(isalpha(ch)) node = PointCmd602(&ch);
+            else if(rtl::isAsciiAlpha(ch)) node = PointCmd602(&ch);
             else if(ch <32) node=tnode::SETCH;
             else node = tnode::WRITE;
             break;
