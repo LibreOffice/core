@@ -2085,6 +2085,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Bibliography Database</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Pie" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2834,6 +2837,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Web</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ProgressBar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2934,6 +2940,9 @@
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Edit</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
@@ -5923,6 +5932,9 @@
       <node oor:name=".uno:Signature" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Digital Signatu~res...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SignPDF" oor:op="replace">
