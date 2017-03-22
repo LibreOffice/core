@@ -92,10 +92,10 @@ private:
     sal_uInt16      m_nSides;
     sal_uInt16      m_nValid;
 
-    sal_uInt16      m_nBoderGroupIDLeft;
-    sal_uInt16      m_nBoderGroupIDRight;
-    sal_uInt16      m_nBoderGroupIDTop;
-    sal_uInt16      m_nBoderGroupIDBottom;
+    sal_uInt16      m_nBorderGroupIDLeft;
+    sal_uInt16      m_nBorderGroupIDRight;
+    sal_uInt16      m_nBorderGroupIDTop;
+    sal_uInt16      m_nBorderGroupIDBottom;
 
     sal_Int32       m_nGroupIndent;
 

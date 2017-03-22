@@ -67,10 +67,10 @@ LwpBorderStuff::LwpBorderStuff()
     m_nSides = 0;
     m_nValid = 0;
 
-    m_nBoderGroupIDLeft = 0;
-    m_nBoderGroupIDRight = 0;
-    m_nBoderGroupIDTop = 0;
-    m_nBoderGroupIDBottom = 0;
+    m_nBorderGroupIDLeft = 0;
+    m_nBorderGroupIDRight = 0;
+    m_nBorderGroupIDTop = 0;
+    m_nBorderGroupIDBottom = 0;
 
     m_nGroupIndent = 0;
 
@@ -85,7 +85,7 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
     m_nSides = pStrm->QuickReaduInt16();
     if( m_nSides&LEFT )
     {
-        m_nBoderGroupIDLeft = pStrm->QuickReaduInt16();
+        m_nBorderGroupIDLeft = pStrm->QuickReaduInt16();
         m_nWidthLeft = pStrm->QuickReadInt32();
         m_aColorLeft.Read(pStrm);
 
@@ -97,7 +97,7 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&RIGHT )
     {
-        m_nBoderGroupIDRight = pStrm->QuickReaduInt16();
+        m_nBorderGroupIDRight = pStrm->QuickReaduInt16();
         m_nWidthRight = pStrm->QuickReadInt32();
         m_aColorRight.Read(pStrm);
 
@@ -109,7 +109,7 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&TOP )
     {
-        m_nBoderGroupIDTop = pStrm->QuickReaduInt16();
+        m_nBorderGroupIDTop = pStrm->QuickReaduInt16();
         m_nWidthTop = pStrm->QuickReadInt32();
         m_aColorTop.Read(pStrm);
 
@@ -121,7 +121,7 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( m_nSides&BOTTOM )
     {
-        m_nBoderGroupIDBottom = pStrm->QuickReaduInt16();
+        m_nBorderGroupIDBottom = pStrm->QuickReaduInt16();
         m_nWidthBottom = pStrm->QuickReadInt32();
         m_aColorBottom.Read(pStrm);
 
@@ -137,21 +137,21 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
 
     if( LwpFileHeader::m_nFileRevision < 0x0010 )
     {
-        if( m_nBoderGroupIDLeft&EXTERNAL_ID )
+        if( m_nBorderGroupIDLeft&EXTERNAL_ID )
         {
-            m_nBoderGroupIDLeft = BGRP_SOLID;
+            m_nBorderGroupIDLeft = BGRP_SOLID;
         }
-        if( m_nBoderGroupIDRight&EXTERNAL_ID )
+        if( m_nBorderGroupIDRight&EXTERNAL_ID )
         {
-            m_nBoderGroupIDRight = BGRP_SOLID;
+            m_nBorderGroupIDRight = BGRP_SOLID;
         }
-        if( m_nBoderGroupIDTop&EXTERNAL_ID )
+        if( m_nBorderGroupIDTop&EXTERNAL_ID )
         {
-            m_nBoderGroupIDTop = BGRP_SOLID;
+            m_nBorderGroupIDTop = BGRP_SOLID;
         }
-        if( m_nBoderGroupIDBottom&EXTERNAL_ID )
+        if( m_nBorderGroupIDBottom&EXTERNAL_ID )
         {
-            m_nBoderGroupIDBottom = BGRP_SOLID;
+            m_nBorderGroupIDBottom = BGRP_SOLID;
         }
     }
 }
@@ -166,13 +166,13 @@ sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
     switch(side)
     {
     case LEFT:
-        return m_nBoderGroupIDLeft;
+        return m_nBorderGroupIDLeft;
     case RIGHT:
-        return m_nBoderGroupIDRight;
+        return m_nBorderGroupIDRight;
     case TOP:
-        return m_nBoderGroupIDTop;
+        return m_nBorderGroupIDTop;
     case BOTTOM:
-        return m_nBoderGroupIDBottom;
+        return m_nBorderGroupIDBottom;
     }
     // FIXME: this is needed to avoid warning: control reaches end of non-void function
     //        a better solution would be to enum value for the parameter side
@@ -220,10 +220,10 @@ LwpBorderStuff& LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
     m_nSides = rOther.m_nSides;
     m_nValid = rOther.m_nValid;
 
-    m_nBoderGroupIDLeft = rOther.m_nBoderGroupIDLeft;
-    m_nBoderGroupIDRight = rOther.m_nBoderGroupIDRight;
-    m_nBoderGroupIDTop = rOther.m_nBoderGroupIDTop;
-    m_nBoderGroupIDBottom = rOther.m_nBoderGroupIDBottom;
+    m_nBorderGroupIDLeft = rOther.m_nBorderGroupIDLeft;
+    m_nBorderGroupIDRight = rOther.m_nBorderGroupIDRight;
+    m_nBorderGroupIDTop = rOther.m_nBorderGroupIDTop;
+    m_nBorderGroupIDBottom = rOther.m_nBorderGroupIDBottom;
 
     m_nGroupIndent = rOther.m_nGroupIndent;
 

@@ -313,9 +313,9 @@ namespace toolkitform
                     OUString sBorderColorPropertyName( "BorderColor" );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
-                        sal_Int32 nBoderColor = COL_TRANSPARENT;
-                        if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBoderColor )
-                            Descriptor->BorderColor = Color( nBoderColor );
+                        sal_Int32 nBorderColor = COL_TRANSPARENT;
+                        if ( xModelProps->getPropertyValue( sBorderColorPropertyName ) >>= nBorderColor )
+                            Descriptor->BorderColor = Color( nBorderColor );
                         else
                             Descriptor->BorderColor = Color( COL_BLACK );
                     }

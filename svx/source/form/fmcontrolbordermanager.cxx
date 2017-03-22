@@ -67,21 +67,21 @@ namespace svxform
     }
 
 
-    static void getBorder( const Reference< XVclWindowPeer >& _rxPeer, BorderDescriptor& _rBoder )
+    static void getBorder( const Reference< XVclWindowPeer >& _rxPeer, BorderDescriptor& _rBorder )
     {
         OSL_ENSURE( _rxPeer.is(), "getBorder: invalid peer!" );
 
-        OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDER ) >>= _rBoder.nBorderType );
-        OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDERCOLOR ) >>= _rBoder.nBorderColor );
+        OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDER ) >>= _rBorder.nBorderType );
+        OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDERCOLOR ) >>= _rBorder.nBorderColor );
     }
 
 
-    static void setBorder( const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rBoder )
+    static void setBorder( const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rBorder )
     {
         OSL_ENSURE( _rxPeer.is(), "setBorder: invalid peer!" );
 
-        _rxPeer->setProperty( FM_PROP_BORDER, makeAny( _rBoder.nBorderType ) );
-        _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBoder.nBorderColor ) );
+        _rxPeer->setProperty( FM_PROP_BORDER, makeAny( _rBorder.nBorderType ) );
+        _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBorder.nBorderColor ) );
     }
 
     ControlBorderManager::ControlBorderManager()
