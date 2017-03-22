@@ -34,6 +34,7 @@
 #include "osl/module.h"
 #include "osl/module.hxx"
 #include "osl/thread.h"
+#include "rtl/character.hxx"
 #include "rtl/process.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -127,7 +128,7 @@ public:
         int len = strlen(tn.get());
         for(int i = 0; i < len; i++)
         {
-            if(!isalnum(tn[i]))
+            if(!rtl::isAsciiAlphanumeric(static_cast<unsigned char>(tn[i])))
             {
                 tn[i] = '_';
             }
