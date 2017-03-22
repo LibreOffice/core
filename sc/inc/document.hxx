@@ -484,7 +484,7 @@ private:
     bool                mbFinalTrackFormulas    : 1;
 
 public:
-    bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
+    bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
     void                     GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
     bool                     IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void                     SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }

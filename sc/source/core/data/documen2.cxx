@@ -1277,7 +1277,7 @@ void ScDocument::ClearLookupCaches()
         pLookupCacheMapImpl->clear();
 }
 
-bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
+bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)
 {
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
@@ -1305,11 +1305,11 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
                 {
                     if (aRange.In(cell))
                     {
-                        if (pColCellBoder != nullptr)
+                        if (pColCellBorder != nullptr)
                         {
                             aColorChanger.Update( *pAction );
                             Color aColor( aColorChanger.GetColor() );
-                            *pColCellBoder = aColor;
+                            *pColCellBorder = aColor;
                         }
                         return true;
                     }
@@ -1325,11 +1325,11 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
                 {
                     if (aRange.In(cell))
                     {
-                        if (pColCellBoder != nullptr)
+                        if (pColCellBorder != nullptr)
                         {
                             aColorChanger.Update( *pAction );
                             Color aColor( aColorChanger.GetColor() );
-                            *pColCellBoder = aColor;
+                            *pColCellBorder = aColor;
                         }
                         return true;
                     }

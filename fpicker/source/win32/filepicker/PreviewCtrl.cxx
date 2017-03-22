@@ -35,7 +35,7 @@
 #define HIMETRIC_INCH 2540
 
 // means 3 pixel left and 3 pixel right
-#define HORZ_BODER_SPACE    6
+#define HORZ_BORDER_SPACE    6
 
 // means 3 pixel top and 3 pixel bottom
 #define VERT_BORDER_SPACE   6
@@ -109,7 +109,7 @@ namespace
         sal_Int32 nWidthWnd  = _getWidthRect( rect );
         sal_Int32 nHeightWnd = _getHeightRect( rect );
 
-        return ( ( ( nWidthWnd  - HORZ_BODER_SPACE )  >= aPicSize.m_cx ) &&
+        return ( ( ( nWidthWnd  - HORZ_BORDER_SPACE )  >= aPicSize.m_cx ) &&
                  ( ( nHeightWnd - VERT_BORDER_SPACE ) >= aPicSize.m_cy ) );
     }
 
