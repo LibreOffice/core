@@ -166,7 +166,7 @@ int control(int counter)
          * We subtract 1 as we want the number of the next line.
          */
         line = atoi(work) - 1;              /* Reset line number    */
-        for (tp = work; isdigit(*tp) || type[(int)*tp] == SPA; tp++)
+        for (tp = work; isdigit((unsigned char)*tp) || type[(int)*tp] == SPA; tp++)
             ;                               /* Skip over digits     */
         if (*tp != EOS)                     /* Got a filename, so:  */
         {

@@ -174,7 +174,7 @@ int dooptions(int argc, char** argv)
         else
         {
             c = *ap++;                      /* Option byte          */
-            if (islower(c))                 /* Normalize case       */
+            if (islower((unsigned char)c))                 /* Normalize case       */
                 c = toupper(c);
             switch (c)                      /* Command character    */
             {
@@ -224,13 +224,13 @@ int dooptions(int argc, char** argv)
                 }
                 while (sizp->bits != endtest && *ap != EOS)
                 {
-                    if (!isdigit(*ap))      /* Skip to next digit   */
+                    if (!isdigit((unsigned char)*ap))      /* Skip to next digit   */
                     {
                         ap++;
                         continue;
                     }
                     size = 0;               /* Compile the value    */
-                    while (isdigit(*ap))
+                    while (isdigit((unsigned char)*ap))
                     {
                         size *= 10;
                         size += (*ap++ - '0');
@@ -254,7 +254,7 @@ int dooptions(int argc, char** argv)
 
 #if OSL_DEBUG_LEVEL > 1
             case 'X':                       /* Debug                */
-                debug = (isdigit(*ap)) ? atoi(ap) : 1;
+                debug = (isdigit((unsigned char)*ap)) ? atoi(ap) : 1;
 #if (HOST == SYS_UNIX)
                 signal(SIGINT, (void (*)(int)) abort); /* Trap "interrupt" */
 #endif
