@@ -212,7 +212,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
         sal_Char cBuf[sizeof(cPuffer)+1];
-        if( isdigit( *cPuffer ) )
+        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cPuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
             strcpy( cBuf + 1, cPuffer );       // #100211# - checked
@@ -251,7 +251,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
                     static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
         sal_Char cBuf[sizeof(cPuffer)+1];
-        if( isdigit( *cPuffer ) )
+        if( rtl::isAsciiDigit( static_cast<unsigned char>(*cPuffer) ) )
         {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
             strcpy( cBuf + 1, cPuffer );       // #100211# - checked
