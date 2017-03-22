@@ -1632,7 +1632,12 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
             AppendEuroToolCallToken( rFuncData.GetExtFuncData() );
         break;
         case ocMacro:
-            AppendMacroCallToken( rFuncData.GetExtFuncData() );
+            // tdf#100011 Do not write the OOXML <definedName> element for new _xlfn.
+            // Fixes export to .xlsx functions like FLOOR, CEILING
+            if ( GetOutput() == EXC_OUTPUT_XML_2007 )
+                AppendNameToken( 0 );     // keep parameter count valid
+            else
+                AppendMacroCallToken( rFuncData.GetExtFuncData() );
         break;
         default:
         {
