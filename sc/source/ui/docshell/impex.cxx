@@ -1855,7 +1855,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             else
                             {
                                 ScFormulaCell* pFCell = new ScFormulaCell(
-                                        pDoc, aPos, *pCode, eGrammar, MM_NONE);
+                                        pDoc, aPos, *pCode, eGrammar, ScMatrixMode::NONE);
                                 pDoc->SetFormulaCell(aPos, pFCell);
                             }
                             delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
@@ -2034,7 +2034,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         const ScFormulaCell* pFCell = aCell.mpFormula;
                         switch ( pFCell->GetMatrixFlag() )
                         {
-                            case MM_REFERENCE :
+                            case ScMatrixMode::Reference :
                                 aCellStr.clear();
                             break;
                             default:
@@ -2047,7 +2047,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                  * writes in SYLK, or even better
                                  * GRAM_ENGLISH_XL_R1C1. */
                         }
-                        if ( pFCell->GetMatrixFlag() != MM_NONE &&
+                        if ( pFCell->GetMatrixFlag() != ScMatrixMode::NONE &&
                                 aCellStr.startsWith("{") &&
                                 aCellStr.endsWith("}") )
                         {   // cut off matrix {} characters
@@ -2058,7 +2058,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         OUString aPrefix;
                         switch ( pFCell->GetMatrixFlag() )
                         {
-                            case MM_FORMULA :
+                            case ScMatrixMode::Formula :
                             {   // diff expression with 'M' M$-extension
                                 SCCOL nC;
                                 SCROW nR;
@@ -2072,7 +2072,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aPrefix += ";M";
                             }
                             break;
-                            case MM_REFERENCE :
+                            case ScMatrixMode::Reference :
                             {   // diff expression with 'I' M$-extension
                                 ScAddress aPos;
                                 (void)pFCell->GetMatrixOrigin( aPos );

@@ -1715,7 +1715,7 @@ bool ScColumn::ParseString(
                 new ScFormulaCell(
                     pDocument, ScAddress(nCol, nRow, nTabP), rString,
                     formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_DEFAULT, eConv),
-                    MM_NONE));
+                    ScMatrixMode::NONE));
     }
     else if ( cFirstChar == '\'') // 'Text
     {

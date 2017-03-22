@@ -498,7 +498,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
         }
 
-        ScFormulaCell aCell(pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+        ScFormulaCell aCell(pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
         delete pArr;
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -749,7 +749,7 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
 
         ScDocument* pDoc = rData.GetDocument();
         SCTAB nTab = rData.GetTabNo();
-        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, eGram, MM_FORMULA );
+        ScFormulaCell aFormCell( pDoc, ScAddress(nCol,nRow,nTab), rString, eGram, ScMatrixMode::Formula );
 
         SCSIZE nSizeX;
         SCSIZE nSizeY;

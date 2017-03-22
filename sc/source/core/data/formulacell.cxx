@@ -613,7 +613,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     pNextTrack(nullptr),
     nSeenInIteration(0),
     nFormatType(css::util::NumberFormat::NUMBER),
-    cMatrixFlag(MM_NONE),
+    cMatrixFlag(ScMatrixMode::NONE),
     bDirty(false),
     bChanged(false),
     bRunning(false),
@@ -635,7 +635,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
-                              sal_uInt8 cMatInd ) :
+                              ScMatrixMode cMatInd ) :
     eTempGrammar( eGrammar),
     pCode( nullptr ),
     pDocument( pDoc ),
@@ -671,7 +671,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 
 ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
-    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
+    const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     eTempGrammar( eGrammar),
     pCode(pArray),
     pDocument( pDoc ),
@@ -722,7 +722,7 @@ ScFormulaCell::ScFormulaCell(
 
 ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
-    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
+    const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     eTempGrammar( eGrammar),
     pCode(new ScTokenArray(rArray)),
     pDocument( pDoc ),
@@ -772,7 +772,7 @@ ScFormulaCell::ScFormulaCell(
 
 ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
-    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cInd ) :
+    const FormulaGrammar::Grammar eGrammar, ScMatrixMode cInd ) :
     mxGroup(xGroup),
     eTempGrammar( eGrammar),
     pCode(xGroup->mpCode ? xGroup->mpCode : new ScTokenArray),
@@ -981,7 +981,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
         rBuffer = ScGlobal::GetErrorString(pCode->GetCodeError());
         return;
     }
-    else if( cMatrixFlag == MM_REFERENCE )
+    else if( cMatrixFlag == ScMatrixMode::Reference )
     {
         // Reference to another cell that contains a matrix formula.
         pCode->Reset();
@@ -1023,7 +1023,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
 
     rBuffer.insert( 0, '=');
-    if( cMatrixFlag )
+    if( cMatrixFlag != ScMatrixMode::NONE )
     {
         rBuffer.insert( 0, '{');
         rBuffer.append( '}');
@@ -1048,7 +1048,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
         aComp.CreateStringFromTokenArray(aBuf);
         return aBuf.makeStringAndClear();
     }
-    else if( cMatrixFlag == MM_REFERENCE )
+    else if( cMatrixFlag == ScMatrixMode::Reference )
     {
         // Reference to another cell that contains a matrix formula.
         pCode->Reset();
@@ -1087,7 +1087,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
     }
 
     aBuf.insert( 0, '=');
-    if( cMatrixFlag )
+    if( cMatrixFlag != ScMatrixMode::NONE )
     {
         aBuf.insert( 0, '{');
         aBuf.append( '}');
@@ -1275,7 +1275,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
 
 void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress )
 {
-    if ( cMatrixFlag == MM_REFERENCE )
+    if ( cMatrixFlag == ScMatrixMode::Reference )
     {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
         // just establish listeners
         StartListeningTo( pDocument );
@@ -1438,9 +1438,9 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     // DoubleRefs for binary operators were always a Matrix before version v5.0.
     // Now this is only the case when in an array formula, otherwise it's an implicit intersection
     if ( pDocument->GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
-            GetMatrixFlag() == MM_NONE && pCode->HasMatrixDoubleRefOps() )
+            GetMatrixFlag() == ScMatrixMode::NONE && pCode->HasMatrixDoubleRefOps() )
     {
-        cMatrixFlag = MM_FORMULA;
+        cMatrixFlag = ScMatrixMode::Formula;
         SetMatColsRows( 1, 1);
     }
 
@@ -1963,7 +1963,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 // Don't set text format as hard format.
                 bSetFormat = false;
             }
-            else if (nFormatType == css::util::NumberFormat::LOGICAL && cMatrixFlag != MM_NONE)
+            else if (nFormatType == css::util::NumberFormat::LOGICAL && cMatrixFlag != ScMatrixMode::NONE)
             {
                 // In a matrix range do not set an (inherited) logical format
                 // as hard format if the value does not represent a strict TRUE
@@ -1976,7 +1976,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 // some other elements should be. We'd need to transport type
                 // or format information on arrays.
                 StackVar eNewCellResultType = aNewResult.GetCellResultType();
-                if (eNewCellResultType != svError || cMatrixFlag == MM_REFERENCE)
+                if (eNewCellResultType != svError || cMatrixFlag == ScMatrixMode::Reference)
                 {
                     double fVal;
                     if (eNewCellResultType != svDouble)
@@ -2089,7 +2089,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             // If the formula wasn't entered as a matrix formula, live on with
             // the upper left corner and let reference counting delete the matrix.
-            if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
+            if( cMatrixFlag != ScMatrixMode::Formula && !pCode->IsHyperLink() )
                 aResult.SetToken( aResult.GetCellResultToken().get());
         }
         if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
@@ -2543,7 +2543,7 @@ bool ScFormulaCell::NeedsInterpret() const
     if (!IsDirtyOrInTableOpDirty())
         return false;
 
-    return (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE));
+    return (pDocument->GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
 }
 
 void ScFormulaCell::MaybeInterpret()
@@ -2630,7 +2630,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     {
         if( IsDirtyOrInTableOpDirty()
         // Was stored !bDirty but an accompanying matrix cell was bDirty?
-        || (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix()))
+        || (!bDirty && cMatrixFlag == ScMatrixMode::Formula && !aResult.GetMatrix()))
             Interpret();
     }
     return aResult.GetMatrix().get();
@@ -2640,10 +2640,10 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
 {
     switch ( cMatrixFlag )
     {
-        case MM_FORMULA :
+        case ScMatrixMode::Formula :
             rPos = aPos;
             return true;
-        case MM_REFERENCE :
+        case ScMatrixMode::Reference :
         {
             pCode->Reset();
             formula::FormulaToken* t = pCode->GetNextReferenceRPN();
@@ -2659,6 +2659,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             }
         }
         break;
+        default: break;
     }
     return false;
 }
@@ -2667,8 +2668,8 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
 {
     switch ( cMatrixFlag )
     {
-        case MM_FORMULA :
-        case MM_REFERENCE :
+        case ScMatrixMode::Formula :
+        case ScMatrixMode::Reference :
         {
             static SCCOL nC;
             static SCROW nR;
@@ -2679,12 +2680,12 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             {   // First time or a different matrix than last time.
                 rOrgPos = aOrg;
                 const ScFormulaCell* pFCell;
-                if ( cMatrixFlag == MM_REFERENCE )
+                if ( cMatrixFlag == ScMatrixMode::Reference )
                     pFCell = pDocument->GetFormulaCell(aOrg);
                 else
-                    pFCell = this;      // this MM_FORMULA
+                    pFCell = this;      // this ScMatrixMode::Formula
                 // There's only one this, don't compare pFCell==this.
-                if (pFCell && pFCell->cMatrixFlag == MM_FORMULA)
+                if (pFCell && pFCell->cMatrixFlag == ScMatrixMode::Formula)
                 {
                     pFCell->GetMatColsRows( nC, nR );
                     if ( nC == 0 || nR == 0 )
@@ -2700,7 +2701,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         do
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
-                            if (pCell && pCell->cMatrixFlag == MM_REFERENCE &&
+                            if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
                                 pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nC++;
@@ -2715,7 +2716,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                         do
                         {
                             pCell = pDocument->GetFormulaCell(aAdr);
-                            if (pCell && pCell->cMatrixFlag == MM_REFERENCE &&
+                            if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
                                 pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nR++;
@@ -3047,7 +3048,7 @@ bool checkCompileColRowName(
 }
 
 void setOldCodeToUndo(
-    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, sal_uInt8 cMatrixFlag)
+    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
 {
     // Copy the cell to aUndoPos, which is its current position in the document,
     // so this works when UpdateReference is called before moving the cells
@@ -3848,7 +3849,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
 {
     // no Matrix formulae yet.
-    if ( GetMatrixFlag() != MM_NONE )
+    if ( GetMatrixFlag() != ScMatrixMode::NONE )
         return NotEqual;
 
     // are these formulas at all similar ?
@@ -4095,7 +4096,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    if (cMatrixFlag != MM_NONE)
+    if (cMatrixFlag != ScMatrixMode::NONE)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         aScope.addMessage("matrix skipped");

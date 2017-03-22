@@ -277,9 +277,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
     if (pArr)
-        pCell = new ScFormulaCell(this, aPos, *pArr, eGram, MM_FORMULA);
+        pCell = new ScFormulaCell(this, aPos, *pArr, eGram, ScMatrixMode::Formula);
     else
-        pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, rFormula, eGram, ScMatrixMode::Formula );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
@@ -340,7 +340,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 aRefData.SetAddress(aBasePos, aPos);
                 *t->GetSingleRef() = aRefData;
                 std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
-                pCell = new ScFormulaCell(this, aPos, *pTokArr, eGram, MM_REFERENCE);
+                pCell = new ScFormulaCell(this, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
                 pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }
@@ -427,7 +427,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     aForString.append(ScCompiler::GetNativeSymbol( ocClose ));
 
     ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString.makeStringAndClear(),
-           formula::FormulaGrammar::GRAM_NATIVE, MM_NONE );
+           formula::FormulaGrammar::GRAM_NATIVE, ScMatrixMode::NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)

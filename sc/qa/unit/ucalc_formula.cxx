@@ -86,6 +86,11 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 
 }
 
+static std::ostream& operator<<(std::ostream& os, ScMatrixMode mode)
+{
+    os << (int) mode; return os;
+}
+
 void Test::testFormulaCreateStringFromTokens()
 {
     // Insert sheets.
@@ -3845,7 +3850,7 @@ void Test::testFuncMIN()
     // Formula cell in C1:C2 should be a 1x2 matrix array.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should be an array.", MM_FORMULA, static_cast<ScMatrixMode>(pFC->GetMatrixFlag()));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should be an array.", ScMatrixMode::Formula, pFC->GetMatrixFlag());
 
     SCCOL nCols;
     SCROW nRows;
@@ -4392,7 +4397,7 @@ void Test::testFuncLEN()
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should be a matrix origin.",
-                           MM_FORMULA, static_cast<ScMatrixMode>(pFC->GetMatrixFlag()));
+                           ScMatrixMode::Formula, pFC->GetMatrixFlag());
 
     // This should be a 1x3 matrix.
     SCCOL nCols = -1;
