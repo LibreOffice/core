@@ -27,9 +27,15 @@
 #define FDS_OPT_HORZ        1   // from filldlg.hxx
 #define FDS_OPT_VERT        2  // from filldlg.hxx
 
-#define INS_CONT_NOEMPTY    0x0100 //from inscodlg.hxx
-#define INS_CONT_TRANS      0x0200 //from inscodlg.hxx
-#define INS_CONT_LINK       0x0400 //from inscodlg.hxx
+enum class InsertContentsFlags {
+    NONE       = 0x00,
+    NoEmpty    = 0x01, //from inscodlg.hxx
+    Trans      = 0x02, //from inscodlg.hxx
+    Link       = 0x04  //from inscodlg.hxx
+};
+namespace o3tl {
+    template<> struct typed_flags<InsertContentsFlags> : is_typed_flags<InsertContentsFlags, 0x07> {};
+}
 
 #define SC_CELL_SHIFT_DISABLE_DOWN  0x01 //from inscodlg.hxx
 #define SC_CELL_SHIFT_DISABLE_RIGHT 0x02 //from inscodlg.hxx
