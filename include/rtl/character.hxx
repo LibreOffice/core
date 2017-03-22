@@ -239,6 +239,29 @@ template<typename T> inline bool isAsciiOctalDigit(T code)
 { return isAsciiOctalDigit(sal_uInt32(code)); }
 #endif
 
+/** Check for ASCII white space character.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is an ASCII white space character as defined by C for
+    isspace in the "C" locale (ASCII ' ', '\f', '\n', '\r', '\t' '\v').
+
+    @since LibreOffice 5.4
+*/
+inline bool isAsciiWhiteSpace(sal_uInt32 code)
+{
+    assert(isUnicodeCodePoint(code));
+    return code == ' ' || code == '\f' || code == '\n' || code == '\r'
+        || code == '\t' || code == '\v';
+}
+
+#if defined LIBO_INTERNAL_ONLY
+bool isAsciiWhiteSpace(char) = delete;
+bool isAsciiWhiteSpace(signed char) = delete;
+template<typename T> inline bool isAsciiWhiteSpace(T code)
+{ return isAsciiWhiteSpace(sal_uInt32(code)); }
+#endif
+
 /** Convert a character, if ASCII, to upper case.
 
     @param code  A Unicode code point.

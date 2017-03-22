@@ -166,7 +166,7 @@ RTFError RTFTokenizer::resolveParse()
 int RTFTokenizer::asHex(char ch)
 {
     int ret = 0;
-    if (isdigit(ch))
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
         ret = ch - '0';
     else
     {
@@ -203,7 +203,7 @@ RTFError RTFTokenizer::resolveKeyword()
     if (Strm().IsEof())
         return RTFError::UNEXPECTED_EOF;
 
-    if (!isalpha(ch))
+    if (!rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
         OString aKeyword = aBuf.makeStringAndClear();
@@ -211,7 +211,7 @@ RTFError RTFTokenizer::resolveKeyword()
         // without doing any SeekRel()
         return dispatchKeyword(aKeyword, bParam, nParam);
     }
-    while (isalpha(ch))
+    while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
         Strm().ReadChar(ch);
@@ -234,13 +234,13 @@ RTFError RTFTokenizer::resolveKeyword()
         if (Strm().IsEof())
             return RTFError::UNEXPECTED_EOF;
     }
-    if (isdigit(ch))
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
     {
         OStringBuffer aParameter;
 
         // we have a parameter
         bParam = true;
-        while (isdigit(ch))
+        while (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
         {
             aParameter.append(ch);
             Strm().ReadChar(ch);

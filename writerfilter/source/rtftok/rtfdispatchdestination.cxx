@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <filter/msfilter/escherex.hxx>
+#include <rtl/character.hxx>
 #include <tools/stream.hxx>
 
 #include <dmapper/DomainMapperFactory.hxx>
@@ -71,11 +72,16 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 Strm().ReadChar(ch);
                 if ('\\' == ch)
                     bInKeyword = true;
-                if (!bInKeyword  && isalnum(ch))
+                if (!bInKeyword
+                    && rtl::isAsciiAlphanumeric(static_cast<unsigned char>(ch)))
                     aBuf.append(ch);
-                else if (bInKeyword && isspace(ch))
+                else if (bInKeyword
+                         && rtl::isAsciiWhiteSpace(
+                             static_cast<unsigned char>(ch)))
                     bInKeyword = false;
-                if (!aBuf.isEmpty() && !isalnum(ch))
+                if (!aBuf.isEmpty()
+                    && !rtl::isAsciiAlphanumeric(
+                        static_cast<unsigned char>(ch)))
                     bFoundCode = true;
             }
 
