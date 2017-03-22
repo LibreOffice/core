@@ -212,9 +212,11 @@ namespace URLEncoder
         std::string result;
         for (char c : rIn)
         {
-            if (isalnum (c) || strchr (good, c))
+            if (rtl::isAsciiAlphanumeric (static_cast<unsigned char>(c))
+                || strchr (good, c))
+            {
                 result += c;
-            else {
+            } else {
                 result += '%';
                 result += hex[static_cast<unsigned char>(c) >> 4];
                 result += hex[c & 0xf];
