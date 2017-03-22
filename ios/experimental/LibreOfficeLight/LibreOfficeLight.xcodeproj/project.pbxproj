@@ -12,7 +12,6 @@
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
 		397E09031E597BD8001374E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397E09011E597BD8001374E0 /* Main.storyboard */; };
-		397E09061E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */; };
 		397E09081E597BD8001374E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 397E09071E597BD8001374E0 /* Assets.xcassets */; };
 		397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */; };
 		397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */; };
@@ -58,7 +57,6 @@
 		397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibreOfficeLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		397E08FD1E597BD8001374E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LibreOfficeLight/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
-		397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LibreOfficeLight.xcdatamodel; sourceTree = "<group>"; };
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		397E090C1E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLight/Info.plist; sourceTree = SOURCE_ROOT; };
 		397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,7 +116,6 @@
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
 				39B084E21E5F0A9600682A59 /* lo.xcconfig */,
 				397E09071E597BD8001374E0 /* Assets.xcassets */,
-				397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */,
 				397E090C1E597BD8001374E0 /* Info.plist */,
 				396F92F61E7AE62400A28C82 /* Settings.bundle */,
 			);
@@ -362,7 +359,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
-				397E09061E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld in Sources */,
 				3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				3992D85E1E5B764A00BEA987 /* FileManagerController.swift in Sources */,
@@ -711,19 +707,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */,
-			);
-			currentVersion = 397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */;
-			path = LibreOfficeLight.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 397E08F21E597BD8001374E0 /* Project object */;
 }

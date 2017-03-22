@@ -15,7 +15,7 @@ static LibreOfficeKitDocument* document;
 
 
 // Bridge functions to LibreOfficeKit
-int LOkit_Init()
+int BridgeLOkit_Init()
 {
     // Initialize LibreOfficeKit
     kit = lok_init(NULL);
@@ -294,7 +294,7 @@ static CLIENTCOMMAND clientcommands[] = {{"canceltiles",       false, client_can
 
 
 
-int LOkit_ClientCommand(const char *input)
+int BridgeLOkit_ClientCommand(const char *input)
 {
     static char argStore[2048];
     const char *args[10];

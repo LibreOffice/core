@@ -23,10 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        LOkit_Init()
-
+        // start LibreOfficeKit
+        BridgeLOkit_Init()
+        
         // Get version info
-        let appInfo = Bundle.main.infoDictionary as! Dictionary<String,AnyObject>
+        let appInfo = Bundle.main.infoDictionary! as Dictionary<String,AnyObject>
         let applicationVersion = (appInfo["CFBundleShortVersionString"] as! String) + "." +
                                  (appInfo["CFBundleVersion"] as! String)
         let defaults = UserDefaults.standard

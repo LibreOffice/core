@@ -8,6 +8,6 @@
 
 
 // Bridge functions to LibreOfficeKit
-int LOkit_Init();
-int LOkit_ClientCommand(const char *input);
+int BridgeLOkit_Init();
+int BridgeLOkit_ClientCommand(const char *input);
 
