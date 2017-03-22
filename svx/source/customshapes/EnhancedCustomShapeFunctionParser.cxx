@@ -178,17 +178,24 @@ class EquationExpression : public ExpressionNode
 {
     sal_Int32                       mnIndex;
     const EnhancedCustomShape2d&    mrCustoShape;
+    mutable bool                    mbGettingValueGuard;
 
 public:
 
     EquationExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex )
         : mnIndex       ( nIndex )
         , mrCustoShape( rCustoShape )
+        , mbGettingValueGuard(false)
     {
     }
     virtual double operator()() const override
     {
-        return mrCustoShape.GetEquationValueAsDouble( mnIndex );
+        if (mbGettingValueGuard)
+            throw ParseError("Loop in Expression");
+        mbGettingValueGuard = true;
+        double fRet = mrCustoShape.GetEquationValueAsDouble(mnIndex);
+        mbGettingValueGuard = false;
+        return fRet;
     }
     virtual bool isConstant() const override
     {
