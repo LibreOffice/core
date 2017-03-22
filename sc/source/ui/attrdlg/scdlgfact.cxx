@@ -335,7 +335,7 @@ void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( bool bSet )
     pDlg->SetChangeTrack( bSet );
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetCellShiftDisabled( int nDisable )
+void    AbstractScInsertContentsDlg_Impl::SetCellShiftDisabled( CellShiftDisabledFlags nDisable )
 {
     pDlg->SetCellShiftDisabled( nDisable );
 }

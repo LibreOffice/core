@@ -49,6 +49,7 @@ class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 enum class CreateNameFlags;
+enum class CellShiftDisabledFlags;
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -195,7 +196,7 @@ public:
     virtual void        SetOtherDoc( bool bSet ) = 0;
     virtual bool        IsTranspose() const = 0;
     virtual void        SetChangeTrack( bool bSet ) = 0;
-    virtual void        SetCellShiftDisabled( int nDisable ) = 0;
+    virtual void        SetCellShiftDisabled( CellShiftDisabledFlags nDisable ) = 0;
     virtual InsCellCmd  GetMoveMode() = 0;
 };
 

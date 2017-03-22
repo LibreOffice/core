@@ -233,7 +233,7 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
     virtual void        SetOtherDoc( bool bSet ) override;
     virtual bool        IsTranspose() const override;
     virtual void        SetChangeTrack( bool bSet ) override;
-    virtual void        SetCellShiftDisabled( int nDisable ) override;
+    virtual void        SetCellShiftDisabled( CellShiftDisabledFlags nDisable ) override;
     virtual InsCellCmd  GetMoveMode() override;
 };
 
