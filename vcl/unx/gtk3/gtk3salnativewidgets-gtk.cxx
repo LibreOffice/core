@@ -456,8 +456,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         Rectangle        arrowRect;
         gint            slider_width = 0;
         gint            stepper_size = 0;
-        gint            stepper_spacing = 0;
-        gint            trough_border = 0;
 
         // make controlvalue rectangles relative to area
         thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
@@ -480,6 +478,10 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
             QuerySize(mpHScrollbarTroughStyle, aSize);
             QuerySize(mpHScrollbarSliderStyle, aSize);
             slider_side = aSize.Height();
+            gtk_style_context_get(mpHScrollbarButtonStyle,
+                                  gtk_style_context_get_state(mpHScrollbarButtonStyle),
+                                  "min-height", &slider_width,
+                                  "min-width", &stepper_size, nullptr);
         }
         else
         {
@@ -488,14 +490,11 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
             QuerySize(mpVScrollbarTroughStyle, aSize);
             QuerySize(mpVScrollbarSliderStyle, aSize);
             slider_side = aSize.Width();
+            gtk_style_context_get(mpVScrollbarButtonStyle,
+                                  gtk_style_context_get_state(mpVScrollbarButtonStyle),
+                                  "min-width", &slider_width,
+                                  "min-height", &stepper_size, nullptr);
         }
-
-        // Grab some button style attributes
-        gtk_style_context_get_style( context,
-                                     "slider_width", &slider_width,
-                                     "stepper_size", &stepper_size,
-                                     "trough_border", &trough_border,
-                                     "stepper_spacing", &stepper_spacing, nullptr );
 
         gboolean has_forward;
         gboolean has_forward2;
@@ -522,22 +521,22 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
             if ( has_backward )
             {
-                button12BoundRect.Move( stepper_size - trough_border,
+                button12BoundRect.Move( stepper_size,
                                         (scrollbarRect.GetHeight() - slider_width) / 2 );
             }
 
-            button11BoundRect.Move( trough_border, (scrollbarRect.GetHeight() - slider_width) / 2 );
+            button11BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
             button11BoundRect.SetSize( Size( stepper_size, slider_width ) );
             button12BoundRect.SetSize( Size( stepper_size, slider_width ) );
 
             if ( has_backward2 )
             {
-                button22BoundRect.Move( stepper_size+(trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
-                button21BoundRect.Move( (trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
+                button22BoundRect.Move( stepper_size, (scrollbarRect.GetHeight() - slider_width) / 2 );
+                button21BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
             }
             else
             {
-                button22BoundRect.Move( (trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
+                button22BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
             }
 
             button21BoundRect.SetSize( Size( stepper_size, slider_width ) );
@@ -558,20 +557,20 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
             if ( has_backward )
             {
                 button12BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2,
-                                        stepper_size + trough_border );
+                                        stepper_size );
             }
-            button11BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, trough_border );
+            button11BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
             button11BoundRect.SetSize( Size( slider_width, stepper_size ) );
             button12BoundRect.SetSize( Size( slider_width, stepper_size ) );
 
             if ( has_backward2 )
             {
-                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, stepper_size+(trough_border+1)/2 );
-                button21BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, (trough_border+1)/2 );
+                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, stepper_size );
+                button21BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
             }
             else
             {
-                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, (trough_border+1)/2 );
+                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
             }
 
             button21BoundRect.SetSize( Size( slider_width, stepper_size ) );
@@ -596,40 +595,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                               scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
         gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
                          scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-        // ----------------- TROUGH
-        GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                  mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
-        gtk_render_background(pScrollbarTroughStyle, cr, 0, 0,
-                              scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-        gtk_render_frame(pScrollbarTroughStyle, cr, 0, 0,
-                         scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-        // ----------------- THUMB
-        if ( has_slider )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
-            if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-                stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
-
-            GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                      mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
-
-            gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
-
-            GtkBorder margin;
-            gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
-
-            gtk_render_background(pScrollbarSliderStyle, cr,
-                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                              thumbRect.GetWidth() - margin.left - margin.right,
-                              thumbRect.GetHeight() - margin.top - margin.bottom);
-
-            gtk_render_frame(pScrollbarSliderStyle, cr,
-                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                              thumbRect.GetWidth() - margin.left - margin.right,
-                              thumbRect.GetHeight() - margin.top - margin.bottom);
-        }
 
         bool backwardButtonInsensitive =
             rScrollbarVal.mnCur == rScrollbarVal.mnMin;
@@ -688,31 +653,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                              MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
         }
         // ----------------- BUTTON 2
-        if ( has_backward2 )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton1State);
-            if ( backwardButtonInsensitive )
-                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
-            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
-
-            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
-
-            gtk_render_background(pScrollbarButtonStyle, cr,
-                                  button21BoundRect.Left(), button21BoundRect.Top(),
-                                  button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
-            gtk_render_frame(pScrollbarButtonStyle, cr,
-                             button21BoundRect.Left(), button21BoundRect.Top(),
-                             button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
-
-            // ----------------- ARROW 2
-            NWCalcArrowRect( button21BoundRect, arrowRect );
-            gtk_render_arrow(pScrollbarButtonStyle, cr,
-                             arrow1Angle,
-                             arrowRect.Left(), arrowRect.Top(),
-                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-        }
         if ( has_forward )
         {
             stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
@@ -738,6 +679,84 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                              arrowRect.Left(), arrowRect.Top(),
                              MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
         }
+
+        if ( has_backward2 )
+        {
+            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton1State);
+            if ( backwardButtonInsensitive )
+                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
+
+            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
+
+            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
+
+            gtk_render_background(pScrollbarButtonStyle, cr,
+                                  button21BoundRect.Left(), button21BoundRect.Top(),
+                                  button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
+            gtk_render_frame(pScrollbarButtonStyle, cr,
+                             button21BoundRect.Left(), button21BoundRect.Top(),
+                             button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
+
+            // ----------------- ARROW 2
+            NWCalcArrowRect( button21BoundRect, arrowRect );
+            gtk_render_arrow(pScrollbarButtonStyle, cr,
+                             arrow1Angle,
+                             arrowRect.Left(), arrowRect.Top(),
+                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
+        }
+
+        // ----------------- TROUGH
+        // trackrect matches that of ScrollBar::ImplCalc
+        Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
+        if (nPart == ControlPart::DrawBackgroundHorz)
+        {
+            Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
+            Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
+            aTrackRect.Left() = aBtn1Rect.Right();
+            aTrackRect.Right() = aBtn2Rect.Left();
+        }
+        else
+        {
+            Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
+            Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
+            aTrackRect.Top() = aBtn1Rect.Bottom() + 1;
+            aTrackRect.Bottom() = aBtn2Rect.Top();
+        }
+
+        GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                                  mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
+        gtk_render_background(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+                              aTrackRect.GetWidth(), aTrackRect.GetHeight() );
+        gtk_render_frame(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+                         aTrackRect.GetWidth(), aTrackRect.GetHeight() );
+
+        // ----------------- THUMB
+        if ( has_slider )
+        {
+            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
+            if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
+                stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
+
+            GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                                      mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
+
+            gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
+
+            GtkBorder margin;
+            gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
+
+            gtk_render_background(pScrollbarSliderStyle, cr,
+                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                              thumbRect.GetWidth() - margin.left - margin.right,
+                              thumbRect.GetHeight() - margin.top - margin.bottom);
+
+            gtk_render_frame(pScrollbarSliderStyle, cr,
+                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                              thumbRect.GetWidth() - margin.left - margin.right,
+                              thumbRect.GetHeight() - margin.top - margin.bottom);
+        }
+
         return;
     }
 
