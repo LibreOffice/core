@@ -49,7 +49,6 @@
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
-#include <cctype>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -297,7 +296,7 @@ bool AboutDialog::IsStringValidGitHash(const OUString& hash)
 {
     for (int i = 0; i < hash.getLength(); i++)
     {
-        if (!std::isxdigit(hash[i]))
+        if (!rtl::isAsciiHexDigit(hash[i]))
         {
             return false;
         }
