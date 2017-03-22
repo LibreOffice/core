@@ -2320,8 +2320,8 @@ void WordArrayComparator::CalcPositions( int *pPos, const SwTextNode *pTextNd,
     for (int i = 0; i <= pTextNd->GetText().getLength(); ++i)
     {
         if (i == 0 || i == pTextNd->GetText().getLength()
-                    || !isalnum( pTextNd->GetText()[ i - 1 ])
-                    || !isalnum( pTextNd->GetText()[ i ]))
+                    || !rtl::isAsciiAlphanumeric( pTextNd->GetText()[ i - 1 ])
+                    || !rtl::isAsciiAlphanumeric( pTextNd->GetText()[ i ]))
         { // Begin new word
             nCnt++;
             pPos[ nCnt ] = i;
