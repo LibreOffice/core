@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
-		cscript configure.js \
+		cscript /e:javascript configure.js \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
 			vcmanifest=yes \
 			lib=$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc \
@@ -53,6 +53,10 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			$(if $(SYSTEM_LIBXML),,--with-libxml-src=$(call gb_UnpackedTarball_get_dir,xml2)) \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_xslt)/libxslt/.libs/libxslt.1.dylib \
+		) \
 	)
 endif
 
