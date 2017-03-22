@@ -714,10 +714,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
     DetectChange ();
 
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
-    if (!pOutlinerView)
-        return true; // end of search
-
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
+
+    if (!pOutlinerView || !GetEditEngine().HasView(&pOutlinerView->GetEditView()))
+    {
+        mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
+        pOutlinerView = mpImpl->GetOutlinerView();
+    }
+
     if (pViewShell != nullptr)
     {
         mpView = pViewShell->GetView();
@@ -1760,21 +1764,26 @@ void SdOutliner::Implementation::ProvideOutlinerView (
             {
                 // Create a new outline view to do the search on.
                 bool bInsert = false;
-                if (mpOutlineView!=nullptr && !mbOwnOutlineView)
+                if (mpOutlineView != nullptr && !mbOwnOutlineView)
                     mpOutlineView = nullptr;
-                if (mpOutlineView == nullptr)
+
+                if (mpOutlineView == nullptr || !rOutliner.GetEditEngine().HasView(&mpOutlineView->GetEditView()))
                 {
+                    delete mpOutlineView;
                     mpOutlineView = new OutlinerView(&rOutliner, pWindow);
                     mbOwnOutlineView = true;
                     bInsert = true;
                 }
                 else
                     mpOutlineView->SetWindow(pWindow);
+
                 EVControlBits nStat = mpOutlineView->GetControlWord();
                 nStat &= ~EVControlBits::AUTOSCROLL;
                 mpOutlineView->SetControlWord(nStat);
+
                 if (bInsert)
                     rOutliner.InsertView( mpOutlineView );
+
                 rOutliner.SetUpdateMode(false);
                 mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
                 rOutliner.SetPaperSize( Size(1, 1) );
