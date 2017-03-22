@@ -184,8 +184,8 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         int i = 0;
         for( i = 0; i < 8; i++ )
         {
-            if( isxdigit( *pStr ) )
-                if( isdigit( *pStr ) )
+            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
+                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
                     nFirst = nFirst * 16 + (*pStr - '0');
                 else
                     nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
@@ -198,8 +198,8 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 4; i++ )
         {
-            if( isxdigit( *pStr ) )
-                if( isdigit( *pStr ) )
+            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
+                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
                     nSec = nSec * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
@@ -212,8 +212,8 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 4; i++ )
         {
-            if( isxdigit( *pStr ) )
-                if( isdigit( *pStr ) )
+            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
+                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
                     nThird = nThird * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
@@ -227,8 +227,8 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 16; i++ )
         {
-            if( isxdigit( *pStr ) )
-                if( isdigit( *pStr ) )
+            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
+                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
                     szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
