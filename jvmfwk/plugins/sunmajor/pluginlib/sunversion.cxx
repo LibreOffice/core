@@ -23,6 +23,7 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/security.hxx"
+#include <rtl/character.hxx>
 #include <string.h>
 #include <ctype.h>
 #include "diagnostics.h"
@@ -77,7 +78,7 @@ bool SunVersion::init(const char *szVersion)
     //char must me a number 0 - 999 and no leading
     while (true)
     {
-        if (pCur < pEnd && isdigit(*pCur))
+        if (pCur < pEnd && rtl::isAsciiDigit(static_cast<unsigned char>(*pCur)))
         {
             if (pCur < pEnd)
                 pCur ++;
@@ -94,7 +95,8 @@ bool SunVersion::init(const char *szVersion)
                 (nPart < 2 && *pCur == '.') )
             && (
                 //prevent 1.4.0. 1.4.0-
-                pCur + 1 != pEnd || isdigit(*(pCur))) )
+                pCur + 1 != pEnd
+                || rtl::isAsciiDigit(static_cast<unsigned char>(*pCur))) )
         {
             int len = pCur - pLast;
             if (len >= 127)
@@ -113,7 +115,9 @@ bool SunVersion::init(const char *szVersion)
 
             //check next character
             if (! ( (pCur < pEnd)
-                    && ( (nPart < 3) && isdigit(*pCur))))
+                    && ( (nPart < 3)
+                         && rtl::isAsciiDigit(
+                             static_cast<unsigned char>(*pCur)))))
                 return false;
         }
         else
@@ -133,7 +137,7 @@ bool SunVersion::init(const char *szVersion)
         {
             if (pCur <= pEnd)
             {
-                if ( ! isdigit(*pCur))
+                if ( ! rtl::isAsciiDigit(static_cast<unsigned char>(*pCur)))
                 {
                     //1.8.0_102-, 1.8.0_01a,
                     size_t len = pCur - pLast;
@@ -184,7 +188,8 @@ bool SunVersion::init(const char *szVersion)
       if (m_preRelease == Rel_FreeBSD)
       {
           pCur++; //eliminate 'p'
-          if (pCur < pEnd && isdigit(*pCur))
+          if (pCur < pEnd
+              && rtl::isAsciiDigit(static_cast<unsigned char>(*pCur)))
               pCur ++;
           int len = pCur - pLast -1; //eliminate 'p'
           if (len >= 127)
