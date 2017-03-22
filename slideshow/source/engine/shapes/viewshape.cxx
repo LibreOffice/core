@@ -285,7 +285,7 @@ namespace slideshow
                                       const ::basegfx::B2DRectangle&        rOrigBounds,
                                       const ::basegfx::B2DRectangle&        rBounds,
                                       const ::basegfx::B2DRectangle&        rUnitBounds,
-                                      int                                   nUpdateFlags,
+                                      UpdateFlags                           nUpdateFlags,
                                       const ShapeAttributeLayerSharedPtr&   pAttr,
                                       const VectorOfDocTreeNodes&           rSubsets,
                                       double                                nPrio,
@@ -429,9 +429,9 @@ namespace slideshow
             // process flags
             // =============
 
-            bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & FORCE) );
+            bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & UpdateFlags::Force) );
 
-            if( mbForceUpdate || (nUpdateFlags & ALPHA) )
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
                                     ::basegfx::clamp(pAttr->getAlpha(),
@@ -439,7 +439,7 @@ namespace slideshow
                                                      1.0) :
                                     1.0 );
             }
-            if( mbForceUpdate || (nUpdateFlags & CLIP) )
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Clip) )
             {
                 if( pAttr && pAttr->isClipValid() )
                 {
@@ -468,7 +468,7 @@ namespace slideshow
                 else
                     mpSprite->clip();
             }
-            if( mbForceUpdate || (nUpdateFlags & CONTENT) )
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Content) )
             {
                 bRedrawRequired = true;
 
@@ -503,7 +503,7 @@ namespace slideshow
                                 const GDIMetaFileSharedPtr&         rMtf,
                                 const ::basegfx::B2DRectangle&      rBounds,
                                 const ::basegfx::B2DRectangle&      rUpdateBounds,
-                                int                                 nUpdateFlags,
+                                UpdateFlags                         nUpdateFlags,
                                 const ShapeAttributeLayerSharedPtr& pAttr,
                                 const VectorOfDocTreeNodes&         rSubsets,
                                 bool                                bIsVisible ) const
@@ -522,9 +522,9 @@ namespace slideshow
 
             // since we have no sprite here, _any_ update request
             // translates into a required redraw.
-            bool bRedrawRequired( mbForceUpdate || nUpdateFlags != 0 );
+            bool bRedrawRequired( mbForceUpdate || nUpdateFlags != UpdateFlags::NONE );
 
-            if( (nUpdateFlags & CONTENT) )
+            if( nUpdateFlags & UpdateFlags::Content )
             {
                 // TODO(P1): maybe provide some appearance change methods at
                 // the Renderer interface
@@ -832,7 +832,7 @@ namespace slideshow
 
         bool ViewShape::update( const GDIMetaFileSharedPtr& rMtf,
                                 const RenderArgs&           rArgs,
-                                int                         nUpdateFlags,
+                                UpdateFlags                 nUpdateFlags,
                                 bool                        bIsVisible ) const
         {
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
