@@ -14,26 +14,20 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
-	lib/Makefile.vc10 \
+	lib/Makefile.vc12 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-freebsd.patch.1 \
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-schannel.patch.1 \
 	external/curl/curl-7.26.0_mingw.patch \
 	external/curl/curl-7.26.0_win-proxy.patch \
+	external/curl/curl-xp.patch.1 \
 ))
 
 ifeq ($(SYSTEM_NSS),)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-nss.patch.1 \
-))
-endif
-
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-android.patch \
 ))
 endif
 

@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.4.dyli
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so.4))
 else
-$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.3.0))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.4.0))
 endif
 
 endif # $(DISABLE_DYNLOADING)

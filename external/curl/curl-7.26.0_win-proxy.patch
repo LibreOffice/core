@@ -1,41 +1,41 @@
---- curl-7.26.0/lib/Makefile.vc10
-+++ misc/build/curl-7.26.0/lib/Makefile.vc10
-@@ -116,7 +116,7 @@ LFLAGS     = /nologo /machine:$(MACHINE)
- SSLLIBS      = libeay32.lib ssleay32.lib
+--- curl-7.26.0/lib/Makefile.vc12
++++ misc/build/curl-7.26.0/lib/Makefile.vc12
+@@ -118,7 +118,7 @@
+ WINSSLLIBS   = crypt32.lib
  ZLIBLIBSDLL  = zdll.lib
  ZLIBLIBS     = zlib.lib
 -WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib
-+WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib
++WINLIBS      = ws2_32.lib wldap32.lib advapi32.lib winhttp.lib crypt32.lib
  CFLAGS       = $(CFLAGS) $(EXCFLAGS)
  
  CFGSET       = FALSE
 --- curl-7.26.0/lib/url.c
 +++ misc/build/curl-7.26.0/lib/url.c
-@@ -80,6 +80,10 @@ void idn_free (void *ptr);
- int curl_win32_idn_to_ascii(const char *in, char **out);
- #endif  /* USE_LIBIDN */
+@@ -78,6 +78,10 @@
+ bool curl_win32_idn_to_ascii(const char *in, char **out);
+ #endif  /* USE_LIBIDN2 */
  
-+#ifdef WIN32
++#ifdef _WIN32
 +#include <WinHttp.h>
 +#endif
 +
  #include "urldata.h"
  #include "netrc.h"
  
-@@ -4111,6 +4115,21 @@ static bool check_noproxy(const char* name, const char* no_proxy)
+@@ -4586,6 +4590,21 @@
    return FALSE;
  }
  
-+#ifdef WIN32
-+static char* wstrToCstr( LPWSTR wStr )
++#ifdef _WIN32
++static char *wstrToCstr(LPWSTR wStr)
 +{
 +  int bufSize;
-+  char* out = NULL;
++  char *out = NULL;
 +  if(wStr != NULL) {
 +    bufSize = WideCharToMultiByte(
-+      CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL );
-+    out = ( char* )malloc( bufSize * sizeof(char));
-+    WideCharToMultiByte( CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL );
++      CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL);
++    out = (char *)malloc(bufSize * sizeof(char));
++    WideCharToMultiByte(CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL);
 +  }
 +  return out;
 +}
@@ -44,7 +44,7 @@
  /****************************************************************
  * Detect what (if any) proxy to use. Remember that this selects a host
  * name and is not limited to HTTP proxies only.
-@@ -4119,6 +4138,7 @@ static bool check_noproxy(const char* name, const char* no_proxy)
+@@ -4594,6 +4613,7 @@
  static char *detect_proxy(struct connectdata *conn)
  {
    char *proxy = NULL;
@@ -52,20 +52,20 @@
  
  #ifndef CURL_DISABLE_HTTP
    /* If proxy was not specified, we check for default proxy environment
-@@ -4138,7 +4158,63 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4613,7 +4633,64 @@
     * For compatibility, the all-uppercase versions of these variables are
     * checked if the lowercase versions don't exist.
     */
 -  char *no_proxy=NULL;
-+#ifdef WIN32
++#ifdef _WIN32
 +  WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *ieProxyConfig;
-+  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG*)
++  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *)
 +    malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));
 +  if(WinHttpGetIEProxyConfigForCurrentUser(ieProxyConfig)) {
 +    if(!ieProxyConfig->fAutoDetect) {
 +      char *ieProxy;
 +      char *ieNoProxy;
-+      char* pos;
++      char *pos;
 +
 +      ieProxy = wstrToCstr(ieProxyConfig->lpszProxy);
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
@@ -82,10 +82,11 @@
 +
 +      if(!check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
-+        char* tok;
++        char *tok;
++        char *saveptr;
 +
 +        if(NULL != ieProxy) {
-+          tok = strtok(ieProxy, ";");
++          tok = strtok_s(ieProxy, ";", &saveptr);
 +          if(strchr(tok, '=') == NULL) {
 +            proxy = strdup(ieProxy);
 +          }
@@ -93,9 +94,9 @@
 +            do {
 +              if(strncmp(tok, "http=", 5) == 0) {
 +                /* We found HTTP proxy value, then use it */
-+                proxy = strdup( tok + 5 );
++                proxy = strdup(tok + 5);
 +              }
-+              tok = strtok(NULL, ";");
++              tok = strtok_s(NULL, ";", &saveptr);
 +            }
 +            while(NULL != tok);
 +          }
@@ -109,15 +110,15 @@
 +      /* TODO Handle the Proxy config Auto Detection case */
 +    }
 +
-+    GlobalFree( ieProxyConfig->lpszAutoConfigUrl );
-+    GlobalFree( ieProxyConfig->lpszProxy );
-+    GlobalFree( ieProxyConfig->lpszProxyBypass );
++    GlobalFree(ieProxyConfig->lpszAutoConfigUrl);
++    GlobalFree(ieProxyConfig->lpszProxy);
++    GlobalFree(ieProxyConfig->lpszProxyBypass);
 +  }
 +#else /* !WIN32 */
    char proxy_env[128];
  
    no_proxy=curl_getenv("no_proxy");
-@@ -4189,6 +4265,7 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4663,6 +4739,7 @@
      }
    } /* if(!check_noproxy(conn->host.name, no_proxy)) - it wasn't specified
         non-proxy */
