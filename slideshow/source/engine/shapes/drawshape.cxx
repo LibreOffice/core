@@ -144,7 +144,7 @@ namespace slideshow
                 mnPriority);
         }
 
-        bool DrawShape::implRender( int nUpdateFlags ) const
+        bool DrawShape::implRender( UpdateFlags nUpdateFlags ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShape::implRender()" );
             SAL_INFO( "slideshow", "::presentation::internal::DrawShape: 0x" << std::hex << this );
@@ -188,15 +188,15 @@ namespace slideshow
             return true;
         }
 
-        int DrawShape::getUpdateFlags() const
+        UpdateFlags DrawShape::getUpdateFlags() const
         {
             // default: update nothing, unless ShapeAttributeStack
             // tells us below, or if the attribute layer was revoked
-            int nUpdateFlags(ViewShape::NONE);
+            UpdateFlags nUpdateFlags(UpdateFlags::NONE);
 
             // possibly the whole shape content changed
             if( mbAttributeLayerRevoked )
-                nUpdateFlags = ViewShape::CONTENT;
+                nUpdateFlags = UpdateFlags::Content;
 
 
             // determine what has to be updated
@@ -216,30 +216,30 @@ namespace slideshow
                         // content change because when the visibility
                         // changes then usually a sprite is shown or hidden
                         // and the background under has to be painted once.
-                        nUpdateFlags |= ViewShape::CONTENT;
+                        nUpdateFlags |= UpdateFlags::Content;
                     }
 
                     // TODO(P1): This can be done without conditional branching.
                     // See HAKMEM.
                     if( mpAttributeLayer->getPositionState() != mnAttributePositionState )
                     {
-                        nUpdateFlags |= ViewShape::POSITION;
+                        nUpdateFlags |= UpdateFlags::Position;
                     }
                     if( mpAttributeLayer->getAlphaState() != mnAttributeAlphaState )
                     {
-                        nUpdateFlags |= ViewShape::ALPHA;
+                        nUpdateFlags |= UpdateFlags::Alpha;
                     }
                     if( mpAttributeLayer->getClipState() != mnAttributeClipState )
                     {
-                        nUpdateFlags |= ViewShape::CLIP;
+                        nUpdateFlags |= UpdateFlags::Clip;
                     }
                     if( mpAttributeLayer->getTransformationState() != mnAttributeTransformationState )
                     {
-                        nUpdateFlags |= ViewShape::TRANSFORMATION;
+                        nUpdateFlags |= UpdateFlags::Transformation;
                     }
                     if( mpAttributeLayer->getContentState() != mnAttributeContentState )
                     {
-                        nUpdateFlags |= ViewShape::CONTENT;
+                        nUpdateFlags |= UpdateFlags::Content;
                     }
                 }
             }
@@ -639,7 +639,7 @@ namespace slideshow
             {
                 pNewShape->update( mpCurrMtf,
                                    getViewRenderArgs(),
-                                   ViewShape::FORCE,
+                                   UpdateFlags::Force,
                                    isVisible() );
             }
         }
@@ -695,15 +695,15 @@ namespace slideshow
             // force redraw. Have to also pass on the update flags,
             // because e.g. content update (regeneration of the
             // metafile renderer) is normally not performed. A simple
-            // ViewShape::FORCE would only paint the metafile in its
+            // UpdateFlags::Force would only paint the metafile in its
             // old state.
-            return implRender( ViewShape::FORCE | getUpdateFlags() );
+            return implRender( UpdateFlags::Force | getUpdateFlags() );
         }
 
         bool DrawShape::isContentChanged() const
         {
             return mbForceUpdate ||
-                getUpdateFlags() != ViewShape::NONE;
+                getUpdateFlags() != UpdateFlags::NONE;
         }
 
 

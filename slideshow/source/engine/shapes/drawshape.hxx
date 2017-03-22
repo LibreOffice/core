@@ -262,8 +262,8 @@ namespace slideshow
              */
             DrawShape( const DrawShape&, const DocTreeNode& rTreeNode, double nPrio );
 
-            int  getUpdateFlags() const;
-            bool implRender( int nUpdateFlags ) const;
+            UpdateFlags getUpdateFlags() const;
+            bool implRender( UpdateFlags nUpdateFlags ) const;
             void updateStateIds() const;
 
             ViewShape::RenderArgs   getViewRenderArgs() const;
