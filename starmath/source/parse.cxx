@@ -1097,12 +1097,11 @@ void SmParser::DoSum()
 
 void SmParser::DoProduct()
 {
-    DoPower();
+    SmNode *pFirst = DoPower();
 
     while (TokenInGroup(TG::Product))
     {   SmStructureNode *pSNode;
-        SmNode *pFirst = popOrZero(m_aNodeStack),
-               *pOper;
+        SmNode *pOper;
         bool bSwitchArgs = false;
 
         SmTokenType eType = m_aCurToken.eType;
@@ -1153,19 +1152,20 @@ void SmParser::DoProduct()
                 pOper = DoOpSubSup();
         }
 
-        DoPower();
+        SmNode *pArg = DoPower();
 
         if (bSwitchArgs)
         {
             //! vgl siehe SmBinDiagonalNode::Arrange
-            pSNode->SetSubNodes(pFirst, popOrZero(m_aNodeStack), pOper);
+            pSNode->SetSubNodes(pFirst, pArg, pOper);
         }
         else
         {
-            pSNode->SetSubNodes(pFirst, pOper, popOrZero(m_aNodeStack));
+            pSNode->SetSubNodes(pFirst, pOper, pArg);
         }
-        m_aNodeStack.push_front(std::unique_ptr<SmStructureNode>(pSNode));
+        pFirst = pSNode;
     }
+    m_aNodeStack.emplace_front(pFirst);
 }
 
 SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
@@ -1240,15 +1240,14 @@ SmNode *SmParser::DoOpSubSup()
     return pNode.release();
 }
 
-void SmParser::DoPower()
+SmNode *SmParser::DoPower()
 {
     // get body for sub- supscripts on top of stack
     SmNode *pNode = DoTerm(false);
 
     if (m_aCurToken.nGroup == TG::Power)
-        m_aNodeStack.emplace_front(DoSubSup(TG::Power, pNode));
-    else
-        m_aNodeStack.emplace_front(pNode);
+        return DoSubSup(TG::Power, pNode);
+    return pNode;
 }
 
 SmBlankNode *SmParser::DoBlank()
@@ -1481,9 +1480,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                        ||  TokenInGroup(TG::FontAttr))
                     aStack.push((bIsAttr) ? DoAttribut() : DoFontAttribut());
 
-                DoPower();
-
-                SmNode *pFirstNode = popOrZero(m_aNodeStack);
+                SmNode *pFirstNode = DoPower();
                 while (!aStack.empty())
                 {
                     SmStructureNode *pNode = aStack.top();
@@ -1549,9 +1546,9 @@ SmOperNode *SmParser::DoOperator()
         pOperator = DoSubSup(m_aCurToken.nGroup, pOperator);
 
     // get argument
-    DoPower();
+    SmNode *pArg = DoPower();
 
-    pSNode->SetSubNodes(pOperator, popOrZero(m_aNodeStack));
+    pSNode->SetSubNodes(pOperator, pArg);
     return pSNode.release();
 }
 
@@ -1631,8 +1628,7 @@ SmStructureNode *SmParser::DoUnOper()
 
         case TNROOT :
             NextToken();
-            DoPower();
-            pExtra = popOrZero(m_aNodeStack);
+            pExtra = DoPower();
             break;
 
         case TUOPER :
@@ -1657,8 +1653,7 @@ SmStructureNode *SmParser::DoUnOper()
     }
 
     // get argument
-    DoPower();
-    pArg = popOrZero(m_aNodeStack);
+    pArg = DoPower();
 
     if (eType == TABS)
     {

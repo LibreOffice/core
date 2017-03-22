@@ -69,7 +69,7 @@ class SmParser
     void    DoProduct();
     SmNode *DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
     SmNode *DoOpSubSup();
-    void    DoPower();
+    SmNode *DoPower();
     SmBlankNode *DoBlank();
     SmNode *DoTerm(bool bGroupNumberIdent);
     SmNode *DoEscape();
