@@ -140,13 +140,6 @@ void ImpSvNumberInputScan::Reset()
     }
 }
 
-
-// static
-inline bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
-{
-    return c < 128 && isdigit( (unsigned char) c );
-}
-
 // native number transliteration if necessary
 void TransformInput( SvNumberFormatter* pFormatter, OUString& rStr )
 {
@@ -246,7 +239,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
         switch (eState)
         {
         case SsStart:
-            if ( MyIsdigit( cToken ) )
+            if ( rtl::isAsciiDigit( cToken ) )
             {
                 eState = SsGetValue;
                 isNumber = true;
@@ -258,7 +251,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
             nChars++;
             break;
         case SsGetValue:
-            if ( MyIsdigit( cToken ) )
+            if ( rtl::isAsciiDigit( cToken ) )
             {
                 nChars++;
             }
@@ -269,7 +262,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
             }
             break;
         case SsGetString:
-            if ( !MyIsdigit( cToken ) )
+            if ( !rtl::isAsciiDigit( cToken ) )
             {
                 nChars++;
             }
@@ -332,7 +325,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
             }
             break;
         case SsGetValue:
-            if ( MyIsdigit( cToken ) )
+            if ( rtl::isAsciiDigit( cToken ) )
             {
                 sBuff.append(cToken);
                 nCounter++;

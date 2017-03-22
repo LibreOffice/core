@@ -371,8 +371,6 @@ private:
     bool IsNumberFormatMain( const OUString& rString,
                              const SvNumberformat* pFormat);    // number format to match against
 
-    static inline bool MyIsdigit( sal_Unicode c );
-
     /** Whether input matches locale dependent date acceptance pattern.
 
         @param nStartPatternAt
