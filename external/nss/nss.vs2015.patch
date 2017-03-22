@@ -1,0 +1,12 @@
+diff -ru nss.org/nss/coreconf/WIN32.mk nss/nss/coreconf/WIN32.mk
+--- a/nss.org/nss/coreconf/WIN32.mk	2016-02-12 15:36:18.000000000 +0100
++++ b/nss/nss/coreconf/WIN32.mk	2016-02-26 00:42:43.170809600 +0100
+@@ -199,7 +199,7 @@
+     # Disable C4244: conversion from 'type1' to 'type2', possible loss of data
+     # Disable C4018: 'expression' : signed/unsigned mismatch
+     # Disable C4312: 'type cast': conversion from 'type1' to 'type2' of greater size
+-    OS_CFLAGS += -w44267 -w44244 -w44018 -w44312
++    OS_CFLAGS += -w44267 -w44244 -w44018 -w44312 -wd4996 -wd4554
+     ifeq ($(_MSC_VER_GE_12),1)
+ 	OS_CFLAGS += -FS
+     endif

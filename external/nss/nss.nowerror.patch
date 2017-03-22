@@ -1,0 +1,12 @@
+diff -ur nss.org/nss/coreconf/WIN32.mk nss/nss/coreconf/WIN32.mk
+--- a/nss.org/nss/coreconf/WIN32.mk	2016-04-13 11:33:09.322294523 +0200
++++ b/nss/nss/coreconf/WIN32.mk	2016-04-13 11:33:27.744323969 +0200
+@@ -127,7 +127,7 @@
+                       -D_CRT_NONSTDC_NO_WARNINGS
+     OS_DLLFLAGS += -nologo -DLL -SUBSYSTEM:WINDOWS
+     ifndef NSS_ENABLE_WERROR
+-        NSS_ENABLE_WERROR = 1
++        NSS_ENABLE_WERROR = 0
+     endif
+     ifeq ($(NSS_ENABLE_WERROR),1)
+         WARNING_CFLAGS += -WX
