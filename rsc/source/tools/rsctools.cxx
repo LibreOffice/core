@@ -31,6 +31,7 @@
 
 #include <osl/file.h>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
 
 /* case insensitive compare of two strings up to a given length */
@@ -93,7 +94,8 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             while( nItems )
             {
-                if( !isspace( szBuffer[ 0 ] ) )
+                if( !rtl::isAsciiWhiteSpace(
+                        static_cast<unsigned char>(szBuffer[ 0 ]) ) )
                 {
                     /*
                      *  #i27914# double ticks '"' now have a duplicate function:
@@ -102,7 +104,10 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
                      *  argument no two !
                      */
                     unsigned int n = 0;
-                    while( nItems && (!isspace( szBuffer[ n ] ) || bInQuotes) &&
+                    while( nItems &&
+                           (!rtl::isAsciiWhiteSpace(
+                               static_cast<unsigned char>(szBuffer[ n ]) ) ||
+                            bInQuotes) &&
                            n +1 < sizeof( szBuffer )  )
                     {
                         n++;

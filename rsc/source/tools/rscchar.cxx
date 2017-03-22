@@ -106,9 +106,9 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         sal_uInt16  nChar = 0;
                         int  i = 0;
                         ++pStr;
-                        while( isxdigit( *pStr ) && i != 2 )
+                        while( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) && i != 2 )
                         {
-                            if( isdigit( *pStr ) )
+                            if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
                                 nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'0';
                             else if( rtl::isAsciiUpperCase( static_cast<unsigned char>(*pStr) ) )
                                 nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'A' +10;
