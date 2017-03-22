@@ -21,12 +21,12 @@ class LOKClipboard : public cppu::WeakImplHelper<css::datatransfer::clipboard::X
     css::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
 
 public:
-    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
+    css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
 
-    virtual void SAL_CALL setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+    void SAL_CALL setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
                                       const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner) override;
 
-    virtual OUString SAL_CALL getName() override;
+    OUString SAL_CALL getName() override;
 };
 
 /// Represents the contents of LOKClipboard.
@@ -41,11 +41,11 @@ class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
 public:
     LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize);
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
-    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
-    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 #endif
