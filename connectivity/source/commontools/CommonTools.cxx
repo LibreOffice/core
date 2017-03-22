@@ -34,6 +34,7 @@
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
+#include <rtl/character.hxx>
 #include <rtl/process.h>
 #include <ctype.h>
 
@@ -183,7 +184,7 @@ bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
     // Test for correct naming (in SQL sense)
     // This is important for table names for example
     const sal_Unicode* pStr = rName.getStr();
-    if (*pStr > 127 || isdigit(*pStr))
+    if (*pStr > 127 || rtl::isAsciiDigit(*pStr))
         return false;
 
     for (; *pStr; ++pStr )
@@ -214,7 +215,7 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
     OUString aNewName(rName);
     const sal_Unicode* pStr = rName.getStr();
     sal_Int32 nLength = rName.getLength();
-    bool bValid(*pStr < 128 && !isdigit(*pStr));
+    bool bValid(*pStr < 128 && !rtl::isAsciiDigit(*pStr));
     for (sal_Int32 i=0; bValid && i < nLength; ++pStr,++i )
         if(!isCharOk(*pStr,_rSpecials))
         {

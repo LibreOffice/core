@@ -24,6 +24,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <unotools/datetime.hxx>
@@ -415,7 +416,7 @@ namespace dbtools
         {
             const sal_Unicode *p = _sSQLString.getStr() + nSeparation;
             const sal_Unicode *const begin = p;
-            while (isspace(*p)) { ++p; }
+            while (rtl::isAsciiWhiteSpace(*p)) { ++p; }
             nSeparation += p - begin;
             aTime = toTime( _sSQLString.copy( nSeparation ) );
         }
