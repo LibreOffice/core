@@ -5949,7 +5949,7 @@ bad_data:
     }
     do {
     PRUint32 decimal = 0;
-        while (len > 0 && isdigit(*from)) {
+        while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from))) {
         PRUint32 addend = (*from++ - '0');
         --len;
         if (decimal > max_decimal)  /* overflow */

@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
+#include <sal/config.h>
+
 #include <comphelper/string.hxx>
+#include <rtl/character.hxx>
+
 #include "xbmread.hxx"
 
 enum XBMFormat
@@ -223,7 +226,7 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
                     const unsigned char cChar = aToken[n];
                     const short         nTable = pHexTable[ cChar ];
 
-                    if( isxdigit( cChar ) || !nTable )
+                    if( rtl::isAsciiHexDigit( cChar ) || !nTable )
                     {
                         nValue = ( nValue << 4 ) + nTable;
                         nDigits++;

@@ -19,6 +19,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 #include <filter/msfilter/mscodec.hxx>
+#include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -994,7 +995,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         }
         default:
         {
-            if (isdigit(ch) || ch == '-')
+            if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)) || ch == '-')
             {
                 // Numbering object: an integer or a real.
                 auto pNumberElement = new PDFNumberElement();
@@ -1015,7 +1016,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                         m_pXRefStream = it->second;
                 }
             }
-            else if (isalpha(ch))
+            else if (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
             {
                 // Possible keyword, like "obj".
                 rStream.SeekRel(-1);
@@ -1166,7 +1167,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             }
             else
             {
-                if (!isspace(ch))
+                if (!rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)))
                 {
                     SAL_WARN("vcl.filter", "PDFDocument::Tokenize: unexpected character: " << ch << " at byte position " << rStream.Tell());
                     return false;
@@ -1261,7 +1262,7 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
     rStream.ReadChar(ch);
     if (rStream.IsEof())
         return OString();
-    while (isalpha(ch))
+    while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
         rStream.ReadChar(ch);
@@ -1682,7 +1683,7 @@ void PDFDocument::SkipWhitespace(SvStream& rStream)
         if (rStream.IsEof())
             break;
 
-        if (!isspace(ch))
+        if (!rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)))
         {
             rStream.SeekRel(-1);
             return;
@@ -1833,7 +1834,7 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
 int PDFDocument::AsHex(char ch)
 {
     int nRet = 0;
-    if (isdigit(ch))
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
         nRet = ch - '0';
     else
     {
@@ -1921,14 +1922,16 @@ bool PDFNumberElement::Read(SvStream& rStream)
     {
         return false;
     }
-    if (!isdigit(ch) && ch != '-' && ch != '.')
+    if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-'
+        && ch != '.')
     {
         rStream.SeekRel(-1);
         return false;
     }
     while (!rStream.IsEof())
     {
-        if (!isdigit(ch) && ch != '-' && ch != '.')
+        if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-'
+            && ch != '.')
         {
             rStream.SeekRel(-1);
             m_nLength = rStream.Tell() - m_nOffset;
@@ -2780,7 +2783,8 @@ bool PDFNameElement::Read(SvStream& rStream)
     rStream.ReadChar(ch);
     while (!rStream.IsEof())
     {
-        if (isspace(ch) || ch == '/' || ch == '[' || ch == ']' || ch == '<' || ch == '>' || ch == '(')
+        if (rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)) || ch == '/'
+            || ch == '[' || ch == ']' || ch == '<' || ch == '>' || ch == '(')
         {
             rStream.SeekRel(-1);
             m_aValue = aBuf.makeStringAndClear();
