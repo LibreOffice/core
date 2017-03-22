@@ -48,6 +48,7 @@ class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
 class ScTableProtection;
+enum class CreateNameFlags;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -151,8 +152,8 @@ public:
 
     bool            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos );
 
-    void            CreateNames( sal_uInt16 nFlags );
-    sal_uInt16      GetCreateNameFlags();
+    void            CreateNames( CreateNameFlags nFlags );
+    CreateNameFlags GetCreateNameFlags();
     void            InsertNameList();
     bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );

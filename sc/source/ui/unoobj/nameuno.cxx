@@ -527,13 +527,13 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
     ScRange aRange;
     ScUnoConversion::FillScRange( aRange, aSource );
 
-    sal_uInt16 nFlags = 0;
-    if (bTop)    nFlags |= NAME_TOP;
-    if (bLeft)   nFlags |= NAME_LEFT;
-    if (bBottom) nFlags |= NAME_BOTTOM;
-    if (bRight)  nFlags |= NAME_RIGHT;
+    CreateNameFlags nFlags = CreateNameFlags::NONE;
+    if (bTop)    nFlags |= CreateNameFlags::Top;
+    if (bLeft)   nFlags |= CreateNameFlags::Left;
+    if (bBottom) nFlags |= CreateNameFlags::Bottom;
+    if (bRight)  nFlags |= CreateNameFlags::Right;
 
-    if (nFlags)
+    if (nFlags != CreateNameFlags::NONE)
         pDocShell->GetDocFunc().CreateNames( aRange, nFlags, true, GetTab_Impl() );
 }
 

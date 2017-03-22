@@ -5059,9 +5059,9 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     }
 }
 
-bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi, SCTAB aTab )
+bool ScDocFunc::CreateNames( const ScRange& rRange, CreateNameFlags nFlags, bool bApi, SCTAB aTab )
 {
-    if (!nFlags)
+    if (nFlags == CreateNameFlags::NONE)
         return false;       // war nix
 
     ScDocShellModificator aModificator( rDocShell );
@@ -5075,10 +5075,10 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
     OSL_ENSURE(rRange.aEnd.Tab() == nTab, "CreateNames: mehrere Tabellen geht nicht");
 
     bool bValid = true;
-    if ( nFlags & ( NAME_TOP | NAME_BOTTOM ) )
+    if ( nFlags & ( CreateNameFlags::Top | CreateNameFlags::Bottom ) )
         if ( nStartRow == nEndRow )
             bValid = false;
-    if ( nFlags & ( NAME_LEFT | NAME_RIGHT ) )
+    if ( nFlags & ( CreateNameFlags::Left | CreateNameFlags::Right ) )
         if ( nStartCol == nEndCol )
             bValid = false;
 
@@ -5095,10 +5095,10 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
             return false;   // shouldn't happen
         ScRangeName aNewRanges( *pNames );
 
-        bool bTop    = ( ( nFlags & NAME_TOP ) != 0 );
-        bool bLeft   = ( ( nFlags & NAME_LEFT ) != 0 );
-        bool bBottom = ( ( nFlags & NAME_BOTTOM ) != 0 );
-        bool bRight  = ( ( nFlags & NAME_RIGHT ) != 0 );
+        bool bTop   ( nFlags & CreateNameFlags::Top );
+        bool bLeft  ( nFlags & CreateNameFlags::Left );
+        bool bBottom( nFlags & CreateNameFlags::Bottom );
+        bool bRight ( nFlags & CreateNameFlags::Right );
 
         SCCOL nContX1 = nStartCol;
         SCROW nContY1 = nStartRow;

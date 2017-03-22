@@ -291,7 +291,7 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNameCreateDlg_Impl, ScNameCreateDlg)
-    virtual sal_uInt16          GetFlags() const override;
+    virtual CreateNameFlags GetFlags() const override;
 };
 
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg
@@ -481,7 +481,7 @@ public:
         const OUString& rDefault) override;
 
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(vcl::Window * pParent,
-        sal_uInt16 nFlags) override;
+        CreateNameFlags nFlags) override;
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true ) override;
 
