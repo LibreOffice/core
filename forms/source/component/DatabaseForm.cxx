@@ -901,7 +901,8 @@ void ODatabaseForm::Encode( OUString& rString )
         nCharCode = rString[nCurPos];
 
         // Handle chars, which are not an alphanumeric character and character codes > 127
-        if( (!isalnum(nCharCode) && nCharCode != ' ') || nCharCode > 127 )
+        if( (!rtl::isAsciiAlphanumeric(nCharCode) && nCharCode != ' ')
+            || nCharCode > 127 )
         {
             switch( nCharCode )
             {
