@@ -69,8 +69,8 @@
 
 #define DO(val) if (!(val)) return NULL
 #define CALLFUNC(ggg,fff) (*((ggg)->funcs.fff))
-#define SKIPSPACE(ccc) while (isspace(*ccc)) ccc++
-#define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
+#define SKIPSPACE(ccc) while (isspace((unsigned char)*ccc)) ccc++
+#define isvarfirstletter(ccc) (isalpha((unsigned char)(ccc)) || (ccc) == '_')
 
 
 static const char *
@@ -83,7 +83,7 @@ parse_variable (IfParser *g, const char *cp, const char **varp)
 
     *varp = cp;
     /* EMPTY */
-    for (cp++; isalnum(*cp) || *cp == '_'; cp++) ;
+    for (cp++; isalnum((unsigned char)*cp) || *cp == '_'; cp++) ;
     return cp;
 }
 
@@ -93,7 +93,7 @@ parse_number (IfParser *g, const char *cp, int *valp)
 {
     SKIPSPACE (cp);
 
-    if (!isdigit(*cp))
+    if (!isdigit((unsigned char)*cp))
         return CALLFUNC(g, handle_error) (g, cp, "number");
 
 #ifdef _WIN32
@@ -104,7 +104,7 @@ parse_number (IfParser *g, const char *cp, int *valp)
 #else
     *valp = atoi (cp);
     /* EMPTY */
-    for (cp++; isdigit(*cp); cp++) ;
+    for (cp++; isdigit((unsigned char)*cp); cp++) ;
 #endif
     return cp;
 }
@@ -155,7 +155,7 @@ parse_value (IfParser *g, const char *cp, int *valp)
         return cp + 1;
 
       case 'd':
-        if (strncmp (cp, "defined", 7) == 0 && !isalnum(cp[7])) {
+        if (strncmp (cp, "defined", 7) == 0 && !isalnum((unsigned char)cp[7])) {
             int paren = 0;
             size_t len;
 
@@ -176,7 +176,7 @@ parse_value (IfParser *g, const char *cp, int *valp)
     /* fall out */
     }
 
-    if (isdigit(*cp)) {
+    if (isdigit((unsigned char)*cp)) {
       DO (cp = parse_number (g, cp, valp));
     } else if (!isvarfirstletter(*cp))
       return CALLFUNC(g, handle_error) (g, cp, "variable or number");

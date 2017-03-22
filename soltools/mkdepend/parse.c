@@ -293,7 +293,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
         /*
          * separate the name of a single symbol.
          */
-        while (isalnum(*p) || *p == '_')
+        while (isalnum((unsigned char)*p) || *p == '_')
             *line++ = *p++;
         *line = '\0';
         break;
@@ -385,7 +385,7 @@ void define( char *def, struct symhash **symbols )
 
     /* Separate symbol name and its value */
     val = def;
-    while (isalnum(*val) || *val == '_')
+    while (isalnum((unsigned char)*val) || *val == '_')
         val++;
     if (*val)
         *val++ = '\0';

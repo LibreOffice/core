@@ -149,7 +149,7 @@ void
                         case 'w':
                             dp = &optarg[n + 1];
                             n += (int)strlen(dp);
-                            while (isspace(*dp)) dp++;
+                            while (isspace((unsigned char)*dp)) dp++;
 
                             for (i = NINCLUDE - 1; i >= 0; i--)
                             {

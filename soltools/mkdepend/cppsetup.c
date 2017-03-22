@@ -174,7 +174,7 @@ my_eval_defined (IfParser *ip, const char *var, size_t len)
         return 0;
 }
 
-#define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
+#define isvarfirstletter(ccc) (isalpha((unsigned char)(ccc)) || (ccc) == '_')
 
 static int
 my_eval_variable (IfParser *ip, const char *var, size_t len)
