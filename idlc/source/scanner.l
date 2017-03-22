@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <rtl/character.hxx>
+
 #include <idlc.hxx>
 #include <errorhandler.hxx>
 #include <fehelper.hxx>
@@ -212,7 +214,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 		return;
 
 	/* Find line number */
-	for (r++; *r == ' ' || *r == '\t' || isalpha(*r); r++) ;
+	for (r++; *r == ' ' || *r == '\t' || rtl::isAsciiAlpha(static_cast<unsigned char>(*r)); r++) ;
 	h = r;
 	for (; *r != '\0' && *r != ' ' && *r != '\t'; r++) ;
 	*r++ = 0;
