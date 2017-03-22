@@ -1153,7 +1153,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
                     else if( maInput.indexOf("U+") == 8 )
                         mbAllowMoreChars = false;
                     // a hex character. Add to string.
-                    else if( isxdigit(uChar) )
+                    else if( rtl::isAsciiHexDigit(uChar) )
                     {
                         mbIsHexString = true;
                         maInput.insertUtf32(0, uChar);
