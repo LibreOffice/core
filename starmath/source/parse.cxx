@@ -1069,8 +1069,7 @@ void SmParser::DoRelation()
         std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
         SmNode *pFirst = popOrZero(m_aNodeStack);
 
-        DoOpSubSup();
-        SmNode *pSecond = popOrZero(m_aNodeStack);
+        SmNode *pSecond = DoOpSubSup();
 
         DoSum();
 
@@ -1087,8 +1086,7 @@ void SmParser::DoSum()
         std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
         SmNode *pFirst = popOrZero(m_aNodeStack);
 
-        DoOpSubSup();
-        SmNode *pSecond = popOrZero(m_aNodeStack);
+        SmNode *pSecond = DoOpSubSup();
 
         DoProduct();
 
@@ -1152,8 +1150,7 @@ void SmParser::DoProduct()
             default:
                 pSNode = new SmBinHorNode(m_aCurToken);
 
-                DoOpSubSup();
-                pOper = popOrZero(m_aNodeStack);
+                pOper = DoOpSubSup();
         }
 
         DoPower();
@@ -1231,7 +1228,7 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     return pNode.release();
 }
 
-void SmParser::DoOpSubSup()
+SmNode *SmParser::DoOpSubSup()
 {
     // get operator symbol
     auto pNode = o3tl::make_unique<SmMathSymbolNode>(m_aCurToken);
@@ -1239,9 +1236,8 @@ void SmParser::DoOpSubSup()
     NextToken();
     // get sub- supscripts if any
     if (m_aCurToken.nGroup == TG::Power)
-        m_aNodeStack.emplace_front(DoSubSup(TG::Power, pNode.release()));
-    else
-        m_aNodeStack.push_front(std::move(pNode));
+        return DoSubSup(TG::Power, pNode.release());
+    return pNode.release();
 }
 
 void SmParser::DoPower()
@@ -1653,8 +1649,7 @@ SmStructureNode *SmParser::DoUnOper()
         case TMINUSPLUS :
         case TNEG :
         case TFACT :
-            DoOpSubSup();
-            pOper = popOrZero(m_aNodeStack);
+            pOper = DoOpSubSup();
             break;
 
         default :
