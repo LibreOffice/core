@@ -227,11 +227,9 @@ static rtl_Locale * parse_locale( const char * locale )
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
- * from nl_langinfo(CODESET) to rtl_textencoding defines.
+ * from nl_langinfo_l(CODESET) to rtl_textencoding defines.
  * nl_langinfo() is supported only on Linux, Solaris,
  * >= NetBSD 1.6 and >= FreeBSD 4.4
- *
- * XXX this code has the usual mt problems aligned with nl_langinfo_l() XXX
  */
 
 #ifdef LINUX
@@ -591,6 +589,10 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     codeset = NULL;
 #else
     codeset = nl_langinfo_l(CODESET, ctype_locale);
+        // per SUSv4, the return value of nl_langinfo_l can be invalidated by a
+        // subsequent call to nl_langinfo (not nl_langinfo_l) in any thread, but
+        // we cannot guard against that (at least, no code in LO itself should
+        // call nl_langinfo)
 #endif
 
     if ( codeset != nullptr )
