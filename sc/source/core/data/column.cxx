@@ -135,7 +135,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
             return MatrixEdge::Nothing;
 
         const ScFormulaCell* pCell = sc::formula_block::at(*aPos.first->data, aPos.second);
-        if (!pCell->GetMatrixFlag())
+        if (pCell->GetMatrixFlag() == ScMatrixMode::NONE)
             return MatrixEdge::Nothing;
 
         return pCell->GetMatrixEdge(aOrigin);
@@ -165,7 +165,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
         {
             // Loop inside the formula block.
             const ScFormulaCell* pCell = *itCell;
-            if (!pCell->GetMatrixFlag())
+            if (pCell->GetMatrixFlag() == ScMatrixMode::NONE)
                 continue;
 
             nEdges = pCell->GetMatrixEdge(aOrigin);
@@ -239,7 +239,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
             {
                 // Loop inside the formula block.
                 const ScFormulaCell* pCell = *itCell;
-                if (!pCell->GetMatrixFlag())
+                if (pCell->GetMatrixFlag() == ScMatrixMode::NONE)
                     // cell is not a part of a matrix.
                     continue;
 
@@ -275,7 +275,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                     {   // new matrix to check?
                         aCurOrigin = aOrigin;
                         const ScFormulaCell* pFCell;
-                        if (pCell->GetMatrixFlag() == MM_REFERENCE)
+                        if (pCell->GetMatrixFlag() == ScMatrixMode::Reference)
                             pFCell = pDocument->GetFormulaCell(aOrigin);
                         else
                             pFCell = pCell;
@@ -2891,7 +2891,7 @@ public:
         else if (pCell->NeedsNumberFormat())
             pCell->SetDirtyVar();
 
-        if (pCell->GetMatrixFlag())
+        if (pCell->GetMatrixFlag() != ScMatrixMode::NONE)
             pCell->SetDirtyVar();
 
         pCell->CompileXML(mrCxt, mrProgress);

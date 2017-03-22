@@ -151,19 +151,19 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         return bFound;
     }
 
-    sal_uInt8 cMatrixFlag = MM_NONE;
+    ScMatrixMode cMatrixFlag = ScMatrixMode::NONE;
     if ( bFound &&
         ( (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE)
         ||(rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL) ) &&
             // Don't split the matrix, only replace Matrix formulas
             !( (eCellType == CELLTYPE_FORMULA &&
-            ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == MM_REFERENCE))
+            ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == ScMatrixMode::Reference))
             // No UndoDoc => Matrix not restorable => don't replace
-            || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
+            || (cMatrixFlag != ScMatrixMode::NONE && !pUndoDoc) ) &&
          IsBlockEditable(nCol, nRow, nCol, nRow)
         )
     {
-        if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SvxSearchCmd::REPLACE )
+        if ( cMatrixFlag == ScMatrixMode::NONE && rSearchItem.GetCommand() == SvxSearchCmd::REPLACE )
             rUndoStr = aString;
         else if (pUndoDoc)
         {
@@ -235,7 +235,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             if (pNote)
                 pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
         }
-        else if ( cMatrixFlag != MM_NONE )
+        else if ( cMatrixFlag != ScMatrixMode::NONE )
         {   // don't split Matrix
             if ( aString.getLength() > 2 )
             {   // remove {} here so that "{=" can be replaced by "{=..."

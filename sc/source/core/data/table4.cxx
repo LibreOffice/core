@@ -481,7 +481,7 @@ void ScTable::FillFormula(
     ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
     aCol[nDestCol].SetFormulaCell(nDestRow, pDestCell);
 
-    if ( bLast && pDestCell->GetMatrixFlag() )
+    if ( bLast && pDestCell->GetMatrixFlag() != ScMatrixMode::NONE )
     {
         ScAddress aOrg;
         if ( pDestCell->GetMatrixOrigin( aOrg ) )
@@ -489,7 +489,7 @@ void ScTable::FillFormula(
             if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {
                 ScFormulaCell* pOrgCell = pDocument->GetFormulaCell(aOrg);
-                if (pOrgCell && pOrgCell->GetMatrixFlag() == MM_FORMULA)
+                if (pOrgCell && pOrgCell->GetMatrixFlag() == ScMatrixMode::Formula)
                 {
                     pOrgCell->SetMatColsRows(
                         nDestCol - aOrg.Col() + 1,
@@ -497,7 +497,7 @@ void ScTable::FillFormula(
                 }
                 else
                 {
-                    OSL_FAIL( "FillFormula: MatrixOrigin no formula cell with MM_FORMULA" );
+                    OSL_FAIL( "FillFormula: MatrixOrigin no formula cell with ScMatrixMode::Formula" );
                 }
             }
             else

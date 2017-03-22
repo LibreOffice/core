@@ -903,7 +903,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 
     static  SCROW               InitContentRowsPerSlot();
 
-    // true if one is MM_FORMULA and the other is
+    // true if one is ScMatrixMode::Formula and the other is
     // not, or if both are and range differs
     static bool IsMatrixFormulaRangeDifferent(
         const ScCellValue& rOldCell, const ScCellValue& rNewCell );

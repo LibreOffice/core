@@ -318,10 +318,10 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, co
     sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
     OUString sFormula;
     pFormulaCell->GetFormula(sFormula, eGrammar);
-    sal_uInt8 nMatrixFlag(pFormulaCell->GetMatrixFlag());
-    if (nMatrixFlag)
+    ScMatrixMode nMatrixFlag(pFormulaCell->GetMatrixFlag());
+    if (nMatrixFlag != ScMatrixMode::NONE)
     {
-        if (nMatrixFlag == MM_FORMULA)
+        if (nMatrixFlag == ScMatrixMode::Formula)
         {
             SCCOL nColumns;
             SCROW nRows;

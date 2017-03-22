@@ -1422,7 +1422,7 @@ void ScChangeActionContent::SetValueString(
         rCell.meType = CELLTYPE_FORMULA;
         rCell.mpFormula = new ScFormulaCell(
             pDoc, aBigRange.aStart.MakeAddress(), rStr,
-            formula::FormulaGrammar::GRAM_DEFAULT, pDoc->GetGrammar() );
+            pDoc->GetGrammar() );
         rCell.mpFormula->SetInChangeTrack(true);
     }
     else
@@ -1652,11 +1652,11 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
         case CELLTYPE_FORMULA :
             switch (rCell.mpFormula->GetMatrixFlag())
             {
-                case MM_NONE :
+                case ScMatrixMode::NONE :
                     return SC_CACCT_NORMAL;
-                case MM_FORMULA :
+                case ScMatrixMode::Formula :
                     return SC_CACCT_MATORG;
-                case MM_REFERENCE :
+                case ScMatrixMode::Reference :
                     return SC_CACCT_MATREF;
             }
             return SC_CACCT_NORMAL;
@@ -1678,11 +1678,11 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
             const ScFormulaCell* pCell = rCell.mpFormula;
             switch (pCell->GetMatrixFlag())
             {
-                case MM_NONE :
+                case ScMatrixMode::NONE :
                     return SC_CACCT_NORMAL;
-                case MM_FORMULA :
+                case ScMatrixMode::Formula :
                     return SC_CACCT_MATORG;
-                case MM_REFERENCE :
+                case ScMatrixMode::Reference :
                     return SC_CACCT_MATREF;
             }
             return SC_CACCT_NORMAL;
@@ -2629,10 +2629,10 @@ bool ScChangeTrack::IsMatrixFormulaRangeDifferent(
     nC1 = nC2 = 0;
     nR1 = nR2 = 0;
 
-    if (rOldCell.meType == CELLTYPE_FORMULA && rOldCell.mpFormula->GetMatrixFlag() == MM_FORMULA)
+    if (rOldCell.meType == CELLTYPE_FORMULA && rOldCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
         rOldCell.mpFormula->GetMatColsRows(nC1, nR1);
 
-    if (rNewCell.meType == CELLTYPE_FORMULA && rNewCell.mpFormula->GetMatrixFlag() == MM_FORMULA)
+    if (rNewCell.meType == CELLTYPE_FORMULA && rNewCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
         rNewCell.mpFormula->GetMatColsRows(nC1, nR1);
 
     return nC1 != nC2 || nR1 != nR2;

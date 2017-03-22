@@ -98,10 +98,10 @@ inline void intrusive_ptr_release(const ScFormulaCellGroup *p)
         delete p;
 }
 
-enum ScMatrixMode {
-    MM_NONE      = 0,                   // No matrix formula
-    MM_FORMULA   = 1,                   // Upper left matrix formula cell
-    MM_REFERENCE = 2                    // Remaining cells, via ocMatRef reference token
+enum class ScMatrixMode : sal_uInt8 {
+    NONE      = 0,                   // No matrix formula
+    Formula   = 1,                   // Upper left matrix formula cell
+    Reference = 2                    // Remaining cells, via ocMatRef reference token
 };
 
 class SC_DLLPUBLIC ScFormulaCell : public SvtListener
@@ -118,7 +118,7 @@ private:
     ScFormulaCell*  pNextTrack;
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     short           nFormatType;
-    sal_uInt8       cMatrixFlag    : 2; // One of ScMatrixMode
+    ScMatrixMode    cMatrixFlag;
     bool            bDirty         : 1; // Must be (re)calculated
     bool            bChanged       : 1; // Whether something changed regarding display/representation
     bool            bRunning       : 1; // Already interpreting right now
@@ -171,15 +171,15 @@ public:
      */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                   sal_uInt8 cMatInd = MM_NONE );
+                   ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                   sal_uInt8 cMatInd = MM_NONE );
+                   ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                   sal_uInt8 = MM_NONE );
+                   ScMatrixMode = ScMatrixMode::NONE );
 
     /** With formula string and grammar to compile with.
        formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that
@@ -188,7 +188,7 @@ public:
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                     const OUString& rFormula,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
-                    sal_uInt8 cMatInd = MM_NONE );
+                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
     ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, ScCloneFlags nCloneFlags = ScCloneFlags::Default);
 
@@ -307,7 +307,7 @@ public:
     bool            GetErrorOrValue( FormulaError& rErr, double& rVal );
     sc::FormulaResultValue GetResult();
     sc::FormulaResultValue GetResult() const;
-    sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
+    ScMatrixMode    GetMatrixFlag() const { return cMatrixFlag;}
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 

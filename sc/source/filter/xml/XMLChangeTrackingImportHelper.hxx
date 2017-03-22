@@ -26,6 +26,7 @@
 
 class ScDocument;
 class DateTime;
+enum class ScMatrixMode : sal_uInt8;
 
 struct ScMyActionInfo
 {
@@ -45,12 +46,12 @@ struct ScMyCellInfo
     sal_Int32          nMatrixRows;
     formula::FormulaGrammar::Grammar eGrammar;
     sal_uInt16         nType;
-    sal_uInt8          nMatrixFlag;
+    ScMatrixMode       nMatrixFlag;
 
     ScMyCellInfo(
         const ScCellValue& rCell, const OUString& sFormulaAddress, const OUString& sFormula,
         const formula::FormulaGrammar::Grammar eGrammar, const OUString& sInputString,
-        const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag,
+        const double& fValue, const sal_uInt16 nType, const ScMatrixMode nMatrixFlag,
         const sal_Int32 nMatrixCols, const sal_Int32 nMatrixRows );
     ~ScMyCellInfo();
 
