@@ -2191,6 +2191,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             };
 
             ScChangeTrack* pCT = rDoc.GetChangeTrack();
+            CPPUNIT_ASSERT(pCT);
             if (!pCT)
             {
                 cerr << "Change track instance doesn't exist." << endl;
@@ -2198,6 +2199,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             }
 
             sal_uLong nActionMax = pCT->GetActionMax();
+            CPPUNIT_ASSERT(nActionMax);
             if (nActionMax != 13)
             {
                 cerr << "Unexpected highest action ID value." << endl;
@@ -2208,6 +2210,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             {
                 sal_uInt16 nActId = aChecks[i].mnActionId;
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
+                CPPUNIT_ASSERT(pAction);
                 if (!pAction)
                 {
                     cerr << "No action for action number " << nActId << " found." << endl;
@@ -2254,6 +2257,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
         bool checkRevisionUserAndTime( ScDocument& rDoc, const OUString& rOwnerName )
         {
             ScChangeTrack* pCT = rDoc.GetChangeTrack();
+            CPPUNIT_ASSERT(pCT);
             if (!pCT)
             {
                 cerr << "Change track instance doesn't exist." << endl;
@@ -2261,6 +2265,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             }
 
             ScChangeAction* pAction = pCT->GetLast();
+            CPPUNIT_ASSERT(pAction);
             if (pAction->GetUser() != "Kohei Yoshida")
             {
                 cerr << "Wrong user name." << endl;
@@ -2268,6 +2273,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             }
 
             DateTime aDT = pAction->GetDateTime();
+            CPPUNIT_ASSERT(aDT);
             if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
             {
                 cerr << "Wrong time stamp." << endl;
@@ -2279,6 +2285,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             ScCellValue aEmpty;
             pCT->AppendContent(ScAddress(1,8,0), aEmpty);
             pAction = pCT->GetLast();
+            CPPUNIT_ASSERT(pAction);
             if (!pAction)
             {
                 cerr << "Failed to retrieve last revision." << endl;
@@ -2292,6 +2299,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             }
 
             DateTime aDTNew = pAction->GetDateTime();
+            CPPUNIT_ASSERT(aDTNew);
             if (aDTNew <= aDT)
             {
                 cerr << "Time stamp of the new revision should be more recent than that of the last revision." << endl;
@@ -2365,7 +2373,7 @@ void ScExportTest::testSheetTabColorsXLSX()
         {
 
             std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
-
+            CPPUNIT_ASSERT(aTabNames);
             // green, red, blue, yellow (from left to right).
             if (aTabNames.size() != 4)
             {
@@ -2377,6 +2385,7 @@ void ScExportTest::testSheetTabColorsXLSX()
             for (size_t i = 0, n = SAL_N_ELEMENTS(pNames); i < n; ++i)
             {
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
+                CPPUNIT_ASSERT(aExpected);
                 if (aExpected != aTabNames[i])
                 {
                     cerr << "incorrect sheet name: expected='" << aExpected <<"', actual='" << aTabNames[i] << "'" << endl;
@@ -2466,6 +2475,7 @@ void ScExportTest::testSharedFormulaExportXLS()
 
                 aPos.IncCol();
                 ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
+                CPPUNIT_ASSERT(pFC);
                 if (!pFC)
                 {
                     cerr << "B" << (i+2) << " should be a formula cell." << endl;
@@ -2473,6 +2483,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                 }
 
                 OUString aFormula = pFC->GetCode()->CreateString(aCxt, aPos);
+                CPPUNIT_ASSERT(aFormula);
                 aExpected = "Coefficients!RC[-1]";
                 if (aFormula != aExpected)
                 {
@@ -2481,6 +2492,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                 }
 
                 fActual = rDoc.GetValue(aPos);
+                CPPUNIT_ASSERT(fActual);
                 if (fExpected != fActual)
                 {
                     cerr << "Wrong value in B" << (i+2) << ": expected=" << fExpected << ", actual=" << fActual << endl;
@@ -2523,6 +2535,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
         bool checkContent( ScDocument& rDoc )
         {
             SCTAB nTabCount = rDoc.GetTableCount();
+            CPPUNIT_ASSERT(nTabCount);
             if (nTabCount != 2)
             {
                 cerr << "Document should have exactly 2 sheets.  " << nTabCount << " found." << endl;
@@ -2533,6 +2546,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             for (SCROW i = 0; i <= 1; ++i)
             {
                 Color aTabBgColor = rDoc.GetTabBgColor(i);
+                CPPUNIT_ASSERT(aTabBgColor);
                 if (aTabBgColor != Color(COL_AUTO))
                 {
                     cerr << "The tab color of Sheet " << (i+1) << " should not be explicitly set." << endl;
@@ -2546,6 +2560,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             {
                 ScAddress aPos(1,i,0);
                 double fVal = rDoc.GetValue(aPos);
+                CPPUNIT_ASSERT(fVal);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in B" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -2559,6 +2574,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             {
                 ScAddress aPos(2,i,0);
                 double fVal = rDoc.GetValue(aPos);
+                CPPUNIT_ASSERT(fVal);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in C" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -2572,6 +2588,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             {
                 ScAddress aPos(3,i,0);
                 double fVal = rDoc.GetValue(aPos);
+                CPPUNIT_ASSERT(fVal);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in D" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -2793,6 +2810,7 @@ void ScExportTest::testPivotTableXLSX()
             }
 
             const ScDPCollection* pDPs = rDoc.GetDPCollection();
+            CPPUNIT_ASSERT(pDPs);
             if (!pDPs)
             {
                 cerr << "Pivot table container should exist." << endl;
@@ -2801,6 +2819,7 @@ void ScExportTest::testPivotTableXLSX()
 
             ScRange aSrcRange(0,0,0,9,2,0); // A1:J3 on Sheet1.
             const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
+            CPPUNIT_ASSERT(pCache);
             if (!pCache)
             {
                 cerr << "The document should have a pivot cache for A1:J3 on Sheet1." << endl;
@@ -2814,6 +2833,7 @@ void ScExportTest::testPivotTableXLSX()
             };
 
             size_t nCount = pCache->GetFieldCount();
+            CPPUNIT_ASSERT(nCount);
             if (nCount != SAL_N_ELEMENTS(pNames))
             {
                 cout << "Incorrect number of fields in pivot cache." << endl;
@@ -2823,6 +2843,7 @@ void ScExportTest::testPivotTableXLSX()
             for (size_t i = 0; i < nCount; ++i)
             {
                 OUString aCacheName = pCache->GetDimensionName(i);
+                CPPUNIT_ASSERT(aCacheName);
                 if (aCacheName != OUString::createFromAscii(pNames[i]))
                 {
                     cerr << "Field " << i << " has label '" << aCacheName << "' but expected '" << pNames[i] << "'" << endl;
@@ -2831,6 +2852,7 @@ void ScExportTest::testPivotTableXLSX()
             }
 
             const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0,10,0); // A11
+            CPPUNIT_ASSERT(pDPObj);
             if (!pDPObj)
             {
                 cerr << "A pivot table should exist over A11." << endl;
@@ -2839,6 +2861,7 @@ void ScExportTest::testPivotTableXLSX()
 
             // Output range should be A8:D15.
             ScRange aOutRange = pDPObj->GetOutRange();
+            CPPUNIT_ASSERT(aOutRange);
             if (ScRange(0,7,0,3,14,0) != aOutRange)
             {
                 cerr << "Incorrect output range." << endl;
@@ -2851,6 +2874,7 @@ void ScExportTest::testPivotTableXLSX()
             // Data field - F10
 
             const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            CPPUNIT_ASSERT(pSaveData);
             if (!pSaveData)
             {
                 cerr << "Save data should exist in each pivot table object." << endl;
@@ -2931,6 +2955,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
             }
 
             const ScDPCollection* pDPs = rDoc.GetDPCollection();
+            CPPUNIT_ASSERT(pDPs);
             if (!pDPs)
             {
                 cerr << "Pivot table container should exist." << endl;
@@ -2939,6 +2964,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
 
             ScRange aSrcRange(1,1,1,2,8,1); // B2:C9 on the 2nd sheet.
             const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
+            CPPUNIT_ASSERT(pCache);
             if (!pCache)
             {
                 cerr << "The document should have a pivot cache for B2:C9 on 'Src'." << endl;
@@ -2949,6 +2975,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
             (void) pNames;
 
             size_t nCount = pCache->GetFieldCount();
+            CPPUNIT_ASSERT(nCount);
             if (nCount != SAL_N_ELEMENTS(pNames))
             {
                 cout << "Incorrect number of fields in pivot cache." << endl;
@@ -2956,6 +2983,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
             }
 
             const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0,2,0); // A3
+            CPPUNIT_ASSERT(pDPObj);
             if (!pDPObj)
             {
                 cerr << "A pivot table should exist over A3." << endl;
@@ -2964,6 +2992,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
 
             // Output range should be A3:C12.
             ScRange aOutRange = pDPObj->GetOutRange();
+            CPPUNIT_ASSERT(aOutRange);
             if (ScRange(0,2,0,2,11,0) != aOutRange)
             {
                 cerr << "Incorrect output range." << endl;
@@ -2971,6 +3000,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
             }
 
             const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            CPPUNIT_ASSERT(pSaveData);
             if (!pSaveData)
             {
                 cerr << "Save data should exist in each pivot table object." << endl;
