@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/processfactory.hxx>
+#include <rtl/character.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -274,7 +275,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         OUStringBuffer sNumber;
         for (sal_Int32 i = 0; i < rest.getLength(); ++i)
         {
-            if (isdigit(rest[i]))
+            if (rtl::isAsciiDigit(rest[i]))
             {
                 sNumber.append(rest[i]);
             }
