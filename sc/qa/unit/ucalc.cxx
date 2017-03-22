@@ -94,6 +94,11 @@
 #include <utility>
 #include <vector>
 
+static std::ostream& operator<<(std::ostream& os, ScMatrixMode mode)
+{
+    os << (int) mode; return os;
+}
+
 struct TestImpl
 {
     ScDocShellRef m_xDocShell;
@@ -1955,12 +1960,12 @@ void Test::testMatrixEditable()
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,2,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should be matrix origin.",
-                               MM_FORMULA, static_cast<ScMatrixMode>(pFC->GetMatrixFlag()));
+                               ScMatrixMode::Formula, pFC->GetMatrixFlag());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A4 should be matrix reference.",
-                               MM_REFERENCE, static_cast<ScMatrixMode>(pFC->GetMatrixFlag()));
+                               ScMatrixMode::Reference, pFC->GetMatrixFlag());
 
     // Check to make sure A3:A4 combined is editable.
     ScEditableTester aTester;

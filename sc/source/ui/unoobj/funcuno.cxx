@@ -591,7 +591,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell(
             pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_API,
-            (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
+            mbArray ? ScMatrixMode::Formula : ScMatrixMode::NONE );
         pFormula = pDoc->SetFormulaCell(aFormulaPos, pFormula);
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates

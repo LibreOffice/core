@@ -491,8 +491,8 @@ void ScColumn::CloneFormulaCell(
 
     SCCOL nMatrixCols = 0;
     SCROW nMatrixRows = 0;
-    sal_uInt8 nMatrixFlag = rSrc.GetMatrixFlag();
-    if (nMatrixFlag == MM_FORMULA)
+    ScMatrixMode nMatrixFlag = rSrc.GetMatrixFlag();
+    if (nMatrixFlag == ScMatrixMode::Formula)
     {
         rSrc.GetMatColsRows( nMatrixCols, nMatrixRows);
         SAL_WARN_IF( nMatrixCols != 1 || nMatrixRows != 1, "sc.core",
@@ -526,7 +526,7 @@ void ScColumn::CloneFormulaCell(
             for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
             {
                 ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup, pDocument->GetGrammar(), nMatrixFlag);
-                if (nMatrixFlag == MM_FORMULA)
+                if (nMatrixFlag == ScMatrixMode::Formula)
                     pCell->SetMatColsRows( nMatrixCols, nMatrixRows);
                 if (i == 0)
                 {
@@ -760,7 +760,7 @@ public:
             // Get the formula string.
             OUString aFormula = pTop->GetFormula(mrCompileFormulaCxt);
             sal_Int32 n = aFormula.getLength();
-            if (pTop->GetMatrixFlag() != MM_NONE && n > 0)
+            if (pTop->GetMatrixFlag() != ScMatrixMode::NONE && n > 0)
             {
                 if (aFormula[0] == '{' && aFormula[n-1] == '}')
                     aFormula = aFormula.copy(1, n-2);

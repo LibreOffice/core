@@ -3786,8 +3786,8 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
 
     if(pMyFormulaCell)
     {
-        sal_uInt8 cMatFlag = pMyFormulaCell->GetMatrixFlag();
-        bMatrixFormula = ( cMatFlag == MM_FORMULA );
+        ScMatrixMode cMatFlag = pMyFormulaCell->GetMatrixFlag();
+        bMatrixFormula = ( cMatFlag == ScMatrixMode::Formula );
     }
     else
         bMatrixFormula = false;

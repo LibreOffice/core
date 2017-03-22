@@ -878,35 +878,36 @@ XclExpFormulaCell::XclExpFormulaCell(
     mxAddRec = rTableopBfr.CreateOrExtendTableop( rScTokArr, aScPos );
 
     // no multiple operation found - try to create matrix formula
-    if( !mxAddRec ) switch( static_cast< ScMatrixMode >( mrScFmlaCell.GetMatrixFlag() ) )
-    {
-        case MM_FORMULA:
+    if( !mxAddRec )
+        switch( mrScFmlaCell.GetMatrixFlag() )
         {
-            // origin of the matrix - find the used matrix range
-            SCCOL nMatWidth;
-            SCROW nMatHeight;
-            mrScFmlaCell.GetMatColsRows( nMatWidth, nMatHeight );
-            OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
-            ScRange aMatScRange( aScPos );
-            ScAddress& rMatEnd = aMatScRange.aEnd;
-            rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
-            rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
-            // reduce to valid range (range keeps valid, because start position IS valid)
-            rRoot.GetAddressConverter().ValidateRange( aMatScRange, true );
-            // create the ARRAY record
-            mxAddRec = rArrayBfr.CreateArray( rScTokArr, aMatScRange );
+            case ScMatrixMode::Formula:
+            {
+                // origin of the matrix - find the used matrix range
+                SCCOL nMatWidth;
+                SCROW nMatHeight;
+                mrScFmlaCell.GetMatColsRows( nMatWidth, nMatHeight );
+                OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
+                ScRange aMatScRange( aScPos );
+                ScAddress& rMatEnd = aMatScRange.aEnd;
+                rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
+                rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
+                // reduce to valid range (range keeps valid, because start position IS valid)
+                rRoot.GetAddressConverter().ValidateRange( aMatScRange, true );
+                // create the ARRAY record
+                mxAddRec = rArrayBfr.CreateArray( rScTokArr, aMatScRange );
+            }
+            break;
+            case ScMatrixMode::Reference:
+            {
+                // other formula cell covered by a matrix - find the ARRAY record
+                mxAddRec = rArrayBfr.FindArray(rScTokArr, aScPos);
+                // should always be found, if Calc document is not broken
+                OSL_ENSURE( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
+            }
+            break;
+            default:;
         }
-        break;
-        case MM_REFERENCE:
-        {
-            // other formula cell covered by a matrix - find the ARRAY record
-            mxAddRec = rArrayBfr.FindArray(rScTokArr, aScPos);
-            // should always be found, if Calc document is not broken
-            OSL_ENSURE( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
-        }
-        break;
-        default:;
-    }
 
     // no matrix found - try to create shared formula
     if( !mxAddRec )
@@ -959,12 +960,12 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
     switch (mrScFmlaCell.GetMatrixFlag())
     {
-        case MM_NONE:
+        case ScMatrixMode::NONE:
             break;
-        case MM_REFERENCE:
+        case ScMatrixMode::Reference:
             bWriteFormula = false;
             break;
-        case MM_FORMULA:
+        case ScMatrixMode::Formula:
             {
                 // origin of the matrix - find the used matrix range
                 SCCOL nMatWidth;

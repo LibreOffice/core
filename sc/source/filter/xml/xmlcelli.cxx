@@ -1377,7 +1377,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             }
         }
 
-        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, MM_NONE);
+        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, ScMatrixMode::NONE);
         SetFormulaCell(pNewCell);
         rDoc.setFormulaCell(rCellPos, pNewCell);
 

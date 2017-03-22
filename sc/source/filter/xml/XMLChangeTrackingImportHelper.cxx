@@ -33,7 +33,7 @@
 ScMyCellInfo::ScMyCellInfo(
     const ScCellValue& rCell, const OUString& rFormulaAddress, const OUString& rFormula,
     const formula::FormulaGrammar::Grammar eTempGrammar, const OUString& rInputString,
-    const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
+    const double& rValue, const sal_uInt16 nTempType, const ScMatrixMode nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
     const sal_Int32 nTempMatrixRows ) :
     maCell(rCell),
     sFormulaAddress(rFormulaAddress),
@@ -744,7 +744,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         }
                         else
                         {
-                            sal_uInt8 nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
+                            ScMatrixMode nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
                             OUString sFormula;
                             // With GRAM_ODFF reference detection is faster on compilation.
                             /* FIXME: new cell should be created with a clone
@@ -756,7 +756,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
                             //        is returned and no further string handling is necessary
                             OUString sFormula2;
-                            if ( nMatrixFlag != MM_NONE )
+                            if ( nMatrixFlag != ScMatrixMode::NONE )
                             {
                                 sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
                             }
@@ -767,7 +767,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
 
                             aNewCell.meType = CELLTYPE_FORMULA;
                             aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
-                            if (nMatrixFlag == MM_FORMULA)
+                            if (nMatrixFlag == ScMatrixMode::Formula)
                             {
                                 SCCOL nCols;
                                 SCROW nRows;

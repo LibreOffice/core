@@ -90,7 +90,7 @@ class ScXMLCellContentDeletionContext : public ScXMLImportContext
     sal_Int32                           nMatrixRows;
     formula::FormulaGrammar::Grammar                  eGrammar;
     sal_uInt16                          nType;
-    sal_uInt8                           nMatrixFlag;
+    ScMatrixMode                        nMatrixFlag;
     bool                            bBigRange;
     bool                            bContainsCell;
 
@@ -220,7 +220,7 @@ public:
                                       OUString& rFormula, OUString& rFormulaNmsp,
                                       formula::FormulaGrammar::Grammar& rGrammar,
                                       OUString& rInputString, double& fValue, sal_uInt16& nType,
-                                      sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
+                                      ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -247,7 +247,7 @@ class ScXMLPreviousContext : public ScXMLImportContext
     sal_Int32                           nMatrixRows;
     formula::FormulaGrammar::Grammar    eGrammar;
     sal_uInt16                          nType;
-    sal_uInt8                           nMatrixFlag;
+    ScMatrixMode                        nMatrixFlag;
 
 public:
     ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -628,7 +628,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     nMatrixRows(0),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nType(css::util::NumberFormat::ALL),
-    nMatrixFlag(MM_NONE),
+    nMatrixFlag(ScMatrixMode::NONE),
     bBigRange(false),
     bContainsCell(false)
 {
@@ -921,7 +921,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
                                                 OUString& rFormula, OUString& rFormulaNmsp,
                                                 formula::FormulaGrammar::Grammar& rGrammar,
                                                 OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
-                                                sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows )
+                                                ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows )
     : ScXMLImportContext( rImport, nPrfx, rLName )
     , mrOldCell(rOldCell)
     , rInputString(rTempInputString)
@@ -1009,9 +1009,9 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
         }
     }
     if (bIsCoveredMatrix)
-        nMatrixFlag = MM_REFERENCE;
+        nMatrixFlag = ScMatrixMode::Reference;
     else if (bIsMatrix && nMatrixRows && nMatrixCols)
-        nMatrixFlag = MM_FORMULA;
+        nMatrixFlag = ScMatrixMode::Formula;
 }
 
 SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -1126,7 +1126,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     nMatrixRows(0),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nType(css::util::NumberFormat::ALL),
-    nMatrixFlag(MM_NONE)
+    nMatrixFlag(ScMatrixMode::NONE)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )

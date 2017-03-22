@@ -262,7 +262,7 @@ void ScViewFunc::DoRefConversion()
                     std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(
-                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
 
                     pDoc->SetFormulaCell(aPos, pNewCell);
                     bOk = true;

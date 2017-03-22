@@ -990,16 +990,16 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             ScAddress aPos = aSourceRange.aStart;
                             OUString aValue;
                             static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &aDocument );
-                            sal_uInt8 eMatrix = MM_NONE;
+                            ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.meType == CELLTYPE_FORMULA)
                                 eMatrix = rCell.mpFormula->GetMatrixFlag();
                             switch ( eMatrix )
                             {
-                                case MM_NONE :
+                                case ScMatrixMode::NONE :
                                     pViewSh->EnterData( aPos.Col(), aPos.Row(), aPos.Tab(), aValue );
                                 break;
-                                case MM_FORMULA :
+                                case ScMatrixMode::Formula :
                                 {
                                     SCCOL nCols;
                                     SCROW nRows;
@@ -1012,7 +1012,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                         EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
-                                case MM_REFERENCE :     // do nothing
+                                case ScMatrixMode::Reference :     // do nothing
                                 break;
                             }
                         }
