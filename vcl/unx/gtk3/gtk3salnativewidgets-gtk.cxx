@@ -388,7 +388,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gint            slider_width = 0;
     gint            stepper_size = 0;
     gint            trough_border = 0;
-    gint            min_slider_length = 0;
 
     // make controlvalue rectangles relative to area
     thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
@@ -409,8 +408,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gtk_style_context_get_style( context,
                                  "slider_width", &slider_width,
                                  "stepper_size", &stepper_size,
-                                 "trough_border", &trough_border,
-                                 "min_slider_length", &min_slider_length, nullptr );
+                                 "trough_border", &trough_border, nullptr );
     gboolean has_forward;
     gboolean has_forward2;
     gboolean has_backward;
