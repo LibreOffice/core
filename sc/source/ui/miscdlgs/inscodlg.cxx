@@ -287,10 +287,10 @@ void ScInsertContentsDlg::SetChangeTrack( bool bSet )
     }
 }
 
-void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
+void ScInsertContentsDlg::SetCellShiftDisabled( CellShiftDisabledFlags nDisable )
 {
-    bool bDown = ((nDisable & SC_CELL_SHIFT_DISABLE_DOWN) != 0);
-    bool bRight = ((nDisable & SC_CELL_SHIFT_DISABLE_RIGHT) != 0);
+    bool bDown(nDisable & CellShiftDisabledFlags::Down);
+    bool bRight(nDisable & CellShiftDisabledFlags::Right);
     if ( bDown != bMoveDownDisabled || bRight != bMoveRightDisabled )
     {
         bMoveDownDisabled = bDown;

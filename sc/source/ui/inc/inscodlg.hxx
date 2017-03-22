@@ -46,7 +46,7 @@ public:
     void    SetOtherDoc( bool bSet );
     void    SetFillMode( bool bSet );
     void    SetChangeTrack( bool bSet );
-    void    SetCellShiftDisabled( int nDisable );
+    void    SetCellShiftDisabled( CellShiftDisabledFlags nDisable );
 
 private:
     VclPtr<CheckBox>        mpBtnInsAll;

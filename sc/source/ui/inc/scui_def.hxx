@@ -33,8 +33,14 @@
 #define INS_CONT_TRANS      0x0200 //from inscodlg.hxx
 #define INS_CONT_LINK       0x0400 //from inscodlg.hxx
 
-#define SC_CELL_SHIFT_DISABLE_DOWN  0x01 //from inscodlg.hxx
-#define SC_CELL_SHIFT_DISABLE_RIGHT 0x02 //from inscodlg.hxx
+enum class CellShiftDisabledFlags {
+    NONE  = 0x00,
+    Down  = 0x01, //from inscodlg.hxx
+    Right = 0x02  //from inscodlg.hxx
+};
+namespace o3tl {
+    template<> struct typed_flags<CellShiftDisabledFlags> : is_typed_flags<CellShiftDisabledFlags, 0x3> {};
+}
 
 enum class CreateNameFlags {
     NONE       = 0,

@@ -1435,28 +1435,28 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     ScRange aDest( nStartX, nStartY, nStartTab,
                                                    nStartX + nRangeSizeX, nStartY + nRangeSizeY, nStartTab );
                                     if ( pOwnClip->GetDocument()->IsCutMode() && aSource.Intersects( aDest ) )
-                                        pDlg->SetCellShiftDisabled( SC_CELL_SHIFT_DISABLE_DOWN | SC_CELL_SHIFT_DISABLE_RIGHT );
+                                        pDlg->SetCellShiftDisabled( CellShiftDisabledFlags::Down | CellShiftDisabledFlags::Right );
                                     else
                                     {
                                         //no conflict with intersecting ranges,
                                         //check if paste plus shift will fit on sheet
                                         //and disable shift-option if no fit
-                                        int nDisableShiftX = 0;
-                                        int nDisableShiftY = 0;
+                                        CellShiftDisabledFlags nDisableShiftX = CellShiftDisabledFlags::NONE;
+                                        CellShiftDisabledFlags nDisableShiftY = CellShiftDisabledFlags::NONE;
 
                                         //check if horizontal shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
                                                     MAXCOL - nRangeSizeX, nStartY,
                                                     MAXCOL, nStartY + nRangeSizeY ) )
-                                            nDisableShiftX = SC_CELL_SHIFT_DISABLE_RIGHT;
+                                            nDisableShiftX = CellShiftDisabledFlags::Right;
 
                                         //check if vertical shift will fit
                                         if ( !pData->GetDocument()->IsBlockEmpty( nStartTab,
                                                     nStartX, MAXROW - nRangeSizeY,
                                                     nStartX + nRangeSizeX, MAXROW ) )
-                                            nDisableShiftY = SC_CELL_SHIFT_DISABLE_DOWN;
+                                            nDisableShiftY = CellShiftDisabledFlags::Down;
 
-                                        if ( nDisableShiftX || nDisableShiftY )
+                                        if ( nDisableShiftX != CellShiftDisabledFlags::NONE || nDisableShiftY != CellShiftDisabledFlags::NONE)
                                             pDlg->SetCellShiftDisabled( nDisableShiftX | nDisableShiftY );
                                     }
                                 }
