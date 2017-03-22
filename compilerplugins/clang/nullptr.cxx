@@ -12,6 +12,7 @@
 #include <limits>
 #include <set>
 
+#include "check.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -128,6 +129,11 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
     case Expr::NPCK_CXX11_nullptr:
         break;
     default:
+        if (loplugin::TypeCheck(expr->getType()).Typedef("locale_t")
+            .GlobalNamespace())
+        {
+            break; // POSIX locale_t is left unspecified
+        }
         handleNull(expr->getSubExpr(), expr->getCastKindName(), k);
         break;
     }
