@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_STRONG_TYPEDEF_HXX
-#define INCLUDED_O3TL_STRONG_TYPEDEF_HXX
+#ifndef INCLUDED_O3TL_STRONG_INT_HXX
+#define INCLUDED_O3TL_STRONG_INT_HXX
 
 #include <sal/config.h>
 
@@ -69,6 +69,6 @@ strong_int<UT,PT> operator+(strong_int<UT,PT> const & lhs, strong_int<UT,PT> con
 
 }; // namespace o3tl
 
-#endif /* INCLUDED_O3TL_STRONG_TYPEDEF_HXX */
+#endif /* INCLUDED_O3TL_STRONG_INT_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
