@@ -387,7 +387,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     Rectangle        arrowRect;
     gint            slider_width = 0;
     gint            stepper_size = 0;
-    gint            stepper_spacing = 0;
     gint            trough_border = 0;
     gint            min_slider_length = 0;
 
@@ -411,7 +410,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                  "slider_width", &slider_width,
                                  "stepper_size", &stepper_size,
                                  "trough_border", &trough_border,
-                                 "stepper_spacing", &stepper_spacing,
                                  "min_slider_length", &min_slider_length, nullptr );
     gboolean has_forward;
     gboolean has_forward2;
