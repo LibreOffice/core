@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCUI_DEF_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCUI_DEF_HXX
 
+#include <o3tl/typed_flags_set.hxx>
+
 #define SCRET_COLS 0x42
 #define SCRET_ROWS 0x43
 
@@ -40,10 +42,16 @@ namespace o3tl {
 #define SC_CELL_SHIFT_DISABLE_DOWN  0x01 //from inscodlg.hxx
 #define SC_CELL_SHIFT_DISABLE_RIGHT 0x02 //from inscodlg.hxx
 
-#define NAME_TOP        1 //from namecrea.hxx
-#define NAME_LEFT       2 //from namecrea.hxx
-#define NAME_BOTTOM     4  //from namecrea.hxx
-#define NAME_RIGHT      8 //from namecrea.hxx
+enum class CreateNameFlags {
+    NONE       = 0,
+    Top        = 1, //from namecrea.hxx
+    Left       = 2, //from namecrea.hxx
+    Bottom     = 4, //from namecrea.hxx
+    Right      = 8, //from namecrea.hxx
+};
+namespace o3tl {
+    template<> struct typed_flags<CreateNameFlags> : is_typed_flags<CreateNameFlags, 0xf> {};
+}
 
 #define BTN_PASTE_NAME  100  // from namepast.hxx
 #define BTN_PASTE_LIST  101  // from namepast.hxx

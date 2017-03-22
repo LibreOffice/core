@@ -477,7 +477,7 @@ void    AbstractScMoveTableDlg_Impl::EnableRenameTable(bool bFlag)
     return pDlg->EnableRenameTable( bFlag);
 }
 
-sal_uInt16 AbstractScNameCreateDlg_Impl::GetFlags() const
+CreateNameFlags AbstractScNameCreateDlg_Impl::GetFlags() const
 {
     return pDlg->GetFlags();
 }
@@ -755,7 +755,7 @@ VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDl
     return VclPtr<AbstractScMoveTableDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(vcl::Window * pParent, sal_uInt16 nFlags)
+VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(vcl::Window * pParent, CreateNameFlags nFlags)
 {
     VclPtr<ScNameCreateDlg> pDlg = VclPtr<ScNameCreateDlg>::Create( pParent, nFlags );
     return VclPtr<AbstractScNameCreateDlg_Impl>::Create( pDlg );

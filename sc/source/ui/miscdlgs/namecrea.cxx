@@ -22,17 +22,17 @@
 #include "namecrea.hxx"
 #include "scresid.hxx"
 
-ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags )
+ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, CreateNameFlags nFlags )
     : ModalDialog(pParent, "CreateNamesDialog", "modules/scalc/ui/createnamesdialog.ui")
 {
     get(m_pTopBox, "top");
     get(m_pLeftBox, "left");
     get(m_pBottomBox, "bottom");
     get(m_pRightBox, "right");
-    m_pTopBox->Check   ( (nFlags & NAME_TOP) != 0 );
-    m_pLeftBox->Check  ( (nFlags & NAME_LEFT) != 0 );
-    m_pBottomBox->Check( (nFlags & NAME_BOTTOM) != 0 );
-    m_pRightBox->Check ( (nFlags & NAME_RIGHT) != 0 );
+    m_pTopBox->Check   ( bool(nFlags & CreateNameFlags::Top) );
+    m_pLeftBox->Check  ( bool(nFlags & CreateNameFlags::Left) );
+    m_pBottomBox->Check( bool(nFlags & CreateNameFlags::Bottom) );
+    m_pRightBox->Check ( bool(nFlags & CreateNameFlags::Right) );
 }
 
 ScNameCreateDlg::~ScNameCreateDlg()
@@ -49,14 +49,18 @@ void ScNameCreateDlg::dispose()
     ModalDialog::dispose();
 }
 
-sal_uInt16 ScNameCreateDlg::GetFlags() const
+CreateNameFlags ScNameCreateDlg::GetFlags() const
 {
-    sal_uInt16  nResult = 0;
+    CreateNameFlags nResult = CreateNameFlags::NONE;
 
-    nResult |= m_pTopBox->IsChecked()      ? NAME_TOP:     0 ;
-    nResult |= m_pLeftBox->IsChecked()     ? NAME_LEFT:    0 ;
-    nResult |= m_pBottomBox->IsChecked()   ? NAME_BOTTOM:  0 ;
-    nResult |= m_pRightBox->IsChecked()    ? NAME_RIGHT:   0 ;
+    if (m_pTopBox->IsChecked())
+        nResult |= CreateNameFlags::Top;
+    if (m_pLeftBox->IsChecked())
+        nResult |= CreateNameFlags::Left;
+    if (m_pBottomBox->IsChecked())
+        nResult |= CreateNameFlags::Bottom;
+    if (m_pRightBox->IsChecked())
+        nResult |= CreateNameFlags::Right;
 
     return nResult;
 }

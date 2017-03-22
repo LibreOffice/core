@@ -1826,7 +1826,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_USE_NAME:
             {
-                sal_uInt16 nFlags = pTabViewShell->GetCreateNameFlags();
+                CreateNameFlags nFlags = pTabViewShell->GetCreateNameFlags();
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -1836,8 +1836,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if( pDlg->Execute() )
                 {
-                    nFlags = pDlg->GetFlags();
-                    pTabViewShell->CreateNames(nFlags);
+                    pTabViewShell->CreateNames(pDlg->GetFlags());
                     rReq.Done();
                 }
             }

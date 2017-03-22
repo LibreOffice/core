@@ -48,6 +48,7 @@ class ScSortWarningDlg;
 class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+enum class CreateNameFlags;
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -263,7 +264,7 @@ class AbstractScNameCreateDlg : public VclAbstractDialog  // Manage Name Dialog
 protected:
     virtual             ~AbstractScNameCreateDlg() override = default;
 public:
-    virtual sal_uInt16          GetFlags() const = 0;
+    virtual CreateNameFlags  GetFlags() const = 0;
 };
 
 class AbstractScNamePasteDlg : public VclAbstractDialog
@@ -466,7 +467,7 @@ public:
         const OUString& rDefault) = 0;
 
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(vcl::Window * pParent,
-        sal_uInt16 nFlags) = 0;
+        CreateNameFlags nFlags) = 0;
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true ) = 0;
 

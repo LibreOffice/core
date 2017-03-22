@@ -47,7 +47,7 @@ class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
 enum class TransliterationFlags;
-
+enum class CreateNameFlags;
 namespace sc {
     struct ColRowSpan;
 }
@@ -202,7 +202,7 @@ public:
      */
     void            ModifyAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
 
-    bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi, SCTAB nTab = -1 ); // -1 for global range names
+    bool            CreateNames( const ScRange& rRange, CreateNameFlags nFlags, bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     bool            InsertNameList( const ScAddress& rStartPos, bool bApi );
 
     void            InsertAreaLink( const OUString& rFile, const OUString& rFilter,

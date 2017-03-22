@@ -2705,7 +2705,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     return bOk;
 }
 
-void ScViewFunc::CreateNames( sal_uInt16 nFlags )
+void ScViewFunc::CreateNames( CreateNameFlags nFlags )
 {
     bool bDone = false;
     ScRange aRange;
@@ -2716,9 +2716,9 @@ void ScViewFunc::CreateNames( sal_uInt16 nFlags )
         ErrorMessage(STR_CREATENAME_MARKERR);
 }
 
-sal_uInt16 ScViewFunc::GetCreateNameFlags()
+CreateNameFlags ScViewFunc::GetCreateNameFlags()
 {
-    sal_uInt16 nFlags = 0;
+    CreateNameFlags nFlags = CreateNameFlags::NONE;
 
     SCCOL nStartCol, nEndCol;
     SCROW nStartRow, nEndRow;
@@ -2739,7 +2739,7 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
             if (!pDoc->HasStringData( i,nStartRow,nTab ))
                 bOk = false;
         if (bOk)
-            nFlags |= NAME_TOP;
+            nFlags |= CreateNameFlags::Top;
         else                            // Bottom only if not Top
         {
             bOk = true;
@@ -2747,7 +2747,7 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
                 if (!pDoc->HasStringData( i,nEndRow,nTab ))
                     bOk = false;
             if (bOk)
-                nFlags |= NAME_BOTTOM;
+                nFlags |= CreateNameFlags::Bottom;
         }
 
         bOk = true;
@@ -2758,7 +2758,7 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
             if (!pDoc->HasStringData( nStartCol,j,nTab ))
                 bOk = false;
         if (bOk)
-            nFlags |= NAME_LEFT;
+            nFlags |= CreateNameFlags::Left;
         else                            // Right only if not Left
         {
             bOk = true;
@@ -2766,14 +2766,14 @@ sal_uInt16 ScViewFunc::GetCreateNameFlags()
                 if (!pDoc->HasStringData( nEndCol,j,nTab ))
                     bOk = false;
             if (bOk)
-                nFlags |= NAME_RIGHT;
+                nFlags |= CreateNameFlags::Right;
         }
     }
 
     if (nStartCol == nEndCol)
-        nFlags &= ~( NAME_LEFT | NAME_RIGHT );
+        nFlags &= ~CreateNameFlags( CreateNameFlags::Left | CreateNameFlags::Right );
     if (nStartRow == nEndRow)
-        nFlags &= ~( NAME_TOP | NAME_BOTTOM );
+        nFlags &= ~CreateNameFlags( CreateNameFlags::Top | CreateNameFlags::Bottom );
 
     return nFlags;
 }
