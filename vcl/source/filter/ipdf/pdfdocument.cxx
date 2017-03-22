@@ -1917,6 +1917,10 @@ bool PDFNumberElement::Read(SvStream& rStream)
     m_nOffset = rStream.Tell();
     char ch;
     rStream.ReadChar(ch);
+    if (rStream.IsEof())
+    {
+        return false;
+    }
     if (!isdigit(ch) && ch != '-' && ch != '.')
     {
         rStream.SeekRel(-1);
