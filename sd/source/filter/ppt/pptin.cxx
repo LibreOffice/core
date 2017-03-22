@@ -2759,9 +2759,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(SvStream &rStream)
 {
-    tools::SvRef<SotStorage> xStorage(new SotStorage(rStream));
-    if (xStorage->GetError())
+    tools::SvRef<SotStorage> xStorage;
+    try
+    {
+        xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
+        if (xStorage->GetError())
+            return false;
+    }
+    catch (...)
+    {
         return false;
+    }
 
     tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
     if ( !xDocStream.is() )
