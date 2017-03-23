@@ -173,9 +173,7 @@ void SvGlobalName::MakeFromMemory( void const * pData )
 
 bool SvGlobalName::MakeId( const OUString & rIdStr )
 {
-    OString aStr(OUStringToOString(rIdStr,
-        RTL_TEXTENCODING_ASCII_US));
-    const sal_Char *pStr = aStr.getStr();
+    const sal_Unicode *pStr = rIdStr.getStr();
     if( rIdStr.getLength() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
@@ -184,11 +182,11 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         int i = 0;
         for( i = 0; i < 8; i++ )
         {
-            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
-                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
+            if( rtl::isAsciiHexDigit( *pStr ) )
+                if( rtl::isAsciiDigit( *pStr ) )
                     nFirst = nFirst * 16 + (*pStr - '0');
                 else
-                    nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
+                    nFirst = nFirst * 16 + (rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -198,11 +196,11 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 4; i++ )
         {
-            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
-                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
+            if( rtl::isAsciiHexDigit( *pStr ) )
+                if( rtl::isAsciiDigit( *pStr ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
-                    nSec = nSec * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
+                    nSec = nSec * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -212,11 +210,11 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 4; i++ )
         {
-            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
-                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
+            if( rtl::isAsciiHexDigit( *pStr ) )
+                if( rtl::isAsciiDigit( *pStr ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
-                    nThird = nThird * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
+                    nThird = nThird * 16 + (sal_uInt16)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
             else
                 return false;
             pStr++;
@@ -227,11 +225,11 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
         pStr++;
         for( i = 0; i < 16; i++ )
         {
-            if( rtl::isAsciiHexDigit( static_cast<unsigned char>(*pStr) ) )
-                if( rtl::isAsciiDigit( static_cast<unsigned char>(*pStr) ) )
+            if( rtl::isAsciiHexDigit( *pStr ) )
+                if( rtl::isAsciiDigit( *pStr ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
-                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(rtl::toAsciiUpperCase( static_cast<unsigned char>(*pStr) ) - 'A' + 10 );
+                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(rtl::toAsciiUpperCase( *pStr ) - 'A' + 10 );
             else
                 return false;
             pStr++;
