@@ -73,7 +73,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
     bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
-                    , m_pChartWindow
+                    , GetChartWindow()
                     , false //bIsNewObj
                     , pOutliner
                     , nullptr //pOutlinerView
@@ -98,7 +98,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
         //we invalidate the outliner region because the outliner has some
         //paint problems (some characters are painted twice a little bit shifted)
-        m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
+        GetChartWindow()->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
     }
 }
 
@@ -169,7 +169,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP ));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetChartWindow(), aSet, getFrame(), RID_SVXDLG_CHARMAP ));
     OSL_ENSURE( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {

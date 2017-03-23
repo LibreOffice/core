@@ -249,15 +249,16 @@ void ChartController::executeDispatch_ScaleText()
 void ChartController::executeDispatch_Paste()
 {
     SolarMutexGuard aGuard;
-    if( m_pChartWindow )
+    auto pChartWindow(GetChartWindow());
+    if( GetChartWindow() )
     {
         Graphic aGraphic;
         // paste location: center of window
         Point aPos;
-        aPos = m_pChartWindow->PixelToLogic( Rectangle( aPos, m_pChartWindow->GetSizePixel()).Center());
+        aPos = pChartWindow->PixelToLogic( Rectangle( aPos, pChartWindow->GetSizePixel()).Center());
 
         // handle different formats
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( m_pChartWindow ));
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pChartWindow ));
         if( aDataHelper.GetTransferable().is())
         {
             if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
@@ -359,11 +360,12 @@ void ChartController::impl_PasteGraphic(
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
         awt::Size aGraphicSize( 1000, 1000 );
+        auto pChartWindow(GetChartWindow());
         // first try size in 100th mm, then pixel size
         if( ! ( xGraphicProp->getPropertyValue( "Size100thMM") >>= aGraphicSize ) &&
-            ( ( xGraphicProp->getPropertyValue( "SizePixel") >>= aGraphicSize ) && m_pChartWindow ))
+            ( ( xGraphicProp->getPropertyValue( "SizePixel") >>= aGraphicSize ) && pChartWindow ))
         {
-            ::Size aVCLSize( m_pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
+            ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
             aGraphicSize.Width = aVCLSize.getWidth();
             aGraphicSize.Height = aVCLSize.getHeight();
         }
