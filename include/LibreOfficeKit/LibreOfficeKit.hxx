@@ -477,6 +477,9 @@ public:
      *
      * @param pUrl the URL of the document to load
      * @param pFilterOptions options for the import filter, e.g. SkipImages.
+     *        Another useful FilterOption is "Language=...".  It is consumed
+     *        by the documentLoad() itself, and when provided, LibreOfficeKit
+     *        switches the language accordingly first.
      * @since pFilterOptions argument added in LibreOffice 5.0
      */
     Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)

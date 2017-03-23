@@ -109,6 +109,7 @@ public:
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
     void testRunMacro();
+    void testExtractParameter();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testRunMacro);
+    CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -2110,6 +2112,34 @@ void DesktopLOKTest::testRunMacro()
 
     bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///I.Am.Not(There)").getStr());
     CPPUNIT_ASSERT(!bNonExistentMacro);
+}
+
+void DesktopLOKTest::testExtractParameter()
+{
+    OUString aOptions("Language=de-DE");
+    OUString aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("de-DE"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aOptions);
+
+    aOptions = "Language=en-US,Something";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something"), aOptions);
+
+    aOptions = "SomethingElse,Language=cs-CZ";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("cs-CZ"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("SomethingElse"), aOptions);
+
+    aOptions = "Something1,Language=hu-HU,Something2";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("hu-HU"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2"), aOptions);
+
+    aOptions = "Something1,Something2=blah,Something3";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

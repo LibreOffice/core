@@ -472,6 +472,50 @@ int lcl_getViewId(const std::string& payload)
 
 }  // end anonymous namespace
 
+// Could be anonymous in principle, but for the unit testing purposes, we
+// declare it in init.hxx.
+OUString desktop::extractParameter(OUString& rOptions, const OUString& rName)
+{
+    OUString aValue;
+
+    OUString aNameEquals(rName + "=");
+    OUString aCommaNameEquals("," + rName + "=");
+
+    int nIndex = -1;
+    if (rOptions.startsWith(aNameEquals))
+    {
+        size_t nLen = aNameEquals.getLength();
+        int nComma = rOptions.indexOf(",", nLen);
+        if (nComma >= 0)
+        {
+            aValue = rOptions.copy(nLen, nComma - nLen);
+            rOptions = rOptions.copy(nComma + 1);
+        }
+        else
+        {
+            aValue = rOptions.copy(nLen);
+            rOptions.clear();
+        }
+    }
+    else if ((nIndex = rOptions.indexOf(aCommaNameEquals)) >= 0)
+    {
+        size_t nLen = aCommaNameEquals.getLength();
+        int nComma = rOptions.indexOf(",", nIndex + nLen);
+        if (nComma >= 0)
+        {
+            aValue = rOptions.copy(nIndex + nLen, nComma - nIndex - nLen);
+            rOptions = rOptions.copy(0, nIndex) + rOptions.copy(nComma);
+        }
+        else
+        {
+            aValue = rOptions.copy(nIndex + nLen);
+            rOptions = rOptions.copy(0, nIndex);
+        }
+    }
+
+    return aValue;
+}
+
 extern "C"
 {
 
@@ -1160,10 +1204,24 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     try
     {
+        // 'Language=...' is an option that LOK consumes by itself, and does
+        // not pass it as a parameter to the filter
+        OUString aOptions = getUString(pOptions);
+        OUString aLanguage = extractParameter(aOptions, "Language");
+
+        if (!aLanguage.isEmpty())
+        {
+            // use with care - it sets it for the entire core, not just the
+            // document
+            SvtSysLocaleOptions aSysLocaleOptions;
+            aSysLocaleOptions.SetLocaleConfigString(aLanguage);
+            aSysLocaleOptions.SetUILocaleConfigString(aLanguage);
+        }
+
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
-                                                       uno::makeAny(OUString::createFromAscii(pOptions)),
+                                                       uno::makeAny(aOptions),
                                                        beans::PropertyState_DIRECT_VALUE);
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
