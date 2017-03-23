@@ -103,15 +103,15 @@ private:
     Link<LinkParamNone*,bool>   maStartVerifySignatureHdl;
 
 private:
-    DECL_LINK( SignatureCreationResultListener, XMLSignatureCreationResult&, void );
-    DECL_LINK( SignatureVerifyResultListener, XMLSignatureVerifyResult&, void );
-    DECL_LINK( StartVerifySignatureElement, LinkParamNone*, void );
-
     XMLSignatureHelper(const XMLSignatureHelper&) = delete;
 
 public:
     XMLSignatureHelper(const css::uno::Reference< css::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
+
+    void SignatureCreationResultListener(XMLSignatureCreationResult& rResult);
+    void SignatureVerifyResultListener(XMLSignatureVerifyResult& rResult);
+    void StartVerifySignatureElement();
 
     // Set the storage which should be used by the default UriBinding
     // Must be set before StatrtMission().

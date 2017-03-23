@@ -32,13 +32,9 @@
 
 using namespace com::sun::star;
 
-ImplXMLSignatureListener::ImplXMLSignatureListener(const Link<XMLSignatureCreationResult&,void>& rCreationResultListenerListener,
-                                                   const Link<XMLSignatureVerifyResult&,void>& rVerifyResultListenerListener,
-                                                   const Link<LinkParamNone*,void>& rStartSignatureElement)
+ImplXMLSignatureListener::ImplXMLSignatureListener(XMLSignatureHelper& rXMLSignatureHelper)
+    : m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
-    maCreationResultListenerListener = rCreationResultListenerListener;
-    maVerifyResultListenerListener = rVerifyResultListenerListener;
-    maStartVerifySignatureElementListener = rStartSignatureElement;
 }
 
 ImplXMLSignatureListener::~ImplXMLSignatureListener()
@@ -54,13 +50,13 @@ void ImplXMLSignatureListener::setNextHandler(
 void SAL_CALL ImplXMLSignatureListener::signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
 {
     XMLSignatureCreationResult aResult( securityId, nResult );
-    maCreationResultListenerListener.Call( aResult );
+    m_rXMLSignatureHelper.SignatureCreationResultListener(aResult);
 }
 
 void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
 {
     XMLSignatureVerifyResult aResult( securityId, nResult );
-    maVerifyResultListenerListener.Call( aResult );
+    m_rXMLSignatureHelper.SignatureVerifyResultListener(aResult);
 }
 
 // XDocumentHandler
@@ -84,7 +80,7 @@ void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, con
 {
     if ( aName == "Signature" )
     {
-        maStartVerifySignatureElementListener.Call( nullptr );
+        m_rXMLSignatureHelper.StartVerifySignatureElement();
     }
 
     if (m_xNextHandler.is())
