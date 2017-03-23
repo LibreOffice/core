@@ -506,13 +506,13 @@ void SAL_CALL ChartController::attachFrame(
 //XModeChangeListener
 void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
 {
+    SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
     //adjust controller to view status changes
 
     if( rEvent.NewMode == "dirty" )
     {
         //the view has become dirty, we should repaint it if we have a window
-        SolarMutexGuard aGuard;
         if( pChartWindow )
             pChartWindow->ForceInvalidate();
     }
@@ -520,7 +520,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     {
         //the view is about to become invalid so end all actions on it
         impl_invalidateAccessible();
-        SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
         if( m_pDrawViewWrapper )
@@ -542,7 +541,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                 if(m_pDrawModelWrapper)
                 {
                     {
-                        SolarMutexGuard aGuard;
                         if( m_pDrawViewWrapper )
                             m_pDrawViewWrapper->ReInit();
                     }
@@ -556,7 +554,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     impl_initializeAccessible();
 
                     {
-                        SolarMutexGuard aGuard;
                         if( pChartWindow )
                             pChartWindow->Invalidate();
                     }
@@ -1450,6 +1447,10 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
 
 VclPtr<ChartWindow> ChartController::GetChartWindow()
 {
+    // clients getting the naked VCL Window from UNO should always have the
+    // solar mutex (and keep it over the lifetime of this ptr), as VCL might
+    // might deinit otherwise
+    DBG_TESTSOLARMUTEX();
     if(!m_xViewWindow.is())
         return nullptr;
     return dynamic_cast<ChartWindow*>(m_xViewWindow.get());

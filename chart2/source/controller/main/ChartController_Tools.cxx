@@ -250,7 +250,7 @@ void ChartController::executeDispatch_Paste()
 {
     SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
-    if( GetChartWindow() )
+    if( pChartWindow )
     {
         Graphic aGraphic;
         // paste location: center of window
@@ -330,6 +330,7 @@ void ChartController::impl_PasteGraphic(
     uno::Reference< graphic::XGraphic > & xGraphic,
     const ::Point & /* aPosition */ )
 {
+    DBG_TESTSOLARMUTEX();
     // note: the XPropertySet of the model is the old API. Also the property
     // "AdditionalShapes" that is used there.
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
