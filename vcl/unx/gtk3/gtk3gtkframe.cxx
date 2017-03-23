@@ -1447,7 +1447,23 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 m_pParent->addGrabLevel();
             }
 
+#if defined(GDK_WINDOWING_WAYLAND)
+            //rhbz#1334915, gnome#779143, tdf#100158
+            //gtk under wayland lacks a way to change the app_id
+            //of a window, so brute force everything as a
+            //startcenter when initially shown to at least get
+            //the default LibreOffice icon and not the broken
+            //app icon
+            if (GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+            {
+                OString sOrigName(g_get_prgname());
+                g_set_prgname("libreoffice-startcenter");
+                gtk_widget_show(m_pWindow);
+                g_set_prgname(sOrigName.getStr());
+            }
+#else
             gtk_widget_show(m_pWindow);
+#endif
 
             if( isFloatGrabWindow() )
             {
