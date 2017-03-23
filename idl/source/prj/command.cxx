@@ -25,6 +25,7 @@
 #include <ctype.h>
 
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 
 #include <command.hxx>
 #include <globals.hxx>
@@ -153,10 +154,14 @@ static bool ResponseFile( StringList * pList, int argc, char ** argv )
                 sal_uInt16 nPos = 1;
                 while( n != nPos )
                 {
-                    while( aStr[n] && isspace( aStr[n] ) )
+                    while( aStr[n]
+                           && rtl::isAsciiWhiteSpace(
+                               static_cast<unsigned char>(aStr[n]) ) )
                         n++;
                     nPos = n;
-                    while( aStr[n] && !isspace( aStr[n] ) )
+                    while( aStr[n]
+                           && !rtl::isAsciiWhiteSpace(
+                               static_cast<unsigned char>(aStr[n]) ) )
                         n++;
                     if( n != nPos )
                         pList->push_back( OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) );
