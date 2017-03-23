@@ -19,6 +19,7 @@
 
 #include "algorithm"
 #include "fileextensions.hxx"
+#include <rtl/character.hxx>
 #include <sal/macros.h>
 
 
@@ -76,17 +77,13 @@ std::string get_file_name_extension(const std::string& file_name)
 /** Return the type of a file
 */
 
-char easytolower( char in )
-{
-    if( in<='Z' && in>='A' )
-        return in-('Z'-'z');
-    return in;
-}
-
 File_Type_t get_file_type(const std::string& file_name)
 {
     std::string fext = get_file_name_extension(file_name);
-    std::transform(fext.begin(), fext.end(), fext.begin(), easytolower);
+    std::transform(
+        fext.begin(), fext.end(), fext.begin(),
+        [](char c) {
+            return rtl::toAsciiLowerCase(static_cast<unsigned char>(c)); });
 
     if (std::string::npos != WRITER_FILE_EXTENSIONS.find(fext))
         return WRITER;
