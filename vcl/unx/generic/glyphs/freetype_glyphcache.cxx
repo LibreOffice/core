@@ -466,14 +466,14 @@ namespace
     }
 }
 
-const std::shared_ptr<FontConfigFontOptions>& FreetypeFont::GetFontOptions() const
+const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
 {
     if (!mxFontOptions)
     {
         mxFontOptions.reset(GetFCFontOptions(mpFontInfo->GetFontAttributes(), maFontSelData.mnHeight));
         mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), NeedsArtificialBold());
     }
-    return mxFontOptions;
+    return mxFontOptions.get();
 }
 
 const OString& FreetypeFont::GetFontFileName() const

@@ -229,7 +229,7 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     FT_Face aFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
     aId.maFace = aFace;
-    aId.mpOptions = rFont.GetFontOptions().get();
+    aId.mpOptions = rFont.GetFontOptions();
     aId.mbEmbolden = rFont.NeedsArtificialBold();
 
     cairo_matrix_t m;
