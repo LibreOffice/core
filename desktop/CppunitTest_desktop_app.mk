@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     salhelper \
     sb \
     sfx \
+    sofficeapp \
     svl \
     svx \
     svxcore \
