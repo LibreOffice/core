@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c8ffca32",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-23T00:33:47Z",
+      "side": 1,
+      "message": "Please use same indentation as other cases.",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e8fc8e40",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-23T00:33:47Z",
+      "side": 1,
+      "message": "Why is this needed? (I see this in other cases too, but I don\u0027t think it\u0027s needed there either.)",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
