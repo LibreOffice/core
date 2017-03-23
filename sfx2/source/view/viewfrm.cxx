@@ -563,7 +563,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // collect the views of the document
                 // TODO: when UNO ViewFactories are available for SFX-based documents, the below code should
                 // be UNOized, too
-                typedef ::std::pair< Reference< XFrame >, sal_uInt16 >  ViewDescriptor;
+                typedef ::std::pair< Reference< XFrame >, SfxInterfaceId >  ViewDescriptor;
                 ::std::list< ViewDescriptor > aViewFrames;
                 SfxViewFrame *pView = GetFirst( xOldObj );
                 while ( pView )
@@ -1325,7 +1325,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     m_pImpl->bObjLocked = false;
     m_pImpl->pFocusWin = nullptr;
     m_pImpl->pActiveChild = nullptr;
-    m_pImpl->nCurViewId = 0;
+    m_pImpl->nCurViewId = SfxInterfaceId(0);
     m_pImpl->bReloading = false;
     m_pImpl->bIsDowning = false;
     m_pImpl->bModal = false;
@@ -1708,7 +1708,7 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 }
 
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
-                                                   const sal_uInt16 i_nViewId, const bool i_bHidden )
+                                                   const SfxInterfaceId i_nViewId, const bool i_bHidden )
 {
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
@@ -1778,7 +1778,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 }
 
 SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
-                                           const Sequence< PropertyValue >& i_rLoadArgs, const sal_uInt16 i_nViewId,
+                                           const Sequence< PropertyValue >& i_rLoadArgs, const SfxInterfaceId i_nViewId,
                                            const bool i_bHidden )
 {
     Reference< XModel > xDocument( i_rDoc.GetModel(), UNO_SET_THROW );
@@ -1786,7 +1786,7 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     ::comphelper::NamedValueCollection aTransformLoadArgs( i_rLoadArgs.getLength() ? i_rLoadArgs : xDocument->getArgs() );
     aTransformLoadArgs.put( "Model", xDocument );
     if ( i_nViewId )
-        aTransformLoadArgs.put( "ViewId", sal_Int16( i_nViewId ) );
+        aTransformLoadArgs.put( "ViewId", sal_uInt16( i_nViewId ) );
     if ( i_bHidden )
         aTransformLoadArgs.put( "Hidden", i_bHidden );
     else
@@ -1806,22 +1806,22 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     return pViewShell;
 }
 
-SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, SfxInterfaceId i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, true );
 }
 
-SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, SfxInterfaceId i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, false );
 }
 
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rTargetFrame )
 {
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, 0, false );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, SfxInterfaceId(0), false );
 }
 
-SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, SfxInterfaceId i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : nullptr, i_nViewId, false );
 }
@@ -1834,7 +1834,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
     return LoadViewIntoFrame_Impl_NoThrow(
         i_rDoc,
         pFrameItem ? pFrameItem->GetFrame() : nullptr,
-        0,
+        SfxInterfaceId(0),
         pHiddenItem && pHiddenItem->GetValue()
     );
 }
@@ -1871,7 +1871,7 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
     return pViewFrame;
 }
 
-void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
+void SfxViewFrame::SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId )
 {
     SfxViewShell* pCurrentShell = GetViewShell();
     ENSURE_OR_RETURN_VOID( pCurrentShell != nullptr, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
@@ -1990,7 +1990,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
 
         // ID of the new view
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
-        const sal_uInt16 nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
+        const SfxInterfaceId nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : SfxInterfaceId(nViewIdOrNo);
 
         // save the view data of the old view, so it can be restored later on (when needed)
         SaveCurrentViewData_Impl( nViewId );
@@ -2025,12 +2025,12 @@ bool SfxViewFrame::SwitchToViewShell_Impl
     return true;
 }
 
-void SfxViewFrame::SetCurViewId_Impl( const sal_uInt16 i_nID )
+void SfxViewFrame::SetCurViewId_Impl( const SfxInterfaceId i_nID )
 {
     m_pImpl->nCurViewId = i_nID;
 }
 
-sal_uInt16 SfxViewFrame::GetCurViewId() const
+SfxInterfaceId SfxViewFrame::GetCurViewId() const
 {
     return m_pImpl->nCurViewId;
 }
@@ -2104,7 +2104,7 @@ void SfxViewFrame::ExecView_Impl
 
             // the view ID (optional arg. TODO: this is currently not supported in the slot definition ...)
             const SfxUInt16Item* pViewIdItem = rReq.GetArg<SfxUInt16Item>(SID_VIEW_ID);
-            const sal_uInt16 nViewId = pViewIdItem ? pViewIdItem->GetValue() : GetCurViewId();
+            const SfxInterfaceId nViewId = pViewIdItem ? SfxInterfaceId(pViewIdItem->GetValue()) : GetCurViewId();
 
             Reference < XFrame > xFrame;
             // the frame (optional arg. TODO: this is currently not supported in the slot definition ...)
@@ -2216,7 +2216,7 @@ void SfxViewFrame::StateView_Impl
             {
                 case SID_VIEWSHELL:
                 {
-                    rSet.Put( SfxUInt16Item( nWhich, m_pImpl->nCurViewId ) );
+                    rSet.Put( SfxUInt16Item( nWhich, sal_uInt16(m_pImpl->nCurViewId )) );
                     break;
                 }
 

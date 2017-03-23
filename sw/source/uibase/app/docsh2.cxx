@@ -746,7 +746,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Create new document
-                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, SFX_INTERFACE_NONE );
                     SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
 
                     // Set document's title

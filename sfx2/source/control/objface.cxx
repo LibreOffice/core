@@ -481,7 +481,7 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
 
     sal_uInt32 nRet = pImplData->aChildWindows[nNo]->nResId;
     if ( pImplData->aChildWindows[nNo]->bContext )
-        nRet += sal_uInt32( nClassId ) << 16;
+        nRet += sal_uInt16( nClassId ) << 16;
     return nRet;
 }
 

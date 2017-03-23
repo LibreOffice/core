@@ -27,6 +27,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/strong_int.hxx>
 
 class ResMgr;
 namespace vcl { class Window; }
@@ -64,35 +65,21 @@ namespace svl
     Id for <SfxInterface>s, gives a quasi-static access to the interface
     through an array to <SfxApplication>.
 */
-enum SfxInterfaceId
-{
-    SFX_INTERFACE_NONE,
-    SFX_INTERFACE_SFXAPP,
-    SFX_INTERFACE_SFXDOCSH,
-    SFX_INTERFACE_SFXVIEWSH,
-    SFX_INTERFACE_SFXVIEWFRM,
-    SFX_INTERFACE_SFXMODULE,
-    SFX_INTERFACE_OFA_START         =  100,
-    SFX_INTERFACE_OFA_END           =  100,
-    SFX_INTERFACE_SC_START          =  150,
-    SFX_INTERFACE_SC_END            =  199,
-    SFX_INTERFACE_SD_START          =  200,
-    SFX_INTERFACE_SD_END            =  249,
-    SFX_INTERFACE_SW_START          =  250,
-    SFX_INTERFACE_SW_END            =  299,
-    SFX_INTERFACE_SIM_START         =  300,
-    SFX_INTERFACE_SIM_END           =  319,
-    SFX_INTERFACE_SCH_START         =  320,
-    SFX_INTERFACE_SCH_END           =  339,
-    SFX_INTERFACE_SMA_START         =  340,
-    SFX_INTERFACE_SMA_END           =  359,
-    SFX_INTERFACE_SBA_START         =  360,
-    SFX_INTERFACE_SBA_END           =  399,
-    SFX_INTERFACE_IDE_START         =  400,
-    SFX_INTERFACE_IDE_END           =  409,
-    //-if one is still needed
-    SFX_INTERFACE_APP               =  SFX_INTERFACE_SW_START,
-};
+struct SfxInterfaceIdTag {};
+typedef o3tl::strong_int<sal_uInt16, SfxInterfaceIdTag> SfxInterfaceId;
+
+constexpr auto SFX_INTERFACE_NONE         = SfxInterfaceId(0);
+constexpr auto SFX_INTERFACE_SFXAPP       = SfxInterfaceId(1);
+constexpr auto SFX_INTERFACE_SFXDOCSH     = SfxInterfaceId(2);
+constexpr auto SFX_INTERFACE_SFXVIEWSH    = SfxInterfaceId(3);
+constexpr auto SFX_INTERFACE_SFXVIEWFRM   = SfxInterfaceId(4);
+constexpr auto SFX_INTERFACE_SFXMODULE    = SfxInterfaceId(5);
+constexpr auto SFX_INTERFACE_SC_START     = SfxInterfaceId(150);
+constexpr auto SFX_INTERFACE_SD_START     = SfxInterfaceId(200);
+constexpr auto SFX_INTERFACE_SW_START     = SfxInterfaceId(250);
+constexpr auto SFX_INTERFACE_SMA_START    = SfxInterfaceId(340);
+constexpr auto SFX_INTERFACE_IDE_START    = SfxInterfaceId(400);
+constexpr auto SFX_INTERFACE_IDE_END      = SfxInterfaceId(409);
 
 enum class SfxShellFeature
 {
@@ -547,16 +534,16 @@ inline void SfxShell::SetPool
     pPool = pNewPool;
 }
 
-#define SFX_DECL_INTERFACE(nId)                                             \
-            static SfxInterface*                pInterface;                 \
-            static SfxInterface*                GetStaticInterface();       \
-            static SfxInterfaceId               GetInterfaceId() {return SfxInterfaceId(nId);} \
-            static void                         RegisterInterface(SfxModule* pMod=nullptr); \
-            virtual SfxInterface*       GetInterface() const override;
+#define SFX_DECL_INTERFACE(nId)                                  \
+            static SfxInterface*     pInterface;                 \
+            static SfxInterface*     GetStaticInterface();       \
+            static SfxInterfaceId    GetInterfaceId() {return nId;} \
+            static void              RegisterInterface(SfxModule* pMod=nullptr); \
+            virtual SfxInterface*    GetInterface() const override;
 
 #define SFX_TMPL_INTERFACE(Class,SuperClass,Abstract)                       \
                                                                             \
-    SfxInterface* Class::pInterface = nullptr;                                    \
+    SfxInterface* Class::pInterface = nullptr;                              \
     SfxInterface* Class::GetStaticInterface()                               \
     {                                                                       \
         if ( !pInterface )                                                  \

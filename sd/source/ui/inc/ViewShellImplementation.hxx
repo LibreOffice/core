@@ -134,7 +134,7 @@ public:
         configuration that has in the center pane a view shell of the same
         type as mrViewShell.
     */
-    sal_uInt16 GetViewId();
+    SfxInterfaceId GetViewId();
 
     /** Return a pointer to the image map dialog that is displayed in some
         child window.

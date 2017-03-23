@@ -694,7 +694,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
             SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
             xTempDocShell->DoInitNew();
-            SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+            SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
@@ -1101,7 +1101,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
         SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
         xTempDocShell->DoInitNew();
-        SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
+        SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;

@@ -38,15 +38,15 @@ struct SfxViewFrame_Impl
     SfxViewFrame*       pActiveChild;
     VclPtr<vcl::Window> pFocusWin;
     sal_uInt16          nDocViewNo;
-    sal_uInt16          nCurViewId;
-    bool            bResizeInToOut:1;
-    bool            bObjLocked:1;
-    bool            bReloading:1;
-    bool            bIsDowning:1;
-    bool            bModal:1;
-    bool            bEnabled:1;
-    bool            bWindowWasEnabled:1;
-    bool            bActive;
+    SfxInterfaceId      nCurViewId;
+    bool                bResizeInToOut:1;
+    bool                bObjLocked:1;
+    bool                bReloading:1;
+    bool                bIsDowning:1;
+    bool                bModal:1;
+    bool                bEnabled:1;
+    bool                bWindowWasEnabled:1;
+    bool                bActive;
     OUString            aFactoryName;
 
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
