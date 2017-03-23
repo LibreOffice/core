@@ -54,6 +54,9 @@ public:
     /// AutoCorrect tests
     void testAutocorrect();
 
+    /// Test Copy/Paste with hyperlinks in text using Legacy Format
+    void testHyperlinkCopyPaste();
+
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
 
@@ -75,6 +78,7 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
+    CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
@@ -381,6 +385,133 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
+}
+
+void Test::testHyperlinkCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // New instance must be empty - no initial text
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Get corresponding Field Item for inserting URLs in text
+    // URL 1
+    OUString aURL1 = "mailto:///user@example.com";
+    OUString aRepres1 = "user@example.com";
+    SvxURLField aURLField1( aURL1, aRepres1, SVXURLFORMAT_REPR );
+    SvxFieldItem aField1( aURLField1, EE_FEATURE_FIELD );
+    // URL 2
+    OUString aURL2 = "mailto:///example@domain.com";
+    OUString aRepres2 = "example@domain.com";
+    SvxURLField aURLField2( aURL2, aRepres2, SVXURLFORMAT_REPR );
+    SvxFieldItem aField2( aURLField2, EE_FEATURE_FIELD );
+
+    // Insert initial text
+    OUString aParaText = "sampletextfortestingfeaturefields";
+    // Positions Ref      .............*13....*20..........
+    sal_Int32 aTextLen = aParaText.getLength();
+    aEditEngine.SetText( aParaText );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert URL 1
+    ContentNode *pNode = rDoc.GetObject(0);
+    EditSelection aSel1( EditPaM(pNode, 13), EditPaM(pNode, 13) );
+    aEditEngine.InsertField( aSel1, aField1 );
+
+    // Assert Field Count
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(1), aEditEngine.GetFieldCount(0) );
+
+    // Insert URL 2
+    EditSelection aSel2( EditPaM(pNode, 20 + 1), EditPaM(pNode, 20 + 1) );
+    aEditEngine.InsertField( aSel2, aField2 );
+
+    // Assert Field Count
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(2), aEditEngine.GetFieldCount(0) );
+
+    // Update Fields
+    aEditEngine.UpdateFields();
+
+    // Assert URL Fields and text before copy
+    // Check text
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefields"), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Check Field 1
+    EFieldInfo aURLFieldInfo1 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(0) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(13), aURLFieldInfo1.aPosition.nIndex );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo1.pFieldItem->Which() );
+    SvxURLField* pURLField1 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aURLFieldInfo1.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT_EQUAL( aURL1, pURLField1->GetURL() );
+    CPPUNIT_ASSERT_EQUAL( aRepres1, pURLField1->GetRepresentation() );
+
+    // Check Field 2
+    EFieldInfo aURLFieldInfo2 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(1) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(21), aURLFieldInfo2.aPosition.nIndex );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aURLFieldInfo2.pFieldItem->Which() );
+    SvxURLField* pURLField2 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aURLFieldInfo2.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT_EQUAL( aURL2, pURLField2->GetURL() );
+    CPPUNIT_ASSERT_EQUAL( aRepres2, pURLField2->GetRepresentation() );
+
+    // Copy text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,10,0,21) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert Changes ACP, ACP: after Copy/Paste
+
+    // Check the fields count
+    // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
+    // For now we expect the following
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(2), aEditEngine.GetFieldCount(0) );
+    // After having a fix - we expect the following as a replacement of above
+    // CPPUNIT_ASSERT_EQUAL( sal_uInt16(3), aEditEngine.GetFieldCount(0) );
+
+    // Check the updated text length
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 + 2 + 1), rDoc.GetTextLen() );
+
+    // Check the updated text contents
+    // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
+    // For now we expect the following
+    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefieldsfor\001testing"), rDoc.GetParaAsString(sal_Int32(0)) );
+    // After having a fix - we expect the following as a replacement of above
+    // CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefieldsfor testing"), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Check the Fields and their values
+
+    // Field 1
+    EFieldInfo aACPURLFieldInfo1 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(0) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(13), aACPURLFieldInfo1.aPosition.nIndex );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo1.pFieldItem->Which() );
+    SvxURLField* pACPURLField1 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo1.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField1->GetURL() );
+    CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField1->GetRepresentation() );
+
+    // Field 2
+    EFieldInfo aACPURLFieldInfo2 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(1) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(21), aACPURLFieldInfo2.aPosition.nIndex );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo2.pFieldItem->Which() );
+    SvxURLField* pACPURLField2 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo2.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT_EQUAL( aURL2, pACPURLField2->GetURL() );
+    CPPUNIT_ASSERT_EQUAL( aRepres2, pACPURLField2->GetRepresentation() )    ;
+
+    // Field 3
+    // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
+    // After having a fix we expect the following
+    //EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(2) );
+    //CPPUNIT_ASSERT_EQUAL( sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex );
+    //CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which() );
+    //SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo3.pFieldItem->GetField()) );
+    //CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField3->GetURL() );
+    //CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField3->GetRepresentation() );
 }
 
 void Test::testCopyPaste()
