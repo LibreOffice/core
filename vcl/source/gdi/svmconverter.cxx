@@ -497,6 +497,17 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConver
     }
 }
 
+namespace
+{
+    sal_Int32 SkipActions(sal_Int32 i, sal_Int32 nFollowingActionCount, sal_Int32 nActions)
+    {
+        sal_Int32 remainingActions = nActions - i;
+        if (nFollowingActionCount < 0)
+            nFollowingActionCount = remainingActions;
+        return std::min(remainingActions, nFollowingActionCount);
+    }
+}
+
 #define LF_FACESIZE 32
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
@@ -1296,15 +1307,15 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_TRANSPARENT_COMMENT:
             {
                 tools::PolyPolygon aPolyPoly;
-                sal_Int32       nFollowingActionCount;
-                sal_Int16       nTrans;
+                sal_Int32 nFollowingActionCount(0);
+                sal_Int16 nTrans(0);
 
                 ReadPolyPolygon( rIStm, aPolyPoly );
                 rIStm.ReadInt16( nTrans ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaTransparentAction( aPolyPoly, nTrans ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1314,7 +1325,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 Point       aPos;
                 Size        aSize;
                 Gradient    aGradient;
-                sal_Int32       nFollowingActionCount;
+                sal_Int32   nFollowingActionCount(0);
 
                 ReadGDIMetaFile( rIStm, aMtf );
                 ReadPair( rIStm, aPos );
@@ -1324,7 +1335,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, aGradient ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1332,7 +1343,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 tools::PolyPolygon aPolyPoly;
                 Hatch       aHatch;
-                sal_Int32       nFollowingActionCount;
+                sal_Int32   nFollowingActionCount(0);
 
                 ReadPolyPolygon( rIStm, aPolyPoly );
                 ReadHatch( rIStm, aHatch );
@@ -1340,7 +1351,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaHatchAction( aPolyPoly, aHatch ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1348,14 +1359,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 Point   aRefPoint;
                 bool    bSet;
-                sal_Int32   nFollowingActionCount;
+                sal_Int32 nFollowingActionCount(0);
 
                 ReadPair( rIStm, aRefPoint );
                 rIStm.ReadCharAsBool( bSet ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaRefPointAction( aRefPoint, bSet ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
 
                 // #106172# Track font relevant data in shadow VDev
                 if( bSet )
@@ -1369,14 +1380,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 Color   aColor;
                 bool    bSet;
-                sal_Int32   nFollowingActionCount;
+                sal_Int32 nFollowingActionCount(0);
 
                 ReadColor( rIStm, aColor );
                 rIStm.ReadCharAsBool( bSet ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaTextLineColorAction( aColor, bSet ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1396,7 +1407,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                                         (FontLineStyle) nUnderline,
                                                         LINESTYLE_NONE ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1404,7 +1415,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 tools::PolyPolygon aPolyPoly;
                 Gradient    aGradient;
-                sal_Int32       nFollowingActionCount;
+                sal_Int32 nFollowingActionCount(0);
 
                 ReadPolyPolygon( rIStm, aPolyPoly );
                 ReadGradient( rIStm, aGradient );
@@ -1412,7 +1423,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction( new MetaGradientExAction( aPolyPoly, aGradient ) );
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
@@ -1442,7 +1453,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ImplSkipActions( rIStm, nFollowingActionCount );
                 rMtf.AddAction(new MetaCommentAction(aComment, nValue, aData.data(), nDataSize));
 
-                i += nFollowingActionCount;
+                i = SkipActions(i, nFollowingActionCount, nActions);
             }
             break;
 
