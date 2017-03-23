@@ -41,14 +41,21 @@ using namespace std;
 # define ENDL  "\n"
 #endif
 
-#define WS  " \t\r\n\v\f"
-
 #define EQ_CASE 0x01    // case sensitive cmd
 #define EQ_ENV  0x02    // equiv to latex environment
 #define EQ_ATOP 0x04    // must revert order
 
-#define IS_WS(ch)   (strchr(WS, ch))
-#define IS_BINARY(ch)   (strchr("+-<=>", ch))
+static bool IS_WS(std::istream::int_type ch) {
+    return ch != std::istream::traits_type::eof()
+        && rtl::isAsciiWhiteSpace(
+            static_cast<unsigned char>(
+                std::istream::traits_type::to_char_type(ch)));
+}
+
+static bool IS_BINARY(std::istream::int_type ch) {
+    return ch != std::istream::traits_type::eof()
+        && strchr("+-<=>", std::istream::traits_type::to_char_type(ch));
+}
 
 #ifdef _WIN32
 #define STRICMP stricmp
@@ -479,7 +486,7 @@ void push_token(MzString &white, MzString &token, istream *strm)
  * alphabet string, sigle character */
 static int next_token(MzString &white, MzString &token, istream *strm)
 {
-  int  ch = 0;
+  std::istream::int_type ch = 0;
 
   if( stk->state(strm) ) {
     white = stk->white;
@@ -500,7 +507,9 @@ static int next_token(MzString &white, MzString &token, istream *strm)
     while( IS_WS(ch = strm->get()) );
   }
 
-  if( ch == '\\' || ch & 0x80 || isalpha(ch) ) {
+  if( ch == '\\' || ch & 0x80
+      || (ch != std::istream::traits_type::eof() && rtl::isAsciiAlpha(ch)) )
+  {
     if( ch == '\\' ) {
       token << (char) ch;
       ch = strm->get();
@@ -509,8 +518,8 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       token << (char) ch;
       ch = strm->get();
     } while( ch != std::istream::traits_type::eof()
-             && (ch & 0x80 || isalpha(ch)) ) ;
-    strm->putback(sal::static_int_cast<char>(ch));
+             && (ch & 0x80 || rtl::isAsciiAlpha(ch)) ) ;
+    strm->putback(static_cast<char>(ch));
     /* special treatment of sub, sub, over, atop
        The reason for this is that affect next_state().
      */
@@ -531,12 +540,14 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   else if( IS_BINARY(ch) ) {
     do token << (char) ch;
     while( IS_BINARY(ch = strm->get()) );
-    strm->putback(sal::static_int_cast<char>(ch));
+    strm->putback(static_cast<char>(ch));
   }
-  else if( isdigit(ch) ) {
-    do token << (char) ch;
-    while( isdigit(ch = strm->get()) );
-    strm->putback(sal::static_int_cast<char>(ch));
+  else if( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) ) {
+    do {
+        token << (char) ch;
+        ch = strm->get();
+    } while( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) );
+    strm->putback(static_cast<char>(ch));
   }
   else
     token << (char) ch;
@@ -544,20 +555,20 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   return token.length();
 }
 
-static int read_white_space(MzString& outs, istream *strm)
+static std::istream::int_type read_white_space(MzString& outs, istream *strm)
 {
-  int   result;
+  std::istream::int_type result;
 
   if( stk->state(strm) ) {
     outs << stk->white;
     stk->white = nullptr;
-    result = stk->token[0];
+    result = std::istream::traits_type::to_int_type(stk->token[0]);
   }
   else {
-    int ch;
+    std::istream::int_type ch;
     while( IS_WS(ch = strm->get()) )
       outs << (char )ch;
-    strm->putback(sal::static_int_cast<char>(ch));
+    strm->putback(static_cast<char>(ch));
     result = ch;
   }
   return result;
@@ -619,7 +630,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
       if( nullptr != (eq = lookup_eqn(keyword)) ) {
         int nargs = eq->nargs;
         while( nargs-- ) {
-          const int ch = read_white_space(state, strm);
+          const std::istream::int_type ch = read_white_space(state, strm);
           if( ch != '{' ) state << '{';
           eq_word(state, strm, script_status);
           if( ch != '{' ) state << '}';
@@ -678,7 +689,8 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
 {
   MzString  white, token;
   char      key[256];
-  int       ch, result;
+  std::istream::int_type ch;
+  int       result;
 
   while( 0 != (result = next_token(white, token, strm)) ) {
     if( sentinel && (result == 1) && strchr(sentinel, token[0]) )
