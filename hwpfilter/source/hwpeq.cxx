@@ -491,7 +491,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
 
   token = nullptr;
   white = nullptr;
-  if( !strm->good() || (ch = strm->get()) == EOF )
+  if( !strm->good() || (ch = strm->get()) == std::istream::traits_type::eof() )
     return 0;
 
   // read preceding ws
@@ -508,7 +508,8 @@ static int next_token(MzString &white, MzString &token, istream *strm)
     do {
       token << (char) ch;
       ch = strm->get();
-    } while( ch != EOF && (ch & 0x80 || isalpha(ch)) ) ;
+    } while( ch != std::istream::traits_type::eof()
+             && (ch & 0x80 || isalpha(ch)) ) ;
     strm->putback(sal::static_int_cast<char>(ch));
     /* special treatment of sub, sub, over, atop
        The reason for this is that affect next_state().
@@ -722,7 +723,8 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
           sstr.replace(pos, ' ');
       }
       sstr << token;
-      while( (ch = strm->get()) != EOF && IS_WS(ch) )
+      while( (ch = strm->get()) != std::istream::traits_type::eof()
+             && IS_WS(ch) )
         sstr << (char)ch;
       if( ch != '{' )
         sstr << "{}";
