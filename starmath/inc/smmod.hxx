@@ -93,7 +93,7 @@ class SmModule : public SfxModule, public utl::ConfigurationListener
     static void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
 public:
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0)
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + SfxInterfaceId(0))
 
 private:
     /// SfxInterface initializer.

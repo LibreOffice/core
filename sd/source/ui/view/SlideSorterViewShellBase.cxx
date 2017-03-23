@@ -42,7 +42,7 @@ SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     return pBase;
 }
 
-void SlideSorterViewShellBase::RegisterFactory( sal_uInt16 nPrio )
+void SlideSorterViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
     pFactory = new SfxViewFactory(&CreateInstance,nPrio,"SlideSorter");
     InitFactory();

@@ -117,8 +117,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , pViewFrame( nullptr )
     , pSlotPool( nullptr )
     , pAppDispat( nullptr )
-    , pInterfaces( nullptr )
-    , nInterfaces( 0 )
     , bDowning( true )
     , bInQuit( false )
 
