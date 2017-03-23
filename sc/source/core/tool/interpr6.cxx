@@ -613,6 +613,9 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
+                if (nGlobalError == FormulaError::NoRef)
+                    return 0.0;
+
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
                      ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
@@ -676,6 +679,9 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             case svRefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
+                if (nGlobalError == FormulaError::NoRef)
+                    return 0.0;
+
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
                      ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
