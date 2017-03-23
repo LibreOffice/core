@@ -106,6 +106,7 @@ public:
     void testPaintPartTile();
     void testWriterCommentInsertCursor();
     void testGetFontSubset();
+    void testExtractParameter();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -140,6 +141,7 @@ public:
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testWriterCommentInsertCursor);
     CPPUNIT_TEST(testGetFontSubset);
+    CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1443,6 +1445,34 @@ void DesktopLOKTest::testGetFontSubset()
     CPPUNIT_ASSERT( aValues.size() > 0 );
     free(pJSON);
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testExtractParameter()
+{
+    OUString aOptions("Language=de-DE");
+    OUString aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("de-DE"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aOptions);
+
+    aOptions = "Language=en-US,Something";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something"), aOptions);
+
+    aOptions = "SomethingElse,Language=cs-CZ";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("cs-CZ"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("SomethingElse"), aOptions);
+
+    aOptions = "Something1,Language=hu-HU,Something2";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString("hu-HU"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2"), aOptions);
+
+    aOptions = "Something1,Something2=blah,Something3";
+    aValue = extractParameter(aOptions, "Language");
+    CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
