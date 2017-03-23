@@ -188,10 +188,8 @@ cmd/lc_hscrollbar.png cmd/lc_insertformhscroll.png
 cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
 
 # Annotations
-cmd/sc_showannotations.png cmd/sc_addwatch.png
-cmd/lc_showannotations.png cmd/lc_addwatch.png
-cmd/sc_insertannotation.png cmd/sc_addwatch.png
-cmd/lc_insertannotation.png cmd/lc_addwatch.png
+cmd/sc_insertannotation.png cmd/sc_showannotations.png
+cmd/lc_insertannotation.png cmd/lc_showannotations.png
 
 # Template Menu
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
@@ -1101,7 +1099,7 @@ sd/res/sf01.png cmd/sc_showfmexplorer.png
 sd/res/sf02.png cmd/sc_dia.png
 
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
-sd/res/comments_indicator.png cmd/sc_addwatch.png
+sd/res/comments_indicator.png cmd/sc_showannotations.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
 sd/res/group.png cmd/sc_group.png
