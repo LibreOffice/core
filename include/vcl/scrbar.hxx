@@ -46,6 +46,7 @@ private:
     Rectangle       maPage1Rect;
     Rectangle       maPage2Rect;
     Rectangle       maThumbRect;
+    Rectangle       maTrackRect;
     ImplScrollBarData* mpData;
     long            mnStartPos;
     long            mnMouseOff;
