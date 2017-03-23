@@ -798,14 +798,18 @@ void PrinterController::resetPrinterOptions( bool i_bFileOutput )
 bool PrinterController::setupPrinter( vcl::Window* i_pParent )
 {
     bool bRet = false;
-    if( mpImplData->mxPrinter.get() )
+
+    // Important to hold printer alive while doing setup etc.
+    VclPtr< Printer > xPrinter = mpImplData->mxPrinter;
+
+    if( xPrinter.get() )
     {
-        mpImplData->mxPrinter->Push();
-        mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
+        xPrinter->Push();
+        xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
 
         // get current data
-        Size aPaperSize(mpImplData->mxPrinter->GetPaperSize());
-        sal_uInt16 nPaperBin = mpImplData->mxPrinter->GetPaperBin();
+        Size aPaperSize(xPrinter->GetPaperSize());
+        sal_uInt16 nPaperBin = xPrinter->GetPaperBin();
 
         // reset paper size back to last configured size, not
         // whatever happens to be the current page
@@ -817,8 +821,12 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         }
 
         // call driver setup
-        bRet = mpImplData->mxPrinter->Setup( i_pParent, getPapersizeFromSetup() );
-        Size aNewPaperSize(mpImplData->mxPrinter->GetPaperSize());
+        bRet = xPrinter->Setup( i_pParent, getPapersizeFromSetup() );
+        SAL_WARN_IF(xPrinter != mpImplData->mxPrinter, "vcl.gdi",
+                    "Printer changed underneath us during setup");
+        xPrinter = mpImplData->mxPrinter;
+
+        Size aNewPaperSize(xPrinter->GetPaperSize());
         if (bRet)
         {
             bool bInvalidateCache = false;
@@ -832,7 +840,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
             }
 
             // was bin overridden ? if so we need to take action
-            sal_uInt16 nNewPaperBin = mpImplData->mxPrinter->GetPaperBin();
+            sal_uInt16 nNewPaperBin = xPrinter->GetPaperBin();
             if (nNewPaperBin != nPaperBin)
             {
                 mpImplData->mnFixedPaperBin = nNewPaperBin;
@@ -848,9 +856,9 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         {
             //restore to whatever it was before we entered this method
             if (aPaperSize != aNewPaperSize)
-                mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
+                xPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
         }
-        mpImplData->mxPrinter->Pop();
+        xPrinter->Pop();
     }
     return bRet;
 }
