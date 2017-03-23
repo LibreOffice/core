@@ -171,21 +171,7 @@ bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
         return false;
     }
 
-    Fraction aX(nXNum, nXDenom);
-    if (!aX.IsValid() || rtl::math::round(aX, 6) == 0.0)
-    {
-        SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode fraction");
-        return false;
-    }
-
-    Fraction aY(nYNum, nYDenom);
-    if (!aY.IsValid() || rtl::math::round(aY, 6) == 0.0)
-    {
-        SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode fraction");
-        return false;
-    }
-
-    rMapMode = MapMode((MapUnit) nUnit, aOrg, aX, aY);
+    rMapMode = MapMode((MapUnit) nUnit, aOrg, Fraction(nXNum, nXDenom), Fraction(nYNum, nYDenom));
 
     return true;
 }
