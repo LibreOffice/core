@@ -165,7 +165,7 @@ private:
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
-    static sal_Int16   impl_determineEffectiveViewId_nothrow(
+    static SfxInterfaceId impl_determineEffectiveViewId_nothrow(
                             const SfxObjectShell& i_rDocument,
                             const ::comphelper::NamedValueCollection& i_rDescriptor
                         );
@@ -536,12 +536,13 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 }
 
 
-sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
+SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor )
 {
-    sal_Int16 nViewId = i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) );
+    SfxInterfaceId nViewId(i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) ));
     try
     {
-        if ( nViewId == 0 ) do
+        if ( nViewId == SfxInterfaceId(0) )
+        do
         {
             Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
             Reference< XIndexAccess > xViewData;
@@ -567,7 +568,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
 
             SfxViewFactory* pViewFactory = i_rDocument.GetFactory().GetViewFactoryByViewName( sViewId );
             if ( pViewFactory )
-                nViewId = sal_Int16( pViewFactory->GetOrdinal() );
+                nViewId = pViewFactory->GetOrdinal();
         }
         while ( false );
     }
@@ -576,7 +577,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( nViewId == 0 )
+    if ( nViewId == SfxInterfaceId(0) )
         nViewId = i_rDocument.GetFactory().GetViewFactory().GetOrdinal();
     return nViewId;
 }
@@ -708,7 +709,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         ENSURE_OR_THROW( xDoc.is(), "no SfxObjectShell for the given model" );
 
         // ensure the ID of the to-be-created view is in the descriptor, if possible
-        const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
+        const SfxInterfaceId nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
         const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
         const OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
 

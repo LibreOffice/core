@@ -204,10 +204,10 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
     if (pGroup && pGroup->GetCount())
     {
         // query which view is registered. In WebWriter there is no normal view
-        sal_uInt16 nViewId = nullptr != SwView::Factory() ? 2 : 6;
+        SfxInterfaceId nViewId = nullptr != SwView::Factory() ? SFX_INTERFACE_SFXDOCSH : SfxInterfaceId(6);
         const OUString sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
-        if( 6 == nViewId )
+        if( SfxInterfaceId(6) == nViewId )
         {
             SwWebGlosDocShell* pDocSh = new SwWebGlosDocShell();
             xDocSh = pDocSh;

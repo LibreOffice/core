@@ -65,7 +65,7 @@ namespace
         SmDocShell::RegisterInterface(pModule);
         SmViewShell::RegisterInterface(pModule);
 
-        SmViewShell::RegisterFactory(1);
+        SmViewShell::RegisterFactory(SFX_INTERFACE_SFXAPP);
 
         SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
         SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);

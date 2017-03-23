@@ -136,7 +136,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     void                InvalidateCursor();
 
 public:
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1)
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+SfxInterfaceId(1))
 
     SFX_DECL_OBJECTFACTORY();
 

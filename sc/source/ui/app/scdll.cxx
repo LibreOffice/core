@@ -129,8 +129,8 @@ void ScDLL::Init()
     ScGlobal::Init();
 
     // register your view-factories here
-    ScTabViewShell      ::RegisterFactory(1);
-    ScPreviewShell      ::RegisterFactory(2);
+    ScTabViewShell      ::RegisterFactory(SFX_INTERFACE_SFXAPP);
+    ScPreviewShell      ::RegisterFactory(SFX_INTERFACE_SFXDOCSH);
 
     // register your shell-interfaces here
     ScModule            ::RegisterInterface(pMod);

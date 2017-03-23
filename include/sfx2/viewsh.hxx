@@ -118,7 +118,7 @@ private: \
     static SfxViewFactory *pFactory; \
 public: \
     static SfxViewShell  *CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView); \
-    static void           RegisterFactory( sal_uInt16 nPrio = USHRT_MAX ); \
+    static void           RegisterFactory( SfxInterfaceId nPrio ); \
     static SfxViewFactory*Factory() { return pFactory; } \
     static void           InitFactory()
 
@@ -126,7 +126,7 @@ public: \
     SfxViewFactory* Class::pFactory; \
     SfxViewShell* Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
     { return new Class(pFrame, pOldView); } \
-    void Class::RegisterFactory( sal_uInt16 nPrio ) \
+    void Class::RegisterFactory( SfxInterfaceId nPrio ) \
     { \
         pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
         InitFactory(); \

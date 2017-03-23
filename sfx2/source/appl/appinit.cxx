@@ -241,9 +241,6 @@ void SfxApplication::Initialize_Impl()
     pImpl->pViewFrames = new SfxViewFrameArr_Impl;
     pImpl->pViewShells = new SfxViewShellArr_Impl;
     pImpl->pObjShells = new SfxObjectShellArr_Impl;
-    pImpl->nInterfaces = SFX_INTERFACE_APP+8;
-    pImpl->pInterfaces = new SfxInterface*[pImpl->nInterfaces];
-    memset( pImpl->pInterfaces, 0, sizeof(SfxInterface*) * pImpl->nInterfaces );
 
     Registrations_Impl();
 
