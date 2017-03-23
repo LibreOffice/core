@@ -52,17 +52,13 @@ class ImplXMLSignatureListener : public cppu::WeakImplHelper
 >
 {
 private:
-    Link<XMLSignatureCreationResult&,void> maCreationResultListenerListener;
-    Link<XMLSignatureVerifyResult&,void>   maVerifyResultListenerListener;
-    Link<LinkParamNone*,void>              maStartVerifySignatureElementListener;
+    XMLSignatureHelper& m_rXMLSignatureHelper;
 
     css::uno::Reference<
         css::xml::sax::XDocumentHandler > m_xNextHandler;
 
 public:
-    ImplXMLSignatureListener(const Link<XMLSignatureCreationResult&,void>& rCreationResultListenerListener,
-                             const Link<XMLSignatureVerifyResult&,void>& rVerifyResultListenerListener,
-                             const Link<LinkParamNone*, void>& rStartVerifySignatureElement);
+    ImplXMLSignatureListener(XMLSignatureHelper& rXMLSignatureHelper);
     virtual ~ImplXMLSignatureListener() override;
 
     void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);

@@ -249,10 +249,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
     /*
      * create a signature listener
      */
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
-                                                    LINK( this, XMLSignatureHelper, SignatureCreationResultListener ),
-                                                    LINK( this, XMLSignatureHelper, SignatureVerifyResultListener ),
-                                                    LINK( this, XMLSignatureHelper, StartVerifySignatureElement ) );
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(*this);
 
     /*
      * configure the signature verify listener
@@ -304,21 +301,21 @@ SignatureInformations XMLSignatureHelper::GetSignatureInformations() const
     return mpXSecController->getSignatureInformations();
 }
 
-IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )
+void XMLSignatureHelper::SignatureCreationResultListener(XMLSignatureCreationResult& rResult)
 {
     maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), rResult );
     if ( rResult.nSignatureCreationResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 
-IMPL_LINK( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult&, rResult, void )
+void XMLSignatureHelper::SignatureVerifyResultListener(XMLSignatureVerifyResult& rResult)
 {
     maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), rResult );
     if ( rResult.nSignatureVerifyResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 
-IMPL_LINK_NOARG( XMLSignatureHelper, StartVerifySignatureElement, LinkParamNone*, void )
+void XMLSignatureHelper::StartVerifySignatureElement()
 {
     if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call(nullptr) )
     {
@@ -415,10 +412,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     uno::Reference<xml::sax::XDocumentHandler> xHandler = mpXSecController->createSignatureReader(embed::StorageFormats::OFOPXML);
 
     // Create the signature listener.
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
-        LINK(this, XMLSignatureHelper, SignatureCreationResultListener),
-        LINK(this, XMLSignatureHelper, SignatureVerifyResultListener),
-        LINK(this, XMLSignatureHelper, StartVerifySignatureElement));
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(*this);
     uno::Reference<xml::sax::XDocumentHandler> xSignatureListener(pSignatureListener);
 
     // Parser -> signature listener -> signature reader.
