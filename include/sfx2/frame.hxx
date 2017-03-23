@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/shell.hxx>
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -109,7 +110,7 @@ public:
     static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
     static css::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden );
+    static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId, bool bHidden );
 
     vcl::Window&        GetWindow() const { return *pWindow;}
     void                CancelTransfers();

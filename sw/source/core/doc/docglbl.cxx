@@ -327,7 +327,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     if( SPLITDOC_TO_HTML == eDocType &&
                         !pDoc->GetSpzFrameFormats()->empty() )
                     {
-                            SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
+                            SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );

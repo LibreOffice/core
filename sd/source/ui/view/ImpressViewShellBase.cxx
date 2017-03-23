@@ -44,7 +44,7 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
     pBase->LateInit("");
     return pBase;
 }
-void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )
+void ImpressViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
     pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
     InitFactory();

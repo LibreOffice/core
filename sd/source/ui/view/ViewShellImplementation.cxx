@@ -280,7 +280,7 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
     }
 }
 
-sal_uInt16 ViewShell::Implementation::GetViewId()
+SfxInterfaceId ViewShell::Implementation::GetViewId()
 {
     switch (mrViewShell.GetShellType())
     {

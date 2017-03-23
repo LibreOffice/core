@@ -28,14 +28,11 @@ namespace sd {
     with a certain view instead of first create a default view and
     then switch to the desired view.
 */
-enum ViewShellFactoryIds
-{
-    IMPRESS_FACTORY_ID = 1,
-    DRAW_FACTORY_ID = 1,
-    SLIDE_SORTER_FACTORY_ID = 2,
-    OUTLINE_FACTORY_ID = 3,
-    PRESENTATION_FACTORY_ID = 4
-};
+constexpr auto IMPRESS_FACTORY_ID         = SfxInterfaceId(1);
+constexpr auto DRAW_FACTORY_ID            = SfxInterfaceId(1);
+constexpr auto SLIDE_SORTER_FACTORY_ID    = SfxInterfaceId(2);
+constexpr auto OUTLINE_FACTORY_ID         = SfxInterfaceId(3);
+constexpr auto PRESENTATION_FACTORY_ID     = SfxInterfaceId(4);
 
 } // end of namespace sd
 

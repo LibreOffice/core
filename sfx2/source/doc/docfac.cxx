@@ -370,11 +370,11 @@ OUString SfxObjectFactory::GetModuleName() const
 }
 
 
-sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const
+sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const SfxInterfaceId i_nViewId, const sal_uInt16 i_nFallback ) const
 {
     for ( sal_uInt16 curViewNo = 0; curViewNo < GetViewFactoryCount(); ++curViewNo )
     {
-        const sal_uInt16 curViewId = GetViewFactory( curViewNo ).GetOrdinal();
+        const SfxInterfaceId curViewId = GetViewFactory( curViewNo ).GetOrdinal();
         if ( i_nViewId == curViewId )
            return curViewNo;
     }

@@ -108,7 +108,7 @@ void Test::setUp()
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
     m_xDocShRef->DoInitNew();
 
-    SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, 0);
+    SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, SFX_INTERFACE_NONE);
 
     CPPUNIT_ASSERT_MESSAGE("Should have a SfxViewFrame", pViewFrame);
 

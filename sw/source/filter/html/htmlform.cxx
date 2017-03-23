@@ -647,7 +647,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
                 m_bRemoveHidden = ( pHiddenItem == nullptr || !pHiddenItem->GetValue() );
             }
 
-            m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
+            m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, SFX_INTERFACE_NONE );
             CallStartAction();
             pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             // this ridiculous hack also enables Undo, so turn it off again
