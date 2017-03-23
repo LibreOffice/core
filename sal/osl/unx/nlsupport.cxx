@@ -173,51 +173,52 @@ static rtl_Locale * parse_locale( const char * locale )
 {
     assert(locale != nullptr);
 
-    if (*locale == '\0' || std::strcmp(locale, "C")
-        || std::strcmp(locale, "POSIX"))
-    {
-        return rtl_locale_register(u"C", u"", u"");
-    }
+    static sal_Unicode c_locale[2] = { (sal_Unicode) 'C', 0 };
 
     size_t len = strlen( locale );
 
-    rtl_uString * pLanguage = nullptr;
-    rtl_uString * pCountry  = nullptr;
-    rtl_uString * pVariant  = nullptr;
-
-    size_t offset = len;
-
-    rtl_Locale * ret;
-
-    /* language is a two or three letter code */
-    if( (len > 3 && locale[3] == '_') || (len == 3 && locale[2] != '_') )
-        offset = 3;
-
-    /* convert language code to unicode */
-    rtl_string2UString( &pLanguage, locale, offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-    OSL_ASSERT(pLanguage != nullptr);
-
-    /* convert country code to unicode */
-    if( len >= offset+3 && locale[offset] == '_' )
+    if( len >= 2 )
     {
-        rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(pCountry != nullptr);
-        offset += 3;
+        rtl_uString * pLanguage = nullptr;
+        rtl_uString * pCountry  = nullptr;
+        rtl_uString * pVariant  = nullptr;
+
+        size_t offset = 2;
+
+        rtl_Locale * ret;
+
+        /* language is a two or three letter code */
+        if( (len > 3 && locale[3] == '_') || (len == 3 && locale[2] != '_') )
+            offset = 3;
+
+        /* convert language code to unicode */
+        rtl_string2UString( &pLanguage, locale, offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+        OSL_ASSERT(pLanguage != nullptr);
+
+        /* convert country code to unicode */
+        if( len >= offset+3 && locale[offset] == '_' )
+        {
+            rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+            OSL_ASSERT(pCountry != nullptr);
+            offset += 3;
+        }
+
+        /* convert variant code to unicode - do not rely on "." as delimiter */
+        if( len > offset ) {
+            rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+            OSL_ASSERT(pVariant != nullptr);
+        }
+
+        ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
+
+        if (pVariant) rtl_uString_release(pVariant);
+        if (pCountry) rtl_uString_release(pCountry);
+        if (pLanguage) rtl_uString_release(pLanguage);
+
+        return ret;
     }
-
-    /* convert variant code to unicode - do not rely on "." as delimiter */
-    if( len > offset ) {
-        rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(pVariant != nullptr);
-    }
-
-    ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : u"", pVariant ? pVariant->buffer : u"" );
-
-    if (pVariant) rtl_uString_release(pVariant);
-    if (pCountry) rtl_uString_release(pCountry);
-    if (pLanguage) rtl_uString_release(pLanguage);
-
-    return ret;
+    else
+        return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 );
 }
 
 #if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
