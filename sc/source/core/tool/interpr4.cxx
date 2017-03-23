@@ -960,10 +960,17 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                 break;
             case svSingleRef:
                 {
+                    const ScSingleRefData* pRefData = p->GetSingleRef();
+                    if (pRefData->IsDeleted())
+                    {
+                        SetError( FormulaError::NoRef);
+                        break;
+                    }
+
                     SCCOL nCol;
                     SCROW nRow;
                     SCTAB nTab;
-                    SingleRefToVars( *p->GetSingleRef(), nCol, nRow, nTab);
+                    SingleRefToVars( *pRefData, nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
                     if (!pDok->m_TableOpList.empty())
                         ReplaceCell( rAdr );
@@ -1085,9 +1092,17 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
                 nGlobalError = pToken->GetError();
                 break;
             case svDoubleRef:
+            {
                 --sp;
-                DoubleRefToRange( *pToken->GetDoubleRef(), rRange);
+                const ScComplexRefData* pRefData = pToken->GetDoubleRef();
+                if (pRefData->IsDeleted())
+                {
+                    SetError( FormulaError::NoRef);
+                    break;
+                }
+                DoubleRefToRange( *pRefData, rRange);
                 break;
+            }
             case svRefList:
                 {
                     const ScRefList* pList = pToken->GetRefList();
