@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_83468521",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-23T09:39:33Z",
+      "side": 1,
+      "message": "Ah, I see you unindented it already, so just drop the brackets.",
+      "parentUuid": "9a57fde8_43873d61",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_e8fc8e40",
         "filename": "sc/source/ui/view/formatsh.cxx",
         "patchSetId": 1
