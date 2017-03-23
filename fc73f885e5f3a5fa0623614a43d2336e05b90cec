@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_68441e74",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-23T07:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_c8ffca32",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_e8fc8e40",
         "filename": "sc/source/ui/view/formatsh.cxx",
         "patchSetId": 1
@@ -30,6 +48,47 @@
       "writtenOn": "2017-03-23T00:33:47Z",
       "side": 1,
       "message": "Why is this needed? (I see this in other cases too, but I don\u0027t think it\u0027s needed there either.)",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_08563229",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-23T07:48:05Z",
+      "side": 1,
+      "message": "!(nNumberFormat \u003d\u003d 4) was unnecessary, corrected patchset 2 but SID_NUMBER_TWODEC\u0027s slot type is SfxVoidItem. To behave like toggle it needs that bool item. When i remove that item from both of the cases, it didn\u0027nt behave like toggle.",
+      "parentUuid": "9a57fde8_e8fc8e40",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a82526c3",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-03-23T07:48:05Z",
+      "side": 1,
+      "message": "when i remove that control button always checked.",
+      "range": {
+        "startLine": 2615,
+        "startChar": 95,
+        "endLine": 2615,
+        "endChar": 114
+      },
       "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
