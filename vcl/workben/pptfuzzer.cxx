@@ -13,6 +13,21 @@
 
 extern "C" bool TestImportPPT(SvStream &rStream);
 
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+{
+    if (__lsan_disable)
+        __lsan_disable();
+
+    CommonInitialize(argc, argv);
+
+    comphelper::getProcessServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
+
+    if (__lsan_enable)
+        __lsan_enable();
+
+    return 0;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);

@@ -72,11 +72,8 @@ extern "C"
     __attribute__((weak)) void __lsan_enable();
 }
 
-extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+void CommonInitialize(int *argc, char ***argv)
 {
-    if (__lsan_disable)
-        __lsan_disable();
-
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
     setenv("JPEGMEM", "768M", 1);
     setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
@@ -104,11 +101,17 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     psp::PrintFontManager::get();
     //get the printer info
     Printer::GetPrinterQueues();
+}
+
+void TypicalFuzzerInitialize(int *argc, char ***argv)
+{
+    if (__lsan_disable)
+        __lsan_disable();
+
+    CommonInitialize(argc, argv);
 
     if (__lsan_enable)
         __lsan_enable();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

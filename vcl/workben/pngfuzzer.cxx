@@ -11,6 +11,12 @@
 #include <vcl/pngread.hxx>
 #include "commonfuzzer.hxx"
 
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+{
+    TypicalFuzzerInitialize(argc, argv);
+    return 0;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
