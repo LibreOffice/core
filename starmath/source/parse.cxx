@@ -1178,18 +1178,6 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
     while (TokenInGroup(nActiveGroup))
     {   SmTokenType  eType (m_aCurToken.eType);
 
-        // skip sub-/supscript token
-        NextToken();
-
-        // get sub-/supscript node on top of stack
-        if (eType == TFROM  ||  eType == TTO)
-        {
-            // parse limits in old 4.0 and 5.0 style
-            m_aNodeStack.emplace_front(DoRelation());
-        }
-        else
-            m_aNodeStack.emplace_front(DoTerm(true));
-
         switch (eType)
         {
             case TRSUB :    nIndex = static_cast<int>(RSUB);    break;
@@ -1206,10 +1194,32 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         nIndex++;
         assert(1 <= nIndex  &&  nIndex <= SUBSUP_NUM_ENTRIES);
 
-        // set sub-/supscript if not already done
-        if (aSubNodes[nIndex] != nullptr)
-            Error(SmParseError::DoubleSubsupscript);
-        aSubNodes[nIndex] = popOrZero(m_aNodeStack);
+        std::unique_ptr<SmNode> pENode;
+        if (aSubNodes[nIndex]) // if already occupied at earlier iteration
+        {
+            // forget the earlier one, remember an error instead
+            delete aSubNodes[nIndex];
+            pENode.reset(DoError(SmParseError::DoubleSubsupscript)); // this also skips current token.
+        }
+        else
+        {
+            // skip sub-/supscript token
+            NextToken();
+        }
+
+        // get sub-/supscript node
+        // (even when we saw a double-sub/supscript error in the above
+        // in order to minimize mess and continue parsing.)
+        std::unique_ptr<SmNode> pSNode;
+        if (eType == TFROM  ||  eType == TTO)
+        {
+            // parse limits in old 4.0 and 5.0 style
+            pSNode.reset(DoRelation());
+        }
+        else
+            pSNode.reset(DoTerm(true));
+
+        aSubNodes[nIndex] = (pENode) ? pENode.release() : pSNode.release();
     }
 
     pNode->SetSubNodes(aSubNodes);
