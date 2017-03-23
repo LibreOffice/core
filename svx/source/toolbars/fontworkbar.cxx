@@ -190,7 +190,6 @@ FontworkBar::FontworkBar(SfxViewShell* pViewShell )
     if( pViewShell )
         SetPool(&pViewShell->GetPool());
 
-    SetHelpId( SVX_INTERFACE_FONTWORK_BAR );
     SetName( SVX_RESSTR( RID_SVX_FONTWORK_BAR ));
 }
 

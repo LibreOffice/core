@@ -53,7 +53,6 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetHelpId( HID_SCSHELL_PAGEBREAK );
     SetName("PageBreak");
 }
 

@@ -559,8 +559,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     {
         GetCurrentFunction()->Activate();
         SetOldFunction( GetCurrentFunction() );
-
-        SetHelpId( GetCurrentFunction()->GetSlotID() );
     }
 
     // invalidate shell, is faster than every individually (says MI)

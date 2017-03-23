@@ -46,10 +46,8 @@ void SwWebOleShell::InitInterface_Impl()
 
 SwWebOleShell::SwWebOleShell(SwView &_rView) :
     SwOleShell(_rView)
-
 {
     SetName("Object");
-    SetHelpId(SW_OLESHELL);
 }
 
 SwWebOleShell::~SwWebOleShell()

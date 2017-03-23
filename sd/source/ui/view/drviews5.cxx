@@ -485,17 +485,14 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
         if (mePageKind == PageKind::Notes)
         {
-            SetHelpId( SID_NOTES_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
         }
         else if (mePageKind == PageKind::Handout)
         {
-            SetHelpId( SID_HANDOUT_MASTER_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );
         }
         else
         {
-            SetHelpId( SD_IF_SDDRAWVIEWSHELL );
             GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
         }
     }

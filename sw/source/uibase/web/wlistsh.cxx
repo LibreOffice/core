@@ -49,7 +49,6 @@ SwWebListShell::SwWebListShell(SwView &_rView) :
     SwListShell(_rView)
 {
     SetName("List");
-    SetHelpId(SW_LISTSHELL);
 }
 
 SwWebListShell::~SwWebListShell()

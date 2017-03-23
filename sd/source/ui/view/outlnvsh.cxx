@@ -160,7 +160,6 @@ void OutlineViewShell::Construct(DrawDocShell* )
 
     SetName( "OutlineViewShell" );
 
-    SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
     GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );
 }
 

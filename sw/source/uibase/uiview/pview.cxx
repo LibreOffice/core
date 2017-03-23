@@ -1191,7 +1191,6 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 {
     SetName("PageView");
     SetWindow( m_pViewWin );
-    SetHelpId(SW_PAGEPREVIEW);
     CreateScrollbar( true );
     CreateScrollbar( false );
 

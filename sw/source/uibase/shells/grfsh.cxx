@@ -956,7 +956,6 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName("Graphic");
-    SetHelpId(SW_GRFSHELL);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
 }
 

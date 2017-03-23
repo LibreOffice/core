@@ -67,7 +67,6 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetHelpId( HID_SCSHELL_DRAWSH );
     SetName("Drawing");
 
     mpSelectionChangeHandler->Connect();

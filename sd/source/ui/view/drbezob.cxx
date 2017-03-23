@@ -72,8 +72,6 @@ BezierObjectBar::BezierObjectBar(
     SetPool(&pDocShell->GetPool());
     SetUndoManager(pDocShell->GetUndoManager());
     SetRepeatTarget(mpView);
-
-    SetHelpId( SD_IF_SDDRAWBEZIEROBJECTBAR );
 }
 
 BezierObjectBar::~BezierObjectBar()

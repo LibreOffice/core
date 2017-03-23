@@ -2699,7 +2699,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
         StartListening(*pStlPool);
 
     GetPageOnFromPageStyleSet( nullptr, 0, bHeaderOn, bFooterOn );
-    SetHelpId( HID_SCSHELL_DOCSH );
 
     // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
@@ -2744,7 +2743,6 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     SfxStyleSheetPool* pStlPool = aDocument.GetStyleSheetPool();
     if (pStlPool)
         StartListening(*pStlPool);
-    SetHelpId( HID_SCSHELL_DOCSH );
 
     aDocument.GetDBCollection()->SetRefreshHandler(
         LINK( this, ScDocShell, RefreshDBDataHdl ) );

@@ -133,7 +133,6 @@ SwGlosDocShell::SwGlosDocShell(bool bNewShow)
     : SwDocShell( (bNewShow)
             ? SfxObjectCreateMode::STANDARD : SfxObjectCreateMode::INTERNAL )
 {
-    SetHelpId(SW_GLOSDOCSHELL);
 }
 
 SwGlosDocShell::~SwGlosDocShell(  )
@@ -169,7 +168,6 @@ bool SwGlosDocShell::Save()
 SwWebGlosDocShell::SwWebGlosDocShell()
     : SwWebDocShell()
 {
-    SetHelpId(SW_WEBGLOSDOCSHELL);
 }
 
 SwWebGlosDocShell::~SwWebGlosDocShell(  )

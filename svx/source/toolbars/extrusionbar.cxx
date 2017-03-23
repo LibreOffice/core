@@ -69,7 +69,6 @@ ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
     if( pViewShell )
         SetPool(&pViewShell->GetPool());
 
-    SetHelpId( SVX_INTERFACE_EXTRUSION_BAR );
     SetName(SVX_RESSTR(RID_SVX_EXTRUSION_BAR));
 }
 

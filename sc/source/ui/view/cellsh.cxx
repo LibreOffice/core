@@ -81,7 +81,6 @@ ScCellShell::ScCellShell(ScViewData* pData, VclPtr<vcl::Window> frameWin) :
     bPastePossible(false),
     pFrameWin(frameWin)
 {
-    SetHelpId(HID_SCSHELL_CELLSH);
     SetName("Cell");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Cell));
 }

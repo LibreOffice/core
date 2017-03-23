@@ -62,7 +62,6 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxRepeatTarget*            pRepeatTarget; // SbxObjectRef xParent;
     bool                        bActive;
     SfxDisableFlags             nDisableFlags;
-    sal_uIntPtr                 nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
     std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
@@ -76,7 +75,6 @@ struct SfxShell_Impl: public SfxBroadcaster
         , pRepeatTarget(nullptr)
         , bActive(false)
         , nDisableFlags(SfxDisableFlags::NONE)
-        , nHelpId(0)
         , pExecuter(nullptr)
         , pUpdater(nullptr)
     {
@@ -637,16 +635,6 @@ const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
         return pImpl->aSlotArr[nIndex].get();
     else
         return nullptr;
-}
-
-void SfxShell::SetHelpId(sal_uIntPtr nId)
-{
-    pImpl->nHelpId = nId;
-}
-
-sal_uIntPtr SfxShell::GetHelpId() const
-{
-    return pImpl->nHelpId;
 }
 
 SfxObjectShell* SfxShell::GetObjectShell()
