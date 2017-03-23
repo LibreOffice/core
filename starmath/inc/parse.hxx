@@ -64,9 +64,9 @@ class SmParser
     SmTableNode *DoTable();
     void    DoLine();
     SmNode *DoExpression();
-    void    DoRelation();
-    void    DoSum();
-    void    DoProduct();
+    SmNode *DoRelation();
+    SmNode *DoSum();
+    SmNode *DoProduct();
     SmNode *DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
     SmNode *DoOpSubSup();
     SmNode *DoPower();
