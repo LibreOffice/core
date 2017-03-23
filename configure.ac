@@ -3456,8 +3456,6 @@ if test "$_os" = "WINNT"; then
     if test ! -e "$DEVENV"; then
         AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
     fi
-    # add quotes around it, this is an ugly hack for convenience
-    DEVENV=\"${DEVENV}\"
 
     dnl ===========================================================
     dnl  Check for the corresponding mspdb*.dll
