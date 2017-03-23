@@ -460,8 +460,6 @@ public:
     static void                 VerbState (SfxItemSet&);
     SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;
 
-    void                        SetHelpId(sal_uIntPtr nId);
-    sal_uIntPtr                     GetHelpId() const;
     virtual SfxObjectShell*     GetObjectShell();
     void                        SetDisableFlags( SfxDisableFlags nFlags );
     SfxDisableFlags             GetDisableFlags() const;

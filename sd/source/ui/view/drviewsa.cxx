@@ -273,14 +273,12 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     if( eDocType == DocumentType::Draw )
     {
-        SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
         GetActiveWindow()->SetHelpId( HID_SDGRAPHICVIEWSHELL );
     }
     else
     {
         if (mePageKind == PageKind::Notes)
         {
-            SetHelpId( SID_NOTES_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
 
             // AutoLayouts have to be created
@@ -288,7 +286,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
         else if (mePageKind == PageKind::Handout)
         {
-            SetHelpId( SID_HANDOUT_MASTER_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );
 
             // AutoLayouts have to be created
@@ -296,7 +293,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
         else
         {
-            SetHelpId( SD_IF_SDDRAWVIEWSHELL );
             GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
         }
     }

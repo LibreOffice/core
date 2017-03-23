@@ -51,7 +51,6 @@ SwOleShell::SwOleShell(SwView &_rView) :
 
 {
     SetName("Object");
-    SetHelpId(SW_OLESHELL);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));
 }
 

@@ -274,7 +274,6 @@ SwListShell::SwListShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName("List");
-    SetHelpId(SW_LISTSHELL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

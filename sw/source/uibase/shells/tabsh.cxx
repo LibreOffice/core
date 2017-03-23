@@ -1404,7 +1404,6 @@ SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName("Table");
-    SetHelpId(SW_TABSHELL);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
 }
 

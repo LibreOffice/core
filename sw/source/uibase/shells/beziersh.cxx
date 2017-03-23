@@ -57,7 +57,6 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )
 {
     SetName("Bezier");
-    SetHelpId(SW_BEZIERSHELL);
 
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();

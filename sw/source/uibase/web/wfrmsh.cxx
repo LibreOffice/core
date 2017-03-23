@@ -50,7 +50,6 @@ void SwWebFrameShell::InitInterface_Impl()
 SwWebFrameShell::SwWebFrameShell(SwView &_rView) :
     SwFrameShell(_rView)
 {
-    SetHelpId(SW_WEBFRAMESHELL);
 }
 
 SwWebFrameShell::~SwWebFrameShell()

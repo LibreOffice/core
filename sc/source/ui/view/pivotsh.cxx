@@ -63,7 +63,6 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
-    SetHelpId( HID_SCSHELL_PIVOTSH );
     SetName("Pivot");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Pivot));
 }

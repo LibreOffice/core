@@ -191,7 +191,6 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
 
 {
     SetName("Media Playback");
-    SetHelpId(SW_MEDIASHELL);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
 }
 

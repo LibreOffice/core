@@ -252,7 +252,6 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 
 void SwSrcView::Init()
 {
-    SetHelpId(SW_SRC_VIEWSHELL);
     SetName("Source");
     SetWindow( aEditWin.get() );
     SwDocShell* pDocShell = GetDocShell();

@@ -60,7 +60,6 @@ void ScChartShell::InitInterface_Impl()
 ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
-    SetHelpId( HID_SCSHELL_CHARTSH );
     SetName( "ChartObject" );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Chart));
 }

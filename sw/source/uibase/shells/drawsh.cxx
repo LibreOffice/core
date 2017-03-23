@@ -535,7 +535,6 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
-    SetHelpId(SW_DRAWSHELL);
     SetName("Draw");
 
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));

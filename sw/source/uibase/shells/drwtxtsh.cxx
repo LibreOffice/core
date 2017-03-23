@@ -132,7 +132,6 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
 
     rSh.NoEdit();
     SetName("ObjectText");
-    SetHelpId(SW_DRWTXTSHELL);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::DrawText));
 }
 
