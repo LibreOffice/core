@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_686dfe03",
+        "filename": "icon-themes/breeze_dark/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-03-23T06:48:52Z",
+      "side": 1,
+      "message": "Watch out for this (unintended) indentation change!",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 4
+      },
+      "revId": "8d335973fd205549d790f146161b617dcbba0ba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
