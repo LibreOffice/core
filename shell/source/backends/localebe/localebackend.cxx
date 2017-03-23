@@ -154,21 +154,22 @@ namespace /* private */
 #else
 
 #include <rtl/ustrbuf.hxx>
-#include <locale.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
-/*
- * Note: setlocale is not at all thread safe, so is this code. It could
- * especially interfere with the stuff VCL is doing, so make sure this
- * is called from the main thread only.
- */
-
-static OUString ImplGetLocale(int category)
+static OUString ImplGetLocale(char const * category)
 {
-    const char *locale = setlocale(category, "");
+    const char *locale = std::getenv("LC_ALL");
+    if (locale == nullptr || *locale == '\0') {
+        locale = std::getenv(category);
+        if (locale == nullptr || *locale == '\0') {
+            locale = std::getenv("LANG");
+        }
+    }
 
     // Return "en-US" for C locales
-    if( (locale == nullptr) || ( locale[0] == 'C' && locale[1] == '\0' ) )
+    if( (locale == nullptr) || *locale == '\0' || std::strcmp(locale, "C") == 0
+        || std::strcmp(locale, "POSIX") == 0 )
         return OUString( "en-US"  );
 
 
@@ -227,7 +228,7 @@ OUString LocaleBackend::getLocale()
 #elif defined (MACOSX)
     return ImplGetLocale("AppleLocale");
 #else
-    return ImplGetLocale(LC_CTYPE);
+    return ImplGetLocale("LC_CTYPE");
 #endif
 }
 
@@ -239,7 +240,7 @@ OUString LocaleBackend::getUILocale()
 #elif defined(MACOSX)
     return ImplGetLocale("AppleLanguages");
 #else
-    return ImplGetLocale(LC_MESSAGES);
+    return ImplGetLocale("LC_MESSAGES");
 #endif
 }
 
