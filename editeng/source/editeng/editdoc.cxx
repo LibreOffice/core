@@ -631,7 +631,7 @@ sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
     for ( sal_Int32 nLine = 0; nLine < aLineList.Count(); nLine++ )
     {
         if ( aLineList[nLine].IsIn( nIndex ) )
-            return (sal_Int32)nLine;
+            return nLine;
     }
 
     // Then it should be at the end of the last line!

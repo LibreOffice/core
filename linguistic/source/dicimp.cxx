@@ -565,7 +565,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
             nIdx2++;
         }
 
-        nRes = ((sal_Int32) nLen1 - nNumIgnChar1) - ((sal_Int32) nLen2 - nNumIgnChar2);
+        nRes = (nLen1 - nNumIgnChar1) - (nLen2 - nNumIgnChar2);
     }
 
     return nRes;

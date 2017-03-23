@@ -1963,7 +1963,7 @@ bool ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
     bool bHasDifferentRTLLevels = false;
 
     sal_uInt16 nRTLLevel = IsRightToLeft( nPara ) ? 1 : 0;
-    for ( sal_Int32 n = 0; n < (sal_Int32)pParaPortion->GetTextPortions().Count(); n++ )
+    for ( sal_Int32 n = 0; n < pParaPortion->GetTextPortions().Count(); n++ )
     {
         const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
         if ( rTextPortion.GetRightToLeftLevel() != nRTLLevel )
@@ -3075,7 +3075,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
 
             // On the lines of the paragraph ...
 
-            sal_Int32 nLines = (sal_Int32)pPortion->GetLines().Count();
+            sal_Int32 nLines = pPortion->GetLines().Count();
             for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
             {
                 EditLine& rLine = pPortion->GetLines()[nLine];

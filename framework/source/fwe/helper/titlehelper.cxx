@@ -354,7 +354,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         OUStringBuffer sNewTitle(256);
         sNewTitle.append (xNumbers->getUntitledPrefix ());
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
-            sNewTitle.append ((::sal_Int32)nLeasedNumber);
+            sNewTitle.append(nLeasedNumber);
         else
             sNewTitle.append("?");
 
@@ -416,8 +416,8 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         sTitle.append      (xModelTitle->getTitle ());
         if ( nLeasedNumber > 1 )
         {
-            sTitle.append (" : ");
-            sTitle.append      ((::sal_Int32)nLeasedNumber);
+            sTitle.append(" : ");
+            sTitle.append(nLeasedNumber);
         }
         if (xModel.is ())
         {
@@ -435,7 +435,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         sTitle.append (xNumbers->getUntitledPrefix ());
         if ( nLeasedNumber > 1 )
         {
-            sTitle.append ((::sal_Int32)nLeasedNumber  );
+            sTitle.append(nLeasedNumber  );
         }
     }
 

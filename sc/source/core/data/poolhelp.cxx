@@ -84,7 +84,7 @@ void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
         sal_Int16 y;
         aOpt.GetDate( d,m,y );
         pFormTable->ChangeNullDate( d,m,y );
-        pFormTable->ChangeStandardPrec( (sal_uInt16)aOpt.GetStdPrecision() );
+        pFormTable->ChangeStandardPrec( aOpt.GetStdPrecision() );
         pFormTable->SetYear2000( aOpt.GetYear2000() );
     }
 }

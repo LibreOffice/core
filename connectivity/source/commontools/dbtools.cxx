@@ -1139,7 +1139,7 @@ try
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
-            xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), makeAny((sal_Int32)nKey));
+            xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), makeAny(nKey));
         }
 
         // min-/max-Value

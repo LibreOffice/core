@@ -1448,7 +1448,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                         // Hurray, we do have an unused entry
                         if( !pFlags[ i ] )
                         {
-                            pAcc->SetPaletteColor( (sal_uInt16) i, rReplaceColor );
+                            pAcc->SetPaletteColor( i, rReplaceColor );
                             aReplace = BitmapColor( (sal_uInt8) i );
                         }
                     }
@@ -1642,7 +1642,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                         pMinG[ i ] <= rCol.GetGreen() && pMaxG[ i ] >= rCol.GetGreen() &&
                         pMinB[ i ] <= rCol.GetBlue() && pMaxB[ i ] >= rCol.GetBlue() )
                     {
-                        pAcc->SetPaletteColor( (sal_uInt16)nEntry, pReplaceColors[ i ] );
+                        pAcc->SetPaletteColor( nEntry, pReplaceColors[ i ] );
                         break;
                     }
                 }

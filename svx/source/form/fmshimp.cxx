@@ -3267,7 +3267,7 @@ void FmXFormShell::CreateExternalView()
 #endif
                         // remember the position within the columns
                         if (aRadioPositions.find(aGroupName) == aRadioPositions.end())
-                            aRadioPositions[aGroupName] = (sal_Int16)nAddedColumns;
+                            aRadioPositions[aGroupName] = nAddedColumns;
 
                         // any further handling is done below
                     }

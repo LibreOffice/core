@@ -443,7 +443,7 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen )
 {
     if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), uno::Any((sal_Int16)nLen), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), uno::Any(nLen), true );
     }
     else
     {
@@ -2742,7 +2742,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
     OUString* pOldData = aSeq.getArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
-        nPos = (sal_uInt16) nOldLen;
+        nPos = nOldLen;
 
     sal_uInt16 n;
     // Items vor der Einfuege-Position
@@ -2902,7 +2902,7 @@ void UnoListBoxControl::makeVisible( sal_Int16 nEntry )
 
 void UnoListBoxControl::setDropDownLineCount( sal_Int16 nLines )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any((sal_Int16) nLines), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINECOUNT ), uno::Any(nLines), true );
 }
 
 sal_Int16 UnoListBoxControl::getDropDownLineCount()
@@ -3363,7 +3363,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
     const OUString* pOldData = aSeq.getConstArray();
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
-        nPos = (sal_uInt16) nOldLen;
+        nPos = nOldLen;
 
     sal_uInt16 n;
     // items before the insert position

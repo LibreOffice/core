@@ -361,7 +361,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                         aPageNumValue = " ";
                         break;
                     default:
-                        aPageNumValue += OUString::number( (sal_Int32)mnPageNumber );
+                        aPageNumValue += OUString::number( mnPageNumber );
                 }
 
                 pInfo->SetRepresentation( aPageNumValue );

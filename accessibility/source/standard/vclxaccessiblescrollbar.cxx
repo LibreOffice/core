@@ -197,7 +197,7 @@ Any VCLXAccessibleScrollBar::getCurrentValue(  )
 
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
-        aValue <<= (sal_Int32) pVCLXScrollBar->getValue();
+        aValue <<=  pVCLXScrollBar->getValue();
 
     return aValue;
 }
@@ -238,7 +238,7 @@ Any VCLXAccessibleScrollBar::getMaximumValue(  )
 
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
-        aValue <<= (sal_Int32) pVCLXScrollBar->getMaximum();
+        aValue <<= pVCLXScrollBar->getMaximum();
 
     return aValue;
 }

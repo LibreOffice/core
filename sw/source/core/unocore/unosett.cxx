@@ -2048,7 +2048,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     }
                 }
                 sal_Int16 eOrient = pSetVOrient ?
-                    (sal_Int16)pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
+                    pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
                 aFormat.SetGraphicBrush( pSetBrush, pSetSize, text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
             }
         }

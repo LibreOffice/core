@@ -85,7 +85,7 @@ public:
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
 {
-    for ( sal_Int32 n=0; n<(sal_Int32)rInfo.getLength(); n++ )
+    for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
     {
         SfxVersionInfo* pInfo = new SfxVersionInfo;
         pInfo->aName = rInfo[n].Identifier;
@@ -99,7 +99,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVersion >& rInfo )
 {
-    for ( sal_Int32 n=0; n<(sal_Int32)rInfo.getLength(); n++ )
+    for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
     {
         SfxVersionInfo* pInfo = new SfxVersionInfo;
         pInfo->aName = rInfo[n].Id;

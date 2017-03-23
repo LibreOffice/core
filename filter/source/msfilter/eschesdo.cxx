@@ -298,8 +298,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.Rectangle" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            sal_Int32 nRadius = (sal_Int32)rObj.ImplGetInt32PropertyValue(
-                                            OUString( "CornerRadius" ));
+            sal_Int32 nRadius = rObj.ImplGetInt32PropertyValue("CornerRadius");
             if( nRadius )
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();

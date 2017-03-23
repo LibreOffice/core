@@ -957,9 +957,9 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         ShowCursor();
         const sal_Int32 nDiff = nNewCursorPos - rPos.nContent.GetIndex();
         if( 0 > nDiff )
-            Left( (sal_Int32)-nDiff, CRSR_SKIP_CHARS );
+            Left( -nDiff, CRSR_SKIP_CHARS );
         else if( 0 < nDiff )
-            Right( (sal_Int32)nDiff, CRSR_SKIP_CHARS );
+            Right( nDiff, CRSR_SKIP_CHARS );
 
         SetOverwriteCursor( rData.IsCursorOverwrite() );
 

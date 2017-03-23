@@ -1350,7 +1350,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
                             if(bWriteAlpha)
                             {
-                                *pTmp++ = (sal_uInt8)0xff - (sal_uInt8)pAccAlpha->GetPixelIndex( nY, nX );
+                                *pTmp++ = (sal_uInt8)0xff - pAccAlpha->GetPixelIndex( nY, nX );
                             }
                         }
 

@@ -74,7 +74,7 @@ public:
         m_nContent(SwTOXElement::Mark | SwTOXElement::OutlineLevel),
         m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
         m_nOLEOptions(SwTOOElements::NONE),
-        m_eLanguage((LanguageType)::GetAppLanguage()),
+        m_eLanguage(::GetAppLanguage()),
         m_eCaptionDisplay(CAPTION_COMPLETE),
         m_nLevel(MAXLEVEL),
         m_bFromObjectNames(false),

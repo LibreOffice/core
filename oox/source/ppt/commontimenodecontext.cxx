@@ -430,7 +430,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                     nEnum = AnimationFill::DEFAULT;
                     break;
                 }
-                aProps[ NP_FILL ] <<=  (sal_Int16)nEnum;
+                aProps[ NP_FILL ] <<= nEnum;
             }
         }
         if( attribs.hasAttribute( XML_grpId ) )
@@ -578,7 +578,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 nEnum = AnimationRestart::DEFAULT;
                 break;
             }
-            aProps[ NP_RESTART ] <<= (sal_Int16)nEnum;
+            aProps[ NP_RESTART ] <<= nEnum;
         }
         // ST_Percentage TODO
         xAttribs->getOptionalValue( XML_spd /*"10000" */ );

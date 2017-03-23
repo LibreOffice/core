@@ -1353,7 +1353,7 @@ void Sc10Import::LoadDataBaseCollection()
     {
         Sc10DataBaseData* pOldData = pDataBaseCollection->At(i);
         ScDBData* pNewData = new ScDBData( SC10TOSTRING( pOldData->DataBaseRec.Name ),
-                                    ( SCTAB ) pOldData->DataBaseRec.Tab,
+                                    pOldData->DataBaseRec.Tab,
                                     ( SCCOL ) pOldData->DataBaseRec.Block.x1,
                                     ( SCROW ) pOldData->DataBaseRec.Block.y1,
                                     ( SCCOL ) pOldData->DataBaseRec.Block.x2,

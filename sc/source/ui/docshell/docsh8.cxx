@@ -124,7 +124,7 @@ namespace
 
         ::std::vector< rtl_TextEncoding > aEncodings;
         svxform::charset_helper::getSupportedTextEncodings( aEncodings );
-        ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
+        ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(), eCharSet);
         if ( aIter == aEncodings.end() )
         {
             OSL_FAIL( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );

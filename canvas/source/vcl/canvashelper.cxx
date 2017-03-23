@@ -1008,8 +1008,7 @@ namespace vclcanvas
         rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
 
         const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
-        const sal_uInt16    nBitCount( std::min( (sal_uInt16)24U,
-                                               (sal_uInt16)rOutDev.GetBitCount() ) );
+        const sal_uInt16 nBitCount( std::min( (sal_uInt16)24, rOutDev.GetBitCount() ) );
         const BitmapPalette* pPalette = nullptr;
 
         if( nBitCount <= 8 )

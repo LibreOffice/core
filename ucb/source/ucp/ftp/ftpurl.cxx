@@ -529,7 +529,7 @@ OUString FTPURL::net_title() const
 
         if(err == CURLE_OK) {       // get the title from the server
             char* fwd = static_cast<char*>(control.m_pBuffer);
-            sal_uInt32 len = (sal_uInt32) control.m_nWritePos;
+            sal_uInt32 len = control.m_nWritePos;
 
             aNetTitle = OUString(fwd,len,RTL_TEXTENCODING_UTF8);
             // the buffer now contains the name of the file;

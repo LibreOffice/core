@@ -325,7 +325,7 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkAlignment.copy(5);
-        aArgs[0].Value <<= (sal_Int32)nAlignment;
+        aArgs[0].Value <<= nAlignment;
 
         mrController.dispatchCommand( msFontworkAlignment, aArgs );
 
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
-        aArgs[0].Value <<= (sal_Int32)nCharacterSpacing;
+        aArgs[0].Value <<= nCharacterSpacing;
 
         mrController.dispatchCommand( ".uno:FontworkCharacterSpacingDialog", aArgs );
     }
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
-        aArgs[0].Value <<=( sal_Int32)nCharacterSpacing;
+        aArgs[0].Value <<= nCharacterSpacing;
 
         mrController.dispatchCommand( msFontworkCharacterSpacing,  aArgs );
 

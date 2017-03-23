@@ -281,7 +281,7 @@ bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any
         sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
                                         ? awt::FontStrikeout::SLASH
                                         : awt::FontStrikeout::X);
-        rValue <<= (sal_Int16)eStrikeout;
+        rValue <<= eStrikeout;
         bRet = true;
     }
 

@@ -1803,7 +1803,7 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     FSHelperPtr pFS
         = openFragmentStreamWithSerializer( OUStringBuffer()
                                             .append( "ppt/slideLayouts/slideLayout" )
-                                            .append( (sal_Int32) mnLayoutFileIdMax )
+                                            .append( mnLayoutFileIdMax )
                                             .append( ".xml" )
                                             .makeStringAndClear(),
                                             "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" );
@@ -2178,7 +2178,7 @@ void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
 {
     FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
                                 .append( "ppt/theme/theme" )
-                                .append( (sal_Int32) nThemeNum + 1 )
+                                .append( nThemeNum + 1 )
                                 .append( ".xml" )
                                 .makeStringAndClear(),
                                                         "application/vnd.openxmlformats-officedocument.theme+xml" );

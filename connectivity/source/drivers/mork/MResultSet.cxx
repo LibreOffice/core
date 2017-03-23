@@ -307,7 +307,7 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload)
     if (!bForceReload)
     {
         // Check whether we've already fetched the row...
-        if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == (sal_Int32)cardNumber )
+        if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == cardNumber )
             return true;
         //Check whether the old row has been changed
         if (cardNumber == m_nUpdatedRow)
@@ -323,7 +323,7 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload)
     if ( !validRow( cardNumber ) )
         return false;
 
-    (m_aRow->get())[0] = (sal_Int32)cardNumber;
+    (m_aRow->get())[0] = cardNumber;
     sal_Int32 nCount = m_aColumnNames.getLength();
     //m_RowStates = m_aQuery.getRowStates(cardNumber);
     for( sal_Int32 i = 1; i <= nCount; i++ )

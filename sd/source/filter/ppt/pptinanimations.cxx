@@ -2800,8 +2800,8 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
                             rTarget <<= aParaTarget;
 
                             rSubType = ShapeAnimationSubType::ONLY_TEXT;
-                            dump( " paragraph %d,", (sal_Int32)nPara);
-                            dump( " %d characters", (sal_Int32)end );
+                            dump( " paragraph %d,", nPara);
+                            dump( " %d characters", end );
                         }
                     }
                     }

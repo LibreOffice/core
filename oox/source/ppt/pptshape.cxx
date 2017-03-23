@@ -332,7 +332,7 @@ void PPTShape::addShape(
                 setMasterTextListStyle( aMasterTextListStyle );
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder.get() != nullptr, aTransformation, getFillProperties() ) );
-            if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ((sal_Int32)mnSubType == XML_title))
+            if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && mnSubType == XML_title)
              {
                 try
                 {

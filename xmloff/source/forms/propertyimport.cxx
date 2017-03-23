@@ -116,7 +116,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
-                    aReturn <<= (sal_Int32)nValue;
+                    aReturn <<= nValue;
                 break;
             }
             bEnumAsInt = true;

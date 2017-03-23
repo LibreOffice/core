@@ -45,8 +45,8 @@ namespace
     /// @throws css::lang::IndexOutOfBoundsException
     void checkSelection_Impl( sal_Int32 _nIndex, const IComboListBoxHelper& _rListBox, bool bSelected )
     {
-        sal_Int32 nCount = bSelected ? (sal_Int32)_rListBox.GetSelectEntryCount()
-                                     : (sal_Int32)_rListBox.GetEntryCount();
+        sal_Int32 nCount = bSelected ? _rListBox.GetSelectEntryCount()
+                                     : _rListBox.GetEntryCount();
         if ( _nIndex < 0 || _nIndex >= nCount )
             throw css::lang::IndexOutOfBoundsException();
     }
@@ -254,7 +254,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
             if ( xNewAcc.is() && GetWindow()->HasFocus() )
             {
                 if ( m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND )
-                    aOldValue <<= getAccessibleChild( (sal_Int32)m_nLastSelectedPos );
+                    aOldValue <<= getAccessibleChild( m_nLastSelectedPos );
                 aNewValue <<= xNewAcc;
             }
         }
@@ -720,7 +720,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
             if ( xNewAcc.is() && GetWindow()->HasFocus() )
             {
                 if ( m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND )
-                    aOldValue <<= getAccessibleChild( (sal_Int32)m_nLastSelectedPos );
+                    aOldValue <<= getAccessibleChild( m_nLastSelectedPos );
                 aNewValue <<= xNewAcc;
             }
             if (m_pListBoxHelper->IsInDropDown())
@@ -843,7 +843,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild
     if ( m_pListBoxHelper )
     {
         checkSelection_Impl(nSelectedChildIndex,*m_pListBoxHelper,true);
-        return getAccessibleChild( (sal_Int32)m_pListBoxHelper->GetSelectEntryPos( (sal_uInt16)nSelectedChildIndex ) );
+        return getAccessibleChild( m_pListBoxHelper->GetSelectEntryPos( (sal_uInt16)nSelectedChildIndex ) );
     }
 
     return nullptr;

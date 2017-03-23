@@ -427,7 +427,7 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
     : SwClient(const_cast<SwModify*>(static_cast<SwModify const *>(pTyp)))
     , m_aForm(rForm)
     , m_aTitle(rTitle)
-    , m_eLanguage((LanguageType)::GetAppLanguage())
+    , m_eLanguage(::GetAppLanguage())
     , m_nCreateType(nCreaType)
     , m_nOLEOptions(SwTOOElements::NONE)
     , m_eCaptionDisplay(CAPTION_COMPLETE)

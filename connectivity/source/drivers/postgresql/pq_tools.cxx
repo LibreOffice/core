@@ -697,11 +697,11 @@ std::vector< sal_Int32 > parseIntArray( const OUString & str )
 //     printf( ">%s<\n" , OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
     for( sal_Int32 i = str.indexOf( ' ' ) ; i != -1 ; i = str.indexOf( ' ', start) )
     {
-        vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
+        vec.push_back( rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
 //         printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
         start = i + 1;
     }
-    vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
+    vec.push_back( rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
 //     printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
     return vec;
 }

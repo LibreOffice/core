@@ -272,7 +272,7 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringLis
 {
     rFmlaStr.clear();
     sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
-    for( sal_Int32 nToken = 0, nStringIx = 0; nToken < (sal_Int32) nTokenCnt; ++nToken )
+    for( sal_Int32 nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
     {
         OUString aToken( rStringList.getToken( 0, '\n', nStringIx ) );
         ScGlobal::AddQuotes( aToken, '"' );

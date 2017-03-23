@@ -240,7 +240,7 @@ void FuText::DoExecute( SfxRequest& )
         && SID_TEXTEDIT == nSlotId
         && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
-        && (sal_uInt16)static_cast<const SfxUInt16Item&>(pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+        && static_cast<const SfxUInt16Item&>(pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
     {
         // Selection by doubleclick -> don't allow QuickDrag
         bQuickDrag = false;
@@ -1273,7 +1273,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             && SID_TEXTEDIT == nSlotId
             && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
-            && (sal_uInt16) static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+            && static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
         {
             // selection wit double click -> do not allow QuickDrag
             bQuickDrag = false;

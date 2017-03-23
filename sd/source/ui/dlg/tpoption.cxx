@@ -420,8 +420,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos ));
-        rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
-                                     (sal_uInt16)nFieldUnit ) );
+        rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ), nFieldUnit ) );
         bModified = true;
     }
 

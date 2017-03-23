@@ -939,7 +939,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             sal_uInt8 nLast = 0;
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
-                                nLast += nx == 0 ? BYTESWAP( (sal_uInt8)*pt++ ) : *pt++;
+                                nLast += nx == 0 ? BYTESWAP( *pt++ ) : *pt++;
                                 pAcc->SetPixelIndex( nY, nx, nLast );
                             }
                         }

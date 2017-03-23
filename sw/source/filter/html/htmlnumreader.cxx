@@ -293,7 +293,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 }
                 if( aPropInfo.m_bBullet )
                 {
-                    aNumFormat.SetBulletChar( (sal_Unicode)aPropInfo.m_cBulletChar );
+                    aNumFormat.SetBulletChar( aPropInfo.m_cBulletChar );
                     bChangeNumFormat = true;
                 }
             }

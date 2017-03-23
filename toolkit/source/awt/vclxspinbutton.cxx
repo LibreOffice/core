@@ -295,19 +295,19 @@ namespace toolkit
                 break;
 
             case BASEPROPERTY_SPINVALUE:
-                aReturn <<= (sal_Int32)getValue( );
+                aReturn <<= getValue( );
                 break;
 
             case BASEPROPERTY_SPINVALUE_MIN:
-                aReturn <<= (sal_Int32)getMinimum( );
+                aReturn <<= getMinimum( );
                 break;
 
             case BASEPROPERTY_SPINVALUE_MAX:
-                aReturn <<= (sal_Int32)getMaximum( );
+                aReturn <<= getMaximum( );
                 break;
 
             case BASEPROPERTY_SPININCREMENT:
-                aReturn <<= (sal_Int32)getSpinIncrement( );
+                aReturn <<= getSpinIncrement( );
                 break;
 
             case BASEPROPERTY_ORIENTATION:

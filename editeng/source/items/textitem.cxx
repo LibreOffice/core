@@ -2134,7 +2134,7 @@ bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
         case SvxCaseMap::SmallCaps:      nRet = style::CaseMap::SMALLCAPS; break;
         default: break;
     }
-    rVal <<= (sal_Int16)(nRet);
+    rVal <<= nRet;
     return true;
 }
 
@@ -3401,7 +3401,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
 bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    rVal <<= ( (sal_uInt32)GetValue() );
+    rVal <<= GetValue();
     return true;
 }
 

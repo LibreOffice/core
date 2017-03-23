@@ -940,7 +940,7 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 break;
 
             case OWN_ATTR_MEDIA_VOLUMEDB:
-                rValue <<= (sal_Int16) aItem.getVolumeDB();
+                rValue <<= aItem.getVolumeDB();
                 break;
 
             case OWN_ATTR_MEDIA_ZOOM:

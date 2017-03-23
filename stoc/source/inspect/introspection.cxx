@@ -373,7 +373,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUS
 {
     sal_Int32 i = getPropertyIndex( aPropertyName );
     if( i != -1 )
-        setPropertyValueByIndex( obj, (sal_Int32)i, aValue );
+        setPropertyValueByIndex( obj, i, aValue );
     else
         throw UnknownPropertyException(aPropertyName);
 }

@@ -60,7 +60,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
                 pUnoArgs[i] <<= (sal_Int16)pVar->GetUShort();
                 break;
             case SbxLONG:
-                pUnoArgs[i] <<= (sal_Int32)pVar->GetLong();
+                pUnoArgs[i] <<= pVar->GetLong();
                 break;
             default:
                 pUnoArgs[i].clear();

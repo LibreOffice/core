@@ -788,7 +788,7 @@ namespace accessibility
             }
 
             // relation CONTENT_FLOWS_TO
-            if ( (nMyParaIndex + 1) < (sal_Int32)mpParaManager->GetNum() &&
+            if ( (nMyParaIndex + 1) < mpParaManager->GetNum() &&
                  mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
             {
                 uno::Sequence<uno::Reference<XInterface> > aSequence

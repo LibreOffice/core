@@ -284,10 +284,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                rLRSpace.SetTextLeft( (sal_Int32)nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetTextLeft( nAbs, (sal_uInt16)nProp );
                                 break;
                             case MID_R_MARGIN:
-                                rLRSpace.SetRight( (sal_Int32)nAbs, (sal_uInt16)nProp );
+                                rLRSpace.SetRight( nAbs, (sal_uInt16)nProp );
                                 break;
                         }
                     }

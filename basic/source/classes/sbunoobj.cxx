@@ -1225,7 +1225,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         else if( rType == cppu::UnoType<oleautomation::Currency>::get())
                         {
                             // assumes per previous code that ole Currency is Int64
-                            aRetVal <<= (sal_Int64)( pVar->GetInt64() );
+                            aRetVal <<= pVar->GetInt64();
                             break;
                         }
                         else if( rType == cppu::UnoType<oleautomation::Date>::get())
@@ -1442,12 +1442,12 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
             aRetVal <<= nByteVal;
             break;
         }
-        case TypeClass_SHORT:           aRetVal <<= (sal_Int16)( pVar->GetInteger() );  break;
-        case TypeClass_LONG:            aRetVal <<= (sal_Int32)( pVar->GetLong() );     break;
-        case TypeClass_HYPER:           aRetVal <<= (sal_Int64)( pVar->GetInt64() );    break;
-        case TypeClass_UNSIGNED_SHORT:  aRetVal <<= (sal_uInt16)( pVar->GetUShort() );  break;
-        case TypeClass_UNSIGNED_LONG:   aRetVal <<= (sal_uInt32)( pVar->GetULong() );   break;
-        case TypeClass_UNSIGNED_HYPER:  aRetVal <<= (sal_uInt64)( pVar->GetUInt64() );  break;
+        case TypeClass_SHORT:           aRetVal <<= pVar->GetInteger();  break;
+        case TypeClass_LONG:            aRetVal <<= pVar->GetLong();     break;
+        case TypeClass_HYPER:           aRetVal <<= pVar->GetInt64();    break;
+        case TypeClass_UNSIGNED_SHORT:  aRetVal <<= pVar->GetUShort();  break;
+        case TypeClass_UNSIGNED_LONG:   aRetVal <<= pVar->GetULong();   break;
+        case TypeClass_UNSIGNED_HYPER:  aRetVal <<= pVar->GetUInt64();  break;
         default: break;
     }
 

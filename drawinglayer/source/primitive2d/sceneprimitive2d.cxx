@@ -361,8 +361,8 @@ namespace drawinglayer
                 const double fFullViewSizeY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fLogicY)).getLength());
 
                 // generate RasterWidth and RasterHeight for visible part
-                const sal_Int32 nRasterWidth((sal_Int32)basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
-                const sal_Int32 nRasterHeight((sal_Int32)basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
+                const sal_Int32 nRasterWidth(basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
+                const sal_Int32 nRasterHeight(basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
 
                 if(nRasterWidth && nRasterHeight)
                 {

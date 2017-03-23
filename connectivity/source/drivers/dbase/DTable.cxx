@@ -2592,7 +2592,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
     // prepare positioning:
     OSL_ENSURE(m_pFileStream,"ODbaseTable::seekRow: FileStream is NULL!");
 
-    sal_uInt32  nNumberOfRecords = (sal_uInt32)m_aHeader.db_anz;
+    sal_uInt32  nNumberOfRecords = m_aHeader.db_anz;
     sal_uInt32 nTempPos = m_nFilePos;
     m_nFilePos = nCurPos;
 
@@ -2612,8 +2612,8 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
             m_nFilePos = nNumberOfRecords;
             break;
         case IResultSetHelper::RELATIVE1:
-            m_nFilePos = (((sal_Int32)m_nFilePos) + nOffset < 0) ? 0L
-                            : (sal_uInt32)(((sal_Int32)m_nFilePos) + nOffset);
+            m_nFilePos = (m_nFilePos + nOffset < 0) ? 0L
+                            : (sal_uInt32)(m_nFilePos + nOffset);
             break;
         case IResultSetHelper::ABSOLUTE1:
         case IResultSetHelper::BOOKMARK:

@@ -184,7 +184,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
         if ((nAnyMask & DEFAULT_LONG) == DEFAULT_LONG)
         {
             sal_Int32 nValue = _rxInStream->readLong();
-            m_aDefault <<= (sal_Int32)nValue;
+            m_aDefault <<= nValue;
         }
         else if ((nAnyMask & DEFAULT_DOUBLE) == DEFAULT_DOUBLE)
         {

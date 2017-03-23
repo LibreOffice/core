@@ -3026,7 +3026,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
             *pStartRow = nRow;
         if (pEndRow)
             *pEndRow = nRow;
-        return (sal_uInt16) ScGlobal::nStdRowHeight;
+        return ScGlobal::nStdRowHeight;
     }
 }
 
@@ -3102,7 +3102,7 @@ sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if
     if (ValidRow(nRow) && mpRowHeights)
         return mpRowHeights->getValue(nRow);
     else
-        return (sal_uInt16) ScGlobal::nStdRowHeight;
+        return ScGlobal::nStdRowHeight;
 }
 
 //  Column/Row -Flags

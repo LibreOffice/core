@@ -2427,8 +2427,8 @@ RTFError RTFDocumentImpl::popState()
 
             if (bTextFrame)
             {
-                xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny((sal_Int32)rDrawing.nLeft));
-                xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny((sal_Int32)rDrawing.nTop));
+                xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(rDrawing.nLeft));
+                xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(rDrawing.nTop));
             }
             else
             {

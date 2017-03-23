@@ -421,8 +421,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
                 return true;
             }
 
-            xPropertySet->setPropertyValue(g_aProxyModePN,
-                Any((sal_Int32) nSelPos));
+            xPropertySet->setPropertyValue(g_aProxyModePN, Any(nSelPos));
             bModified = true;
         }
 

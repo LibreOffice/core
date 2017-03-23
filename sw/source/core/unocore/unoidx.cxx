@@ -3049,7 +3049,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                     sal_Int32 nPos = (convertTwipToMm100(aToken.nTabStopPosition));
                     if(nPos < 0)
                         nPos = 0;
-                    pArr[1].Value <<= (sal_Int32)nPos;
+                    pArr[1].Value <<= nPos;
                 }
                 pArr[2].Name = "TabStopFillCharacter";
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);

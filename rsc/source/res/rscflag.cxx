@@ -288,7 +288,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
             Flag = 1;
     }
 
-    aMem.Put( (sal_Int32)lVal );
+    aMem.Put( lVal );
     return ERR_OK;
 }
 

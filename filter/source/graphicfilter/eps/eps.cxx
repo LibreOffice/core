@@ -2167,14 +2167,14 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
     {
         // writes the Color (grayscale) as a Number from 0.000 up to 1.000
 
-        ImplWriteF( 1000 * ( (sal_uInt8)aColor.GetRed() * 77 + (sal_uInt8)aColor.GetGreen() * 151 +
-            (sal_uInt8)aColor.GetBlue() * 28 + 1 ) / 65536, 3, nMode );
+        ImplWriteF( 1000 * ( aColor.GetRed() * 77 + aColor.GetGreen() * 151 +
+            aColor.GetBlue() * 28 + 1 ) / 65536, 3, nMode );
     }
     else
     {
-        ImplWriteB1 ( (sal_uInt8)aColor.GetRed() );
-        ImplWriteB1 ( (sal_uInt8)aColor.GetGreen() );
-        ImplWriteB1 ( (sal_uInt8)aColor.GetBlue() );
+        ImplWriteB1 ( aColor.GetRed() );
+        ImplWriteB1 ( aColor.GetGreen() );
+        ImplWriteB1 ( aColor.GetBlue() );
     }
     mpPS->WriteCharPtr( "c" );                               // ( c is defined as setrgbcolor or setgray )
     ImplExecMode( nMode );

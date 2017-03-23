@@ -711,7 +711,7 @@ bool PNGReaderImpl::ImplReadPalette()
     if ( ( ( mnChunkLen % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mxAcc )
     {
         mbPalette = true;
-        mxAcc->SetPaletteEntryCount( (sal_uInt16) nCount );
+        mxAcc->SetPaletteEntryCount( nCount );
 
         for ( sal_uInt16 i = 0; i < nCount; i++ )
         {

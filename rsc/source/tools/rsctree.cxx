@@ -331,9 +331,9 @@ IdNode * IdNode::Search( sal_uInt32 nTypeName ) const
 
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
 {
-    if( GetId() < (sal_uInt32)(static_cast<const IdNode *>(pSearch)->GetId()) )
+    if( GetId() < static_cast<const IdNode *>(pSearch)->GetId() )
         return LESS;
-    else if( GetId() > (sal_uInt32)(static_cast<const IdNode *>(pSearch)->GetId()) )
+    else if( GetId() > static_cast<const IdNode *>(pSearch)->GetId() )
         return GREATER;
     else
         return EQUAL;

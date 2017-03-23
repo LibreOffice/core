@@ -281,7 +281,7 @@ namespace svt
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
             bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
@@ -559,7 +559,7 @@ namespace svt
     {
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
         RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         sal_Int32 nCurrentStatePathIndex = -1;
         if ( m_pImpl->nActivePath != -1 )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );

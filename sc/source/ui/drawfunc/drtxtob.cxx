@@ -1081,8 +1081,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Zeilenabstand
 
-    sal_uInt16 nLineSpace = (sal_uInt16)
-                static_cast<const SvxLineSpacingItem&>(aAttrSet.
+    sal_uInt16 nLineSpace = static_cast<const SvxLineSpacingItem&>(aAttrSet.
                         Get( EE_PARA_SBL )).GetPropLineSpace();
     switch( nLineSpace )
     {

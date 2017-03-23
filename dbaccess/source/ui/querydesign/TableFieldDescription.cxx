@@ -171,7 +171,7 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
     o_rSettings.put( "FieldAlias", m_aFieldAlias );
     o_rSettings.put( "FunctionName", m_aFunctionName );
     o_rSettings.put( "DataType", m_eDataType );
-    o_rSettings.put( "FunctionType", (sal_Int32)m_eFunctionType );
+    o_rSettings.put( "FunctionType", m_eFunctionType );
     o_rSettings.put( "FieldType", (sal_Int32)m_eFieldType );
     o_rSettings.put( "OrderDir", (sal_Int32)m_eOrderDir );
     o_rSettings.put( "ColWidth", m_nColWidth );

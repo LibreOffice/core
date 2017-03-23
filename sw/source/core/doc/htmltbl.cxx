@@ -1256,8 +1256,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                         (sal_uInt16)((nColMinD * m_nRelTabWidth) / m_nMin) );
                 }
 
-                nAbs = nAbs + (sal_uInt16)pColumn->GetAbsColWidth();
-                nRel = nRel + (sal_uInt16)pColumn->GetRelColWidth();
+                nAbs = nAbs + pColumn->GetAbsColWidth();
+                nRel = nRel + pColumn->GetRelColWidth();
             }
             pColumn = GetColumn( m_nCols-1 );
             pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
@@ -1293,8 +1293,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                         (sal_uInt16)((((nColMinD-nRealColMin) * nDistRel) / nDistMin) + nRealColMin) );
                 }
 
-                nAbs = nAbs + (sal_uInt16)pColumn->GetAbsColWidth();
-                nRel = nRel + (sal_uInt16)pColumn->GetRelColWidth();
+                nAbs = nAbs + pColumn->GetAbsColWidth();
+                nRel = nRel + pColumn->GetRelColWidth();
             }
             pColumn = GetColumn( m_nCols-1 );
             pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );

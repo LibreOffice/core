@@ -418,7 +418,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
                 // added to avoid warnings
             }
         }
-        aRet <<= (sal_Int16) nZoomVal;
+        aRet <<= nZoomVal;
     }
     else if (aPropertyName == SC_UNONAME_ULISTS )
     {

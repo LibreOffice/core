@@ -672,10 +672,10 @@ IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCMISCOPT_DEFOBJWIDTH:
-                pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeWidth();
+                pValues[nProp] <<= GetDefaultObjectSizeWidth();
                 break;
             case SCMISCOPT_DEFOBJHEIGHT:
-                pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeHeight();
+                pValues[nProp] <<= GetDefaultObjectSizeHeight();
                 break;
             case SCMISCOPT_SHOWSHAREDDOCWARN:
                 pValues[nProp] <<= GetShowSharedDocumentWarning();
