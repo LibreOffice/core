@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <ctype.h>
 
 #include <tools/debug.hxx>
 

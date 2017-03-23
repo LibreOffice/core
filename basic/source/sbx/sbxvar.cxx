@@ -29,7 +29,6 @@
 #include "sbxconv.hxx"
 #include "sbunoobj.hxx"
 #include <math.h>
-#include <ctype.h>
 #include <rtl/character.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>

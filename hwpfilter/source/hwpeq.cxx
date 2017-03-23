@@ -20,7 +20,6 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 
 // DVO: always use standard headers:
 #include <istream>

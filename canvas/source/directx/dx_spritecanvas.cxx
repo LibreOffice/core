@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <ctype.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>

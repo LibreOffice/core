@@ -29,7 +29,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <ctype.h>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/debugXML.h>

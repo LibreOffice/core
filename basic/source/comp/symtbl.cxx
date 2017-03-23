@@ -24,7 +24,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <rtl/character.hxx>
 #include <o3tl/make_unique.hxx>
 

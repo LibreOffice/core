@@ -50,7 +50,6 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
 
-#include <ctype.h>
 #include <float.h>
 
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>

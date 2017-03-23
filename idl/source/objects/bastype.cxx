@@ -19,7 +19,6 @@
 
 
 #include <limits.h>
-#include <ctype.h>
 #include <bastype.hxx>
 #include <lex.hxx>
 #include <globals.hxx>

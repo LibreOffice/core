@@ -22,7 +22,6 @@
 #include <svtools/rtftoken.h>
 
 #include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
 
 // the table is still to be sorted

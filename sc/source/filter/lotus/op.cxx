@@ -21,7 +21,6 @@
 
 #include <string.h>
 #include <math.h>
-#include <ctype.h>
 #include <stdlib.h>
 
 #include "scitems.hxx"

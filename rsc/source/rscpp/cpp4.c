@@ -19,7 +19,6 @@
 
 #include <sal/types.h>
 #include <stdio.h>
-#include <ctype.h>
 #include "cppdef.h"
 #include "cpp.h"
 

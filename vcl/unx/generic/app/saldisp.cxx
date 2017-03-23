@@ -24,7 +24,6 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <ctype.h>
 
 #if defined(__sun) || defined(AIX)
 #include <osl/module.h>

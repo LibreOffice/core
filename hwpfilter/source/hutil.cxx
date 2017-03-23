@@ -19,7 +19,6 @@
 
 #include "precompile.h"
 
-#include <ctype.h>
 #include "hwpfile.h"
 #include "hbox.h"
 #include "hutil.h"

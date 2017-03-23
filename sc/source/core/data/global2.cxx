@@ -24,7 +24,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
-#include <ctype.h>
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
 #include <formula/errorcodes.hxx>

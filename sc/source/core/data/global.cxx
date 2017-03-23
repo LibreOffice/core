@@ -42,7 +42,6 @@
 #include <unotools/securityoptions.hxx>
 #include <stdlib.h>
 #include <time.h>
-#include <ctype.h>
 #include <numeric>
 #include <svx/svdmodel.hxx>
 

@@ -27,6 +27,8 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
+#include <ctype.h>
+
 #include "def.h"
 char *hash_lookup( char *symbol, struct symhash *symbols );
 void hash_undefine( char *symbol, struct symhash *symbols );

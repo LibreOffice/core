@@ -21,7 +21,6 @@
 #include "jpeglib.h"
 #include "transupp.h"       /* My own external interface */
 #include "jpegcomp.h"
-#include <ctype.h>      /* to declare isdigit() */
 
 /* Definition of jdiv_round_up is copied here from jutils.c in jpeg-8c.tar.gz,
    just as the rest of this file appears to be copied here from transupp.c in

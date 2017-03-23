@@ -19,8 +19,6 @@
 
 #include "precompile.h"
 
-#include <ctype.h>
-
 #include <osl/diagnose.h>
 
 #include "hwpfile.h"

@@ -20,7 +20,6 @@
 #include "t602filter.hxx"
 #include "t602filter.hrc"
 
-#include <ctype.h>
 #include <stdio.h>
 
 #include <cppuhelper/factory.hxx>

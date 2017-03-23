@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <ctype.h>
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <rtl/ustrbuf.hxx>

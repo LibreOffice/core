@@ -25,7 +25,6 @@
 #include "osl/security.hxx"
 #include <rtl/character.hxx>
 #include <string.h>
-#include <ctype.h>
 #include "diagnostics.h"
 using namespace osl;
 

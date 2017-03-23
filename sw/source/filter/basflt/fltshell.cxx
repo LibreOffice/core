@@ -21,7 +21,6 @@
 
 #include <cstddef>
 
-#include <ctype.h>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <vcl/graphicfilter.hxx>

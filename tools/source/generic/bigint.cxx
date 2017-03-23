@@ -26,7 +26,6 @@
 
 
 #include <string.h>
-#include <ctype.h>
 
 static const long MY_MAXLONG  = 0x3fffffff;
 static const long MY_MINLONG  = -MY_MAXLONG;

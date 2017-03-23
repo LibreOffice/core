@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <ctype.h>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>

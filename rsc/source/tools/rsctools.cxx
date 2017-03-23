@@ -24,7 +24,6 @@
 #include <direct.h>
 #endif
 #include <string.h>
-#include <ctype.h>
 
 #include <rscdef.hxx>
 #include <rsctools.hxx>

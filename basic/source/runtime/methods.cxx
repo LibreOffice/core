@@ -84,7 +84,6 @@ using namespace com::sun::star::uno;
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <errno.h>
 
 #include "sbobjmod.hxx"

@@ -27,6 +27,8 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
+#include <ctype.h>
+
 #include "def.h"
 
 #ifdef  CPP

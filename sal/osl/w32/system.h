@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <ctype.h>
 #include <malloc.h>
 #include <limits.h>
 #include <process.h>

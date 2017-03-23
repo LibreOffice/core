@@ -29,7 +29,6 @@
 
 #include "runtime.hxx"
 
-#include <ctype.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>
 #include <rtl/strbuf.hxx>

@@ -41,7 +41,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>

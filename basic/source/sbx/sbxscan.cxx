@@ -32,7 +32,6 @@
 
 #include <math.h>
 #include <string.h>
-#include <ctype.h>
 
 #include "sbxres.hxx"
 #include "sbxbase.hxx"

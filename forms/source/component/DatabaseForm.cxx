@@ -78,7 +78,6 @@
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 
-#include <ctype.h>
 #include <unordered_map>
 
 using namespace ::dbtools;
