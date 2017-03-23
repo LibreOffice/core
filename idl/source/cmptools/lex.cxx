@@ -125,9 +125,9 @@ void SvTokenStream::FillTokenList()
     pCurToken = aTokList.begin();
 }
 
-int SvTokenStream::GetNextChar()
+char SvTokenStream::GetNextChar()
 {
-    int nChar;
+    char nChar;
     while (aBufStr.getLength() <= nBufPos)
     {
         if (pInStream->ReadLine(aBufStr))
@@ -171,7 +171,9 @@ sal_uLong SvTokenStream::GetNumber()
             if( isdigit( c ) )
                 l = l * nLog + (c - '0');
             else
-                l = l * nLog + (rtl::toAsciiUpperCase( c ) - 'A' + 10 );
+                l = l * nLog
+                    + (rtl::toAsciiUpperCase( static_cast<unsigned char>(c) )
+                       - 'A' + 10 );
             c = GetFastNextChar();
         }
     }
@@ -208,7 +210,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     if( '/' == c )
     {
         // time optimization, no comments
-        int c1 = c;
+        char c1 = c;
         c = GetFastNextChar();
         if( '/' == c )
         {
@@ -247,7 +249,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         else
         {
             rToken.nType = SVTOKENTYPE::Char;
-            rToken.cChar = (char)c1;
+            rToken.cChar = c1;
         }
     }
     else if( c == '"' )
@@ -271,7 +273,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
                 bDone = true;
             }
             else
-                aStr.append(static_cast<char>(c));
+                aStr.append(c);
         }
         if( IsEof() || ( SVSTREAM_OK != pInStream->GetError() ) )
             return false;
@@ -289,7 +291,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         OStringBuffer aBuf;
         while( isalnum( c ) || c == '_' )
         {
-            aBuf.append(static_cast<char>(c));
+            aBuf.append(c);
             c = GetFastNextChar();
         }
         OString aStr = aBuf.makeStringAndClear();
@@ -322,7 +324,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     else
     {
         rToken.nType = SVTOKENTYPE::Char;
-        rToken.cChar = (char)c;
+        rToken.cChar = c;
         c = GetFastNextChar();
     }
     rToken.SetLine( nLastLine );

@@ -100,7 +100,7 @@ class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
     sal_Int32       nBufPos;
-    int             c;          // next character
+    char            c;          // next character
     static const sal_uInt16 nTabSize = 4;   // length of tabulator
     OString         aStrTrue;
     OString         aStrFalse;
@@ -115,8 +115,8 @@ class SvTokenStream
 
     void            InitCtor();
 
-    int             GetNextChar();
-    int             GetFastNextChar()
+    char            GetNextChar();
+    char            GetFastNextChar()
                     {
                         return (nBufPos < aBufStr.getLength())
                             ? aBufStr[nBufPos++]
