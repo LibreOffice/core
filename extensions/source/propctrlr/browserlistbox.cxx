@@ -326,9 +326,11 @@ namespace pcr
             ,m_bUpdate(true)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
-        ScopedVclPtrInstance< ListBox > aListBox(this,WB_DROPDOWN);
-        aListBox->SetPosSizePixel(Point(0,0),Size(100,100));
-        m_nRowHeight = aListBox->GetSizePixel().Height()+2;
+        ScopedVclPtrInstance<ListBox> aListBox(this, WB_DROPDOWN);
+        ScopedVclPtrInstance<Edit> aEditBox(this);
+        m_nRowHeight = std::max(aListBox->get_preferred_size().Height(),
+                                aEditBox->get_preferred_size().Height());
+        m_nRowHeight += 2;
         SetBackground( pParent->GetBackground() );
         m_aLinesPlayground->SetBackground( GetBackground() );
 
@@ -338,7 +340,6 @@ namespace pcr
         m_aVScroll->Hide();
         m_aVScroll->SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
     }
-
 
     OBrowserListBox::~OBrowserListBox()
     {
