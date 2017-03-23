@@ -57,6 +57,9 @@ public:
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
 
+    /// Test Copy/Paste with Tabs
+    void testTabsCopyPaste();
+
     /// Test hyperlinks
     void testHyperlinkSearch();
 
@@ -73,6 +76,7 @@ public:
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testBoldItalicCopyPaste);
     CPPUNIT_TEST(testUnderlineCopyPaste);
@@ -409,6 +413,59 @@ void Test::testCopyPaste()
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aText + aText), rDoc.GetParaAsString(sal_Int32(0)) );
+}
+
+void Test::testTabsCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // New instance must be empty - no initial text
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Get corresponding Item for inserting tabs in the text
+    SfxVoidItem aTab( EE_FEATURE_TAB );
+
+    // Insert initial text
+    OUString aParaText = "sampletextfortestingtab";
+    // Positions Ref      ......*6...............*23
+    sal_Int32 aTextLen = aParaText.getLength();
+    aEditEngine.SetText( aParaText );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert tab 1 at desired position
+    ContentNode *pNode = rDoc.GetObject(0);
+    EditSelection aSel1( EditPaM(pNode, 6), EditPaM(pNode, 6) );
+    aEditEngine.InsertFeature( aSel1, aTab );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 1), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab"), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert tab 2 at desired position
+    EditSelection aSel2( EditPaM(pNode, 23+1), EditPaM(pNode, 23+1) );
+    aEditEngine.InsertFeature( aSel2, aTab );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Copy text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,6,0,aTextLen+2) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen - 6 + 4 ), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
 namespace {
