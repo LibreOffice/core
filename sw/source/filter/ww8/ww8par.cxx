@@ -556,7 +556,7 @@ sal_uInt32 SwMSDffManager::GetFilterFlags()
  * native nonOLE Form Control Objects.
  */
 // #i32596# - consider new parameter <_nCalledByGroup>
-SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
+SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                       const Graphic& rGrf,
                                       const Rectangle& rBoundRect,
                                       const Rectangle& rVisArea,
@@ -6345,7 +6345,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     return bRet;
 }
 
-bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
+bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName,
     tools::SvRef<SotStorage>& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;

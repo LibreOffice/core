@@ -576,7 +576,7 @@ protected:
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object.
     virtual SdrObject*      ImportOLE(
-                                long nOLEId,
+                                sal_uInt32 nOLEId,
                                 const Graphic& rGraf,
                                 const Rectangle& rBoundRect,
                                 const Rectangle& rVisArea,

@@ -472,7 +472,7 @@ protected:
     // #i32596# - pass <nCalledByGroup> to method
     // Needed in Writer's Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
-    virtual SdrObject* ImportOLE( long nOLEId,
+    virtual SdrObject* ImportOLE( sal_uInt32 nOLEId,
                                   const Graphic& rGraf,
                                   const Rectangle& rBoundRect,
                                   const Rectangle& rVisArea,
@@ -516,7 +516,7 @@ protected:
     static void ReadObjText( const OUString& rText, SdrObject* pObj );
 
 // the following method needs to be overridden for the import of OLE objects
-    virtual bool GetOLEStorageName( long nOLEId,
+    virtual bool GetOLEStorageName( sal_uInt32 nOLEId,
                                       OUString& rStorageName,
                                       tools::SvRef<SotStorage>& rSrcStorage,
                                       css::uno::Reference < css::embed::XStorage >& xDestStg

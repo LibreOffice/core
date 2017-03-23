@@ -1780,7 +1780,7 @@ bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32
 }
 
 // #i32596# - add new parameter <_nCalledByGroup>
-SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
+SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                            const Graphic& rGraf,
                                            const Rectangle& rBoundRect,
                                            const Rectangle& rVisArea,
@@ -1817,7 +1817,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
     for (PPTOleEntry* pOe : const_cast<SdrPowerPointImport*>(this)->aOleObjectList)
     {
-        if ( pOe->nId != (sal_uInt32)nOLEId )
+        if ( pOe->nId != nOLEId )
             continue;
 
         rStCtrl.Seek( pOe->nRecHdOfs );

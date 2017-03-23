@@ -6540,7 +6540,7 @@ void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader
     return;  // will be overridden by SJ in Draw
 }
 
-bool SvxMSDffManager::GetOLEStorageName( long /* nOLEId */, OUString&, tools::SvRef<SotStorage>&, uno::Reference < embed::XStorage >& ) const
+bool SvxMSDffManager::GetOLEStorageName( sal_uInt32, OUString&, tools::SvRef<SotStorage>&, uno::Reference < embed::XStorage >& ) const
 {
     return false;
 }
@@ -6551,7 +6551,7 @@ bool SvxMSDffManager::ShapeHasText( sal_uLong /* nShapeId */, sal_uLong /* nFile
 }
 
 // #i32596# - add new parameter <_nCalledByGroup>
-SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
+SdrObject* SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                        const Graphic& rGrf,
                                        const Rectangle& rBoundRect,
                                        const Rectangle& rVisArea,
