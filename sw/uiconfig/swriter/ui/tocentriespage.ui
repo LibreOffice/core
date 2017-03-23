@@ -558,7 +558,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="hyperlink">
-                                    <property name="label" translatable="yes">L_ink</property>
+                                    <property name="label" translatable="yes">H_yperlink</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>

@@ -31,7 +31,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
-    Text [ en-US ] = "Trigger link" ;
+    Text [ en-US ] = "Trigger hyperlink" ;
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
@@ -49,7 +49,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
 };
 String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
 {
-    Text [ en-US ] = "This is where you create a link to a Web page or FTP server connection." ;
+    Text [ en-US ] = "This is where you create a hyperlink to a Web page or FTP server connection." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
@@ -58,7 +58,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
 };
 String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
 {
-    Text [ en-US ] = "This is where you create a link to an e-mail address." ;
+    Text [ en-US ] = "This is where you create a hyperlink to an e-mail address." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP
@@ -67,7 +67,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
 };
 String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
 {
-    Text [ en-US ] = "This is where you create a link to an existing document or a target within a document." ;
+    Text [ en-US ] = "This is where you create a hyperlink to an existing document or a target within a document." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP

@@ -1851,11 +1851,11 @@ String STR_COPYERR+RID_GLOBSTR_OFFSET
 };
 String STR_CTRLCLICKHYPERLINK+RID_GLOBSTR_OFFSET
 {
-    Text [ en-US ] = "%s-Click to follow link:";
+    Text [ en-US ] = "%s-click to follow hyperlink:";
 };
 String STR_CLICKHYPERLINK+RID_GLOBSTR_OFFSET
 {
-    Text [ en-US ] = "click to open link:";
+    Text [ en-US ] = "click to open hyperlink:";
 };
 
 String STR_PRINT_PREVIEW_NODATA+RID_GLOBSTR_OFFSET

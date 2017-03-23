@@ -610,7 +610,7 @@
       </node>
       <node oor:name=".uno:EditHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Link...</value>
+          <value xml:lang="en-US">~Hyperlink...</value>
         </prop>
       </node>
       <node oor:name=".uno:HideLastLevel" oor:op="replace">

@@ -767,7 +767,7 @@ String STR_HTMLATTR_TEXT
 
 String STR_HTMLATTR_LINK
 {
-    Text [ en-US ] = "Link";
+    Text [ en-US ] = "Hyperlink";
 };
 
 String STR_HTMLATTR_VLINK

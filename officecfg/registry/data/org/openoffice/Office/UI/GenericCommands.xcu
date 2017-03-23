@@ -3169,7 +3169,7 @@
       </node>
       <node oor:name=".uno:OpenHyperlinkOnCursor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Open Link</value>
+          <value xml:lang="en-US">Open Hyperlink</value>
         </prop>
       </node>
       <node oor:name=".uno:OpenSmartTagMenuOnCursor" oor:op="replace">
@@ -3832,10 +3832,10 @@
       </node>
       <node oor:name=".uno:HyperlinkDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Link...</value>
+          <value xml:lang="en-US">~Hyperlink...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Link</value>
+          <value xml:lang="en-US">Insert Hyperlink</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>

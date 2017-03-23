@@ -4155,7 +4155,7 @@ StringArray SC_OPCODE_HYPERLINK+RID_SC_FUNC_DESCRIPTIONS_START
 {
     ItemList [ en-US ] =
     {
-        < "Link." ; >;
+        < "Hyperlink." ; >;
         < "URL " ; >;
         < "URL"; >;
         < "CellText " ; >;

@@ -2140,12 +2140,12 @@
       </node>
       <node oor:name=".uno:EditShapeHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Edit Link</value>
+          <value xml:lang="en-US">Edit Hyperlink</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteShapeHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Remove Link</value>
+          <value xml:lang="en-US">Remove Hyperlink</value>
         </prop>
       </node>
       <node oor:name=".uno:ColorScaleDialog" oor:op="replace">

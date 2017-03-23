@@ -404,7 +404,7 @@ String STR_INSERT_URLBTN
 };
 String STR_INSERT_URLTXT
 {
-    Text [ en-US ] = "Insert Link";
+    Text [ en-US ] = "Insert Hyperlink";
 };
 String STR_DELETE_INVISIBLECNTNT
 {

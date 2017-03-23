@@ -138,7 +138,7 @@
               <object class="GtkLabel" id="hyperlink">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Link</property>
+                <property name="label" translatable="yes">Hyperlink</property>
               </object>
               <packing>
                 <property name="position">3</property>
