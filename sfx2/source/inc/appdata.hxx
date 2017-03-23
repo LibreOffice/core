@@ -118,10 +118,7 @@ public:
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
     SfxDispatcher*              pAppDispat;     // Dispatcher if no document
-    SfxInterface**              pInterfaces;
     ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
-
-    sal_uInt16                  nInterfaces;
 
     bool                        bDowning:1;   // sal_True on Exit and afterwards
     bool                        bInQuit : 1;

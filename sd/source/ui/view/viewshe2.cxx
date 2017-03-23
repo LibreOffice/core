@@ -970,13 +970,11 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     // Get the view id from the view shell in the center pane.  This will
     // usually be the called view shell, but to be on the safe side we call
     // the main view shell explicitly.
-    sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
+    SfxInterfaceId nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell().get() != nullptr)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
     rSequence[nIndex].Name = sUNO_View_ViewId;
-    OUStringBuffer sBuffer( "view" );
-    sBuffer.append( static_cast<sal_Int32>(nViewID));
-    rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();
+    rSequence[nIndex].Value <<= "view" + OUString::number( static_cast<sal_uInt16>(nViewID));
 
     mpFrameView->WriteUserDataSequence( rSequence, bBrowse );
 }

@@ -1152,7 +1152,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     SolarMutexGuard aGuard;
     if(IsValid())
     {
-        SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, 7 );
+        SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, SfxInterfaceId(7) );
         SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
@@ -2482,7 +2482,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             {
                 //create a hidden view to be able to export as PDF also in print preview
                 //pView and pSwView are not changed intentionally!
-                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
+                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, SFX_INTERFACE_SFXDOCSH );
                 pViewShell = static_cast<SwView*>(m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
             }
             else

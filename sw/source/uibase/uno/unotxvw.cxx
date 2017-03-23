@@ -635,7 +635,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     // #i103634#, #i112425#: do not expand numbering and fields on PDF export
     pTempDoc->SetClipBoard(true);
     rOldSh.FillPrtDoc(pTempDoc,  pPrt);
-    SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
+    SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
     SwView* pDocView = static_cast<SwView*>( pDocFrame->GetViewShell() );
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();

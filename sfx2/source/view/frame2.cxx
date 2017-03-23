@@ -218,7 +218,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden )
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId, bool bHidden )
 {
     SfxFrame* pFrame = nullptr;
     try
@@ -242,8 +242,8 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt
         ::comphelper::NamedValueCollection aArgs( aLoadArgs );
         aArgs.put( "Model", rDoc.GetModel() );
         aArgs.put( "Hidden", bHidden );
-        if ( nViewId )
-            aArgs.put( "ViewId", nViewId );
+        if ( nViewId != SfxInterfaceId(0) )
+            aArgs.put( "ViewId", (sal_uInt16)nViewId );
 
         aLoadArgs = aArgs.getPropertyValues();
 

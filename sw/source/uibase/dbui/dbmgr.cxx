@@ -973,7 +973,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
 {
     const SwDoc *pSourceDoc = rSourceWrtShell.GetDoc();
     SfxObjectShellRef xWorkObjectShell = pSourceDoc->CreateCopy( true, (aType == WorkingDocType::TARGET) );
-    SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkObjectShell, 0 );
+    SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkObjectShell, SFX_INTERFACE_NONE );
 
     if( pSourceWindow )
     {

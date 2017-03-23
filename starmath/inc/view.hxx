@@ -294,7 +294,7 @@ public:
     void        NextError();
     void        PrevError();
 
-    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2)
+    SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+SfxInterfaceId(2))
     SFX_DECL_VIEWFACTORY(SmViewShell);
 
 private:

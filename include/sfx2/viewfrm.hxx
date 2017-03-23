@@ -97,9 +97,9 @@ public:
 
     static void             SetViewFrame( SfxViewFrame* );
 
-    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
-    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId );
+    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, SfxInterfaceId i_nViewId );
+    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, SfxInterfaceId i_nViewId );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, SfxInterfaceId i_nViewId );
     static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
@@ -143,7 +143,7 @@ public:
     SAL_DLLPRIVATE void InvalidateBorderImpl( const SfxViewShell *pSh );
 
     virtual SfxObjectShell* GetObjectShell() override;
-    sal_uInt16              GetCurViewId() const;
+    SfxInterfaceId          GetCurViewId() const;
     SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
 
@@ -206,12 +206,12 @@ public:
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
-    SAL_DLLPRIVATE void SetCurViewId_Impl( const sal_uInt16 i_nID );
+    SAL_DLLPRIVATE void SetCurViewId_Impl( const SfxInterfaceId i_nID );
 
 private:
     SAL_DLLPRIVATE bool SwitchToViewShell_Impl( sal_uInt16 nNo, bool bIsIndex = false );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
-    SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId );
+    SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId );
 
     /** loads the given existing document into the given frame
 
@@ -234,7 +234,7 @@ private:
                             const SfxObjectShell& i_rDoc,
                             const css::uno::Reference< css::frame::XFrame >& i_rFrame,
                             const css::uno::Sequence< css::beans::PropertyValue >& i_rLoadArgs,
-                            const sal_uInt16 i_nViewId,
+                            const SfxInterfaceId i_nViewId,
                             const bool i_bHidden
                         );
 
@@ -256,7 +256,7 @@ private:
     SAL_DLLPRIVATE static SfxViewFrame* LoadViewIntoFrame_Impl_NoThrow(
                             const SfxObjectShell& i_rDoc,
                             const css::uno::Reference< css::frame::XFrame >& i_rFrame,
-                            const sal_uInt16 i_nViewId,
+                            const SfxInterfaceId i_nViewId,
                             const bool i_bHidden
                         );
 };

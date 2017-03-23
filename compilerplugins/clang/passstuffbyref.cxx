@@ -252,6 +252,10 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     }
 }
 
+static bool startswith(const std::string& rStr, const char* pSubStr) {
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+
 void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl) {
 
     if (methodDecl && (methodDecl->isVirtual() || methodDecl->hasAttr<OverrideAttr>())) {
@@ -303,6 +307,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         .GlobalNamespace()) {
         return;
     }
+    if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
+        return;
+    }
     mbInsideFunctionDecl = true;
     mbFoundDisqualifier = false;
     TraverseStmt(functionDecl->getBody());
@@ -313,9 +320,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
 
     report(
             DiagnosticsEngine::Warning,
-            "rather return %0 from function %1 %2 by const& than by value, to avoid unnecessary copying",
+            "rather return %0 from function %1 by const& than by value, to avoid unnecessary copying",
             functionDecl->getSourceRange().getBegin())
-        << type.getAsString() << functionDecl->getQualifiedNameAsString() << type->getTypeClassName() << functionDecl->getSourceRange();
+        << type.getAsString() << functionDecl->getQualifiedNameAsString() << functionDecl->getSourceRange();
 
     // display the location of the class member declaration so I don't have to search for it by hand
     if (functionDecl->getSourceRange().getBegin() != functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
