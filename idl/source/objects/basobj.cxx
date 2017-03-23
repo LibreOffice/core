@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <ctype.h>
-
+#include <rtl/character.hxx>
 #include <tools/debug.hxx>
 
 #include <basobj.hxx>
@@ -49,7 +49,8 @@ void SvMetaObject::Back2Delimiter( SvStream & rOutStm )
     char c = 0;
     rOutStm.ReadChar( c );
 
-    while( isspace( c ) && rOutStm.Tell() != 1 )
+    while( rtl::isAsciiWhiteSpace( static_cast<unsigned char>(c) )
+           && rOutStm.Tell() != 1 )
     {
         rOutStm.SeekRel( -2 );
         rOutStm.ReadChar( c );
