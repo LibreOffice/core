@@ -219,6 +219,8 @@ public:
         sal_Int32 m_nBitmapObject;
         /// Size of the bitmap replacement, in pixels.
         Size m_aPixelSize;
+        /// PDF data from the graphic object, if not writing a reference XObject.
+        css::uno::Sequence<sal_Int8> m_aPDFData;
 
         ReferenceXObjectEmit()
             : m_nFormObject(0),

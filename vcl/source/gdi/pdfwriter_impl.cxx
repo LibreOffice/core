@@ -71,6 +71,7 @@
 #include <vcl/strhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"
@@ -10911,13 +10912,59 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
 
     OStringBuffer aStream;
     aStream.append("q ");
-    aStream.append(aSize.Width());
-    aStream.append(" 0 0 ");
-    aStream.append(aSize.Height());
-    aStream.append(" 0 0 cm\n");
-    aStream.append("/Im");
-    aStream.append(rEmit.m_nBitmapObject);
-    aStream.append(" Do\n");
+    if (m_aContext.UseReferenceXObject)
+    {
+        // Reference XObject markup is used, just refer to the fallback bitmap
+        // here.
+        aStream.append(aSize.Width());
+        aStream.append(" 0 0 ");
+        aStream.append(aSize.Height());
+        aStream.append(" 0 0 cm\n");
+        aStream.append("/Im");
+        aStream.append(rEmit.m_nBitmapObject);
+        aStream.append(" Do\n");
+    }
+    else
+    {
+        // No reference XObject, include the original page stream.
+        // Reset line width to the default.
+        aStream.append(" 1 w\n");
+        SvMemoryStream aPDFStream;
+        aPDFStream.WriteBytes(rEmit.m_aPDFData.getArray(), rEmit.m_aPDFData.getLength());
+        aPDFStream.Seek(0);
+        filter::PDFDocument aPDFDocument;
+        if (!aPDFDocument.Read(aPDFStream))
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: reading the PDF document failed");
+            return;
+        }
+        std::vector<filter::PDFObjectElement*> aPages = aPDFDocument.GetPages();
+        if (aPages.empty() || !aPages[0])
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: no pages");
+            return;
+        }
+
+        filter::PDFObjectElement* pPageContents = aPages[0]->LookupObject("Contents");
+        if (!pPageContents)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: page has no contents");
+            return;
+        }
+
+        filter::PDFStreamElement* pPageStream = pPageContents->GetStream();
+        if (!pPageStream)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: contents has no stream");
+            return;
+        }
+
+        SvMemoryStream& rPageStream = pPageStream->GetMemory();
+
+        // Copy the original page stream to the end of the form XObject stream.
+        aStream.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
+        aStream.append("\n");
+    }
     aStream.append("Q");
     aLine.append(aStream.getLength());
 
@@ -11263,6 +11310,8 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
 
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
+    else
+        rEmit.m_aPDFData = rGraphic.getPdfData();
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
