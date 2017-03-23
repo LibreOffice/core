@@ -239,7 +239,7 @@ public:
         @param nSheet  Sheet index for the returned address (will be checked).
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
-        @return  A valid API cell address struct. */
+        @return  A valid cell address struct. */
     ScAddress           createValidCellAddress(
                             const OUString& rString,
                             sal_Int16 nSheet,
@@ -278,7 +278,7 @@ public:
         @param nSheet  Sheet index for the returned address (will be checked).
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
-        @return  A valid API cell address struct. */
+        @return  A valid cell address struct. */
     ScAddress           createValidCellAddress(
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,

@@ -1252,7 +1252,6 @@ ApiTokenSequence OoxFormulaParserImpl::importOoxFormula( const ScAddress& rBaseA
     return finalizeTokenArray( maApiParser.parseFormula( rFormulaString, rBaseAddr ) );
 }
 
-// TODO: remove the importBiff12Formula function
 ApiTokenSequence OoxFormulaParserImpl::importBiff12Formula( const ScAddress& rBaseAddr, FormulaType eType, SequenceInputStream& rStrm )
 {
     initializeImport( rBaseAddr, eType );
