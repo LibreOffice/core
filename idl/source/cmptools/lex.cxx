@@ -166,9 +166,9 @@ sal_uLong SvTokenStream::GetNumber()
 
     if( nLog == 16 )
     {
-        while( isxdigit( c ) )
+        while( rtl::isAsciiHexDigit( static_cast<unsigned char>(c) ) )
         {
-            if( isdigit( c ) )
+            if( rtl::isAsciiDigit( static_cast<unsigned char>(c) ) )
                 l = l * nLog + (c - '0');
             else
                 l = l * nLog
@@ -179,7 +179,7 @@ sal_uLong SvTokenStream::GetNumber()
     }
     else
     {
-        while( isdigit( c ) || 'x' == c )
+        while( rtl::isAsciiDigit( static_cast<unsigned char>(c) ) || 'x' == c )
         {
             l = l * nLog + (c - '0');
             c = GetFastNextChar();
@@ -196,7 +196,8 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         if( 0 == c )
             c = GetNextChar();
         // skip whitespace
-        while( isspace( c ) || 26 == c )
+        while( rtl::isAsciiWhiteSpace( static_cast<unsigned char>(c) )
+               || 26 == c )
         {
             c = GetFastNextChar();
             nColumn += c == '\t' ? nTabSize : 1;
@@ -280,16 +281,17 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         rToken.nType   = SVTOKENTYPE::String;
         rToken.aString = aStr.makeStringAndClear();
     }
-    else if( isdigit( c ) )
+    else if( rtl::isAsciiDigit( static_cast<unsigned char>(c) ) )
     {
         rToken.nType = SVTOKENTYPE::Integer;
         rToken.nLong = GetNumber();
 
     }
-    else if( isalpha (c) || (c == '_') )
+    else if( rtl::isAsciiAlpha (static_cast<unsigned char>(c)) || (c == '_') )
     {
         OStringBuffer aBuf;
-        while( isalnum( c ) || c == '_' )
+        while( rtl::isAsciiAlphanumeric( static_cast<unsigned char>(c) )
+               || c == '_' )
         {
             aBuf.append(c);
             c = GetFastNextChar();
