@@ -126,7 +126,6 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
 
-    SetHelpId( HID_SCSHELL_DRTXTOB );
     SetName("DrawText");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::DrawText));
 }

@@ -39,7 +39,6 @@ SwNavigationShell::SwNavigationShell(SwView &_rView)
     : SwBaseShell( _rView )
 {
     SetName("Navigation");
-    SetHelpId(SW_NAVIGATIONSHELL);
 }
 
 void SwNavigationShell::Execute(SfxRequest &rReq)

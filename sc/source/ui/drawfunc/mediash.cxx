@@ -48,7 +48,6 @@ void ScMediaShell::InitInterface_Impl()
 ScMediaShell::ScMediaShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
-    SetHelpId(HID_SCSHELL_MEDIA);
     SetName( OUString( ScResId( SCSTR_MEDIASHELL ) ) );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
 }

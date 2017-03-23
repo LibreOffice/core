@@ -59,7 +59,6 @@ void SwWebTextShell::InitInterface_Impl()
 SwWebTextShell::SwWebTextShell(SwView &_rView) :
     SwTextShell(_rView)
 {
-    SetHelpId(SW_WEBTEXTSHELL);
 }
 
 SwWebTextShell::~SwWebTextShell()

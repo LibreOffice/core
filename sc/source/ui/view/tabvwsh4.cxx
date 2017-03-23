@@ -1528,7 +1528,6 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     }
     SetRepeatTarget( &aTarget );
     pFormShell->SetRepeatTarget( &aTarget );
-    SetHelpId( HID_SCSHELL_TABVWSH );
 
     if ( bFirstView )   // first view?
     {

@@ -1932,7 +1932,6 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     SetWindow(mpGraphic.get());
     SfxShell::SetName("SmView");
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
-    SetHelpId( HID_SMA_VIEWSHELL_DOCUMENT );
 }
 
 

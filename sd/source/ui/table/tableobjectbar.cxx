@@ -91,7 +91,6 @@ TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
         SetUndoManager( pDocShell->GetUndoManager() );
     }
     SetRepeatTarget( mpView );
-    SetHelpId( SD_IF_SDDRAWTABLEOBJECTBAR );
     SetName( SD_RESSTR( RID_DRAW_TABLE_TOOLBOX ) );
     SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Table));
 }

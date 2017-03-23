@@ -72,7 +72,6 @@ GraphicObjectBar::GraphicObjectBar (
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );
     SetRepeatTarget( mpView );
-    SetHelpId( SD_IF_SDDRAWGRAFOBJECTBAR );
     SetName( "Graphic objectbar");
 }
 

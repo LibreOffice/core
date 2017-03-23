@@ -381,17 +381,13 @@ void SwView::SelectShell()
         {
             bSetExtInpCntxt = true;
             eShellMode = ShellMode::Text;
-            sal_uInt32 nHelpId = 0;
             if ( m_nSelectionType & nsSelectionType::SEL_NUM )
             {
                 eShellMode = ShellMode::ListText;
                 m_pShell = new SwListShell( *this );
-                nHelpId = m_pShell->GetHelpId();
                 rDispatcher.Push( *m_pShell );
             }
             m_pShell = new SwTextShell(*this);
-            if(nHelpId)
-                m_pShell->SetHelpId(nHelpId);
             rDispatcher.Push( *m_pShell );
             if ( m_nSelectionType & nsSelectionType::SEL_TBL )
             {

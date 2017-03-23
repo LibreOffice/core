@@ -55,7 +55,6 @@ SwWebTableShell::SwWebTableShell(SwView &_rView) :
 {
     GetShell().UpdateTable();
     SetName("Table");
-    SetHelpId(SW_TABSHELL);
 }
 
 SwWebTableShell::~SwWebTableShell()
