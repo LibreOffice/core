@@ -761,7 +761,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance<SchAttribTabDlg> aDlg(
-                m_pChartWindow, &aItemSet, &aDialogParameter,
+                GetChartWindow(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
                 uno::Reference< util::XNumberFormatsSupplier >(
                         getModel(), uno::UNO_QUERY ) );
@@ -823,7 +823,7 @@ void ChartController::executeDispatch_View3D()
 
         //open dialog
         SolarMutexGuard aSolarGuard;
-        ScopedVclPtrInstance< View3DDialog > aDlg(m_pChartWindow, getModel());
+        ScopedVclPtrInstance< View3DDialog > aDlg(GetChartWindow(), getModel());
         if( aDlg->Execute() == RET_OK )
             aUndoGuard.commit();
     }

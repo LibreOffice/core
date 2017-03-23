@@ -379,7 +379,6 @@ private:
     TheModelRef m_aModel;
 
     //view
-    VclPtr<ChartWindow> m_pChartWindow;
     css::uno::Reference<css::awt::XWindow> m_xViewWindow;
     css::uno::Reference<css::uno::XInterface> m_xChartView;
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;

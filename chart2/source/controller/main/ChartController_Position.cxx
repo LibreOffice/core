@@ -141,7 +141,7 @@ void ChartController::executeDispatch_PositionAndSize()
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         OSL_ENSURE( pFact, "No dialog factory" );
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
-            m_pChartWindow, &aItemSet, pSdrView, bResizePossible ));
+            GetChartWindow(), &aItemSet, pSdrView, bResizePossible ));
         OSL_ENSURE( pDlg, "Couldn't create SchTransformTabDialog" );
 
         if( pDlg->Execute() == RET_OK )

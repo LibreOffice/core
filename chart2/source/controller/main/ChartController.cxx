@@ -106,7 +106,6 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_xFrame( nullptr ),
     m_aModelMutex(),
     m_aModel( nullptr, m_aModelMutex ),
-    m_pChartWindow( nullptr ),
     m_xViewWindow(),
     m_xChartView(),
     m_pDrawModelWrapper(),
@@ -442,21 +441,22 @@ void SAL_CALL ChartController::attachFrame(
         pParent = VCLUnoHelper::GetWindow( xContainerWindow ).get();
     }
 
-    if(m_pChartWindow)
+    auto pChartWindow(GetChartWindow());
+    if(pChartWindow)
     {
         //@todo delete ...
-        m_pChartWindow->clear();
+        pChartWindow->clear();
         m_apDropTargetHelper.reset();
     }
     {
         // calls to VCL
         SolarMutexGuard aSolarGuard;
-        m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
-        m_pChartWindow->SetBackground();//no Background
-        m_xViewWindow.set( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
-        m_pChartWindow->Show();
+        pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
+        pChartWindow->SetBackground();//no Background
+        m_xViewWindow.set( pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
+        pChartWindow->Show();
         m_apDropTargetHelper.reset(
-            new ChartDropTargetHelper( m_pChartWindow->GetDropTarget(),
+            new ChartDropTargetHelper( pChartWindow->GetDropTarget(),
                                        uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 
         impl_createDrawViewController();
@@ -506,14 +506,15 @@ void SAL_CALL ChartController::attachFrame(
 //XModeChangeListener
 void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
 {
+    auto pChartWindow(GetChartWindow());
     //adjust controller to view status changes
 
     if( rEvent.NewMode == "dirty" )
     {
         //the view has become dirty, we should repaint it if we have a window
         SolarMutexGuard aGuard;
-        if( m_pChartWindow )
-            m_pChartWindow->ForceInvalidate();
+        if( pChartWindow )
+            pChartWindow->ForceInvalidate();
     }
     else if( rEvent.NewMode == "invalid" )
     {
@@ -533,7 +534,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         //the view was rebuild so we can start some actions on it again
         if( !m_bConnectingToView )
         {
-            if(m_pChartWindow && m_aModel.is() )
+            if(pChartWindow && m_aModel.is() )
             {
                 m_bConnectingToView = true;
 
@@ -556,8 +557,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
                     {
                         SolarMutexGuard aGuard;
-                        if( m_pChartWindow )
-                            m_pChartWindow->Invalidate();
+                        if( pChartWindow )
+                            pChartWindow->Invalidate();
                     }
                 }
 
@@ -645,8 +646,9 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     //the frameloader is responsible to call xModel->connectController
     {
         SolarMutexGuard aGuard2;
-        if( m_pChartWindow )
-            m_pChartWindow->Invalidate();
+        auto pChartWindow(GetChartWindow());
+        if( pChartWindow )
+            pChartWindow->Invalidate();
     }
 
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
@@ -744,7 +746,7 @@ void ChartController::impl_createDrawViewController()
     {
         if( m_pDrawModelWrapper )
         {
-            m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow);
+            m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),GetChartWindow());
             m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }
@@ -826,9 +828,7 @@ void SAL_CALL ChartController::dispose()
             m_apDropTargetHelper.reset();
 
             //the accessible view is disposed within window destructor of m_pChartWindow
-            m_pChartWindow->clear();
-            m_pChartWindow = nullptr;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
-            m_xViewWindow->dispose();
+            m_xViewWindow->dispose(); //ChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
             m_xChartView.clear();
         }
 
@@ -1111,8 +1111,9 @@ void SAL_CALL ChartController::dispatch(
     {
         ChartViewHelper::setViewToDirtyState( getModel() );
         SolarMutexGuard aGuard;
-        if( m_pChartWindow )
-            m_pChartWindow->Invalidate();
+        auto pChartWindow(GetChartWindow());
+        if( pChartWindow )
+            pChartWindow->Invalidate();
     }
     else if(aCommand == "DiagramData" )
         this->executeDispatch_EditData();
@@ -1312,7 +1313,7 @@ void ChartController::executeDispatch_ChartType()
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ScopedVclPtrInstance< ChartTypeDialog > aDlg( m_pChartWindow, getModel() );
+    ScopedVclPtrInstance< ChartTypeDialog > aDlg( GetChartWindow(), getModel() );
     if( aDlg->Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
@@ -1333,7 +1334,7 @@ void ChartController::executeDispatch_SourceData()
     if( xChartDoc.is())
     {
         SolarMutexGuard aSolarGuard;
-        ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( m_pChartWindow, xChartDoc, m_xCC );
+        ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( GetChartWindow(), xChartDoc, m_xCC );
         if( aDlg->Execute() == RET_OK )
         {
             impl_adaptDataSeriesAutoResize();
@@ -1449,7 +1450,9 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
 
 VclPtr<ChartWindow> ChartController::GetChartWindow()
 {
-    return m_pChartWindow;
+    if(!m_xViewWindow.is())
+        return nullptr;
+    return dynamic_cast<ChartWindow*>(m_xViewWindow.get());
 }
 
 bool ChartController::isAdditionalShapeSelected()
@@ -1478,9 +1481,10 @@ uno::Reference< XAccessible > ChartController::CreateAccessible()
 void ChartController::impl_invalidateAccessible()
 {
     SolarMutexGuard aGuard;
-    if( m_pChartWindow )
+    auto pChartWindow(GetChartWindow());
+    if( pChartWindow )
     {
-        Reference< lang::XInitialization > xInit( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY );
+        Reference< lang::XInitialization > xInit( pChartWindow->GetAccessible(false), uno::UNO_QUERY );
         if(xInit.is())
         {
             uno::Sequence< uno::Any > aArguments(3);//empty arguments -> invalid accessible
@@ -1491,8 +1495,9 @@ void ChartController::impl_invalidateAccessible()
 void ChartController::impl_initializeAccessible()
 {
     SolarMutexGuard aGuard;
-    if( m_pChartWindow )
-        this->impl_initializeAccessible( Reference< lang::XInitialization >( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY ) );
+    auto pChartWindow(GetChartWindow());
+    if( pChartWindow )
+        this->impl_initializeAccessible( Reference< lang::XInitialization >( pChartWindow->GetAccessible(false), uno::UNO_QUERY ) );
 }
 void ChartController::impl_initializeAccessible( const uno::Reference< lang::XInitialization >& xInit )
 {
@@ -1505,9 +1510,10 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         uno::Reference< XAccessible > xParent;
         {
             SolarMutexGuard aGuard;
-            if( m_pChartWindow )
+            auto pChartWindow(GetChartWindow());
+            if( pChartWindow )
             {
-                vcl::Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
+                vcl::Window* pParentWin( pChartWindow->GetAccessibleParentWindow());
                 if( pParentWin )
                     xParent.set( pParentWin->GetAccessible());
             }
