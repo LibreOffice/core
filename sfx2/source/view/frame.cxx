@@ -352,7 +352,7 @@ void SfxFrame::GetViewData_Impl()
         }
 
         if ( pViewFrame->GetCurViewId() )
-            pSet->Put( SfxUInt16Item( SID_VIEW_ID, pViewFrame->GetCurViewId() ) );
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, (sal_uInt16)pViewFrame->GetCurViewId() ) );
         if ( pChildArr )
         {
             // For Framesets also the data from the ChildViews have to be processed
