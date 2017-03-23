@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_43873d61",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-23T09:35:39Z",
+      "side": 1,
+      "message": "Actually I meant to unindent the whole block, and drop the curly brackets.",
+      "parentUuid": "9a57fde8_68441e74",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_e8fc8e40",
         "filename": "sc/source/ui/view/formatsh.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "!(nNumberFormat \u003d\u003d 4) was unnecessary, corrected patchset 2 but SID_NUMBER_TWODEC\u0027s slot type is SfxVoidItem. To behave like toggle it needs that bool item. When i remove that item from both of the cases, it didn\u0027nt behave like toggle.",
       "parentUuid": "9a57fde8_e8fc8e40",
+      "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a3dd4972",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-23T09:35:39Z",
+      "side": 1,
+      "message": "Does it stop working if you remove just that line? It still works for me. (Just to clarify: I didn\u0027t mean to remove anything in GetNumFormatState. By \"other cases\" I meant other commands in this method.)\n\nBesides: Maybe we can change SID_NUMBER_TWODEC\u0027s slot type to bool. We can even leave it as a \"method slot\", and just add \"SlotType \u003d SfxBoolItem\". (See more about method slots vs property slots in https://wiki.openoffice.org/wiki/Framework/Article/Implementation_of_the_Dispatch_API_In_SFX2#Slot_definitions)",
+      "parentUuid": "9a57fde8_08563229",
       "revId": "fc73f885e5f3a5fa0623614a43d2336e05b90cec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
