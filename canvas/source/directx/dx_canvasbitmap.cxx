@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cctype>
 #include <memory>
 
 #include <cppuhelper/supportsservice.hxx>

@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <calc.hxx>
-#include <cctype>
 #include <cfloat>
 #include <climits>
 #include <memory>

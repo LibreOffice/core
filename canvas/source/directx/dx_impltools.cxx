@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <cctype>
 #include <vector>
 
 

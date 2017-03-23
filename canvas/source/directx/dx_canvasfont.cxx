@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cctype>
-
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <cppuhelper/supportsservice.hxx>

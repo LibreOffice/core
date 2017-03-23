@@ -48,7 +48,6 @@
 #include <vector>
 
 #include <list>
-#include <cctype>
 
 #include <memory>
 

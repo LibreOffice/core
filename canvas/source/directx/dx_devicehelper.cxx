@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cctype>
-
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <osl/mutex.hxx>

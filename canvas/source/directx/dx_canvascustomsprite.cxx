@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cctype>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <cppuhelper/supportsservice.hxx>
