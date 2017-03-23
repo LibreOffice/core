@@ -920,10 +920,10 @@ void ChartController::execute_Resize()
 
 void ChartController::execute_Command( const CommandEvent& rCEvt )
 {
+    SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
     bool bIsAction = false;
     {
-        SolarMutexGuard aGuard;
         DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
         if(!pChartWindow || !pDrawViewWrapper)
             return;
@@ -934,7 +934,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
     if(rCEvt.GetCommand() == CommandEventId::ContextMenu && !bIsAction)
     {
         {
-            SolarMutexGuard aGuard;
             if(pChartWindow)
                 pChartWindow->ReleaseMouse();
         }
@@ -948,7 +947,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         Point aPos( rCEvt.GetMousePosPixel() );
         if( !rCEvt.IsMouseEvent() )
         {
-            SolarMutexGuard aGuard;
             if(pChartWindow)
                 aPos = pChartWindow->GetPointerState().maPos;
         }
@@ -1236,7 +1234,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == CommandEventId::InputContextChange ) )
     {
         //#i84417# enable editing with IME
-        SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper )
             m_pDrawViewWrapper->Command( rCEvt, pChartWindow );
     }
@@ -1244,6 +1241,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
 bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 {
+    SolarMutexGuard aGuard;
     bool bReturn=false;
 
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
@@ -1271,7 +1269,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         return bReturn;
 
     {
-        SolarMutexGuard aGuard;
         if( pDrawViewWrapper->IsTextEdit() )
         {
             if( pDrawViewWrapper->KeyInput(rKEvt, pChartWindow) )
@@ -1373,7 +1370,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     if( bAlternate && pChartWindow )
                     {
                         // together with Alt-key: 1 px in each direction
-                        SolarMutexGuard aGuard;
                         if( pChartWindow )
                         {
                             Size aPixelSize = pChartWindow->PixelToLogic( Size( 2, 2 ));
@@ -1404,7 +1400,6 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     if( bAlternate && pChartWindow )
                     {
                         // together with Alt-key: 1 px
-                        SolarMutexGuard aGuard;
                         if(pChartWindow)
                         {
                             Size aPixelSize = pChartWindow->PixelToLogic( Size( 1, 1 ));
@@ -1507,8 +1502,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            SolarMutexGuard aGuard;
-            ScopedVclPtrInstance<InfoBox>(GetChartWindow(), SCH_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+            ScopedVclPtrInstance<InfoBox>(pChartWindow, SCH_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
         }
     }
 
