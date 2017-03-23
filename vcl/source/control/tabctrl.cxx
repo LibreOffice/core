@@ -2487,6 +2487,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
                 n++;
             }
 
+            if( m_pShortcuts && ( it == mpTabCtrlData->maItemList.begin() ) )
+            {
+                Point aPos(nIDX + nDX + nDX, nLineHeightAry[n-1]);
+                m_pShortcuts->SetPosPixel(aPos);
+            }
+
             it->maRect.Left() += nIDX;
             it->maRect.Right() += nIDX + nDX;
             it->maRect.Top() = nLineHeightAry[n-1];
@@ -2505,6 +2511,14 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     }
     else
     { // only one line
+
+        if( m_pShortcuts && mpTabCtrlData
+            && mpTabCtrlData->maItemList.begin() != mpTabCtrlData->maItemList.end() )
+        {
+            Point aPos(mpTabCtrlData->maItemList.begin()->maRect.Right(), 0);
+            m_pShortcuts->SetPosPixel(aPos);
+        }
+
         if(ImplGetSVData()->maNWFData.mbCenteredTabs)
         {
             int nRightSpace = nMaxWidth;//space left on the right by the tabs
