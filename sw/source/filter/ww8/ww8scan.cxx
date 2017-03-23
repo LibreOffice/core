@@ -4500,6 +4500,11 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
             m_nLineEnd = m_pPap->nEndPos;// nLineEnd points *after* the <CR>
             m_pPap->nEndPos--;        // shorten paragraph end by one character
 
+            // gibt es bereits ein CharAttr-Ende das auf das jetzige
+            // Absatzende zeigt ?  ... dann auch um 1 Zeichen verkuerzen
+            if (m_pChp->nEndPos == m_nLineEnd)
+                m_pChp->nEndPos--;
+
             // Is there already a sep end, which points to the current paragraph end?
             // Then we also must shorten by one character
             if( m_pSep->nEndPos == m_nLineEnd )
