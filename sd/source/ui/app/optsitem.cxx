@@ -954,8 +954,8 @@ bool SdOptionsZoom::WriteData( Any* pValues ) const
 
     GetScale( x, y );
 
-    pValues[ 0 ] <<= (sal_Int32) x;
-    pValues[ 1 ] <<= (sal_Int32) y;
+    pValues[ 0 ] <<= x;
+    pValues[ 1 ] <<= y;
 
     return true;
 }

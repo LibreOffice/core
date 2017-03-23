@@ -1560,7 +1560,7 @@ void VCLXListBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int
         const OUString* pItemsEnd = aItems.getConstArray() + aItems.getLength();
         while ( pItems != pItemsEnd )
         {
-            if ( (sal_uInt16)nP == 0xFFFF )
+            if ( nP == 0xFFFF )
             {
                 OSL_FAIL( "VCLXListBox::addItems: too many entries!" );
                 // skip remaining entries, list cannot hold them, anyway
@@ -3612,37 +3612,37 @@ css::uno::Any VCLXScrollBar::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_SCROLLVALUE:
             {
-                aProp <<= (sal_Int32) getValue();
+                aProp <<= getValue();
             }
             break;
             case BASEPROPERTY_SCROLLVALUE_MAX:
             {
-                aProp <<= (sal_Int32) getMaximum();
+                aProp <<= getMaximum();
             }
             break;
             case BASEPROPERTY_SCROLLVALUE_MIN:
             {
-                aProp <<= (sal_Int32) getMinimum();
+                aProp <<= getMinimum();
             }
             break;
             case BASEPROPERTY_LINEINCREMENT:
             {
-                aProp <<= (sal_Int32) getLineIncrement();
+                aProp <<= getLineIncrement();
             }
             break;
             case BASEPROPERTY_BLOCKINCREMENT:
             {
-                aProp <<= (sal_Int32) getBlockIncrement();
+                aProp <<= getBlockIncrement();
             }
             break;
             case BASEPROPERTY_VISIBLESIZE:
             {
-                aProp <<= (sal_Int32) getVisibleSize();
+                aProp <<= getVisibleSize();
             }
             break;
             case BASEPROPERTY_ORIENTATION:
             {
-                aProp <<= (sal_Int32) getOrientation();
+                aProp <<= getOrientation();
             }
             break;
             case BASEPROPERTY_BACKGROUNDCOLOR:

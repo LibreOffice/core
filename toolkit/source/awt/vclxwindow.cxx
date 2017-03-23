@@ -2112,7 +2112,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             case BASEPROPERTY_REPEAT_DELAY:
             {
                 sal_Int32 nButtonRepeat = GetWindow()->GetSettings().GetMouseSettings().GetButtonRepeat();
-                aProp <<= (sal_Int32)nButtonRepeat;
+                aProp <<= nButtonRepeat;
             }
             break;
 

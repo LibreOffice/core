@@ -91,7 +91,7 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
     sal_uInt32 nBookmarkValue = std::abs((sal_Int32)(_rRow->get())[0]->getValue());
 
-    OKeyValue* pKeyValue = OKeyValue::createKeyValue((sal_uInt32)nBookmarkValue);
+    OKeyValue* pKeyValue = OKeyValue::createKeyValue(nBookmarkValue);
 
     std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)

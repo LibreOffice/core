@@ -648,7 +648,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 GetPage()->SetAutoLayout( (AutoLayout)nValue, true );
                 break;
             case WID_PAGE_DURATION:
-                GetPage()->SetTime((sal_Int32)nValue);
+                GetPage()->SetTime(nValue);
                 break;
             }
             break;
@@ -1026,16 +1026,16 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny = getNavigationOrder();
         break;
     case WID_PAGE_LEFT:
-        aAny <<= (sal_Int32)( GetPage()->GetLftBorder() );
+        aAny <<= GetPage()->GetLftBorder();
         break;
     case WID_PAGE_RIGHT:
-        aAny <<= (sal_Int32)( GetPage()->GetRgtBorder() );
+        aAny <<= GetPage()->GetRgtBorder();
         break;
     case WID_PAGE_TOP:
-        aAny <<= (sal_Int32)( GetPage()->GetUppBorder() );
+        aAny <<= GetPage()->GetUppBorder();
         break;
     case WID_PAGE_BOTTOM:
-        aAny <<= (sal_Int32)( GetPage()->GetLwrBorder() );
+        aAny <<= GetPage()->GetLwrBorder();
         break;
     case WID_PAGE_WIDTH:
         aAny <<= (sal_Int32)( GetPage()->GetSize().getWidth() );

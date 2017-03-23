@@ -1332,7 +1332,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 sal_Int16 nMeasureUnit = 0;
                 SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
-                aAny <<= (sal_Int16)nMeasureUnit;
+                aAny <<= nMeasureUnit;
         }
         break;
         case WID_MODEL_FORBCHARS:

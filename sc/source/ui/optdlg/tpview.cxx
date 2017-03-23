@@ -427,8 +427,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
     if ( m_pUnitLB->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));
-        rCoreSet->Put( SfxUInt16Item( SID_ATTR_METRIC,
-                                     (sal_uInt16)nFieldUnit ) );
+        rCoreSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 

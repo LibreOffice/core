@@ -1165,7 +1165,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
     else
         nConcurrency = ResultSetConcurrency::READ_ONLY;
 
-    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( (sal_Int32)nConcurrency ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( nConcurrency ) );
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( (sal_Int32)ResultSetType::SCROLL_SENSITIVE ) );
 
     bool bSuccess = false;

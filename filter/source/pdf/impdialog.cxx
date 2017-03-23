@@ -732,7 +732,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
-    paParent->mnFormsType = (sal_Int32) mpLbFormsFormat->GetSelectEntryPos();
+    paParent->mnFormsType = mpLbFormsFormat->GetSelectEntryPos();
     paParent->mbAllowDuplicateFieldNames = mpCbAllowDuplicateFieldNames->IsChecked();
 }
 

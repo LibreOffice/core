@@ -564,7 +564,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(EE_PARA_LRSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
         }
-        sal_uInt16 nLineSpace = (sal_uInt16) static_cast<const SvxLineSpacingItem&>( aAttrSet.
+        sal_uInt16 nLineSpace = static_cast<const SvxLineSpacingItem&>( aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
         {

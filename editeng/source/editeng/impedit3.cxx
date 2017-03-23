@@ -2401,7 +2401,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     sal_Int32 nPortionStart = 0;
     sal_Int32 nInvPortion = 0;
     sal_Int32 nP;
-    for ( nP = 0; nP < (sal_Int32)pParaPortion->GetTextPortions().Count(); nP++ )
+    for ( nP = 0; nP < pParaPortion->GetTextPortions().Count(); nP++ )
     {
         const TextPortion& rTmpPortion = pParaPortion->GetTextPortions()[nP];
         nPortionStart = nPortionStart + rTmpPortion.GetLen();
@@ -2462,7 +2462,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
 
             // A blank portion may be here, if the paragraph was empty,
             // or if a line was created by a hard line break.
-            if ( ( nNewPortionPos < (sal_Int32)pParaPortion->GetTextPortions().Count() ) &&
+            if ( ( nNewPortionPos < pParaPortion->GetTextPortions().Count() ) &&
                     !pParaPortion->GetTextPortions()[nNewPortionPos].GetLen() )
             {
                 TextPortion& rTP = pParaPortion->GetTextPortions()[nNewPortionPos];
@@ -3454,7 +3454,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
                                                 OUStringBuffer aBlanks;
-                                                comphelper::string::padToLength( aBlanks, (sal_Int32) nTextLen, ' ' );
+                                                comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
@@ -4203,7 +4203,7 @@ LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
     else if ( SvtCTLOptions::NUMERALS_ARABIC == nCTLTextNumerals )
         eLang = LANGUAGE_ENGLISH;
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nCTLTextNumerals )
-        eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
+        eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     return eLang;
 }
@@ -4271,7 +4271,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
 
     // #114278# Also setting up digit language from Svt options
     // (cannot reliably inherit the outdev's setting)
-    LanguageType eLang = (LanguageType) Application::GetSettings().GetLanguageTag().getLanguageType();
+    LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
     ImplInitDigitMode( pOutDev, eLang );
 }
 

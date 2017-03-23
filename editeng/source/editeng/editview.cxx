@@ -1183,7 +1183,7 @@ void EditView::SetInvalidateMore( sal_uInt16 nPixel )
 
 sal_uInt16 EditView::GetInvalidateMore() const
 {
-    return (sal_uInt16)pImpEditView->GetInvalidateMore();
+    return pImpEditView->GetInvalidateMore();
 }
 
 static void ChangeFontSizeImpl( EditView* pEditView, bool bGrow, const ESelection& rSel, const FontList* pFontList )

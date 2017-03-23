@@ -1141,11 +1141,11 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 nVertOri = text::VertOrientation::NONE;
                 break;
             }
-            aTmp <<= (sal_Int16)nVertOri ;
+            aTmp <<= nVertOri ;
             xShapePropSet->setPropertyValue("VertOrient", aTmp );
         }
 
-        aTmp <<= (sal_Int16)nAnchorType ;
+        aTmp <<= nAnchorType ;
         xShapePropSet->setPropertyValue("AnchorType", aTmp );
 
         if( text::TextContentAnchorType_AT_PAGE == nAnchorType )
@@ -1169,17 +1169,17 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             aTmp <<= (sal_Int16)text::HoriOrientation::NONE;
             xShapePropSet->setPropertyValue("HoriOrient", aTmp );
-            aTmp <<= (sal_Int32)nXPos ;
+            aTmp <<= nXPos ;
             xShapePropSet->setPropertyValue("HoriOrientPosition", aTmp );
 
             aTmp <<= (sal_Int16)text::VertOrientation::NONE;
             xShapePropSet->setPropertyValue("VertOrient", aTmp );
-            aTmp <<= (sal_Int32)nYPos ;
+            aTmp <<= nYPos ;
             xShapePropSet->setPropertyValue("VertOrientPosition", aTmp );
         }
         if( bSetSurround )
         {
-            aTmp <<= (sal_Int16)nSurround ;
+            aTmp <<= nSurround ;
             xShapePropSet->setPropertyValue("Surround", aTmp );
         }
 
@@ -1621,7 +1621,7 @@ void SwHTMLParser::InsertInput()
     {
         if( nTabIndex >= TABINDEX_MIN && nTabIndex <= TABINDEX_MAX  )
         {
-            aTmp <<= (sal_Int16) (sal_Int16)nTabIndex ;
+            aTmp <<= (sal_Int16)nTabIndex ;
             xPropSet->setPropertyValue("TabIndex", aTmp );
         }
 
@@ -1655,7 +1655,7 @@ void SwHTMLParser::InsertInput()
             // vorhergehenden Gruppe gehoert.
             if( HTMLInputType::Checkbox == eType )
             {
-                aTmp <<= (sal_Int16) nChecked ;
+                aTmp <<= nChecked ;
                 xPropSet->setPropertyValue("DefaultState", aTmp );
             }
 
@@ -1734,7 +1734,7 @@ void SwHTMLParser::InsertInput()
             xPropSet->setPropertyValue("DefaultText", aTmp );
             if( nMaxLen != 0 )
             {
-                aTmp <<= (sal_Int16) nMaxLen ;
+                aTmp <<= nMaxLen ;
                 xPropSet->setPropertyValue("MaxTextLen", aTmp );
             }
         }
@@ -1833,7 +1833,7 @@ void SwHTMLParser::InsertInput()
 
     if( HTMLInputType::Radio == eType )
     {
-        aTmp <<= (sal_Int16) nChecked ;
+        aTmp <<= nChecked ;
         xPropSet->setPropertyValue("DefaultState", aTmp );
     }
 

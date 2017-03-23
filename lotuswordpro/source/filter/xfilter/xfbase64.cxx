@@ -73,9 +73,9 @@ const  sal_Char aBase64EncodeTable[] =
  */
 inline void Encode_(sal_uInt8 *src, sal_Char* dest)
 {
-    sal_Int32 nBinaer = (((sal_uInt8)src[ 0]) << 16) +
-        (((sal_uInt8)src[1]) <<  8) +
-        ((sal_uInt8)src[2]);
+    sal_Int32 nBinaer = (src[ 0] << 16) +
+        (src[1] <<  8) +
+        (src[2]);
 
     sal_uInt8 nIndex = ((nBinaer & 0xFC0000) >> 18);
     dest[0] = aBase64EncodeTable [nIndex];

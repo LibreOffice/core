@@ -283,7 +283,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 for ( i = 0; i < rText.getLength(); i++ )
                 {
                     FWCharacterData aCharacterData;
-                    OUString aCharText( (sal_Unicode)rText[ i ] );
+                    OUString aCharText( rText[ i ] );
                     if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, pDXArry.get() ) )
                     {
                         sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);

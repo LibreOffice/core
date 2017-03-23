@@ -223,9 +223,9 @@ struct SvXMLStyleIndexCmp_Impl
     {
         sal_Int32 nRet;
 
-        if( (sal_uInt16)r1.GetFamily() < (sal_uInt16)r2.GetFamily() )
+        if( r1.GetFamily() < r2.GetFamily() )
             nRet = -1;
-        else if( (sal_uInt16)r1.GetFamily() > (sal_uInt16)r2.GetFamily() )
+        else if( r1.GetFamily() > r2.GetFamily() )
             nRet = 1;
         else
             nRet = r1.GetName().compareTo( r2.GetName() );

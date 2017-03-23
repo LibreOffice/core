@@ -560,7 +560,7 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                     sal_Int32 ub = 0;
                     for ( sal_Int32 j = 1 ; j <= pSource->GetDims(); ++j )
                     {
-                        pSource->GetDim32( (sal_Int32)j, lb, ub );
+                        pSource->GetDim32( j, lb, ub );
                         pDest->AddDim32( lb, ub );
                     }
                 }

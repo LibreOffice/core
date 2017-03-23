@@ -1941,7 +1941,7 @@ bool XLineStartWidthItem::GetPresentation
 
 bool XLineStartWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= GetValue();
     return true;
 }
 
@@ -1989,7 +1989,7 @@ bool XLineEndWidthItem::GetPresentation
 
 bool XLineEndWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    rVal <<= GetValue();
     return true;
 }
 

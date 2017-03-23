@@ -793,7 +793,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if ((nKey != -1) && m_xAggregateSet.is())
     {
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, makeAny((sal_Int32)nKey));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nKey));
     }
     else
     {

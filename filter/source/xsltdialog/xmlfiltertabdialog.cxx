@@ -247,7 +247,7 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 != nErrorId )
     {
-        m_pTabCtrl->SetCurPageId((sal_uInt16)nErrorPage);
+        m_pTabCtrl->SetCurPageId(nErrorPage);
         ActivatePageHdl(nullptr, m_pTabCtrl);
 
         ResId aResId( nErrorId, mrResMgr );

@@ -1780,7 +1780,7 @@ bool ScColumn::ParseString(
                     if ( bOverwrite )
                     {
                         ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
-                            (sal_uInt32) nIndex) );
+                            nIndex) );
                         bNumFmtSet = true;
                     }
                 }

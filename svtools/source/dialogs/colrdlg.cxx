@@ -76,7 +76,7 @@ short SvColorDialog::Execute()
         props[0].Name = sColor;
         props[0].Value <<= (sal_Int32) maColor.GetColor();
         props[1].Name = "Mode";
-        props[1].Value <<= (sal_Int16) meMode;
+        props[1].Value <<= meMode;
 
         xPropertyAccess->setPropertyValues( props );
 

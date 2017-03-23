@@ -1417,7 +1417,7 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
 {
     sal_uInt16 count = aCells.size();
 
-    rStrm   << (sal_uInt16) count               // number of cells
+    rStrm   << count                            // number of cells
             << sal_uInt8(bProtected)            // fProtection
             << (sal_uInt8) 0                    // fHidden
             << (sal_uInt8) sName.Len()          // length of scen name

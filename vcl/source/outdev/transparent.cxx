@@ -513,7 +513,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                         }
                                         if( ( *pRScan & cBit ) == cBlack )
                                         {
-                                            *pWScan = (sal_uInt8) pMap[ *pWScan ].GetIndex();
+                                            *pWScan = pMap[ *pWScan ].GetIndex();
                                         }
                                     }
                                 }

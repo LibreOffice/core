@@ -168,7 +168,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             p->uInt64 = (sal_uInt64) n; break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            ImpCreateDecimal( p )->setInt( (sal_Int16)n );
+            ImpCreateDecimal( p )->setInt( n );
             break;
 
         case SbxBYREF | SbxSTRING:
@@ -195,7 +195,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
-            *p->pInteger = (sal_Int16) n; break;
+            *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             *p->pUShort = (sal_uInt16) n; break;

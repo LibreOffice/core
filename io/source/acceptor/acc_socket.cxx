@@ -162,12 +162,12 @@ namespace io_acceptor {
     {
         OUStringBuffer buf( 256 );
         buf.append( ",peerPort=" );
-        buf.append( (sal_Int32) m_socket.getPeerPort() );
+        buf.append( m_socket.getPeerPort() );
         buf.append( ",peerHost=" );
         buf.append( m_socket.getPeerHost( ) );
 
         buf.append( ",localPort=" );
-        buf.append( (sal_Int32) m_socket.getLocalPort() );
+        buf.append( m_socket.getLocalPort() );
         buf.append( ",localHost=" );
         buf.append( m_socket.getLocalHost() );
 

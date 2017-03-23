@@ -236,7 +236,7 @@ ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     sal_Int32 lVal;
 
     GetNumber( rInst, &lVal );
-    aMem.Put( (sal_Int32)lVal );
+    aMem.Put( lVal );
 
     return ERR_OK;
 }
@@ -376,7 +376,7 @@ ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 {
     sal_Int32 lVal = reinterpret_cast<RscId*>(rInst.pData)->GetNumber();
 
-    aMem.Put( (sal_Int32)lVal );
+    aMem.Put( lVal );
 
     return ERR_OK;
 }

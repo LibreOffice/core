@@ -178,7 +178,7 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
                 css::uno::Reference< css::uno::XInterface >(),
                 0);
 
-    return (sal_uInt16)nCode;
+    return nCode;
 }
 
 OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)

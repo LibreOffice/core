@@ -711,7 +711,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
         pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
     }
 
-    nHighlightedItem = (sal_uInt16)n;
+    nHighlightedItem = n;
     SAL_WARN_IF( !pMenu->ImplIsVisible( nHighlightedItem ) && nHighlightedItem != ITEMPOS_INVALID, "vcl", "ChangeHighlightItem: Not visible!" );
     if( nHighlightedItem != ITEMPOS_INVALID )
     {

@@ -739,7 +739,7 @@ namespace svt
 
                 sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    aReturn <<= (sal_Int32)static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                    aReturn <<= static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 else
                     aReturn <<= (sal_Int32)-1;
             }

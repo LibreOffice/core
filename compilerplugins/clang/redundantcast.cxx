@@ -304,6 +304,16 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
             DiagnosticsEngine::Warning,
             "redundant cstyle enum cast from %0 to %1", expr->getExprLoc())
             << t1 << t2 << expr->getSourceRange();
+        return true;
+    }
+    if (loplugin::TypeCheck(t1).Typedef() && loplugin::TypeCheck(t2).Typedef() && t1 == t2
+        && !compiler.getSourceManager().isMacroBodyExpansion(expr->getLocStart()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "redundant cstyle typedef cast from %0 to %1", expr->getExprLoc())
+            << t1 << t2 << expr->getSourceRange();
+        return true;
     }
     return true;
 }

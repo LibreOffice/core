@@ -1244,7 +1244,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                nSelect = (sal_Int32) ( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + (sal_Int32) mnTop;
+                nSelect = (sal_Int32) ( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + mnTop;
                 nSelect = std::min( nSelect, GetLastVisibleEntry() );
                 nSelect = std::min( nSelect, (sal_Int32) ( mpEntryList->GetEntryCount() - 1 ) );
             }
@@ -1866,7 +1866,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Re
     long nY = 0; // + mnBorder;
     long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
 
-    for (sal_Int32 i = (sal_Int32)mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
+    for (sal_Int32 i = mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
     {
         const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(i);
         if (nY + pEntry->mnHeight >= rRect.Top() &&

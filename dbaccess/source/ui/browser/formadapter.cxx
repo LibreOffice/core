@@ -1586,7 +1586,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     // notify container listeners
     css::container::ContainerEvent aEvt;
     aEvt.Source = *this;
-    aEvt.Accessor <<= (sal_Int32)_rIndex;
+    aEvt.Accessor <<= _rIndex;
     aEvt.Element <<= xElement;
     aEvt.ReplacedElement <<= xOld;
 

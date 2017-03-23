@@ -339,9 +339,9 @@ static SwFieldGroupRgn const aWebRanges[] =
 };
 
     if (bHtmlMode)
-        return aWebRanges[(sal_uInt16)nGrpId];
+        return aWebRanges[nGrpId];
     else
-        return aRanges[(sal_uInt16)nGrpId];
+        return aRanges[nGrpId];
 }
 
 // determine GroupId

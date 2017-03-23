@@ -27,8 +27,8 @@ using namespace ::com::sun::star::beans;
 
 CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharBackColor" ),     Any( (sal_Int32) nBackColor ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharColor" ),         Any( (sal_Int32) nColor ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharBackColor" ),     Any( nBackColor ) ) );
+    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharColor" ),         Any( nColor ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontCharSet" ),   Any( (sal_Int16) rFont.GetCharSet() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontFamily" ),    Any( (sal_Int16) rFont.GetFamilyType() ) ) );
     m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontName" ),      Any( rFont.GetFamilyName() ) ) );

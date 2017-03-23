@@ -131,7 +131,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             rProp.Value >>= sValue;
             if( !sValue.isEmpty() )
             {
-                cBullet = (sal_Unicode)sValue[0];
+                cBullet = sValue[0];
             }
         }
         else if( rProp.Name == "BulletRelSize" )

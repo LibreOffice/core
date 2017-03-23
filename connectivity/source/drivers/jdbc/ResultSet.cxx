@@ -294,7 +294,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
     {
         jvalue args[2];
         // convert parameter
-        args[0].i = (sal_Int32)columnIndex;
+        args[0].i = columnIndex;
         args[1].l = convertTypeMapToJavaMap(t.pEnv,typeMap);
         // initialize temporary Variable
         // Java-Call

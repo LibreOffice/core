@@ -1440,7 +1440,7 @@ void DlgEdForm::UpdateTabIndices()
                aCtrl >>= xPSet;
             if ( xPSet.is() )
             {
-                xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any((sal_Int16) nNewTabIndex) );
+                xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(nNewTabIndex) );
                 nNewTabIndex++;
             }
         }

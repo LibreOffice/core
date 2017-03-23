@@ -682,7 +682,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
 
                     if ( bNewProtected != bProtected )
                     {
-                        sal_uLong nPos = (sal_uLong)m_pLibBox->GetModel()->GetAbsPos( pCurEntry );
+                        sal_uLong nPos = m_pLibBox->GetModel()->GetAbsPos( pCurEntry );
                         m_pLibBox->GetModel()->Remove( pCurEntry );
                         ImpInsertLibEntry( aLibName, nPos );
                         m_pLibBox->SetCurEntry( m_pLibBox->GetEntry( nPos ) );

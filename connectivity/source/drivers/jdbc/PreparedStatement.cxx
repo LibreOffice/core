@@ -540,9 +540,9 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             // functions.html#wp22933>; work around that difference in a way
             // that doesn't trigger loplugin:redundantcast
             t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeqData);
-            args2[0].l =  pByteArray;
-            args2[1].i =  0;
-            args2[2].i =  (sal_Int32)actualLength;
+            args2[0].l = pByteArray;
+            args2[1].i = 0;
+            args2[2].i = actualLength;
 
             // Java-Call
             jclass aClass = t.pEnv->FindClass("java/io/ByteArrayInputStream");
@@ -556,7 +556,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             jobject tempObj = nullptr;
             if(mID2)
                 tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
-            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,(sal_Int32)actualLength);
+            t.pEnv->CallVoidMethod( object, mID, parameterIndex,tempObj,actualLength);
             // and clean up
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);

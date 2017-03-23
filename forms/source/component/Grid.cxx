@@ -928,7 +928,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (nAnyMask & ROWHEIGHT)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        m_aRowHeight <<= (sal_Int32)nValue;
+        m_aRowHeight <<= nValue;
     }
     FontDescriptor aFont( getFont() );
     if ( nAnyMask & FONTATTRIBS )
@@ -970,7 +970,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (nAnyMask & TEXTCOLOR)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        setTextColor( (sal_Int32)nValue );
+        setTextColor( nValue );
     }
     // new since version 6
     if (nVersion > 5)
@@ -989,7 +989,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (nAnyMask & BACKGROUNDCOLOR)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        m_aBackgroundColor <<= (sal_Int32)nValue;
+        m_aBackgroundColor <<= nValue;
     }
 }
 

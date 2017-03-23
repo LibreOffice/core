@@ -2918,7 +2918,7 @@ namespace pcr
 
         aColor = aColorDlg.GetColor();
         nColor = aColor.GetColor();
-        _out_rNewValue <<= (sal_Int32)nColor;
+        _out_rNewValue <<= nColor;
         return true;
     }
 

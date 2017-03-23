@@ -312,7 +312,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             }
             // add the change listener to the helper container
 
-            aBoundLC.addInterface( (sal_Int32)nHandle, rxListener );
+            aBoundLC.addInterface( nHandle, rxListener );
         }
         else
             // add the change listener to the helper container
@@ -343,7 +343,7 @@ void OPropertySetHelper::removePropertyChangeListener(
             if( nHandle == -1 )
                 // property not known throw exception
                 throw UnknownPropertyException();
-            aBoundLC.removeInterface( (sal_Int32)nHandle, rxListener );
+            aBoundLC.removeInterface( nHandle, rxListener );
         }
         else {
             // remove the change listener to the helper container
@@ -387,7 +387,7 @@ void OPropertySetHelper::addVetoableChangeListener(
                 return;
             }
             // add the vetoable listener to the helper container
-            aVetoableLC.addInterface( (sal_Int32)nHandle, rxListener );
+            aVetoableLC.addInterface( nHandle, rxListener );
         }
         else
             // add the vetoable listener to the helper container
@@ -419,7 +419,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
                 throw UnknownPropertyException();
             }
             // remove the vetoable listener to the helper container
-            aVetoableLC.removeInterface( (sal_Int32)nHandle, rxListener );
+            aVetoableLC.removeInterface( nHandle, rxListener );
         }
         else
             // add the vetoable listener to the helper container

@@ -388,7 +388,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
             {   // seems to be a ST_Coordinate
-                aRet.Value <<= (sal_Int32)(rValue.toInt32() );
+                aRet.Value <<= rValue.toInt32();
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             else

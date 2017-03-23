@@ -1064,7 +1064,7 @@ void DbGridControl::StateChanged( StateChangedType nType )
             Point aPoint = GetControlArea().TopLeft();
             sal_uInt16 nX = (sal_uInt16)aPoint.X();
             ArrangeControls(nX, (sal_uInt16)aPoint.Y());
-            ReserveControlArea((sal_uInt16)nX);
+            ReserveControlArea(nX);
         }
         break;
         case StateChangedType::ControlFont:
@@ -1270,7 +1270,7 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
         sal_uInt16 nX = (sal_uInt16)aPoint.X();
 
         ArrangeControls(nX, (sal_uInt16)aPoint.Y());
-        ReserveControlArea((sal_uInt16)nX);
+        ReserveControlArea(nX);
     }
     else
     {

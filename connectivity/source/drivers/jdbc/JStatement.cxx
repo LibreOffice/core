@@ -363,7 +363,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  )
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     sal_Int32 out = callIntMethod_ThrowSQL("getUpdateCount", mID);
-    m_aLogger.log( LogLevel::FINER, STR_LOG_UPDATE_COUNT, (sal_Int32)out );
+    m_aLogger.log( LogLevel::FINER, STR_LOG_UPDATE_COUNT, out );
     return out;
 }
 
@@ -519,7 +519,7 @@ void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    m_aLogger.log( LogLevel::FINE, STR_LOG_RESULT_SET_CONCURRENCY, (sal_Int32)_par0 );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_RESULT_SET_CONCURRENCY, _par0 );
     m_nResultSetConcurrency = _par0;
 
     clearObject();
@@ -529,7 +529,7 @@ void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    m_aLogger.log( LogLevel::FINE, STR_LOG_RESULT_SET_TYPE, (sal_Int32)_par0 );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_RESULT_SET_TYPE, _par0 );
     m_nResultSetType = _par0;
 
     clearObject();
@@ -539,7 +539,7 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_DIRECTION, (sal_Int32)_par0 );
+    m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_DIRECTION, _par0 );
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
@@ -550,7 +550,7 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_SIZE, (sal_Int32)_par0 );
+    m_aLogger.log( LogLevel::FINER, STR_LOG_FETCH_SIZE, _par0 );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);

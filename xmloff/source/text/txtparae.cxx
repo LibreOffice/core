@@ -3450,7 +3450,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             if( nSpaceChars > 1 )
             {
                 OUStringBuffer sTmp;
-                sTmp.append( (sal_Int32)nSpaceChars );
+                sTmp.append( nSpaceChars );
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_C,
                               sTmp.makeStringAndClear() );
             }
@@ -3513,7 +3513,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         if( nSpaceChars > 1 )
         {
             OUStringBuffer sTmp;
-            sTmp.append( (sal_Int32)nSpaceChars );
+            sTmp.append( nSpaceChars );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_C,
                           sTmp.makeStringAndClear() );
         }

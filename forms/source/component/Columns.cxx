@@ -539,7 +539,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     if (nAnyMask & WIDTH)
     {
         sal_Int32 nValue = _rxInStream->readLong();
-        m_aWidth <<= (sal_Int32)nValue;
+        m_aWidth <<= nValue;
     }
 
     if (nAnyMask & ALIGN)

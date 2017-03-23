@@ -280,7 +280,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                         buf.append( "pyuno bridge: expected for method " );
                         buf.append( aFunctionName );
                         buf.append( " one return value and " );
-                        buf.append( (sal_Int32) aOutParamIndex.getLength() );
+                        buf.append( aOutParamIndex.getLength() );
                         buf.append( " out parameters, got a sequence of " );
                         buf.append( seq.getLength() );
                         buf.append( " elements as return value." );

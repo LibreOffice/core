@@ -1015,7 +1015,7 @@ bool SVGTextWriter::nextParagraph()
                                                 rProp.Value >>= sValue;
                                                 if( !sValue.isEmpty() )
                                                 {
-                                                    cBullet = (sal_Unicode)sValue[0];
+                                                    cBullet = sValue[0];
                                                 }
                                             }
                                         }

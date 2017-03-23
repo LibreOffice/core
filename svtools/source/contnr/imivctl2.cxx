@@ -51,7 +51,7 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, 
         else
             nCurValue = rRect.Left();
         if( nValue >= nPrevValue && nValue <= nCurValue )
-            return (sal_uInt16)nCurPos;
+            return nCurPos;
         nPrevValue = nCurValue;
         nCount--;
         nCurPos++;

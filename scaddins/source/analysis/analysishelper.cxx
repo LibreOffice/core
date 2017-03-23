@@ -234,7 +234,7 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
     while ( bCalc );
 
     rMonth = 1;
-    while ( (sal_Int32)nTempDays > DaysInMonth( rMonth, rYear ) )
+    while ( nTempDays > DaysInMonth( rMonth, rYear ) )
     {
         nTempDays -= DaysInMonth( rMonth, rYear );
         rMonth++;

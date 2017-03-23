@@ -3494,7 +3494,7 @@ RTLFUNC(Format)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uInt16 nArgCount = (sal_uInt16)rPar.Count();
+    sal_uInt16 nArgCount = rPar.Count();
     if ( nArgCount < 2 || nArgCount > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -4518,7 +4518,7 @@ RTLFUNC(MsgBox)
     };
 
 
-    sal_uInt16 nArgCount = (sal_uInt16)rPar.Count();
+    sal_uInt16 nArgCount = rPar.Count();
     if( nArgCount < 2 || nArgCount > 6 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -4677,7 +4677,7 @@ RTLFUNC(DumpAllObjects)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uInt16 nArgCount = (sal_uInt16)rPar.Count();
+    sal_uInt16 nArgCount = rPar.Count();
     if( nArgCount < 2 || nArgCount > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );

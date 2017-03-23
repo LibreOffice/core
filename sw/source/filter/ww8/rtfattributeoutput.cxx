@@ -2793,7 +2793,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
         else
         {
             m_aTabStop.append(OOO_STRING_SVTOOLS_RTF_DEFTAB);
-            m_aTabStop.append((sal_Int32)rTabStop[0].GetTabPos());
+            m_aTabStop.append(rTabStop[0].GetTabPos());
         }
     }
 }
@@ -2859,11 +2859,11 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
                 {
                     m_aStyles.append((sal_Int32)8);
                     m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
-                    m_aStyles.append((sal_Int32)nLvl);
+                    m_aStyles.append(nLvl);
                     m_aStyles.append('}');
                 }
                 else
-                    m_aStyles.append((sal_Int32)nLvl);
+                    m_aStyles.append(nLvl);
             }
             else
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
@@ -3712,13 +3712,13 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         aRet.append((sal_Int32)((100 * rRendered.Height()) / nYCroppedSize));
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPL);
-        aRet.append((sal_Int32)rCr.GetLeft());
+        aRet.append(rCr.GetLeft());
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPR);
-        aRet.append((sal_Int32)rCr.GetRight());
+        aRet.append(rCr.GetRight());
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPT);
-        aRet.append((sal_Int32)rCr.GetTop());
+        aRet.append(rCr.GetTop());
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICCROPB);
-        aRet.append((sal_Int32)rCr.GetBottom());
+        aRet.append(rCr.GetBottom());
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_PICW);
         aRet.append((sal_Int32)rMapped.Width());

@@ -715,7 +715,7 @@ void ExtrusionLightingWindow::SelectHdl(void* pControl)
 
             Sequence< PropertyValue > aArgs( 1 );
             aArgs[0].Name = OUString(g_sExtrusionLightingDirection).copy(5);
-            aArgs[0].Value <<= (sal_Int32)nDirection;
+            aArgs[0].Value <<= nDirection;
 
             mrController.dispatchCommand( g_sExtrusionLightingDirection, aArgs );
 
@@ -850,7 +850,7 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(g_sExtrusionSurface).copy(5);
-        aArgs[0].Value <<= (sal_Int32)nSurface;
+        aArgs[0].Value <<= nSurface;
 
         mrController.dispatchCommand( g_sExtrusionSurface, aArgs );
 

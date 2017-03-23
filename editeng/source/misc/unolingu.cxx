@@ -703,7 +703,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
             ++nR;
 
         aRes.aReplacement       = aAltWord.copy( nL, nAltLen - nL - nR );
-        aRes.nChangedPos        = (sal_Int16) nL;
+        aRes.nChangedPos        = nL;
         aRes.nChangedLength     = nLen - nL - nR;
         aRes.bIsAltSpelling     = true;
         aRes.xHyphWord          = rHyphWord;

@@ -795,7 +795,7 @@ inline void SwSubFont::SetLanguage( LanguageType eNewLang )
 {
     m_pMagic = nullptr;
     if( eNewLang == LANGUAGE_SYSTEM )
-        eNewLang = (LanguageType)GetAppLanguage();
+        eNewLang = GetAppLanguage();
     SvxFont::SetLanguage( eNewLang );
 }
 

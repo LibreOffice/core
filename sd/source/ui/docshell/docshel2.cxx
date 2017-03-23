@@ -76,7 +76,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     if( nullptr == pSelectedPage )
     {
         SdPage* pPage = nullptr;
-        sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PageKind::Standard);
+        sal_uInt16 nPageCnt = mpDoc->GetSdPageCount(PageKind::Standard);
 
         for (sal_uInt16 i = 0; i < nPageCnt; i++)
         {

@@ -679,7 +679,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
                 SCROW nOldY = pViewData->GetCurY();
 
                 pView->InitBlockMode( nOldX, nOldY, nTab, true );
-                pView->MarkCursor( (SCCOL) nOldX, (SCROW) nOldY, nTab );
+                pView->MarkCursor( nOldX, nOldY, nTab );
 
                 if ( nOldX != nPosX || nOldY != nPosY )
                 {

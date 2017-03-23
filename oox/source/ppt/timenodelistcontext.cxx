@@ -291,7 +291,7 @@ namespace oox { namespace ppt {
                             }
                             break;
                         }
-                        mpNode->getNodeProperties()[ NP_COMMAND ] <<= (sal_Int16)nCommand;
+                        mpNode->getNodeProperties()[ NP_COMMAND ] <<= nCommand;
                         if( nCommand == EffectCommands::CUSTOM )
                         {
                             SAL_WARN("oox.ppt", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");

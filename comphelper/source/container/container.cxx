@@ -94,7 +94,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                         xSearchLoop = *o3tl::doAccess<css::uno::Reference<css::uno::XInterface>>(aElement);
                         bCheckingStartingPoint = false;
                         // and update its position in the list.
-                        m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);
+                        m_arrChildIndizies.push_back(nOldSearchChildIndex);
 
                         break;
                     }

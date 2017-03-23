@@ -2056,7 +2056,7 @@ void XMLFileNameImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
                                                 aFilenameDisplayMap))
             {
-                nFormat = (sal_uInt16)nTmp;
+                nFormat = nTmp;
             }
             break;
         }
@@ -2128,7 +2128,7 @@ void XMLTemplateNameImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertEnum(nTmp, sAttrValue,
                                                 aTemplateDisplayMap))
             {
-                nFormat = (sal_uInt16)nTmp;
+                nFormat = nTmp;
             }
             break;
         }

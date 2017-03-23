@@ -923,7 +923,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             ScopedVclPtrInstance< SwGotoPageDlg > aDlg (&GetViewFrame()->GetWindow(), &GetViewFrame()->GetBindings());
             if(aDlg->Execute() == RET_OK)
-                GetWrtShell().GotoPage((sal_uInt16)aDlg->GetPageSelection(), true);
+                GetWrtShell().GotoPage(aDlg->GetPageSelection(), true);
         }
         break;
         case  FN_EDIT_CURRENT_TOX:

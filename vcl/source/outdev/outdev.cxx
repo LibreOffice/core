@@ -366,7 +366,7 @@ sal_uInt16 OutputDevice::GetBitCount() const
             return 0;
     }
 
-    return (sal_uInt16)mpGraphics->GetBitCount();
+    return mpGraphics->GetBitCount();
 }
 
 void OutputDevice::SetOutOffXPixel(long nOutOffX)

@@ -611,7 +611,7 @@ namespace pcr
                     break;
 
                 default:
-                    _out_rValue <<= (sal_Int32)nPos;
+                    _out_rValue <<=  nPos;
                     break;
             }
         }

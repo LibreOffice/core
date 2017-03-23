@@ -184,7 +184,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                m_pEdFieldSep->SetText( OUString((sal_Unicode)nCode) );
+                m_pEdFieldSep->SetText( OUString(nCode) );
             else
                 m_pEdFieldSep->SetText( aStr );
 
@@ -192,7 +192,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pTextSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )
-                m_pEdTextSep->SetText( OUString((sal_Unicode)nCode) );
+                m_pEdTextSep->SetText( OUString(nCode) );
             else
                 m_pEdTextSep->SetText( aStr );
         }

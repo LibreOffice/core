@@ -2683,7 +2683,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             case OWN_ATTR_GLUEID_HEAD:
             case OWN_ATTR_GLUEID_TAIL:
                 {
-                    rValue <<= (sal_Int32)pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
+                    rValue <<= pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
                     break;
                 }
             case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:

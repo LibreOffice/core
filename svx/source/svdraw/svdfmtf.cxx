@@ -1220,7 +1220,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
                     aXGradient.SetGradientStyle((css::awt::GradientStyle)rGrad.GetStyle());
                     aXGradient.SetStartColor(rGrad.GetStartColor());
                     aXGradient.SetEndColor(rGrad.GetEndColor());
-                    aXGradient.SetAngle((sal_uInt16)rGrad.GetAngle());
+                    aXGradient.SetAngle(rGrad.GetAngle());
                     aXGradient.SetBorder(rGrad.GetBorder());
                     aXGradient.SetXOffset(rGrad.GetOfsX());
                     aXGradient.SetYOffset(rGrad.GetOfsY());

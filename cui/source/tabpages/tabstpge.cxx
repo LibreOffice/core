@@ -433,7 +433,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
         pTypeBtn = m_pDezTab;
         m_pDezChar->Enable();
         m_pDezCharLabel->Enable();
-        m_pDezChar->SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
+        m_pDezChar->SetText( OUString( aAktTab.GetDecimal() ) );
     }
     else if ( aAktTab.GetAdjustment() == SvxTabAdjust::Center )
         pTypeBtn = m_pCenterTab;
@@ -456,7 +456,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     {
         pFillBtn = m_pFillSpecial;
         m_pFillChar->Enable();
-        m_pFillChar->SetText( OUString( (sal_Unicode)aAktTab.GetFill() ) );
+        m_pFillChar->SetText( OUString( aAktTab.GetFill() ) );
     }
     pFillBtn->Check();
 }
@@ -587,7 +587,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
         eAdj = SvxTabAdjust::Decimal;
         m_pDezChar->Enable();
         m_pDezCharLabel->Enable();
-        m_pDezChar->SetText( OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
+        m_pDezChar->SetText( OUString( aAktTab.GetDecimal() ) );
     }
 
     aAktTab.GetAdjustment() = eAdj;

@@ -1091,7 +1091,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( xTransitionFilter.is() )
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_TransitionType ) )
-                        xTransitionFilter->setTransition( (sal_Int16)nEnum );
+                        xTransitionFilter->setTransition( nEnum );
                 }
             }
             break;
@@ -1101,7 +1101,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( xTransitionFilter.is() )
                 {
                     if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_TransitionSubType ) )
-                        xTransitionFilter->setSubtype( (sal_Int16)nEnum );
+                        xTransitionFilter->setSubtype( nEnum );
                 }
             }
             break;

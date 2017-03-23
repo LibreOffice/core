@@ -168,7 +168,7 @@ namespace svxform
                 {
                     OUStringBuffer aBuffer( _rBaseLabel );
                     aBuffer.append( " " );
-                    aBuffer.append( (sal_Int32)i++ );
+                    aBuffer.append( i++ );
                     sLabel = aBuffer.makeStringAndClear();
                 }
             }
@@ -604,7 +604,7 @@ namespace svxform
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
                     aValue <<= (double)nMinValue;
                 else if ( aProperty.Type.getTypeClass() == TypeClass_LONG )
-                    aValue <<= (sal_Int32)nMinValue;
+                    aValue <<= nMinValue;
                 else
                 {
                     OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
@@ -616,7 +616,7 @@ namespace svxform
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
                     aValue <<= (double)nMaxValue;
                 else if ( aProperty.Type.getTypeClass() == TypeClass_LONG )
-                    aValue <<= (sal_Int32)nMaxValue;
+                    aValue <<= nMaxValue;
                 else
                 {
                     OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );

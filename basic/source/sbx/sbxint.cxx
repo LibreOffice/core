@@ -632,7 +632,7 @@ start:
             {
                 SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = 0;
             }
-            *p->puInt64 = (sal_Int64) n; break;
+            *p->puInt64 = n; break;
 
         default:
             SbxBase::SetError( ERRCODE_SBX_CONVERSION );

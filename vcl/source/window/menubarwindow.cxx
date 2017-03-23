@@ -505,7 +505,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
     }
 
-    nHighlightedItem = (sal_uInt16)n;
+    nHighlightedItem = n;
     SAL_WARN_IF( ( nHighlightedItem != ITEMPOS_INVALID ) && !pMenu->ImplIsVisible( nHighlightedItem ), "vcl", "ChangeHighlightItem: Not visible!" );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         Invalidate(); //HighlightItem( nHighlightedItem, true );

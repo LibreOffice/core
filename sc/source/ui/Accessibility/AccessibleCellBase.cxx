@@ -411,7 +411,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
     }
     //else return all the shadow properties
     sShadowAttrs += "Location=";
-    sShadowAttrs += OUString::number( (sal_Int32)nLocationVal );
+    sShadowAttrs += OUString::number( nLocationVal );
     sShadowAttrs += sInnerSplit;
     sShadowAttrs += "ShadowWidth=";
     sShadowAttrs += OUString::number( (sal_Int32)aShadowFmt.ShadowWidth ) ;

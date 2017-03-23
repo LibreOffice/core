@@ -1333,11 +1333,11 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
 {
     // sprmSNLnnMod - activate Line Numbering and define Modulo
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSNLnnMod );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetCountBy() );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rLnNumInfo.GetCountBy() );
 
     // sprmSDxaLnn - xPosition of Line Number
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSDxaLnn );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetPosFromLeft() );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rLnNumInfo.GetPosFromLeft() );
 
     // sprmSLnc - restart number: 0 per page, 1 per section, 2 never restart
     if ( nRestartNo || !rLnNumInfo.IsRestartEachPage() )

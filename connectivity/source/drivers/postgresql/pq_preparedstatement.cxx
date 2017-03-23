@@ -455,7 +455,7 @@ void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
     checkColumnIndex( parameterIndex );
     OStringBuffer buf( 20 );
     buf.append( "'" );
-    buf.append( (sal_Int32) x );
+    buf.append( x );
     buf.append( "'" );
     m_vars[parameterIndex-1] = buf.makeStringAndClear();
 }
@@ -467,7 +467,7 @@ void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
     checkColumnIndex( parameterIndex );
     OStringBuffer buf( 20 );
     buf.append( "'" );
-    buf.append( (sal_Int64) x );
+    buf.append( x );
     buf.append( "'" );
     m_vars[parameterIndex-1] = buf.makeStringAndClear();
 }

@@ -627,13 +627,13 @@ bool PSDReader::ImplReadBody()
 
                         for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                         {
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetRed() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetRed() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetGreen() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetGreen() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetBlue() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetBlue() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
                             pBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;
@@ -654,13 +654,13 @@ bool PSDReader::ImplReadBody()
 
                             if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                                 m_rPSD.ReadUChar( nDummy );
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetRed() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetRed() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetGreen() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetGreen() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            nBlack = (sal_uInt8)mpReadAcc->GetPixel( nY, nX ).GetBlue() + nDat;
+                            nBlack = mpReadAcc->GetPixel( nY, nX ).GetBlue() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
                             pBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;

@@ -564,16 +564,16 @@ OUString java_sql_DatabaseMetaData::impl_callStringMethod( const char* _pMethodN
 sal_Int32 java_sql_DatabaseMetaData::impl_callIntMethod_ThrowSQL(const char* _pMethodName, jmethodID& _inout_MethodID)
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
-    sal_Int32 out( (sal_Int32)callIntMethod_ThrowSQL(_pMethodName,_inout_MethodID) );
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, (sal_Int32)out );
+    sal_Int32 out( callIntMethod_ThrowSQL(_pMethodName,_inout_MethodID) );
+    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 
 sal_Int32 java_sql_DatabaseMetaData::impl_callIntMethod_ThrowRuntime(const char* _pMethodName, jmethodID& _inout_MethodID)
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
-    sal_Int32 out( (sal_Int32)callIntMethod_ThrowRuntime(_pMethodName,_inout_MethodID) );
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, (sal_Int32)out );
+    sal_Int32 out( callIntMethod_ThrowRuntime(_pMethodName,_inout_MethodID) );
+    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 

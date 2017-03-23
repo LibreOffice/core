@@ -450,7 +450,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         beans::PropertyValue *pProps = aPropSeq.getArray();
         sal_Int32 nPos = 0;
         pProps[nPos].Name = "NumberingType";
-        pProps[nPos++].Value <<= (sal_Int16)eType ;
+        pProps[nPos++].Value <<= eType ;
 
         pProps[nPos].Name = "Prefix";
         pProps[nPos++].Value <<= sPrefix;
@@ -463,26 +463,26 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
         sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
         pProps[nPos].Name = "LeftMargin";
-        pProps[nPos++].Value <<= (sal_Int32)nLeftMargin;
+        pProps[nPos++].Value <<= nLeftMargin;
 
         sal_Int32 nFirstLineOffset = -nMinLabelWidth;
 
         pProps[nPos].Name = "FirstLineOffset";
-        pProps[nPos++].Value <<= (sal_Int32)nFirstLineOffset;
+        pProps[nPos++].Value <<= nFirstLineOffset;
 
         pProps[nPos].Name = "SymbolTextDistance";
         pProps[nPos++].Value <<= (sal_Int16)nMinLabelDist;
 
         pProps[nPos].Name = "PositionAndSpaceMode";
-        pProps[nPos++].Value <<= (sal_Int16)ePosAndSpaceMode;
+        pProps[nPos++].Value <<= ePosAndSpaceMode;
         pProps[nPos].Name = "LabelFollowedBy";
-        pProps[nPos++].Value <<= (sal_Int16)eLabelFollowedBy;
+        pProps[nPos++].Value <<= eLabelFollowedBy;
         pProps[nPos].Name = "ListtabStopPosition";
-        pProps[nPos++].Value <<= (sal_Int32)nListtabStopPosition;
+        pProps[nPos++].Value <<= nListtabStopPosition;
         pProps[nPos].Name = "FirstLineIndent";
-        pProps[nPos++].Value <<= (sal_Int32)nFirstLineIndent;
+        pProps[nPos++].Value <<= nFirstLineIndent;
         pProps[nPos].Name = "IndentAt";
-        pProps[nPos++].Value <<= (sal_Int32)nIndentAt;
+        pProps[nPos++].Value <<= nIndentAt;
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
@@ -550,16 +550,16 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
             pProps[nPos++].Value <<= aSize;
 
             pProps[nPos].Name = "VertOrient";
-            pProps[nPos++].Value <<= (sal_Int16)eImageVertOrient;
+            pProps[nPos++].Value <<= eImageVertOrient;
         }
 
         if( bNum )
         {
             pProps[nPos].Name = "StartWith";
-            pProps[nPos++].Value <<= (sal_Int16)nNumStartValue;
+            pProps[nPos++].Value <<= nNumStartValue;
 
             pProps[nPos].Name = "ParentNumbering";
-            pProps[nPos++].Value <<= (sal_Int16)nNumDisplayLevels;
+            pProps[nPos++].Value <<= nNumDisplayLevels;
         }
 
         if( ( bNum || bBullet ) && nRelSize )

@@ -339,13 +339,13 @@ namespace frm
                         {
                             if ( bIsNew )
                                 nPosition = ++nCount;
-                            aState.State <<= (sal_Int32)nPosition;
+                            aState.State <<= nPosition;
                             aState.Enabled = true;
                         }
                     }
                     else
                     {
-                        aState.State <<= (sal_Int32)nPosition;
+                        aState.State <<= nPosition;
                         aState.Enabled = true;
                     }
                 }
@@ -835,7 +835,7 @@ namespace frm
                 sal_Int32 nCount      = impl_getRowCount_throw();
                 bool  bFinalCount = impl_isRowCountFinal_throw();
 
-                if ( bFinalCount && ( (sal_Int32)nPosition > nCount ) )
+                if ( bFinalCount && ( nPosition > nCount ) )
                     nPosition = nCount;
 
                 m_xCursor->absolute( nPosition );

@@ -534,8 +534,8 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
     {
         if( !bNoId )
         {
-            if( (sal_Int32)pClassData->pEntries[ i ].aName.GetNumber() > 0x7FFF ||
-                (sal_Int32)pClassData->pEntries[ i ].aName.GetNumber() < 1 )
+            if( pClassData->pEntries[ i ].aName.GetNumber() > 0x7FFF ||
+                pClassData->pEntries[ i ].aName.GetNumber() < 1 )
             {
                 bRet = false;
             }

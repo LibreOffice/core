@@ -599,7 +599,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             if (aCursorSource.isEmpty())
             {
                 xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
-                xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
+                xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
             }
         }
     }

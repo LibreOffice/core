@@ -2425,7 +2425,7 @@ sal_uInt32 SdrPowerPointImport::GetAktPageId()
 {
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( pList && nAktPageNum < pList->size() )
-        return (*pList)[ (sal_uInt16)nAktPageNum ].aPersistAtom.nSlideId;
+        return (*pList)[ nAktPageNum ].aPersistAtom.nSlideId;
     return 0;
 }
 
@@ -3763,8 +3763,8 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( (sal_uInt16)nBulletHeight );
     rNumberFormat.SetBulletColor( aCol );
-    sal_uInt16 nAbsLSpace = (sal_uInt16)( ( (sal_uInt32)nTextOfs * 2540 ) / 576 );
-    sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( (sal_uInt32)nBulletOfs * 2540 ) / 576 );
+    sal_uInt16 nAbsLSpace = (sal_uInt16)( ( nTextOfs * 2540 ) / 576 );
+    sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( nBulletOfs * 2540 ) / 576 );
     rNumberFormat.SetAbsLSpace( nAbsLSpace );
     rNumberFormat.SetFirstLineOffset( -nFirstLineOffset );
 }
@@ -6234,8 +6234,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     if ( !nIsBullet2 )
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-        sal_uInt16 nAbsLSpace = (sal_uInt16)( ( (sal_uInt32)_nTextOfs * 2540 ) / 576 );
-        sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( (sal_uInt32)_nBulletOfs * 2540 ) / 576 );
+        sal_uInt16 nAbsLSpace = (sal_uInt16)( ( _nTextOfs * 2540 ) / 576 );
+        sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( _nBulletOfs * 2540 ) / 576 );
         aLRSpaceItem.SetLeft( nAbsLSpace );
         aLRSpaceItem.SetTextFirstLineOfstValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );

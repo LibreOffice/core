@@ -669,7 +669,7 @@ uno::Reference<drawing::XShape>
             xProp->setPropertyValue( UNO_NAME_3D_HORZ_SEGS
                 , uno::Any(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( UNO_NAME_3D_VERT_SEGS
-                , uno::Any((sal_Int32)nVerticalSegmentCount) );//depends on point count of the used polygon
+                , uno::Any(nVerticalSegmentCount) );//depends on point count of the used polygon
 
             //Reduced lines
             xProp->setPropertyValue( UNO_NAME_3D_REDUCED_LINE_GEOMETRY

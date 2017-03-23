@@ -1602,7 +1602,7 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     sal_Int32 i = nStart;
 
     // Used for decimal tab handling:
-    const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
+    const sal_Unicode cTabDec = GetLastTab() ? GetTabDecimal() : 0;
     const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
 
     // #i45951# German (Switzerland) uses ' as thousand separator

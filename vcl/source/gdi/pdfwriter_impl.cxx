@@ -3334,7 +3334,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( nFontStream );
                 aLine.append( " 0 obj\n"
                              "<</Length " );
-                aLine.append( (sal_Int32)nStreamLengthObject );
+                aLine.append( nStreamLengthObject );
                 if (!g_bDebugDisableCompression)
                     aLine.append( " 0 R"
                                  "/Filter/FlateDecode"
@@ -7755,7 +7755,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
         aMetadataObj.append( "<</Type/Metadata/Subtype/XML/Length " );
 
-        aMetadataObj.append( (sal_Int32) aMetadataStream.getLength() );
+        aMetadataObj.append( aMetadataStream.getLength() );
         aMetadataObj.append( ">>\nstream\n" );
         if ( !writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) )
             return 0;

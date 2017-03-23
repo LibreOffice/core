@@ -36,7 +36,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
     WriteColor( rStream, rFont.GetColor() );
     nTemp = (sal_uInt16)rFont.GetFamilyType(); rStream.WriteUInt16( nTemp );
 
-    nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet());
+    nTemp = (sal_uInt16)GetSOStoreTextEncoding(rFont.GetCharSet());
     rStream.WriteUInt16( nTemp );
 
     nTemp = (sal_uInt16)rFont.GetPitch(); rStream.WriteUInt16( nTemp );

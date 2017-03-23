@@ -1105,7 +1105,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     else
                     {
                         pPict->ReadUChar( nByteCountAsByte );
-                        nByteCount = (sal_uInt8)nByteCountAsByte;
+                        nByteCount = nByteCountAsByte;
                         nByteCount++;
                     }
                     size_t i = 0;

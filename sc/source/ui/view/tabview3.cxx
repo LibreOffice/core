@@ -169,7 +169,7 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
     {
         DoneBlockMode( bControl );
         aViewData.ResetOldCursor();
-        SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
+        SetCursor( nPosX, nPosY );
     }
 }
 
