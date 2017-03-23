@@ -1037,15 +1037,9 @@ SmNode *SmParser::DoExpression()
     }
 
     SmNodeArray  RelationArray;
-
-    DoRelation();
-    RelationArray.push_back(popOrZero(m_aNodeStack));
-
+    RelationArray.push_back(DoRelation());
     while (m_aCurToken.nLevel >= 4)
-    {
-        DoRelation();
-        RelationArray.push_back(popOrZero(m_aNodeStack));
-    }
+        RelationArray.push_back(DoRelation());
 
     if (RelationArray.size() > 1)
     {
@@ -1061,41 +1055,35 @@ SmNode *SmParser::DoExpression()
     }
 }
 
-void SmParser::DoRelation()
+SmNode *SmParser::DoRelation()
 {
-    DoSum();
+    SmNode *pFirst = DoSum();
     while (TokenInGroup(TG::Relation))
     {
         std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
-        SmNode *pFirst = popOrZero(m_aNodeStack);
-
         SmNode *pSecond = DoOpSubSup();
-
-        DoSum();
-
-        pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
-        m_aNodeStack.push_front(std::move(pSNode));
+        SmNode *pThird = DoSum();
+        pSNode->SetSubNodes(pFirst, pSecond, pThird);
+        pFirst = pSNode.release();
     }
+    return pFirst;
 }
 
-void SmParser::DoSum()
+SmNode *SmParser::DoSum()
 {
-    DoProduct();
+    SmNode *pFirst = DoProduct();
     while (TokenInGroup(TG::Sum))
     {
         std::unique_ptr<SmStructureNode> pSNode(new SmBinHorNode(m_aCurToken));
-        SmNode *pFirst = popOrZero(m_aNodeStack);
-
         SmNode *pSecond = DoOpSubSup();
-
-        DoProduct();
-
-        pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
-        m_aNodeStack.push_front(std::move(pSNode));
+        SmNode *pThird = DoProduct();
+        pSNode->SetSubNodes(pFirst, pSecond, pThird);
+        pFirst = pSNode.release();
     }
+    return pFirst;
 }
 
-void SmParser::DoProduct()
+SmNode *SmParser::DoProduct()
 {
     SmNode *pFirst = DoPower();
 
@@ -1165,7 +1153,7 @@ void SmParser::DoProduct()
         }
         pFirst = pSNode;
     }
-    m_aNodeStack.emplace_front(pFirst);
+    return pFirst;
 }
 
 SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
@@ -1197,7 +1185,7 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         if (eType == TFROM  ||  eType == TTO)
         {
             // parse limits in old 4.0 and 5.0 style
-            DoRelation();
+            m_aNodeStack.emplace_front(DoRelation());
         }
         else
             m_aNodeStack.emplace_front(DoTerm(true));
@@ -2072,11 +2060,8 @@ SmTableNode *SmParser::DoBinom()
 
     NextToken();
 
-    DoSum();
-    DoSum();
-
-    SmNode *pSecond = popOrZero(m_aNodeStack);
-    SmNode *pFirst = popOrZero(m_aNodeStack);
+    SmNode *pFirst = DoSum();
+    SmNode *pSecond = DoSum();
     pSNode->SetSubNodes(pFirst, pSecond);
     return pSNode.release();
 }
