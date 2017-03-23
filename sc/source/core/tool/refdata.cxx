@@ -553,6 +553,11 @@ bool ScComplexRefData::IncEndRowSticky( SCROW nDelta, const ScAddress& rPos )
     return true;
 }
 
+bool ScComplexRefData::IsDeleted() const
+{
+    return Ref1.IsDeleted() || Ref2.IsDeleted();
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScComplexRefData::Dump( int nIndent ) const
 {

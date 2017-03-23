@@ -2625,6 +2625,12 @@ void setRefDeleted( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
     }
 }
 
+void restoreDeletedRef( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
+{
+    restoreDeletedRef(rRef.Ref1, rCxt);
+    restoreDeletedRef(rRef.Ref2, rCxt);
+}
+
 bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange,
         const ScComplexRefData& rRef )
 {
@@ -2997,6 +3003,19 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                     aRes.mbReferenceModified = true;
                                     break;
                                 }
+                            }
+                        }
+
+                        if (!rCxt.isDeleted() && rRef.IsDeleted())
+                        {
+                            // Check if the token has reference to previously deleted region.
+                            ScRange aCheckRange = rRef.toAbs(aNewPos);
+                            if (aSelectedRange.In(aCheckRange))
+                            {
+                                // This reference was previously in the deleted region. Restore it.
+                                restoreDeletedRef(rRef, rCxt);
+                                aRes.mbValueChanged = true;
+                                break;
                             }
                         }
 
