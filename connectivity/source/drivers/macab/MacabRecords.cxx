@@ -730,7 +730,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
              */
             for(i = 0; i < numRecords; i++)
             {
-                dictType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
+                dictType = getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
                 localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                 dictKeyString = CFStringToOUString(localizedDictKey);
                 dictLabelString = propertyNameString + ": " + fixLabel(dictKeyString);
@@ -797,7 +797,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 for(i = 0; i < arrLength; i++)
                 {
                     arrValue = CFArrayGetValueAtIndex(static_cast<CFArrayRef>(_propertyValue), i);
-                    arrType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(arrValue) );
+                    arrType = getABTypeFromCFType( CFGetTypeID(arrValue) );
                     arrLabelString = propertyNameString + OUString::number(i);
                     arrLabel = OUStringToCFString(arrLabelString);
                     auto hdr = std::unique_ptr<MacabHeader>(createHeaderForProperty(arrType, arrValue, arrLabel));
