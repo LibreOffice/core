@@ -190,6 +190,8 @@ struct ScComplexRefData
         @return TRUE if changed. */
     bool IncEndRowSticky( SCROW nDelta, const ScAddress& rPos );
 
+    bool IsDeleted() const;
+
 #if DEBUG_FORMULA_COMPILER
     void Dump( int nIndent = 0 ) const;
 #endif
