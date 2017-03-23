@@ -218,7 +218,8 @@ bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
     return false;
 }
 
-SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen ) :
+SwAutoCompleteWord::SwAutoCompleteWord(
+    editeng::SortedAutoCompleteStrings::size_type nWords, sal_uInt16 nMWrdLen ):
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),
@@ -302,12 +303,13 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
     return bRet;
 }
 
-void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
+void SwAutoCompleteWord::SetMaxCount(
+    editeng::SortedAutoCompleteStrings::size_type nNewMax )
 {
     if( nNewMax < nMaxCount && aLRULst.size() > nNewMax )
     {
         // remove the trailing ones
-        sal_uInt16 nLRUIndex = nNewMax-1;
+        SwAutoCompleteStringPtrDeque::size_type nLRUIndex = nNewMax-1;
         while (nNewMax < m_WordList.size() && nLRUIndex < aLRULst.size())
         {
             editeng::SortedAutoCompleteStrings::const_iterator it =
