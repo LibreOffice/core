@@ -628,7 +628,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
                         dType);
                 break;
             case SQL_INT64:
-                n64Value = (sal_Int64) toNumericWithoutDecimalPlace(myString);
+                n64Value = toNumericWithoutDecimalPlace(myString);
                 setValue< sal_Int64 >(parameterIndex,
                         n64Value,
                         dType);
