@@ -940,26 +940,11 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
 
 void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 {
-    if( sp )
-    {
-        --sp;
-        const FormulaToken* p = pStack[ sp ];
-        switch (p->GetType())
-        {
-            case svError:
-                nGlobalError = p->GetError();
-                break;
-            case svSingleRef:
-                SingleRefToVars( *p->GetSingleRef(), rCol, rRow, rTab);
-                if (!pDok->m_TableOpList.empty())
-                    ReplaceCell( rCol, rRow, rTab );
-                break;
-            default:
-                SetError( FormulaError::IllegalParameter);
-        }
-    }
-    else
-        SetError( FormulaError::UnknownStackVariable);
+    ScAddress aAddr(rCol, rRow, rTab);
+    PopSingleRef(aAddr);
+    rCol = aAddr.Col();
+    rRow = aAddr.Row();
+    rTab = aAddr.Tab();
 }
 
 void ScInterpreter::PopSingleRef( ScAddress& rAdr )
