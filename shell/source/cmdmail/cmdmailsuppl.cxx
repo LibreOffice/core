@@ -228,7 +228,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         appendShellWord(aBuffer, xSimpleMailMessage->getOriginator(), false);
     }
 
-    // Append receipient if set in the message
+    // Append recipient if set in the message
     if ( !xSimpleMailMessage->getRecipient().isEmpty() )
     {
         aBuffer.append(" --to ");

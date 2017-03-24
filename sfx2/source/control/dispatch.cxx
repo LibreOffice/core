@@ -483,7 +483,7 @@ SfxDispatcher::~SfxDispatcher()
     xImp->aIdle.Stop();
     xImp->xPoster->SetEventHdl( Link<SfxRequest*,void>() );
 
-    // Notify the stack varialbles in Call_Impl
+    // Notify the stack variables in Call_Impl
     if ( xImp->pInCallAliveFlag )
         *xImp->pInCallAliveFlag = false;
 
@@ -1011,7 +1011,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
 
     @param nSlot the Id of the executing function
     @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
-    @param pArgs Zero teminated C-Array of Parameters
+    @param pArgs Zero terminated C-Array of Parameters
     @param pInternalArgs Zero terminated C-Array of Parameters
 
     @return const SfxPoolItem* Pointer to the SfxPoolItem valid to the next run
@@ -1611,7 +1611,7 @@ void SfxDispatcher::FlushImpl()
     if( bAwakeBindings )
         aToDoCopy.clear();
 
-    // If more changes have occurred on the stach when
+    // If more changes have occurred on the stack when
     // Activate/Deactivate/Delete:
     if (!xImp->bFlushed)
         // If Push/Pop has been called by someone, then also EnterReg was called!

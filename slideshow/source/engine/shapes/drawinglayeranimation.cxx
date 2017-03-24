@@ -824,7 +824,7 @@ ActivityImpl::ActivityImpl(
     if( DoScrollIn() )
     {
         // most parameters are set correctly from the dialog logic, but
-        // eg VisisbleWhenStopped is grayed out and needs to be corrected here.
+        // eg VisibleWhenStopped is grayed out and needs to be corrected here.
         mbVisibleWhenStopped = true;
         mbVisibleWhenStarted = false;
         mnRepeat = 0L;

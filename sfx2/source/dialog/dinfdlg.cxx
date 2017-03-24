@@ -1177,7 +1177,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
 #endif
 
-     // Determine the Titels
+     // Determine the Titles
     const SfxPoolItem* pItem = nullptr;
     OUString aTitle( GetText() );
     if ( SfxItemState::SET !=

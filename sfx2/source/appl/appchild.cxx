@@ -74,7 +74,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
                 SfxChildWinFactory *pFac = &(*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
-                    // Factory found, registrer Context here.
+                    // Factory found, register Context here.
                     pF = pFac;
                     break;
                 }

@@ -1307,7 +1307,7 @@ void AutoReloadTimer_Impl::Invoke()
 
     if ( pFrame )
     {
-        // Not possible/meanigfull at the moment?
+        // Not possible/meaningful at the moment?
         if ( !pObjSh->CanReload_Impl() || pObjSh->IsAutoLoadLocked() || Application::IsUICaptured() )
         {
             // Allow a retry
