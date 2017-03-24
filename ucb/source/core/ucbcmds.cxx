@@ -1602,7 +1602,7 @@ void globalTransfer_(
     }
 }
 
-} /* namescpace */
+} /* namespace */
 
 
 // UniversalContentBroker implementation ( XCommandProcessor commands ).

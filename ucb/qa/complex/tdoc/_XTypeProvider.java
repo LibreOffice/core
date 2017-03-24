@@ -55,7 +55,7 @@ public class _XTypeProvider {
 
 
     /**
-    * ?alls the method and checks the return value.<p>
+    * Calls the method and checks the return value.<p>
     * Has <b>OK</b> status if one of the return value equals to the
     * type <code>com.sun.star.lang.XTypeProvider</code>.
     */

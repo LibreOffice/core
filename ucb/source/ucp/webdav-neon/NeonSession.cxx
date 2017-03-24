@@ -511,7 +511,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
         // If there is a proxy server in between, it shall never use
         // cached data. We always want 'up-to-date' data.
         ne_buffer_concat( headers, "Pragma: no-cache", EOL, nullptr );
-        // alternative, but understoud by HTTP 1.1 servers only:
+        // alternative, but understood by HTTP 1.1 servers only:
         // ne_buffer_concat( headers, "Cache-Control: max-age=0", EOL, NULL );
 
         const RequestDataMap * pRequestData
@@ -892,7 +892,7 @@ void NeonSession::OPTIONS( const OUString & inPath,
                 // we detect the class (1, 2 and 3), other elements (token, URL)
                 // are not used for now
                 // silly parser written using OUString, not very efficient
-                // but quick and esy to write...
+                // but quick and easy to write...
                 sal_Int32 nFromIndex = 0;
                 sal_Int32 nNextIndex = 0;
                 while( ( nNextIndex = aHeaderValue.indexOf( ",", nFromIndex ) ) != -1 )
