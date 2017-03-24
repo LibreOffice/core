@@ -1371,14 +1371,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:SpinButton" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Spin Button</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ConvertToScrollBar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Replace with Scrollbar</value>
@@ -2649,14 +2641,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertPushbutton" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Button</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ChangeCaseToFullWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Full-width</value>
@@ -2675,14 +2659,6 @@
           <value xml:lang="en-US">Stop Loading</value>
         </prop>
       </node>
-      <node oor:name=".uno:Radiobutton" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Option Button</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ChangeCaseToHiragana" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Hiragana</value>
@@ -2694,14 +2670,6 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:Checkbox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Check Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToKatakana" oor:op="replace">
@@ -2822,28 +2790,12 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertImageControl" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Image Control</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:BrowseView" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Web View</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Web</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ProgressBar" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Progress Bar</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2918,22 +2870,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:AddDateField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Date Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertTimeField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Time Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:EditStyle" oor:op="replace">
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Edit Style...</value>
@@ -2964,14 +2900,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertNumericField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Numeric Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:StyleUpdateByExample" oor:op="replace">
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Update Style</value>
@@ -2993,14 +2921,6 @@
           <value xml:lang="en-US">Line Dash/Dot</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertCurrencyField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Currency Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:LineTransparence" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Transparency</value>
@@ -3014,41 +2934,9 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertFormattedField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Formatted Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:XLineColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Color</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertPatternField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pattern Field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertFileControl" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">File Selection</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertTreeControl" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Tree Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3207,38 +3095,14 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertFixedText" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Label field</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ObjectMenue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Ob~ject</value>
         </prop>
       </node>
-      <node oor:name=".uno:Groupbox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Group Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:OpenXMLFilterSettings" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~XML Filter Settings...</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertEdit" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Text Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:HangulHanjaConversion" oor:op="replace">
@@ -3251,22 +3115,6 @@
           <value xml:lang="en-US">Chinese Conversion...</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertListbox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">List Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:Combobox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Combo Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:Spinbutton" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Spin Button</value>
@@ -3275,49 +3123,9 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:HScrollbar" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Horizontal Scroll Bar</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:VScrollbar" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Vertical Scroll Bar</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:Preview" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Preview</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:URLButton" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">URL Button</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ModifiedStatus" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Document Modified</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SelectMode" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:IsLoading" oor:op="replace">
@@ -4554,11 +4362,6 @@
           <value xml:lang="en-US">Chart Options</value>
         </prop>
       </node>
-      <node oor:name=".uno:SimEditOptions" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Image Options</value>
-        </prop>
-      </node>
       <node oor:name=".uno:FrameName" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Name</value>
@@ -5580,14 +5383,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:CountAll" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Records</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SbaNativeSql" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Run SQL command directly</value>
@@ -5777,14 +5572,6 @@
       <node oor:name=".uno:ViewFormAsGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Data source as Table</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RemoveFilter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reset Filter</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6091,11 +5878,6 @@
       <node oor:name=".uno:TextAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Alig~n</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:PolyFormen" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Shapes</value>
         </prop>
       </node>
       <node oor:name=".uno:Scan" oor:op="replace">
