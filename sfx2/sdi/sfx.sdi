@@ -4831,24 +4831,6 @@ SfxVoidItem ZoomMinus SID_ZOOM_IN
 ]
 
 
-SfxVoidItem Zooming SID_ZOOM
-(SfxUInt32Item ZoomScale ID_VAL_ZOOM)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxVoidItem ZoomNext SID_ZOOM_NEXT
 ()
 [

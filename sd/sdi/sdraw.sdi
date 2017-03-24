@@ -1848,23 +1848,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxBoolItem GridFront SID_GRID_FRONT
 
 [
@@ -3461,23 +3444,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     GroupId = ;
 ]
 
-SfxVoidItem SelectAt SID_SELECTAT
-(SfxUInt32Item AnchorX ID_VAL_ANCHOR_X,SfxUInt32Item AnchorY ID_VAL_ANCHOR_Y,SfxUInt32Item Left ID_VAL_MOUSESTART_X,SfxUInt32Item Top ID_VAL_MOUSESTART_Y,SfxUInt32Item Right ID_VAL_LENGTH_X,SfxUInt32Item Bottom ID_VAL_LENGTH_Y)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
 SfxVoidItem SelectGradient SID_SELECTGRADIENT
 (SfxStringItem Name ID_VAL_INDEX)
 [
@@ -3741,23 +3707,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem StartApplication SID_STARTAPP
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem SummaryPage SID_SUMMARY_PAGE
 ()
 [
@@ -3823,24 +3772,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
-]
-
-SfxBoolItem TextAlignment SID_TEXTALIGNMENT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
 ]
 
 SfxVoidItem TextAttributes SID_TEXTATTR_DLG
@@ -4238,22 +4169,6 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 ()
 [
@@ -4422,30 +4337,6 @@ SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
     Asynchron;
 
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-/** This item holds the requested pane of the multi pane GUI in which a
-    change of the view shell is requested by a call to the SID_SWITCH_SHELL
-    slot.
-*/
-SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
-[
-    // flags:
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    // config:
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,

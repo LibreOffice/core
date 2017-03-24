@@ -84,7 +84,7 @@
 #define SID_COMBINE                         (SID_SD_START+26)
 #define SID_NAME_GROUP                      (SID_SD_START+27)
 #define SID_DRAWTBX_CONNECTORS              (SID_SD_START+28)
-#define SID_TEXTALIGNMENT                   (SID_SD_START+29)
+    // FREE
 // In svxids.hrc: SID_BEZIER_ELIMINATE_POINTS   (SID_SD_START+30)
 #define SID_MOREFRONT                       (SID_SD_START+31)
 #define SID_MOREBACK                        (SID_SD_START+32)
@@ -104,7 +104,7 @@
 #define SID_MODIFYLAYER                     (SID_SD_START+45)
 #define SID_PAGEMODE                        (SID_SD_START+46)
 #define SID_LAYERMODE                       (SID_SD_START+47)
-#define SID_STARTAPP                        (SID_SD_START+49)
+    // FREE
 #define SID_MASTERPAGE                      (SID_SD_START+50)
 // Navigation between slides
 #define SID_GO_TO_NEXT_PAGE                 (SID_SD_START+51)
@@ -128,7 +128,6 @@
 #define SID_HANDOUT_MASTER_MODE             (SID_SD_START+70)
 #define SID_LINEEND_POLYGON                 (SID_SD_START+71)
     // FREE
-#define SID_GRAPHIC_EXPORT                  (SID_SD_START+73)
 #define SID_SWITCH_POINTEDIT                (SID_SD_START+74)
     // FREE
 // In svxids.hrc: SID_TEXTEDIT              (SID_SD_START+76)
@@ -278,7 +277,7 @@
 // In svxids.hrc: SID_BEZIERTO                  (SID_SD_START+252)
 #define SID_PAGESIZE                        (SID_SD_START+253)
 #define SID_PAGEMARGIN                      (SID_SD_START+254)
-#define SID_SELECTAT                        (SID_SD_START+256)
+    // FREE
 #define SID_COLORVIEW                       (SID_SD_START+257)
     // FREE
 #define SID_GETRED                          (SID_SD_START+259)
@@ -421,7 +420,6 @@
 #define SID_LEFT_PANE_DRAW                  (SID_SD_START+415)
         // FREE
 #define SID_NOTES_WINDOW                    (SID_SD_START+417)
-#define SID_SWITCH_SHELL_PANE               (SID_SD_START+418)
         // FREE
 #define SID_NORMAL_MULTI_PANE_GUI           (SID_SD_START+420)
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
@@ -450,7 +448,6 @@
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
 #define SID_SHOW_SLIDE                      (SID_SD_START+441)
 
-#define SID_TABLE_TOOLBOX                   (SID_SD_START+443)
     // FREE
 #define SID_ZOOM_MODE                       (SID_SD_START+447)
 #define SID_HIDE_LAST_LEVEL                 (SID_SD_START+448)

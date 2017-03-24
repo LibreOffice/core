@@ -432,11 +432,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_SELECTAT // ole : no, status : play rec
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_PRESENTATION_LAYOUT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -665,11 +660,6 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
     SID_SIZE_ALL // ole : no, status : ?
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_ZOOM // ole : no, status : play rec
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
@@ -1633,11 +1623,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_GRAPHIC_EXPORT // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_NAME_GROUP // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -1679,11 +1664,6 @@ interface DrawView
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
     MenuConfig = TRUE ;
-    ]
-    SID_TEXTALIGNMENT // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
     ]
     SID_COLOR_CONTROL // ole : no, status : ?
     [
