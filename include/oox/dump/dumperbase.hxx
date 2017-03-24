@@ -498,7 +498,7 @@ typedef std::shared_ptr< NameListBase > NameListRef;
 
 /** Base class of all classes providing names for specific values (name lists).
 
-    The idea is to provide a unique interfase for all different methods to
+    The idea is to provide a unique interface for all different methods to
     write specific names for any values. This can be enumerations (dedicated
     names for a subset of values), or names for bits in bit fields. Classes
     derived from this base class implement the specific behaviour for the

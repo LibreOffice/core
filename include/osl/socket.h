@@ -239,7 +239,7 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     rtl_uString *strDottedAddr, sal_Int32 Port);
 
 
-/** Create an internet-address, consisting of hostaddress and port.
+/** Create an internet-address, consisting of host address and port.
     We interpret strDottedAddr as a dotted-decimal inet-addr
     (e.g. "141.99.128.50").
     @param strDottedAddr [in] String with dotted address.

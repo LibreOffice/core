@@ -33,8 +33,8 @@ namespace o3tl
 ///   typedef o3tl::strong_int<unsigned, MyIntTag> MyInt;
 ///
 /// \param UNDERLYING_TYPE the underlying scalar type
-/// \param PHANTOM_TYPE    a type tag, used to distinguish this instantion of the template
-///                        from other instantiantions with the same UNDERLYING_TYPE.
+/// \param PHANTOM_TYPE    a type tag, used to distinguish this instantiation of the template
+///                        from other instantiations with the same UNDERLYING_TYPE.
 ///
 template <typename UNDERLYING_TYPE, typename PHANTOM_TYPE>
 struct strong_int

@@ -190,7 +190,7 @@ namespace o3tl
 
 /** specifies the type of a field value.
 
-    A field can have a value if it repsresents a constant or an enum value.
+    A field can have a value if it represents a constant or an enum value.
  */
 enum RTValueType {
     RT_TYPE_NONE,

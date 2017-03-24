@@ -71,7 +71,7 @@ namespace drawinglayer {
 
     WinBits
 
-    WB_VSCROLL          A scroolbar will be always shown. The visible number of
+    WB_VSCROLL          A scrollbar will be always shown. The visible number of
                         lines have to be specified with SetLineCount() if this
                         flag is set.
     WB_TABSTOP          It is possible to jump into the ValueSet with the tab key.

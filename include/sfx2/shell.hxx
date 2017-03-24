@@ -355,7 +355,7 @@ public:
     /**
         With this method can the slots of the subclasses be invalidated through the
         slot Id or alternatively through the Which ID. Slot IDs, which are
-        inherited by the subclass are also invalidert.
+        inherited by the subclass are also invalidated.
 
         [Cross-reference]
 

@@ -227,7 +227,7 @@ namespace sfx2
             Note that if this method returns <FALSE/>, then subsequent calls of
             ->adjustMacroMode can still return <FALSE/>.
             That is, if the current macro execution mode for the document is not yet known
-            (and inparticular <em>not</em> MacroExecMode::NEVER_EXECUTE), then ->isMacroExecutionDisallowed
+            (and in particular <em>not</em> MacroExecMode::NEVER_EXECUTE), then ->isMacroExecutionDisallowed
             will return <FALSE/>.
             However, a subsequent call to ->adjustMacroMode can result in the user
             denying macro execution, in which ->adjustMacroMode will return <FALSE/>,
