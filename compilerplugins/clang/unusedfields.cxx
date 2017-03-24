@@ -57,7 +57,8 @@ bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 
 
 // try to limit the voluminous output a little
-static std::set<MyFieldInfo> touchedSet;
+static std::set<MyFieldInfo> touchedFromInsideSet;
+static std::set<MyFieldInfo> touchedFromConstructorSet;
 static std::set<MyFieldInfo> touchedFromOutsideSet;
 static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> definitionSet;
@@ -76,8 +77,10 @@ public:
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
         std::string output;
-        for (const MyFieldInfo & s : touchedSet)
-            output += "touch:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : touchedFromInsideSet)
+            output += "inside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : touchedFromConstructorSet)
+            output += "constructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : touchedFromOutsideSet)
             output += "outside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : readFromSet)
@@ -100,7 +103,7 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
 private:
     MyFieldInfo niceName(const FieldDecl*);
-    void checkForTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr, const MyFieldInfo& fieldInfo);
+    void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
 };
 
 MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
@@ -193,7 +196,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 
   // for the touched-from-outside analysis
 
-    checkForTouchedFromOutside(fieldDecl, memberExpr, fieldInfo);
+    checkTouched(fieldDecl, memberExpr);
 
   // for the write-only analysis
 
@@ -281,19 +284,18 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation()))) {
         return true;
     }
-    MyFieldInfo fieldInfo = niceName(fieldDecl);
-    touchedSet.insert(fieldInfo);
-    checkForTouchedFromOutside(fieldDecl, declRefExpr, fieldInfo);
+    checkTouched(fieldDecl, declRefExpr);
     return true;
 }
 
-void UnusedFields::checkForTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr, const MyFieldInfo& fieldInfo) {
+void UnusedFields::checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr) {
     const FunctionDecl* memberExprParentFunction = parentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(memberExprParentFunction);
 
+    MyFieldInfo fieldInfo = niceName(fieldDecl);
+
     // it's touched from somewhere outside a class
     if (!methodDecl) {
-        touchedSet.insert(fieldInfo);
         touchedFromOutsideSet.insert(fieldInfo);
         return;
     }
@@ -303,9 +305,13 @@ void UnusedFields::checkForTouchedFromOutside(const FieldDecl* fieldDecl, const 
         // ignore move/copy operator, it's self->self
     } else if (constructorDecl && (constructorDecl->isCopyConstructor() || constructorDecl->isMoveConstructor())) {
         // ignore move/copy constructor, it's self->self
+    } else if (constructorDecl && memberExprParentFunction->getParent() == fieldDecl->getParent()) {
+        // if the field is touched from inside it's parent class constructor
+        touchedFromConstructorSet.insert(fieldInfo);
     } else {
-        touchedSet.insert(fieldInfo);
-        if (memberExprParentFunction->getParent() != fieldDecl->getParent()) {
+        if (memberExprParentFunction->getParent() == fieldDecl->getParent()) {
+            touchedFromInsideSet.insert(fieldInfo);
+        } else {
            touchedFromOutsideSet.insert(fieldInfo);
         }
     }

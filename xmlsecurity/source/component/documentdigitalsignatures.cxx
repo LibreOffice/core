@@ -400,7 +400,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  )
     if (aSignatureManager.init())
         xSecEnv = aSignatureManager.getSecurityEnvironment();
 
-    ScopedVclPtrInstance< MacroSecurity > aDlg( nullptr, mxCtx, xSecEnv );
+    ScopedVclPtrInstance< MacroSecurity > aDlg( nullptr, xSecEnv );
     aDlg->Execute();
 }
 

@@ -50,7 +50,6 @@ private:
     VclPtr<OKButton>           m_pOkBtn;
     VclPtr<PushButton>         m_pResetBtn;
 
-    css::uno::Reference< css::uno::XComponentContext >  mxCtx;
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
     SvtSecurityOptions                                          maSecOptions;
 
@@ -63,7 +62,6 @@ private:
     DECL_LINK(          OkBtnHdl, Button*, void );
 public:
     MacroSecurity(vcl::Window* pParent,
-        const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~MacroSecurity() override;
     virtual void dispose() override;
