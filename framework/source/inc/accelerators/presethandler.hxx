@@ -228,7 +228,7 @@ class PresetHandler
                     in case this configuration supports localized entries,
                     the current locale must be set.
 
-                    Localzation will be represented as directory structure
+                    Localization will be represented as directory structure
                     of provided presets. Means: you call us with a preset name "default";
                     and we use e.g. "/en-US/default.xml" internally.
 

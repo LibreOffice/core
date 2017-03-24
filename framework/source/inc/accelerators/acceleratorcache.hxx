@@ -102,7 +102,7 @@ class AcceleratorCache
                     the key, which should be checked.
 
             @return [bool]
-                    sal_True if the speicfied key exists inside this container.
+                    sal_True if the specified key exists inside this container.
          */
         bool hasKey(const css::awt::KeyEvent& aKey) const;
         bool hasCommand(const OUString& sCommand) const;

@@ -33,7 +33,7 @@ namespace framework{
 /**
     @short  implements a simple configuration access
     @descr  Sometimes it's better to have direct config access
-            instead of using soecialize config items of the svtools
+            instead of using specialized config items of the svtools
             project. This class can wrapp such configuration access.
  */
 class FWI_DLLPUBLIC ConfigAccess final

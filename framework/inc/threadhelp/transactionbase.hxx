@@ -25,7 +25,7 @@
 namespace framework{
 
 /*-************************************************************************************************************
-    @short          make it possible to instanciate a transacion manager as first member!
+    @short          make it possible to instanciate a transaction manager as first member!
     @descr          If you use a transaction manager as a member of your class and wish to use it earlier then other ones
                     you should have a look on this implementation. You must use it as the first base class
                     of your implementation - because base classes are initialized by his order and before your
