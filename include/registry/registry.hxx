@@ -240,7 +240,7 @@ public:
     /// Destructor, the internal array with key names will be deleted.
     inline ~RegistryKeyNames();
 
-    /// returns the name of the key sepecified by index.
+    /// returns the name of the key specified by index.
     inline rtl::OUString getElement(sal_uInt32 index);
 
     /// returns the length of the array.

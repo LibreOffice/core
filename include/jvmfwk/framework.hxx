@@ -293,7 +293,7 @@ struct JavaInfoGuard {
    the second argument which is compared with the first.
    @return
    true - both object represent the same JRE.</br>
-   false - the objects represend different JREs
+   false - the objects represent different JREs
  */
 JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB);
@@ -328,7 +328,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_isVMRunning(sal_Bool *bRunning);
     JREs can be provided by different vendors.
     The function obtains information about JRE installations and checks if
     there is one among them that supports
-    a set of features (currently only accessibilty is possible). If none was
+    a set of features (currently only accessibility is possible). If none was
     found then it also uses a list of paths, which have been registered
     by <code>jfw_addJRELocation</code>
     to find JREs. Found JREs are examined in the same way.</p>

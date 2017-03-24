@@ -98,7 +98,7 @@ template<typename T> inline boost::optional<T const> tryGetConverted(
 /** Try to access the value of a specific type stored in an Any.
 
     In trying to obtain a value, the same set of conversions as supported by
-    ">>=" are considere.
+    ">>=" are considered.
 
     The returned object is a proxy.  Proxies can be either positive or negative.
     Each proxy can be contextually converted to bool, yielding true iff the

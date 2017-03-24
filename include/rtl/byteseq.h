@@ -140,7 +140,7 @@ namespace rtl
 
 enum __ByteSequence_NoDefault
 {
-    /** This enum value can be used to create a bytesequence with uninitalized data
+    /** This enum value can be used to create a bytesequence with uninitialized data
     */
     BYTESEQ_NODEFAULT = 0xcafe
 };
@@ -217,7 +217,7 @@ public:
     inline ByteSequence( sal_Int32 len , enum __ByteSequence_NoDefault nodefault );
     /** Constructor:
         Creates a sequence from a C-Handle without acquiring the handle, thus taking
-        over owenership. Eitherway the handle is release by the destructor.
+        over ownership. Eitherway the handle is released by the destructor.
         This ctor is useful, when working with a c-interface (it safes a pair of
         acquire and release call and is thus a performance optimization only).
 
