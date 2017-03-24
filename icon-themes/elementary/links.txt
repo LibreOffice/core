@@ -211,6 +211,12 @@ cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/lc_view100.png cmd/lc_zoom100percent.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
+cmd/lc_dataimport.png cmd/lc_importfromfile.png
+cmd/sc_dataimport.png cmd/sc_importfromfile.png
+cmd/lc_importdialog.png cmd/lc_importfromfile.png
+cmd/sc_importdialog.png cmd/sc_importfromfile.png
+cmd/lc_importdialog.png cmd/lc_importfromfile.png
+cmd/sc_importdialog.png cmd/sc_importfromfile.png
 cmd/nl/lc_bold.png cmd/lc_bold.png
 cmd/nl/lc_italic.png cmd/lc_italic.png
 cmd/nl/lc_underline.png cmd/lc_underline.png
@@ -275,7 +281,6 @@ cmd/sc_drawtext.png cmd/sc_text.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
-cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 cmd/sc_flowchartshapes.png cmd/sc_flowchartshapes.flowchart-internal-storage.png
 cmd/sc_fontcolor.png cmd/sc_color.png
@@ -292,6 +297,10 @@ cmd/sc_insertfilecontrol.png cmd/sc_filecontrol.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertobjctrl.png cmd/sc_insertobject.png
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
+cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
+cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
+cmd/sc_formfilterexecute.png cmd/sc_datafilterstandardfilter.png
+cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
 cmd/sc_justifypara.png cmd/sc_alignblock.png
@@ -347,6 +356,8 @@ cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 cmd/sc_togglemergecells.png cmd/sc_mergecells.png
 cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
+cmd/lc_exportdialog.png cmd/lc_exportto.png
+cmd/sc_exportdialog.png cmd/sc_exportto.png
 cmd/sk/lc_bold.png cmd/lc_bold.png
 cmd/sk/lc_italic.png cmd/lc_italic.png
 cmd/sk/lc_underline.png cmd/lc_underline.png
