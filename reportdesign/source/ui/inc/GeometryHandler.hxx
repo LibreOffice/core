@@ -210,7 +210,7 @@ namespace rptui
         */
         void loadDefaultFunctions();
 
-        /** creates a default functionof the _sFunction for the data field _sDataField
+        /** creates a default function of the _sFunction for the data field _sDataField
         *   The new function will only be created if it didn't exist.
         *
         * \param _aGuard        Will be cleared, when a new function was created.

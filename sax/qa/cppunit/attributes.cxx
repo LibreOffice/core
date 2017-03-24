@@ -39,7 +39,7 @@ void AttributesTest::test()
 
     // We can't test getValueToken() and getOptionalValueToken()
     // without XFastTokenHandler :-(
-    // Uncomment to get segmantation fault:
+    // Uncomment to get segmentation fault:
     // xAttributeList->getOptionalValueToken(1, 0);
     // xAttributeList->getValueToken(2);
 
