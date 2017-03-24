@@ -34,7 +34,6 @@
 #define SID_ZOOMIN                  (SID_SMA_START + 10)
 #define SID_ZOOMOUT                 (SID_SMA_START + 11)
 #define SID_DRAW                    (SID_SMA_START + 12)
-#define SID_TOOLBOX                 (SID_SMA_START + 14)
 #define SID_FORMULACURSOR           (SID_SMA_START + 15)
 #define SID_FONT                    (SID_SMA_START + 50)
 #define SID_FONTSIZE                (SID_SMA_START + 51)
@@ -71,7 +70,6 @@
 
 #define SID_GETEDITTEXT             (SID_SMA_START + 121)
 #define SID_CMDBOXWINDOW            (SID_SMA_START + 122)
-#define SID_TOOLBOXWINDOW           (SID_SMA_START + 123)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
 #define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
 #define SID_ELEMENTSDOCKINGWINDOW   (SID_SMA_START + 126)

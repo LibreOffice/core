@@ -283,22 +283,11 @@ interface FormulaView
     [
         ExecMethod = Execute;
     ]
-    //idlpp kein Menueeintrag , also keine Texte
-    SID_TOOLBOXWINDOW //idlpp ole : no , status : no
+    SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
     [
-        ExecMethod = NoExec ;
-        StateMethod = NoState ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
-        SID_TOOLBOX //idlpp ole : no , status : no
-        [
-                ExecMethod = Execute ;
-                StateMethod = GetState ;
-        ]
-        SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
-        [
-                ExecMethod = Execute ;
-                StateMethod = GetState ;
-        ]
 }
 
 shell SmViewShell
