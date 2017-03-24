@@ -2341,7 +2341,7 @@ StringArray SC_OPCODE_MEDIAN+RID_SC_FUNC_DESCRIPTIONS_START
         < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
     };
 };
- // -=*# Resource for function PERCENTIL #*=-
+ // -=*# Resource for function PERCENTILE #*=-
 StringArray SC_OPCODE_PERCENTILE+RID_SC_FUNC_DESCRIPTIONS_START
 {
     ItemList [ en-US ] =

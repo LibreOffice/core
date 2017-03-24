@@ -301,7 +301,7 @@ void ScTabControl::Select()
     rBind.Invalidate( SID_TABLE_CELL );
 
         // SetReference onlw when the consolidate dialog is open
-        // (for referenzes over multiple sheets)
+        // (for references over multiple sheets)
         // for others this is only needed fidgeting
 
     if ( bRefMode && pViewData->GetRefType() == SC_REFTYPE_REF )
