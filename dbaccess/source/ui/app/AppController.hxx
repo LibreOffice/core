@@ -272,7 +272,7 @@ namespace dbaui
         */
         void addContainerListener(const css::uno::Reference< css::container::XNameAccess>& _xCollection);
 
-        /** opens a uno dialog withthe currently selected data source as initialize argument
+        /** opens a uno dialog with the currently selected data source as initialize argument
             @param  _sServiceName
                 The service name of the dialog to be executed.
         */

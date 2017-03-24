@@ -87,7 +87,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
         // checks the tables according to the filter given
-        // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
+        // in opposite to implCheckTables, this method handles the case of an empty sequence, too ...
         void implCompleteTablesCheck( const css::uno::Sequence< OUString >& _rTableFilter );
     };
 

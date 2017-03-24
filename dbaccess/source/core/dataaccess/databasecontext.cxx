@@ -652,7 +652,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
         throw;
     }
     catch (const Exception&)
-    {   // exceptions other than the speciafied ones -> wrap
+    {   // exceptions other than the specified ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
     }
