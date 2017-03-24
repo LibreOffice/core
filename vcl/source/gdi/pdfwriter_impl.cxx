@@ -83,7 +83,7 @@
 
 #include "pdfwriter_impl.hxx"
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS && !defined(_WIN32)
+#if HAVE_FEATURE_NSS && !defined(_WIN32)
 // NSS headers for PDF signing
 #include "nss.h"
 #include "cert.h"
@@ -121,7 +121,7 @@ using namespace::com::sun::star;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
 // Is this length truly the maximum possible, or just a number that
 // seemed large enough when the author tested this (with some type of
 // certificates)? I suspect the latter.
@@ -5283,7 +5283,7 @@ bool PDFWriterImpl::emitCatalog()
         }
         aLine.append( "\n]" );
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
         if (m_nSignatureObject != -1)
             aLine.append( "/SigFlags 3");
 #endif
@@ -5293,7 +5293,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( " 0 R" );
         // NeedAppearances must not be used if PDF is signed
         if( m_bIsPDF_A1
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
             || ( m_nSignatureObject != -1 )
 #endif
             )
@@ -5324,7 +5324,7 @@ bool PDFWriterImpl::emitCatalog()
     return true;
 }
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
 
 bool PDFWriterImpl::emitSignature()
 {
@@ -5399,12 +5399,9 @@ bool PDFWriterImpl::emitSignature()
     return true;
 }
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS && !defined(_WIN32)
+#if HAVE_FEATURE_NSS && !defined(_WIN32)
 
 namespace {
-#if 0
-}
-#endif
 
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
@@ -6230,12 +6227,9 @@ NSSCMSMessage *CreateCMSMessage(PRTime* time,
     return result;
 }
 
-#if 0
-{
-#endif
 } // anonymous namespace
 
-#endif // !defined(ANDROID) && HAVE_FEATURE_NSS && !defined(_WIN32)
+#endif // HAVE_FEATURE_NSS && !defined(_WIN32)
 
 #ifdef _WIN32
 
@@ -7371,7 +7365,7 @@ bool PDFWriterImpl::finalizeSignature()
 #endif
 }
 
-#else // defined(ANDROID) || !HAVE_FEATURE_NSS
+#else // !HAVE_FEATURE_NSS
 bool PDFWriter::Sign(PDFSignContext& /*rContext*/)
 {
     // Not implemented.
@@ -8129,7 +8123,7 @@ bool PDFWriterImpl::emit()
     // needed for widget tab order
     sortWidgets();
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
     if( m_aContext.SignPDF )
     {
         // sign the document
@@ -8145,7 +8139,7 @@ bool PDFWriterImpl::emit()
     // emit catalog
     CHECK_RETURN( emitCatalog() );
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
     if (m_nSignatureObject != -1) // if document is signed, emit sigdict
     {
         if( !emitSignature() )
@@ -8159,7 +8153,7 @@ bool PDFWriterImpl::emit()
     // emit trailer
     CHECK_RETURN( emitTrailer() );
 
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
     if (m_nSignatureObject != -1) // finalize the signature
     {
         if( !finalizeSignature() )
@@ -13319,7 +13313,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         createDefaultEditAppearance( rNewWidget, rEdit );
     }
-#if !defined(ANDROID) && HAVE_FEATURE_NSS
+#if HAVE_FEATURE_NSS
     else if( rControl.getType() == PDFWriter::Signature)
     {
         sigHidden = true;
