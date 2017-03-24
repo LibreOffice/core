@@ -981,7 +981,7 @@ bool FastSaxParserImpl::consume(EventList *pEventList)
                 return false;
             case EXCEPTION:
                 rEntity.throwException( mxDocumentLocator, false );
-                SAL_FALLTHROUGH; // avoid unreachable code warning with some comilers
+                SAL_FALLTHROUGH; // avoid unreachable code warning with some compilers
             default:
                 assert(false);
                 return false;
@@ -1376,7 +1376,7 @@ FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
             mpImpl->m_bIgnoreMissingNSDecl = true;
         else if ( str == "DoSmeplease" )
         {
-            //just ignore as this is already immune to billon laughs
+            //just ignore as this is already immune to billion laughs
         }
         else
             throw IllegalArgumentException();

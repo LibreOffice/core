@@ -431,7 +431,7 @@ public:
 // const OString& newStr )
 
 // Developer note: Mindy Liu, 2004-04-23
-// stollen from sal/qa/rtl_strings/rtl_OString.cxx
+// stolen from sal/qa/rtl_strings/rtl_OString.cxx
 
 class replaceAt : public CppUnit::TestFixture
 {

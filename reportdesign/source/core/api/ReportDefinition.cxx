@@ -1497,7 +1497,7 @@ bool OReportDefinition::WriteThroughComponent(
             return false;
 
         uno::Reference<beans::XPropertySet> xStreamProp(xOutputStream,uno::UNO_QUERY);
-        OSL_ENSURE(xStreamProp.is(),"No valid preoperty set for the output stream!");
+        OSL_ENSURE(xStreamProp.is(),"No valid property set for the output stream!");
 
         uno::Reference<io::XSeekable> xSeek(xStreamProp,uno::UNO_QUERY);
         if ( xSeek.is() )

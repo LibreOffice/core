@@ -769,10 +769,10 @@ namespace osl_Thread
     public:
         /** Check after call terminate if the thread running function will not go on executing
 
-            the next statement after join will not exec before the thread terminate
+            the next statement after join will not exec before the thread terminates
             ALGORITHM:
             recode system time at the beginning of the thread run, call join, then record system time again,
-            the difference of the two time should be equal or more than 20 seconds, the CountThead normally terminate
+            the difference of the two times should be equal or more than 20 seconds, the CountThread normally terminates
         */
         void join_001()
             {
@@ -1541,7 +1541,7 @@ namespace osl_Thread
                 // but should be differ from nValue
 
                 delete aThread;
-                //check if thread really terminate after call terminate, if join immediatlly return
+                //check if thread really terminate after call terminate, if join immediately return
                 CPPUNIT_ASSERT_MESSAGE(
                     "Schedule: Returns False if the thread should terminate.",
                     nValue_join -  nValue_term <= 1 && nValue_join -  nValue_term >= 0

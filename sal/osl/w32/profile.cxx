@@ -1942,7 +1942,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
 
     else
     {
-        /* if we have not product identfication, do a special handling for soffice.ini */
+        /* if we have not product identification, do a special handling for soffice.ini */
         if (rtl_ustr_ascii_compare(strFile, SVERSION_PROFILE) == 0)
         {
             rtl_uString * strSVProfile  = nullptr;
