@@ -295,7 +295,7 @@ Dim sPrevMimeTypeorExtension as String
 		Exit Sub
 	End If
 	TotFound = Ubound(FilesList()) + 1 			
-	If FilesList(0,0) = &quot;&quot; Then					&apos; Querying the number of fields in a multidimensionl Array is unsecure
+	If FilesList(0,0) = &quot;&quot; Then					&apos; Querying the number of fields in a multidimensional Array is unsecure
 		TotFound = 0							&apos; because it will return the value 0 (and not -1) even when the Array is empty
 		SetProgressDisplay(0)
 	End If

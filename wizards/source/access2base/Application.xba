@@ -427,7 +427,7 @@ Const cstDot = &quot;.&quot;
 		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
 		If VarType(pvIndex) = vbString Then
 			iMode = cstByName
-			&apos;	Dtermine full name STORAGE.LIBRARY.MODULE
+			&apos;	Determine full name STORAGE.LIBRARY.MODULE
 			vNames = Split(pvIndex, cstDot)
 			If UBound(vNames) = 2 Then
 			ElseIf UBound(vNames) = 1 Then

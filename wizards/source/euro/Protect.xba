@@ -132,7 +132,7 @@ Sub RejectPassword()
 End Sub
 
 
-&apos; Reprotects the previousliy protected sheets
+&apos; Reprotects the previously protected sheets
 &apos; The password information is stored in the List &apos;UnProtectList()&apos;
 Sub ReprotectSheets()
 Dim i as Integer

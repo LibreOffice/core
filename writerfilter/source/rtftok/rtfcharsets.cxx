@@ -41,7 +41,7 @@ RTFEncoding aRTFEncodings[] =
     {136, 950}, // Big5
     {161, 1253}, // Greek
     {162, 1254}, // Turkish
-    {163, 1258}, // Viatnamese
+    {163, 1258}, // Vietnamese
     {177, 1255}, // Herbrew
     {178, 1256}, // Arabic
     {186, 1257}, // Baltic

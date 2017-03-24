@@ -1088,7 +1088,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             }
             break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
-            //depending on the behindDoc attribute text wraps through behind or in fron of the object
+            //depending on the behindDoc attribute text wraps through behind or in front of the object
             m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
