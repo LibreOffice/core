@@ -64,7 +64,7 @@ namespace DOM
         pNs = xmlSearchNsByHref(pNode->doc, pNode, pUri);
         // if (!pNs) hmm... now what? throw?
         if (!pNs) {
-            SAL_WARN("unoxml", "CAtttr: cannot create namespace");
+            SAL_WARN("unoxml", "CAttr: cannot create namespace");
         }
         return pNs;
     }

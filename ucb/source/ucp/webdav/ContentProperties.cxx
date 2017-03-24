@@ -509,7 +509,7 @@ void ContentProperties::addProperty( const OUString & rName,
         OUString aValue;
         rValue >>= aValue;
 
-        // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
+        // Map DAV:resourcetype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
         bool bFolder =
             aValue.equalsIgnoreAsciiCase( "collection" );
 

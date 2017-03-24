@@ -114,7 +114,7 @@ namespace toolkit
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
             // segment
             const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
-            ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
+            ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsupported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
             OUStringBuffer composer;
             composer.append( i_imageURL.copy( 0, separatorPos ) );

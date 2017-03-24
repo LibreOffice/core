@@ -1109,7 +1109,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
             if (aPoints.size() >= SAL_MAX_UINT16)
             {
                 OSL_ENSURE(aPoints.size() < SAL_MAX_UINT16,
-                    "Polygon::AdapativeSubdivision created polygon too many points;"
+                    "Polygon::AdaptiveSubdivision created polygon too many points;"
                     " using original polygon instead");
 
                 // The resulting polygon can not hold all the points
@@ -1690,7 +1690,7 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, Pol
     {
         if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
         {
-            // #i115917# Patch from osnola (modified, thanks for showing the porblem)
+            // #i115917# Patch from osnola (modified, thanks for showing the problem)
 
             // The correction is needed because an integer polygon with control points
             // is converted to double precision. When C1 or C2 is used the involved vectors
@@ -1700,7 +1700,7 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, Pol
             // it needs to be corrected to be able to detect the continuity in this points
             // correctly.
 
-            // We only have the integer data here (already in double precision form, but no mantisses
+            // We only have the integer data here (already in double precision form, but no mantisse
             // used), so the best correction is to use:
 
             // for C1: The longest vector since it potentially has best preserved the original vector.

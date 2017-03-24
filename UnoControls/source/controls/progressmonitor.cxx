@@ -206,7 +206,7 @@ void SAL_CALL ProgressMonitor::addText(
     // Safe impossible cases
     // Check valid call of this method.
     DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText, bbeforeProgress )   , "ProgressMonitor::addText()\nCall without valid parameters!\n");
-    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )       , "ProgresMonitor::addText()\nThe text already exist.\n"        );
+    DBG_ASSERT ( !(impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )       , "ProgressMonitor::addText()\nThe text already exist.\n"        );
 
     // Do nothing (in Release), if topic already exist.
     if ( impl_searchTopic ( rTopic, bbeforeProgress ) != nullptr )

@@ -561,7 +561,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
                 }
             }
 
-            // resignal the exitcondition
+            // resignal the exit condition
             setReply(EXIT);
             break;
         }
@@ -1239,7 +1239,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
             nSize = 0;
         }
         else {
-            SAL_INFO("unotools.ucbhelper", "Not truncatable!");
+            SAL_INFO("unotools.ucbhelper", "Not truncable!");
         }
     }
 

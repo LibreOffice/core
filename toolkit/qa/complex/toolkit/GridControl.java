@@ -232,7 +232,7 @@ public class GridControl
         impl_assertColumnModelConsistency();
         List< ContainerEvent > events = listener.assertExclusiveInsertionEvents();
         listener.reset();
-        assertEquals( "wrong number of events fired by setDefaulColumns", defaultColumnsCount, events.size() );
+        assertEquals( "wrong number of events fired by setDefaultColumns", defaultColumnsCount, events.size() );
         for ( int i=0; i<defaultColumnsCount; ++i )
         {
             final ContainerEvent event = events.get(i);
