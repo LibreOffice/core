@@ -136,7 +136,7 @@ namespace basegfx
             usually pretty usable for processing purposes. There is no parameter
             passing here ATM but it may be changed on demand. If needed, a TYPE
             and PARAMETER (both defaulted) may be added to allow for switching
-            between the different kinds of subdivisiond and passing them one
+            between the different kinds of subdivisioned and passing them one
             parameter.
 
             The lifetime of the buffered subdivision is based on polygon changes.

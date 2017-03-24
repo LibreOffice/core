@@ -98,7 +98,7 @@ namespace comphelper
 
             @return
                 <TRUE/> if all listeners have been notified, <FALSE/> else. The latter can happen
-                if <member>implNotify</member> cancelles the notification loop.
+                if <member>implNotify</member> cancels the notification loop.
 
             @see implNotify
         */

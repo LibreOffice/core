@@ -123,7 +123,7 @@ public:
     SQLExceptionInfo& operator=(const css::uno::Any& _rCaughtSQLException);
 
     bool        isKindOf(TYPE _eType) const;
-        // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
+        // not just a simple comparison ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
     bool        isValid() const { return m_eType != TYPE::Undefined; }
     TYPE        getType() const { return m_eType; }
 

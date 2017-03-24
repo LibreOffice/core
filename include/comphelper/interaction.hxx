@@ -70,7 +70,7 @@ namespace comphelper
     typedef OInteraction< css::task::XInteractionApprove > OInteractionApprove;
 
 
-    //= OInteractionDispprove
+    //= OInteractionDisapprove
 
     typedef OInteraction< css::task::XInteractionDisapprove >  OInteractionDisapprove;
 
