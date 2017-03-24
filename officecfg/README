@@ -5,7 +5,7 @@ If you change change a file in this module, then a make postprocess is needed af
 See also:
 [[configmgr]]
 
-AcceleratorKeyChecker.fodt in the util folder is a tool written in Basic that check menues for 
-entries that use the same accellerator key. The tool goes through the menues using the accessibility
-api and checkes the accellerator keys. For information on how to use the tool open the fodt file
+AcceleratorKeyChecker.fodt in the util folder is a tool written in Basic that check menus for
+entries that use the same accellerator key. The tool goes through the menus using the accessibility
+api and checkes the accelerator keys. For information on how to use the tool open the fodt file
 in LibreOffice.

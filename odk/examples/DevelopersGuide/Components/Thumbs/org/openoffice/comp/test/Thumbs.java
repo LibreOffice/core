@@ -60,7 +60,7 @@ public class Thumbs {
             System.out.println("ImageShrink component successfully instantiated");
 
             java.io.File f = new java.io.File(".");
-            System.out.println("set SourceDrectory ...");
+            System.out.println("set SourceDirectory...");
             xImageShrinkFilter.setSourceDirectory(f.getCanonicalPath());
 
             System.out.println("source Directory = "
