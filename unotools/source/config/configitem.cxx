@@ -353,7 +353,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
             (void)::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
             if (sPath.isEmpty() && sProperty.isEmpty())
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nsplitt failed\n");
+                OSL_FAIL("ConfigItem::IsReadonly()\nsplit failed\n");
                 continue;
             }
 

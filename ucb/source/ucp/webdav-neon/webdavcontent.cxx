@@ -2293,7 +2293,7 @@ uno::Any Content::open(
                     }
                     xResAccess->setFlags( rArg.OpeningFlags );
 
-                    // fill inputsream sync; return if all data present
+                    // fill inputstream sync; return if all data present
                     DAVResource aResource;
                     std::vector< OUString > aHeaders;
 
@@ -3872,7 +3872,7 @@ Content::ResourceType Content::getResourceType(
                 }
                 if ( e.getStatus() == SC_NOT_FOUND )
                 {
-                    // arrives here if OPTIONS is still cached for a resource prevously available
+                    // arrives here if OPTIONS is still cached for a resource previously available
                     // operate on the OPTIONS cache:
                     // if OPTIONS was not found, do nothing
                     // else OPTIONS returned on a resource not existent  (example a server that allows lock on null resource) set
@@ -4046,7 +4046,7 @@ void Content::getResourceOptions(
                 case DAVException::DAV_HTTP_CONNECT:
                 {
                     // something bad happened to the connection
-                    // not same as not found, this instead happens when the server does'n exist or does'n aswer at all
+                    // not same as not found, this instead happens when the server doesn't exist or doesn't answer at all
                     // probably a new bit stating 'timed out' should be added to opts var?
                     // in any case abort the command
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );

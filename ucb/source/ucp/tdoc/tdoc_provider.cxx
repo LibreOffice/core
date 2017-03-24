@@ -583,7 +583,7 @@ ContentProvider::queryStorageTitle( const OUString & rUri ) const
     else if ( aUri.isDocument() )
     {
         // for documents, title shall not be derived from URL. It shall
-        // be somethimg more 'speaking' than just the document UID.
+        // be something more 'speaking' than just the document UID.
         if ( m_xDocsMgr.is() )
             aTitle = m_xDocsMgr->queryStorageTitle( aUri.getDocumentId() );
     }

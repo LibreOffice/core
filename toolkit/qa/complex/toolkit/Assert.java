@@ -87,7 +87,7 @@ public class Assert
      * retrieves a method, given by name and parameter signature, from the given class
      *
      * The method does somewhat more than simply calling {@link Class#getMethod}. In particular, it recognizes
-     * primitiive parameter types, and attempts to find a method taking the given primitive type, instead of the
+     * primitive parameter types, and attempts to find a method taking the given primitive type, instead of the
      * type represented by the parameter class.
      *
      * For instance, if you have a method <code>foo( int )</code>, {@link Class#getMethod} would not return this

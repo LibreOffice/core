@@ -1060,7 +1060,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    // 4th Production (misscounted slashes):
+                    // 4th Production (miscounted slashes):
                     //    "//" *path ["#" *UCS4]
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]

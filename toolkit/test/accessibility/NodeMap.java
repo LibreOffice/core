@@ -44,7 +44,7 @@ class NodeMap
 
     /** @return
             whether the new node was different from a previous one
-            repspectively was the first one set.
+            respectively was the first one set.
     */
     public boolean InsertNode (XAccessibleContext xContext, AccessibleTreeNode aNode)
     {
