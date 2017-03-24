@@ -1407,7 +1407,7 @@ void ImplementationRegistration::prepareRegister(
     } else
     {
         // check locationUrl to find out what kind of loader is needed
-        // set iimplLoaderUrl
+        // set implLoaderUrl
     }
 
     if( m_xSMgr.is() ) {

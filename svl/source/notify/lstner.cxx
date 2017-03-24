@@ -109,7 +109,7 @@ void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 
 void SfxListener::EndListeningAll()
 {
-    // Attention: when optimizing this: Respect sideffects of RemoveListener!
+    // Attention: when optimizing this: respect side effects of RemoveListener!
     while ( !mpImpl->maBCs.empty() )
     {
         SfxBroadcaster *pBC = mpImpl->maBCs.front();

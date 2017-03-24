@@ -780,7 +780,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
             // [NatNum1] simple numerals
             // [natNum2] financial numerals
             // [NatNum3] Arabic fullwidth numerals
-            // Chine simplified and Chinese traditional have same primary mask
+            // Chinese simplified and Chinese traditional have same primary mask
             // Chinese-PRC
             if ( nReferenceLanguage == LANGUAGE_CHINESE_SIMPLIFIED
               && nLocaleLang != LANGUAGE_CHINESE_SIMPLIFIED

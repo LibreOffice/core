@@ -2675,7 +2675,7 @@ void SmXMLTableContext_Impl::EndElement()
             //be elements that were not inside a <mtd> pair, in which
             //case they will not be in a row, i.e. they will not have
             //SubNodes, so we have to wait until here before we can
-            //resolve the situation. Implicitsurrounding tags are
+            //resolve the situation. Implicit surrounding tags are
             //surprisingly difficult to get right within this
             //architecture
 

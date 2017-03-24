@@ -673,7 +673,7 @@ namespace svt
         // their number
         sal_Int32 nRootDirectories = 0;
         m_pCacheStream->ReadInt32( nRootDirectories );
-        // init empty TemplateContens with the URLs
+        // init empty TemplateContents with the URLs
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )
         {
