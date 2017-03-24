@@ -67,6 +67,7 @@ public:
     void                    UncacheFont( FreetypeFont& );
     void                    ClearFontCache();
     void                    InvalidateAllGlyphs();
+    void                    ClearFontOptions();
 
 private:
     friend class FreetypeFont;
@@ -124,6 +125,7 @@ public:
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     const FontConfigFontOptions* GetFontOptions() const;
+    void                    ClearFontOptions();
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 

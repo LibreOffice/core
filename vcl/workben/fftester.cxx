@@ -52,6 +52,8 @@
 #include <osl/file.hxx>
 #include <unistd.h>
 #include <signal.h>
+#include "headless/svpgdi.hxx"
+#include "unx/glyphcache.hxx"
 
 #include <../source/filter/igif/gifread.hxx>
 #include <../source/filter/ixbm/xbmread.hxx>
@@ -88,6 +90,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
 
+        setenv("SAL_USE_VCLPLUGIN", "svp", 1);
+        setenv("JPEGMEM", "768M", 1);
+        setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
+        setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
+        setenv("SAL_NO_FONT_LOOKUP", "1", 1);
+
         OUString in(argv[1], strlen(argv[1]), RTL_TEXTENCODING_UTF8);
         OUString out;
         osl::File::getFileURLFromSystemPath(in, out);
@@ -101,11 +109,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         comphelper::setProcessServiceFactory( xServiceManager );
         utl::ConfigManager::EnableAvoidConfig();
         InitVCL();
-
-        setenv("JPEGMEM", "768M", 1);
-        setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
-        setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
-        setenv("SAL_NO_FONT_LOOKUP", "1", 1);
 
 try_again:
 
@@ -444,6 +447,8 @@ try_again:
         }
 
         /* If AFL_PERSISTENT not set or PERSIST_MAX exceeded, exit normally. */
+
+        SvpSalGraphics::getPlatformGlyphCache().ClearFontOptions();
     }
     catch (...)
     {

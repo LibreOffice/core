@@ -24,7 +24,9 @@
 #include <vcl/wmf.hxx>
 #include <unistd.h>
 #include <stdlib.h>
+#include "headless/svpgdi.hxx"
 #include "unx/fontmanager.hxx"
+#include "unx/glyphcache.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -64,6 +64,16 @@ void GlyphCache::InvalidateAllGlyphs()
     mpCurrentGCFont = nullptr;
 }
 
+void GlyphCache::ClearFontOptions()
+{
+    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
+    {
+        FreetypeFont* pFreetypeFont = it->second;
+        // free demand-loaded FontConfig related data
+        pFreetypeFont->ClearFontOptions();
+    }
+}
+
 inline
 size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
 {

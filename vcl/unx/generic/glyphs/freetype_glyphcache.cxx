@@ -476,6 +476,11 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     return mxFontOptions.get();
 }
 
+void FreetypeFont::ClearFontOptions()
+{
+    mxFontOptions.reset();
+}
+
 const OString& FreetypeFont::GetFontFileName() const
 {
     return mpFontInfo->GetFontFileName();
