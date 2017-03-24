@@ -95,7 +95,7 @@ $(APP_JAR) : $(OUT_APP_CLASS)/$(APP_NAME).mf $(OUT_APP_CLASS)/$(APP_NAME).class
 
 JavaNotesAccessExample : NotesAPIs $(APP_JAR)
 	@echo --------------------------------------------------------------------------------
-	@echo NOTE: Before you run this example make sure that the exaternal "$(QM)Notes.jar$(QM)" can
+	@echo NOTE: Before you run this example make sure that the external "$(QM)Notes.jar$(QM)" can
 	@echo be found besides "$(QM)$(APP_JAR)"$(QM)
 	@echo and that the PATH variable includes the Notes installation directory.
 	@echo -   

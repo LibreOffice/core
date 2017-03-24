@@ -1994,7 +1994,7 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing )
     {
-        if (nParaLeftMargin) // For Paraghraph
+        if (nParaLeftMargin) // For Paragraph
             mpFS->startElementNS( XML_a, XML_pPr,
                                XML_lvl, nLevel > 0 ? I32S( nLevel ) : nullptr,
                                XML_marL, nParaLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nParaLeftMargin ) ) : nullptr,
