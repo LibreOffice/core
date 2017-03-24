@@ -52,8 +52,6 @@
 #include <osl/file.hxx>
 #include <unistd.h>
 #include <signal.h>
-#include "headless/svpgdi.hxx"
-#include "unx/glyphcache.hxx"
 
 #include <../source/filter/igif/gifread.hxx>
 #include <../source/filter/ixbm/xbmread.hxx>
@@ -447,8 +445,6 @@ try_again:
         }
 
         /* If AFL_PERSISTENT not set or PERSIST_MAX exceeded, exit normally. */
-
-        SvpSalGraphics::getPlatformGlyphCache().ClearFontOptions();
     }
     catch (...)
     {
