@@ -28,6 +28,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0002-add-a-get_clen_and_captype-varient-that-takes-a-buff.patch \
 	external/hunspell/0003-hoist-string-lowering-from-ngram-to-ngsuggest.patch \
 	external/hunspell/0004-either-clear-will-be-called-anyway-before-use-or-its.patch \
+	external/hunspell/0002-fix-other-regression-in-compounding.patch \
+	external/hunspell/0005-fix-syllable-counting-in-compound-word-handling.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
