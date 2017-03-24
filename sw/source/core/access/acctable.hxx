@@ -86,7 +86,8 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrame* pTableFrame );
+    SwAccessibleTable(std::shared_ptr<SwAccessibleMap> const& pInitMap,
+                      const SwTabFrame* pTableFrame);
 
     // XInterface
 
@@ -292,7 +293,8 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrame *pTabFrame );
+    SwAccessibleTableColHeaders(std::shared_ptr<SwAccessibleMap> const& pMap,
+                                const SwTabFrame *pTabFrame);
 
     // XInterface
 

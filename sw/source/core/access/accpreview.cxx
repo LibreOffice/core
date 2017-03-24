@@ -29,8 +29,8 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDoc
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 
-SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
-    SwAccessibleDocumentBase( pMp )
+SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap)
+    : SwAccessibleDocumentBase(pMap)
 {
     SetName( GetResource( STR_ACCESS_PREVIEW_DOC_NAME ) );
 }
