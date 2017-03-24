@@ -187,7 +187,7 @@ void Test::testFormulaCreateStringFromTokens()
 
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
-    // Artificially add external refererence data after the context object is
+    // Artificially add external reference data after the context object is
     // initialized.
     aCxt.maExternalFileNames.push_back("file:///path/to/fake.file");
     std::vector<OUString> aExtTabNames;

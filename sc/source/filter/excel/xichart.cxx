@@ -3029,7 +3029,7 @@ void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3d
         /*  Crossing position value depends on base time unit, it specifies the
             number of days, months, or years from null date. Note that Excel
             2007/2010 write broken BIFF8 files, they always stores the number
-            of days cregardless of the base time unit (and they are reading it
+            of days regardless of the base time unit (and they are reading it
             the same way, thus wrongly displaying files written by Excel
             97-2003). This filter sticks to the correct behaviour of Excel
             97-2003. */

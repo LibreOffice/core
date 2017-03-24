@@ -45,7 +45,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     CheckSubArgumentIsNan(ss,vSubArguments,arg++);
     int secondParaWidth = 1;
 
-    // tdf#99512 - for now only allow non-dynamic indicees (the
+    // tdf#99512 - for now only allow non-dynamic indices (the
     // common-case) to validate consistent return types vs. the input.
     int index = 0;
     int indexArg = vSubArguments.size() - 2;
