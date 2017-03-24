@@ -323,7 +323,7 @@ namespace internal
             uno::Reference< drawing::XShape >   mxTargetShape;
             sal_Int16                           mnParagraphIndex;
 
-            // get initial or filal state
+            // get initial or final state
             bool                                mbInitial;
         };
     }

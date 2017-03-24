@@ -264,7 +264,7 @@ private:
     */
     bool                                                mbMainSequenceFound;
 
-    /// When true, show() was called. Slide hidden oherwise.
+    /// When true, show() was called. Slide hidden otherwise.
     bool                                                mbActive;
 
     /// When true, enablePaintOverlay was called and mbUserPaintOverlay = true

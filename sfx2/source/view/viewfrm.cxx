@@ -1044,7 +1044,7 @@ bool SfxViewFrame::Close()
     if (SfxViewFrame::Current() == this)
         SfxViewFrame::SetViewFrame( nullptr );
 
-    // Since the Dispatcher is emptied, it can not be used in any reasnable
+    // Since the Dispatcher is emptied, it can not be used in any reasonable
     // manner, thus it is better to let the dispatcher be.
     GetDispatcher()->Lock(true);
     delete this;
