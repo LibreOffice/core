@@ -70,7 +70,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     sal_uInt16 nResId = AccessibleRole::END_NOTE == GetRole()
         ? STR_ACCESS_ENDNOTE_DESC

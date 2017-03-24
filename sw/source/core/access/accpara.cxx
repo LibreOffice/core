@@ -922,7 +922,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    ThrowIfDisposed();
 
     osl::MutexGuard aGuard2( m_Mutex );
     if( sDesc.isEmpty() )
@@ -951,7 +951,8 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    ThrowIfDisposed();
 
     utl::AccessibleRelationSetHelper* pHelper = new utl::AccessibleRelationSetHelper();
 
@@ -986,7 +987,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    ThrowIfDisposed();
 
     // get cursor shell
     SwCursorShell *pCursorSh = GetCursorShell();
@@ -1263,7 +1264,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nRet = GetCaretPos();
     {
@@ -1284,7 +1285,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -1316,7 +1317,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     OUString sText( GetString() );
 
@@ -1333,7 +1334,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     /*  #i12332# The position after the string needs special treatment.
         IsValidChar -> IsValidPosition
@@ -1594,7 +1595,8 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 {
 
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+
+    ThrowIfDisposed();
 
     const OUString& rText = GetString();
 
@@ -1862,7 +1864,8 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         const uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+
+    ThrowIfDisposed();
 
     tAccParaPropValMap aDefAttrSeq;
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
@@ -2028,7 +2031,8 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
         const uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+
+    ThrowIfDisposed();
 
     {
         const OUString& rText = GetString();
@@ -2327,7 +2331,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     // #i12332# The position after the string needs special treatment.
     // IsValidChar -> IsValidPosition
@@ -2384,7 +2388,7 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     return GetString().getLength();
 }
@@ -2393,7 +2397,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     // construct SwPosition (where GetCursorOfst() will put the result into)
     SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
@@ -2471,7 +2475,7 @@ OUString SwAccessibleParagraph::getSelectedText()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nStart, nEnd;
     bool bSelected = GetSelection( nStart, nEnd );
@@ -2484,7 +2488,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -2495,7 +2499,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -2506,7 +2510,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -2541,7 +2545,7 @@ OUString SwAccessibleParagraph::getText()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     return GetString();
 }
@@ -2551,7 +2555,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     OUString sText( GetString() );
 
@@ -2568,7 +2572,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
@@ -2604,7 +2608,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     const OUString rText = GetString();
 
@@ -2675,7 +2679,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
@@ -2770,8 +2774,9 @@ OUString SwAccessibleParagraph::getTextRange(
 
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
     SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
 
     // select and copy (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
@@ -2783,8 +2788,9 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleEditableText );
     SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
 
     if( !IsEditableState() )
         return false;
@@ -2797,8 +2803,9 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
 
 sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleEditableText );
     SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
 
     if( !IsEditableState() )
         return false;
@@ -2825,7 +2832,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleEditableText );
+    ThrowIfDisposed();
 
     const OUString& rText = GetString();
 
@@ -2875,7 +2882,8 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     const uno::Sequence<PropertyValue>& rAttributeSet )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleEditableText );
+
+    ThrowIfDisposed();
 
     const OUString& rText = GetString();
 
@@ -2937,7 +2945,7 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
 void SwAccessibleParagraph::selectAccessibleChild(
     sal_Int32 nChildIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
@@ -2945,26 +2953,26 @@ void SwAccessibleParagraph::selectAccessibleChild(
 sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleParagraph::clearAccessibleSelection(  )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 }
 
 void SwAccessibleParagraph::selectAllAccessibleChildren(  )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     return aSelectionHelper.getSelectedAccessibleChildCount();
 }
@@ -2972,7 +2980,7 @@ sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
 uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
@@ -2981,7 +2989,7 @@ uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
 void SwAccessibleParagraph::deselectAccessibleChild(
     sal_Int32 nChildIndex )
 {
-    CHECK_FOR_DEFUNC( XAccessibleSelection );
+    ThrowIfDisposed();
 
     aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
@@ -3043,7 +3051,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+    ThrowIfDisposed();
 
     sal_Int32 nCount = 0;
     // #i77108# - provide hyperlinks also in editable documents.
@@ -3060,7 +3068,8 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwAccessibleParagraph::getHyperLink( sal_Int32 nLinkIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    ThrowIfDisposed();
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
@@ -3148,7 +3157,8 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    ThrowIfDisposed();
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -3256,7 +3266,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSe
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nStart, nEnd;
     /*sal_Bool bSelected = */GetSelectionAtIndex(nSelectedPortionIndex, nStart, nEnd );
@@ -3267,7 +3277,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSele
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     sal_Int32 nStart, nEnd;
     /*sal_Bool bSelected = */GetSelectionAtIndex(nSelectedPortionIndex, nStart, nEnd );
@@ -3333,7 +3343,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
+    ThrowIfDisposed();
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();

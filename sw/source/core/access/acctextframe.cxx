@@ -244,7 +244,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     if ( !msTitle.isEmpty() )
     {
@@ -258,7 +258,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     return msDesc;
 
@@ -313,7 +313,8 @@ AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const S
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    ThrowIfDisposed();
 
     // get the frame, and insert prev/next relations into helper
 

@@ -197,6 +197,8 @@ protected:
     }
     void RemoveFrameFromAccessibleMap();
 
+    void ThrowIfDisposed();
+
     virtual ~SwAccessibleContext() override;
 
 public:
@@ -350,19 +352,6 @@ public:
                                         const OUString *pArg1 = nullptr,
                                         const OUString *pArg2 = nullptr );
 };
-
-#define CHECK_FOR_DEFUNC_THIS( ifc, ths )                \
-    if( !(GetFrame() && GetMap()) )                        \
-    {                                                    \
-        css::uno::Reference < ifc > xThis( ths );        \
-        css::lang::DisposedException aExcept(            \
-            "object is nonfunctional",        \
-            xThis );                                     \
-        throw aExcept;                                   \
-    }
-
-#define CHECK_FOR_DEFUNC( ifc )                                             \
-    CHECK_FOR_DEFUNC_THIS( ifc, this )
 
 #endif
 

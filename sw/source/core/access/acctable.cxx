@@ -909,7 +909,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     return m_sDesc;
 }
@@ -918,7 +918,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     return  GetTableData().GetRowCount();
 }
@@ -927,7 +927,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnCount(  )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     return GetTableData().GetColumnCount();
 }
@@ -1005,7 +1005,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     UpdateTableData();
     GetTableData().CheckRowAndCol( nRow, nColumn, this );
@@ -1035,7 +1035,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
     UpdateTableData();
 
     GetTableData().CheckRowAndCol( nRow, nColumn, this );
@@ -1088,7 +1088,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
@@ -1111,7 +1111,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
@@ -1133,7 +1133,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     GetTableData().CheckRowAndCol( nRow, 0, this );
 
@@ -1159,7 +1159,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     GetTableData().CheckRowAndCol( 0, nColumn, this );
 
@@ -1188,7 +1188,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     const SwFrame *pCellFrame =
                     GetTableData().GetCell( nRow, nColumn, this );
@@ -1217,7 +1217,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     const SwFrame *pFrame =
                     GetTableData().GetCell( nRow, nColumn, this );
@@ -1243,7 +1243,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleIndex(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     SwAccessibleChild aCell( GetTableData().GetCell( nRow, nColumn, this ));
     if ( aCell.IsValid() )
@@ -1260,7 +1260,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     // #i77106#
     if ( ( nChildIndex < 0 ) ||
@@ -1297,7 +1297,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable )
+    ThrowIfDisposed();
 
     // #i77106#
     if ( ( nChildIndex < 0 ) ||
@@ -1461,7 +1461,8 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     sal_Int32 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+
+    ThrowIfDisposed();
 
     if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) ) // #i77106#
         throw lang::IndexOutOfBoundsException();
@@ -1539,7 +1540,8 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+
+    ThrowIfDisposed();
 
     if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) ) // #i77106#
         throw lang::IndexOutOfBoundsException();
@@ -1551,7 +1553,7 @@ void SAL_CALL SwAccessibleTable::clearAccessibleSelection(  )
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+    ThrowIfDisposed();
 
     SwCursorShell* pCursorShell = GetCursorShell();
     if( pCursorShell != nullptr )
@@ -1573,7 +1575,8 @@ void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
 sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+
+    ThrowIfDisposed();
 
     // iterate over all children and count isAccessibleChildSelected()
     sal_Int32 nCount = 0;
@@ -1590,7 +1593,8 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
     sal_Int32 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+
+    ThrowIfDisposed();
 
     // parameter checking (part 1): index lower 0
     if( nSelectedChildIndex < 0 )
@@ -1616,7 +1620,8 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     sal_Int32 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleTable );
+
+    ThrowIfDisposed();
 
     SwCursorShell* pCursorShell = GetCursorShell();
 
@@ -1850,7 +1855,7 @@ sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     sal_Int32 nCount = 0;
 

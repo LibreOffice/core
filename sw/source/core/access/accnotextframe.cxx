@@ -176,7 +176,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     if ( !msTitle.isEmpty() )
     {
@@ -190,7 +190,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     return msDesc;
 }
@@ -294,7 +294,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+    ThrowIfDisposed();
 
     sal_Int32 nCount = 0;
     SwFormatURL aURL( static_cast<const SwLayoutFrame*>(GetFrame())->GetFormat()->GetURL() );
@@ -309,7 +309,8 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwAccessibleNoTextFrame::getHyperLink( sal_Int32 nLinkIndex )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    ThrowIfDisposed();
 
     uno::Reference< XAccessibleHyperlink > xRet;
 

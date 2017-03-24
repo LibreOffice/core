@@ -61,7 +61,7 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     sal_uInt16 nResId = AccessibleRole::HEADER == GetRole()
         ? STR_ACCESS_HEADER_DESC

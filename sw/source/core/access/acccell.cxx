@@ -341,7 +341,8 @@ SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 uno::Any SwAccessibleCell::getCurrentValue( )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleValue );
+
+    ThrowIfDisposed();
 
     return uno::Any( GetTableBoxFormat()->GetTableBoxValue().GetValue() );
 }
@@ -349,7 +350,8 @@ uno::Any SwAccessibleCell::getCurrentValue( )
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
-    CHECK_FOR_DEFUNC( XAccessibleValue );
+
+    ThrowIfDisposed();
 
     double fValue = 0;
     bool bValid = (aNumber >>= fValue);

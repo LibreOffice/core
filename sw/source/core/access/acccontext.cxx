@@ -530,6 +530,15 @@ bool SwAccessibleContext::IsEditableState()
     return bRet;
 }
 
+void SwAccessibleContext::ThrowIfDisposed()
+{
+    if (!(GetFrame() && GetMap()))
+    {
+        throw lang::DisposedException("object is nonfunctional",
+                static_cast<cppu::OWeakObject*>(this));
+    }
+}
+
 SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const& pMap,
                                           sal_Int16 const nRole,
                                           const SwFrame *pF )
@@ -571,7 +580,8 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
+
     //Notify the frame is a document
     if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
         m_bIsAccDocUse = true;
@@ -584,7 +594,7 @@ uno::Reference< XAccessible> SAL_CALL
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     //Notify the frame is a document
     if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
@@ -631,7 +641,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
@@ -655,7 +665,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
@@ -696,7 +706,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    ThrowIfDisposed();
 
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
@@ -776,7 +786,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
+    ThrowIfDisposed();
 
     uno::Reference< XAccessible > xAcc;
 
@@ -834,7 +844,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
+    ThrowIfDisposed();
 
     const SwFrame *pParent = GetParent();
     OSL_ENSURE( pParent, "no Parent found" );
@@ -923,7 +933,7 @@ void SAL_CALL SwAccessibleContext::grabFocus()
 {
     SolarMutexGuard aGuard;
 
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    ThrowIfDisposed();;
 
     if( GetFrame()->IsFlyFrame() )
     {

@@ -137,7 +137,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
-    // CHECK_FOR_DEFUNC is called by parent
+    // ThrowIfDisposed is called by parent
 
     sal_Int32 nChildren = SwAccessibleContext::getAccessibleChildCount();
     if( !IsDisposing() && mpChildWin )
@@ -153,7 +153,8 @@ uno::Reference< XAccessible> SAL_CALL
 
     if( mpChildWin  )
     {
-        CHECK_FOR_DEFUNC( XAccessibleContext )
+        ThrowIfDisposed();
+
         if ( nIndex == GetChildCount( *(GetMap()) ) )
         {
             return mpChildWin->GetAccessible();
@@ -320,7 +321,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
 
     if( mpChildWin  )
     {
-        CHECK_FOR_DEFUNC( XAccessibleComponent )
+        ThrowIfDisposed();
 
         vcl::Window *pWin = GetWindow();
         if (!pWin)

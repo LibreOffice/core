@@ -158,7 +158,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
 
 OUString SwAccessiblePage::getAccessibleDescription( )
 {
-    CHECK_FOR_DEFUNC( css::accessibility::XAccessibleContext );
+    ThrowIfDisposed();
 
     OUString sArg( GetFormattedPageNumber() );
     return GetResource( STR_ACCESS_PAGE_DESC, &sArg );
