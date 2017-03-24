@@ -120,7 +120,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
     {
         for (size_t i = 0, n = nMatchMax; i < n; ++i)
         {
-            /* TODO: a CellNotes iterator would come handy and migt speed
+            /* TODO: a CellNotes iterator would come handy and might speed
              * things up a little, though we only loop through the
              * search/replace result positions here. */
             ScRange aRange( *rMatchedRanges[i] );

@@ -546,7 +546,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, Edit&, rEd, void )
     if ( &rEd == m_pEdVal2 ) pLb = m_pLbCond2;
     else if ( &rEd == m_pEdVal3 ) pLb = m_pLbCond3;
 
-    // if ond of the special values "empty"/"non-empty" was chosen only the
+    // if cond of the special values "empty"/"non-empty" was chosen only the
     // =-operand makes sense:
 
     if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )

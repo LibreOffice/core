@@ -292,7 +292,7 @@ void ScDrawStringsVars::SetPattern(
     pPattern = pNew;
     pCondSet = pSet;
 
-    // évaluate pPattern
+    // evaluate pPattern
 
     OutputDevice* pDev = pOutput->mpDev;
     OutputDevice* pRefDevice = pOutput->mpRefDevice;
@@ -2025,7 +2025,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         {
                             // If the string is clipped, make it shorter for
                             // better performance since drawing by HarfBuzz is
-                            // quite expensive especiall for long string.
+                            // quite expensive especially for long string.
 
                             OUString aShort = aString;
 

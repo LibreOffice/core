@@ -166,7 +166,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         {
                             SAL_WARN("scripting",
                                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                                "while dispatchFinished with failture of the execution "
+                                "while dispatchFinished with failure of the execution "
                                 << e.Message );
                         }
                     }

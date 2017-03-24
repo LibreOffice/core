@@ -350,7 +350,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     {
         CalcPages();
         RecalcPages();
-        UpdateDrawView();       // Spreedsheet eventually changes
+        UpdateDrawView();       // Spreadsheet eventually changes
     }
 
     Fraction aPreviewZoom( nZoom, 100 );

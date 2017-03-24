@@ -1684,7 +1684,7 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
 void
 ScVbaRange::setFormula(const uno::Any &rFormula )
 {
-    // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
+    // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporarily disable conversion
     setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
@@ -2744,7 +2744,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
         if ( bForceUseInpuRangeTab )
         {
             // this is a call from Application.Range( x,y )
-            // its possiblefor x or y to specify a different sheet from
+            // it's possible for x or y to specify a different sheet from
             // the current or active on ( but they must be the same )
             if ( cell1.Sheet != cell2.Sheet )
                 throw uno::RuntimeException();
