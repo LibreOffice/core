@@ -866,25 +866,6 @@ SvxWeightItem BoldCTL SID_ATTR_CHAR_CTL_WEIGHT
 ]
 
 
-SfxObjectItem Border SID_BORDER_OBJECT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SvxBoxInfoItem BorderInner SID_ATTR_BORDER_INNER
 
 [

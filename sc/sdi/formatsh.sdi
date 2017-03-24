@@ -38,10 +38,6 @@ interface TableFont
 
 interface FormatForSelection
 {
-    //Auch das Basic muss wieder laufen
-    SbxObject Font SID_PROP_FONT ()
-    SbxObject Interior SID_PROP_INTERIOR () // status(Final)
-
     // Slot's die in der DrawShell disabled werden. {
     SID_STYLE_FAMILY2           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_APPLY             [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]

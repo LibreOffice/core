@@ -63,8 +63,6 @@ interface BaseSelection
 
     SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
     (
-        SfxBoolItem ColHeaders SID_ATTR_COLHEADERS,
-        SfxBoolItem RowHeaders SID_ATTR_ROWHEADERS,
         SfxBoolItem InNewTable FN_PARAM_4,
         SfxStringItem RangeList FN_PARAM_5
     )
@@ -217,30 +215,6 @@ interface TableEditView
     SID_READONLY_MODE   [ StateMethod = GetState; ]
 }
 
-
-
- //     Pivot-Krempel
-
-
-interface DataPilotTables
-{
-}
-
-interface DataPilotTable
-{
-    SbxObject DataPilotFields SID_PIVOT_FIELDS ()
-}
-
-interface DataPilotFields
-{
-}
-
-interface DataPilotField
-{
-    String FieldName SID_PFIELD_NAME ()
-    UINT16 Orientation SID_PFIELD_ORIENTATION ()
-    UINT16 Function SID_PFIELD_FUNCTION ()
-}
 
 
 shell ScTabViewShell
