@@ -100,7 +100,7 @@ namespace sdr
             // to implement the animation effect and to re-initiate the event.
             bool                                            mbAllowsAnimation : 1;
 
-            // Flag tocontrol if this OverlayObject allows AntiAliased visualisation.
+            // Flag to control if this OverlayObject allows AntiAliased visualisation.
             // Default is true, but e.g. for selection visualisation in SC and SW,
             // it is switched to false
             bool                                            mbAllowsAntiAliase : 1;

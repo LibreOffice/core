@@ -63,7 +63,7 @@ struct FmSearchContext
     // [out]
     css::uno::Reference< css::sdbc::XResultSet>
                             xCursor;        // the iterator for the context
-    OUString                strUsedFields;  // a list of field names separeted by ';'
+    OUString                strUsedFields;  // a list of field names separated by ';'
     ::std::vector< css::uno::Reference< css::uno::XInterface > >
                             arrFields;      // the corresponding text interfaces for the fields in strUsedFields
     OUString                sFieldDisplayNames;     // if not empty: names to be displayed for the searchable fields (must have the same token count as strUsedFields!)

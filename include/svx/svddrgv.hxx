@@ -150,7 +150,7 @@ public:
     bool IsNoDragXorPolys() const { return mbNoDragXorPolys; }
 
     // If the number of selected objects exceeds the value set here,
-    // NoDragPolys is (temporarily) activated implicitely.
+    // NoDragPolys is (temporarily) activated implicitly.
     // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100
     sal_uIntPtr GetDragXorPolyLimit() const { return mnDragXorPolyLimit; }
