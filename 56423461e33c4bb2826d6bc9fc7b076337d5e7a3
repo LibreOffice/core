@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_790eae35",
+        "filename": "sw/qa/extras/rtfimport/data/rhbz1065629.rtf",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-03-24T15:04:10Z",
+      "side": 1,
+      "message": "I don\u0027t think this is a typo. The document is not in English;) \"Responsable Commercial\" is presumably quite correct in the language in question.",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "56423461e33c4bb2826d6bc9fc7b076337d5e7a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
