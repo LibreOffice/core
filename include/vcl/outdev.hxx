@@ -403,7 +403,6 @@ private:
     mutable bool                    mbInitTextColor : 1;
     mutable bool                    mbInitClipRegion : 1;
     mutable bool                    mbClipRegionSet : 1;
-    mutable bool                    mbKerning : 1;
     mutable bool                    mbNewFont : 1;
     mutable bool                    mbTextLines : 1;
     mutable bool                    mbTextSpecial : 1;

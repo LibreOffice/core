@@ -170,19 +170,11 @@ struct ImplPostEventData
     ImplSVEvent *   mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
-    ZoomEvent       maZoomEvent;
-    ScrollEvent     maScrollEvent;
 
-       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
+    ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
+    ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( nullptr ), maMouseEvent( rMouseEvent ) {}
-#if !HAVE_FEATURE_DESKTOP
-       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const ZoomEvent& rZoomEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
-       ImplPostEventData( VclEventId nEvent, vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
-        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
-#endif
 };
 
 Application* GetpApp()

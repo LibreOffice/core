@@ -58,7 +58,6 @@ struct SbxValues
         sal_Int16*      pInteger;
         sal_uInt32*     pULong;
         sal_Int32*      pLong;
-        int*            pInt;
         sal_uInt64*     puInt64;
         sal_Int64*      pnInt64;
 

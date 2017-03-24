@@ -56,10 +56,8 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, Button*, void)
 }
 
 MacroSecurity::MacroSecurity( vcl::Window* _pParent,
-    const css::uno::Reference< css::uno::XComponentContext> &_rxCtx,
     const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment)
     : TabDialog(_pParent, "MacroSecurityDialog", "xmlsec/ui/macrosecuritydialog.ui")
-    , mxCtx(_rxCtx)
     , mxSecurityEnvironment(_rxSecurityEnvironment)
 {
     get(m_pTabCtrl, "tabcontrol");
