@@ -80,7 +80,6 @@
 #define SID_POLY_MERGE                      (SID_SFX_START + 679)
 #define SID_POLY_SUBSTRACT                  (SID_SFX_START + 680)
 #define SID_POLY_INTERSECT                  (SID_SFX_START + 681)
-#define SID_POLY_FORMEN                     (SID_SFX_START + 682)
 #define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683)
 #define SID_EQUALIZEWIDTH                   (SID_SFX_START + 684)
 #define SID_EQUALIZEHEIGHT                  (SID_SFX_START + 685)
@@ -125,7 +124,6 @@
 #define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
 #define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
 #define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
-#define SID_BASICIDE_NEWJAVAMODULE          ( SID_BASICIDE_START + 41 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
 // StarBase-Id's
@@ -284,7 +282,6 @@
 #define SID_BEZIER_MOVE                                 ( SID_SVX_START + 121 )
 #define SID_BEZIER_CLOSE                                ( SID_SVX_START + 122 )
 #define SID_BEZIER_SMOOTH                               ( SID_SVX_START + 123 )
-#define SID_BEZIER_APPEND                               ( SID_SVX_START + 124 )
 #define SID_BEZIER_EDIT                                 ( SID_SVX_START + 126 )
 #define SID_BEZIER_CUTLINE                              ( SID_SVX_START + 127 )
 #define SID_OBJECT_SELECT                               ( SID_SVX_START + 128 )
@@ -303,9 +300,6 @@
 #define SID_ATTRIBUTES_AREA                             ( SID_SVX_START + 142 )
 #define SID_ATTRIBUTES_LINE                             ( SID_SVX_START + 143 )
 #define SID_CHOOSE_CONTROLS                             ( SID_SVX_START + 144 )
-#define SID_INSERT_PUSHBUTTON                           ( SID_SVX_START + 146 )
-#define SID_INSERT_RADIOBUTTON                          ( SID_SVX_START + 147 )
-#define SID_INSERT_CHECKBOX                             ( SID_SVX_START + 148 )
 #define SID_OUTLINE_UP                                  ( SID_SVX_START + 150 )
 #define SID_OUTLINE_DOWN                                ( SID_SVX_START + 151 )
 #define SID_OUTLINE_LEFT                                ( SID_SVX_START + 152 )
@@ -343,17 +337,6 @@
 #define SID_BACKGROUND_COLOR                            ( SID_SVX_START + 186 )
 #define SID_BACKGROUND_PATTERN                          ( SID_SVX_START + 187 )
 #define SID_ATTR_BORDER                                 ( SID_SVX_START + 188 )
-#define SID_INSERT_FIXEDTEXT                            ( SID_SVX_START + 189 )
-#define SID_INSERT_GROUPBOX                             ( SID_SVX_START + 190 )
-#define SID_INSERT_EDIT                                 ( SID_SVX_START + 191 )
-#define SID_INSERT_LISTBOX                              ( SID_SVX_START + 192 )
-#define SID_INSERT_COMBOBOX                             ( SID_SVX_START + 193 )
-#define SID_INSERT_SPINBUTTON                           ( SID_SVX_START + 194 )
-#define SID_INSERT_HSCROLLBAR                           ( SID_SVX_START + 195 )
-#define SID_INSERT_VSCROLLBAR                           ( SID_SVX_START + 196 )
-#define SID_INSERT_PREVIEW                              ( SID_SVX_START + 197 )
-#define SID_INSERT_URLBUTTON                            ( SID_SVX_START + 198 )
-#define SID_INSERT_SELECT                               ( SID_SVX_START + 199 )
 #define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 200 )
 #define SID_FRAME_LINESTYLE                             ( SID_SVX_START + 201 )
 #define SID_FRAME_LINECOLOR                             ( SID_SVX_START + 202 )
@@ -487,12 +470,11 @@
 #define SID_DRAWTBX_LINES                               ( SID_SVX_START + 401 )
 #define SID_BACKGRND_DESTINATION                        ( SID_SVX_START + 404 )
 #define SID_ATTR_FLASH                                  ( SID_SVX_START + 406 )
-#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
-#define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
 
 // CAUTION! Range <413 .. 413> used by EditEngine (!)
 
-#define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
+#define SID_ATTR_3D_START                               ( SID_SVX_START + 415 )
+#define SID_RULER_PROTECT                               SID_ATTR_3D_START
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
 
 #define SID_TABLE_INSERT_COL_BEFORE                     ( SID_SVX_START + 418 )
@@ -514,7 +496,6 @@
 #define SID_SC_EDITOPTIONS                              ( SID_SVX_START + 435 )
 #define SID_SM_EDITOPTIONS                              ( SID_SVX_START + 436 )
 #define SID_SCH_EDITOPTIONS                             ( SID_SVX_START + 437 )
-#define SID_SIM_EDITOPTIONS                             ( SID_SVX_START + 438 )
 #define SID_SW_ONLINEOPTIONS                            ( SID_SVX_START + 439 )
 #define SID_GET_COLORLIST                               ( SID_SVX_START + 441 )
 #define SID_OUTLINE_TO_IMPRESS                          ( SID_SVX_START + 443 )
@@ -632,7 +613,6 @@
 #define SID_FM_ORDERCRIT                                ( SID_SVX_START + 714 )
 #define SID_FM_FILTERCRIT                               ( SID_SVX_START + 715 )
 #define SID_FM_AUTOFILTER                               ( SID_SVX_START + 716 )
-#define SID_FM_COUNTALL                                 ( SID_SVX_START + 717 )
 #define SID_FM_NATIVESQL                                ( SID_SVX_START + 720 )
 #define SID_FM_EXECUTE                                  ( SID_SVX_START + 721 )
 #define SID_SBA_QRY_EXECUTE                                 SID_FM_EXECUTE
@@ -675,7 +655,6 @@
 #define SID_FM_FILTER_IS_NULL                           ( SID_SVX_START + 759 )
 #define SID_FM_FILTER_IS_NOT_NULL                       ( SID_SVX_START + 760 )
 #define SID_FM_VIEW_AS_GRID                             ( SID_SVX_START + 761 )
-#define SID_FM_FILTER_REMOVE                            ( SID_SVX_START + 762 )
 #define SID_FM_AUTOCONTROLFOCUS                         ( SID_SVX_START + 763 )
 #define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )
 #define SID_FM_CREATE_FIELDCONTROL                      ( SID_SVX_START + 765 )
@@ -739,8 +718,6 @@
 
 // CAUTION! Range <925 .. 925> used by EditEngine (!)
 
-#define SID_INSERT_IMAGECONTROL                         ( SID_SVX_START + 926 )
-#define SID_INSERT_PROGRESSBAR                          ( SID_SVX_START + 927 )
 #define SID_INSERT_HFIXEDLINE                           ( SID_SVX_START + 928 )
 #define SID_INSERT_VFIXEDLINE                           ( SID_SVX_START + 929 )
 #define SID_READONLY_MODE                               ( SID_SVX_START + 930 )
@@ -748,13 +725,6 @@
 #define SID_ATTR_NUMBERFORMAT_SOURCE                    ( SID_SVX_START + 932 )
 
 #define SID_RULER_BORDER_DISTANCE                       ( SID_SVX_START + 935 )
-#define SID_INSERT_DATEFIELD                            ( SID_SVX_START + 936 )
-#define SID_INSERT_TIMEFIELD                            ( SID_SVX_START + 937 )
-#define SID_INSERT_NUMERICFIELD                         ( SID_SVX_START + 938 )
-#define SID_INSERT_CURRENCYFIELD                        ( SID_SVX_START + 939 )
-#define SID_INSERT_FORMATTEDFIELD                       ( SID_SVX_START + 940 )
-#define SID_INSERT_PATTERNFIELD                         ( SID_SVX_START + 941 )
-#define SID_INSERT_FILECONTROL                          ( SID_SVX_START + 942 )
 #define SID_SHOW_PROPERTYBROWSER                        ( SID_SVX_START + 943 )
 
 // CAUTION! Range <944 .. 945> used by EditEngine (!)
@@ -880,10 +850,8 @@
 #define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
 // (SID_SVX_START + 1062) is in include/sfx2/sfxsids.hrc
-#define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
 #define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
 #define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )
-#define SID_FONTNAMELIST                                ( SID_SVX_START + 1066 )
 #define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1067 )
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
 #define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )

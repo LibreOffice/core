@@ -282,12 +282,6 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    SID_BASICIDE_NEWJAVAMODULE
-    [
-        ExecMethod  = ExecuteGlobal;
-        StateMethod = GetState;
-    ]
-
     SID_BASICIDE_NEWDIALOG
     [
         ExecMethod  = ExecuteGlobal;
