@@ -44,7 +44,7 @@ namespace dbaui
             @param  _rDiff
                 Contains the difference of the old and new toolbox size.
 
-                TO-DO: remove this when all implmentations
+                TO-DO: remove this when all implementations
                 are converted to .ui format
         */
         virtual void resizeControls(const Size& _rDiff) = 0;

@@ -87,7 +87,7 @@ namespace connectivity
             Some error messages need to contain references to runtime-dependent data (say, the
             name of a concrete table in the database), which in the resource file's strings are
             represented by a placeholder, namely $1$, $2, and so on. This method allows to
-            retrieve such an error message, and replace upo to 3 placeholders with their concrete
+            retrieve such an error message, and replace up to 3 placeholders with their concrete
             values.
 
             In a non-product build, assertions will fire if the number of placeholders in the

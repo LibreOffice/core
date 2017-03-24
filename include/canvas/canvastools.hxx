@@ -313,7 +313,7 @@ namespace canvas
 
             @param i_rxCanvas
             Input parameter, the canvas representation for which the device information
-            is to be retrieveds
+            is to be retrieved
 
             @param o_rxParams
             Output parameter, the sequence of Anys that hold the device parameters. Layout is as described above

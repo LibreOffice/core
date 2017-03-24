@@ -194,7 +194,7 @@ bool Options::setOption(char const * option, std::string const & rArg)
 }
 
 #ifdef _WIN32
-/* Helper functiopn to convert windows paths including spaces, brackets etc. into
+/* Helper function to convert windows paths including spaces, brackets etc. into
    a windows short Url. The ucpp preprocessor has problems with such paths and returns
    with error.
 */

@@ -139,7 +139,7 @@ public:
 
 enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT = 0,    // Set as in App
                         SVXURLFORMAT_URL,           // Represent URL
-                        SVXURLFORMAT_REPR           // Constitute repraesentation
+                        SVXURLFORMAT_REPR           // Constitute representation
                     };
 
 class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData

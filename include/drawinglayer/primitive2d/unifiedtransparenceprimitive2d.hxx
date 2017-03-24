@@ -31,7 +31,7 @@ namespace drawinglayer
     {
         /** UnifiedTransparencePrimitive2D class
 
-            This primitive encapsualtes a child hierarchy and defines
+            This primitive encapsulates a child hierarchy and defines
             that it shall be visualized with the given transparency. That
             transparency is unique for all contained geometry, so that
             e.g. overlapping polygons in the child geometry will not show

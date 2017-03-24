@@ -344,7 +344,7 @@ public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const EditPosition&,
                         bool bCopyAttr );
     ~SvxRTFItemStackType();
-    //cmc, I'm very suspicios about SetStartPos, it doesn't change
+    //cmc, I'm very suspicious about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
     //bad, consider this deprecated.
     void SetStartPos( const EditPosition& rPos );
