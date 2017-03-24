@@ -681,7 +681,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             {
                 // linguistic::PossibleHyphens is stuck with
                 // css::uno::Sequence<sal_Int16> because of
-                // css.linguistic2.XPossibleHpyhens.getHyphenationPositions, so
+                // css.linguistic2.XPossibleHyphens.getHyphenationPositions, so
                 // any further positions need to be ignored:
                 assert(i >= SAL_MIN_INT16);
                 if (i > SAL_MAX_INT16)

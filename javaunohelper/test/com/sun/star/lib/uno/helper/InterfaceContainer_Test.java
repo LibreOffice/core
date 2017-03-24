@@ -461,7 +461,7 @@ public class InterfaceContainer_Test
 
     @Test public void ListIterator_next() throws Exception
     {
-        logger.log(Level.INFO, "Testing InterfaceContainer.listIerator, ListIterator.next()");
+        logger.log(Level.INFO, "Testing InterfaceContainer.listIterator, ListIterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
 
         cont.addAll(list1);

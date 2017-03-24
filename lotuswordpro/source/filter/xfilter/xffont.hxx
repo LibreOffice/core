@@ -256,7 +256,7 @@ private:
     sal_Int16   m_nWidthScale;
     XFColor     m_aColor;
     XFColor     m_aBackColor;
-    //The flag defines which variable will be funtional.
+    //The flag defines which variable will be functional
     sal_uInt32  m_nFlag;
     bool    m_bTransparent;
 };

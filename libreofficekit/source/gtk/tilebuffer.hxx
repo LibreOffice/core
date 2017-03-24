@@ -165,7 +165,7 @@ enum
    A struct that we use to store the data about the LOK call.
 
    Object of this type is passed with all the LOK calls,
-   so that they can be idenitified. Additionally, it also contains
+   so that they can be identified. Additionally, it also contains
    the data that LOK call needs.
 */
 struct LOEvent

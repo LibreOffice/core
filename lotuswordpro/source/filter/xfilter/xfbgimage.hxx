@@ -93,7 +93,7 @@ public:
     void    SetRepeate();
 
     /**
-     * @descr   Set whether the image should be streatched to fill the owner object.
+     * @descr   Set whether the image should be stretched to fill the owner object.
      */
     void    SetStretch();
 
