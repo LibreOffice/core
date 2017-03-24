@@ -1429,14 +1429,6 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     return sStr;
 }
 
-
-void SwAccessibleContext::ClearMapPointer()
-{
-    DBG_TESTSOLARMUTEX();
-    m_pMap = nullptr;
-    m_wMap.reset();
-}
-
 void SwAccessibleContext::RemoveFrameFromAccessibleMap()
 {
     assert(m_refCount > 0); // must be alive to do this without using m_wMap

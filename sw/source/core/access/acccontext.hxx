@@ -59,6 +59,9 @@ class SwAccessibleContext :
     // 'externalized' and wants access to the protected members like
     // GetMap, GetChild, GetParent, and GetFrame.
     friend class SwAccessibleSelectionHelper;
+#if OSL_DEBUG_LEVEL > 0
+    friend class SwAccessibleMap;
+#endif
 
 protected:
     mutable ::osl::Mutex m_Mutex;
@@ -167,7 +170,6 @@ protected:
     virtual void InvalidateFocus_();
 
 public:
-    void ClearMapPointer();
     void FireAccessibleEvent( css::accessibility::AccessibleEventObject& rEvent );
 
 protected:

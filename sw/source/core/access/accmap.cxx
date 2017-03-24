@@ -1671,6 +1671,7 @@ SwAccessibleMap::~SwAccessibleMap()
         SwAccessibleDocument *pAcc = static_cast< SwAccessibleDocument * >( xAcc.get() );
         pAcc->Dispose( true );
     }
+#if OSL_DEBUG_LEVEL > 0
     if( mpFrameMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();
@@ -1680,12 +1681,12 @@ SwAccessibleMap::~SwAccessibleMap()
             if( xTmp.is() )
             {
                 SwAccessibleContext *pTmp = static_cast< SwAccessibleContext * >( xTmp.get() );
-                // TODO is this still needed
-                pTmp->ClearMapPointer();
+                assert(pTmp->GetMap() == nullptr); // must be disposed
             }
             ++aIter;
         }
     }
+#endif
     {
         osl::MutexGuard aGuard( maMutex );
 #if OSL_DEBUG_LEVEL > 0
