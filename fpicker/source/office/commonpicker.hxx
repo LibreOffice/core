@@ -112,7 +112,7 @@ namespace svt
         virtual void SAL_CALL disposing() override;
 
 
-        // XEventListner
+        // XEventListener
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 

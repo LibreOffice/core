@@ -1231,7 +1231,7 @@ void PictReader::ReadHeader()
           if (st < 2) { confidence[st] = --actualConfid; continue; }
           IsVersion2 = false; return;
         }
-        if (sBuf[0] != 0x00) continue; // unrecovable error
+        if (sBuf[0] != 0x00) continue; // unrecoverable error
         int numZero = 0;
         do
           {

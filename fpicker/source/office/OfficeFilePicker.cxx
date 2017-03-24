@@ -907,7 +907,7 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
     // the preview window switchable because
     // else we would have to change the layout
     // of the file dialog dynamically
-    // support for set/getShowState is opionally
+    // support for set/getShowState is optionally
     // see css::ui::dialogs::XFilePreview
 
         bRet = false;

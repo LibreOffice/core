@@ -253,7 +253,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
         // (OFS8) TIFF image file directory (IFD)
         mnCurrentTagCountPos = m_rOStm.Tell();
-        m_rOStm.WriteUInt16( 0 );               // the number of tagentrys is to insert later
+        m_rOStm.WriteUInt16( 0 );               // the number of tangents to insert later
 
         sal_uInt32 nSubFileFlags = 0;
         if ( bMultiPage )

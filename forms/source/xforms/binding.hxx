@@ -224,7 +224,7 @@ public:
     /// get this binding's context node
     xforms::EvaluationContext getEvaluationContext() const;
 
-    /// get evalation contexts for this binding's MIPs
+    /// get evaluation contexts for this binding's MIPs
     std::vector<xforms::EvaluationContext> getMIPEvaluationContexts();
 
     /// get nodeset the bind is bound to

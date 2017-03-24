@@ -1160,7 +1160,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                 // normally nContent is the complete size of the complex property,
                 // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
 
-                // I love special threatments :-(
+                // I love special treatments :-(
                 if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
                     || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
                         || ( nRecType == DFF_Prop_pWrapPolygonVertices ) || ( nRecType == DFF_Prop_connectorPoints )

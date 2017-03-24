@@ -897,13 +897,13 @@ void OInterfaceContainer::removeElementsNoEvents()
 
 void OInterfaceContainer::implInserted( const ElementDescription* /*_pElement*/ )
 {
-    // not inrerested in
+    // not interested in
 }
 
 
 void OInterfaceContainer::implRemoved( const css::uno::Reference<css::uno::XInterface>& /*_rxObject*/ )
 {
-    // not inrerested in
+    // not interested in
 }
 
 
