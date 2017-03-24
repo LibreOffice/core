@@ -95,7 +95,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     }
     else if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
-        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; // 2 centimetres
+        nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; // 2 centimeters
     }
     else
     {

@@ -3244,8 +3244,8 @@ SwContentFrame *SwTabFrame::FindLastContent()
             {
 #if OSL_DEBUG_LEVEL > 0
                 SwSectionFrame* pSect = pRet->FindSctFrame();
-                OSL_ENSURE( pSect, "Where does this column come fron?");
-                OSL_ENSURE( IsAnLower( pSect ), "Splited cell?" );
+                OSL_ENSURE( pSect, "Where does this column come from?");
+                OSL_ENSURE( IsAnLower( pSect ), "Splitted cell?" );
 #endif
                 return pRet->FindSctFrame()->FindLastContent();
             }

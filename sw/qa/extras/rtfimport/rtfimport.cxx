@@ -1680,7 +1680,7 @@ DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Responsable Commercial:"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Responsible for Commercial:"), xPara->getString());
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
     xParaEnum = xParaEnumAccess->createEnumeration();
@@ -2073,7 +2073,7 @@ DECLARE_RTFIMPORT_TEST(testFdo82071, "fdo82071.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo83464, "fdo83464.rtf")
 {
-    // Problem was that the text in the textfrme had wrong font.
+    // Problem was that the text in the textframe had wrong font.
     uno::Reference<text::XTextRange> xFrameText(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xFrameText->getString());
     // This was Times New Roman.

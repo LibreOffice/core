@@ -1463,7 +1463,7 @@ namespace
                 SwClient::SwClientNotify(rModify, rHint);
         }
     };
-    // sad copypasta as tools/rtti.hxxs little brain can't cope with templates
+    // sad copypasta as tools/rtti.hxx little brain can't cope with templates
     struct OtherTestClient : SwClient
     {
         int m_nModifyCount;

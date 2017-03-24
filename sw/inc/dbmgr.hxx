@@ -166,7 +166,7 @@ struct SwMergeDescriptor
     /**
      * Basename incl. the path for the generated files.
      *
-     * The final filename will be created by concating a number to prevent
+     * The final filename will be created by concatenating a number to prevent
      * overwriting an existing file and the extension based on the filter
      * settings.
      */

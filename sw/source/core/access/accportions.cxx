@@ -606,7 +606,7 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
             (m_pTextNode->GetText()[nModelPos] != m_sAccessibleString[nPos]))
         {
             // case 1: a one-character, non-text portion
-            // reference position is the first accessibilty for our
+            // reference position is the first accessibility for our
             // core portion
             nRefPos = m_aAccessiblePositions[ nCorePortionNo ];
             nExtend = SwSPExtendRange::NONE;
