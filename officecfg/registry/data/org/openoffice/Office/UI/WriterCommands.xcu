@@ -766,14 +766,6 @@
           <value xml:lang="en-US">Create Master ~Document</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertTimeField" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Time</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertPageNumberField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page Number</value>
