@@ -882,7 +882,7 @@ void PackageManagerImpl::removePackage(
             //shared extension was "deleted". When a user starts OOo, then it
             //will check if something changed in the shared repository. Based on
             //the flag file it will then recognize, that the extension was
-            //deleted and can then update the extnesion database of the shared
+            //deleted and can then update the extension database of the shared
             //extensions in the user installation.
             if ( xPackage.is() && !m_readOnly && !xPackage->isRemoved() && (m_context == "shared"))
             {

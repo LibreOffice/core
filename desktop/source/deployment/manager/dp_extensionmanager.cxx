@@ -272,7 +272,7 @@ void ExtensionManager::addExtensionsToMap(
    returns a list containing extensions with the same identifier from
    all repositories (user, shared, bundled). If one repository does not
    have this extension, then the list contains an empty Reference. The list
-   is ordered according to the priority of the repostories:
+   is ordered according to the priority of the repositories:
    1. user
    2. shared
    3. bundled

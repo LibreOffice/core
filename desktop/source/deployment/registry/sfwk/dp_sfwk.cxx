@@ -152,7 +152,7 @@ BackendImpl::PackageImpl::PackageImpl(
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     m_name = m_displayName;
 
-    dp_misc::TRACE("PakageImpl displayName is " + m_displayName);
+    dp_misc::TRACE("PackageImpl displayName is " + m_displayName);
 }
 
 

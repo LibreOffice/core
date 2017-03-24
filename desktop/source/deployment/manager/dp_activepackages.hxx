@@ -47,7 +47,7 @@ public:
         OUString temporaryName;
         /* The file name (shared, user) or the folder name (bundled)
            If the key is the file name, then file name is not encoded.
-           If the key is the idendifier then the file name is UTF-8 encoded.
+           If the key is the identifier then the file name is UTF-8 encoded.
          */
         OUString fileName;
         OUString mediaType;

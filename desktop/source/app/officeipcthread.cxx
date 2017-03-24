@@ -1198,7 +1198,7 @@ void PipeIpcThread::execute()
             // we might have decided to shutdown while we were sleeping
             if (!RequestHandler::pGlobal.is()) return;
 
-            // only lock the mutex when processing starts, othewise we deadlock when the office goes
+            // only lock the mutex when processing starts, otherwise we deadlock when the office goes
             // down during wait
             osl::ClearableMutexGuard aGuard( RequestHandler::GetMutex() );
 

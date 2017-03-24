@@ -14,5 +14,5 @@ wrongdownload2.oxt: same as wrongdownload1.oxt
 wrongdownload3.oxt: same as wrongdownload1.oxt
 
 
-Use the wrongdownload extensions to check the automatic scolling of the text area that contains the results.
+Use the wrongdownload extensions to check the automatic scrolling of the text area that contains the results.
 
