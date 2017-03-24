@@ -176,7 +176,7 @@ void WINAPI CWinClipbImpl::onClipboardContentChanged()
 {
     MutexGuard aGuard( s_aMutex );
 
-    // reassocition to instance through static member
+    // reassociation to instance through static member
     if ( nullptr != s_pCWinClipbImpl )
         s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );
 }

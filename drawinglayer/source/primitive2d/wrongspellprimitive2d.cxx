@@ -52,7 +52,7 @@ namespace drawinglayer
             const double fUnderlineDistance(fFontHeight * fDefaultDistance);
             const double fWaveWidth(2.0 * fUnderlineDistance);
 
-            // the Y-distance needs to be relativated to FontHeight since the points get
+            // the Y-distance needs to be relative to FontHeight since the points get
             // transformed with the transformation containing that scale already.
             const double fRelativeUnderlineDistance(basegfx::fTools::equalZero(aScale.getY()) ? 0.0 : fUnderlineDistance / aScale.getY());
             basegfx::B2DPoint aStart(getStart(), fRelativeUnderlineDistance);
