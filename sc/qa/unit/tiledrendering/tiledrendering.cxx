@@ -42,7 +42,7 @@ using namespace css;
 
 std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 {
-    os << (int)id; return os;
+    os << (sal_Int32)id; return os;
 }
 
 namespace
