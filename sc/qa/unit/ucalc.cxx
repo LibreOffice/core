@@ -6765,6 +6765,53 @@ void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpect
     CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
 }
 
+ScRange Test::insertRangeData(
+    ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData )
+{
+    if (rData.empty())
+        return ScRange(ScAddress::INITIALIZE_INVALID);
+
+    ScAddress aPos = rPos;
+
+    SCCOL nColWidth = 1;
+    for (const std::vector<const char*>& rRow : rData)
+        nColWidth = std::max<SCCOL>(nColWidth, rRow.size());
+
+    ScRange aRange(aPos);
+    aRange.aEnd.IncCol(nColWidth-1);
+    aRange.aEnd.IncRow(rData.size()-1);
+
+    clearRange(pDoc, aRange);
+
+    for (const std::vector<const char*>& rRow : rData)
+    {
+        aPos.SetCol(rPos.Col());
+
+        for (const char* pStr : rRow)
+        {
+            if (!pStr)
+            {
+                aPos.IncCol();
+                continue;
+            }
+
+            OUString aStr(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8);
+
+            ScSetStringParam aParam; // Leave default.
+            aParam.meStartListening = sc::NoListening;
+            pDoc->SetString(aPos, aStr, &aParam);
+
+            aPos.IncCol();
+        }
+
+        aPos.IncRow();
+    }
+
+    pDoc->StartAllListeners(aRange);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
+
 void Test::testPrecisionAsShown()
 {
     m_pDoc->InsertTab(0, "Test");
