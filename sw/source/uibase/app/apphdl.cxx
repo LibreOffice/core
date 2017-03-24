@@ -241,8 +241,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
 // start field dialog
 void NewXForms( SfxRequest& rReq ); // implementation: below
 
-#if HAVE_FEATURE_DBCONNECTIVITY
-
 std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs, sal_uInt16 nWizardRestartPage)
 {
     // create if it does not exist yet
@@ -304,6 +302,8 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
     }
     return xMMConfig;
 }
+
+#if HAVE_FEATURE_DBCONNECTIVITY
 
 namespace
 {

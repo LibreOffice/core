@@ -131,8 +131,6 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
 
 }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
-
 void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rConfigItem,
                                     sal_uInt16 nRestart)
 {
@@ -144,8 +142,6 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::GetMailMergeConfigItem() const
 {
     return m_pViewImpl->GetMailMergeConfigItem();
 }
-
-#endif
 
 static bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {

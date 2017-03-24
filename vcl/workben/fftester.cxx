@@ -67,7 +67,6 @@ extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
 typedef bool (*WFilterCall)(const OUString &rUrl, const OUString &rFlt);
-typedef bool (*HFilterCall)(const OUString &rUrl);
 typedef bool (*FFilterCall)(SvStream &rStream);
 
 /* This constant specifies the number of inputs to process before restarting.
@@ -349,16 +348,17 @@ try_again:
             }
             else if (strcmp(argv[2], "rtf") == 0)
             {
-                static HFilterCall pfnImport(nullptr);
+                static FFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
                     aLibrary.loadRelative(&thisModule, "libmswordlo.so", SAL_LOADMODULE_LAZY);
-                    pfnImport = reinterpret_cast<HFilterCall>(
+                    pfnImport = reinterpret_cast<FFilterCall>(
                         aLibrary.getFunctionSymbol("TestImportRTF"));
                     aLibrary.release();
                 }
-                ret = (int) (*pfnImport)(out);
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
             }
             else if ( (strcmp(argv[2], "xls") == 0) ||
                       (strcmp(argv[2], "wb2") == 0) )

@@ -178,13 +178,13 @@ protected:
 #define SW_STORAGE_READER   2
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rUrl, const OUString &rFltName);
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString &rUrl);
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(SvStream &rStream);
 
 class SW_DLLPUBLIC Reader
 {
     friend class SwReader;
     friend bool TestImportDOC(const OUString &rUrl, const OUString &rFltName);
-    friend bool TestImportRTF(const OUString &rUrl);
+    friend bool TestImportRTF(SvStream &rStream);
     rtl::Reference<SwDoc> mxTemplate;
     OUString aTemplateNm;
 

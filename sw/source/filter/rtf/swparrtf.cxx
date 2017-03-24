@@ -158,10 +158,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
     return new SwRTFReader;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(SvStream &rStream)
 {
-    SvFileStream aFileStream(rURL, StreamMode::READ);
-
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
@@ -177,7 +175,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aDescriptor(1);
     aDescriptor[0].Name = "InputStream";
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(aFileStream));
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(rStream));
     aDescriptor[0].Value <<= xStream;
     bool bRet = true;
     try

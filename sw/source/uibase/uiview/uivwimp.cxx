@@ -56,9 +56,7 @@ SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()
     , pView(pShell)
     , eShellMode(ShellMode::Text)
-#if HAVE_FEATURE_DBCONNECTIVITY
     , nMailMergeRestartPage(0)
-#endif
     , m_pDocInserter(nullptr)
     , m_pRequest(nullptr)
     , m_nParam(0)

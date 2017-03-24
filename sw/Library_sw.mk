@@ -571,6 +571,11 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/app/swmodul1 \
     sw/source/uibase/app/swmodule \
     sw/source/uibase/app/swwait \
+    sw/source/uibase/dbui/dbmgr \
+    sw/source/uibase/dbui/dbui \
+    sw/source/uibase/dbui/maildispatcher \
+    sw/source/uibase/dbui/mailmergehelper \
+    sw/source/uibase/dbui/mmconfigitem \
     sw/source/uibase/cctrl/actctrl \
     sw/source/uibase/chrdlg/ccoll \
     sw/source/uibase/config/StoredChapterNumbering \
@@ -722,6 +727,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/uno/unodispatch \
     sw/source/uibase/uno/unodoc \
     sw/source/uibase/uno/unofreg \
+    sw/source/uibase/uno/unomailmerge \
     sw/source/uibase/uno/unomod \
     sw/source/uibase/uno/unomodule \
     sw/source/uibase/uno/unotxdoc \
@@ -768,14 +774,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,sw,\
-    sw/source/uibase/dbui/dbmgr \
     sw/source/uibase/dbui/dbtree \
-    sw/source/uibase/dbui/dbui \
-    sw/source/uibase/dbui/maildispatcher \
-    sw/source/uibase/dbui/mailmergehelper \
     sw/source/uibase/dbui/mailmergetoolbarcontrols \
-    sw/source/uibase/dbui/mmconfigitem \
-    sw/source/uibase/uno/unomailmerge \
 ))
 endif
 

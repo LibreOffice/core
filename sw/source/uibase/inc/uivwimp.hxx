@@ -101,11 +101,9 @@ class SwView_Impl
                                 mxClipEvtLstnr;
     ShellMode                   eShellMode;
 
-#if HAVE_FEATURE_DBCONNECTIVITY
     std::shared_ptr<SwMailMergeConfigItem>
                                 xConfigItem;
     sal_uInt16                  nMailMergeRestartPage;
-#endif
 
     sfx2::DocumentInserter*     m_pDocInserter;
     SfxRequest*                 m_pRequest;
@@ -137,14 +135,12 @@ public:
 
     void                            AddTransferable(SwTransferable& rTransferable);
 
-#if HAVE_FEATURE_DBCONNECTIVITY
     void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rItem, sal_uInt16 nRestart)
     {
         xConfigItem = rItem;
         nMailMergeRestartPage = nRestart;
     }
     std::shared_ptr<SwMailMergeConfigItem>  GetMailMergeConfigItem() {return xConfigItem;}
-#endif
 
     //#i33307# restore editing position
     void                    SetRestorePosition(const Point& rCursorPos, bool bSelectObj)

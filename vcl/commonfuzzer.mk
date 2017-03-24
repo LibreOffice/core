@@ -38,6 +38,11 @@ fuzzer_externals = \
     zlib \
 
 fuzzer_libraries = \
+    msword \
+    sw \
+    swd \
+    writerfilter \
+    textfd \
     sdfilt \
     sd \
     sdd \
