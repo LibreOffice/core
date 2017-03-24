@@ -414,7 +414,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                         ScDrawObjData aAnchor;
                                         aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
                                         aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
-                                        //Uno sets the Anchor in terms of the unorotated shape, not much we can do
+                                        //Uno sets the Anchor in terms of the unrotated shape, not much we can do
                                         //about that since uno also displays the shape geometry in terms of the unrotated
                                         //shape. #TODO think about changing the anchoring behaviour here too
                                         //Currently we've only got a start anchor, not an end-anchor, so generate that now

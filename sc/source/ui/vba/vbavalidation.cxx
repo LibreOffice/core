@@ -210,7 +210,7 @@ ScVbaValidation::Delete(  )
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-// Fix the defect that validatation cannot work when the input should be limited between a lower bound and an upper bound
+// Fix the defect that validation cannot work when the input should be limited between a lower bound and an upper bound
 void SAL_CALL
 ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 )
 {

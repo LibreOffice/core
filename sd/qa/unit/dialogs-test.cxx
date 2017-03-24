@@ -68,7 +68,7 @@ private:
     SdAbstractDialogFactory*                mpFact;
     SdXImpressDocument*                     mpImpressDocument;
 
-    /// on-demand created instances required for varoius dialogs to open
+    /// on-demand created instances required for various dialogs to open
     ::sd::DrawDocShell*                     mpDocShell;
     ::sd::ViewShell*                        mpViewShell;
     ::sd::DrawView*                         mpDrawView;
@@ -576,7 +576,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         {
             // CreateHeaderFooterDialog(sd::ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage) override;
             // This is a hard case, for two reasons:
-            // - It uses BaseClass TabPage which hase a very spartse interface,
+            // - It uses BaseClass TabPage which has a very sparse interface,
             //   need to add 'Screenshot interface' there and implement
             // - The concrete dialog has two TabPages which use the *same*
             //   .ui file, so extended markup will be needed to differ these two
