@@ -441,17 +441,10 @@ void SAL_CALL ChartController::attachFrame(
         pParent = VCLUnoHelper::GetWindow( xContainerWindow ).get();
     }
 
-    auto pChartWindow(GetChartWindow());
-    if(pChartWindow)
-    {
-        //@todo delete ...
-        pChartWindow->clear();
-        m_apDropTargetHelper.reset();
-    }
     {
         // calls to VCL
         SolarMutexGuard aSolarGuard;
-        pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
+        auto pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         pChartWindow->SetBackground();//no Background
         m_xViewWindow.set( pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
         pChartWindow->Show();
