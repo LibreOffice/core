@@ -204,7 +204,7 @@ static Reference< XInterface > loadComponent(
                 Reference< XSingleServiceFactory > xSFac( xFactory, UNO_QUERY );
                 if (xSFac.is())
                 {
-                    out( "\n> warning: ignroing context for implementation \"" );
+                    out( "\n> warning: ignoring context for implementation \"" );
                     out( rImplName );
                     out( "\"!" );
                     xInstance = xSFac->createInstance();

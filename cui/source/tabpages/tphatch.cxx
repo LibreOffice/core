@@ -259,7 +259,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
         aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
     }
-    // gradient has been (unidentifiedly) passed
+    // gradient has been (unidentified) passed
     else
     {
         pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),

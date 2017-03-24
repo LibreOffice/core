@@ -106,7 +106,7 @@ namespace pq_sdbc_driver
 // These are inherited from JDBC, and thus won't change anytime soon.
 // Having them as pre-processor definitions allows to include them
 // into compile-time strings (through STRINGIFY), which can be passed to ASCII_STR.
-// That is without resorting to horrendeous hacks in template meta-programming.
+// That is without resorting to horrendous hacks in template meta-programming.
 #define KEYRULE_CASCADE      0
 #define KEYRULE_RESTRICT     1
 #define KEYRULE_SET_NULL     2

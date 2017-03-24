@@ -125,7 +125,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL shutdownKApplication()
     has to be called, else the results are unpredictable.
 
     @return
-        <ul><li><code>0</code> if the KDE version is supportednon</li>
+        <ul><li><code>0</code> if the KDE version is not supported</li>
             <li>a negative value if the version is too old</li>
             <li>a positive value if the version is too new to know whether it works with this driver</li>
         </ul>

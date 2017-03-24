@@ -98,7 +98,7 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
         aSql.append(" ");
         aSql.append(sAutoIncrementValue);
     }
-    // AutoIncrementive "IDENTITY" is implizit "NOT NULL"
+    // AutoIncrement "IDENTITY" is implicitly "NOT NULL"
     else if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         aSql.append(" NOT NULL");
 
