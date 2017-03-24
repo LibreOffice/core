@@ -86,7 +86,7 @@ public class SwXNumberingRules extends TestCase {
     * Creating a TestEnvironment for the interfaces to be tested.
     * At first some strings are inserted to a text document, then style families
     * are gotten from text document using <code>XStyleFamiliesSupplier</code>.
-    * Then style family 'NuberingRules' is retrieved, then style indexed '0'
+    * Then style family 'NumberingRules' is retrieved, then style indexed '0'
     * is obtained. At the end property value 'NumberingRules' is obtained from
     * given style.
     */

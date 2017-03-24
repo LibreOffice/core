@@ -57,7 +57,7 @@ public interface PropertyName {
      */
     String DEBUG_IS_ACTIVE = "DebugIsActive";
     /**
-     * parameter name: "OutProduceer"
+     * parameter name: "OutProducer"
      * This parameter contains the class used<br>
      * for Logging
      */

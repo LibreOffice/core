@@ -40,7 +40,7 @@ public class _XReset extends MultiMethodTest {
     public static XReset oObj = null;
 
     /**
-    * Indicates if listeners must approve restes requests or not.
+    * Indicates if listeners must approve reset requests or not.
     */
     protected boolean approve = true;
     /**

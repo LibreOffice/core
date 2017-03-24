@@ -45,7 +45,7 @@ import util.utils;
 
 /**
  * Test for object which is represented by accessible component of the 'Font'
- * combo box in Format->Character... dislog box.
+ * combo box in Format->Character... dialog box.
  * <p>
  *
  * Object implements the following interfaces :

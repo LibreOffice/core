@@ -515,7 +515,7 @@ public class _XFrame extends MultiMethodTest {
      * Test calls the method. <p>
      * Has <b> OK </b> status if the method successfully returns.
      * In case a frame should initialised twice, a
-     * <CODE>com.sun.star.uno.RuntimeException</CODE> was thron. This is ok. But since
+     * <CODE>com.sun.star.uno.RuntimeException</CODE> was thrown. This is ok. But since
      * a com.sun.star.uno.RuntimeException could thrown in any state the message of
      * the exception must contain a defined string. In this case the test get an
      * <CODE>OK</CODE> status.

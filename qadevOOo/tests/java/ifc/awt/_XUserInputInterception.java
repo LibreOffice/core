@@ -198,7 +198,7 @@ public class _XUserInputInterception extends MultiMethodTest {
      * Has <b> OK </b> status if only one of the listener are triggered. <p>
      * The following method tests are to be completed successfully before :
      * <ul>
-     *  <li> <code> addMouseKlickHandler() </code> : adds two key listener </li>
+     *  <li> <code> addMouseClickHandler() </code> : adds two key listener </li>
      * </ul>
      */
     public void _removeMouseClickHandler() {

@@ -87,7 +87,7 @@ public class _XShapeCombiner extends MultiMethodTest {
 
         boolean result = false;
 
-        log.println("spiltting the shape...");
+        log.println("splitting the shape...");
 
         oObj.split(oGroup);
         int countAfterSplit = oShapes.getCount();
