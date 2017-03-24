@@ -632,7 +632,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
 void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequest)
 {
-    const bool bMultiSelection = rRequest->getArgumentOrDefault(PROP_MULTISELECTION_MODE, true);
+    const bool bMultiSelection = rRequest->getArgumentOrDefault<sal_Bool>(PROP_MULTISELECTION_MODE, true);
 
     // SYNCHRONIZED->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
