@@ -164,7 +164,7 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
 
     // TODO: I assume adjacent text nodes should be joined, to preserve
-    // processinf model? (I.e., if the SAX parser breaks a string into 2
+    // processing model? (I.e., if the SAX parser breaks a string into 2
     // Characters(..) calls, the DOM model would still see only one child.)
 
     // create text node and append to parent

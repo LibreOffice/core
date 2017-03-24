@@ -100,7 +100,7 @@ struct SignatureInformation
     OUString ouDescriptionPropertyId;
     /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
     OUString ouCertDigest;
-    /// A full OOXML signguature for unchanged roundtrip, empty for ODF.
+    /// A full OOXML signature for unchanged roundtrip, empty for ODF.
     css::uno::Sequence<sal_Int8> aSignatureBytes;
     /// For PDF: digest format, from css::xml::crypto::DigestID
     sal_Int32 nDigestID;

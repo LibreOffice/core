@@ -230,7 +230,7 @@ protected:
 
 
 /**
- * uperclass for variable/user-set, var/user-input, and sequence fields
+ * upperclass for variable/user-set, var/user-input, and sequence fields
  * inds field master of appropriate type and attaches field to it.
  */
 class XMLSetVarFieldImportContext : public XMLVarFieldImportContext
