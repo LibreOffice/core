@@ -71,7 +71,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rExceptio
 
     @param eError is an IO error code.
 
-    @param rArgs is a sequeence containing the arguments to pass along with
+    @param rArgs is a sequence containing the arguments to pass along with
            the exception. Each IO error code can be combined with one or
            more additional arguments. Refer to com/sun/star/ucb/IOErroprCode.idl
            for details.

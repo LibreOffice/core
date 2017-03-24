@@ -225,7 +225,7 @@ public:
         WidgetType          Type;       // primitive RTTI
     public:
         OUString            Name;       // a distinct name to identify the control
-        OUString            Description;// descriptive text for the contro (e.g. for tool tip)
+        OUString            Description;// descriptive text for the control (e.g. for tool tip)
         OUString            Text;       // user text to appear on the control
         DrawTextFlags       TextStyle;  // style flags
         bool                ReadOnly;

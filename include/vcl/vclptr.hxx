@@ -377,7 +377,7 @@ public:
     }
 
 private:
-    // Most likely we don't want this default copy-construtor.
+    // Most likely we don't want this default copy-constructor.
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) = delete;
     // And certainly we don't want a default assignment operator.
     ScopedVclPtr<reference_type>& operator = (const ScopedVclPtr<reference_type> &) = delete;

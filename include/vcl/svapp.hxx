@@ -774,7 +774,7 @@ public:
 
     /** Post a user event to the default window.
 
-     User events allow for the deferreal of work to later in the main-loop - at idle.
+     User events allow for the deferral of work to later in the main-loop - at idle.
 
      Execution of the deferred work is thread-safe which means all the tasks are executed
      serially, so no thread-safety locks between tasks are necessary.
