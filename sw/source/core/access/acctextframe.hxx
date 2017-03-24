@@ -43,7 +43,8 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrame& rFlyFrame );
+    SwAccessibleTextFrame(std::shared_ptr<SwAccessibleMap> const& pInitMap,
+                          const SwFlyFrame& rFlyFrame);
 
     virtual css::uno::Any SAL_CALL queryInterface(
         css::uno::Type const & rType ) override;

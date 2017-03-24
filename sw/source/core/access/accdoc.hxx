@@ -42,7 +42,7 @@ protected:
     virtual ~SwAccessibleDocumentBase() override;
 
 public:
-    SwAccessibleDocumentBase( SwAccessibleMap* pInitMap );
+    SwAccessibleDocumentBase(std::shared_ptr<SwAccessibleMap> const& pInitMap);
 
     void SetVisArea();
 
@@ -108,7 +108,7 @@ protected:
     virtual ~SwAccessibleDocument() override;
 
 public:
-    SwAccessibleDocument( SwAccessibleMap* pInitMap );
+    SwAccessibleDocument(std::shared_ptr<SwAccessibleMap> const& pInitMap);
 
     DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );
 

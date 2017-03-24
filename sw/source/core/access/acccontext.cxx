@@ -406,8 +406,21 @@ void SwAccessibleContext::DisposeChildren(const SwFrame *pFrame,
                 xAccImpl = GetMap()->GetContextImpl( pLower, false );
             if( xAccImpl.is() )
                 xAccImpl->Dispose( bRecursive );
-            else if( bRecursive )
-                DisposeChildren(pLower, bRecursive, bCanSkipInvisible);
+            else
+            {
+                // it's possible that the xAccImpl *does* exist with a
+                // ref-count of 0 and blocked in its dtor in another thread -
+                // this call here could be from SwAccessibleMap dtor so
+                // remove it from any maps now!
+                GetMap()->RemoveContext(pLower);
+                // in this case the context will check with a weak_ptr
+                // that the map is still alive so it's not necessary
+                // to clear its m_pMap here.
+                if (bRecursive)
+                {
+                    DisposeChildren(pLower, bRecursive, bCanSkipInvisible);
+                }
+            }
         }
         else if ( rLower.GetDrawObject() )
         {
@@ -517,12 +530,13 @@ bool SwAccessibleContext::IsEditableState()
     return bRet;
 }
 
-SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
+SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const& pMap,
                                           sal_Int16 const nRole,
                                           const SwFrame *pF )
     : SwAccessibleFrame( pMap->GetVisArea().SVRect(), pF,
                          pMap->GetShell()->IsPreview() )
-    , m_pMap( pMap )
+    , m_pMap(pMap.get())
+    , m_wMap(pMap)
     , m_nClientId(0)
     , m_nRole(nRole)
     , m_isDisposing( false )
@@ -534,8 +548,16 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *const pMap,
 
 SwAccessibleContext::~SwAccessibleContext()
 {
+    // must have for 2 reasons: 2. as long as this thread has SolarMutex
+    // another thread cannot destroy the SwAccessibleMap so our temporary
+    // taking a hard ref to SwAccessibleMap won't delay its destruction
     SolarMutexGuard aGuard;
-    RemoveFrameFromAccessibleMap();
+    // must check with weak_ptr that m_pMap is still alive
+    std::shared_ptr<SwAccessibleMap> pMap(m_wMap.lock());
+    if (m_isRegisteredAtAccessibleMap && GetFrame() && pMap)
+    {
+        pMap->RemoveContext( GetFrame() );
+    }
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL
@@ -1049,6 +1071,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
     RemoveFrameFromAccessibleMap();
     ClearFrame();
     m_pMap = nullptr;
+    m_wMap.reset();
 
     m_isDisposing = false;
 }
@@ -1406,8 +1429,17 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     return sStr;
 }
 
+
+void SwAccessibleContext::ClearMapPointer()
+{
+    DBG_TESTSOLARMUTEX();
+    m_pMap = nullptr;
+    m_wMap.reset();
+}
+
 void SwAccessibleContext::RemoveFrameFromAccessibleMap()
 {
+    assert(m_refCount > 0); // must be alive to do this without using m_wMap
     if (m_isRegisteredAtAccessibleMap && GetFrame() && GetMap())
         GetMap()->RemoveContext( GetFrame() );
 }

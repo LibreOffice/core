@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 SwAccessibleGraphic::SwAccessibleGraphic(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleNoTextFrame( pInitMap, AccessibleRole::GRAPHIC, pFlyFrame )
 {

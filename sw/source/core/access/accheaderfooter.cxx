@@ -36,7 +36,7 @@ const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessi
 const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwHeaderFrame* pHdFrame    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrame )
 {
@@ -47,7 +47,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
 }
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFooterFrame* pFtFrame    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrame )
 {

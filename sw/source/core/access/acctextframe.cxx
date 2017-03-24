@@ -43,7 +43,7 @@ using utl::AccessibleRelationSetHelper;
 using ::com::sun::star::accessibility::XAccessibleContext;
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFlyFrame& rFlyFrame  ) :
     SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, &rFlyFrame ),
     msTitle(),

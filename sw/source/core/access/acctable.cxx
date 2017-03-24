@@ -762,7 +762,7 @@ void SwAccessibleTable::GetStates(
 }
 
 SwAccessibleTable::SwAccessibleTable(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTabFrame* pTabFrame  ) :
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame ),
     mpTableData( nullptr )
@@ -1073,7 +1073,8 @@ uno::Reference< XAccessibleTable > SAL_CALL
     // #i87532# - assure that return accessible object is empty,
     // if no column header exists.
     SwAccessibleTableColHeaders* pTableColHeaders =
-        new SwAccessibleTableColHeaders( GetMap(), static_cast< const SwTabFrame *>( GetFrame() ) );
+        new SwAccessibleTableColHeaders(GetMap()->shared_from_this(),
+                    static_cast<const SwTabFrame *>(GetFrame()));
     uno::Reference< XAccessibleTable > xTableColumnHeaders( pTableColHeaders );
     if ( pTableColHeaders->getAccessibleChildCount() <= 0 )
     {
@@ -1808,9 +1809,10 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
 }
 
 // #i77106# - implementation of class <SwAccessibleTableColHeaders>
-SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2,
-                                                          const SwTabFrame *pTabFrame )
-    : SwAccessibleTable( pMap2, pTabFrame )
+SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
+        std::shared_ptr<SwAccessibleMap> const& pMap,
+        const SwTabFrame *const pTabFrame)
+    : SwAccessibleTable(pMap, pTabFrame)
 {
     SolarMutexGuard aGuard;
 

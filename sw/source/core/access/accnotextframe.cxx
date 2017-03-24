@@ -57,7 +57,7 @@ const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 }
 
 SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame ),

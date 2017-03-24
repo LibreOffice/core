@@ -30,10 +30,12 @@
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include "fesh.hxx"
+#include <o3tl/typed_flags_set.hxx>
+
 #include <list>
 #include <vector>
+#include <memory>
 #include <set>
-#include <o3tl/typed_flags_set.hxx>
 
 class SwAccessibleParagraph;
 class SwViewShell;
@@ -88,6 +90,7 @@ namespace o3tl
 
 class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
                         public ::accessibility::IAccessibleParent
+                , public std::enable_shared_from_this<SwAccessibleMap>
 {
     mutable ::osl::Mutex maMutex;
     ::osl::Mutex maEventMutex;

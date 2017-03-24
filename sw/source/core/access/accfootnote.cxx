@@ -40,7 +40,7 @@ const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAcces
 const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
 SwAccessibleFootnote::SwAccessibleFootnote(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         bool bIsEndnote,
         const SwFootnoteFrame *pFootnoteFrame ) :
     SwAccessibleContext( pInitMap,

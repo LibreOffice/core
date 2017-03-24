@@ -36,7 +36,7 @@ using namespace ::com::sun::star::accessibility;
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleNoTextFrame( pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame )
 {

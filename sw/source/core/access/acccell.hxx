@@ -54,7 +54,8 @@ protected:
     virtual ~SwAccessibleCell() override;
 
 public:
-    SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrame *pCellFrame );
+    SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInitMap,
+                     const SwCellFrame *pCellFrame);
 
     virtual bool HasCursor() override;   // required by map to remember that object
 

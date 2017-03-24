@@ -98,7 +98,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     }
 }
 
-SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
+SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                     const SwCellFrame *pCellFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrame )
     , m_aSelectionHelper( *this )

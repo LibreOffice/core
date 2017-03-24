@@ -28,7 +28,7 @@ protected:
     virtual ~SwAccessibleGraphic() override;
 
 public:
-    SwAccessibleGraphic( SwAccessibleMap* pInitMap,
+    SwAccessibleGraphic(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                          const SwFlyFrame *pFlyFrame );
 
     // XServiceInfo

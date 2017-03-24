@@ -124,7 +124,7 @@ SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
 }
 
 SwAccessibleFrameBase::SwAccessibleFrameBase(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrame ),

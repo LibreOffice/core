@@ -108,7 +108,7 @@ void SwAccessiblePage::InvalidateFocus_()
     }
 }
 
-SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
+SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                     const SwFrame* pFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
     , bIsSelected( false )

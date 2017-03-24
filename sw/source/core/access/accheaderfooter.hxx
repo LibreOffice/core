@@ -31,9 +31,9 @@ protected:
     virtual ~SwAccessibleHeaderFooter() override;
 
 public:
-    SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
+    SwAccessibleHeaderFooter( std::shared_ptr<SwAccessibleMap> const& pInitMap,
                               const SwHeaderFrame* pHdFrame );
-    SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
+    SwAccessibleHeaderFooter( std::shared_ptr<SwAccessibleMap> const& pInitMap,
                               const SwFooterFrame* pFtFrame );
 
     // XAccessibleContext

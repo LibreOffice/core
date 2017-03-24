@@ -35,7 +35,7 @@ class SwAccessiblePreview : public  SwAccessibleDocumentBase
     virtual ~SwAccessiblePreview() override;
 
 public:
-    SwAccessiblePreview( SwAccessibleMap *pMap );
+    SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap);
 
     // XServiceInfo
 

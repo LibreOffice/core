@@ -529,7 +529,7 @@ void SwAccessibleParagraph::InvalidateFocus_()
 }
 
 SwAccessibleParagraph::SwAccessibleParagraph(
-        SwAccessibleMap* pInitMap,
+        std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTextFrame& rTextFrame )
     : SwClient( const_cast<SwTextNode*>(rTextFrame.GetTextNode()) ) // #i108125#
     , SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )

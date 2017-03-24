@@ -69,11 +69,12 @@ using lang::IndexOutOfBoundsException;
 // SwAccessibleDocumentBase: base class for SwAccessibleDocument and
 // SwAccessiblePreview
 
-SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
-    SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT_TEXT,
-                         _pMap->GetShell()->GetLayout() ),
-    mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
-    mpChildWin( nullptr )
+SwAccessibleDocumentBase::SwAccessibleDocumentBase(
+        std::shared_ptr<SwAccessibleMap> const& pMap)
+    : SwAccessibleContext(pMap, AccessibleRole::DOCUMENT_TEXT,
+                          pMap->GetShell()->GetLayout())
+    , mxParent(pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible())
+    , mpChildWin(nullptr)
 {
 }
 
@@ -334,9 +335,10 @@ void SwAccessibleDocument::GetStates(
     rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
 }
 
-SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
-    SwAccessibleDocumentBase( pInitMap ),
-    maSelectionHelper( *this )
+SwAccessibleDocument::SwAccessibleDocument(
+        std::shared_ptr<SwAccessibleMap> const& pInitMap)
+    : SwAccessibleDocumentBase(pInitMap)
+    , maSelectionHelper(*this)
 {
     SetName(pInitMap->GetDocName());
     vcl::Window *pWin = pInitMap->GetShell()->GetWin();
