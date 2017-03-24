@@ -205,7 +205,7 @@ public:
     /** enables handling of not-a-number value.
 
         When this is set to <FALSE/> (the default), then invalid inputs (i.e. text which cannot be
-        intepreted, according to the current formatting) will be handled as if the default value
+        interpreted, according to the current formatting) will be handled as if the default value
         has been entered. GetValue the will return this default value.
 
         When set to <TRUE/>, then GetValue will return NaN (not a number, see <method scope="rtl::math">isNan</method>)
@@ -230,7 +230,7 @@ protected:
     void impl_Modify(bool makeValueDirty = true);
     virtual void Modify() override;
 
-    // Override CheckTextfor input-time checks
+    // Override CheckText for input-time checks
     virtual bool CheckText(const OUString&) const { return true; }
 
     // any aspect of the current format has changed

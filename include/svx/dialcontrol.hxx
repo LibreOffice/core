@@ -105,7 +105,7 @@ public:
 
     /** Links the passed numeric edit field to the control (bi-directional).
      *  nDecimalPlaces:
-     *     field value is usign given decimal places
+     *     field value is unsign given decimal places
      *     default is 0 which means field values are in degrees,
      *     2 means 100th of degree
      */

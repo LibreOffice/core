@@ -153,7 +153,7 @@ public:
         WB_SMALL_ICON       // Text right to the icon, position does not mind
         WB_DETAILS          // Text right to the icon, limited positioning
         WB_BORDER
-        WB_NOHIDESELECTION  // Draw selection inaktively, if not focused.
+        WB_NOHIDESELECTION  // Draw selection inactively, if not focused.
         WB_NOHSCROLL
         WB_NOVSCROLL
         WB_NOSELECTION
@@ -262,7 +262,7 @@ public:
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
 
-    // Re-calculation of cached view-data and invalidatiopn of those in the view
+    // Re-calculation of cached view-data and invalidation of those in the view
     void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
 
     // Entry is selectd, if the BoundRect is selected

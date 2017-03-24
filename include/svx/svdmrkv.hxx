@@ -427,7 +427,7 @@ public:
     // Is set by DragView automatically when finishing a Crook-Drag.
     void SetLastCrookCenter(const Point& rPt) { maLastCrookCenter=rPt; }
 
-    // Rotation center point and start point of the axis of reflextion, respecively
+    // Rotation center point and start point of the axis of reflextion, respectively
     const Point& GetRef1() const { return maRef1; }
     void SetRef1(const Point& rPt);
 

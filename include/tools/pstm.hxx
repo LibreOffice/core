@@ -108,7 +108,7 @@ class SvStream;
     [Example]
 
     One example is described in the constructor.
-    Assume a ring-like dependency, where A referenes B,
+    Assume a ring-like dependency, where A references B,
     B itself references C, and C references to both D and A.
 
     The order of the objects upon saving and loading does not matter,

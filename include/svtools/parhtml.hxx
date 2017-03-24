@@ -256,7 +256,7 @@ public:
 
     // remove a comment around the content of <SCRIPT> or <STYLE>
     // In case of 'bFull', the whole line behind a "<!--" might
-    // be deleted (for JavaSript)
+    // be deleted (for JavaScript)
     static void RemoveSGMLComment( OUString &rString, bool bFull );
 
     static bool InternalImgToPrivateURL( OUString& rURL );

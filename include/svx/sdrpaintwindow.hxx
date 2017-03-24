@@ -129,7 +129,7 @@ public:
     const vcl::Region& GetRedrawRegion() const { return maRedrawRegion;}
     void SetRedrawRegion(const vcl::Region& rNew);
 
-    // #i72889# read/write access to TempoparyTarget
+    // #i72889# read/write access to TemporaryTarget
     bool getTemporaryTarget() const { return (bool)mbTemporaryTarget; }
     void setTemporaryTarget(bool bNew) { mbTemporaryTarget = bNew; }
 
