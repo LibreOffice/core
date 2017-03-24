@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sal/types.h>
 
 #ifdef _WIN32
 #ifdef _MSC_VER
@@ -53,18 +56,6 @@ static bool SHGetSpecialFolderW32( int nFolderID, WCHAR* pszFolder, int nSize )
     return true;
 }
 
-#endif
-
-// Copied from sal/types.h to circumvent problems with precompiled headers
-// and redefinitions of BOOL, INT32 and other types. Unfortunately tools
-// also define these type incompatible with Win32 types which leads from
-// time to very nasty compilation errors. If someone finds a better
-// way to solve these probs please remove this copied part!
-typedef unsigned short sal_uInt16;
-#if defined(_WIN32)
-    typedef wchar_t             sal_Unicode;
-#else
-    typedef sal_uInt16          sal_Unicode;
 #endif
 
 bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
