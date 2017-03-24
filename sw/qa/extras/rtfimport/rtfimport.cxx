@@ -2073,7 +2073,7 @@ DECLARE_RTFIMPORT_TEST(testFdo82071, "fdo82071.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo83464, "fdo83464.rtf")
 {
-    // Problem was that the text in the textfrme had wrong font.
+    // Problem was that the text in the textframe had wrong font.
     uno::Reference<text::XTextRange> xFrameText(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xFrameText->getString());
     // This was Times New Roman.

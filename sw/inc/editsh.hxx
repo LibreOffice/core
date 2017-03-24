@@ -284,7 +284,7 @@ public:
     void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCursor = nullptr );
     void GCAttr();
 
-    /// @return the scripttpye of the selection.
+    /// @return the scripttype of the selection.
     SvtScriptType GetScriptType() const;
 
     /// @return the language at current cursor position.
@@ -863,7 +863,7 @@ public:
     bool IsMoveLeftMargin( bool bRight, bool bModulus = true ) const;
     void MoveLeftMargin( bool bRight, bool bModulus = true );
 
-    /// Query NumberFormater from document.
+    /// Query NumberFormatter from document.
           SvNumberFormatter* GetNumberFormatter();
     const SvNumberFormatter* GetNumberFormatter() const
     {   return const_cast<SwEditShell*>(this)->GetNumberFormatter();  }

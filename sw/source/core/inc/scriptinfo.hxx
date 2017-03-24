@@ -301,7 +301,7 @@ public:
 /** retrieves kashida opportunities for a given text range.
 
    pKashidaPositions: buffer to receive the char indices of the
-                      kashida opportunties relative to the paragraph
+                      kashida opportunities relative to the paragraph
 */
     void GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
        sal_Int32* pKashidaPosition);

@@ -245,7 +245,7 @@ void SwPageFrame::DestroyImpl()
         m_pSortedObjs = nullptr; // reset to zero to prevent problems when detaching the Flys
     }
 
-    if ( !IsEmptyPage() ) //#59184# unnessesary for empty pages
+    if ( !IsEmptyPage() ) //#59184# unnecessary for empty pages
     {
         // prevent access to destroyed pages
         SwDoc *pDoc = GetFormat() ? GetFormat()->GetDoc() : nullptr;

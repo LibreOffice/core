@@ -556,7 +556,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
 
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)
 {
-    // A document with two labes merged with 5 datasets should result in three pages
+    // A document with two labels merged with 5 datasets should result in three pages
     executeMailMerge();
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>( mxComponent.get() );

@@ -1078,7 +1078,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
                                          sal_uInt16 nAbsRightSpace,
                                          sal_uInt16 nParentInhAbsSpace )
 {
-    // For a start we do a lot of plausability tests
+    // For a start we do a lot of plausibility tests
 
     // An absolute width always has to be passed
     OSL_ENSURE( nAbsAvail, "AutoLayout pass 2: No absolute width given" );

@@ -133,7 +133,7 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // fields before INIT_FLDTYPES.
 #define INIT_SEQ_FLDTYPES   4
 
-// The former Rendevouz-IDs live on:
+// The former Rendezvous-IDs live on:
 // There are IDs for the anchors (SwFormatAnchor) and some others
 // that are only of importance for interfaces (SwDoc).
 enum class RndStdIds
