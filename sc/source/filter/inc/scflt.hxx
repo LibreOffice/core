@@ -507,7 +507,7 @@ struct Sc10ImageHeader
 // ChartHeader
 struct Sc10ChartHeader
 {
-    sal_Int16   MM;                 // Meatfile structure MapMode, Width, Hight
+    sal_Int16   MM;                 // Metafile structure MapMode, width, height
     sal_Int16   xExt;
     sal_Int16   yExt;
     sal_uInt32 Size;                // image size in BYTES

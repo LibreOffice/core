@@ -2076,7 +2076,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
                 }
                 else
                 {
-                    debugiter("advanced column %d to block starting row %d, retying\n",
+                    debugiter("advanced column %d to block starting row %d, retrying\n",
                               (int)maColPos->mnCol, r.maPos->position);
                 }
             }

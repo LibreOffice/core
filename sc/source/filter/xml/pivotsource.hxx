@@ -20,7 +20,7 @@
 namespace sc {
 
 /**
- * Store pivot table data that need to be post-processeed at the end of the
+ * Store pivot table data that need to be post-processed at the end of the
  * import.
  */
 struct PivotTableSources

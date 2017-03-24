@@ -668,7 +668,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //we want to me sure that volatile functions are always recalculated
         //regardless of cached results.  if you update the ods file, you must
         //update the values here.
-        //if NOW() is recacluated, then it should never equal sTodayCache
+        //if NOW() is recalcuated, then it should never equal sTodayCache
         OUString sTodayCache("01/25/13 01:06 PM");
         OUString sTodayRecalc(rDoc.GetString(0,0,1));
 
@@ -1012,7 +1012,7 @@ struct Border
     SvxBorderLineStyle tStyle;
     SvxBorderLineStyle rStyle;
     SvxBorderLineStyle bStyle;
-    // that's a monstrum
+    // that's a monster
     Border(sal_Int16 col, sal_Int32 r, sal_Int32 lW, sal_Int32 tW, sal_Int32 rW, sal_Int32 bW, sal_uInt16 lOutW, sal_uInt16 lInW,
         sal_uInt16 lDist, sal_uInt16 tOutW, sal_uInt16 tInW, sal_uInt16 tDist, sal_uInt16 rOutW, sal_uInt16 rInW, sal_uInt16 rDist,
         sal_uInt16 bOutW, sal_uInt16 bInW, sal_uInt16 bDist, sal_Int16 lSt, sal_Int16 tSt, sal_Int16 rSt, sal_Int16 bSt):

@@ -649,7 +649,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
     // Represent identity permutation, P[i]=i
     for (SCSIZE i=0; i < n; ++i)
         P[i] = i;
-    // "Recursion" on the diagonale.
+    // "Recursion" on the diagonal.
     SCSIZE l = n - 1;
     for (SCSIZE k=0; k < l; ++k)
     {
