@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_becb9c71",
+        "filename": "ios/experimental/LibreOfficeLight/LibreOfficeLight/FileManagerController.swift",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-03-24T08:59:24Z",
+      "side": 1,
+      "message": "Trailing space should be caught by commit hooks - we surely don\u0027t want them in the repo",
+      "revId": "b1d63cd3b7b182c5846d2de4365e0f91acc56692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
