@@ -891,7 +891,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     bool bLayerLocked = false;
                     if (m_pFormView)
                     {
-                        // Ist der css::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
+                        // Ist der css::drawing::Layer gelocked, so müssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != nullptr)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());

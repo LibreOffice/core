@@ -177,7 +177,7 @@ namespace {
         SdrModel*           mpDoc;
     };
 
-    /** creates a bitmap that is optionaly transparent from a metafile
+    /** creates a bitmap that is optionally transparent from a metafile
     */
     BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, bool bTransparent, const Size* pSize )
     {

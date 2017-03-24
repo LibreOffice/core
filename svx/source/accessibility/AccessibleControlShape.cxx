@@ -169,7 +169,7 @@ void AccessibleControlShape::Init()
         // way future-proof - as soon as an inner context appears which implements an additional interface,
         // we would need to adjust our implementation to support this new interface, too. Bad idea.
 
-        // The usual solution for such a problem is aggregation. Aggregation means using UNO's own meachnisms
+        // The usual solution for such a problem is aggregation. Aggregation means using UNO's own mechanism
         // for merging an inner with an outer component, and get a component which behaves as it is exactly one.
         // This is what XAggregation is for. Unfortunately, aggregation requires _exact_ control over the ref count
         // of the inner object, which we do not have at all.

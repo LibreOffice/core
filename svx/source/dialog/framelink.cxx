@@ -884,7 +884,7 @@ void lclDrawVerFrameBorder(
 }
 
 
-// Drawing of diagonal frame borders, incudes clipping functions.
+// Drawing of diagonal frame borders, includes clipping functions.
 
 /** Returns the drawing coordinates for a diagonal thin line.
 
