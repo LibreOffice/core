@@ -342,7 +342,7 @@ namespace sdr
                 // care for a repaint of the child window. A transparent child window is NOT
                 // a window which always keeps it's content consistent over the parent, but it's
                 // more like just a paint flag for the parent.
-                // To get the update, the windows in question are updated manulally here.
+                // To get the update, the windows in question are updated manually here.
                 if(bTargetIsWindow)
                 {
                     vcl::Window& rWindow = static_cast< vcl::Window& >(mrOutputDevice);
