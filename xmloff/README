@@ -21,7 +21,7 @@ with the default being the latest ODF version with "extensions", which
 means it may contain elements and attributes that are only in drafts of
 the specification or are not yet submitted for specification.  Documents
 produced in the other (non-extended) ODF modes are supposed to be
-strictly conforming to the respecive specification, i.e., only markup
+strictly conforming to the respective specification, i.e., only markup
 defined by the ODF specification is allowed.
 
 There is another library "xof" built from the source/transform directory,

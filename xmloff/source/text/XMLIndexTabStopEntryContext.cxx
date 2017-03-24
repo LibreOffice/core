@@ -155,7 +155,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
 
     // check whether we really filled all elements of the sequence
     SAL_WARN_IF( nNextEntry != rValues.getLength(), "xmloff",
-                "length incorrectly precumputed!" );
+                "length incorrectly precomputed!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ using namespace ::xmloff::token;
 #define MR_E( a, p, l, t, c ) \
     M_E_( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
-// cell propertiess
+// cell properties
 #define MC_E( a, p, l, t, c ) \
     M_E_( a, p, l, (t|XML_TYPE_PROP_TABLE_CELL), c )
 

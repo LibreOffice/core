@@ -78,7 +78,7 @@ public interface Iterator {
      * refresh the content.
      *
      * <p>It is used mainly for {@code Iterator} objects which take a snapshot
-     * instead of dynamically tranversing the tree.  The current position will
+     * instead of dynamically traversing the tree.  The current position will
      * be set to the beginning.</p>
      */
     void refresh();
