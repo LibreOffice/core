@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_7914eef4",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-24T21:35:39Z",
+      "side": 1,
+      "message": "eh, just use \"auto\" instead of \u003c200 letters\u003e::iterator",
+      "revId": "3892d6e20f4974e8db4929819c1c9c45d5d4f94b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
