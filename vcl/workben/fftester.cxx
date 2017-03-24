@@ -22,7 +22,7 @@
         export CXX=afl-clang-fast++
         make
         cp workdir/LinkTarget/Executable/fftester instdir/program
-        LD_LIBRARY_PATH=`pwd`/instdir/program SAL_USE_VCLPLUGIN=svp AFL_PERSISTENT=1 afl-fuzz -t 50 -i ~/fuzz/in.png -o ~/fuzz/out.png -d -T png -m 50000000 instdir/program/fftester @@ png
+        LD_LIBRARY_PATH=`pwd`/instdir/program AFL_PERSISTENT=1 afl-fuzz -t 50 -i ~/fuzz/in.png -o ~/fuzz/out.png -d -T png -m 50000000 instdir/program/fftester @@ png
 
         On slower file formats like .doc you can probably drop the -t and rely on the
         estimations, on faster file formats ironically not specifying a timeout will
