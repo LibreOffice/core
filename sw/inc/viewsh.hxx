@@ -113,7 +113,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
                                      // i.e. if the EndActions of the other
                                      // Shells on the document are through.
 
-    Point         maPrtOffst;        // Ofst for Printer,
+    Point         maPrtOffset;       // Offset for Printer,
                                      // non-printable margin.
     Size          maBrowseBorder;    // Border for frame documents.
     SwRect        maInvalidRect;

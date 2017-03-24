@@ -200,9 +200,9 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
     // physical page while the output uses OutputOffset as origin.
     if ( pOutDev )
     {
-        maPrtOffst = Point();
+        maPrtOffset = Point();
 
-        maPrtOffst += pOutDev->GetMapMode().GetOrigin();
+        maPrtOffset += pOutDev->GetMapMode().GetOrigin();
         MapMode aMapMode( pOutDev->GetMapMode() );
         aMapMode.SetMapUnit( MapUnit::MapTwip );
         pOutDev->SetMapMode( aMapMode );
@@ -210,7 +210,7 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
         pOutDev->SetFillColor();
     }
     else
-        maPrtOffst.X() = maPrtOffst.Y() = 0;
+        maPrtOffset.X() = maPrtOffset.Y() = 0;
 
     if ( !mpWin )
         mpOut = pOutDev;
