@@ -24,7 +24,7 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
 
     void SAL_CALL setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
-                                      const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner) override;
+                              const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner) override;
 
     OUString SAL_CALL getName() override;
 };
