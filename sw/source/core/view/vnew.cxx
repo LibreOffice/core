@@ -142,9 +142,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         long nFlags )
-    : m_pReplaceBmp(nullptr)
-    , m_pErrorBmp(nullptr)
-    ,
+    :
     maBrowseBorder(),
     mpSfxViewShell( nullptr ),
     mpImp( new SwViewShellImp( this ) ),
@@ -217,10 +215,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 /// CTor for further Shells on a document.
 SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
                         OutputDevice * pOutput, long const nFlags)
-    : Ring( &rShell )
-    , m_pReplaceBmp(nullptr)
-    , m_pErrorBmp(nullptr)
-    ,
+    : Ring( &rShell ) ,
     maBrowseBorder( rShell.maBrowseBorder ),
     mpSfxViewShell( nullptr ),
     mpImp( new SwViewShellImp( this ) ),

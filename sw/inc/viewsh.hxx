@@ -106,16 +106,16 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( SwViewShell *pSh, const SwRect & );
 
-    BitmapEx* m_pReplaceBmp; ///< replaced display of still loaded images
-    BitmapEx* m_pErrorBmp;   ///< error display of missed images
+    std::unique_ptr<BitmapEx> m_xReplaceBmp; ///< replaced display of still loaded images
+    std::unique_ptr<BitmapEx> m_xErrorBmp;   ///< error display of missed images
 
-    static bool mbLstAct;        // true if EndAction of last Shell
-                                    // i.e. if the EndActions of the other
-                                    // Shells on the document are through.
+    static bool mbLstAct;            // true if EndAction of last Shell
+                                     // i.e. if the EndActions of the other
+                                     // Shells on the document are through.
 
-    Point         maPrtOffst;         // Ofst for Printer,
+    Point         maPrtOffst;        // Ofst for Printer,
                                      // non-printable margin.
-     Size         maBrowseBorder;     // Border for frame documents.
+    Size          maBrowseBorder;    // Border for frame documents.
     SwRect        maInvalidRect;
 
     SfxViewShell *mpSfxViewShell;

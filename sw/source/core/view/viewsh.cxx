@@ -2491,20 +2491,20 @@ const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
 {
     if (bIsErrorState)
     {
-        if (!m_pErrorBmp)
-            m_pErrorBmp = new BitmapEx(SW_RES(RID_GRAPHIC_ERRORBMP));
-        return *m_pErrorBmp;
+        if (!m_xErrorBmp)
+            m_xErrorBmp.reset(new BitmapEx(SW_RES(RID_GRAPHIC_ERRORBMP)));
+        return *m_xErrorBmp;
     }
 
-    if (!m_pReplaceBmp)
-        m_pReplaceBmp = new BitmapEx(SW_RES(RID_GRAPHIC_REPLACEBMP));
-    return *m_pReplaceBmp;
+    if (!m_xReplaceBmp)
+        m_xReplaceBmp.reset(new BitmapEx(SW_RES(RID_GRAPHIC_REPLACEBMP)));
+    return *m_xReplaceBmp;
 }
 
 void SwViewShell::DeleteReplacementBitmaps()
 {
-    DELETEZ( m_pErrorBmp );
-    DELETEZ( m_pReplaceBmp );
+    m_xErrorBmp.reset();
+    m_xReplaceBmp.reset();
 }
 
 SwPostItMgr* SwViewShell::GetPostItMgr()
