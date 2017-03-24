@@ -145,7 +145,7 @@
 #define SID_ENTER_GROUP                     (SID_SD_START+96)
 #define SID_LEAVE_GROUP                     (SID_SD_START+97)
 #define SID_SIZE_PAGE_WIDTH                 (SID_SD_START+98)
-#define SID_INSERT_IMAGE                    (SID_SD_START+105)
+    // free
 #define SID_INSERT_MATH                     (SID_SD_START+106)
 #define SID_SIZE_VISAREA                    (SID_SD_START+114)
 #define SID_ATTR_SYMBOLTYPE                 (SID_SD_START+115)  //wird vom Chart und von SvxLineTabPage genutzt
@@ -317,7 +317,7 @@
 #define SID_PRESENTATION_CURRENT_SLIDE                  ( SID_SVX_START + 158 )
 #define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
 #define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
-#define SID_CHOOSE_POLYGON                              ( SID_SVX_START + 162 )
+    // FREE
 #define SID_ATTR_FILL_STYLE                             ( SID_SVX_START + 164 )
 #define SID_ATTR_FILL_COLOR                             ( SID_SVX_START + 165 )
 #define SID_ATTR_FILL_GRADIENT                          ( SID_SVX_START + 166 )

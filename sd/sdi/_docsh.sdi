@@ -21,11 +21,6 @@ interface DrawDocument
     [
         StateMethod = GetState ;
     ]
-    SID_PACKNGO // ole : ?, status : ?
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_CLOSEDOC // ole : ?, status : ?
     [
         ExecMethod = Execute ;

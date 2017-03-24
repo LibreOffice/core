@@ -1354,23 +1354,6 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
 SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 
 [
@@ -1848,23 +1831,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxBoolItem GridFront SID_GRID_FRONT
 
 [
@@ -1898,25 +1864,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
-]
-
-SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    SlotType = SfxBoolItem
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
@@ -2630,23 +2577,6 @@ SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
 ]
 
 
-SfxVoidItem DisplayMode SID_DISPLAY_MODE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
 SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 ()
 [
@@ -3023,23 +2953,6 @@ SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem PackAndGo SID_PACKNGO
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem PageMargin SID_PAGEMARGIN
 (SfxUInt32Item PageLeft ID_VAL_PAGELEFT,SfxUInt32Item PageRight ID_VAL_PAGERIGHT,SfxUInt32Item PageTop ID_VAL_PAGETOP,SfxUInt32Item PageBottom ID_VAL_PAGEBOTTOM,SfxBoolItem ScaleObjects ID_VAL_SCALEOBJECTS)
 [
@@ -3304,24 +3217,6 @@ SfxUInt32Item PreviewState SID_PREVIEW_STATE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem PreviewWindow SID_PREVIEW_WIN
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
 SfxBoolItem QuickEdit SID_QUICKEDIT
 
 [
@@ -3459,23 +3354,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
-]
-
-SfxVoidItem SelectAt SID_SELECTAT
-(SfxUInt32Item AnchorX ID_VAL_ANCHOR_X,SfxUInt32Item AnchorY ID_VAL_ANCHOR_Y,SfxUInt32Item Left ID_VAL_MOUSESTART_X,SfxUInt32Item Top ID_VAL_MOUSESTART_Y,SfxUInt32Item Right ID_VAL_LENGTH_X,SfxUInt32Item Bottom ID_VAL_LENGTH_Y)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
 ]
 
 SfxVoidItem SelectGradient SID_SELECTGRADIENT
@@ -3741,23 +3619,6 @@ SfxBoolItem Sphere SID_3D_SPHERE
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem StartApplication SID_STARTAPP
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem SummaryPage SID_SUMMARY_PAGE
 ()
 [
@@ -3823,24 +3684,6 @@ SfxVoidItem SwitchPointEdit SID_SWITCH_POINTEDIT
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
-]
-
-SfxBoolItem TextAlignment SID_TEXTALIGNMENT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
 ]
 
 SfxVoidItem TextAttributes SID_TEXTATTR_DLG
@@ -4238,22 +4081,6 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem TableToolBox SID_TABLE_TOOLBOX
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem DistributeColumns SID_TABLE_DISTRIBUTE_COLUMNS
 ()
 [
@@ -4422,30 +4249,6 @@ SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
     Asynchron;
 
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-/** This item holds the requested pane of the multi pane GUI in which a
-    change of the view shell is requested by a call to the SID_SWITCH_SHELL
-    slot.
-*/
-SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
-[
-    // flags:
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-
-    // config:
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
