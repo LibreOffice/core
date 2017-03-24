@@ -519,7 +519,7 @@ ButtonUIObject::~ButtonUIObject()
 StringMap ButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    // Move that to a Contrl base class
+    // Move that to a Control base class
     aMap["Label"] = mxButton->GetDisplayText();
 
     return aMap;

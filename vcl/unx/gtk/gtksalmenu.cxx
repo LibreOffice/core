@@ -668,7 +668,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 //to where it came from. If the menubar was activated because of F6
 //moving focus into the associated VCL menubar then on pressing ESC
 //or any other normal reason for deactivation we want focus to return
-//to the document, defininitely not still stuck in the associated
+//to the document, definitely not still stuck in the associated
 //VCL menubar. But if F6 is pressed while the menubar is activated
 //we want to pass that F6 back to the VCL menubar which will move
 //focus to the next pane by itself.

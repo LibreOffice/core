@@ -1013,7 +1013,7 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
     }
     else if (!aCustomKeyName.isEmpty())
     {
-        // For semicolumn, bracket left and bracket right, it's better to use
+        // For semicolon, bracket left and bracket right, it's better to use
         // their keys than their names. (fdo#32891)
         if (!aStrMap.isEmpty())
             aStrMap += "+";

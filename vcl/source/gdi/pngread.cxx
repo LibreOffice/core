@@ -1075,7 +1075,7 @@ void PNGReaderImpl::ImplApplyFilter()
         }
         break;
 
-        case 4: // Scanline Filter Type "PaethPredictor"
+        case 4: // Scanline Filter Type "PathPredictor"
         {
             sal_uInt8* p1 = mpInflateInBuf + 1;
             const sal_uInt8* p2 = mpScanPrior + 1;

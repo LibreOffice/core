@@ -25,7 +25,7 @@
 class ImplRegionBand
 
 This class handles one y-band of the region. In this band may contain one
-or more seprarations in x-direction. The y-Band do not contain any
+or more separations in x-direction. The y-Band do not contain any
 separation after creation.
 
 The separations are modified with basic clipping functions like Union and

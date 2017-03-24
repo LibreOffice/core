@@ -427,7 +427,7 @@ bool GenPspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*f
 
 bool GenPspGraphics::drawPolyLine(
     const basegfx::B2DPolygon&,
-    double /*fTranspareny*/,
+    double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eJoin*/,
     css::drawing::LineCap /*eLineCap*/,

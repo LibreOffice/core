@@ -537,7 +537,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const Pol
         return;
 
     snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
-    WritePS(mpPageBody, pString); //Move to the starting point for the PolyPoygon
+    WritePS(mpPageBody, pString); //Move to the starting point for the PolyPolygon
     for (unsigned int i=1; i < nPoints;)
     {
         if (pFlgAry[i] != PolyFlags::Control)

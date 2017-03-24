@@ -167,7 +167,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     OString getFontFile(const PrintFont* pFont) const;
 
     bool analyzeFontFile(int nDirID, const OString& rFileName, std::list<std::unique_ptr<PrintFont>>& rNewFonts, const char *pFormat=nullptr) const;
-    static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* formt font subsetting code
+    static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* format font subsetting code
     static void analyzeSfntFamilyName( void* pTTFont, std::list< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeSfntFile(PrintFont* pFont) const;
     // finds the font id for the nFaceIndex face in this font file

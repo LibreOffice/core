@@ -389,7 +389,7 @@ void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*
         return;
 
     //if gdk_display_supports_selection_notification is not supported, e.g. like
-    //right now under wayland, then you only get owner-changed nofications at
+    //right now under wayland, then you only get owner-changed notifications at
     //opportune times when the selection might have changed. So here
     //we see if the selection supports a dummy selection type identifying
     //our pid, in which case it's us.

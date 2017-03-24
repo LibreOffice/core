@@ -375,7 +375,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                         .ReadUChar( nSamplingFactor )
                                         .ReadUChar( nQuantizationTableDestinationSelector );
 
-                                    // nSamplingFactor (lower nibble: vertial,
+                                    // nSamplingFactor (lower nibble: vertical,
                                     // upper nibble: horizontal) is unused
 
                                     aPixSize.Height() = nNumberOfLines;
