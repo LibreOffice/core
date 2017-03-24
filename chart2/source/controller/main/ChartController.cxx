@@ -1453,7 +1453,7 @@ VclPtr<ChartWindow> ChartController::GetChartWindow()
     DBG_TESTSOLARMUTEX();
     if(!m_xViewWindow.is())
         return nullptr;
-    return dynamic_cast<ChartWindow*>(m_xViewWindow.get());
+    return dynamic_cast<ChartWindow*>(VCLUnoHelper::GetWindow(m_xViewWindow).get());
 }
 
 bool ChartController::isAdditionalShapeSelected()
