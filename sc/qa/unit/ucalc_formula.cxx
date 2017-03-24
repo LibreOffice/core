@@ -2447,6 +2447,77 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    std::vector<std::vector<const char*>> aData = {
+        { "1", "=COUNT($A$1:$A$4)", "=COUNT(A1)" },
+        { "2", "=COUNT($A$1:$A$4)", "=COUNT(A2)" },
+        { "3", "=COUNT($A$1:$A$4)", "=COUNT(A3)" },
+        { "4", "=COUNT($A$1:$A$4)", "=COUNT(A4)" },
+    };
+
+    insertRangeData(m_pDoc, ScAddress(), aData);
+
+    auto funcCheckOriginal = [&]()
+    {
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0))); // A1
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0))); // A2
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0))); // A3
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,3,0))); // A4
+
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,0,0))); // B1
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,1,0))); // B2
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,2,0))); // B3
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0))); // B4
+
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,0,0))); // C1
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0))); // C2
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,2,0))); // C3
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,3,0))); // C4
+    };
+
+    auto funcCheckDeleted = [&]()
+    {
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(0,0,0))); // A1
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(0,1,0))); // A2
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(0,2,0))); // A3
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(0,3,0))); // A4
+
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,0,0))); // B1
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,1,0))); // B2
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,2,0))); // B3
+        CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,3,0))); // B4
+    };
+
+    funcCheckOriginal();
+
+    // Delete Column A.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bDeleted = rFunc.DeleteCells(ScRange(0,0,0,0,MAXROW,0), &aMark, DEL_CELLSLEFT, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    funcCheckDeleted();
+
+    // Undo and check.
+    SfxUndoManager* pUndo = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndo);
+
+    pUndo->Undo();
+    funcCheckOriginal();
+
+    // Redo and check.
+    pUndo->Redo();
+    funcCheckDeleted();
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateDeleteAndShiftUp()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

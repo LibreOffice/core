@@ -62,6 +62,9 @@ public:
 
     void checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal );
 
+    ScRange insertRangeData(
+        ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData );
+
     template<size_t Size>
     static ScRange insertRangeData(
         ScDocument* pDoc, const ScAddress& rPos, const char* aData[][Size], size_t nRowCount )
@@ -151,6 +154,7 @@ public:
     void testFormulaRefUpdateMoveToSheet();
     void testFormulaRefUpdateDeleteContent();
     void testFormulaRefUpdateDeleteAndShiftLeft();
+    void testFormulaRefUpdateDeleteAndShiftLeft2();
     void testFormulaRefUpdateDeleteAndShiftUp();
     void testFormulaRefUpdateName();
     void testFormulaRefUpdateNameMove();
@@ -550,6 +554,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateMoveToSheet);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteContent);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft);
+    CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftLeft2);
     CPPUNIT_TEST(testFormulaRefUpdateDeleteAndShiftUp);
     CPPUNIT_TEST(testFormulaRefUpdateName);
     CPPUNIT_TEST(testFormulaRefUpdateNameMove);
