@@ -130,8 +130,6 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrame ),
     bIsSelected( false )
 {
-    SolarMutexGuard aGuard;
-
     const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
     const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 

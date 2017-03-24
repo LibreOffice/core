@@ -47,8 +47,6 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFootnoteFrame )
 {
-    SolarMutexGuard aGuard;
-
     sal_uInt16 nResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
 

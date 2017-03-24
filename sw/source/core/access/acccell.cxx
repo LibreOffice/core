@@ -104,7 +104,6 @@ SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInit
     , m_aSelectionHelper( *this )
     , m_bIsSelected( false )
 {
-    SolarMutexGuard aGuard;
     OUString sBoxName( pCellFrame->GetTabBox()->GetName() );
     SetName( sBoxName );
 

@@ -544,8 +544,6 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTextFrame ) ) // #i108125#
     , m_bLastHasSelection(false)  //To add TEXT_SELECTION_CHANGED event
 {
-    SolarMutexGuard aGuard;
-
     bIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
     nHeadingLevel = GetRealHeadingLevel();

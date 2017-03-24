@@ -117,8 +117,6 @@ SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInit
     OSL_ENSURE( pInitMap != nullptr, "need map" );
     OSL_ENSURE( pFrame->IsPageFrame(), "need page frame" );
 
-    SolarMutexGuard aGuard;
-
     OUString sPage = OUString::number(
         static_cast<const SwPageFrame*>( GetFrame() )->GetPhyPageNum() );
     SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );

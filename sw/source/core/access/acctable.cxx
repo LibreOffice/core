@@ -767,8 +767,6 @@ SwAccessibleTable::SwAccessibleTable(
     SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame ),
     mpTableData( nullptr )
 {
-    SolarMutexGuard aGuard;
-
     const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
     const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 
@@ -1070,6 +1068,8 @@ uno::Reference< XAccessibleTable > SAL_CALL
 uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
 {
+    SolarMutexGuard aGuard;
+
     // #i87532# - assure that return accessible object is empty,
     // if no column header exists.
     SwAccessibleTableColHeaders* pTableColHeaders =

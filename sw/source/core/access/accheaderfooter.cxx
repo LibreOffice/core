@@ -40,8 +40,6 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         const SwHeaderFrame* pHdFrame    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrame )
 {
-    SolarMutexGuard aGuard;
-
     OUString sArg( OUString::number( pHdFrame->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_HEADER_NAME, &sArg ) );
 }
@@ -51,8 +49,6 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         const SwFooterFrame* pFtFrame    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrame )
 {
-    SolarMutexGuard aGuard;
-
     OUString sArg( OUString::number( pFtFrame->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_FOOTER_NAME, &sArg ) );
 }

@@ -1838,6 +1838,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
 uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                                                      bool bCreate )
 {
+    DBG_TESTSOLARMUTEX();
     uno::Reference < XAccessible > xAcc;
     uno::Reference < XAccessible > xOldCursorAcc;
     bool bOldShapeSelected = false;
