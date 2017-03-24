@@ -169,7 +169,7 @@ protected:
                          const OUString& sServiceName);
 
     /// force an update of the field's value
-    /// call update on optional XUptadeable interface; (disable Fixed property)
+    /// call update on optional XUpdatable interface; (disable Fixed property)
     static void ForceUpdate(
         const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 };

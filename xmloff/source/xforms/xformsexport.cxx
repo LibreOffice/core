@@ -560,7 +560,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
         SvXMLElementExport aSchemaElem( rExport, XML_NAMESPACE_XSD, XML_SCHEMA,
                                         true, true );
 
-        // now get data type repositry, and export
+        // now get data type repository, and export
         Reference<XEnumerationAccess> xTypes( xModel->getDataTypeRepository(),
                                               UNO_QUERY );
         if( xTypes.is() )

@@ -903,7 +903,7 @@ bool ImportContext::importDataAwareProperty(
     Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );
     if ( xFac.is() && ( !sLinkedCell.isEmpty() ||  !sCellRange.isEmpty() ) )
     {
-        // Set up Celllink
+        // Set up cell link
         if ( !sLinkedCell.isEmpty() )
         {
             Reference< form::binding::XBindableValue > xBindable( getControlModel(), uno::UNO_QUERY );
@@ -925,7 +925,7 @@ bool ImportContext::importDataAwareProperty(
                 bRes = true;
             }
         }
-        // Set up CelllRange
+        // Set up CellRange
         if ( !sCellRange.isEmpty() )
         {
             Reference< form::binding::XListEntrySink  > xListEntrySink( getControlModel(), uno::UNO_QUERY );

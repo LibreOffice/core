@@ -178,7 +178,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     }
 
     /*
-     * replace both digestValues and signatueValue to " "
+     * replace both digestValues and signatureValue to " "
      */
     for(i=0; i<size; ++i)
     {

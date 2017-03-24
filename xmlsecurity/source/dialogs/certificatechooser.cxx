@@ -96,7 +96,7 @@ short CertificateChooser::Execute()
 
     // PostUserLink behavior is to slow, so do it directly before Execute().
     // Problem: This Dialog should be visible right now, and the parent should not be accessible.
-    // Show, Update, DIsableInput...
+    // Show, Update, DisableInput...
 
     vcl::Window* pMe = this;
     vcl::Window* pParent = GetParent();

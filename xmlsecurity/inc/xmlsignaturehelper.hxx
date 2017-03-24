@@ -114,7 +114,7 @@ public:
     void StartVerifySignatureElement();
 
     // Set the storage which should be used by the default UriBinding
-    // Must be set before StatrtMission().
+    // Must be set before StartMission().
     //sODFVersion indicates  the ODF version
     void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, const OUString& sODFVersion );
 

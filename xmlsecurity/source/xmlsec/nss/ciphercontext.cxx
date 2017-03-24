@@ -192,7 +192,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
     if ( m_bW3CPadding && m_bEncryption )
     {
-        // in this case the last block should be smaller than standtard block
+        // in this case the last block should be smaller than standard block
         // it will be increased with the padding
         OSL_ENSURE( m_aLastBlock.getLength() < m_nBlockSize, "Unexpected size of cashed incomplete last block!" );
 
