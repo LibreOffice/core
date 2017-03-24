@@ -12,7 +12,7 @@ requires two external libraries to be built:
 
 The MariaDB client library is provided as an external and will be
 automatically built if you pass "--without-system-mariadb" to
-autogens.sh.
+autogen.sh.
 
 libmysqlcppconn is provided as an external and will be automatically
 compiled if you pass "--without-system-mysql-cppconn" to autogen.sh.

@@ -400,7 +400,7 @@ void Export::Execute( int nToken, const char * pToken )
             OString sCondition;
             if ( sId.indexOf( '#' ) != -1 )
             {
-                // between ResTyp, Id and paranthes is a precomp. condition
+                // between ResTyp, Id and parentheses is a precomp. condition
                 sCondition = "#";
                 sal_Int32 n = 0;
                 sId = sId.getToken(0, '#', n);

@@ -212,7 +212,7 @@ OUString LwpSilverBullet::GetBulletFontName()
 /**
  * @short:   Get bullet character of the bullet vo_para.
  * @descr:
- * @return:  An UChar32 bulle character.
+ * @return:  An UChar32 bullet character.
  */
 OUString LwpSilverBullet::GetBulletChar()
 {

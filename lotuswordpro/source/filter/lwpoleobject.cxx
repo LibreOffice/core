@@ -239,7 +239,7 @@ void LwpOleObject::Read()
 /**
  * @descr:   Parse VO_OLEOBJECT and dump to XML stream only on WIN32 platform
  * @param:  pOutputStream - stream to dump OLE object
- * @param:  pFrameLayout -  framlayout object used to dump OLE object
+ * @param:  pFrameLayout -  framelayout object used to dump OLE object
  */
 void LwpOleObject::Parse(IXFStream* /*pOutputStream*/)
 {

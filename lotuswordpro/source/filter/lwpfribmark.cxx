@@ -1362,7 +1362,7 @@ void LwpFribField::ConvertCrossRefStart(XFContentContainer* pXFPara,LwpFieldMark
     XFCrossRefStart* pRef = new XFCrossRefStart;
     pRef->SetRefType(m_nCrossRefType);
     pRef->SetMarkName(m_sFormula);
-//  pFieldMark->SetStart(sal_True);//for some disnormal cases
+//  pFieldMark->SetStart(sal_True);//for some unusual cases
     if (m_ModFlag)
     {
         XFTextSpanStart* pSpan = new XFTextSpanStart;

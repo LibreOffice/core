@@ -160,7 +160,7 @@ public class JavaLoader implements XImplementationLoader,
      * new <code>com.sun.star.lang.XMultiServiceFactory</code> should be set at
      * the loader.
      *
-     * @param       args - the first parameter (args[0]) specifices the <code>ServiceManager</code>.
+     * @param       args - the first parameter (args[0]) specifies the <code>ServiceManager</code>.
      * @see         com.sun.star.lang.XInitialization
      * @see         com.sun.star.comp.servicemanager.ServiceManager
      */
@@ -415,7 +415,7 @@ public class JavaLoader implements XImplementationLoader,
      * Registers the <code>JavaLoader</code> at the registry.
      *
      * @param      regKey   root key under which the <code>JavaLoader</code> should be registered.
-     * @return     true if registration succseeded - otherwise false.
+     * @return     true if registration succeeded - otherwise false.
      */
     public static boolean writeRegistryServiceInfo(XRegistryKey regKey) {
         boolean result = false;

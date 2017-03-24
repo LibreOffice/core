@@ -963,7 +963,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
             m_aErrorInformation.m_sMessage += "Tag mismatch";
             break;
         case XML_ERROR_DUPLICATE_ATTRIBUTE:
-            m_aErrorInformation.m_sMessage += "Duplicat attribute";
+            m_aErrorInformation.m_sMessage += "Duplicated attribute";
             break;
         case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:
             m_aErrorInformation.m_sMessage += "Junk after doc element";

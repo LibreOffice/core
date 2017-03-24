@@ -361,7 +361,7 @@ bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
     return false;
 }
 /**
- * @short   Get what is used for separater
+ * @short   Get what is used for separator
  * @param  index - TOC level
  * @return sal_uInt16 - separator type
  */

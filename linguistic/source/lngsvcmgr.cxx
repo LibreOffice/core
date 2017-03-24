@@ -910,7 +910,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         }
         else
         {
-            SAL_WARN( "linguistic", "nofified for unexpected property" );
+            SAL_WARN( "linguistic", "notified for unexpected property" );
         }
     }
 }

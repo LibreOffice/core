@@ -236,7 +236,7 @@ public class ComponentContext implements XComponentContext, XComponent
         m_eventListener.clear();
 
         XComponent tdmgr = null;
-        // dispose values, then service manager, then typdescription manager
+        // dispose values, then service manager, then typedescription manager
         for (Map.Entry<String, Object> entry : m_table.entrySet())
         {
             String name = entry.getKey();
