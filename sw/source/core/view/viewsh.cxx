@@ -2489,24 +2489,16 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
 // --> PB 2007-05-30 #146850#
 const BitmapEx& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
 {
-    BitmapEx** ppRet;
-    sal_uInt16 nResId = 0;
-    if( bIsErrorState )
+    if (bIsErrorState)
     {
-        ppRet = &m_pErrorBmp;
-        nResId = RID_GRAPHIC_ERRORBMP;
-    }
-    else
-    {
-        ppRet = &m_pReplaceBmp;
-        nResId = RID_GRAPHIC_REPLACEBMP;
+        if (!m_pErrorBmp)
+            m_pErrorBmp = new BitmapEx(SW_RES(RID_GRAPHIC_ERRORBMP));
+        return *m_pErrorBmp;
     }
 
-    if( !*ppRet )
-    {
-        *ppRet = new BitmapEx( SW_RES( nResId ) );
-    }
-    return **ppRet;
+    if (!m_pReplaceBmp)
+        m_pReplaceBmp = new BitmapEx(SW_RES(RID_GRAPHIC_REPLACEBMP));
+    return *m_pReplaceBmp;
 }
 
 void SwViewShell::DeleteReplacementBitmaps()
