@@ -1866,7 +1866,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             sal_uInt16 nTabCount = (SVX_TAB_DEFDIST * 13 ) / sal_uInt16(nValue);
             /*
              cmc, make sure we have at least one, or all hell breaks loose in
-             everybodies exporters, #i8247#
+             everybody exporters, #i8247#
             */
             if (nTabCount < 1)
                 nTabCount = 1;

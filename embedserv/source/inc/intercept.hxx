@@ -54,7 +54,7 @@ public:
 
     void generateFeatureStateEvent();
 
-    // overwritten to release the statuslistner.
+    // overwritten to release the statuslistener.
 
 
     // XComponent

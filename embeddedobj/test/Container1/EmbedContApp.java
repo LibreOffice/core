@@ -1666,7 +1666,7 @@ public class EmbedContApp extends Applet
     {
         // TODO:
         // usage of object, storage and bitmap painter should be locked
-        // but since possibility of rasecondition is very low
+        // but since possibility of race condition is very low
         // it is not really required for testing application
 
         clearObjectAndStorage();

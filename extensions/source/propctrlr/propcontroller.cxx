@@ -1189,7 +1189,7 @@ namespace pcr
             std::set< sal_uInt16 > aUsedPages;
 
             // when building the UI below, remember which properties are actuating,
-            // to allow for a initial actuatinPropertyChanged call
+            // to allow for a initial actuatingPropertyChanged call
             std::vector< OUString > aActuatingProperties;
             std::vector< Any > aActuatingPropertyValues;
 

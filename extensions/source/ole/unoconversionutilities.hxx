@@ -354,7 +354,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                 // 1: JScript, VARTYPE: VT_DISPATCH
                 // 2. VBScript simple arraysVT_VARIANT|VT_BYREF the referenced VARIANT contains
                 //      a VT_ARRAY|  <type>
-                // 3. VBSrcript multi dimensional arrays: VT_ARRAY|VT_BYREF
+                // 3. VBScript multi dimensional arrays: VT_ARRAY|VT_BYREF
                 if( pArg->vt == VT_DISPATCH)
                 {
                     dispatchExObject2Sequence( pArg, rAny, ptype);
