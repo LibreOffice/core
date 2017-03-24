@@ -162,7 +162,7 @@ void AboutDialog::SetBuildIdLink()
         }
 
         m_pBuildIdLink->SetText(m_buildIdLinkString.replaceAll("$GITHASH", buildId));
-        m_pBuildIdLink->SetURL("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h=" + buildId);
+        m_pBuildIdLink->SetURL("https://hub.libreoffice.org/git-core/" + buildId);
     }
     else
     {
