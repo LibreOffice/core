@@ -923,7 +923,7 @@ Resource RID_GLOBSTR
     };
     String STR_MERGE_NOTEMPTY
     {
-        Text [ en-US ] = "Should the contents of the hidden cells be moved into the first cell?" ;
+        Text [ en-US ] = "After the merge only the upper-left cell will remain visible. Should the contents of the hidden cells be moved there?" ;
     };
     String STR_CELL_FILTER
     {
