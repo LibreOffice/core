@@ -55,7 +55,7 @@ typedef ::cppu::WeakComponentImplHelper<
     for Windows Vista and upcoming versions.
 
     Note: This will be an UNO wrapper for the real file picker
-    implementation oly. The real implementation is done in class
+    implementation only. The real implementation is done in class
     VistaFilePickerImpl.
  */
 class VistaFilePicker : public ::cppu::BaseMutex

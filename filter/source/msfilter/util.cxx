@@ -369,7 +369,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 }
 
 // FindNextPara searches the next backslash parameter or the next string
-// until the next blank or "\" or closing quatation mark
+// until the next blank or "\" or closing quotation mark
 // or the end of the string of pStr.
 //
 // Output ppNext (if ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
@@ -403,7 +403,7 @@ sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
     // quotation marks before paragraph?
     if ( aData[n]=='"' || aData[n]==0x201c || aData[n]==132 || aData[n]==0x14 )
     {
-        n++;                        // read over quatation marks
+        n++;                        // read over quotation marks
         n2 = n;                     // search for the end from here on
         while(     (nLen > n2)
                 && (aData[n2] != '"')

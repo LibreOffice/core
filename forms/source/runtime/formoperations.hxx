@@ -209,7 +209,7 @@ namespace frm
         /// determines whether our form is in "insert-only" mode
         bool        impl_isInsertOnlyForm_throw() const;
 
-        /** retrieces the column to which the current control of our controller is bound
+        /** retrieves the column to which the current control of our controller is bound
             @precond
                 m_xController.is()
         */

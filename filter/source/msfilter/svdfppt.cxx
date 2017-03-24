@@ -277,7 +277,7 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
     rIn
        .ReadInt32( nSlideX ).ReadInt32( nSlideY )
        .ReadInt32( nNoticeX ).ReadInt32( nNoticeY )
-       .ReadInt32( nDummy ).ReadInt32( nDummy )             // skip ZoomRation
+       .ReadInt32( nDummy ).ReadInt32( nDummy )             // skip ZoomRatio
        .ReadUInt32( rAtom.nNotesMasterPersist )
        .ReadUInt32( rAtom.nHandoutMasterPersist )
        .ReadUInt16( rAtom.n1stPageNumber )
@@ -2502,7 +2502,7 @@ Size SdrPowerPointImport::GetPageSize() const
 {
     Size aRet( IsNoteOrHandout( nAktPageNum, eAktPageKind ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
     Scale( aRet );
-    // PPT works with units of 576 dpi in any case. To avoid inacurracies
+    // PPT works with units of 576 dpi in any case. To avoid inaccuracies
     // I do round the last decimal digit away.
     if ( nMapMul > 2 * nMapDiv )
     {
@@ -7802,7 +7802,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
             {
                 // check if it is sensible to use the centered alignment
                 sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left or also right aligned pararagraphs
+                if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left or also right aligned paragraphs
                     eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
             }
             break;
@@ -7855,7 +7855,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
             {
                 // check if it is sensible to use the centered alignment
                 sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left or also right aligned pararagraphs
+                if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left or also right aligned paragraphs
                     eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
             }
             break;

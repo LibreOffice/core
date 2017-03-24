@@ -1188,7 +1188,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
     if(sType == "xforms-generic") {
 
         // the modification of the 'mnDeferModifyNotifications'-member
-        // is necessary to prevent infinite notication looping.
+        // is necessary to prevent infinite notification looping.
         // This can happened in case the binding which caused
         // the notification chain is listening to those events
         // as well...

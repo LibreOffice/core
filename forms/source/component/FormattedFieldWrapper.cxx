@@ -288,7 +288,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         }
         else
         {   // no -> substitute it with a formatted model
-            // let the formmatted model do the reading
+            // let the formatted model do the reading
             m_xFormattedPart.set(new OFormattedModel(m_xContext));
             m_xFormattedPart->read(_rxInStream);
             m_pEditPart = pBasicReader;
