@@ -1645,7 +1645,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         else
         {
             // no mask yet, create and add new mask. For better quality, use Alpha,
-            // this allows the drawn mask being processed with AnitAliasing (AAed)
+            // this allows the drawn mask being processed with AntiAliasing (AAed)
             aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
         }
     }

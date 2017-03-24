@@ -1401,7 +1401,7 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
 
 /**********************************
 Algorithm 3.3  Compute the encryption dictionary /O value, save into the class data member
-the step numbers down here correspond to the ones in PDF v.1.4 specfication
+the step numbers down here correspond to the ones in PDF v.1.4 specification
 */
 bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword,
                                              const sal_uInt8* i_pPaddedUserPassword,

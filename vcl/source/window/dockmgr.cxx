@@ -484,7 +484,7 @@ void ImplPopupFloatWin::dispose()
 
 css::uno::Reference< css::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
 {
-    // switch off direct accessibilty support for this window
+    // switch off direct accessibility support for this window
 
     // this is to avoid appearance of this window as standalone window in the accessibility hierarchy
     // as this window is only used as a helper for subtoolbars that are not teared-off, the parent toolbar

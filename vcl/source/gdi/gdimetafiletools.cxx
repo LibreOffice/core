@@ -864,7 +864,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     if(rComment.equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
                         // nothing to do; this just means that between here and XGRAD_SEQ_END
-                        // exists a MetaActionType::GRADIENTEX mixed with Xor-tricked painiting
+                        // exists a MetaActionType::GRADIENTEX mixed with Xor-tricked painting
                         // commands. This comment is used to scan over these and filter for
                         // the gradient action. It is needed to support MetaActionType::GRADIENTEX
                         // in this processor to solve usages.

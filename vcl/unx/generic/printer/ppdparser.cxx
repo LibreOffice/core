@@ -577,7 +577,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     if( pNewParser )
     {
         // this may actually be the SGENPRT parser,
-        // so ensure uniquness here
+        // so ensure uniqueness here
         rPPDCache.aAllParsers.remove( pNewParser );
         // insert new parser to list
         rPPDCache.aAllParsers.push_front( pNewParser );

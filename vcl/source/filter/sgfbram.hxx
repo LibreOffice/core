@@ -116,7 +116,7 @@ public:
     sal_Int32  Hight;      // height in Pixel
     sal_uInt16 Planes;     // number of planes (always 1)
     sal_uInt16 PixBits;    // number of bits per pixel (1,4,8 or 24)
-    sal_uInt32 Compress;   // datakompression
+    sal_uInt32 Compress;   // data compression
     sal_uInt32 ImgSize;    // size of  image in bytes. Without compression also 0 is allowed.
     sal_Int32  xDpmm;      // Dot per Meter (0 is allowed)
     sal_Int32  yDpmm;      // Dot per Meter (0 is allowed)

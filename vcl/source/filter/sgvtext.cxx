@@ -108,7 +108,7 @@
 #define  EscNoVal  -2147483647 /* -MaxLongInt */
 
 #define  NoTrenn 0xFFFF   /* parameter value for 'Rest' of GetTextChar(), if separation should not occur */
-#define  DoTrenn 0xFFFE   /* parameter value for 'Rest' of GetTextChar(), if separtion should occur      */
+#define  DoTrenn 0xFFFE   /* parameter value for 'Rest' of GetTextChar(), if separation should occur     */
 
 #define  MaxLineChars 1024
 

@@ -240,7 +240,7 @@ public:
 private:
     static void CleanupModules();
 
-    // This is a singleton object disable copy ctor and assignemnt operator
+    // This is a singleton object disable copy ctor and assignment operator
     D2DWriteTextOutRenderer(const D2DWriteTextOutRenderer &) = delete;
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 

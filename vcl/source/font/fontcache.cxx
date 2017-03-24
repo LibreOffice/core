@@ -178,7 +178,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFo
         pFontInstance = pFontData->CreateFontInstance( aFontSelData );
         pFontInstance->mpFontCache = this;
 
-        // if we're subtituting from or to a symbol font we may need a symbol
+        // if we're substituting from or to a symbol font we may need a symbol
         // conversion table
         if( pFontData->IsSymbolFont() || aFontSelData.IsSymbolFont() )
         {
