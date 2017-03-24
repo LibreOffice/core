@@ -2586,6 +2586,11 @@ void PDFObjectElement::SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamB
     m_pStreamBuffer = std::move(pStreamBuffer);
 }
 
+PDFDocument& PDFObjectElement::GetDocument()
+{
+    return m_rDoc;
+}
+
 PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
     : m_rDoc(rDoc),
       m_fObjectValue(fObjectValue),
