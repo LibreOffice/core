@@ -2696,14 +2696,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:Checkbox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Check Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ChangeCaseToKatakana" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Katakana</value>
@@ -3257,14 +3249,6 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:Combobox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Combo Box</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:Spinbutton" oor:op="replace">
@@ -5580,14 +5564,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:CountAll" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Records</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SbaNativeSql" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Run SQL command directly</value>
@@ -5777,14 +5753,6 @@
       <node oor:name=".uno:ViewFormAsGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Data source as Table</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RemoveFilter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reset Filter</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
