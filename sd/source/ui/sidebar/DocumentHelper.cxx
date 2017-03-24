@@ -193,7 +193,7 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
                 nPageIndex --;
         }
 
-        // If no page was found that refernced the given master page reset
+        // If no page was found, that referenced the given master page, reset
         // the pointer that is returned.
         if ( ! bFound)
             pCandidate = nullptr;

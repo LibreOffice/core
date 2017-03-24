@@ -663,7 +663,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
 {
     /* indicators for a header:
      *  - single line paragrah at top of page (  inside 15% page height)
-     *  - at least linheight above the next paragraph
+     *  - at least lineheight above the next paragraph
      *
      *  indicators for a footer likewise:
      *  - single line paragraph at bottom of page (inside 15% page height)
@@ -1099,7 +1099,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     elem.BottomMargin = 0;
     elem.LeftMargin = elem.w;
     elem.RightMargin = 0;
-    // first element should be a paragraphy
+    // first element should be a paragraph
     ParagraphElement* pFirstPara = nullptr;
     for( std::list< Element* >::const_iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {

@@ -170,7 +170,7 @@ void AvahiNetworkService::setup() {
 #if ENABLE_DBUS
     // Sure, without ENABLE_DBUS it probably makes no sense to try to use this Avahi stuff either,
     // but this is just a stop-gap measure to get this to even compile for now with the probably
-    // pointless combination of configury options --enable-avahi --enable-dbus --disable-gui.
+    // pointless combination of configurable options --enable-avahi --enable-dbus --disable-gui.
 
     // Avahi internally uses D-Bus, which requires the following in order to be
     // thread-safe (and we potentially access D-Bus from different threads in

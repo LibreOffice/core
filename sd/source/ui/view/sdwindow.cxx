@@ -164,7 +164,7 @@ void Window::CalcMinZoom()
             // Decide whether to take the larger or the smaller factor.
             sal_uLong nFact = std::min(nX, nY);
 
-            // The factor is tansfomed according to the current zoom factor.
+            // The factor is transformed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
             mnMinZoom = std::max((sal_uInt16) MIN_ZOOM, (sal_uInt16) nFact);
         }

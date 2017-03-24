@@ -655,7 +655,7 @@ bool ImplSdPPTImport::Import()
                             nOutlinerInstance = TSS_Type::Subtitle;
                         }
 
-                        // titelstylesheet
+                        // titlestylesheet
                         pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                         if ( pSheet )
                         {

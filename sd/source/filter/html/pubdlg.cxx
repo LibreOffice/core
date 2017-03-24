@@ -996,7 +996,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, Button*, void)
     UpdatePage();
 }
 
-// Clickhandler for the other servertypess
+// Clickhandler for the other servertypes
 IMPL_LINK( SdPublishingDlg, WebServerHdl, Button *, pButton, void )
 {
     bool bASP = pButton == pPage2_ASP;
