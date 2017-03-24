@@ -445,7 +445,7 @@ private:
         @descr  It depends from the set target information, if such
                 search is allowed or not! So this method checks first,
                 if the target is the special one "_default".
-                If not it returns with an empty result immidatly!
+                If not it returns with an empty result immediately!
                 In case search is allowed, an existing document with the
                 same URL is searched. If it could be found, the corresponding
                 view will get the focus and this method return the corresponding frame.
@@ -454,7 +454,7 @@ private:
                 inside the document, which is related to the jumpmark.
 
         @return A valid reference to the target frame, which contains the already loaded content
-                and could be activated successfully. An empty reference oterwhise.
+                and could be activated successfully. An empty reference otherwise.
 
         @throw  A LoadEnvException only in cases, where an internal error indicates,
                 that the complete load environment seems to be not useable in general.

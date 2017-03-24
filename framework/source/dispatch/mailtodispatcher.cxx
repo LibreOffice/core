@@ -185,7 +185,7 @@ bool MailToDispatcher::implts_dispatch( const css::util::URL&                   
     try
     {
         // start mail client
-        // Because there is no notofocation about success - we use case of
+        // Because there is no notification about success - we use case of
         // no detected exception as SUCCESS - FAILED otherwise.
         xSystemShellExecute->execute( aURL.Complete, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         bSuccess = true;

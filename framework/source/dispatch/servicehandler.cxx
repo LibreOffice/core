@@ -170,7 +170,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
     @param      lArguments
                     list of optional arguments for this request
 
-    @return     <NULL/> if requested service couldn't be created successullfy;
+    @return     <NULL/> if requested service couldn't be created successfully;
                 a valid reference otherwise. This return value can be used to indicate,
                 if dispatch was successfully or not.
 */

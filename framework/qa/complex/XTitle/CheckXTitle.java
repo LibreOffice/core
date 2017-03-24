@@ -200,7 +200,7 @@ public class CheckXTitle
         xDisProv = null;
     }
 
-    /** @short sets frame title and checks for infinite recusion
+    /** @short sets frame title and checks for infinite recursion
 
         @descr sets frame title. then cycles through default and
                print preview. then closes the window and checks

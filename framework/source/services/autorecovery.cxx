@@ -2847,7 +2847,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         if implts_registerDocument() was called.
         So we have to check a second time, if this property is set ....
         Best place doing so is to check it immeditaly before saving
-        and suppressingd saving the document then.
+        and suppressing saving the document then.
         Of course removing the corresponding cache entry is not an option.
         Because it would disturb iteration over the cache !
         So we ignore such documents only ...

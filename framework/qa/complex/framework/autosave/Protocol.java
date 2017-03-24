@@ -446,7 +446,7 @@ public class Protocol extends JComponent
 
     /**
      * ctor
-     * It creates a new instance of this class and innitialize it in the right mode.
+     * It creates a new instance of this class and initializes it in the right mode.
      *
      * @param nMode
      *          specify how the log should be generated.
