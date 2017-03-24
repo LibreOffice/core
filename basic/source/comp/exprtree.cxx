@@ -103,7 +103,7 @@ static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
     else // check for default params with reserved names ( e.g. names of tokens )
     {
         SbiTokenizer tokens( *static_cast<SbiTokenizer*>(p) );
-        // Urk the Next() / Peek() symantics are... weird
+        // Urk the Next() / Peek() semantics are... weird
         tokens.Next();
         if ( tokens.Peek() == ASSIGN )
         {

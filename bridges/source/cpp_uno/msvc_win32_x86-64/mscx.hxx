@@ -48,7 +48,7 @@ void mscx_raiseException(
 
 }
 
-//TOOD: Work around missing __CxxDetectRethrow in clang-cl for now (predefined
+//TODO: Work around missing __CxxDetectRethrow in clang-cl for now (predefined
 // in cl, <www.geoffchappell.com/studies/msvc/language/predefined/index.html>):
 #if defined __clang__
 extern "C" int __cdecl __CxxDetectRethrow(void *);
