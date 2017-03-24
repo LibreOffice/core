@@ -1668,7 +1668,8 @@ SwAccessibleMap::~SwAccessibleMap()
 
     if(xAcc.is())
     {
-        SwAccessibleDocument *pAcc = static_cast< SwAccessibleDocument * >( xAcc.get() );
+        SwAccessibleDocumentBase *const pAcc =
+            static_cast<SwAccessibleDocumentBase *>(xAcc.get());
         pAcc->Dispose( true );
     }
 #if OSL_DEBUG_LEVEL > 0
