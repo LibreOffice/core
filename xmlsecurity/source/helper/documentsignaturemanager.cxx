@@ -66,7 +66,7 @@ bool DocumentSignatureManager::init()
     if (mxGpgSEInitializer.is())
         mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
 
-    return mxSecurityContext.is() && mxGpgSecurityContext.is();
+    return mxSecurityContext.is() || mxGpgSecurityContext.is();
 #else
     return mxSecurityContext.is();
 #endif
