@@ -1298,7 +1298,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                     else
                     {
                         aAny = xNode->getBegin();
-                        if ( nFlags & 0x10 )    // replace ON_NEXT with IDEFINITE
+                        if ( nFlags & 0x10 )    // replace ON_NEXT with INDEFINITE
                         {
                             if ( ( aAny >>= aEvent ) && ( aEvent.Trigger == EventTrigger::ON_NEXT ) )
                             {

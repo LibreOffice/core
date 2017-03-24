@@ -45,7 +45,7 @@ class GenericPageCache;
     <li>Rendering pages ahead of time.  Additionally to rendering the
     visible slides we try to render part or all of the slides that are not
     (yet) visible.  This, of course, makes sense only when the computer is
-    ohterwise idle while doing that.</li>
+    otherwise idle while doing that.</li>
     <li>When the size of the slides on the screen changes we mark the
     bitmaps as needing an update but use them while the new bitmap in the
     correct size is not available.</li>

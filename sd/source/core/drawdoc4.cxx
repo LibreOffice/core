@@ -286,7 +286,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(makeSdrShadowXDistItem(200));        // 3 mm shadow distance
     pISet->Put(makeSdrShadowYDistItem(200));
 
-    // Object without fillung
+    // Object without filling
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);

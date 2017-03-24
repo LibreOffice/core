@@ -47,7 +47,7 @@ class BitmapCache
 public:
     /** The key for looking up preview bitmaps is a pointer to an SdrPage
         object.  The prior use of PageObjectViewObjectContact objects (which
-        ultimatly use them) turned out to be less suitable because their
+        ultimately use them) turned out to be less suitable because their
         life time is shorter then that of the page objects.  Frequent
         destruction and re-creation of the preview bitmaps was the result.
     */

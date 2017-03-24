@@ -318,7 +318,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                      ( eHit == SdrHitKind::UnmarkedObject && bFirstObjCreated &&
                        !bPermanent ) )
                 {
-                    // Handle, hit marked or umarked object
+                    // Handle, hit marked or unmarked object
                     if (eHit == SdrHitKind::TextEditObj)
                     {
                         /* hit text of unmarked object:

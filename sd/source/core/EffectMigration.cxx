@@ -1358,7 +1358,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
 // work) animations will not work in slideshow
 void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
 {
-    // aw080 will give a vector immeditately
+    // aw080 will give a vector immediately
     SdrObjListIter aIter(rGroupObj);
 
     if(aIter.Count())
