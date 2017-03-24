@@ -113,9 +113,9 @@ SwAccessiblePage::SwAccessiblePage(std::shared_ptr<SwAccessibleMap> const& pInit
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
     , bIsSelected( false )
 {
-    OSL_ENSURE( pFrame != nullptr, "need frame" );
-    OSL_ENSURE( pInitMap != nullptr, "need map" );
-    OSL_ENSURE( pFrame->IsPageFrame(), "need page frame" );
+    assert(pFrame != nullptr);
+    assert(pInitMap != nullptr);
+    assert(pFrame->IsPageFrame());
 
     OUString sPage = OUString::number(
         static_cast<const SwPageFrame*>( GetFrame() )->GetPhyPageNum() );
