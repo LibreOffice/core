@@ -371,7 +371,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     if ( CDataFormatTranslator::isOemOrAnsiTextFormat( fetc.cfFormat ) )
         nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
 
-    // prepare data for transmision
+    // prepare data for transmission
     // #i124085# DIBV5 should not happen for now, but keep as hint here
     if ( CF_DIBV5 == fetc.cfFormat || CF_DIB == fetc.cfFormat )
     {
@@ -478,7 +478,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATET
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
 
-// the transferable must have only unicode text so we will sythesize text
+// the transferable must have only unicode text so we will synthesize text
 
 void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
 {

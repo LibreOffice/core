@@ -47,7 +47,7 @@ private:
     basegfx::ip_double                                      maIntTexture;
     basegfx::ip_triple                                      maIntInvTexture;
 
-    // current material to use for ratsreconversion
+    // current material to use for rasterconversion
     const drawinglayer::attribute::MaterialAttribute3D*     mpCurrentMaterial;
 
     // some boolean flags for line span interpolator usages

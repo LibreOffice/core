@@ -121,7 +121,7 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            // get the current ViewTransfromation
+            // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
             if(!getBuffered2DDecomposition().empty() && rViewTransformation != getViewTransformation())
