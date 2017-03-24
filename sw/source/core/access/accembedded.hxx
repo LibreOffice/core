@@ -32,7 +32,7 @@ protected:
     virtual ~SwAccessibleEmbeddedObject() override;
 
 public:
-    SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,
+    SwAccessibleEmbeddedObject(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                 const SwFlyFrame* pFlyFrame );
 
     // XInterface

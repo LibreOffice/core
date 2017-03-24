@@ -74,7 +74,9 @@ class SwViewShellImp
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
     SwLayIdle     *m_pIdleAct;     // The same as SwLayAction for SwLayIdle
 
-    SwAccessibleMap *m_pAccessibleMap;    // Accessible wrappers
+    /// note: the map is *uniquely* owned here - the shared_ptr is only
+    /// used so that SwAccessibleContext can check via weak_ptr that it's alive
+    std::shared_ptr<SwAccessibleMap> m_pAccessibleMap;
 
     bool m_bFirstPageInvalid : 1; // Pointer to the first Page invalid?
     bool m_bResetHdlHiddenPaint : 1; // Ditto

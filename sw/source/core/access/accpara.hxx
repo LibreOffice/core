@@ -236,7 +236,7 @@ protected:
 
 public:
 
-    SwAccessibleParagraph( SwAccessibleMap* pInitMap,
+    SwAccessibleParagraph( std::shared_ptr<SwAccessibleMap> const& pInitMap,
                            const SwTextFrame& rTextFrame );
 
     inline operator css::accessibility::XAccessibleText *();

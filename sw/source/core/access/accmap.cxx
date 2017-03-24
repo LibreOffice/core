@@ -1655,6 +1655,7 @@ SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
 
 SwAccessibleMap::~SwAccessibleMap()
 {
+    DBG_TESTSOLARMUTEX();
     uno::Reference < XAccessible > xAcc;
     {
         osl::MutexGuard aGuard( maMutex );
@@ -1665,7 +1666,8 @@ SwAccessibleMap::~SwAccessibleMap()
             if( aIter != mpFrameMap->end() )
                 xAcc = (*aIter).second;
             if( !xAcc.is() )
-                xAcc = new SwAccessibleDocument( this );
+                assert(false); // let's hope this can't happen? the vcl::Window apparently owns the top-level
+                //xAcc = new SwAccessibleDocument(shared_from_this());
         }
     }
 
@@ -1683,7 +1685,8 @@ SwAccessibleMap::~SwAccessibleMap()
             if( xTmp.is() )
             {
                 SwAccessibleContext *pTmp = static_cast< SwAccessibleContext * >( xTmp.get() );
-                pTmp->SetMap(nullptr);
+                // TODO is this still needed
+                pTmp->ClearMapPointer();
             }
             ++aIter;
         }
@@ -1691,8 +1694,6 @@ SwAccessibleMap::~SwAccessibleMap()
     {
         osl::MutexGuard aGuard( maMutex );
 #if OSL_DEBUG_LEVEL > 0
-        SAL_WARN_IF(!(!mpFrameMap || mpFrameMap->empty()), "sw.a11y",
-                "Frame map should be empty after disposing the root frame");
         if( mpFrameMap )
         {
             SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();
@@ -1708,8 +1709,6 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
-        SAL_WARN_IF(!(!mpShapeMap || mpShapeMap->empty()), "sw.a11y",
-                "Object map should be empty after disposing the root frame");
         if( mpShapeMap )
         {
             SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
@@ -1725,6 +1724,10 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
+        assert((!mpFrameMap || mpFrameMap->empty()) &&
+                "Frame map should be empty after disposing the root frame");
+        assert((!mpShapeMap || mpShapeMap->empty()) &&
+                "Object map should be empty after disposing the root frame");
 #endif
         delete mpFrameMap;
         mpFrameMap = nullptr;
@@ -1786,9 +1789,9 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
         else
         {
             if( bPagePreview )
-                xAcc = new SwAccessiblePreview( this );
+                xAcc = new SwAccessiblePreview(shared_from_this());
             else
-                xAcc = new SwAccessibleDocument( this );
+                xAcc = new SwAccessibleDocument(shared_from_this());
 
             if( aIter != mpFrameMap->end() )
             {
@@ -1860,15 +1863,15 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 switch( pFrame->GetType() )
                 {
                 case SwFrameType::Txt:
-                    pAcc = new SwAccessibleParagraph( this,
+                    pAcc = new SwAccessibleParagraph(shared_from_this(),
                                     static_cast< const SwTextFrame& >( *pFrame ) );
                     break;
                 case SwFrameType::Header:
-                    pAcc = new SwAccessibleHeaderFooter( this,
+                    pAcc = new SwAccessibleHeaderFooter(shared_from_this(),
                                     static_cast< const SwHeaderFrame *>( pFrame ) );
                     break;
                 case SwFrameType::Footer:
-                    pAcc = new SwAccessibleHeaderFooter( this,
+                    pAcc = new SwAccessibleHeaderFooter(shared_from_this(),
                                     static_cast< const SwFooterFrame *>( pFrame ) );
                     break;
                 case SwFrameType::Ftn:
@@ -1877,7 +1880,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                             static_cast < const SwFootnoteFrame * >( pFrame );
                         bool bIsEndnote =
                             SwAccessibleFootnote::IsEndnote( pFootnoteFrame );
-                        pAcc = new SwAccessibleFootnote( this, bIsEndnote,
+                        pAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
                                     /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
                                     pFootnoteFrame );
                     }
@@ -1889,29 +1892,29 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                         switch( SwAccessibleFrameBase::GetNodeType( pFlyFrame ) )
                         {
                         case ND_GRFNODE:
-                            pAcc = new SwAccessibleGraphic( this, pFlyFrame );
+                            pAcc = new SwAccessibleGraphic(shared_from_this(), pFlyFrame );
                             break;
                         case ND_OLENODE:
-                            pAcc = new SwAccessibleEmbeddedObject( this, pFlyFrame );
+                            pAcc = new SwAccessibleEmbeddedObject(shared_from_this(), pFlyFrame );
                             break;
                         default:
-                            pAcc = new SwAccessibleTextFrame( this, *pFlyFrame );
+                            pAcc = new SwAccessibleTextFrame(shared_from_this(), *pFlyFrame );
                             break;
                         }
                     }
                     break;
                 case SwFrameType::Cell:
-                    pAcc = new SwAccessibleCell( this,
+                    pAcc = new SwAccessibleCell(shared_from_this(),
                                     static_cast< const SwCellFrame *>( pFrame ) );
                     break;
                 case SwFrameType::Tab:
-                    pAcc = new SwAccessibleTable( this,
+                    pAcc = new SwAccessibleTable(shared_from_this(),
                                     static_cast< const SwTabFrame *>( pFrame ) );
                     break;
                 case SwFrameType::Page:
                     OSL_ENSURE( GetShell()->IsPreview(),
                                 "accessible page frames only in PagePreview" );
-                    pAcc = new SwAccessiblePage( this, pFrame );
+                    pAcc = new SwAccessiblePage(shared_from_this(), pFrame);
                     break;
                 default: break;
                 }

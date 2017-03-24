@@ -51,7 +51,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwAccessibleNoTextFrame( SwAccessibleMap* pInitMap,
+    SwAccessibleNoTextFrame( std::shared_ptr<SwAccessibleMap> const& pInitMap,
                              sal_Int16 nInitRole,
                              const SwFlyFrame *pFlyFrame );
 

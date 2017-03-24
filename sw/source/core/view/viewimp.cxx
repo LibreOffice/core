@@ -106,7 +106,7 @@ SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
 
 SwViewShellImp::~SwViewShellImp()
 {
-    delete m_pAccessibleMap;
+    m_pAccessibleMap.reset();
 
     delete m_pPagePreviewLayout;
 
@@ -449,9 +449,9 @@ void SwViewShellImp::InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage )
 
 SwAccessibleMap *SwViewShellImp::CreateAccessibleMap()
 {
-    OSL_ENSURE( !m_pAccessibleMap, "accessible map exists" );
-    m_pAccessibleMap = new SwAccessibleMap( GetShell() );
-    return m_pAccessibleMap;
+    assert(!m_pAccessibleMap);
+    m_pAccessibleMap.reset(new SwAccessibleMap(GetShell()));
+    return m_pAccessibleMap.get();
 }
 
 void SwViewShellImp::FireAccessibleEvents()
