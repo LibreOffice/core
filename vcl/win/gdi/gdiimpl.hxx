@@ -37,7 +37,7 @@ private:
     HPEN mhPen; // Pen
     bool mbStockPen : 1; // is Pen a stockpen
     bool mbBrush : 1; // is Brush (FALSE == NULL_BRUSH)
-    bool mbStockBrush : 1; // is Brush a stcokbrush
+    bool mbStockBrush : 1; // is Brush a stockbrush
     HBRUSH mhBrush; // Brush
     COLORREF mnPenColor; // PenColor
     COLORREF mnBrushColor; // BrushColor

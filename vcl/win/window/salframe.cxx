@@ -1187,7 +1187,7 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
         pFrame->mbInShow = FALSE;
         pFrame->updateScreenNumber();
 
-        // Direct Paint only, if we get the SolarMutx
+        // Direct Paint only, if we get the SolarMutex
         if ( ImplSalYieldMutexTryToAcquire() )
         {
             UpdateWindow( hWnd );
@@ -3709,7 +3709,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
         if ( GetUpdateRect( hWnd, nullptr, FALSE ) )
         {
             // Call BeginPaint/EndPaint to query the rect and send
-            // this Notofication to rect
+            // this Notification to rect
             RECT aUpdateRect;
             PAINTSTRUCT aPs;
             BeginPaint( hWnd, &aPs );

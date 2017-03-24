@@ -1173,7 +1173,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 
     // Compute rtl flags, since in some scripts glyphs/char order can be
-    // reversed for a few character sequencies e.g. Myanmar
+    // reversed for a few character sequences e.g. Myanmar
     std::vector<bool> vRtl(rArgs.mnEndCharPos - rArgs.mnMinCharPos, false);
     rArgs.ResetPos();
     bool bRtl;

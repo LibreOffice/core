@@ -416,7 +416,7 @@ void Transform(void* pInputStream, void* pOutputStream, long nAngle)
         aDestinationCoefArrays = jtransform_adjust_parameters(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
         jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
 
-        // Compute optimal Huffman coding tables instead of precomuted tables
+        // Compute optimal Huffman coding tables instead of precomputed tables
         aDestinationInfo.optimize_coding = TRUE;
         jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
         jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);

@@ -567,7 +567,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             // Correct recognition is made harder by words such as
                                             // "Schiffahrtsbrennesseln", as the Hyphenator splits all
                                             // positions of the word and comes up with "Schifffahrtsbrennnesseln"
-                                            // Thus, we cannot infer the aWord from the AlternativWord's
+                                            // Thus, we cannot infer the aWord from the AlternativeWord's
                                             // index.
                                             // TODO: The whole junk will be made easier by a function in
                                             // the Hyphenator, as soon as AMA adds it.
@@ -577,7 +577,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             sal_Int32 nAltEnd = nAltStart;
 
                                             // The area between nStart and nEnd is the difference
-                                            // between AlternativString and OriginalString
+                                            // between AlternativeString and OriginalString
                                             while( nTxtEnd < aWord.getLength() && nAltEnd < aAlt.getLength() &&
                                                    aWord[nTxtEnd] != aAlt[nAltEnd] )
                                             {

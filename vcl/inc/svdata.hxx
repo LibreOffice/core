@@ -172,7 +172,7 @@ struct ImplSVGDIData
     ImplPrnQueueList*       mpPrinterQueueList = nullptr;   // List of all printer queue
     PhysicalFontCollection* mpScreenFontList = nullptr;     // Screen-Font-List
     ImplFontCache*          mpScreenFontCache = nullptr;    // Screen-Font-Cache
-    ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutons defined in Tools->Options->Fonts
+    ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height

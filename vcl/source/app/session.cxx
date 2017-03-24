@@ -127,7 +127,7 @@ void VCLSession::callSaveRequested( bool bShutdown )
         m_bSaveDone = false;
         m_bInteractionDone = false;
         // without session we assume UI is always possible,
-        // so it was reqeusted and granted
+        // so it was requested and granted
         m_bInteractionRequested = m_bInteractionGranted = !m_xSession;
 
         // answer the session manager even if no listeners available anymore

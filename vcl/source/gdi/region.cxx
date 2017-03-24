@@ -1243,7 +1243,7 @@ Rectangle vcl::Region::GetBoundRect() const
     if(IsNull())
     {
         // error; null region has no BoundRect
-        // OSL_ENSURE(false, "Region::GetBoundRect error: null region has unlimitied bound rect, not representable (!)");
+        // OSL_ENSURE(false, "Region::GetBoundRect error: null region has unlimited bound rect, not representable (!)");
         return Rectangle();
     }
 

@@ -2673,7 +2673,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer 
             // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
             // equating to 3 scroll lines and a delta of 120. So scale the delta here
             // by 120 where a single mouse wheel click is an incoming delta_x of 1
-            // and divide that by 40 to get the number of scrollines
+            // and divide that by 40 to get the number of scroll lines
             if (pEvent->delta_x != 0.0)
             {
                 aEvent.mnDelta = -pEvent->delta_x * 120;

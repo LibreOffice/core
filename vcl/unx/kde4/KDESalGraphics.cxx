@@ -344,7 +344,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QRect menuItemRect( region2QRect( menuVal->maItemRect ));
             QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),
                 widgetRect.size().expandedTo( menuItemRect.size()));
-            // checkboxes are always displayed next to images in menues, so are never centered
+            // checkboxes are always displayed next to images in menus, so are never centered
             const int focus_size = QApplication::style()->pixelMetric( QStyle::PM_FocusFrameHMargin );
             rect.moveTo( -focus_size, rect.y() );
             draw( QStyle::CE_MenuItem, &option, m_image.get(),

@@ -2974,7 +2974,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     // #i105373# The tools::PolyPolygon in this action may be a curve; this
     // was ignored until now what is an error. To make older office
     // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
-    // to the PolyPoylgon.
+    // to the PolyPolygon.
     // The alternative would be to really write the curve information
     // like in MetaPolyPolygonAction::Write (where someone extended it
     // correctly, but not here :-( ).
