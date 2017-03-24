@@ -2413,7 +2413,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
-                    // consider multidimensinal arrays!
+                    // consider multidimensional arrays!
                     if (SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>(pVar->GetObject()))
                     {
                         SbxDimArray* pOldArray = pItem->mpArray.get();

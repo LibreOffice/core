@@ -537,7 +537,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
        // Add dialog model to dispose vector
        Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
        GetSbData()->pInst->getComponentVector().push_back( xDlgComponent );
-       // need ThisCompoent from calling script
+       // need ThisComponent from calling script
     }
     // preserve existing bad behaviour, it's possible... but probably
     // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes

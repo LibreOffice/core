@@ -476,7 +476,7 @@ public class LocalOfficeConnection
      * </ul>
      *
      * @param url This is UNO URL which describes the type of a connection.
-     * @exception java.net.MalformedURLException when inappropreate URL was
+     * @exception java.net.MalformedURLException when inappropriate URL was
      *  provided.
      */
     private void parseUnoUrlWithOfficePath(String url, String prefix)

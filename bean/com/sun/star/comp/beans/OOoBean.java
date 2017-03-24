@@ -1035,7 +1035,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     }
 
 
-    /** Applies all tool visiblities to the real thing.
+    /** Applies all tool visibilities to the real thing.
 
         @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
         which can be obtained from a frame, to control toolbars. See also

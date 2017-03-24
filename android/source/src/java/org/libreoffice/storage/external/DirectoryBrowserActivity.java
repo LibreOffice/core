@@ -14,7 +14,7 @@ import org.libreoffice.R;
  * Container for DirectoryBrowserFragment
  */
 public class DirectoryBrowserActivity extends AppCompatActivity {
-    public static final String DIRECTORY_PATH_EXTRA = "org.libreoffie.directory_path_extra";
+    public static final String DIRECTORY_PATH_EXTRA = "org.libreoffice.directory_path_extra";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

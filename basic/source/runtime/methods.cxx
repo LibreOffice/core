@@ -4903,7 +4903,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
         //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
         if( ( nMonth < 1 ) || ( nMonth > 12 ) )
         {
-            // inacurrate around leap year, don't use days to calculate,
+            // inaccurate around leap year, don't use days to calculate,
             // just modify the months directory
             sal_Int16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
             if ( nMonth <=0 )

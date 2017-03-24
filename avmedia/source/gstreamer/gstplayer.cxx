@@ -614,7 +614,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
     mpPlaybin = gst_element_factory_make( "playbin", nullptr );
 
     //tdf#96989 on systems with flat-volumes setting the volume directly on the
-    //playbin to 100% results in setting the global volums to 100% of the
+    //playbin to 100% results in setting the global volume to 100% of the
     //maximum. We expect to set as % of the current volume.
     mpVolumeControl = gst_element_factory_make( "volume", nullptr );
     GstElement *pAudioSink = gst_element_factory_make( "autoaudiosink", nullptr );

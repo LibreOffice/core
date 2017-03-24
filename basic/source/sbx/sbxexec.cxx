@@ -212,7 +212,7 @@ static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Uni
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
         if( refVar2.is() )
         {
-            // temporaere Variable!
+            // temporary Variable!
             SbxVariable* pVar = refVar.get();
             pVar = new SbxVariable( *pVar );
             refVar = pVar;

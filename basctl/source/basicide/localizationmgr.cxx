@@ -681,7 +681,7 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
             }
             else
             {
-                // Inconsistancy, keep last locale
+                // Inconsistency, keep last locale
                 bConsistant = false;
                 bRemove = false;
             }
