@@ -215,7 +215,7 @@ public class utils {
     }
 
     /**
-     * In the office there are some sttetings available. This function
+     * In the office there are some settings available. This function
      * returns the value of the given setting name. For Example the setting name "Temp"
      * "Temp" returns the temp folder of the office instance.
      * @param msf a XMultiServiceFactory
@@ -694,7 +694,7 @@ public class utils {
      * Validate the connection string. Returned is an error message, starting
      * with "Error:", or a warning, if the command might work.
      * @param connectString The connection string that is checked.
-     * @param checkAppExecutionCommand If the AppExecutionCommand is checked, the error messages willbe different.
+     * @param checkAppExecutionCommand If the AppExecutionCommand is checked, the error message is different.
      * @return The error message, or OK, if no error was detected.
      */
     private static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {

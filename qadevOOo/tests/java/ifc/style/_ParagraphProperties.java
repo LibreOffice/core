@@ -309,7 +309,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
 
     /**
      * Tested with com.sun.star.text.NumberingLevel <p>
-     * The value of this property is a com.sun.star.container.XIndexReplace which is represneted by
+     * The value of this property is a com.sun.star.container.XIndexReplace which is represented by
      * com.sun.star.text.NumberingLevel.
      * The following property tests are to be completed successfully before :
      * <ul>

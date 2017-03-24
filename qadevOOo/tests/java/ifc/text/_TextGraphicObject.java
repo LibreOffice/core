@@ -56,7 +56,7 @@ import util.utils;
  * </ul> <p>
  * This test needs the following object relations :
  * <ul>
- *  <li> <code>'ImageMap'</code> (an inmplementation of
+ *  <li> <code>'ImageMap'</code> (an implementation of
  *  <code>com.sun.star.image.ImageMapObject</code>):
  *   is used to insert a new Map into collection
  *   from 'ImageMap' property. </li>

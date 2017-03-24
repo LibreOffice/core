@@ -76,7 +76,7 @@ public class _XRowSetApproveBroadcaster extends MultiMethodTest {
 
     /**
     * Implementation of <code>XRowSetApproveListener</code> interface
-    * which just detects and stores approve requipements. They are checked
+    * which just detects and stores approve requirements. They are checked
     * later.
     */
     private static class TestListener implements XRowSetApproveListener {
