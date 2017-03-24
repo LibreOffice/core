@@ -77,6 +77,8 @@ public:
     sal_uInt64 GetDictionaryLength();
     PDFDictionaryElement* GetDictionary() const;
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
+    /// Get access to the parsed key-value items from the object dictionary.
+    const std::map<OString, PDFElement*>& GetDictionaryItems() const;
     void SetArray(PDFArrayElement* pArrayElement);
     void SetStream(PDFStreamElement* pStreamElement);
     /// Access to the stream of the object, if it has any.
@@ -109,6 +111,8 @@ class VCL_DLLPUBLIC PDFReferenceElement : public PDFElement
     PDFDocument& m_rDoc;
     int m_fObjectValue;
     int m_fGenerationValue;
+    /// Location after the 'R' token.
+    sal_uInt64 m_nOffset = 0;
 
 public:
     PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue);
@@ -119,6 +123,7 @@ public:
     PDFObjectElement* LookupObject();
     int GetObjectValue() const;
     int GetGenerationValue() const;
+    sal_uInt64 GetOffset() const;
 };
 
 /// Stream object: a byte array with a known length.

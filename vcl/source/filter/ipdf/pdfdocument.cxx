@@ -2224,7 +2224,10 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             {
                 rDictionary[aName] = pReference;
                 if (pThisDictionary)
+                {
                     pThisDictionary->SetKeyOffset(aName, nNameOffset);
+                    pThisDictionary->SetKeyValueLength(aName, pReference->GetOffset() - nNameOffset);
+                }
                 aName.clear();
             }
             else
@@ -2421,6 +2424,11 @@ void PDFObjectElement::SetDictionary(PDFDictionaryElement* pDictionaryElement)
     m_pDictionaryElement = pDictionaryElement;
 }
 
+const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems() const
+{
+    return m_aDictionary;
+}
+
 void PDFObjectElement::SetArray(PDFArrayElement* pArrayElement)
 {
     m_pArrayElement = pArrayElement;
@@ -2598,10 +2606,16 @@ PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, in
 {
 }
 
-bool PDFReferenceElement::Read(SvStream& /*rStream*/)
+bool PDFReferenceElement::Read(SvStream& rStream)
 {
     SAL_INFO("vcl.filter", "PDFReferenceElement::Read: " << m_fObjectValue << " " << m_fGenerationValue << " R");
+    m_nOffset = rStream.Tell();
     return true;
+}
+
+sal_uInt64 PDFReferenceElement::GetOffset() const
+{
+    return m_nOffset;
 }
 
 double PDFReferenceElement::LookupNumber(SvStream& rStream) const

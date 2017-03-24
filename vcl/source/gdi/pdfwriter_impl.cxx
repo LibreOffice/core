@@ -10852,6 +10852,77 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     writeReferenceXObject(rObject.m_aReferenceXObject);
 }
 
+sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject)
+{
+    sal_Int32 nObject = createObject();
+
+    OStringBuffer aLine;
+    aLine.append(nObject);
+    aLine.append(" 0 obj\n");
+    if (filter::PDFDictionaryElement* pDictionary = rObject.GetDictionary())
+    {
+        aLine.append("<<");
+
+        // Complex case: can't copy the dictionary byte array as is, as it contains a reference.
+        bool bDone = false;
+        const std::map<OString, filter::PDFElement*>& rItems = rObject.GetDictionaryItems();
+        OString aReferenceName("ColorSpace");
+        auto it = rItems.find(aReferenceName);
+        if (it != rItems.end())
+        {
+            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(it->second);
+            if (pReference)
+            {
+                filter::PDFObjectElement* pReferenced = pReference->LookupObject();
+                if (pReferenced)
+                {
+                    // Copy the referenced object.
+                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
+
+                    sal_uInt64 nDictStart = rObject.GetDictionaryOffset();
+                    sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(aReferenceName) + aReferenceName.getLength();
+                    sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(aReferenceName) + pDictionary->GetKeyValueLength(aReferenceName);
+                    sal_uInt64 nDictEnd = nDictStart + rObject.GetDictionaryLength();
+                    // Dict start -> reference start.
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nDictStart, nReferenceStart - nDictStart);
+                    // Write the updated reference.
+                    aLine.append(" ");
+                    aLine.append(nRef);
+                    aLine.append(" 0 R");
+                    // Reference end -> dict end.
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nReferenceEnd, nDictEnd - nReferenceEnd);
+
+                    bDone = true;
+                }
+            }
+        }
+
+        // Can copy it as-is.
+        if (!bDone)
+            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetDictionaryOffset(), rObject.GetDictionaryLength());
+
+        aLine.append(">>\n");
+    }
+
+    if (filter::PDFStreamElement* pStream = rObject.GetStream())
+    {
+        aLine.append("stream\n");
+        SvMemoryStream& rStream = pStream->GetMemory();
+        aLine.append(static_cast<const sal_Char*>(rStream.GetData()), rStream.GetSize());
+        aLine.append("\nendstream\n");
+    }
+
+    aLine.append("endobj\n\n");
+
+    // We have the whole object, now write it to the output.
+    if (!updateObject(nObject))
+        return -1;
+    if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+        return -1;
+
+    return nObject;
+}
+
 std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind)
 {
     // A name - object ID map, IDs as they appear in our output, not the
@@ -10867,6 +10938,8 @@ std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObj
     if (!pDictionary)
         return aRet;
 
+    SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
+
     const std::map<OString, filter::PDFElement*>& rItems = pDictionary->GetItems();
     for (const auto& rItem : rItems)
     {
@@ -10879,31 +10952,8 @@ std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObj
         if (!pValue)
             continue;
 
-        sal_Int32 nObject = createObject();
-        if (!updateObject(nObject))
-            continue;
-
-        SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
-
-        // When copying over an object copy its dictionary and its stream.
-        OStringBuffer aLine;
-        aLine.append(nObject);
-        aLine.append(" 0 obj\n<<");
-        aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + pValue->GetDictionaryOffset(), pValue->GetDictionaryLength());
-        aLine.append(">>\nstream\n");
-
-        filter::PDFStreamElement* pStream = pValue->GetStream();
-        if (!pStream)
-            continue;
-
-        SvMemoryStream& rStream = pStream->GetMemory();
-        aLine.append(static_cast<const sal_Char*>(rStream.GetData()), rStream.GetSize());
-        aLine.append("\nendstream\nendobj\n\n");
-
-        // We have the whole object, now write it to the output.
-        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
-            continue;
-
+        // Then copying over an object copy its dictionary and its stream.
+        sal_Int32 nObject = copyExternalResource(rDocBuffer, *pValue);
         aRet[rItem.first] = nObject;
     }
 
