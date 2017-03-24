@@ -551,6 +551,7 @@ extern "C" {
 /// used by unit tests that test only via the LOK API
 SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 {
+    const SolarMutexGuard aGuard;
     Scheduler::ProcessEventsToIdle();
 }
 }
