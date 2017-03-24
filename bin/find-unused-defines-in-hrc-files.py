@@ -111,7 +111,7 @@ def in_exclusion_set( a ):
             return True;
     return False;
 
-a = subprocess.Popen("git grep -hP '^#define\s+\w+\s+' -- *.hrc | sort -u", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen("git grep -hP '^#define\s+SID_\w+\s+' -- *.hrc | sort -u", stdout=subprocess.PIPE, shell=True)
 
 with a.stdout as txt:
     for line in txt:
@@ -134,7 +134,10 @@ with a.stdout as txt:
             for line2 in txt2:
                 line2 = line2.strip() # otherwise the comparisons below will not work
                 # check if we found one in actual code
-                if not ".hrc:" in line2 and not ".src:" in line2: found_reason_to_exclude = True
+                if idName.startswith("SID_"):
+                    if not ".hrc:" in line2 and not ".src:" in line2 and not ".sdi:" in line2: found_reason_to_exclude = True
+                else:
+                    if not ".hrc:" in line2 and not ".src:" in line2: found_reason_to_exclude = True
                 if idName.startswith("RID_"):
                         # is the constant being used as an identifier by entries in .src files?
                         if ".src:" in line2 and "Identifier = " in line2: found_reason_to_exclude = True
@@ -163,9 +166,9 @@ with a.stdout as txt:
                 if "forms/" in line2 and idName.startswith("PROPERTY_"): found_reason_to_exclude = True
                 if "svx/source/tbxctrls/extrusioncontrols.hrc:" in line2 and idName.startswith("DIRECTION_"): found_reason_to_exclude = True
                 if "svx/source/tbxctrls/extrusioncontrols.hrc:" in line2 and idName.startswith("FROM_"): found_reason_to_exclude = True
-                # if we see more than 2 lines then it's probably one of the BASE/START/BEGIN things
-                cnt = cnt + 2
-                if cnt > 3: found_reason_to_exclude = True
+                # if we see more than a few lines then it's probably one of the BASE/START/BEGIN things
+                cnt = cnt + 1
+                if cnt > 4: found_reason_to_exclude = True
         if not found_reason_to_exclude:
             sys.stdout.write(idName + '\n')
             # otherwise the previous line of output will be incorrectly mixed into the below git output, because of buffering
