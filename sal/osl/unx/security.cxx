@@ -480,7 +480,7 @@ static bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDir
 /*
  * FIXME: rewrite to use more flexible
  * NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)
- * as soon as we can bumb the baseline to Tiger (for NSApplicationSupportDirectory) and have
+ * as soon as we can bump the baseline to Tiger (for NSApplicationSupportDirectory) and have
  * support for Objective-C in the build environment
  */
 

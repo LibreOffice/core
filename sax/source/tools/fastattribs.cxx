@@ -28,7 +28,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_fastparser
 {
 
-// wasteage to keep MSVC happy vs. an in-line {}
+// wastage to keep MSVC happy vs. an in-line {}
 FastTokenHandlerBase::~FastTokenHandlerBase()
 {
 }

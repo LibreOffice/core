@@ -42,7 +42,7 @@ static ImplReplaceCharData const aImplRepCharTab[] =
   { 0x2005, 0x0020 },   /* FOUR-PER-EM SPACE */
   { 0x2006, 0x0020 },   /* SIX-PER-EM SPACE */
   { 0x2007, 0x0020 },   /* FIGURE SPACE */
-  { 0x2008, 0x0020 },   /* PUNCTATION SPACE */
+  { 0x2008, 0x0020 },   /* PUNCTUATION SPACE */
   { 0x2009, 0x0020 },   /* THIN SPACE */
   { 0x200A, 0x0020 },   /* HAIR SPACE */
   { 0x2010, 0x002D },   /* HYPHEN */
