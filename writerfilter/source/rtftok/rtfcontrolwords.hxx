@@ -1992,7 +1992,7 @@ enum RTFControlTypes
     CONTROL_VALUE // eg \fs (requires parameter)
 };
 
-/// Respresents an RTF Control Word
+/// Represents an RTF Control Word
 struct RTFSymbol
 {
     const char* sKeyword;
@@ -2005,7 +2005,7 @@ struct RTFSymbol
 extern RTFSymbol aRTFControlWords[];
 extern int nRTFControlWords;
 
-/// Respresents an RTF Math Control Word
+/// Represents an RTF Math Control Word
 struct RTFMathSymbol
 {
     RTFKeyword eKeyword;

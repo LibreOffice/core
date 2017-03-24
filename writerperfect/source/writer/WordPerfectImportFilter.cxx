@@ -122,18 +122,18 @@ bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::Pr
                 break;
             else
                 unsuccessfulAttempts++;
-            if (unsuccessfulAttempts == 3) // timeout after 3 password atempts
+            if (unsuccessfulAttempts == 3) // timeout after 3 password attempts
                 return false;
         }
     }
 
-    // An XML import service: what we push sax messages to..
+    // An XML import service: what we push sax messages to.
     Reference < XDocumentHandler > xInternalHandler(
         mxContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.comp.Writer.XMLOasisImporter", mxContext),
         css::uno::UNO_QUERY_THROW);
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    // The XImporter sets up an empty target document for XDocumentHandler to write to.
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 

@@ -45,7 +45,7 @@ public class DataEntrySetter
         String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46);
         String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates
         String sNoDeletion = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 48);     // AllowDeletes
-        String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AlowInserts
+        String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AllowInserts
         String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 45);
 
         CurUnoDialog.insertRadioButton("optNewDataOnly", new XItemListenerAdapter() {

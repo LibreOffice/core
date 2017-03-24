@@ -2172,7 +2172,7 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
 }
 
 /**
-* Deselect one XAccessible item, for accSelect implimentation
+* Deselect one XAccessible item, for accSelect implementation
 * @param    pItem, the item should be deselected.
 * @return  S_OK if successful.
 */

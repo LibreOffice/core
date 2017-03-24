@@ -686,7 +686,7 @@ Public Function OpenRecordset(ByVal Optional pvType As Variant _
 								, ByVal Optional pvOptions As Variant _
 								, ByVal Optional pvLockEdit As Variant _
 								, ByVal Optional pbClone As Boolean) As Object
-&apos;Return a Recordset object based on currentrecordset object with filter addition
+&apos;Return a Recordset object based on current recordset object with filter addition
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Dim cstThisSub As String

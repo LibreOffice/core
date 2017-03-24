@@ -36,7 +36,7 @@ Sub LoadFrenchLanguage()
 	sMsgNoValidExchangeDate = &quot;Saisissez une date correcte pour le split d&apos;action.&quot;
 	sMsgWrongExchangeDate = &quot;Split impossible car il y a déjà eu des transactions après la date du split !&quot;
 	sMsgSellTooMuch = &quot;Impossible de vendre autant d&apos;actions ! Maximum : &quot;
-	sMsgConfirm = &quot;Confirmation requise&quot;
+	sMsgConfirm = &quot;Confirmation required&quot;
 	sMsgFreeStock = &quot;S&apos;agit-il d&apos;actions gratuites ?&quot;
 	sMsgTotalLoss = &quot;Prévoyez-vous une perte totale ?&quot;
 	sMsgAuthorization = &quot;Requête de sécurité&quot;

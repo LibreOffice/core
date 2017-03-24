@@ -37,7 +37,7 @@ class TemplateConsts:
     '''
     SECTION_MINUTES_ALL = "MINUTES_ALL"
     '''
-    the name of the child nimutes section.
+    the name of the child minutes section.
     This section will be duplicated for each topic.
     '''
     SECTION_MINUTES = "MINUTES"
