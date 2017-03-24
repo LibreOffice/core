@@ -92,7 +92,7 @@ typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( vcl::Window *pParentWi
 struct SfxChildWinContextFactory
 {
     SfxChildWinContextCtor  pCtor;      // Factory method
-    sal_uInt16              nContextId; // Idenifier for SfxInterface
+    sal_uInt16              nContextId; // Identifier for SfxInterface
 
     SfxChildWinContextFactory( SfxChildWinContextCtor pTheCtor, sal_uInt16 nID )
         : pCtor(pTheCtor)

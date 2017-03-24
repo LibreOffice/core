@@ -34,7 +34,7 @@ extern "C" {
 
 Main goals and usage hints
 
-The main intentention of this interface is to provide an universal portable and
+The main intention of this interface is to provide an universal portable and
 high performance access to file system issues on any operating system.
 
 There are a few main goals:
@@ -571,7 +571,7 @@ struct _oslVolumeInfo {
     sal_uInt64      uFreeSpace;
 /** Maximum length of file name of a single item */
     sal_uInt32      uMaxNameLength;
-/** Maximum length of a full quallified path in system notation */
+/** Maximum length of a full qualified path in system notation */
     sal_uInt32      uMaxPathLength;
 /** Points to a string that receives the name of the file system type. String should be set to zero before calling osl_getVolumeInformation
     and released after usage. */
@@ -1454,7 +1454,7 @@ typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
     Function ptr that calculates the width of a string. Can be zero.
 
     @param uMaxWidth [in]
-    Maximum width allowed that is retunrned from pCalcWidth.
+    Maximum width allowed that is returned from pCalcWidth.
     If pCalcWidth is zero the character count is assumed as width.
 
     @retval osl_File_E_None on success

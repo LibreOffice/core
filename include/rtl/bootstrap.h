@@ -56,7 +56,7 @@ extern "C" {
    without .bin or .exe suffix. The ini-filename can be
    set by the special command line parameter
    '-env:INIFILENAME=/absolute/path/to/inifile' at runtime or it may
-   be set at compiletime by an API-call.<p>
+   be set at compile time by an API-call.<p>
 
    5th level: URE_BOOTSTRAP ini-file. If the bootstrap variable URE_BOOTSTRAP
    expands to the URL of an ini-file, that ini-file is searched.<p>

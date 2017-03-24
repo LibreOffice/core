@@ -102,12 +102,12 @@ namespace osl
         inline sal_Int32 SAL_CALL getPort() const;
 
         /** Sets the port number of the address.
-           @return true if successfule.
+           @return true if successful.
          */
         inline bool SAL_CALL setPort( sal_Int32 nPort );
 
         /** Sets the address of the underlying socket address struct in network byte order.
-            @return true on success, false signales failure.
+            @return true on success, false signals failure.
          */
         inline bool SAL_CALL setAddr( const ::rtl::ByteSequence & address );
 

@@ -97,7 +97,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_locale_setDefault(
 
 /**
     Getter for programmatic name of field,
-    a lowercased two-letter ISO 639-1 or three-letter ISO 639-3 code.
+    a lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @see getDisplayLanguage
  */
 SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_locale_getLanguage( rtl_Locale * This );
