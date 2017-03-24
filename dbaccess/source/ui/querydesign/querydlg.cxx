@@ -65,7 +65,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     get(m_pPB_OK, "ok");
 
     m_pML_HelpText->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    // Connection kopieren
+    // Copy connection
     m_pConnData.reset(_pData->NewInstance());
     m_pConnData->CopyFrom(*_pData);
 

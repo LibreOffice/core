@@ -346,7 +346,7 @@ IMPL_LINK_NOARG( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool )
 {
     // tell my parent
     vcl::Window* pParent = Window::GetParent();
-    OSL_ENSURE(pParent != nullptr, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
+    OSL_ENSURE(pParent != nullptr, "OTableWindowListBox::OnDoubleClick : have no Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 

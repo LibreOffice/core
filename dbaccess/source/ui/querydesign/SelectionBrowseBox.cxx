@@ -428,7 +428,7 @@ CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
     if ( nColId > getFields().size() )
         return nullptr;
     OTableFieldDescRef pEntry = getFields()[nColId-1];
-    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetController : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetController : invalid FieldDescription !");
 
     if (!pEntry.is())
         return nullptr;
@@ -463,7 +463,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
     if ( nPos == 0 || nPos == BROWSER_INVALIDID || nPos > getFields().size() )
         return;
     OTableFieldDescRef pEntry = getFields()[nPos-1];
-    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::InitController : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::InitController : invalid FieldDescription !");
     long nCellIndex = GetRealRow(nRow);
 
     switch (nCellIndex)
@@ -683,7 +683,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
 
         if  ( _pEntry->isAggreateFunction() )
         {
-            OSL_ENSURE(!_pEntry->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
+            OSL_ENSURE(!_pEntry->GetFunction().isEmpty(),"No empty Function name allowed here! ;-(");
             sQuotedFullFieldName = _pEntry->GetFunction() + "(" + sQuotedFullFieldName + ")";
             sFullFieldName = _pEntry->GetFunction() + "(" + sFullFieldName + ")";
         }
@@ -1633,7 +1633,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if(!xConnection.is())
         return;
-    OSL_ENSURE(!rInfo->IsEmpty(),"AddGroupBy:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(!rInfo->IsEmpty(),"AddGroupBy:: OTableFieldDescRef should not be empty!");
     OTableFieldDescRef pEntry;
     const Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     const ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
@@ -1713,7 +1713,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if(!xConnection.is())
         return;
-    OSL_ENSURE(rInfo.is() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(rInfo.is() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef should not be Empty!");
 
     OTableFieldDescRef pLastEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -2056,7 +2056,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
                 break;
         }
     }
-    OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
+    OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg cannot be greater than BROW_ROW_CNT!");
     return i;
 }
 
@@ -2316,9 +2316,9 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     // but the changes aren't permanent ...
 
     sal_uInt16 nPos = GetColumnPos(nColId);
-    OSL_ENSURE(nPos <= getFields().size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
+    OSL_ENSURE(nPos <= getFields().size(),"ColumnResized:: nColId should not be greater than List::count!");
     OTableFieldDescRef pEntry = getEntry(nPos-1);
-    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::ColumnResized : invalid FieldDescription !");
     static_cast<OQueryController&>(getDesignView()->getController()).setModified( true );
     EditBrowseBox::ColumnResized(nColId);
 
