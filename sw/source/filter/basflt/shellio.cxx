@@ -486,37 +486,36 @@ SwDoc* Reader::GetTemplateDoc()
             aChkDateTime += tools::Time( 0L, 1L );
         }
 
-        if( bLoad )
+        if (bLoad)
         {
             ClearTemplate();
             OSL_ENSURE( !mxTemplate.is(), "Who holds the template doc?" );
 
-                // If the writer module is not installed,
-                // we cannot create a SwDocShell. We could create a
-                // SwWebDocShell however, because this exists always
-                // for the help.
-                SvtModuleOptions aModuleOptions;
-                if( aModuleOptions.IsWriter() )
+            // If the writer module is not installed,
+            // we cannot create a SwDocShell. We could create a
+            // SwWebDocShell however, because this exists always
+            // for the help.
+            SvtModuleOptions aModuleOptions;
+            if (aModuleOptions.IsWriter())
+            {
+                SwDocShell *pDocSh = new SwDocShell(SfxObjectCreateMode::INTERNAL);
+                SfxObjectShellLock xDocSh = pDocSh;
+                if (pDocSh->DoInitNew())
                 {
-                    SwDocShell *pDocSh =
-                        new SwDocShell ( SfxObjectCreateMode::INTERNAL );
-                    SfxObjectShellLock xDocSh = pDocSh;
-                    if( pDocSh->DoInitNew() )
-                    {
-                        mxTemplate = pDocSh->GetDoc();
-                        mxTemplate->SetOle2Link( Link<bool,void>() );
-                        // always FALSE
-                        mxTemplate->GetIDocumentUndoRedo().DoUndo( false );
-                        mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
-                        mxTemplate->RemoveAllFormatLanguageDependencies();
+                    mxTemplate = pDocSh->GetDoc();
+                    mxTemplate->SetOle2Link( Link<bool,void>() );
+                    // always FALSE
+                    mxTemplate->GetIDocumentUndoRedo().DoUndo( false );
+                    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
+                    mxTemplate->RemoveAllFormatLanguageDependencies();
 
-                        ReadXML->SetOrganizerMode( true );
-                        SfxMedium aMedium( aFileName, StreamMode::NONE );
-                        SwReader aRdr( aMedium, OUString(), mxTemplate.get() );
-                        aRdr.Read( *ReadXML );
-                        ReadXML->SetOrganizerMode( false );
-                    }
+                    ReadXML->SetOrganizerMode( true );
+                    SfxMedium aMedium( aFileName, StreamMode::NONE );
+                    SwReader aRdr( aMedium, OUString(), mxTemplate.get() );
+                    aRdr.Read( *ReadXML );
+                    ReadXML->SetOrganizerMode( false );
                 }
+            }
         }
 
         OSL_ENSURE( !mxTemplate.is() || FStatHelper::IsDocument( aFileName ) || aTemplateNm=="$$Dummy$$",
