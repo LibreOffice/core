@@ -1,0 +1,66 @@
+From f4ec6a283f972c82d068f4472320d424c40d45cb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?=
+ <laszlo.nemeth@collabora.com>
+Date: Thu, 23 Mar 2017 16:40:52 +0100
+Subject: [PATCH 5/7] fix syllable counting in compound word handling
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Note: one of the fixed regressions is related to an old
+hidden mistake: using clen instead of blen of the stem
+word lengths was indifferent with the original get_syllable(),
+because blen == clen at 8-bit encodings, and UTF-8
+words were handled by null-termination. Implementing Unicode
+support in Hunspell, clen was changed only in
+compound_check_morph() to blen accidentally, but not
+in compound_check(), resulting problems from the
+recent std::string conversion.
+
+Now this commit is a real fix for the regression from the
+commit c63c93237e4decdba5544a96093448605ac549c2,
+instead of the following bad fix:
+
+commit d06b0c57ae87ee8743f1bf53f80c1f8e364db619
+Author: László Németh <laszlo.nemeth@collabora.com>
+Date:   Fri Mar 17 15:11:23 2017 +0100
+
+    fix Hungarian compound word handling
+---
+ src/hunspell/affixmgr.cxx | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index 2ed8233..3d65539 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -1816,7 +1816,7 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+           // LANG_hu section: spec. Hungarian rule
+           if (langnum == LANG_hu) {
+             // calculate syllable number of the word
+-            numsyllable += get_syllable(st.substr(i));
++            numsyllable += get_syllable(st.substr(0, i));
+             // + 1 word, if syllable number of the prefix > 1 (hungarian
+             // convention)
+             if (pfx && (get_syllable(pfx->getKey()) > 1))
+@@ -1901,7 +1901,7 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                  (compoundend && TESTAFF(rv->astr, compoundend, rv->alen))) &&
+                 (((cpdwordmax == -1) || (wordnum + 1 < cpdwordmax)) ||
+                  ((cpdmaxsyllable != 0) &&
+-                  (numsyllable + get_syllable(std::string(HENTRY_WORD(rv), rv->clen)) <=
++                  (numsyllable + get_syllable(std::string(HENTRY_WORD(rv), rv->blen)) <=
+                    cpdmaxsyllable))) &&
+                 (
+                     // test CHECKCOMPOUNDPATTERN
+@@ -2382,7 +2382,7 @@ int AffixMgr::compound_check_morph(const char* word,
+         // LANG_hu section: spec. Hungarian rule
+         if (langnum == LANG_hu) {
+           // calculate syllable number of the word
+-          numsyllable += get_syllable(st.substr(i));
++          numsyllable += get_syllable(st.substr(0, i));
+ 
+           // + 1 word, if syllable number of the prefix > 1 (hungarian
+           // convention)
+-- 
+2.7.4
+

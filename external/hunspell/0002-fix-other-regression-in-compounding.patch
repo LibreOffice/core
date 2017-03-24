@@ -1,0 +1,43 @@
+From 1fada01663b29b57c010a9c274e45a5cf9ecf222 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?=
+ <laszlo.nemeth@collabora.com>
+Date: Sun, 19 Mar 2017 13:19:29 +0100
+Subject: [PATCH 2/7] fix other regression in compounding
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Allow compound words again with
+starting "kor", "alak", "asszony", "úr"
+related to the "REP kor _kor" etc. rules
+using the Hungarian spelling dictionary.
+
+regression from...
+
+commit 73b1cad1af7ab94252f75784fa6724cf062a6966
+Author: Martin Hosken <martin_hosken@sil.org>
+Date:   Mon Apr 18 16:28:26 2016 +0700
+
+    Add support for bounded conversion
+---
+ src/hunspell/affixmgr.cxx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index 78c70e7..ec2093d 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -1290,8 +1290,8 @@ int AffixMgr::cpdrep_check(const char* word, int wl) {
+     // search every occurence of the pattern in the word
+     while ((r = strstr(r, reptable[i].pattern.c_str())) != NULL) {
+       std::string candidate(word);
+-      size_t type = r == word ? 1 : 0;
+-      if (r - word + reptable[i].pattern.size() == lenp)
++      size_t type = r == word && langnum != LANG_hu ? 1 : 0;
++      if (r - word + reptable[i].pattern.size() == lenp && langnum != LANG_hu)
+         type += 2;
+       candidate.replace(r - word, lenp, reptable[i].outstrings[type]);
+       if (candidate_check(candidate.c_str(), candidate.size()))
+-- 
+2.7.4
+
