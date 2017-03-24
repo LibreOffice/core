@@ -73,7 +73,7 @@ published service TypeDescriptionManager
         </ul>
 
         <p>Even though the name of this interface suggests that the used type
-        names are hierarchical, this doesn't need to be the case.  (For example, consider
+        names are hierarchical, this doesn't need to be the case. (For example, consider
         the names of instantiated polymorphic struct types, like
         <code>"Struct&lt;long&gt;"</code>.)</p>
     */
