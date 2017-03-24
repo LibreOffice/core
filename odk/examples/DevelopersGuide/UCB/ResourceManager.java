@@ -256,7 +256,7 @@ public class ResourceManager {
             boolean result = transResource.transferResource(
                                 sourceURL, targetFolderURL, newTitle, transOperation );
             if ( result )
-                System.out.println( "\nTransfering resource succeeded." );
+                System.out.println( "\nTransferring resource succeeded." );
             else
                 System.out.println( "Transferring resource failed." );
 

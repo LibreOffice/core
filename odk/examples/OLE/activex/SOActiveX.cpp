@@ -394,7 +394,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     hr = GetIDispByFunc( pdispDesktop, L"getFrames", NULL, 0, pdispChildren );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    // insert new frame into desctop hierarchy
+    // insert new frame into desktop hierarchy
     hr = ExecuteFunc( pdispChildren, L"append", &CComVariant( mpDispFrame ), 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 

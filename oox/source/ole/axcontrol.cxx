@@ -1155,7 +1155,7 @@ void AxLabelModel::convertFromProperties( PropertySet& rPropSet, const ControlCo
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
 
     ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
-    // VerticleAlign doesn't seem to be read from binary
+    // VerticalAlign doesn't seem to be read from binary
 
     // not sure about background color, how do we decide when to set
     // AX_FLAGS_OPAQUE ?

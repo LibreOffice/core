@@ -253,7 +253,7 @@ StartServiceUpdate(LPCWSTR installDir)
   PathAppendSafe(newMaintServicePath,
                  L"maintenanceservice.exe");
 
-  // Copy the temp file in alongside the maintenace service.
+  // Copy the temp file in alongside the maintenance service.
   // This is a requirement for maintenance service upgrades.
   if (!CopyFileW(newMaintServicePath, tmpService, FALSE)) {
     return FALSE;

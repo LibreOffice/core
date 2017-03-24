@@ -57,7 +57,7 @@ struct WallFloorModel
 struct DataTableModel
 {
     bool                mbShowHBorder;      /// Show Horizontal Border
-    bool                mbShowVBorder;      /// Show Verticle Border
+    bool                mbShowVBorder;      /// Show Vertical Border
     bool                mbShowOutline;      /// Show outline
     explicit            DataTableModel();
                         ~DataTableModel();

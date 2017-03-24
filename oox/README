@@ -134,7 +134,7 @@ we need to load shape definition of preset shapes. The procedure
 to convert the definition from OOXML spec for LO is documented
 ( also a script ) in oox/source/drawingml/customshapes/README.
 The scripts in oox/source/drawingml/customshapes/ also generate pptx
-files for signle presets and also for all presets
+files for single presets and also for all presets
 cshape-all.pptx. The cshape-all.pptx file is then loaded into Impress
 build with debug enabled in oox and the command line output contains
 information. The generated definition is oox-drawingml-cs-presets.
