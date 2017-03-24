@@ -4373,31 +4373,31 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             uno::Sequence<beans::PropertyValue> aValues ;
                             aProperty >>= aValues;
                             beans::PropertyValue propertyVal;
-                            bool bTitleFound = false;
-                            int i=0;
-                            for (; i < aValues.getLength(); i++)
+                            sal_Int32 nTitleFoundIndex = -1;
+                            for (sal_Int32 i = 0; i < aValues.getLength(); ++i)
                             {
                                 propertyVal = aValues[i];
-                                if(propertyVal.Name == "Title")
+                                if (propertyVal.Name == "Title")
                                 {
-                                    bTitleFound = true;
+                                    nTitleFoundIndex = i;
                                     break;
                                 }
                             }
-                            if(bTitleFound)
+                            if (nTitleFoundIndex != -1)
                             {
                                 OUString titleStr;
                                 uno::Any aValue(propertyVal.Value);
                                 aValue >>= titleStr;
                                 titleStr = titleStr + rResult;
                                 propertyVal.Value <<= titleStr;
-                                aValues[i] = propertyVal;
+                                aValues[nTitleFoundIndex] = propertyVal;
                             }
                             else
                             {
+                                aValues.realloc(aValues.getLength() + 1);
                                 propertyVal.Name = "Title";
                                 propertyVal.Value <<= rResult;
-                                aValues[i] = propertyVal;
+                                aValues[aValues.getLength() - 1] = propertyVal;
                             }
                             xFieldProperties->setPropertyValue("Fields",
                                     uno::makeAny(aValues));
