@@ -518,7 +518,7 @@ static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
                                 SvxTabStopItem& rChgTabStop )
 {
     // Set the default values of all TabStops to the new value.
-    // Attention: we always work with the PoolAttribut here, so that
+    // Attention: we always work with the PoolAttribute here, so that
     // we don't calculate the same value on the same TabStop (pooled!) for all sets.
     // We send a FormatChg to modify.
 
@@ -626,7 +626,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             static_cast<const SvxTabStopItem*>(pTmpItem)->Count() )
         {
             // Set the default values of all TabStops to the new value.
-            // Attention: we always work with the PoolAttribut here, so that
+            // Attention: we always work with the PoolAttribute here, so that
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FormatChg to modify.
             SwTwips nNewWidth = (*static_cast<const SvxTabStopItem*>(pTmpItem))[ 0 ].GetTabPos(),

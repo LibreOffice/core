@@ -329,7 +329,7 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         }
         case RES_COL:
-            OSL_FAIL( "Columns for new FrameTyp?" );
+            OSL_FAIL( "Columns for new FrameType?" );
             break;
 
         default:

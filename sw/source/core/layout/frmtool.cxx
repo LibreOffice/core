@@ -1158,7 +1158,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     //immediately.
     //The advantage is, that on one hand already a nearly realistic number of
     //pages are created, but above all there are no almost endless long chain
-    //of paragraphs, which must be moved expensively until it reaches a tolarable
+    //of paragraphs, which must be moved expensively until it reaches a tolerable
     //reduced level.
     //We'd like to think that 20 Paragraphs fit on one page.
     //So that it does not become in extreme situations so violent we calculate depending

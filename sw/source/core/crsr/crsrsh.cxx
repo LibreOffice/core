@@ -265,7 +265,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
             m_pVisibleCursor->Show();
 
         // If there is still a ChgCall and just the "basic
-        // parenthiszing(?) (Basic-Klammerung)" exists, call it. This
+        // parenthising(?)" exists, call it. This
         // decouples the internal with the Basic-parenthising, the
         // Shells are switched.
         if( !BasicActionPend() )
@@ -304,7 +304,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 
         if( !m_nCursorMove ||
             ( 1 == m_nCursorMove && m_bInCMvVisportChgd ) )
-            // display Cursor & Selektions again
+            // display Cursor & Selections again
             ShowCursors( m_bSVCursorVis );
     }
     // call ChgCall if there is still one
@@ -1867,7 +1867,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         }
     }
 
-    m_eMvState = MV_NONE; // state for cursor tavelling - GetCursorOfst
+    m_eMvState = MV_NONE; // state for cursor travelling - GetCursorOfst
 
     if( pFrame && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrame );

@@ -359,7 +359,7 @@ public:
     void        PushCursor();
     void        PopCursor();
 
-    /** Put all that are new into SortLst for updating. @return true if not empty.
+    /** Put all that are new into SortList for updating. @return true if not empty.
      (For Glossary: only update its input-fields).
      Compare TmpLst with current fields. */
     bool        BuildSortLst();

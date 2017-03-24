@@ -368,7 +368,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             ++aEnd;
         bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
 
-        // evalutate result: if both start + end, end is preferred
+        // evaluate result: if both start + end, end is preferred
         if( bEnd )
             pReturn = pInnermostNode->EndOfSectionNode();
         else if ( bStart )

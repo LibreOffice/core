@@ -638,7 +638,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
     if( pParent )
     {   // Search for the appropriate insert position
         if( pNxtSct && pNxtSct->GetFormat() == pParent )
-        {   // Here we can insert outselves at the beginning
+        {   // Here we can insert ourselves at the beginning
             pUp = FirstLeaf( pNxtSct );
             pPrv = nullptr;
             if( pPrvSct && !( pPrvSct->GetFormat() == pParent ) )
@@ -2184,7 +2184,7 @@ SwFrame* SwFrame::GetIndNext_()
         return pSct->GetIndNext();
     if( pSct->IsColBodyFrame() && (pSct = pSct->GetUpper()->GetUpper())->IsSctFrame() )
     {   // We can only return the successor of the SectionFrames if there is no
-        // content in the successing columns
+        // content in the successive columns
         SwFrame* pCol = GetUpper()->GetUpper()->GetNext();
         while( pCol )
         {
