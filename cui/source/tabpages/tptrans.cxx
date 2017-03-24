@@ -498,7 +498,7 @@ void SvxTransparenceTabPage::PointChanged(vcl::Window* , RectPoint eRcPt)
 
 bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
 {
-    // set transparencetyp for preview
+    // set transparencetype for preview
     if ( m_pRbtTransOff->IsChecked() )
     {
         ClickTransOffHdl_Impl(nullptr);

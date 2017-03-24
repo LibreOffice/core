@@ -332,7 +332,7 @@ AC_SUBST(ENABLE_LTO)
 
 AC_ARG_ENABLE(fuzz-options,
     AS_HELP_STRING([--enable-fuzz-options],
-        [Randomly enable or disable each of those configury options
+        [Randomly enable or disable each of those configurable options
          that are supposed to be freely selectable without interdependencies,
          or where bad interaction from interdependencies is automatically avoided.])
 )
