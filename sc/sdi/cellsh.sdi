@@ -63,7 +63,6 @@ interface CellSelection
     // } Datenbank-Operationen
 
 
-    SID_BORDER_OBJECT   [ StateMethod = GetState; ]
     SID_RANGE_ADDRESS   [ StateMethod = GetState; ]
 
     SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteEdit; ]

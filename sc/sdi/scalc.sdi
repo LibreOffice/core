@@ -139,24 +139,6 @@ SfxVoidItem AddChartData SID_CHART_ADDSOURCE
 ]
 
 
-SfxVoidItem AddInManager SID_ADD_IN_MANAGER
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem AddPrintArea SID_ADD_PRINTAREA
 ()
 [
@@ -1651,24 +1633,6 @@ SfxVoidItem EditLinks SID_LINKS
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
-]
-
-
-SfxVoidItem EditObject SID_SC_EDIT_OBJECT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
 ]
 
 
@@ -5158,24 +5122,6 @@ SfxVoidItem SplitWindow SID_WINDOW_SPLIT
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
-]
-
-
-SfxVoidItem StandardFonts SID_STANDARD_FONTS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
 ]
 
 
