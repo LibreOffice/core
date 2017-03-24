@@ -302,7 +302,7 @@ OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()
 
 Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
 {
-    // return empty label, as we have no range representaions to determine something useful
+    // return empty label, as we have no range representations to determine something useful
     return Sequence< OUString >();
 }
 
