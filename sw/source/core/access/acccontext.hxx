@@ -230,9 +230,7 @@ public:
     virtual sal_Int16 SAL_CALL
         getAccessibleRole() override;
 
-    // Return this object's description.
-    virtual OUString SAL_CALL
-        getAccessibleDescription() override;
+    // getAccessibleDescription() is abstract
 
     // Return the object's current name.
     virtual OUString SAL_CALL
@@ -282,18 +280,11 @@ public:
 
     // XServiceInfo
 
-    /** Returns an identifier for the implementation of this object. */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
+    // getImplementationName() and getSupportedServiceNames are abstract
 
     /** Return whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL
         supportsService (const OUString& sServiceName) override;
-
-    /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext service. */
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
 
     // thread safe C++ interface
 

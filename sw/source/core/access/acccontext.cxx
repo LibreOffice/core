@@ -678,12 +678,6 @@ sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole()
     return m_nRole;
 }
 
-OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
-{
-    assert(!"description needs to be overridden");
-    throw uno::RuntimeException("description needs to be overridden");
-}
-
 OUString SAL_CALL SwAccessibleContext::getAccessibleName()
 {
     return m_sName;
@@ -975,21 +969,9 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
     return COL_WHITE;
 }
 
-OUString SAL_CALL SwAccessibleContext::getImplementationName()
-{
-    assert(!"implementation name needs to be overridden");
-    throw uno::RuntimeException("implementation name needs to be overridden");
-}
-
 sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
-}
-
-uno::Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
-{
-    assert(!"supported services names needs to be overridden");
-    throw uno::RuntimeException("supported services names needs to be overridden");
 }
 
 void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
