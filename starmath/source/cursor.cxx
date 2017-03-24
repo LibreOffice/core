@@ -857,7 +857,7 @@ bool SmCursor::InsertRow() {
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
-    //FinishEdit is actually used to handle siturations where parent is an instance of
+    //FinishEdit is actually used to handle situations where parent is an instance of
     //SmSubSupNode. In this case parent should always be a table or matrix, however, for
     //code reuse we just use FinishEdit() here too.
     return true;

@@ -1764,7 +1764,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
 }
 
 /*Simply determine if we are at the end of a record or the end of a line,
- *with fiddley logic to see if we are in a matrix or a pile or neither
+ *with fiddly logic to see if we are in a matrix or a pile or neither
 
  Note we cannot tell until after the event that this is the last entry
  of a pile, so we must strip the last separator of a pile after this

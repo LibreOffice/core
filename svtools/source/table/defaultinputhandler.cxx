@@ -104,7 +104,7 @@ namespace svt { namespace table
                     break;
                 case ContinueFunction:
                 case DeactivateFunction:
-                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactivate handler cannot be continued or deactivated!" );
+                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactive handler cannot be continued or deactivated!" );
                     break;
                 case SkipFunction:
                     handled = false;

@@ -812,7 +812,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     if ( !bResolvable )
     {
         // If the pool in the stream has a different structure, the SlotId
-        // from the stream must be mapable to a WhichId
+        // from the stream must be mappable to a WhichId
         sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId) : 0;
         if ( IsWhich(nMappedWhich) )
         {
