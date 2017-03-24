@@ -162,7 +162,7 @@ namespace connectivity
             /**
              * Creates a new transaction with the desired parameters, if
              * necessary discarding an existing transaction. This has to be done
-             * anytime we change the transaction isolation, or autocommiting.
+             * anytime we change the transaction isolation, or autocommitting.
              *
              * @throws css::sdbc::SQLException
              */

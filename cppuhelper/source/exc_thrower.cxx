@@ -81,7 +81,7 @@ void SAL_CALL ExceptionThrower_dispatch(
                 const_cast< typelib_TypeDescription * >( pMemberType ) )->
             nPosition)
     {
-    case 0: // queryInterace()
+    case 0: // queryInterface()
     {
         Type const & rType_demanded =
             *static_cast< Type const * >( pArgs[ 0 ] );

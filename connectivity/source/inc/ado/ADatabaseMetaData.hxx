@@ -52,7 +52,7 @@ namespace connectivity
             bool isCapable(sal_uInt32 _nId);
             OUString getLiteral(sal_uInt32 _nProperty);
 
-            // get info out of propertyst
+            // get info out of properties
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             OUString getStringProperty(const OUString& _aProperty);
