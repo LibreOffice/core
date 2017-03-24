@@ -3751,7 +3751,7 @@ void SwUiWriterTest::testTdf96536()
     CPPUNIT_ASSERT(parseDump("/root/page[1]/infos/bounds", "height").toInt32() >= 2 * nSingleParaPageHeight);
     discardDumpedLayout();
 
-    // ... and then delete the 2nd paragraph, which shriks the page to the previous size.
+    // ... and then delete the 2nd paragraph, which shrinks the page to the previous size.
     uno::Reference<lang::XComponent> xParagraph(getParagraph(2), uno::UNO_QUERY);
     xParagraph->dispose();
     calcLayout();

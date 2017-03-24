@@ -54,7 +54,7 @@ public:
     // Is a bullet point/symbol/etc. at the first text position?
     bool IsBullet( sal_Int32 nTextPos ) const;
 
-    // determine intentation for first line
+    // determine indentation for first line
     SwTwips GetFirstIndent() const;
 
     const SwTextFrame* GetFrame() const { return pFrame; }

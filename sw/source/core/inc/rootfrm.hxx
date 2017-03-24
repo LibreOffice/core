@@ -139,7 +139,7 @@ class SwRootFrame: public SwLayoutFrame
      * and will be activated by the last d'tor of CurrShell.
      * One other problem is the destruction of a shell while it is active.
      * The pointer mpCurrShell is then reset to an arbitrary other shell.
-     * If at the time of the destruction of a shell, which is still referneced
+     * If at the time of the destruction of a shell, which is still referenced
      * by a curshell object, that will be cleaned up as well.
      */
     friend class CurrShell;

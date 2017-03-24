@@ -934,7 +934,7 @@ void SwFormatCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
 void SwFormatCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
     // Deleting seems to be a bit radical on the first sight; but otherwise we
-    // have to initialize all values of the remaining SwCloumns.
+    // have to initialize all values of the remaining SwColumns.
     if ( !m_aColumns.empty() )
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )

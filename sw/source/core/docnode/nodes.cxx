@@ -247,7 +247,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                 if( pTextNd )
                 {
                     SwpHints * const pHts = pTextNd->GetpSwpHints();
-                    // OultineNodes set the new nodes in the array
+                    // OutlineNodes set the new nodes in the array
                     if (bInsOutlineIdx && pTextNd->IsOutline())
                     {
                         rNds.m_pOutlineNodes->insert( pTextNd );
