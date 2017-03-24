@@ -1741,9 +1741,8 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         osl::MutexGuard aGuard( maEventMutex );
-#if OSL_DEBUG_LEVEL > 0
-        assert(!(mpEvents || mpEventMap));
-#endif
+        assert(!mpEvents);
+        assert(!mpEventMap);
         delete mpEventMap;
         mpEventMap = nullptr;
         delete mpEvents;
