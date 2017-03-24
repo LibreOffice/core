@@ -76,7 +76,7 @@ class SmParser
     SmOperNode *DoOperator();
     SmNode *DoOper();
     SmStructureNode *DoUnOper();
-    void    DoAlign();
+    SmNode *DoAlign();
     SmStructureNode *DoFontAttribut();
     SmAttributNode *DoAttribut();
     SmStructureNode *DoFont();

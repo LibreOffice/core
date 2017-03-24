@@ -963,7 +963,7 @@ SmTableNode *SmParser::DoTable()
     return pSNode.release();
 }
 
-void SmParser::DoAlign()
+SmNode *SmParser::DoAlign()
     // parse alignment info (if any), then go on with rest of expression
 {
     std::unique_ptr<SmStructureNode> pSNode;
@@ -976,10 +976,7 @@ void SmParser::DoAlign()
 
         // allow for just one align statement in 5.0
         if (TokenInGroup(TG::Align))
-        {
-            Error(SmParseError::DoubleAlign);
-            return;
-        }
+            return DoError(SmParseError::DoubleAlign);
     }
 
     std::unique_ptr<SmNode> pNode(DoExpression());
@@ -987,10 +984,9 @@ void SmParser::DoAlign()
     if (pSNode)
     {
         pSNode->SetSubNode(0, pNode.release());
-        m_aNodeStack.push_front(std::move(pSNode));
+        return pSNode.release();
     }
-    else
-        m_aNodeStack.push_front(std::move(pNode));
+    return pNode.release();
 }
 
 void SmParser::DoLine()
@@ -1001,10 +997,7 @@ void SmParser::DoLine()
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-    {
-        DoAlign();
-        ExpressionArray.push_back(popOrZero(m_aNodeStack));
-    }
+        ExpressionArray.push_back(DoAlign());
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
         ExpressionArray.push_back(DoExpression());
@@ -1304,7 +1297,7 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
                 return pSNode.release();
             }
             // go as usual
-            DoAlign();
+            m_aNodeStack.emplace_front(DoAlign());
             if (m_aCurToken.eType != TRGROUP)
                 return DoError(SmParseError::RgroupExpected);
             NextToken();
@@ -1984,7 +1977,7 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
             }
             else if (m_aCurToken.eType != TRIGHT)
             {
-                DoAlign();
+                m_aNodeStack.emplace_front(DoAlign());
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
@@ -2004,7 +1997,7 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
             }
             else if (!TokenInGroup(TG::RBrace))
             {
-                DoAlign();
+                m_aNodeStack.emplace_front(DoAlign());
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TG::RBrace))
@@ -2087,7 +2080,7 @@ SmStructureNode *SmParser::DoStack()
         do
         {
             NextToken();
-            DoAlign();
+            m_aNodeStack.emplace_front(DoAlign());
             n++;
         }
         while (m_aCurToken.eType == TPOUND);
@@ -2120,7 +2113,7 @@ SmStructureNode *SmParser::DoMatrix()
         do
         {
             NextToken();
-            DoAlign();
+            m_aNodeStack.emplace_front(DoAlign());
             c++;
         }
         while (m_aCurToken.eType == TPOUND);
@@ -2132,7 +2125,7 @@ SmStructureNode *SmParser::DoMatrix()
             NextToken();
             for (sal_uInt16 i = 0; i < c; i++)
             {
-                DoAlign();
+                m_aNodeStack.emplace_front(DoAlign());
                 if (i < (c - 1))
                 {
                     if (m_aCurToken.eType == TPOUND)
