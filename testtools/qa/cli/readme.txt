@@ -21,6 +21,6 @@ However, if for some reason an assembly remains in the GAC than it is used no ma
 what.
 
 
-The qa test simply executes the cli_bridgetest_inprocess.exe. All console output is descarded.
+The qa test simply executes the cli_bridgetest_inprocess.exe. All console output is discarded.
 When the test fails one should directly run that executable. Then one may see the cause
 of the failure in the console.

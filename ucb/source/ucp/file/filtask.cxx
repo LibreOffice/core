@@ -2373,7 +2373,7 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
             {
                 // extremely ugly, but otherwise default construction
                 // of aDirItem and aFileStatus2
-                // before the preciding if
+                // before the preceding if
                 isVolume = osl::FileStatus::Volume == aFileStatus.getFileType();
                 isDirectory =
                     osl::FileStatus::Volume == aFileStatus.getFileType() ||
