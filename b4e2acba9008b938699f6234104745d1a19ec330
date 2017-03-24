@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_59200a9c",
+        "filename": "rsc/source/parser/rsclex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-24T15:10:58Z",
+      "side": 1,
+      "message": "Beware, c is of type int, and pFI-\u003eGetFastChar() put a (plain) char into it, so on platforms where char is signed, c could be a large negative value (instead of a small positive value in the range 0x80--0xFF), which is not what rtl::toAsciiUpperCase accepts.  Therefore, you should cast c to unsigned char here, as the surrounding code now does since \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003deedb6435f863b9377197a65ffd75ebec98007ebe\u003e \"Use rtl::isAscii* instead of ctype.h is* (and fix passing plain char)\".  (And please rebase this change onto more recent master so the \"cannot merge\" message goes away.)\n\n(Strictly speaking, that casting would not be necessary here, because due to the preceding if(isxdigit(c)) we already know that c is in the \"unproblematic\" 0x00--0x7F ASCII range.  But still better to be careful.)",
+      "revId": "b4e2acba9008b938699f6234104745d1a19ec330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
