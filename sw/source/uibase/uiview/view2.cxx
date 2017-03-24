@@ -666,7 +666,6 @@ void SwView::Execute(SfxRequest &rReq)
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
             const SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-            SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
             sal_uInt16 nRedline = USHRT_MAX;
             if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
             {
