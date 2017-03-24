@@ -6743,7 +6743,7 @@ static const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
 };
 static const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
 {
-    0xA504, 0x8000      // clockwíse arc
+    0xA504, 0x8000      // clockwise arc
 };
 static const SvxMSDffHandle mso_sptTextArchUpCurveHandle[] =
 {

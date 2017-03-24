@@ -440,7 +440,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     }
 
     // append as new one
-    // TODO think about mmatching Module name to a corresponding icon
+    // TODO think about matching Module name to a corresponding icon
     OUString sURL = aNew.OrgURL;
     if (sURL.isEmpty())
         sURL = aNew.FactoryURL;

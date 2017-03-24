@@ -134,7 +134,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
         case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
 
         // decompose evtl. animated text contained in MaskPrimitive2D
-        // or group rimitives
+        // or group primitives
         case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
         case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
         {

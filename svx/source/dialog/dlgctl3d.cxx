@@ -614,7 +614,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
                 }
                 else
                 {
-                    // intercation start, save values
+                    // interaction start, save values
                     GetPosition(mfSaveActionStartHor, mfSaveActionStartVer);
                 }
 

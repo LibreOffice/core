@@ -1047,7 +1047,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_pGridListener(nullptr)
             ,m_xContext(_rxContext)
 {
-    // Create must be called after this constructure
+    // Create must be called after this constructor
     m_pGridListener = new GridListenerDelegator( this );
 }
 
@@ -2825,7 +2825,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    DBG_ASSERT((sal_Int32)aSlots.size() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
+    DBG_ASSERT((sal_Int32)aSlots.size() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconsistent data returned by getSupportedURLs/getSupportedGridSlots!");
 
     for (size_t i=0; i<aSlots.size(); ++i, ++pUrls)
     {
