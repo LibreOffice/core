@@ -230,8 +230,10 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         SolarMutexGuard aGuard;
 
         vcl::Window *pWin = GetWindow();
-
-        CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+        if (!pWin)
+        {
+            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        }
 
         Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
         awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
@@ -250,8 +252,10 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     SolarMutexGuard aGuard;
 
     vcl::Window *pWin = GetWindow();
-
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Point aPixPos( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ).TopLeft() );
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
@@ -264,8 +268,10 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
     SolarMutexGuard aGuard;
 
     vcl::Window *pWin = GetWindow();
-
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Point aPixPos( pWin->GetWindowExtentsRelative( nullptr ).TopLeft() );
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
@@ -278,8 +284,10 @@ css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
     SolarMutexGuard aGuard;
 
     vcl::Window *pWin = GetWindow();
-
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Size aPixSize( pWin->GetWindowExtentsRelative( nullptr ).GetSize() );
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
@@ -293,8 +301,10 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
     SolarMutexGuard aGuard;
 
     vcl::Window *pWin = GetWindow();
-
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Rectangle aPixBounds( pWin->GetWindowExtentsRelative( nullptr ) );
     aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
@@ -313,7 +323,10 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         CHECK_FOR_DEFUNC( XAccessibleComponent )
 
         vcl::Window *pWin = GetWindow();
-        CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+        if (!pWin)
+        {
+            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        }
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
         if( mpChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )

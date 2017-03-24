@@ -380,11 +380,6 @@ public:
 #define CHECK_FOR_DEFUNC( ifc )                                             \
     CHECK_FOR_DEFUNC_THIS( ifc, this )
 
-#define CHECK_FOR_WINDOW( i, w )                                            \
-    if( !(w) )                                                              \
-    {                                                                       \
-        THROW_RUNTIME_EXCEPTION( i, "window is missing" );                  \
-    }
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -787,7 +787,10 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     uno::Reference< XAccessible > xAcc;
 
     vcl::Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
     if( !GetFrame()->IsRootFrame() )
@@ -843,7 +846,14 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
     OSL_ENSURE( pParent, "no Parent found" );
     vcl::Window *pWin = GetWindow();
 
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
+    if (!pParent)
+    {
+        throw uno::RuntimeException("no Parent", static_cast<cppu::OWeakObject*>(this));
+    }
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
     Rectangle aPixBounds( 0, 0, 0, 0 );
@@ -896,7 +906,10 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
     Point aPixPos(aRect.X, aRect.Y);
 
     vcl::Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     aPixPos = pWin->OutputToAbsoluteScreenPixel(aPixPos);
     awt::Point aPoint(aPixPos.getX(), aPixPos.getY());

@@ -1381,7 +1381,10 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     {
         // translate core coordinates into accessibility coordinates
         vcl::Window *pWin = GetWindow();
-        CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+        if (!pWin)
+        {
+            throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+        }
 
         SwRect aTmpRect(0, 0, tabs[0].Position, 0);
 
@@ -2360,7 +2363,10 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     // translate core coordinates into accessibility coordinates
     vcl::Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
 
     Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
     SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
@@ -2396,7 +2402,10 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 
     // construct Point (translate into layout coordinates)
     vcl::Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+    if (!pWin)
+    {
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+    }
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
@@ -3527,7 +3536,10 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
                 const SwRect& aCursorCoreRect = pCursorShell->GetCharRect();
                 // translate core coordinates into accessibility coordinates
                 vcl::Window *pWin = GetWindow();
-                CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+                if (!pWin)
+                {
+                    throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+                }
 
                 Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
 
