@@ -227,7 +227,7 @@ namespace connectivity
         };
 
         /** PI()
-            Returns the value of PI. The default shown number of decimals is 5, but  internally uses the full double precession for PI.
+            Returns the value of PI. The default shown number of decimals is 5, but  internally uses the full double precision for PI.
 
         > SELECT PI();
                 -> 3.141593

@@ -250,7 +250,7 @@ namespace dbtools
             return;
 
         // we may need to strip any links which are invalid, so here go the containers
-        // for temporarirly holding the new pairs
+        // for temporarily holding the new pairs
         std::vector< OUString > aStrippedMasterFields;
         std::vector< OUString > aStrippedDetailFields;
 
