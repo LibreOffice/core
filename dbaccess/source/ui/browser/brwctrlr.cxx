@@ -2170,7 +2170,7 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
         }
     }
 
-    if ( !CommitCurrent() ) // das aktuelle Control committen lassen
+    if ( !CommitCurrent() ) // Commit the current control
         return false;
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2211,7 +2211,7 @@ bool SbaXDataBrowserController::CommitCurrent()
     bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
-        // zunaechst das Control fragen ob es das IFace unterstuetzt
+        // At first check Control if it supports the IFace
         Reference< css::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
         if (!xBoundControl.is())
             xBoundControl.set(xActiveControl->getModel(), UNO_QUERY);

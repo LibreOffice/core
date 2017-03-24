@@ -384,7 +384,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     const OUString& rOptVal = rOption.GetString();
     if ( rOptVal.indexOf('%') != -1 )
     {   // percentage
-        OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
+        OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 and Width%" );
         return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else

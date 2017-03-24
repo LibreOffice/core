@@ -521,7 +521,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                 case NumberFormat::TEXT:
                 case NumberFormat::UNDEFINED:
                 case NumberFormat::LOGICAL:
-                    nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+                    nNumberFormat = NumberFormat::TEXT; // Text overwrites everything
                     break;
                 case NumberFormat::DATETIME:
                     switch(_nOldNumberFormat)
@@ -546,7 +546,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
     }
     catch(Exception&)
     {
-        nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+        nNumberFormat = NumberFormat::TEXT; // Text overwrites everything
     }
 
     return nNumberFormat;
