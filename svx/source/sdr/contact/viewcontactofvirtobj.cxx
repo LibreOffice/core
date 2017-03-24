@@ -52,7 +52,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
     // This solution is only a first solution to get things running. Later
     // this needs to be replaced with creating real VOCs for the objects
     // referenced by virtual objects to avoid the 'trick' of setting the
-    // offset for painting at the destination OutputDevive.
+    // offset for painting at the destination OutputDevice.
 
     // As can be seen, with primitives, the problem will be solved using
     // a transformPrimitive, so this solution can stay with primitives.
