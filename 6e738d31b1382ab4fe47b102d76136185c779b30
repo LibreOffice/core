@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_59b48af1",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-24T21:49:59Z",
+      "side": 1,
+      "message": "this is a SfxVoidItem ???\n\n... \n\nyes it is.\n\nidly wondering what fun consequences that has considering that SfxVoidItem is typically used to implement the SfxItemState::DISABLED...   ... ah that is a SfxVoidItem with WhichId hard-coded to 0 in SfxItemSet::DisableItem ... interesting",
+      "revId": "6e738d31b1382ab4fe47b102d76136185c779b30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
