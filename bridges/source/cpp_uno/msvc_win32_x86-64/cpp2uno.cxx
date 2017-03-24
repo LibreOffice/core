@@ -207,7 +207,7 @@ static inline typelib_TypeClass cpp2uno_call(
         }
         if ( pReturnTD )
         {
-            typelib_TypeClass eRet = (typelib_TypeClass)pReturnTD->eTypeClass;
+            typelib_TypeClass eRet = pReturnTD->eTypeClass;
             TYPELIB_DANGER_RELEASE( pReturnTD );
             return eRet;
         }
