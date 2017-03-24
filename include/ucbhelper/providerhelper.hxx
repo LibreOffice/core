@@ -112,7 +112,7 @@ protected:
       * This method registers a newly created content instance with the
       * content provider. It should be called directly after creating a new
       * content instance. The provider can reuse a registered instance upon
-      * subsedent requests for content instances with an idententifier
+      * subsequent requests for content instances with an identifier
       * of a registered instance.
       * Note that the provider does not hold a hard reference on the
       * registered instance. If last external reference is gone, the provider

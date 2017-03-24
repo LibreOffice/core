@@ -239,7 +239,7 @@ public:
     {
         /// horizontal parallel lines, one unit apart
         hatchSingle=0,
-        /// horizontal and verticall orthogonally crossing lines, one unit apart
+        /// horizontal and vertical orthogonally crossing lines, one unit apart
         hatchDouble,
         /// three crossing lines, like HatchType::hatchDouble, but
         /// with an additional diagonal line, rising to the upper

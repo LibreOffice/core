@@ -25,7 +25,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-// aapears to be a copy of css::view::DuplexMode
+// appears to be a copy of css::view::DuplexMode
 enum class DuplexMode { Unknown, Off, LongEdge, ShortEdge };
 
 

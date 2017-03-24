@@ -159,7 +159,7 @@ protected:
 
     // to remain compatible in the minor release we copy the above ImpInsertText
     // function and add the extra parameter we need but make sure this function
-    // gets not exported. First and second parameter swapped to have a different signatur.
+    // gets not exported. First and second parameter swapped to have a different signature.
     SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
     SAL_DLLPRIVATE css::uno::Reference< css::i18n::XExtendedInputSequenceChecker > const & GetInputSequenceChecker();
