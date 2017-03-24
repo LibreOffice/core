@@ -139,24 +139,6 @@ SfxVoidItem AddChartData SID_CHART_ADDSOURCE
 ]
 
 
-SfxVoidItem AddInManager SID_ADD_IN_MANAGER
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem AddPrintArea SID_ADD_PRINTAREA
 ()
 [
@@ -758,22 +740,6 @@ SfxVoidItem CommentChange FID_CHG_COMMENT
 ]
 
 
-SfxVoidItem ConditionalFormatMenu SID_POPUP_CONDFRMT
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    NoRecord;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
 SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
 ()
 [
@@ -865,42 +831,6 @@ SfxVoidItem CondDateFormatDialog SID_OPENDLG_CONDDATE
 
 
 SfxVoidItem ConditionalFormatManagerDialog SID_OPENDLG_CONDFRMT_MANAGER
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
-SfxVoidItem ColorScaleDialog SID_COLORSCALE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
-SfxVoidItem DataBarDialog SID_DATABAR
 ()
 [
     AutoUpdate = FALSE,
@@ -1139,24 +1069,6 @@ SfxVoidItem DataFilterStandardFilter SID_FILTER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DATA;
-]
-
-
-SfxVoidItem DataImport SID_IMPORT_DATA
-(SfxStringItem DatabaseName SID_IMPORT_DATA,SfxStringItem SqlCommand FN_PARAM_1)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
 
@@ -1651,24 +1563,6 @@ SfxVoidItem EditLinks SID_LINKS
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
-]
-
-
-SfxVoidItem EditObject SID_SC_EDIT_OBJECT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
 ]
 
 
@@ -2924,25 +2818,6 @@ SfxVoidItem InputLineMatrix FID_INPUTLINE_MATRIX
 ]
 
 
-SfxVoidItem InsCellsCtrl SID_TBXCTL_INSCELLS
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-
 SfxVoidItem Insert FID_INS_TABLE
 (SfxStringItem Name FID_INS_TABLE,SfxUInt16Item Index FN_PARAM_1)
 [
@@ -3124,25 +2999,6 @@ SfxVoidItem InsertContents FID_INS_CELL_CONTENTS
 ]
 
 
-SfxVoidItem InsertCtrl SID_TBXCTL_INSERT
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-
 SfxVoidItem InsertExternalDataSource SID_EXTERNAL_SOURCE
 (SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Options SID_FILE_FILTEROPTIONS,SfxStringItem Source FN_PARAM_1,SfxUInt32Item Refresh FN_PARAM_2)
 [
@@ -3247,25 +3103,6 @@ SfxVoidItem InsertName FID_INSERT_NAME
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
-]
-
-
-SfxVoidItem InsertObjectStarImage SID_INSERT_SIMAGE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
 
@@ -5161,24 +4998,6 @@ SfxVoidItem SplitWindow SID_WINDOW_SPLIT
 ]
 
 
-SfxVoidItem StandardFonts SID_STANDARD_FONTS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 // ISSUE66550_HLINK_FOR_SHAPES
 SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
 ()
@@ -5730,24 +5549,6 @@ SfxVoidItem ToolProtectionDocument FID_PROTECT_DOC
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-
-SfxVoidItem ToolsOptions SID_SCOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
 
