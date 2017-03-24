@@ -938,7 +938,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
     const SwTextFrame *pTextFrame = dynamic_cast<const SwTextFrame*>( GetFrame()  );
     if( !pTextFrame )
     {
-        THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (no text frame)" );
+        throw uno::RuntimeException("no SwTextFrame", static_cast<cppu::OWeakObject*>(this));
     }
 
     const SwTextNode *pTextNd = pTextFrame->GetTextNode();

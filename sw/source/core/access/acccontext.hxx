@@ -360,13 +360,6 @@ public:
                                         const OUString *pArg2 = nullptr );
 };
 
-// some heavily used exception support
-#define THROW_RUNTIME_EXCEPTION( ifc, msg )         \
-    css::uno::Reference < ifc > xThis( this );      \
-    css::uno::RuntimeException aExcept(             \
-        msg, xThis );       \
-    throw aExcept;
-
 #define CHECK_FOR_DEFUNC_THIS( ifc, ths )                \
     if( !(GetFrame() && GetMap()) )                        \
     {                                                    \

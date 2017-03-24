@@ -680,8 +680,8 @@ sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole()
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
 {
-    OSL_ENSURE(false, "description needs to be overridden");
-    THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overridden)" );
+    assert(!"description needs to be overridden");
+    throw uno::RuntimeException("description needs to be overridden");
 }
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleName()
@@ -977,9 +977,8 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
 
 OUString SAL_CALL SwAccessibleContext::getImplementationName()
 {
-    OSL_ENSURE( false, "implementation name needs to be overridden" );
-
-    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "implementation name needs to be overridden" )
+    assert(!"implementation name needs to be overridden");
+    throw uno::RuntimeException("implementation name needs to be overridden");
 }
 
 sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)
@@ -989,8 +988,8 @@ sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceN
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
 {
-    OSL_ENSURE( false, "supported services names needs to be overridden" );
-    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supported services needs to be overridden" )
+    assert(!"supported services names needs to be overridden");
+    throw uno::RuntimeException("supported services names needs to be overridden");
 }
 
 void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
