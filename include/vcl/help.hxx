@@ -41,7 +41,7 @@ enum class QuickHelpFlags
     Bottom            = 0x0020,
     NoAutoPos         = Left | Center | Right | Top | VCenter | Bottom,
     CtrlText          = 0x0040,
-/// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
+/// no delay when opening the quick help. Applies to ShowBalloon and ShowQuickHelp
     NoDelay           = 0x0080,
 /// force balloon-style in ShowPopover and ShowQuickHelp
     TipStyleBalloon   = 0x0100,

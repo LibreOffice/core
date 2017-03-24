@@ -67,7 +67,7 @@ namespace utl
                 specifies the service factory which should be used to access the configuration
             @param _rAccessSafety
                 As this class is intended to manipulate objects it does not hold itself (see the various
-                registerXXX methods), it needs to guard these access for muti threading safety.<br/>
+                registerXXX methods), it needs to guard these access for multi threading safety.<br/>
                 The mutex given here is locked whenever such an access occurs.
             @param _pConfigLocation
                 is an ASCII string describing the configurations node path
