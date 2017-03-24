@@ -145,7 +145,7 @@ public class _XActiveDataControl extends MultiMethodTest {
 
     /**
      * Tests <code>removeListener()</code>. Before, it ensures that other
-     * tests are perforemed and that <code>addListener()</code> is okay. Then,
+     * tests are performed and that <code>addListener()</code> is okay. Then,
      * calls <code>XActiveDataControl.start()</code> and checks that no method
      * of the listener was called.
      */

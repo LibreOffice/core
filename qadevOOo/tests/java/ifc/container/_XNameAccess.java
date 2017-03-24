@@ -102,7 +102,7 @@ public class _XNameAccess extends MultiMethodTest {
     * </ul>
     */
     public void _getByName() {
-        log.println("reqiure getElementNames() ...");
+        log.println("require getElementNames() ...");
         requiredMethod("getElementNames()");
         log.println("require getElementNames() ...OK");
         log.println("testing getByName() ...");

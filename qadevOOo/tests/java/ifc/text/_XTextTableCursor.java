@@ -230,7 +230,7 @@ public class _XTextTableCursor extends MultiMethodTest {
     }
 
     /**
-     * First splits the cell horyzontally. Then the end cell
+     * First splits the cell horizontally. Then the end cell
      * name is checked. Second split all cells vertically and
      * again the end cell name is checked<p>
      *

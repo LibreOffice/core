@@ -48,7 +48,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>'StreamData'</code> (of type <code>Vector</code>):
 *   vector of data for comparing with data that obtained from stream </li>
 *  <li> <code>'StreamWriter'</code> (of type <code>XDataOutputStream</code>):
-*   a possiblitiy to write values to the stream. </li>
+*   a possibility to write values to the stream. </li>
 * <ul> <p>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.io.XDataInputStream

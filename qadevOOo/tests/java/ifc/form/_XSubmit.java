@@ -88,7 +88,7 @@ public class _XSubmit extends MultiMethodTest {
     }
 
     /**
-    * Before submision tries to set 'TargetURL' property
+    * Before submission tries to set 'TargetURL' property
     * of component to some value assuming that component
     * supports <code>com.sun.star.form.HTMLForm</code>
     * service.
