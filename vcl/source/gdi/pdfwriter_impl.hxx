@@ -90,6 +90,11 @@ class PDFStreamIf;
 class Matrix3;
 class PdfBuiltinFontFace;
 
+namespace filter
+{
+class PDFObjectElement;
+}
+
 class PDFWriterImpl
 {
     friend class PDFStreamIf;
@@ -847,6 +852,9 @@ i12626
     void writeJPG( JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
     void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
+    /// Copies resources of a given kind from an external page to the output,
+    /// returning what has beeen copied (name) and where (object ID).
+    std::map<OString, sal_Int32> copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */

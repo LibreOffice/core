@@ -44,13 +44,14 @@ public:
 /// Indirect object: something with a unique ID.
 class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
 {
+    /// The document owning this element.
     PDFDocument& m_rDoc;
     double m_fObjectValue;
     double m_fGenerationValue;
     std::map<OString, PDFElement*> m_aDictionary;
     /// Position after the '<<' token.
     sal_uInt64 m_nDictionaryOffset;
-    /// Length of the dictionary buffer till (before) the '<<' token.
+    /// Length of the dictionary buffer till (before) the '>>' token.
     sal_uInt64 m_nDictionaryLength;
     PDFDictionaryElement* m_pDictionaryElement;
     /// The contained direct array, if any.
@@ -86,6 +87,7 @@ public:
     std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
     SvMemoryStream* GetStreamBuffer() const;
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
+    PDFDocument& GetDocument();
 };
 
 /// Array object: a list.
