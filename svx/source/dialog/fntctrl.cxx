@@ -221,7 +221,7 @@ inline bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 }
 
 /*
- * evalutates the scripttypes of the actual string.
+ * evaluates the scripttypes of the actual string.
  * Afterwards the positions of script change are notified in aScriptChg,
  * the scripttypes in aScriptType.
  * The aTextWidth array will be filled with zero.

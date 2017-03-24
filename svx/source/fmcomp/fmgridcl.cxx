@@ -661,7 +661,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bool bDesignMode = static_cast<FmGridControl*>(GetParent())->IsDesignMode();
 
     Reference< css::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
-    // Aufbau des Insert Menues
+    // Aufbau des Insert Menus
     // mark the column if nColId != HEADERBAR_ITEM_NOTFOUND
     if(nColId > 0)
     {

@@ -38,7 +38,7 @@ namespace sdr
             void ImpRemoveStyleSheet();
 
         protected:
-            // the SytleSheet of this object
+            // the StyleSheet of this object
             SfxStyleSheet*                                  mpStyleSheet;
 
             // create a new itemset

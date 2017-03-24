@@ -65,7 +65,7 @@ namespace sdr
             // #i102380#
             void flushGraphicObjects();
 
-            // helpers for viusualisation state
+            // helpers for visualisation state
             bool visualisationUsesPresObj() const;
             bool visualisationUsesDraft() const;
 
