@@ -138,7 +138,7 @@ private:
 
 /*----------------------------------------
 *
-*   Attributlist implementation
+*   Attributelist implementation
 *
 *----------------------------------------*/
 struct AttributeListImpl_impl;

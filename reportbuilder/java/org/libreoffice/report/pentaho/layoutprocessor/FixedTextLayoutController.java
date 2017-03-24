@@ -33,7 +33,7 @@ import org.jfree.report.flow.layoutprocessor.LayoutControllerFactory;
 import org.jfree.report.structure.Section;
 
 /**
- * Processes a fixed-text element of the OpenOffice reporting specificiation.
+ * Processes a fixed-text element of the OpenOffice reporting specification.
  * The element itself contains a single paragraph which contains the content.
  * After checking, whether this element should be printed, this layout
  * controller simply delegates the dirty work to a suitable handler.

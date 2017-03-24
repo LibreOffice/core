@@ -337,7 +337,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                 }
                 else
                 {
-                    /* No direct encoded charcater, then the buffer is */
+                    /* No direct encoded character, then the buffer is */
                     /* corrupt */
                     if ( c > 0x7F )
                     {
