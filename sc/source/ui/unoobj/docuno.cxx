@@ -4072,7 +4072,7 @@ ScAnnotationsObj::~ScAnnotationsObj()
 
 void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! adjust nTab when updatig references!!!
+    //! adjust nTab when updating references!!!
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {

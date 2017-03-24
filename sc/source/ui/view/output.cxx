@@ -334,7 +334,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     //   * when bWorksInPixels is false: these are in the logic units
     //
     // This is where all the confusion comes from, ultimately we want them
-    // always in the logic units (100th of millimiters), but we need to get
+    // always in the logic units (100th of millimeters), but we need to get
     // there gradually (get rid of setting MapUnit::MapPixel first), otherwise we'd
     // break all the drawing by one change.
     // So until that happens, we need to special case.
@@ -2295,7 +2295,7 @@ void ScOutputData::DrawChangeTrack()
     ScActionColorChanger aColorChanger(*pTrack);
 
     //  clipping happens from the outside
-    //! without clipping, only paínt affected cells ??!??!?
+    //! without clipping, only paint affected cells ??!??!?
 
     SCCOL nEndX = nX2;
     SCROW nEndY = nY2;

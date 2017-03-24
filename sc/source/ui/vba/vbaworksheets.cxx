@@ -373,7 +373,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace )
     ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
     bool bReplace = true;
     Replace >>= bReplace;
-    // Replace is defaulted to True, meanining this current collection
+    // Replace is defaulted to True, meaning this current collection
     // becomes the Selection, if it were false then the current selection would
     // be extended
     bool bSelectSingle = bReplace;

@@ -950,7 +950,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
             xLayoutManager->lock();
             DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, nullptr,  AllSettingsFlags::STYLE );
 
-            // this basically will trigger the reposititioning of the
+            // this basically will trigger the repositioning of the
             // items in the toolbar from ImplFormat ( which is controlled by
             // mnWinHeight ) which in turn is updated in ImplCalcItem which is
             // controlled by mbCalc. Additionally the ImplFormat above is

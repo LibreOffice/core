@@ -31,7 +31,7 @@
 //   - vanilla put/call:  putcall() = +/- ( binasset() - K*bincash() )
 //   - truncated put/call (barriers active at maturity only)
 
-// (3) write a wrapper function to include all vanilla pricers
+// (3) write a wrapper function to include all vanilla prices
 //   - this is so we don't duplicate code when pricing barriers
 //     as this is derived from vanillas
 
