@@ -215,7 +215,7 @@ namespace drawinglayer
                                                 a2D.invert();
                                                 a2DHatchLines.transform(a2D);
 
-                                                // expand back-transformated geometry tpo 3D
+                                                // expand back-transformed geometry to 3D
                                                 basegfx::B3DPolyPolygon a3DHatchLines(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
 
                                                 // create 3d matrix with 3d vectors as column vectors (0,0,1 as Z) and 3d point as offset, this represents

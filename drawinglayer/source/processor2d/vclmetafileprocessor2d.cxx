@@ -1813,7 +1813,7 @@ namespace drawinglayer
                 {
                     // for metafile: Need to examine what the pure vcl version is doing here actually
                     // - uses DrawTransparent with metafile for content and a gradient
-                    // - uses DrawTransparent for single PolyPoylgons directly. Can be detected by
+                    // - uses DrawTransparent for single PolyPolygons directly. Can be detected by
                     //   checking the content for single PolyPolygonColorPrimitive2D
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
                     const primitive2d::Primitive2DContainer& rContent = rUniTransparenceCandidate.getChildren();

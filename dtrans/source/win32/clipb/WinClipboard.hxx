@@ -41,7 +41,7 @@ class CWinClipbImpl;
 
 // implements the XClipboard[Ex] ... interfaces
 // for the clipboard viewer mechanism we need a static callback function
-// and a static member to reasocciate from this static function to the
+// and a static member to reassociate from this static function to the
 // class instance
 // watch out: we are using only one static member variable and not a list
 // because we assume to be instantiated only once

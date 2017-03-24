@@ -37,7 +37,7 @@ namespace basegfx {
 }
 
 
-// support WrongSpell rendreing using VCL from primitives due to VCLs nice
+// support WrongSpell rendering using VCL from primitives due to VCLs nice
 // and fast solution with wavelines
 
 namespace drawinglayer

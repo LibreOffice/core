@@ -28,7 +28,7 @@
 namespace basegfx { class B2DRange; }
 
 
-// support methods for vcl direct gradient renderering
+// support methods for vcl direct gradient rendering
 
 namespace drawinglayer
 {
