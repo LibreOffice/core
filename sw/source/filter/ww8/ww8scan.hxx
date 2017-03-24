@@ -1156,7 +1156,7 @@ public:
     bool m_fWord2000Saved    :1;
     sal_uInt8 :2;
 
-    sal_uInt16 m_chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
+    sal_uInt16 m_chse;        // 0x14 default extended character set id for text in document stream. (overridden by chp.chse)
                         //      0 = ANSI  / 256 Macintosh character set.
     sal_uInt16 m_chseTables;  // 0x16 default extended character set id for text in
                         //      internal data structures: 0 = ANSI, 256 = Macintosh

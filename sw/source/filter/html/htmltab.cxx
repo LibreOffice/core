@@ -2333,7 +2333,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         // Step 1: needed layout structures are created (including tables in tables)
         CreateLayoutInfo();
 
-        // Step 2: the mininal and maximal column width is calculated
+        // Step 2: the minimal and maximal column width is calculated
         // (including tables in tables). Since we don't have boxes yet,
         // we'll work on the start nodes
         m_pLayoutInfo->AutoLayoutPass1();
@@ -3915,7 +3915,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         return;
     }
 
-    // If the content of the cell was empty, we need to create an epty content
+    // If the content of the cell was empty, we need to create an empty content
     // We also create an empty content if the cell ended with a table and had no
     // COL tags. Otherwise, it was probably exported by us and we don't
     // want to have an additional paragraph

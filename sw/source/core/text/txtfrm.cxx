@@ -1022,7 +1022,7 @@ void SwTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 // E.g.: empty line, set 14 pt!
                 // if( !nLen ) nLen = 1;
 
-                // FootnoteNummbers need to be formatted
+                // FootnoteNumbers need to be formatted
                 if( !nLen )
                     nLen = 1;
 

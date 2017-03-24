@@ -44,7 +44,7 @@ bool SwWrtShell::SttWrd()
 }
 
 // The end of a word is the follow of separator to nonseparator.
-// The end of a word is also the sequence of wordseparators to
+// The end of a word is also the sequence of word separators to
 // punctuation marks.
 // The end of a paragraph is also the end of a word.
 
