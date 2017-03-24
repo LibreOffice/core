@@ -55,7 +55,7 @@ import javax.swing.*;
  * call needs this mutex too => a deadlock occurs.
  * Why? UNO had created a new thread for our synchronous call
  * inside the office process and so exist different threads
- * for this constallation.
+ * for this constellation.
  *
  */
 public class StatusView extends    JPanel

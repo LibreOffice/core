@@ -147,7 +147,7 @@ CryptoX_Result CyprtoAPI_VerifySignature(HCRYPTHASH *hash,
 
 /* This default implementation is necessary because we don't want to
  * link to NSS from updater code on non Windows platforms.  On Windows
- * we use CyrptoAPI instead of NSS.  We don't call any function as they
+ * we use CryptoAPI instead of NSS.  We don't call any function as they
  * would just fail, but this simplifies linking.
  */
 

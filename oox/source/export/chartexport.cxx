@@ -1098,7 +1098,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
     // TODO: lstStyle
     pFS->singleElement( FSNS( XML_a, XML_lstStyle ),
             FSEND );
-    // FIXME: handle multipul paragraphs to parse aText
+    // FIXME: handle multiple paragraphs to parse aText
     pFS->startElement( FSNS( XML_a, XML_p ),
             FSEND );
 
