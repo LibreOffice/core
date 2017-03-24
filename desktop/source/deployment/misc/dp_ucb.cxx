@@ -49,7 +49,7 @@ bool create_ucb_content(
         // content ctor/isFolder() will throw exception in case the resource
         // does not exist.
 
-        // dilemma: no chance to use the given iahandler here, because it would
+        // dilemma: no chance to use the given handler here, because it would
         //          raise no such file dialogs, else no interaction for
         //          passwords, ...? xxx todo
         ::ucbhelper::Content ucbContent(

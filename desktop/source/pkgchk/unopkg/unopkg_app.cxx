@@ -231,7 +231,7 @@ extern "C" int unopkg_main()
             dp_misc::writeConsole("\n" APP_NAME " Version 3.3\n");
             return 0;
         }
-        //consume all bootstrap variables which may occur before the subcommannd
+        //consume all bootstrap variables which may occur before the subcommand
         while(isBootstrapVariable(&nPos))
             ;
 

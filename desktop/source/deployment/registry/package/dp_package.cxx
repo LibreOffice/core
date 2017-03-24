@@ -641,7 +641,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         //check correct value for attribute
         if ( ! (simplLicAttr->acceptBy == "user" || simplLicAttr->acceptBy == "admin"))
             throw css::deployment::DeploymentException(
-                "Could not obtain attribute simple-lincense@accept-by or it has no valid value", nullptr, Any());
+                "Could not obtain attribute simple-license@accept-by or it has no valid value", nullptr, Any());
 
 
         //Only use interaction if there is no version of this extension already installed

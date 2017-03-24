@@ -435,7 +435,7 @@ void BackendImpl::PackageImpl::processPackage_(
     bool bDialogSuccess = false;
     if (!startup)
     {
-        //If there is a bundled extension, and the user installes the same extension
+        //If there is a bundled extension, and the user installs the same extension
         //then the script from the bundled extension must be removed. If this does not work
         //then live deployment does not work for scripts.
         bScriptSuccess = lcl_maybeAddScript(bScript, m_name, m_scriptURL, xScriptLibs);

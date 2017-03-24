@@ -497,7 +497,7 @@ bool BackendImpl::removeFromConfigmgrIni(
         //in case the xcu contained %origin% then the configmr.ini contains the
         //url to the file in the user installation (e.g. $BUNDLED_EXTENSIONS_USER)
         //However, m_url (getURL()) contains the URL for the file in the actual
-        //extension installatation.
+        //extension installation.
         ::boost::optional<ConfigurationBackendDb::Data> data = readDataFromDb(url_);
         if (data)
             i = std::find(rSet.begin(), rSet.end(), data->iniEntry);

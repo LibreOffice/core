@@ -539,7 +539,7 @@ void syncRepositories(
         return;
 
     Reference<deployment::XExtensionManager> xExtensionManager;
-    //synchronize shared before bundled otherewise there are
+    //synchronize shared before bundled otherwise there are
     //more revoke and registration calls.
     bool bModified = false;
     if (force || needToSyncRepository("shared") || needToSyncRepository("bundled"))
