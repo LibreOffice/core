@@ -46,7 +46,7 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
      */
     boolean IsEnabled;
 
-    /** specifies whether the XDispatch has to be requeried.
+    /** specifies whether the XDispatch has to be required.
 
         <p>
         Interest code should listen for FrameActionEvent

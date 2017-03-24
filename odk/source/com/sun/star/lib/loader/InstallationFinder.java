@@ -54,7 +54,7 @@ import java.util.ArrayList;
  * Both methods require that the 'soffice' executable or a symbolic
  * link is in one of the directories listed in the PATH environment variable.
  * For older versions than OOo 2.0 the above described methods may fail.
- * In this case the default installation is taken from the .sversionrc file in
+ * In this case the default installation is taken from the .versionrc file in
  * the user's home directory. Note, that the .sversionrc file will be omitted
  * for OOo 2.0</p>
  */

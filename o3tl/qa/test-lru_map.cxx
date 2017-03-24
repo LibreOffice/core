@@ -89,7 +89,7 @@ void lru_map_test::testReplaceValue()
     CPPUNIT_ASSERT_EQUAL(4, lru.find(1)->second);
     CPPUNIT_ASSERT_EQUAL(200, lru.find(2)->second);
 
-    // check if insert with same key, moves the entry back of the lru queu
+    // check if insert with same key, moves the entry back of the lru queue
 
     // inserting new entry with key that already exists
     lru.insert(std::make_pair<int, int>(1, 6));
