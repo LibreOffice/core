@@ -19,7 +19,7 @@
 
 /* Information:
  * This class implements a mechanism to lock a users installation directory,
- * which is necessesary because instances of staroffice could be running on
+ * which is necessary because instances of staroffice could be running on
  * different hosts while using the same directory thus causing data
  * inconsistency.
  * When an existing lock is detected, the user will be asked whether he wants

@@ -459,7 +459,7 @@ void DesktopLOKTest::testPaintTile()
     int nTileWidth = 1000;
     int nTileHeight = 3000;
 
-    // This used to crash: painTile() implementation did not handle
+    // This used to crash: paintTile() implementation did not handle
     // nCanvasWidth != nCanvasHeight correctly, as usually both are just always
     // 256.
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -1362,7 +1362,7 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Superseded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Superseded.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseedd.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 7

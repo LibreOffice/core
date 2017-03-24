@@ -892,7 +892,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         [&rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == LOK_CALLBACK_INVALIDATE_TILES)
                             {
-                                // Remove exiting if new is all-encompasing, or if of the same part.
+                                // Remove exiting if new is all-encompassing, or if of the same part.
                                 const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
                                 return (rcNew.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart);
                             }
@@ -1408,7 +1408,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             break;
         case LOK_DOCTYPE_OTHER:
         default:
-            SAL_INFO("lok", "Can't save document - unsopported document type.");
+            SAL_INFO("lok", "Can't save document - unsupported document type.");
             return false;
         }
 
