@@ -50,7 +50,7 @@ const char* StringContainer::putString( const char* pString )
     return aInsert.first->getStr();
 }
 
-static int      c;
+static char     c;
 static bool     bLastInclude;//  true, if last symbol was INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
@@ -166,7 +166,7 @@ int MakeToken( YYSTYPE * pTokenVal )
             c = pFI->GetFastChar();
             while( '>' != c && !pFI->IsEof() )
             {
-                aBuf.append( sal_Char(c) );
+                aBuf.append( c );
                 c = pFI->GetFastChar();
             }
             c = pFI->GetFastChar();
@@ -204,10 +204,10 @@ int MakeToken( YYSTYPE * pTokenVal )
                 aBuf.append( '\\' );
                 c = pFI->GetFastChar();
                 if( c )
-                    aBuf.append( sal_Char(c) );
+                    aBuf.append( c );
             }
             else
-                aBuf.append( sal_Char(c) );
+                aBuf.append( c );
         }
         pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
         return STRING;
@@ -226,7 +226,7 @@ int MakeToken( YYSTYPE * pTokenVal )
         while( rtl::isAsciiAlphanumeric (static_cast<unsigned char>(c))
                || (c == '_') || (c == '-') || (c == ':'))
         {
-            aBuf.append( sal_Char(c) );
+            aBuf.append( c );
             c = pFI->GetFastChar();
         }
 

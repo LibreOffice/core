@@ -60,8 +60,8 @@ public:
     sal_uInt32  GetLineNo()                   { return nLineNo;     }
     sal_uInt32  GetScanPos()                  { return nScanPos;    }
     char *      GetLine()                     { return pLine;       }
-    int         GetChar();
-    int         GetFastChar()
+    char        GetChar();
+    char        GetFastChar()
                     {
                         return pLine[ nScanPos ] ?
                             pLine[ nScanPos++ ] : GetChar();

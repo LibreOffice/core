@@ -57,7 +57,7 @@ RscFileInst::~RscFileInst()
         rtl_freeMemory( pLine );
 }
 
-int RscFileInst::GetChar()
+char RscFileInst::GetChar()
 {
     if( pLine[ nScanPos ] )
         return pLine[ nScanPos++ ];
