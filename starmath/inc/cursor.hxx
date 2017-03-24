@@ -184,7 +184,7 @@ public:
      *
      * This method is used for implementing backspace and delete.
      * If one of these causes a complex selection, e.g. a node with
-     * subnodes or similar, this should not be deleted imidiately.
+     * subnodes or similar, this should not be deleted immediately.
      */
     bool HasComplexSelection();
 

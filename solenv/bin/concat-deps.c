@@ -263,7 +263,7 @@ void* data;
     }
     else
     {
-        /* re-used old freed element by chopipng the head of the free list */
+        /* re-used old freed element by chopping the head of the free list */
         pool->head_free = *(void**)data;
     }
 
@@ -389,9 +389,9 @@ static unsigned int hash_compute( struct hash* hash, const char* key, int length
      * but we mask the undefined stuff if any, so we are still good, thanks
      * to alignment of memory allocation and tail-memory management overhead
      * we always can read 3 bytes past the official end without triggering
-     * a segfault -- if you find a platform/compiler couple for which that postulat
+     * a segfault -- if you find a platform/compiler couple for which that postulate
      * is false, then you just need to over-allocate by 2 more bytes in file_load()
-     * file_load already over-allocate by 1 to sitck a \0 at the end of the buffer.
+     * file_load already over-allocate by 1 to stick a \0 at the end of the buffer.
      */
     switch(length)
     {

@@ -70,11 +70,11 @@ namespace gb
     static const List<String> CPUDEFS;
     /// default c++ compilation compiler flags
     static const List<String> CXXFLAGS;
-    /// platform- and compilerin dependent default defines
+    /// platform- and compiler independent default defines
     static const List<String> GLOBALDEFS;
     /// default objective c++ compilation compiler flags
     static const List<String> OBJCXXFLAGS;
-    /// platfomspecific default defines
+    /// platformspecific default defines
     static const List<String> OSDEFS;
     /// ?
     static const Path SDKDIR;

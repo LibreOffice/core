@@ -751,7 +751,7 @@ namespace svt { namespace table
             OSL_ENSURE( flexibility >= 0, "TableControl_Impl::impl_ni_calculateColumnWidths: a column's flexibility should be non-negative." );
             if  (   ( flexibility < 0 )                                 // normalization
                 ||  ( !pColumn->isResizable() )                         // column not resizable => no auto-resize
-                ||  ( col <= i_assumeInflexibleColumnsUpToIncluding )   // column shall be treated as inflexible => respec this
+                ||  ( col <= i_assumeInflexibleColumnsUpToIncluding )   // column shall be treated as inflexible => respect this
                 )
                 flexibility = 0;
 
@@ -1262,7 +1262,7 @@ namespace svt { namespace table
 
             Rectangle const aRect = aRowIterator.getRect().GetIntersection(aAllDataCellsArea);
 
-            // give the redenderer a chance to prepare the row
+            // give the renderer a chance to prepare the row
             pRenderer->PrepareRow(aRowIterator.getRow(), isControlFocused, isSelectedRow, rRenderContext, aRect, rStyle);
 
             // paint the row header

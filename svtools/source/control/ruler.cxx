@@ -2265,7 +2265,7 @@ void Ruler::Activate()
 {
     mbActive = true;
 
-    // update positionlies - draw is delayed
+    // update positionlines - draw is delayed
     mnUpdateFlags |= RULER_UPDATE_LINES;
     Invalidate(InvalidateFlags::NoErase);
 }
