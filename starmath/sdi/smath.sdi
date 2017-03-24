@@ -124,24 +124,6 @@ SfxVoidItem ElementsDockingWindow SID_ELEMENTSDOCKINGWINDOW
 ]
 
 
-SfxVoidItem Preferences SID_PREFERENCES
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-
 SfxStringItem ConfigName SID_TEXT
 
 [
@@ -526,24 +508,6 @@ SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
 ]
 
 
-SfxVoidItem Symbols SID_SYMBOLS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-
 SfxBoolItem Textmode SID_TEXTMODE
 
 [
@@ -597,43 +561,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
-]
-
-
-SfxVoidItem ToolBoxWindow SID_TOOLBOXWINDOW
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-
-SfxBoolItem ToolBox SID_TOOLBOX
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 
