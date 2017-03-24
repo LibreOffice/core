@@ -120,7 +120,7 @@ namespace drawinglayer
                 return OUString("Time");
             }
 
-            // a central PropertyValue parsing method to allow transportatin of
+            // a central PropertyValue parsing method to allow transportation of
             // all ViewParameters using UNO API
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {

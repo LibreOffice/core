@@ -375,7 +375,7 @@ namespace drawinglayer
         basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // check if this needs to be a TextDecoratedPortionPrimitive2D or
-            // if a TextSimplePortionPrimitive2D would be suficcient
+            // if a TextSimplePortionPrimitive2D would be sufficient
             if (TEXT_LINE_NONE != getFontOverline()
                  || TEXT_LINE_NONE != getFontUnderline()
                  || TEXT_STRIKEOUT_NONE != getTextStrikeout()
