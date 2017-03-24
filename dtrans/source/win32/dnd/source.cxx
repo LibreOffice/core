@@ -67,7 +67,7 @@ DragSource::~DragSource()
 
      ????
           Do we really need a separate thread for
-          every Dnd opeartion or only if the source
+          every Dnd operation or only if the source
           thread is an MTA thread
      ????
 */
