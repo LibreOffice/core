@@ -48,7 +48,7 @@ namespace editeng
             </ul>
             For instance, you could have two independent selections within your document, which are then
             two text portions. A text unit would be single Hangul/Hanja words within a portion, or even
-            single Hangul syllabills when "replace by character" is enabled.
+            single Hangul syllabification when "replace by character" is enabled.
         </p>
     */
     class EDITENG_DLLPUBLIC HangulHanjaConversion

@@ -235,7 +235,7 @@ namespace drawinglayer
         /** BufferedDecompositionPrimitive2D class
 
             Baseclass for all C++ implementations of css::graphic::XPrimitive2D
-            which want to buffer the decomoposition result
+            which want to buffer the decomposition result
 
             Buffering the decomposition is the most-used buffering and is thus used my most
             primitive implementations which support a decomposition as base class.
