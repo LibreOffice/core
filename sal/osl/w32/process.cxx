@@ -71,7 +71,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     // it's not exactly easy - an example can be found here:
     // http://windowsitpro.com/site-files/windowsitpro.com/files/archive/windowsitpro.com/content/content/15989/listing_01.txt
 
-    HANDLE hDupProcess = NULL;
+    HANDLE hDupProcess = nullptr;
 
 
     // we need to make sure we can create a thread in the remote process, if the handle was created
@@ -97,7 +97,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
         SAL_WARN("sal.osl", "Could not duplicate process handle, let's hope for the best...");
 
     DWORD dwProcessStatus = 0;
-    HANDLE hRemoteThread = NULL;
+    HANDLE hRemoteThread = nullptr;
 
     if (GetExitCodeProcess(hProcess, &dwProcessStatus) && (dwProcessStatus == STILL_ACTIVE))
     {
@@ -121,11 +121,11 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
         FARPROC pfnExitProc = GetProcAddress(hKernel, "ExitProcess");
         hRemoteThread = CreateRemoteThread(
                             hProcess,           /* process handle */
-                            NULL,               /* default security descriptor */
+                            nullptr,               /* default security descriptor */
                             0,                  /* initial size of stack in bytes is default
                                                    size for executable */
-                            (LPTHREAD_START_ROUTINE)pfnExitProc, /* Win32 ExitProcess() */
-                            (PVOID)uExitCode,   /* ExitProcess() dummy return... */
+                            reinterpret_cast<LPTHREAD_START_ROUTINE>(pfnExitProc), /* Win32 ExitProcess() */
+                            reinterpret_cast<PVOID>(uExitCode),   /* ExitProcess() dummy return... */
                             0,                  /* value of 0 tells thread to run immediately
                                                    after creation */
                             &dwTID);            /* new remote thread's identifier */
