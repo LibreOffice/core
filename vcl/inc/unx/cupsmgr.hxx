@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 #define INCLUDED_VCL_INC_UNX_CUPSMGR_HXX
 
+#include <mutex>
+
 #include <vcl/printerinfomanager.hxx>
 #include "osl/module.h"
 #include "osl/thread.h"
@@ -55,7 +57,7 @@ class CUPSManager : public PrinterInfoManager
     osl::Mutex                                                  m_aCUPSMutex;
     oslThread                                                   m_aDestThread;
 
-    osl::Mutex                                                  m_aGetPPDMutex;
+    std::mutex                                                  m_aGetPPDMutex;
     bool                                                        m_bPPDThreadRunning;
 
     CUPSManager();

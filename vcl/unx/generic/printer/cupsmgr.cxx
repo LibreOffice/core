@@ -39,27 +39,29 @@
 #include <vcl/fixed.hxx>
 
 #include <algorithm>
+#include <mutex>
+#include <condition_variable>
 
 using namespace psp;
 using namespace osl;
 
 struct GetPPDAttribs
 {
-    osl::Condition      m_aCondition;
-    OString             m_aParameter;
-    OString             m_aResult;
-    int                 m_nRefs;
-    bool*               m_pResetRunning;
-    osl::Mutex*         m_pSyncMutex;
+    std::condition_variable m_aCondition;
+    OString                 m_aParameter;
+    OString                 m_aResult;
+    int                     m_nRefs;
+    bool*                   m_pResetRunning;
+    std::mutex*             m_pSyncMutex;
 
     GetPPDAttribs( const char * m_pParameter,
-                   bool* pResetRunning, osl::Mutex* pSyncMutex )
-            : m_aParameter( m_pParameter ),
+                   bool* pResetRunning, std::mutex* pSyncMutex )
+            : m_aCondition(),
+              m_aParameter( m_pParameter ),
               m_pResetRunning( pResetRunning ),
               m_pSyncMutex( pSyncMutex )
     {
         m_nRefs = 2;
-        m_aCondition.reset();
     }
 
     ~GetPPDAttribs()
@@ -82,23 +84,30 @@ struct GetPPDAttribs
         // This CUPS method is not at all thread-safe we need
         // to dup the pointer to a static buffer it returns ASAP
         OString aResult = cupsGetPPD(m_aParameter.getStr());
-        MutexGuard aGuard( *m_pSyncMutex );
+        std::lock_guard<std::mutex> aGuard( *m_pSyncMutex );
         m_aResult = aResult;
-        m_aCondition.set();
+        m_aCondition.notify_all();
         unref();
     }
 
-    OString waitResult( TimeValue *pDelay )
+    template <class Rep, class Period>
+    OString waitResult( std::chrono::duration<Rep, Period> *pDelay=nullptr )
     {
-        m_pSyncMutex->release();
+        std::unique_lock<std::mutex> lck (*m_pSyncMutex);
 
-        if (m_aCondition.wait( pDelay ) != Condition::result_ok
-            )
+        lck.unlock();
+
+        if (pDelay && m_aCondition.wait_for(lck, *pDelay) == std::cv_status::timeout)
         {
             SAL_WARN("vcl.unx.print",
                     "cupsGetPPD " << m_aParameter << " timed out");
         }
-        m_pSyncMutex->acquire();
+        else
+        {
+            m_aCondition.wait(lck);
+        }
+
+        lck.lock();
 
         OString aRetval = m_aResult;
         m_aResult.clear();
@@ -121,7 +130,8 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
 {
     OString aResult;
 
-    m_aGetPPDMutex.acquire();
+    std::lock_guard<std::mutex> lck(m_aGetPPDMutex);
+
     // if one thread hangs in cupsGetPPD already, don't start another
     if( ! m_bPPDThreadRunning )
     {
@@ -132,15 +142,12 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
 
         oslThread aThread = osl_createThread( getPPDWorker, pAttribs );
 
-        TimeValue aValue;
-        aValue.Seconds = 5;
-        aValue.Nanosec = 0;
+        std::chrono::seconds aTimeout(5);
 
         // NOTE: waitResult release and acquires the GetPPD mutex
-        aResult = pAttribs->waitResult( &aValue );
+        aResult = pAttribs->waitResult( &aTimeout );
         osl_destroyThread( aThread );
     }
-    m_aGetPPDMutex.release();
 
     return aResult;
 }
