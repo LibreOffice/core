@@ -547,6 +547,14 @@ void Scheduler::ProcessEventsToIdle()
     }
 }
 
+extern "C" {
+/// used by unit tests that test only via the LOK API
+SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
+{
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
 void Application::Yield()
 {
     ImplYield(true, false, 0);
