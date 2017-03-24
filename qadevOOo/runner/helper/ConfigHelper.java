@@ -263,7 +263,7 @@ public class ConfigHelper
                             XNameContainer.class,xGroup);
         } catch(com.sun.star.container.NoSuchElementException ex) {
              throw new com.sun.star.uno.Exception(ex,
-                "could not get extensilbe group '"+extGroup+
+                "could not get extensible group '"+extGroup+
                 "' from group '"+ group +
                 "' from set '"+ setName +"'");
         }

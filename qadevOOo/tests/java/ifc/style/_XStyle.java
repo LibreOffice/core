@@ -74,7 +74,7 @@ public class _XStyle extends MultiMethodTest {
 
     /**
     * Test calls the method. <p>
-    * Has <b> OK </b> status if the method sreturns <code>true</code>. <p>
+    * Has <b> OK </b> status if the method returns <code>true</code>. <p>
     */
     public void _isInUse() {
         tRes.tested("isInUse()",oObj.isInUse());

@@ -43,7 +43,7 @@ public interface LogWriter {
     /**
      * Set a <CODE>Watcher</CODE> to the <CODE>LogWriter</CODE>
      * This is useful if a test starts a new office instance by itself. In this cases
-     * the <CODE>LogWritter</CODE> could retrigger the <CODE>Watcher</CODE>
+     * the <CODE>LogWriter</CODE> could retrigger the <CODE>Watcher</CODE>
      * @see share.Watcher
      * @param watcher the new <CODE>Watcher</CODE>
      */

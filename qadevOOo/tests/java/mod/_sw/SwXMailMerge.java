@@ -222,7 +222,7 @@ public class SwXMailMerge extends TestCase {
         tEnv.addObjRelation("DataAccessDescriptor.XResultSet", oResultSet);
         tEnv.addObjRelation("DataAccessDescriptor.XConnection", getRemoteXConnection(Param));
 
-        // com.sun.star.text.MailMaerge
+        // com.sun.star.text.MailMerge
         tEnv.addObjRelation("MailMerge.XConnection", getRemoteXConnection(Param));
         tEnv.addObjRelation("MailMerge.XResultSet", oMMXResultSet);
 

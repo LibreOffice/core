@@ -485,7 +485,7 @@ public class ODatabaseForm extends TestCase {
 
 
         // adding an object for XNameReplace testing
-        log.println("adding oInstace as obj relation to environment");
+        log.println("adding oInstance as obj relation to environment");
         tEnv.addObjRelation("INSTANCE", oInstance);
 
 
