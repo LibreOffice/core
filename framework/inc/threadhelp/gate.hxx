@@ -70,7 +70,7 @@ class Gate
         Gate(const Gate&) = delete;
         /*-****************************************************************************************************
             @short      copy-assignment
-            @descr      Forbid copy assiging
+            @descr      Forbid copy assigning
         *//*-*****************************************************************************************************/
         Gate& operator=(const Gate&) = delete;
 

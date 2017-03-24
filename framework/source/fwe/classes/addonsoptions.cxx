@@ -1192,7 +1192,7 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     {
         if ( aURL == SEPARATOR_URL )
         {
-            // A speparator toolbar item only needs a URL
+            // A separator toolbar item only needs a URL
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
             aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= m_aEmpty;
             aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= m_aEmpty;

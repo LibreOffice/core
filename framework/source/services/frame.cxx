@@ -2071,9 +2071,9 @@ void SAL_CALL Frame::disposing()
 
     SAL_INFO("fwk.frame", "[Frame] " << m_sName << " send dispose event to listener");
 
-    // First operation should be ... "stopp all listening for window events on our container window".
+    // First operation should be... "stop all listening for window events on our container window".
     // These events are superfluous but can make trouble!
-    // We will die, die and die ...
+    // We will die, die and die...
     implts_stopWindowListening();
 
     css::uno::Reference<css::frame::XLayoutManager2> layoutMgr;

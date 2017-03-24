@@ -444,7 +444,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 
             if ( Event.Requery )
             {
-                // Release dispatch object - will be requeried on the next activate!
+                // Release dispatch object - will be required on the next activate!
                 pMenuItemHandler->xMenuItemDispatch.clear();
             }
         }

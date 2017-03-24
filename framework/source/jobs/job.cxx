@@ -690,7 +690,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& )
             Then we had not throwed a veto exception. But now we must agree with this situation and break
             all our internal processes. It's not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was running too. Because that would disable this job and may
-            the office does not really shutdownm, because another listener has thrown the suitable exception.
+            the office does not really shutdown, because another listener has thrown the suitable exception.
 
     @param  aEvent
                 describes the broadcaster and must be the desktop instance

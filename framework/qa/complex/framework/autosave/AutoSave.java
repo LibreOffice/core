@@ -375,7 +375,7 @@ public class AutoSave
      *  @descr  First we simulate an UI save by dispatching the right URL
      *          to the document and at the same time we try to trigger an AutoSave
      *          from another thread. So these operations should be started at the same time.
-     *          It should not crash. The AutoSave request must be postphoned.
+     *          It should not crash. The AutoSave request must be postponed.
      */
     @Test public void checkConcurrentAutoSaveToNormalUISave()
     {

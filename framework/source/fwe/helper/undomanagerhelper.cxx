@@ -343,7 +343,7 @@ namespace framework
         const UndoManagerEvent aEvent( buildEvent( i_title ) );
 
         // TODO: this notification method here is used by UndoManagerHelper_Impl, to multiplex the notifications we
-        // receive from the IUndoManager. Those notitications are sent with a locked SolarMutex, which means
+        // receive from the IUndoManager. Those notifications are sent with a locked SolarMutex, which means
         // we're doing the multiplexing here with a locked SM, too. Which is Bad (TM).
         // Fixing this properly would require outsourcing all the notifications into an own thread - which might lead
         // to problems of its own, since clients might expect synchronous notifications.
