@@ -237,7 +237,7 @@ protected:
     // The map is filled by buildComTlbIndex
     // It maps Uno Function names to an index which is used in ITypeInfo::GetFuncDesc
     TLBFuncIndexMap m_mapComFunc;
-    // used for synchroizing the computation of the content for m_mapComFunc
+    // used for synchronizing the computation of the content for m_mapComFunc
     bool m_bComTlbIndexInit;
     // Keeps the ITypeInfo obtained from IDispatch::GetTypeInfo
     CComPtr< ITypeInfo > m_spTypeInfo;

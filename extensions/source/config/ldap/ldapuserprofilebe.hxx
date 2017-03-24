@@ -47,8 +47,8 @@ typedef cppu::WeakComponentImplHelper<css::beans::XPropertySet,
 struct LdapProfileMutexHolder { osl::Mutex mMutex; };
 /**
   Implements the PlatformBackend service, a specialization of the
-  XPropertySet service for retreiving LDAP user profile
-  configuration settings from a LDAP repsoitory.
+  XPropertySet service for retrieving LDAP user profile
+  configuration settings from a LDAP repository.
   */
 class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 {

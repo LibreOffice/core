@@ -417,7 +417,7 @@ bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationI
         // We need the name of the property or method to get its type information.
         // The name can be identified through the param "id"
         // that is kept as value in the map m_nameToDispIdMap.
-        // Proplem: the Windows JScript engine sometimes changes small letters to capital
+        // Problem: the Windows JScript engine sometimes changes small letters to capital
         // letters as happens in xidlclass_obj.createObject( var) // in JScript.
         // IDispatch::GetIdsOfNames is then called with "CreateObject" !!!
         // m_nameToDispIdMap can contain several names for one DISPID but only one is

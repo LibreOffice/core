@@ -1338,7 +1338,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         if ( m_bFromClipboard )
         {
             // the object should be initialized from clipboard
-            // inpossibility to initialize the object means error here
+            // impossibility to initialize the object means error here
             CreateOleComponentFromClipboard_Impl();
             m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
             m_pOleComponent->RunObject();

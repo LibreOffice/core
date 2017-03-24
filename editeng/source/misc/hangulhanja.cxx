@@ -88,7 +88,7 @@ namespace editeng
                                                     // (and likely a specialised dialog) or if it is to run
                                                     // automatically without any user interaction.
                                                     // True for Hangul / Hanja conversion
-                                                    // False for Chinese simlified / traditional conversion
+                                                    // False for Chinese simplified / traditional conversion
 
         HangulHanjaConversion*  m_pAntiImpl;            // our "anti-impl" instance
 

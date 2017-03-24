@@ -83,7 +83,7 @@ std::unordered_map<sal_uIntPtr, sal_uIntPtr> AdapterToWrapperMap;
 // key: XInterface of the wrapper object.
 // value: XInterface of the Interface created by the Invocation Adapter Factory.
 // A COM wrapper is responsible for removing the corresponding entry
-// in AdapterToWrappperMap if it is being destroyed. Because the wrapper does not
+// in AdapterToWrapperMap if it is being destroyed. Because the wrapper does not
 // know about its adapted interface it uses WrapperToAdapterMap to get the
 // adapted interface which is then used to locate the entry in AdapterToWrapperMap.
 std::unordered_map<sal_uIntPtr,sal_uIntPtr> WrapperToAdapterMap;
@@ -475,7 +475,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
                     OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
                     if ( sTmp.startsWith("_") )
                        sTmp = sTmp.copy(1);
-                    // do we own the memory for pTypeLib, msdn doco is vague
+                    // do we own the memory for pTypeLib, msdn doc is vague
                     // I'll assume we do
                     CComPtr< ITypeLib > pTypeLib;
                     unsigned int index;
@@ -2187,7 +2187,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
     cit itIndex= m_mapComFunc.find(sFuncName);
     if (itIndex == m_mapComFunc.end())
     {
-        //try case insensive with IDispatch::GetIDsOfNames
+        //try case insensitive with IDispatch::GetIDsOfNames
         DISPID id;
         if (getDispid(sFuncName, &id))
         {
@@ -2255,7 +2255,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
     pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName);
     if (p.first == m_mapComFunc.end())
     {
-        //try case insensive with IDispatch::GetIDsOfNames
+        //try case insensitive with IDispatch::GetIDsOfNames
         DISPID id;
         if (getDispid(sFuncName, &id))
         {

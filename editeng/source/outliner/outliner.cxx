@@ -2102,7 +2102,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         const sal_Int32 nEndPos = pEditEngine->GetTextLen(nEndPara);
 
         if (nLen == 0) {
-            // XXX: What happens inside this case might be dependent on the joining paragraps or not-thingy
+            // XXX: What happens inside this case might be dependent on the joining paragraph or not-thingy
             // Overflowing paragraph is empty or first line overflowing: it's not "Non-Overflowing" text then
             sal_Int32 nParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
             aOverflowingTextSelection =

@@ -483,7 +483,7 @@ STDMETHODIMP CCallback::inSeqXEventListener( LPSAFEARRAY listeners, LPSAFEARRAY 
     hr= SafeArrayGetLBound( listeners, 1, &lbound);
     count= ubound - lbound +1;
 
-    // We assume thate the count of EventObjects in events is the same
+    // We assume that the count of EventObjects in events is the same
     for( long i = 0; i < count; i++)
     {
         CComVariant varListener;
