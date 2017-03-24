@@ -808,7 +808,7 @@ public:
             *p, mrClipTab.GetDoc(), getDestPos(nRow), ScCloneFlags::StartListening);
 
         //  rotate reference
-        //  for Cut, the referneces are later adjusted through UpdateTranspose
+        //  for Cut, the references are later adjusted through UpdateTranspose
 
         if (!mbWasCut)
             pNew->TransposeReference();

@@ -646,7 +646,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
         {
             if ( const PivotCacheItem* pItem = rBaseCacheField.getCacheItems().getCacheItem( aIt - aBeg ) )
             {
-                // Skip unspecified or ununsed entries or errors
+                // Skip unspecified or unused entries or errors
                 if ( pItem->isUnused() || ( pItem->getType() == XML_m ) ||  ( pItem->getType() == XML_e ) )
                     continue;
             }

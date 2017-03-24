@@ -1801,7 +1801,7 @@ void ScInterpreter::ScPoissonDist( bool bODFF )
             }
             else
             {
-                if (x >= 936.0) // result is always undistinghable from 1
+                if (x >= 936.0) // result is always indistinguishable from 1
                     PushDouble (1.0);
                 else
                 {

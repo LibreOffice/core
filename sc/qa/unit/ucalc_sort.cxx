@@ -398,7 +398,7 @@ void Test::testSortWithFormulaRefs()
     for (SCROW i = 1; i <= 4; ++i)
         m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
 
-    // Insert forumulas in A1:A6 on the 2nd sheet.
+    // Insert formulas in A1:A6 on the 2nd sheet.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
         m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 

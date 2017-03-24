@@ -258,7 +258,7 @@ protected:
 
 protected:
     XclImpDrawObjVector maChildren;         /// Grouped objects.
-    sal_uInt16          mnFirstUngrouped;   /// Object identfier of first object not grouped into this group.
+    sal_uInt16          mnFirstUngrouped;   /// Object identifier of first object not grouped into this group.
 };
 
 /** A line object. */

@@ -90,7 +90,7 @@ private:
     double mfRMSE;                      // root mean squared error (standard deviation)
     double mfSMAPE;                     // symmetric mean absolute error
     FormulaError mnErrorValue;
-    bool bAdditive;                     // true: additive method, false: mulitplicative method
+    bool bAdditive;                     // true: additive method, false: multiplicative method
     bool bEDS;                          // true: EDS, false: ETS
 
     // constants used in determining best fit for alpha, beta, gamma
@@ -391,7 +391,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
 
 bool ScETSForecastCalculation::initData( )
 {
-    // give variuous vectors size and initial value
+    // give various vectors size and initial value
     mpBase     = new double[ mnCount ];
     mpTrend    = new double[ mnCount ];
     if ( !bEDS )

@@ -273,7 +273,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     do
                     {
                         if (!(pValues[nProp] >>= nIntVal))
-                            // extractino failed.
+                            // extracting failed.
                             break;
 
                         switch (nIntVal)

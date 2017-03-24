@@ -299,7 +299,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
     } eState = xlPSText;
 
     const sal_Unicode* pChar = rHFString.getStr();
-    const sal_Unicode* pNull = pChar + rHFString.getLength(); // pointer to teminating null char
+    const sal_Unicode* pNull = pChar + rHFString.getLength(); // pointer to terminating null char
     while( *pChar )
     {
         switch( eState )

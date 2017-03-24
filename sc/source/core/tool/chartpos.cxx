@@ -366,7 +366,7 @@ void ScChartPositioner::CreatePositionMap()
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
-            // nTab in ColKey to allow to have the same col/row in another tabe
+            // nTab in ColKey to allow to have the same col/row in another table
             sal_uLong nInsCol = (static_cast<sal_uLong>(nTab) << 16) | (bNoGlue ? 0 :
                     static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
