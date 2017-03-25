@@ -1271,12 +1271,12 @@ void BrowseBox::ColumnInserted( sal_uInt16 nPos )
 
 sal_uInt16 BrowseBox::FrozenColCount() const
 {
-    sal_uInt16 nCol;
+    BrowserColumns::size_type nCol;
     for ( nCol = 0;
           nCol < pCols.size() && pCols[ nCol ]->IsFrozen();
           ++nCol )
         /* empty loop */;
-    return nCol;
+    return nCol; //TODO: BrowserColumns::size_type -> sal_uInt16!
 }
 
 

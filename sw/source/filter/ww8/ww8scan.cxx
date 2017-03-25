@@ -4123,7 +4123,7 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     if (pBook[0] && pBook[1])
     {
         WW8_CP nStartAkt, nEndAkt;
-        while (i < aBookNames.size())
+        while (sal::static_int_cast<decltype(aBookNames)::size_type>(i) < aBookNames.size())
         {
             void* p;
             sal_uInt16 nEndIdx;
