@@ -276,7 +276,7 @@ namespace cairocanvas
             useStates( viewState, renderState, true );
 
             cairo_move_to( mpCairo.get(), aBezierSegment.Px + 0.5, aBezierSegment.Py + 0.5 );
-            // tdf#99165 correction of control poinits not needed here, only hairlines drawn
+            // tdf#99165 correction of control points not needed here, only hairlines drawn
             // (see cairo_set_line_width above)
             cairo_curve_to( mpCairo.get(),
                             aBezierSegment.C1x + 0.5, aBezierSegment.C1y + 0.5,

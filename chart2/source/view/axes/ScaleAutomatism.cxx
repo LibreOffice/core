@@ -261,7 +261,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
     if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
         rExplicitScale.Maximum = EquidistantTickFactory::getMaximumAtIncrement( rExplicitScale.Maximum, rExplicitIncrement );
 
-    //prevent performace killover
+    //prevent performance killover
     double fDistanceCount = ::rtl::math::approxFloor( (rExplicitScale.Maximum-rExplicitScale.Minimum) / rExplicitIncrement.Distance );
     if( static_cast< sal_Int32 >( fDistanceCount ) > MAXIMUM_MANUAL_INCREMENT_COUNT )
     {

@@ -150,7 +150,7 @@ public:
     1==AttachedAxisIndex indicates that the series should be scaled at the first secondary axis if there is any otherwise at the main y axis
     and so on.
     The parameter nAxisIndex matches this DataSeries property 'AttachedAxisIndex'.
-    nAxisIndex must be greater than 0. nAxisIndex==1 referres to the first secondary axis.
+    nAxisIndex must be greater than 0. nAxisIndex==1 refers to the first secondary axis.
     )
 
     @throws css::uno::RuntimeException

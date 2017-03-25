@@ -61,7 +61,7 @@ public:
 
         @return
             A pair containing a template with the correct properties set as
-            first entry and the service name of the templateas second entry.  If
+            first entry and the service name of the templates second entry.  If
             no template was found both elements are empty.
      */
     static tTemplateWithServiceName

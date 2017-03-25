@@ -80,7 +80,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         Decl const * prev = getPreviousNonFriendDecl(decl);
         if (prev != nullptr/* && prev != decl->getPrimaryTemplate()*/) {
-            // Workaround for redeclarations that introduce visiblity attributes
+            // Workaround for redeclarations that introduce visibility attributes
             // (as is done with
             //
             //  SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
