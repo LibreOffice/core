@@ -24,10 +24,16 @@
 // Color types
 typedef sal_uInt32 ColorData;
 
-#define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE) \
-        ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE))))|(((sal_uInt32)((sal_uInt8)(GREEN)))<<8)|(((sal_uInt32)((sal_uInt8)(RED)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE)))<<24))
+constexpr ColorData TRGB_COLORDATA(
+    sal_uInt8 TRANSPARENCE, sal_uInt8 RED, sal_uInt8 GREEN, sal_uInt8 BLUE)
+{
+    return sal_uInt32(BLUE) | (sal_uInt32(GREEN) << 8) | (sal_uInt32(RED) << 16)
+        | (sal_uInt32(TRANSPARENCE) << 24);
+}
 
-#define RGB_COLORDATA( r,g,b )      ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
+constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
+    return sal_uInt32(b) | (sal_uInt32(g) << 8) | (sal_uInt32(r) << 16);
+}
 
 #define COLORDATA_RED( n )          ((sal_uInt8)((n)>>16))
 #define COLORDATA_GREEN( n )        ((sal_uInt8)(((sal_uInt16)(n)) >> 8))

@@ -33,7 +33,11 @@ enum class DeviceFormat {
                         };
 
 typedef sal_uInt32 SalColor;
-#define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
+
+constexpr SalColor MAKE_SALCOLOR(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
+    return sal_uInt32(b) | (sal_uInt32(g) << 8) | (sal_uInt32(r) << 16);
+}
+
 #define SALCOLOR_RED( n )           ((sal_uInt8)((n)>>16))
 #define SALCOLOR_GREEN( n )         ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
 #define SALCOLOR_BLUE( n )          ((sal_uInt8)(n))
