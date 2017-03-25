@@ -2096,58 +2096,56 @@ SmStructureNode *SmParser::DoMatrix()
 {
     std::unique_ptr<SmMatrixNode> pMNode(new SmMatrixNode(m_aCurToken));
     NextToken();
-    if (m_aCurToken.eType == TLGROUP)
+    if (m_aCurToken.eType != TLGROUP)
+        return DoError(SmParseError::LgroupExpected);
+
+    SmNodeArray aExprArr;
+    do
     {
-        sal_uInt16 c = 0;
-
-        do
-        {
-            NextToken();
-            m_aNodeStack.emplace_front(DoAlign());
-            c++;
-        }
-        while (m_aCurToken.eType == TPOUND);
-
-        sal_uInt16 r = 1;
-
-        while (m_aCurToken.eType == TDPOUND)
-        {
-            NextToken();
-            for (sal_uInt16 i = 0; i < c; i++)
-            {
-                m_aNodeStack.emplace_front(DoAlign());
-                if (i < (c - 1))
-                {
-                    if (m_aCurToken.eType == TPOUND)
-                    {
-                        NextToken();
-                    }
-                    else
-                        Error(SmParseError::PoundExpected);
-                }
-            }
-
-            r++;
-        }
-
-        size_t nRC = static_cast<size_t>(r) * c;
-
-        SmNodeArray ExpressionArray(nRC);
-        for (auto rIt = ExpressionArray.rbegin(), rEnd = ExpressionArray.rend(); rIt != rEnd; ++rIt)
-        {
-            *rIt = popOrZero(m_aNodeStack);
-        }
-
-        if (m_aCurToken.eType != TRGROUP)
-            Error(SmParseError::RgroupExpected);
-
-        pMNode->SetSubNodes(ExpressionArray);
-        pMNode->SetRowCol(r, c);
-
         NextToken();
-        return pMNode.release();
+        aExprArr.push_back(DoAlign());
     }
-    return DoError(SmParseError::LgroupExpected);
+    while (m_aCurToken.eType == TPOUND);
+
+    size_t nCol = aExprArr.size();
+    size_t nRow = 1;
+    while (m_aCurToken.eType == TDPOUND)
+    {
+        NextToken();
+        for (size_t i = 0; i < nCol; i++)
+        {
+            std::unique_ptr<SmNode> pNode(DoAlign());
+            if (i < (nCol - 1))
+            {
+                if (m_aCurToken.eType == TPOUND)
+                    NextToken();
+                else
+                    pNode.reset(DoError(SmParseError::PoundExpected));
+            }
+            aExprArr.push_back(pNode.release());
+        }
+        ++nRow;
+    }
+
+    if (m_aCurToken.eType == TRGROUP)
+        NextToken();
+    else
+    {
+        auto pENode = DoError(SmParseError::RgroupExpected);
+        if (aExprArr.empty())
+            nRow = nCol = 1;
+        else
+        {
+            delete aExprArr.back();
+            aExprArr.pop_back();
+        }
+        aExprArr.push_back(pENode);
+    }
+
+    pMNode->SetSubNodes(aExprArr);
+    pMNode->SetRowCol(static_cast<sal_uInt16>(nRow),
+                      static_cast<sal_uInt16>(nCol));
+    return pMNode.release();
 }
 
 SmSpecialNode *SmParser::DoSpecial()
