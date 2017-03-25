@@ -623,9 +623,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
     OString aWidth(OString::number(TwipsToEMU(cx)));
     //we explicitly check the converted EMU value for the range as mentioned in above comment.
-    aWidth = (aWidth.toInt64() > 0 ? (aWidth.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE) : aWidth.getStr()): "0");
+    aWidth = (aWidth.toInt64() > 0 ? (aWidth.toInt64() > MAX_INTEGER_VALUE ? IS(MAX_INTEGER_VALUE) : aWidth.getStr()): "0");
     OString aHeight(OString::number(TwipsToEMU(cy)));
-    aHeight = (aHeight.toInt64() > 0 ? (aHeight.toInt64() > MAX_INTEGER_VALUE ? I64S(MAX_INTEGER_VALUE) : aHeight.getStr()): "0");
+    aHeight = (aHeight.toInt64() > 0 ? (aHeight.toInt64() > MAX_INTEGER_VALUE ? IS(MAX_INTEGER_VALUE) : aHeight.getStr()): "0");
 
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_extent,
                                             XML_cx, aWidth,
@@ -1550,8 +1550,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         {
             //not the first in the chain, so write the tag as linkedTxbx
             pFS->singleElementNS(XML_wps, XML_linkedTxbx,
-                                 XML_id,  I32S(linkedTextboxesIter->second.nId),
-                                 XML_seq, I32S(linkedTextboxesIter->second.nSeq),
+                                 XML_id,  IS(linkedTextboxesIter->second.nId),
+                                 XML_seq, IS(linkedTextboxesIter->second.nSeq),
                                  FSEND);
             /* no text content should be added to this tag,
                since the textbox is linked, the entire content
@@ -1565,7 +1565,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
                to this block*/
             //since the text box is linked, it needs an id.
             pFS->startElementNS(XML_wps, XML_txbx,
-                                XML_id,  I32S(linkedTextboxesIter->second.nId),
+                                XML_id,  IS(linkedTextboxesIter->second.nId),
                                 FSEND);
             isTxbxLinked = true ;
         }
