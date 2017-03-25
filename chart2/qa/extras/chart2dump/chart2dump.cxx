@@ -201,7 +201,7 @@ protected:
     {
         rExpectedTranform = readExpected(sCheck); // Reference transfromation string
 
-        // Covnert string back to a transformation;
+        // Convert string back to a transformation;
         drawing::HomogenMatrix3 aExpectedTransform;
         aExpectedTransform.Line1.Column1 = rExpectedTranform.getToken(0, ';').toDouble();
         aExpectedTransform.Line1.Column2 = rExpectedTranform.getToken(1, ';').toDouble();

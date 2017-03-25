@@ -454,7 +454,7 @@ void BarChart::createShapes()
         std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
 
-        //sum up the values for all series in a complete z zlot per attached axis
+        //sum up the values for all series in a complete z slot per attached axis
         std::map< sal_Int32,  double > aLogicYSumMap;
         for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
