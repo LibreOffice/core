@@ -104,7 +104,7 @@ class RewritePlugin
             // If the resulting line would be completely empty, it'll be removed.
             RemoveLineIfEmpty = 1 << 0,
             // Use this to remove the declaration/statement as a whole, i.e. all whitespace before the statement
-            // and the trailing semicolor (is not part of the AST element range itself).
+            // and the trailing semicolon (is not part of the AST element range itself).
             // The trailing semicolon must be present.
             RemoveWholeStatement = 1 << 1,
             // Removes also all whitespace preceding and following the expression (completely, so that

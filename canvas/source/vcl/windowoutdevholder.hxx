@@ -41,7 +41,7 @@ namespace vclcanvas
         virtual const OutputDevice& getOutDev() const override { return mrOutputWindow; }
 
         // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
-        // now listenes to the window component, I still consider
+        // now listens to the window component, I still consider
         // holding a naked reference unsafe here (especially as we
         // pass it around via getOutDev). This _only_ works reliably,
         // if disposing the SpriteCanvas correctly disposes all

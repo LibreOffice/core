@@ -1286,7 +1286,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
     if( ! bReturn )
     {
-        // Natvigation (Tab/F3/Home/End)
+        // Navigation (Tab/F3/Home/End)
         uno::Reference< XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
         ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));

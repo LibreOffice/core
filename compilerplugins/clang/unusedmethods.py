@@ -207,7 +207,7 @@ for d in definitionSet:
     # alone if the other one is in use.
     if d[1] == "begin() const" or d[1] == "begin()" or d[1] == "end()" or d[1] == "end() const":
         continue
-    # There is lots of macro magic going on in SRCDIR/include/sax/fshelper.hxx that should be using C++11 varag templates
+    # There is lots of macro magic going on in SRCDIR/include/sax/fshelper.hxx that should be using C++11 varargs templates
     if d[1].startswith("sax_fastparser::FastSerializerHelper::"):
        continue
     # used by Windows build

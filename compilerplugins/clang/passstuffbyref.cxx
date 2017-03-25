@@ -21,7 +21,7 @@
 //
 // Generally recommending lambda capture by-ref rather than by-copy is even more
 // problematic than with function parameters, as a lambda instance can easily
-// outlive a referrenced variable.  So once lambdas start to get used in more
+// outlive a referenced variable. So once lambdas start to get used in more
 // sophisticated ways than passing them into standard algorithms, this plugin's
 // advice, at least for explicit captures, will need to be revisited.
 
