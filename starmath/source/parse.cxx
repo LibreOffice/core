@@ -1962,8 +1962,7 @@ SmStructureNode *SmParser::DoBrace()
 SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
 {
     auto pBody = o3tl::make_unique<SmBracebodyNode>(m_aCurToken);
-    sal_uInt16           nNum = 0;
-
+    SmNodeArray aNodes;
     // get body if any
     if (bIsLeftRight)
     {
@@ -1971,17 +1970,14 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+                aNodes.push_back(new SmMathSymbolNode(m_aCurToken));
                 NextToken();
-                nNum++;
             }
             else if (m_aCurToken.eType != TRIGHT)
             {
-                m_aNodeStack.emplace_front(DoAlign());
-                nNum++;
-
+                aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
-                    Error(SmParseError::RightExpected);
+                    aNodes.push_back(DoError(SmParseError::RightExpected));
             }
         } while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TRIGHT);
     }
@@ -1991,26 +1987,16 @@ SmBracebodyNode *SmParser::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
+                aNodes.push_back(new SmMathSymbolNode(m_aCurToken));
                 NextToken();
-                nNum++;
             }
             else if (!TokenInGroup(TG::RBrace))
             {
-                m_aNodeStack.emplace_front(DoAlign());
-                nNum++;
-
+                aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TG::RBrace))
-                    Error(SmParseError::RbraceExpected);
+                    aNodes.push_back(DoError(SmParseError::RbraceExpected));
             }
         } while (m_aCurToken.eType != TEND  &&  !TokenInGroup(TG::RBrace));
-    }
-
-    // build argument vector in parsing order
-    SmNodeArray aNodes(nNum);
-    for (auto rIt = aNodes.rbegin(), rEnd = aNodes.rend(); rIt != rEnd; ++rIt)
-    {
-        *rIt = popOrZero(m_aNodeStack);
     }
 
     pBody->SetSubNodes(aNodes);
