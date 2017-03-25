@@ -4190,10 +4190,10 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
         double bottom = nCropB * heightMultiplier;
 
         m_pSerializer->singleElementNS( XML_a, XML_srcRect,
-             XML_l, I32S(left),
-             XML_t, I32S(top),
-             XML_r, I32S(right),
-             XML_b, I32S(bottom),
+             XML_l, IS(left),
+             XML_t, IS(top),
+             XML_r, IS(right),
+             XML_b, IS(bottom),
              FSEND );
     }
 }
@@ -4522,7 +4522,7 @@ void DocxAttributeOutput::WritePostponedChart()
            docPr Id should be unique, ensuring the same here.
         */
         m_pSerializer->singleElementNS( XML_wp, XML_docPr,
-            XML_id, I32S( m_anchorId++ ),
+            XML_id, IS( m_anchorId++ ),
             XML_name, USS( sName ),
             FSEND );
 
