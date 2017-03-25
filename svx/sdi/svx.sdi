@@ -1376,7 +1376,7 @@ SfxBoolItem CheckBox SID_FM_CHECKBOX
 ]
 
 
-SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
+SfxVoidItem ChooseControls SID_CHOOSE_CONTROLS
 
 [
     AutoUpdate = TRUE,
@@ -1392,8 +1392,6 @@ SvxChooseControlItem ChooseControls SID_CHOOSE_CONTROLS
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_INSERT;
 ]
 
 
@@ -1679,7 +1677,7 @@ SfxBoolItem Combobox SID_INSERT_COMBOBOX
 ]
 
 
-SfxUInt16Item Config SID_FM_CONFIG
+SfxVoidItem Config SID_FM_CONFIG
 
 [
     AutoUpdate = TRUE,
@@ -1695,8 +1693,6 @@ SfxUInt16Item Config SID_FM_CONFIG
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_INSERT;
 ]
 
 
@@ -1716,8 +1712,6 @@ SfxBoolItem MoreControls SID_FM_MORE_CONTROLS
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_INSERT;
 ]
 
 
@@ -1737,8 +1731,6 @@ SfxBoolItem FormDesignTools SID_FM_FORM_DESIGN_TOOLS
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_INSERT;
 ]
 
 
@@ -5799,7 +5791,7 @@ SfxBoolItem InsertNumericField SID_INSERT_NUMERICFIELD
 ]
 
 
-SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
+SfxVoidItem ObjectAlign SID_OBJECT_ALIGN
 
 [
     AutoUpdate = FALSE,
@@ -5815,8 +5807,6 @@ SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
-    PseudoSlots = TRUE;
-    PseudoPrefix = SID_OBJECT_ALIGN;
 ]
 
 
@@ -10838,8 +10828,6 @@ SfxBoolItem ColorSettings SID_COLOR_SETTINGS
         MenuConfig = FALSE,
         ToolBoxConfig = TRUE,
         GroupId = GID_MODIFY;
-        PseudoSlots = TRUE;
-        PseudoPrefix = SID_INSERT;
 ]
 
 

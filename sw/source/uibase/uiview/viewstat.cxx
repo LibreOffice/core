@@ -428,7 +428,6 @@ void SwView::GetState(SfxItemSet &rSet)
                 if( !m_pShell )
                     SelectShell();
                 sal_uInt16 nAlias = 0;
-                bool bDraw = false;
                 if( m_nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {
                     switch( nWhich )
@@ -440,17 +439,6 @@ void SwView::GetState(SfxItemSet &rSet)
                         case SID_ALIGN_ANY_TOP      :   nAlias = SID_TABLE_VERT_NONE; break;
                         case SID_ALIGN_ANY_VCENTER  :   nAlias = SID_TABLE_VERT_CENTER; break;
                         case SID_ALIGN_ANY_BOTTOM   :   nAlias = SID_TABLE_VERT_BOTTOM; break;
-                    }
-                }
-                else if(m_nSelectionType & (nsSelectionType::SEL_DRW))
-                {
-                    //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
-                    if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
-                    {
-                        const SfxPoolItem* pItem = nullptr;
-                        GetViewFrame()->GetDispatcher()->QueryState( SID_OBJECT_ALIGN, pItem );
-                        if(pItem)
-                            bDraw = true;
                     }
                 }
                 else
@@ -471,10 +459,13 @@ void SwView::GetState(SfxItemSet &rSet)
                     GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
                 if(pState)
                 {
-                    std::unique_ptr<SfxPoolItem> pNewItem(pState->CloneSetWhich(nWhich));
-                    rSet.Put(*pNewItem);
+                    if (!(m_nSelectionType & nsSelectionType::SEL_DRW))
+                    {
+                        std::unique_ptr<SfxPoolItem> pNewItem(pState->CloneSetWhich(nWhich));
+                        rSet.Put(*pNewItem);
+                    }
                 }
-                else if(!bDraw)
+                else
                     rSet.DisableItem(nWhich);
             }
             break;

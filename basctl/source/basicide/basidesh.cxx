@@ -46,7 +46,6 @@
 
 #define basctl_Shell
 #define SFX_TYPEMAP
-#include <idetemp.hxx>
 #include <basslots.hxx>
 
 #ifdef DISABLE_DYNLOADING
@@ -840,7 +839,7 @@ void Shell::InvalidateBasicIDESlots()
             pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
             pBindings->Invalidate( SID_BASICIDE_ADDWATCH );
             pBindings->Invalidate( SID_BASICIDE_REMOVEWATCH );
-            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
+
             pBindings->Invalidate( SID_PRINTDOC );
             pBindings->Invalidate( SID_PRINTDOCDIRECT );
             pBindings->Invalidate( SID_SETUPPRINTER );
@@ -851,6 +850,49 @@ void Shell::InvalidateBasicIDESlots()
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
             pBindings->Invalidate( SID_ATTR_INSERT );
             pBindings->Invalidate( SID_ATTR_SIZE );
+        }
+    }
+}
+
+void Shell::InvalidateControlSlots()
+{
+    if (GetShell())
+    {
+        if (SfxBindings* pBindings = GetBindingsPtr())
+        {
+            pBindings->Invalidate( SID_INSERT_FORM_RADIO );
+            pBindings->Invalidate( SID_INSERT_FORM_CHECK );
+            pBindings->Invalidate( SID_INSERT_FORM_LIST );
+            pBindings->Invalidate( SID_INSERT_FORM_COMBO );
+            pBindings->Invalidate( SID_INSERT_FORM_VSCROLL );
+            pBindings->Invalidate( SID_INSERT_FORM_HSCROLL );
+            pBindings->Invalidate( SID_INSERT_FORM_SPIN );
+
+            pBindings->Invalidate( SID_INSERT_SELECT );
+            pBindings->Invalidate( SID_INSERT_PUSHBUTTON );
+            pBindings->Invalidate( SID_INSERT_RADIOBUTTON );
+            pBindings->Invalidate( SID_INSERT_CHECKBOX );
+            pBindings->Invalidate( SID_INSERT_LISTBOX );
+            pBindings->Invalidate( SID_INSERT_COMBOBOX );
+            pBindings->Invalidate( SID_INSERT_GROUPBOX );
+            pBindings->Invalidate( SID_INSERT_EDIT );
+            pBindings->Invalidate( SID_INSERT_FIXEDTEXT );
+            pBindings->Invalidate( SID_INSERT_IMAGECONTROL );
+            pBindings->Invalidate( SID_INSERT_PROGRESSBAR );
+            pBindings->Invalidate( SID_INSERT_HSCROLLBAR );
+            pBindings->Invalidate( SID_INSERT_VSCROLLBAR );
+            pBindings->Invalidate( SID_INSERT_HFIXEDLINE );
+            pBindings->Invalidate( SID_INSERT_VFIXEDLINE );
+            pBindings->Invalidate( SID_INSERT_DATEFIELD );
+            pBindings->Invalidate( SID_INSERT_TIMEFIELD );
+            pBindings->Invalidate( SID_INSERT_NUMERICFIELD );
+            pBindings->Invalidate( SID_INSERT_CURRENCYFIELD );
+            pBindings->Invalidate( SID_INSERT_FORMATTEDFIELD );
+            pBindings->Invalidate( SID_INSERT_PATTERNFIELD );
+            pBindings->Invalidate( SID_INSERT_FILECONTROL );
+            pBindings->Invalidate( SID_INSERT_SPINBUTTON );
+            pBindings->Invalidate( SID_INSERT_TREECONTROL );
+            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
         }
     }
 }

@@ -28,8 +28,43 @@ shell SwWebDrawBaseShell: SwBaseShell
 
     SID_OBJECT_ALIGN
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_LEFT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_CENTER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_RIGHT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_UP
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_MIDDLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_OBJECT_ALIGN_DOWN
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }

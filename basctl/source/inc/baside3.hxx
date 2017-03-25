@@ -60,6 +60,7 @@ private:
     std::unique_ptr<DlgEditor> m_pEditor;
     std::unique_ptr<SfxUndoManager> m_pUndoMgr; // never nullptr
     OUString            m_sCurPath;
+    sal_uInt16          m_nControlSlotId;
 
 protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

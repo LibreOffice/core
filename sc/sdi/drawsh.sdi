@@ -116,16 +116,7 @@ interface TableDraw
     SID_ATTR_TRANSFORM_AUTOHEIGHT [ StateMethod = GetDrawAttrStateForIFBX; Export = FALSE; ]
 
      // ---- Ausrichtungs - Funktionen:
-     //!    PseudoSlots gibt Aerger mit Referenz-Dialogen ???
-    SID_OBJECT_ALIGN
-    [
-        PseudoSlots = FALSE ;
-        Export = FALSE ;
-        ExecMethod = ExecDrawFunc ;
-        StateMethod = GetDrawFuncState ;
-        GroupId = GID_FORMAT ;
-        ToolBoxConfig ;
-    ]
+    SID_OBJECT_ALIGN        [ StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_OBJECT_ALIGN_LEFT   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_OBJECT_ALIGN_CENTER [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_OBJECT_ALIGN_RIGHT  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]

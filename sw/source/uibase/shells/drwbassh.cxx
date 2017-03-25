@@ -107,14 +107,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
 
-    //Special case align by menu
-    if(pItem && nSlotId == SID_OBJECT_ALIGN)
-    {
-        OSL_ENSURE(dynamic_cast<const SfxEnumItemInterface*>( pItem),"SfxEnumItem expected" );
-        nSlotId = nSlotId + static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
-        nSlotId++;
-    }
-
     bool bAlignPossible = pSh->IsAlignPossible();
 
     bool bTopParam = true, bBottomParam = true;
@@ -671,17 +663,15 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    SfxAllEnumItem aEnumItem(nWhich, USHRT_MAX);
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     //if only one object is selected it can only be vertically
                     // aligned because it is character bound
                     if( rMarkList.GetMarkCount() == 1 )
                     {
-                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_LEFT);
-                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_CENTER);
-                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_RIGHT);
+                        rSet.DisableItem(SID_OBJECT_ALIGN_LEFT);
+                        rSet.DisableItem(SID_OBJECT_ALIGN_CENTER);
+                        rSet.DisableItem(SID_OBJECT_ALIGN_RIGHT);
                     }
-                    rSet.Put(aEnumItem);
                 }
                 break;
 

@@ -377,7 +377,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
             m_nLastSlot = nSlot;
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             break;
     }
 
@@ -584,7 +583,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_LEAVE_CREATE:
             m_nLastSlot = 0;
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             rReq.Done();
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
@@ -659,7 +657,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 rReq.Done();
 
             m_nLastSlot = SID_FM_DESIGN_MODE;
-            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
         }
         break;
 
@@ -987,9 +984,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
                 if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );
-                break;
-            case SID_FM_CONFIG:
-                rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
             case SID_FM_DESIGN_MODE:
                 if (!m_pFormView || GetImpl()->IsReadonlyDoc() )

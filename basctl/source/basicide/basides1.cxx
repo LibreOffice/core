@@ -806,6 +806,30 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_CHOOSE_CONTROLS:
             case SID_DIALOG_TESTMODE:
+            case SID_INSERT_SELECT:
+            case SID_INSERT_PUSHBUTTON:
+            case SID_INSERT_RADIOBUTTON:
+            case SID_INSERT_CHECKBOX:
+            case SID_INSERT_LISTBOX:
+            case SID_INSERT_COMBOBOX:
+            case SID_INSERT_GROUPBOX:
+            case SID_INSERT_EDIT:
+            case SID_INSERT_FIXEDTEXT:
+            case SID_INSERT_IMAGECONTROL:
+            case SID_INSERT_PROGRESSBAR:
+            case SID_INSERT_HSCROLLBAR:
+            case SID_INSERT_VSCROLLBAR:
+            case SID_INSERT_HFIXEDLINE:
+            case SID_INSERT_VFIXEDLINE:
+            case SID_INSERT_DATEFIELD:
+            case SID_INSERT_TIMEFIELD:
+            case SID_INSERT_NUMERICFIELD:
+            case SID_INSERT_CURRENCYFIELD:
+            case SID_INSERT_FORMATTEDFIELD:
+            case SID_INSERT_PATTERNFIELD:
+            case SID_INSERT_FILECONTROL:
+            case SID_INSERT_SPINBUTTON:
+            case SID_INSERT_TREECONTROL:
             case SID_INSERT_FORM_RADIO:
             case SID_INSERT_FORM_CHECK:
             case SID_INSERT_FORM_LIST:
@@ -1064,6 +1088,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
         aObjectCatalog->SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : nullptr );
         InvalidateBasicIDESlots();
+        InvalidateControlSlots();
         EnableScrollbars(pCurWin != nullptr);
 
         if ( m_pCurLocalizationMgr )
