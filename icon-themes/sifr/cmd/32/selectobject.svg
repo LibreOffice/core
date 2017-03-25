@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 4.2597656 4.0019531 C 3.7841056 3.9661531 4.0003831 4.5172287 4.5957031 6.0117188 L 11.636719 25.251953 C 12.526989 27.698463 12.332856 27.489114 13.447266 25.183594 L 16.398438 19.419922 L 24.378906 27.396484 C 24.767236 27.784664 25.260916 28 25.853516 28 C 27.038696 28 28 27.040159 28 25.855469 C 28 25.263089 27.784834 24.769019 27.396484 24.380859 L 19.416016 16.402344 L 25.25 13.453125 C 27.44598 12.355695 27.75894 12.377792 25.25 11.576172 L 5.9355469 4.6054688 C 5.0599369 4.2802387 4.5451456 4.0234031 4.2597656 4.0019531 z "
+     />
+</svg>

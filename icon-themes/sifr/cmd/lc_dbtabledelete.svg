@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg7833"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lc_dbtabledelete.svg"
+   inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/32/connector.png"
+   inkscape:export-xdpi="89"
+   inkscape:export-ydpi="89">
+  <title
+     id="title9025">LibreOffice Symbolic Icon Theme SIFR</title>
+  <defs
+     id="defs7835" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="32.000001"
+     inkscape:cx="12.341717"
+     inkscape:cy="5.3193667"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:snap-center="true"
+     inkscape:snap-nodes="true"
+     inkscape:snap-global="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid8381"
+       empspacing="1" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="symbolic"
+     inkscape:groupmode="layer"
+     transform="translate(0,-8)">
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#555753;fill-opacity:1;stroke:none;stroke-width:2;marker:none;enable-background:new"
+       d="M 1 2 L 1 21 L 9.0332031 21 L 9 19 L 3 19 L 3 16 L 9 16 L 9 15 L 3 15 L 3 12 L 9.0332031 12 L 9.0332031 11.6875 C 9.0332031 10.86322 9.4316031 10.11993 10.033203 9.625 L 10.033203 8 L 15 8 L 15 9 L 16 9 L 16 8 L 21 8 L 21 9 L 22.345703 9 C 22.574753 8.99998 22.78649 9.0604475 23 9.1171875 L 23 2 L 1 2 z M 3 4 L 9 4 L 9 7 L 3 7 L 3 4 z M 10 4 L 15 4 L 15 7 L 10 7 L 10 4 z M 16 4 L 18.033203 4 L 21 4 L 21 7 L 16 7 L 16 4 z M 3 8 L 9 8 L 9 11 L 3 11 L 3 8 z M 12.333984 11 C 11.595324 11 11 11.595314 11 12.333984 L 11 21.666016 C 11 22.404686 11.595324 23 12.333984 23 L 21.699219 23 C 22.437879 23 23.033203 22.404686 23.033203 21.666016 L 23.033203 12.333984 C 23.033203 11.595314 22.437879 11 21.699219 11 L 12.333984 11 z M 14.691406 11.958984 L 17.066406 15 L 19.441406 11.958984 L 21.484375 13.666016 L 19.066406 17 L 21.484375 20.208984 L 19.441406 21.916016 L 17.066406 19 L 14.691406 21.916016 L 12.650391 20.208984 L 15.166016 17 L 12.650391 13.666016 L 14.691406 11.958984 z "
+       transform="translate(0,8)"
+       id="path6981" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path6987"
+       d="m 3.76819,18.97317 c 0.42057,-0.008 1.09557,-0.008 1.5,3e-5 0.40443,0.008 0.0603,0.0135 -0.76467,0.0135 -0.825,-3e-5 -1.1559,-0.006 -0.73533,-0.0135 z"
+       style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none" />
+    <path
+       style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+       d="M 3 4 L 3 7 L 9 7 L 9 4 L 3 4 z M 10 4 L 10 7 L 15 7 L 15 4 L 10 4 z M 16 4 L 16 7 L 21 7 L 21 4 L 16 4 z M 3 8 L 3 11 L 9 11 L 9 8 L 3 8 z M 10 8 L 10.011719 9.6425781 C 10.296875 9.4121091 10.910156 9.0039 12 9 L 15 9 L 15 8 L 10 8 z M 16 8 L 16 9 L 21 9 L 21 8 L 16 8 z M 3 12 L 3 15 L 9 15 L 9 12 L 3 12 z M 3 16 L 3 19 L 9 19 L 9 16 L 3 16 z "
+       transform="translate(0,8)"
+       id="path6995" />
+  </g>
+</svg>

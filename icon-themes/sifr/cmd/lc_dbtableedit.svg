@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg7833"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lc_dbtableedit.svg"
+   inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/32/connector.png"
+   inkscape:export-xdpi="89"
+   inkscape:export-ydpi="89">
+  <title
+     id="title9025">LibreOffice Symbolic Icon Theme SIFR</title>
+  <defs
+     id="defs7835" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="32.000001"
+     inkscape:cx="10.934985"
+     inkscape:cy="10.274025"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:snap-center="true"
+     inkscape:snap-nodes="true"
+     inkscape:snap-global="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid8381"
+       empspacing="1" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="symbolic"
+     inkscape:groupmode="layer"
+     transform="translate(0,-8)">
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#555753;fill-opacity:1;stroke:none;stroke-width:2;marker:none;enable-background:new"
+       d="M 19.5 1.5253906 L 18 3.0214844 L 19.5 4.5195312 L 21 6.0175781 L 22.5 4.5195312 C 22.5 4.3173213 22.503995 4.1106394 22.453125 3.9121094 C 22.419125 3.7463794 22.325775 3.5978694 22.265625 3.4433594 C 21.901165 2.5071294 21.115135 1.7777356 20.109375 1.5722656 C 20.094375 1.5692656 20.0775 1.5752656 20.0625 1.5722656 C 19.87793 1.5284656 19.6875 1.5253906 19.5 1.5253906 z M 1 3 L 1 18 L 1 22 L 23 22 L 23 18 L 23 6.15625 L 22.0625 7.09375 L 21.59375 7.5 L 21 8.15625 L 20.5625 8.59375 L 20.15625 9 L 21 9 L 21 12 L 17.15625 12 L 16.15625 13 L 21 13 L 21 16 L 16 16 L 16 13.15625 L 15 14.15625 L 15 16 L 13.15625 16 L 12.15625 17 L 15 17 L 15 20 L 10 20 L 10 18 L 9 18 L 9 20 L 3 20 L 3 17 L 6 17 L 6 16.5 L 6 16 L 3 16 L 3 13 L 6 13 L 6 12.90625 L 6.40625 12.4375 L 6.84375 12 L 3 12 L 3 9 L 9 9 L 9 9.84375 L 10.84375 8 L 10 8 L 10 5 L 13.875 5 L 15.40625 3.46875 L 15.875 3 L 1 3 z M 16.5 4.5195312 L 7.5 13.503906 L 7.5 16.5 L 10.5 16.5 L 19.5 7.515625 L 16.5 4.5195312 z M 3 5 L 9 5 L 9 8 L 3 8 L 3 5 z M 16 17 L 21 17 L 21 20 L 16 20 L 16 17 z "
+       transform="translate(0,8)"
+       id="path6954" />
+    <path
+       style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+       d="M 3 5 L 3 6.5 L 3 8 L 6 8 L 9 8 L 9 6.5 L 9 5 L 6 5 L 3 5 z M 12.75 5 L 10 5.03125 L 10 6.5 L 10 7.96875 L 10.875 7.96875 L 13.84375 5 L 12.75 5 z M 3.03125 9 L 3.03125 10.46875 L 3.03125 11.96875 L 6 11.96875 L 6.84375 11.96875 L 8.96875 9.84375 L 8.96875 9 L 6 9 L 3.03125 9 z M 3.03125 13 L 3.03125 14.5 L 3.03125 15.96875 L 6 15.96875 L 6 13.5 L 6 13 L 3.03125 13 z M 3 17 L 3 18.5 L 3 20 L 6 20 L 9 20 L 9 18.5 L 9 18 L 7.5 18 L 6 18 L 6 17 L 3 17 z "
+       transform="translate(0,8)"
+       id="path6958" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path6960"
+       d="m 3.76818,19.97306 c 0.42057,-0.007 1.09557,-0.007 1.5,3e-5 0.40443,0.007 0.0603,0.0135 -0.76467,0.0135 -0.825,-3e-5 -1.1559,-0.006 -0.73533,-0.0135 z"
+       style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none" />
+  </g>
+</svg>

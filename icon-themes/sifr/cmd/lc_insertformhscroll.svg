@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg7833"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   viewBox="0 0 24 24"
+   sodipodi:docname="lc_insertformhscroll.svg"
+   inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/32/connector.png"
+   inkscape:export-xdpi="89"
+   inkscape:export-ydpi="89">
+  <title
+     id="title9025">LibreOffice Symbolic Icon Theme SIFR</title>
+  <defs
+     id="defs7835" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="22.395604"
+     inkscape:cx="9.5358385"
+     inkscape:cy="15.315069"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:snap-center="true"
+     inkscape:snap-nodes="true"
+     inkscape:snap-global="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid8381"
+       empspacing="1" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="old"
+     style="display:none;opacity:0.25"
+     sodipodi:insensitive="true">
+    <image
+       style="display:inline;opacity:1"
+       y="0"
+       x="0"
+       id="image5124"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAqlJREFU SInNlU9IVFEYxX+OZmkt0tQKkhQjM1tJSNEqokZBVCikjRDRTtRQwzYqFUSlQREEZYuWlYsoEMKo qM0YVJa0iCgtMgvNPzNqk05vvhb3e/qa3jhjbXow3HfnnXvP+c537nvwH1wJ/4LxLLJIgERgmY5u m8TERCOo1fEAsBJY7rK4QsejilkRQ/Dvyp76nogqzAbWAMkRJDI89MGJyXATEpVxc34hpaX7AMqA 1AiCisaGOic8RStIjLuCyfExaWs5ZivcpAptEgn4J6S/r9d+XgDkAKsiRUer4G5wNsiuHcVUVe0H 8KrKZKCysaGOUGiO/ld9AFd1TVjJJJ4KKk+0tcqEexXz6svLSgQTiHxgHcameGJtbPg+My093V3i 3btbgBrgSHlZiUyMf5Oe7i6buBDIA9IxcY2LAKCyo/2cTAUmpbmpVgApKiqS0dER6e/rlUPVB231 BZgU/eF/XFXMTE/Ji2c+KS7eLvV1tfLwwf1I9ZEBWNLlAWTky5Dc674jXq/Xufk2YAuw4W/UO6tI AuTtm9fSeeWyvfl5YCuQC6SxiPexDkYC0ARk37zVlZ6ZkRlOSvRYn4Y+ZwA3gCAwA4SUOG6LTgOT +nsMjAHDwEvgq/7/EQgAfqCdhdMe06pmVdMKnNT7EaAe09AOJROgETij96cwUU2JRfJOFaVhDs8l JdiIeR1kAQPAbUwPcoBrwCCwXtfNJ8qNKQ+4jmmuBXQCmcAPYE7HXOCRzmcBnxJZLHwbiEbwHjis CiygWhWHdG4pZg/m/WOpqAGdJ+BotluKUoEWVbcTOA5cAJ7r81m1oAZYrfh2F8xPl71B2c9i0uEH LgJrMf1w+mtjAorJcsFEza0H83VKwXgKxqKgqgu7YERVOzGLHgwPptG2jZZuEF4K5hdL1/vGJa6U PAAAAABJRU5ErkJggg== "
+       height="24"
+       width="24" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="tango"
+     style="display:none"
+     sodipodi:insensitive="true" />
+  <g
+     id="layer1"
+     inkscape:label="symbolic"
+     inkscape:groupmode="layer"
+     transform="translate(0,-8)"
+     style="display:inline">
+    <path
+       style="opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+       d="M 1.4746094 6 C 0.65726236 6 0 6.2433986 0 6.546875 L 0 17.451172 C 0 17.754648 0.65726236 18 1.4746094 18 L 22.525391 18 C 23.342738 18 24 17.754648 24 17.451172 L 24 6.546875 C 24 6.2433986 23.342738 6 22.525391 6 L 1.4746094 6 z "
+       transform="translate(0,8)"
+       id="rect7817" />
+    <path
+       style="fill:#555753;fill-opacity:1;stroke:none"
+       d="M 9 7.5 L 1.5 12 L 9 16.5 L 9 7.5 z M 15 7.5 L 15 16.5 L 22.5 12 L 15 7.5 z "
+       transform="translate(0,8)"
+       id="path7820" />
+  </g>
+</svg>

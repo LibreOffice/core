@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_extendedhelp.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="32.338983"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+     d="m 4.9354222,22.914733 c -0.68683,-0.25206 -1.06612,-0.92566 -0.89427,-1.58817 0.10854,-0.41841 0.34474,-0.70837 0.73579,-0.90324 1.18038,-0.5882 2.5063303,0.52825 2.01741,1.69867 -0.28784,0.68909 -1.14516,1.05469 -1.85893,0.79274 z"
+     id="path6750"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="C:\Users\Ahmad\SparkleShare\icons\exported-sifr\cmd\lc_extendedhelp.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     inkscape:connector-curvature="0"
+     style="color:#000000;display:block;overflow:visible;visibility:visible;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+     d="m 10.999991,1.4627228 0,15.5705502 3.51606,-3.43223 2.00916,4.10193 c 0.49213,1.10942 3.05058,0.21738 2.3231,-1.26616 l -1.98825,-4.25887 4.43693,0 -10.297,-10.7152202 z"
+     id="path6742-4"
+     sodipodi:nodetypes="cccccccc"
+     inkscape:export-filename="C:\Users\Ahmad\SparkleShare\icons\exported-sifr\cmd\lc_extendedhelp.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+     d="m 4.9027822,18.873393 c -0.39722,-0.18996 -0.75251,-0.59712 -0.82738,-0.9482 -0.12731,-0.5969 0.15663,-1.46583 0.67433,-2.06366 0.14884,-0.17187 0.56838,-0.55586 0.93232,-0.8533 0.36394,-0.29745 0.80098,-0.68387 0.97121,-0.85871 0.29468,-0.30269 0.3107003,-0.33688 0.3347303,-0.71435 0.0198,-0.31008 -0.002,-0.44978 -0.1006403,-0.64129 -0.34994,-0.6806 -1.11526,-0.98107 -1.91024,-0.74997 -0.60514,0.17592 -0.86311,0.47753 -1.0067,1.177 l -0.0353,0.17187 -1.46756,0 -1.46756013,0 0.002,-0.20312 c 0.004,-0.41676 0.18163,-1.18907 0.35895,-1.56482 0.77251,-1.6369902 2.70899,-2.6554902 4.60169,-2.4203002 1.1311304,0.14056 1.9874604,0.56107 2.7887904,1.3694402 0.89398,0.90184 1.22368,1.75082 1.16748,3.0063 -0.0652,1.45756 -0.47011,2.09899 -2.11166,3.3454 -0.7076,0.53728 -0.8699304,0.68951 -0.8699304,0.81582 0,0.2093 -0.16254,0.5852 -0.33111,0.76575 -0.44195,0.47336 -1.15771,0.62719 -1.70362,0.36614 l 0,0 z"
+     id="path6748"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="C:\Users\Ahmad\SparkleShare\icons\exported-sifr\cmd\lc_extendedhelp.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+</svg>
