@@ -251,7 +251,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
                                 ->GetSortNumber() !=
                          static_txtattr_cast<const SwTextCharFormat *>(pHtLast)
                                 ->GetSortNumber())
-                    ) // multiple CHARFMT on same range need distinct sortner
+                    ) // multiple CHARFMT on same range need distinct sorter
                 )
             ||  (pHtThis->GetStart() == *pHtThis->End()), // this empty
                    "HintsCheck: Portion inconsistency. "

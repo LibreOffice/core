@@ -185,7 +185,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     {
         // pPrev will be the last portion before pUnderflow,
         // which still has a real width.
-        // Exception: SoftHyphPortions must not be forgotten, of course!
+        // Exception: SoftHyphPortion must not be forgotten, of course!
         // Although they don't have a width.
         SwLinePortion *pTmpPrev = pPor;
         while( pPor && pPor != pUnderflow )
@@ -1638,7 +1638,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
         flyStarts.clear();
     }
     else
-        // Special case: We do not allow an optimitation of the repaint
+        // Special case: we do not allow an optimization of the repaint
         // area, but during formatting the repaint offset is set to indicate
         // a maximum value for the offset. This value has to be reset:
         GetInfo().SetPaintOfst( 0 );

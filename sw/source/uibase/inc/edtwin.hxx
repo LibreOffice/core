@@ -163,7 +163,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     /*
      * handler for scrolling on when the mousepointer
-     * stopps outside of EditWin during a drag-operation.
+     * stops outside of EditWin during a drag-operation.
      * The selection is regularly increased towards the mouse
      * position.
      */

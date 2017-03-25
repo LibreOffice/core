@@ -311,7 +311,7 @@ namespace sw
             their layout frms deleted and recalculated. This TableManager
             detects the necessity to do this, and all tables inserted into
             a document should be registered with this manager with
-            InsertTable, and before finialization DelAndMakeTableFrames should
+            InsertTable, and before finalization DelAndMakeTableFrames should
             be called.
 
             @author

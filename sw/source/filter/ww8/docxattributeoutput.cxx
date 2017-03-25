@@ -310,7 +310,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
         }
     }
-    // TODO also avoid multiline paragarphs in those SDT types for shape text
+    // TODO also avoid multiline paragraphs in those SDT types for shape text
     bool bOneliner = m_bStartedParaSdt && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() && lcl_isOnelinerSdt(m_aStartedParagraphSdtPrAlias);
     if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr) || bOneliner)
     {

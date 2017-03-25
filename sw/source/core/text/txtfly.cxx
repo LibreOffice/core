@@ -420,7 +420,7 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     if( pSorted ) // bOn actually makes sure that we have objects on the side,
-                  // but who knows who deleted somehting in the meantime?
+                  // but who knows who deleted something in the meantime?
     {
         for ( size_t i = 0; i < pSorted->size(); ++i )
         {

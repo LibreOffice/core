@@ -1983,7 +1983,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
     else
     {
         // adapted switch logic to a more readable state; removed goto's and made
-        // execution of standard setting of proerty in ItemSet dependent of this variable
+        // execution of standard setting of property in ItemSet dependent of this variable
         uno::Any aValue(rValue);
         lcl_TranslateMetric(rEntry, m_pDoc, aValue);
         SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, aValue, rBase);

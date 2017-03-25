@@ -123,7 +123,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
     // possibly, we first need to start a new list
     if( m_nDefListLvl < nNewLvl )
     {
-        // output </pre> for the previous(!) pararagraph, if required.
+        // output </pre> for the previous(!) paragraph, if required.
         // Preferable, the <pre> is exported by OutHTML_SwFormatOff for the
            // previous  paragraph already, but that's not possible, because a very
         // deep look at the next paragraph (this one) is required to figure

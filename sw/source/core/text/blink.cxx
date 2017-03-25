@@ -32,7 +32,7 @@
 /**
  * pBlink points to the instance where blinking portions need to register.
  * If necessary, it needs to be created by SwBlink.
- * They are then triggered rhythimcally for a repaint. They can query
+ * They are then triggered rhythmically for a repaint. They can query
  * for being visible or invisible with IsVisible().
  */
 SwBlink *pBlink = nullptr;

@@ -3357,7 +3357,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     // #i21237# - propagate tab stops from paragraph styles used in TOX to patterns of the TOX
     pBase->AdjustTabStops( m_rDoc );
 
-    //#i10028# inserting a toc implicltly acts like a parabreak in word and writer
+    //#i10028# inserting a toc implicitly acts like a parabreak in word and writer
     if ( m_pPaM->End() &&
          m_pPaM->End()->nNode.GetNode().GetTextNode() &&
          m_pPaM->End()->nNode.GetNode().GetTextNode()->Len() != 0 )

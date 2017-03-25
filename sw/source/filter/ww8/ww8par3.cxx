@@ -1574,7 +1574,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     certainly a simple continuous list, and we will try to keep it like that.
     Otherwise when we save again it will be shown as the true outline list
     that it is, confusing the user that just wanted what they thought was a
-    simple list. On the otherhand it is possible that some of the other levels
+    simple list. On the other hand it is possible that some of the other levels
     were used by the user, in which case we will not pretend anymore that it
     is a simple list. Something that word 2000 does anyway, that 97 didn't, to
     my bewilderment.
