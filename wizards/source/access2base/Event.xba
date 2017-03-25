@@ -254,7 +254,7 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 	Set oObject = poEvent.Source
 	_EventSource = oObject
 	sArray = Split(Utils._getUNOTypeName(poEvent), &quot;.&quot;)
-	_EventType = UCase(sArray(UBound(sArray))
+	_EventType = UCase(sArray(UBound(sArray)))
 	If Utils._hasUNOProperty(poEvent, &quot;EventName&quot;) Then _EventName = poEvent.EventName
 
 	Select Case _EventType

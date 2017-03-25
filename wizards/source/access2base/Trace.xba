@@ -182,7 +182,7 @@ Public Sub TraceLevel(ByVal Optional psTraceLevel As String)
 		Case psTraceLevel = &quot;&quot;				:		psTraceLevel = &quot;ERROR&quot;
 		Case Utils._InList(UCase(psTraceLevel), Array( _
 			TRACEDEBUG, TRACEINFO, TRACEWARNING, TRACEERRORS, TRACEFATAL, TRACEABORT _
-			)
+			))
 		Case Else							:		Goto Exit_Sub
 	End Select
 	_A2B_.MinimalTraceLevel = _TraceLevel(psTraceLevel)
