@@ -21,6 +21,8 @@ interface XUITest
     void executeDialog([in] string command);
 
     XUIObject getTopFocusWindow();
+
+    XUIObject getFloatWindow();
 };
 
 }; }; }; }; };

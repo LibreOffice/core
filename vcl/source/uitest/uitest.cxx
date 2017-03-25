@@ -49,4 +49,16 @@ std::unique_ptr<UIObject> UITest::getFocusTopWindow()
     return rWinData.mpFirstFrame->GetUITestFactory()(rWinData.mpFirstFrame);
 }
 
+std::unique_ptr<UIObject> UITest::getFloatWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVWinData& rWinData = pSVData->maWinData;
+
+    VclPtr<vcl::Window> pFloatWin = rWinData.mpFirstFloat;
+    if (pFloatWin)
+        return pFloatWin->GetUITestFactory()(pFloatWin);
+
+    return nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
