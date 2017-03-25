@@ -129,16 +129,6 @@ enum SvxCellOrientation
     SVX_ORIENTATION_STACKED
 };
 
-enum SvxDrawAlignEnum
-{
-    SVX_OBJECT_ALIGN_LEFT,
-    SVX_OBJECT_ALIGN_CENTER,
-    SVX_OBJECT_ALIGN_RIGHT,
-    SVX_OBJECT_ALIGN_UP,
-    SVX_OBJECT_ALIGN_MIDDLE,
-    SVX_OBJECT_ALIGN_DOWN
-};
-
 enum class SvxSpellArea
 {
     Body = 0,

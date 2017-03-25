@@ -1238,14 +1238,11 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
-    SfxVoidItem ObjectAlign SID_OBJECT_ALIGN // ole : no, status : ?
+    SID_OBJECT_ALIGN // ole : no, status : ?
     [
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
         Export ;
-        PseudoSlots = FALSE ;
-        ToolBoxConfig ;
-        MenuConfig = TRUE;
     ]
 
     SID_ZOOM_TOOLBOX // ole : no, status : ?

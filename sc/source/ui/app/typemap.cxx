@@ -100,7 +100,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
 
-#define SvxDrawAlignItem            SfxAllEnumItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 
 #ifdef DISABLE_DYNLOADING

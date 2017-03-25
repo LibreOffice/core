@@ -42,47 +42,6 @@ enum SvxCellOrientationEnum
     SVX_ORIENTATION_STACKED
 };
 
-enum SvxChooseControlEnum
-{
-    SVX_SNAP_PUSHBUTTON,
-    SVX_SNAP_CHECKBOX,
-    SVX_SNAP_RADIOBUTTON,
-    SVX_SNAP_SPINBUTTON,
-    SVX_SNAP_FIXEDTEXT,
-    SVX_SNAP_GROUPBOX,
-    SVX_SNAP_LISTBOX,
-    SVX_SNAP_COMBOBOX,
-    SVX_SNAP_EDIT,
-    SVX_SNAP_HSCROLLBAR,
-    SVX_SNAP_VSCROLLBAR,
-    SVX_SNAP_PREVIEW,
-    SVX_SNAP_SELECT,
-    SVX_SNAP_URLBUTTON,
-    SVX_SNAP_IMAGECONTROL,
-    SVX_SNAP_PROGRESSBAR,
-    SVX_SNAP_HFIXEDLINE,
-    SVX_SNAP_VFIXEDLINE,
-    SVX_SNAP_DATEFIELD,
-    SVX_SNAP_TIMEFIELD,
-    SVX_SNAP_NUMERICFIELD,
-    SVX_SNAP_CURRENCYFIELD,
-    SVX_SNAP_FORMATTEDFIELD,
-    SVX_SNAP_PATTERNFIELD,
-    SVX_SNAP_FILECONTROL,
-    SVX_SNAP_TREECONTROL
-};
-item SvxChooseControlEnum SvxChooseControlItem;
-
-enum SvxDrawAlignEnum
-{
-    SVX_OBJECT_ALIGN_LEFT,
-    SVX_OBJECT_ALIGN_CENTER,
-    SVX_OBJECT_ALIGN_RIGHT,
-    SVX_OBJECT_ALIGN_UP,
-    SVX_OBJECT_ALIGN_MIDDLE,
-    SVX_OBJECT_ALIGN_DOWN
-};
-
 enum SvxAdjust
 {
     SVX_ADJUST_LEFT,
@@ -228,7 +187,6 @@ item FontItalic             SvxPostureItem;  // enum
 item BOOL                   SvxPrintItem;
 item UINT16                 SvxPropSizeItem;        // derived from UInt16Item
 item BOOL                   SvxShadowedItem;
-item SvxDrawAlignEnum       SvxDrawAlignItem;
 item BYTE                   SvxWidowsItem;
 item BOOL                   SvxWordLineModeItem;
 item SvxCellHorJustifyEnum  SvxHorJustifyItem;

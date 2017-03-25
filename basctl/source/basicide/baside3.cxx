@@ -29,7 +29,6 @@
 #include "dlgedmod.hxx"
 #include "dlgedview.hxx"
 #include "iderdll.hxx"
-#include "idetemp.hxx"
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 
@@ -79,6 +78,7 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
                                             ? rDocument.getDocument()
                                             : Reference<frame::XModel>(), xDialogModel))
     ,m_pUndoMgr(new SfxUndoManager)
+    ,m_nControlSlotId(SID_INSERT_SELECT)
 {
     InitSettings();
 
@@ -137,9 +137,9 @@ void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
     m_pEditor->MouseButtonUp( rMEvt );
     if( (m_pEditor->GetMode() == DlgEditor::INSERT) && !m_pEditor->IsCreateOK() )
     {
+        m_nControlSlotId = SID_INSERT_SELECT;
         m_pEditor->SetMode( DlgEditor::SELECT );
-        if (SfxBindings* pBindings = GetBindingsPtr())
-            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
+        Shell::InvalidateControlSlots();
     }
     if (SfxBindings* pBindings = GetBindingsPtr())
     {
@@ -304,50 +304,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_CHOOSE_CONTROLS:
             {
                 if ( IsReadOnly() )
-                {
                     rSet.DisableItem( nWh );
-                }
-                else
-                {
-                    SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS );
-                    if ( GetEditor().GetMode() == DlgEditor::SELECT )
-                        aItem.SetValue( SVX_SNAP_SELECT );
-                    else
-                    {
-                        sal_uInt16 nObj;
-                        switch( m_pEditor->GetInsertObj() )
-                        {
-                            case OBJ_DLG_PUSHBUTTON:        nObj = SVX_SNAP_PUSHBUTTON; break;
-                            case OBJ_DLG_RADIOBUTTON:       nObj = SVX_SNAP_RADIOBUTTON; break;
-                            case OBJ_DLG_CHECKBOX:          nObj = SVX_SNAP_CHECKBOX; break;
-                            case OBJ_DLG_LISTBOX:           nObj = SVX_SNAP_LISTBOX; break;
-                            case OBJ_DLG_COMBOBOX:          nObj = SVX_SNAP_COMBOBOX; break;
-                            case OBJ_DLG_GROUPBOX:          nObj = SVX_SNAP_GROUPBOX; break;
-                            case OBJ_DLG_EDIT:              nObj = SVX_SNAP_EDIT; break;
-                            case OBJ_DLG_FIXEDTEXT:         nObj = SVX_SNAP_FIXEDTEXT; break;
-                            case OBJ_DLG_IMAGECONTROL:      nObj = SVX_SNAP_IMAGECONTROL; break;
-                            case OBJ_DLG_PROGRESSBAR:       nObj = SVX_SNAP_PROGRESSBAR; break;
-                            case OBJ_DLG_HSCROLLBAR:        nObj = SVX_SNAP_HSCROLLBAR; break;
-                            case OBJ_DLG_VSCROLLBAR:        nObj = SVX_SNAP_VSCROLLBAR; break;
-                            case OBJ_DLG_HFIXEDLINE:        nObj = SVX_SNAP_HFIXEDLINE; break;
-                            case OBJ_DLG_VFIXEDLINE:        nObj = SVX_SNAP_VFIXEDLINE; break;
-                            case OBJ_DLG_DATEFIELD:         nObj = SVX_SNAP_DATEFIELD; break;
-                            case OBJ_DLG_TIMEFIELD:         nObj = SVX_SNAP_TIMEFIELD; break;
-                            case OBJ_DLG_NUMERICFIELD:      nObj = SVX_SNAP_NUMERICFIELD; break;
-                            case OBJ_DLG_CURRENCYFIELD:     nObj = SVX_SNAP_CURRENCYFIELD; break;
-                            case OBJ_DLG_FORMATTEDFIELD:    nObj = SVX_SNAP_FORMATTEDFIELD; break;
-                            case OBJ_DLG_PATTERNFIELD:      nObj = SVX_SNAP_PATTERNFIELD; break;
-                            case OBJ_DLG_FILECONTROL:       nObj = SVX_SNAP_FILECONTROL; break;
-                            case OBJ_DLG_SPINBUTTON:        nObj = SVX_SNAP_SPINBUTTON; break;
-                            case OBJ_DLG_TREECONTROL:       nObj = SVX_SNAP_TREECONTROL; break;
-                            default:                        nObj = 0;
-                        }
-                        SAL_INFO_IF( !nObj, "basctl.basicide", "SID_CHOOSE_CONTROLS: unknown" );
-                        aItem.SetValue( nObj );
-                    }
-
-                    rSet.Put( aItem );
-                }
             }
             break;
 
@@ -372,6 +329,40 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             {
                 if ( !bIsCalc || IsReadOnly() )
                     rSet.DisableItem( nWh );
+                else
+                    rSet.Put( SfxBoolItem( nWh, m_nControlSlotId == nWh ) );
+            }
+            break;
+
+            case SID_INSERT_SELECT:
+            case SID_INSERT_PUSHBUTTON:
+            case SID_INSERT_RADIOBUTTON:
+            case SID_INSERT_CHECKBOX:
+            case SID_INSERT_LISTBOX:
+            case SID_INSERT_COMBOBOX:
+            case SID_INSERT_GROUPBOX:
+            case SID_INSERT_EDIT:
+            case SID_INSERT_FIXEDTEXT:
+            case SID_INSERT_IMAGECONTROL:
+            case SID_INSERT_PROGRESSBAR:
+            case SID_INSERT_HSCROLLBAR:
+            case SID_INSERT_VSCROLLBAR:
+            case SID_INSERT_HFIXEDLINE:
+            case SID_INSERT_VFIXEDLINE:
+            case SID_INSERT_DATEFIELD:
+            case SID_INSERT_TIMEFIELD:
+            case SID_INSERT_NUMERICFIELD:
+            case SID_INSERT_CURRENCYFIELD:
+            case SID_INSERT_FORMATTEDFIELD:
+            case SID_INSERT_PATTERNFIELD:
+            case SID_INSERT_FILECONTROL:
+            case SID_INSERT_SPINBUTTON:
+            case SID_INSERT_TREECONTROL:
+            {
+                if ( IsReadOnly() )
+                    rSet.DisableItem( nWh );
+                else
+                    rSet.Put( SfxBoolItem( nWh, m_nControlSlotId == nWh ) );
             }
             break;
             case SID_SHOWLINES:
@@ -394,7 +385,10 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
 void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
-    switch ( rReq.GetSlot() )
+    const sal_uInt16 nSlotId(rReq.GetSlot());
+    sal_uInt16 nInsertObj(0);
+
+    switch ( nSlotId )
     {
         case SID_CUT:
             if ( !IsReadOnly() )
@@ -423,198 +417,102 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
+
         case SID_INSERT_FORM_RADIO:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMRADIO );
+            nInsertObj = OBJ_DLG_FORMRADIO;
             break;
         case SID_INSERT_FORM_CHECK:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMCHECK );
+            nInsertObj = OBJ_DLG_FORMCHECK;
             break;
         case SID_INSERT_FORM_LIST:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMLIST );
+            nInsertObj = OBJ_DLG_FORMLIST;
             break;
         case SID_INSERT_FORM_COMBO:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMCOMBO );
+            nInsertObj = OBJ_DLG_FORMCOMBO;
             break;
         case SID_INSERT_FORM_SPIN:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMSPIN );
+            nInsertObj = OBJ_DLG_FORMSPIN;
             break;
         case SID_INSERT_FORM_VSCROLL:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMVSCROLL );
+            nInsertObj = OBJ_DLG_FORMVSCROLL;
             break;
         case SID_INSERT_FORM_HSCROLL:
-            GetEditor().SetMode( DlgEditor::INSERT );
-            GetEditor().SetInsertObj( OBJ_DLG_FORMHSCROLL );
+            nInsertObj = OBJ_DLG_FORMHSCROLL;
             break;
-        case SID_CHOOSE_CONTROLS:
-        {
-            const SfxItemSet* pArgs = rReq.GetArgs();
-            assert(pArgs && "Nix Args");
-
-            const SfxAllEnumItem& rItem = static_cast<const SfxAllEnumItem&>(pArgs->Get( SID_CHOOSE_CONTROLS ));
-            switch( rItem.GetValue() )
-            {
-                case SVX_SNAP_PUSHBUTTON:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_PUSHBUTTON );
-                }
-                break;
-                case SVX_SNAP_RADIOBUTTON:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_RADIOBUTTON );
-                }
-                break;
-                case SVX_SNAP_CHECKBOX:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_CHECKBOX);
-                }
-                break;
-                case SVX_SNAP_LISTBOX:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_LISTBOX );
-                }
-                break;
-                case SVX_SNAP_COMBOBOX:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_COMBOBOX );
-                }
-                break;
-                case SVX_SNAP_GROUPBOX:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_GROUPBOX );
-                }
-                break;
-                case SVX_SNAP_EDIT:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_EDIT );
-                }
-                break;
-                case SVX_SNAP_FIXEDTEXT:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_FIXEDTEXT );
-                }
-                break;
-                case SVX_SNAP_IMAGECONTROL:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_IMAGECONTROL );
-                }
-                break;
-                case SVX_SNAP_PROGRESSBAR:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_PROGRESSBAR );
-                }
-                break;
-                case SVX_SNAP_HSCROLLBAR:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_HSCROLLBAR );
-                }
-                break;
-                case SVX_SNAP_VSCROLLBAR:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_VSCROLLBAR );
-                }
-                break;
-                case SVX_SNAP_HFIXEDLINE:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_HFIXEDLINE );
-                }
-                break;
-                case SVX_SNAP_VFIXEDLINE:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_VFIXEDLINE );
-                }
-                break;
-                case SVX_SNAP_DATEFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_DATEFIELD );
-                }
-                break;
-                case SVX_SNAP_TIMEFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_TIMEFIELD );
-                }
-                break;
-                case SVX_SNAP_NUMERICFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_NUMERICFIELD );
-                }
-                break;
-                case SVX_SNAP_CURRENCYFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_CURRENCYFIELD );
-                }
-                break;
-                case SVX_SNAP_FORMATTEDFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
-                }
-                break;
-                case SVX_SNAP_PATTERNFIELD:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_PATTERNFIELD );
-                }
-                break;
-                case SVX_SNAP_FILECONTROL:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_FILECONTROL );
-                }
-                break;
-                case SVX_SNAP_SPINBUTTON:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_SPINBUTTON );
-                }
-                break;
-                case SVX_SNAP_TREECONTROL:
-                {
-                    GetEditor().SetMode( DlgEditor::INSERT );
-                    GetEditor().SetInsertObj( OBJ_DLG_TREECONTROL );
-                }
-                break;
-
-                case SVX_SNAP_SELECT:
-                {
-                    GetEditor().SetMode( DlgEditor::SELECT );
-                }
-                break;
-            }
-
-            if ( rReq.GetModifier() & KEY_MOD1 )
-            {
-                if ( GetEditor().GetMode() == DlgEditor::INSERT )
-                    GetEditor().CreateDefaultObject();
-            }
-
-            if (SfxBindings* pBindings = GetBindingsPtr())
-                pBindings->Invalidate( SID_DOC_MODIFIED );
-        }
-        break;
+        case SID_INSERT_PUSHBUTTON:
+            nInsertObj = OBJ_DLG_PUSHBUTTON;
+            break;
+        case SID_INSERT_RADIOBUTTON:
+            nInsertObj = OBJ_DLG_RADIOBUTTON;
+            break;
+        case SID_INSERT_CHECKBOX:
+            nInsertObj = OBJ_DLG_CHECKBOX;
+            break;
+        case SID_INSERT_LISTBOX:
+            nInsertObj = OBJ_DLG_LISTBOX;
+            break;
+        case SID_INSERT_COMBOBOX:
+            nInsertObj = OBJ_DLG_COMBOBOX;
+            break;
+        case SID_INSERT_GROUPBOX:
+            nInsertObj = OBJ_DLG_GROUPBOX;
+            break;
+        case SID_INSERT_EDIT:
+            nInsertObj = OBJ_DLG_EDIT;
+            break;
+        case SID_INSERT_FIXEDTEXT:
+            nInsertObj = OBJ_DLG_FIXEDTEXT;
+            break;
+        case SID_INSERT_IMAGECONTROL:
+            nInsertObj = OBJ_DLG_IMAGECONTROL;
+            break;
+        case SID_INSERT_PROGRESSBAR:
+            nInsertObj = OBJ_DLG_PROGRESSBAR;
+            break;
+        case SID_INSERT_HSCROLLBAR:
+            nInsertObj = OBJ_DLG_HSCROLLBAR;
+            break;
+        case SID_INSERT_VSCROLLBAR:
+            nInsertObj = OBJ_DLG_VSCROLLBAR;
+            break;
+        case SID_INSERT_HFIXEDLINE:
+            nInsertObj = OBJ_DLG_HFIXEDLINE;
+            break;
+        case SID_INSERT_VFIXEDLINE:
+            nInsertObj = OBJ_DLG_VFIXEDLINE;
+            break;
+        case SID_INSERT_DATEFIELD:
+            nInsertObj = OBJ_DLG_DATEFIELD;
+            break;
+        case SID_INSERT_TIMEFIELD:
+            nInsertObj = OBJ_DLG_TIMEFIELD;
+            break;
+        case SID_INSERT_NUMERICFIELD:
+            nInsertObj = OBJ_DLG_NUMERICFIELD;
+            break;
+        case SID_INSERT_CURRENCYFIELD:
+            nInsertObj = OBJ_DLG_CURRENCYFIELD;
+            break;
+        case SID_INSERT_FORMATTEDFIELD:
+            nInsertObj = OBJ_DLG_FORMATTEDFIELD;
+            break;
+        case SID_INSERT_PATTERNFIELD:
+            nInsertObj = OBJ_DLG_PATTERNFIELD;
+            break;
+        case SID_INSERT_FILECONTROL:
+            nInsertObj = OBJ_DLG_FILECONTROL;
+            break;
+        case SID_INSERT_SPINBUTTON:
+            nInsertObj = OBJ_DLG_SPINBUTTON;
+            break;
+        case SID_INSERT_TREECONTROL:
+            nInsertObj = OBJ_DLG_TREECONTROL;
+            break;
+        case SID_INSERT_SELECT:
+            m_nControlSlotId = nSlotId;
+            GetEditor().SetMode( DlgEditor::SELECT );
+            Shell::InvalidateControlSlots();
+            break;
 
         case SID_DIALOG_TESTMODE:
         {
@@ -644,6 +542,22 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 }
             }
             break;
+    }
+
+    if ( nInsertObj )
+    {
+        m_nControlSlotId = nSlotId;
+        GetEditor().SetMode( DlgEditor::INSERT );
+        GetEditor().SetInsertObj( nInsertObj );
+
+        if ( rReq.GetModifier() & KEY_MOD1 )
+        {
+            GetEditor().CreateDefaultObject();
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate( SID_DOC_MODIFIED );
+        }
+
+        Shell::InvalidateControlSlots();
     }
 
     rReq.Done();

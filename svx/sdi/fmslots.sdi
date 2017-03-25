@@ -19,10 +19,7 @@
 interface Form
 {
     SID_FM_CONFIG // ole : no, status : ?
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
+    []
     SID_FM_PUSHBUTTON
     [
         ExecMethod = Execute ;
@@ -627,10 +624,7 @@ shell FmFormShell
     import Form;
 
     SID_FM_CONFIG // ole : no, status : ?
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
+    []
     SID_FM_MORE_CONTROLS
     [
         ExecMethod = Execute ;

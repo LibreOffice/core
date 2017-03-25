@@ -195,6 +195,8 @@ public:
         const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
         const OUString& rDestLibName, const OUString& rDlgName );
 
+    static void InvalidateControlSlots();
+
     virtual css::uno::Reference< css::frame::XModel >
                         GetCurrentDocument() const override;
 

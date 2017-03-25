@@ -1230,15 +1230,8 @@ void SwView::Execute(SfxRequest &rReq)
                     case SID_ALIGN_ANY_BOTTOM   :   nAlias = SID_OBJECT_ALIGN_DOWN    ; break;
                 }
             }
-            //special handling for the draw shell
-            if(nAlias && (m_nSelectionType & (nsSelectionType::SEL_DRW)))
-            {
-                SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
-                GetViewFrame()->GetDispatcher()->ExecuteList(SID_OBJECT_ALIGN,
-                        SfxCallMode::ASYNCHRON, { &aEnumItem });
-            }
-            else if(nAlias)
             //these slots are either re-mapped to text or object alignment
+            if (nAlias)
                 GetViewFrame()->GetDispatcher()->Execute(
                                 nAlias, SfxCallMode::ASYNCHRON);
         }
