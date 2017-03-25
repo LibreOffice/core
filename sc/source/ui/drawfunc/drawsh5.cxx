@@ -241,14 +241,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     SfxBindings& rBindings = pViewData->GetBindings();
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
-    const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlotId = rReq.GetSlot();
-
-    //!!!
-    // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
-
-    if (nSlotId == SID_OBJECT_ALIGN && pArgs)
-        nSlotId = SID_OBJECT_ALIGN + static_cast<const SfxEnumItemInterface&>(pArgs->Get(SID_OBJECT_ALIGN)).GetEnumValue() + 1;
 
     switch (nSlotId)
     {
