@@ -150,7 +150,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
             if (method_name.equals( "hashCode" ))
             {
                 // int hashCode()
-                return new Integer( m_oid.hashCode() );
+                return Integer.valueOf( m_oid.hashCode() );
             }
             else if (method_name.equals( "equals" ))
             {
@@ -208,7 +208,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     }
 
     private Boolean isSame(Object obj) {
-        return new Boolean(obj != null
-                           && m_oid.equals(UnoRuntime.generateOid(obj)));
+        return obj != null
+                           && m_oid.equals(UnoRuntime.generateOid(obj));
     }
 }

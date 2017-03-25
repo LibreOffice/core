@@ -221,7 +221,7 @@ XMultiPropertySet
      */
     protected Property getPropertyByHandle(int nHandle)
     {
-        return (Property) _handleToPropertyMap.get(new Integer(nHandle));
+        return (Property) _handleToPropertyMap.get(nHandle);
     }
 
     /** Returns an array of all Property objects or an array of length null if there
@@ -251,7 +251,7 @@ XMultiPropertySet
     {
         _nameToPropertyMap.put(prop.Name, prop);
         if (prop.Handle != -1)
-            _handleToPropertyMap.put(new Integer(prop.Handle), prop);
+            _handleToPropertyMap.put(prop.Handle, prop);
     }
 
     /** Assigns an identifyer object to a Property object so that the identifyer
@@ -577,7 +577,7 @@ XMultiPropertySet
      *  value of the property is to be stored in a member variable of type int with name intProp. Then setPropertyValue is
      *  called:
      *  <pre>
-     *  set.setPropertyValue( "PropA", new Byte( (byte)111));
+     *  set.setPropertyValue( "PropA", (byte)111);
      *  </pre>
      *  At some point setPropertyValue will call convertPropertyValue and pass in the Byte object. Since we allow
      *  that Byte values can be used with the property and know that the value is to be stored in intProp (type int)
@@ -732,21 +732,21 @@ XMultiPropertySet
             retVal= obj;
         }
         else if(cl.equals(boolean.class))
-            retVal= new Boolean(AnyConverter.toBoolean(obj));
+            retVal= AnyConverter.toBoolean(obj);
         else if (cl.equals(char.class))
-            retVal= new Character(AnyConverter.toChar(obj));
+            retVal= AnyConverter.toChar(obj);
         else if (cl.equals(byte.class))
-            retVal= new Byte(AnyConverter.toByte(obj));
+            retVal= AnyConverter.toByte(obj);
         else if (cl.equals(short.class))
-            retVal= new Short(AnyConverter.toShort(obj));
+            retVal= AnyConverter.toShort(obj);
         else if (cl.equals(int.class))
-            retVal= new Integer(AnyConverter.toInt(obj));
+            retVal= AnyConverter.toInt(obj);
         else if (cl.equals(long.class))
-            retVal= new Long(AnyConverter.toLong(obj));
+            retVal= AnyConverter.toLong(obj);
         else if (cl.equals(float.class))
-            retVal= new Float(AnyConverter.toFloat(obj));
+            retVal= AnyConverter.toFloat(obj);
         else if (cl.equals(double.class))
-            retVal= new Double(AnyConverter.toDouble(obj));
+            retVal= AnyConverter.toDouble(obj);
         else if (cl.equals(String.class))
             retVal= AnyConverter.toString(obj);
         else if (cl.isArray())
@@ -754,21 +754,21 @@ XMultiPropertySet
         else if (cl.equals(Type.class))
             retVal= AnyConverter.toType(obj);
         else if (cl.equals(Boolean.class))
-            retVal= new Boolean(AnyConverter.toBoolean(obj));
+            retVal= AnyConverter.toBoolean(obj);
         else if (cl.equals(Character.class))
-            retVal= new Character(AnyConverter.toChar(obj));
+            retVal= AnyConverter.toChar(obj);
         else if (cl.equals(Byte.class))
-            retVal= new Byte(AnyConverter.toByte(obj));
+            retVal= AnyConverter.toByte(obj);
         else if (cl.equals(Short.class))
-            retVal= new Short(AnyConverter.toShort(obj));
+            retVal= AnyConverter.toShort(obj);
         else if (cl.equals(Integer.class))
-            retVal= new Integer(AnyConverter.toInt(obj));
+            retVal= AnyConverter.toInt(obj);
         else if (cl.equals(Long.class))
-            retVal= new Long(AnyConverter.toLong(obj));
+            retVal= AnyConverter.toLong(obj);
         else if (cl.equals(Float.class))
-            retVal= new Float(AnyConverter.toFloat(obj));
+            retVal= AnyConverter.toFloat(obj);
         else if (cl.equals(Double.class))
-            retVal= new Double(AnyConverter.toDouble(obj));
+            retVal= AnyConverter.toDouble(obj);
         else if (XInterface.class.isAssignableFrom(cl))
             retVal= AnyConverter.toObject(new Type(cl), obj);
         else if (com.sun.star.uno.Enum.class.isAssignableFrom(cl))

@@ -931,7 +931,7 @@ public final class PropertySetMixin {
                         isDefaulted, wrapOptional));
                 UnoRuntime.queryInterface(
                     XIdlField2.class, type.getField("IsAmbiguous")).set(
-                        strct, new Boolean(isAmbiguous));
+                        strct, isAmbiguous);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 throw new RuntimeException(
                     "unexpected com.sun.star.lang.IllegalArgumentException: "
@@ -958,7 +958,7 @@ public final class PropertySetMixin {
                         false, false, wrapOptional));
                 UnoRuntime.queryInterface(
                     XIdlField2.class, type.getField("IsDefaulted")).set(
-                        strct, new Boolean(isDefaulted));
+                        strct, isDefaulted);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 throw new RuntimeException(
                     "unexpected com.sun.star.lang.IllegalArgumentException: "
@@ -978,7 +978,7 @@ public final class PropertySetMixin {
             try {
                 UnoRuntime.queryInterface(
                     XIdlField2.class, type.getField("IsPresent")).set(
-                        strct, new Boolean(present));
+                        strct, present);
                 if (present) {
                     XIdlField2 field = UnoRuntime.queryInterface(
                         XIdlField2.class, type.getField("Value"));

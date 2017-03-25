@@ -215,7 +215,7 @@ final class Unmarshal {
 
     private Byte readByteValue() {
         try {
-            return new Byte(input.readByte());
+            return input.readByte();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -223,7 +223,7 @@ final class Unmarshal {
 
     private Short readShortValue() {
         try {
-            return new Short(input.readShort());
+            return input.readShort();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -231,7 +231,7 @@ final class Unmarshal {
 
     private Integer readLongValue() {
         try {
-            return new Integer(input.readInt());
+            return input.readInt();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -239,7 +239,7 @@ final class Unmarshal {
 
     private Long readHyperValue() {
         try {
-            return new Long(input.readLong());
+            return input.readLong();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -247,7 +247,7 @@ final class Unmarshal {
 
     private Float readFloatValue() {
         try {
-            return new Float(input.readFloat());
+            return input.readFloat();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -255,7 +255,7 @@ final class Unmarshal {
 
     private Double readDoubleValue() {
         try {
-            return new Double(input.readDouble());
+            return input.readDouble();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
@@ -263,7 +263,7 @@ final class Unmarshal {
 
     private Character readCharValue() {
         try {
-            return new Character(input.readChar());
+            return input.readChar();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }

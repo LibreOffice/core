@@ -433,7 +433,7 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.BYTE_value:
-                    return new Short( ((Byte)object).byteValue() );
+                    return Short.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                     return object;
                 }
@@ -449,10 +449,10 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.BYTE_value:
-                    return new Integer( ((Byte)object).byteValue() );
+                    return Integer.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Integer( ((Short)object).shortValue() );
+                    return Integer.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
                     return object;
                 }
@@ -461,7 +461,7 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Integer( ((Short)object).shortValue() );
+                    return Integer.valueOf( ((Short)object).shortValue() );
                 case TypeClass.UNSIGNED_LONG_value:
                     return object;
                 }
@@ -470,13 +470,13 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.BYTE_value:
-                    return new Long( ((Byte)object).byteValue() );
+                    return Long.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Long( ((Short)object).shortValue() );
+                    return Long.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
                 case TypeClass.UNSIGNED_LONG_value:
-                    return new Long( ((Integer)object).intValue() );
+                    return Long.valueOf( ((Integer)object).intValue() );
                 case TypeClass.HYPER_value:
                     return object;
                 }
@@ -485,9 +485,9 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.UNSIGNED_SHORT_value:
-                    return new Long( ((Short)object).shortValue() );
+                    return Long.valueOf( ((Short)object).shortValue() );
                 case TypeClass.UNSIGNED_LONG_value:
-                    return new Long( ((Integer)object).intValue() );
+                    return Long.valueOf( ((Integer)object).intValue() );
                 case TypeClass.UNSIGNED_HYPER_value:
                     return object;
                 }
@@ -496,9 +496,9 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.BYTE_value:
-                    return new Float( ((Byte)object).byteValue() );
+                    return Float.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
-                    return new Float( ((Short)object).shortValue() );
+                    return Float.valueOf( ((Short)object).shortValue() );
                 case TypeClass.FLOAT_value:
                     return object;
                 }
@@ -507,13 +507,13 @@ public class AnyConverter
                 switch (tc)
                 {
                 case TypeClass.BYTE_value:
-                    return new Double( ((Byte)object).byteValue() );
+                    return Double.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
-                    return new Double( ((Short)object).shortValue() );
+                    return Double.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
-                    return new Double( ((Integer)object).intValue() );
+                    return Double.valueOf( ((Integer)object).intValue() );
                 case TypeClass.FLOAT_value:
-                    return new Double( ((Float)object).floatValue() );
+                    return Double.valueOf( ((Float)object).floatValue() );
                 case TypeClass.DOUBLE_value:
                     return object;
                 }

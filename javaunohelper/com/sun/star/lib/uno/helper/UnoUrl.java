@@ -236,7 +236,7 @@ public class UnoUrl {
                 ch = (hb << 4) | lb;
             }
 
-            v.addElement(new Integer(ch));
+            v.addElement(ch);
         }
 
         int size = v.size();
