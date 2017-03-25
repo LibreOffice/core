@@ -2073,33 +2073,23 @@ SmStructureNode *SmParser::DoStack()
 {
     std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
     NextToken();
-    if (m_aCurToken.eType == TLGROUP)
+    if (m_aCurToken.eType != TLGROUP)
+        return DoError(SmParseError::LgroupExpected);
+    SmNodeArray aExprArr;
+    do
     {
-        sal_uInt16 n = 0;
-
-        do
-        {
-            NextToken();
-            m_aNodeStack.emplace_front(DoAlign());
-            n++;
-        }
-        while (m_aCurToken.eType == TPOUND);
-
-        SmNodeArray ExpressionArray(n);
-        for (auto rIt = ExpressionArray.rbegin(), rEnd = ExpressionArray.rend(); rIt != rEnd; ++rIt)
-        {
-            *rIt = popOrZero(m_aNodeStack);
-        }
-
-        if (m_aCurToken.eType != TRGROUP)
-            Error(SmParseError::RgroupExpected);
-
-        pSNode->SetSubNodes(ExpressionArray);
-
         NextToken();
-        return pSNode.release();
+        aExprArr.push_back(DoAlign());
     }
-    return DoError(SmParseError::LgroupExpected);
+    while (m_aCurToken.eType == TPOUND);
+
+    if (m_aCurToken.eType == TRGROUP)
+        NextToken();
+    else
+        aExprArr.push_back(DoError(SmParseError::RgroupExpected));
+
+    pSNode->SetSubNodes(aExprArr);
+    return pSNode.release();
 }
 
 SmStructureNode *SmParser::DoMatrix()
