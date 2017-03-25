@@ -7,11 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <string>
-#include <iostream>
+#include <algorithm>
+#include <cassert>
+#include <list>
+#include <map>
 
 #include "plugin.hxx"
-#include "clang/AST/CXXInheritance.h"
+//#include "clang/AST/CXXInheritance.h"
 
 // Idea from bubli. Check that the index variable in a for loop is able to cover the range
 // revealed by the terminating condition.
@@ -30,86 +32,195 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool VisitForStmt( const ForStmt* stmt );
+    bool VisitForStmt( const ForStmt* stmt ) {
+        checkExpr(stmt->getCond());
+        return true;
+    }
+
+    bool VisitWhileStmt(WhileStmt const * stmt) {
+        checkExpr(stmt->getCond());
+        return true;
+    }
+
+    bool VisitDoStmt(DoStmt const * stmt) {
+        checkExpr(stmt->getCond());
+        return true;
+    }
 
 private:
-    StringRef getFilename(SourceLocation loc);
+    unsigned getIntValueWidth(QualType type) const;
 
+    void checkSubExpr(Expr const * expr, bool positive);
+
+    void checkExpr(Expr const * expr);
+
+    struct Comparison {
+        BinaryOperator const * op;
+        unsigned rhsWidth;
+    };
+
+    struct Comparisons {
+        std::list<Comparison> comparisons;
+        unsigned lhsWidth;
+    };
+
+    std::map<Decl const *, Comparisons> comparisons_;
 };
 
-StringRef LoopVarTooSmall::getFilename(SourceLocation loc)
-{
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    StringRef name { compiler.getSourceManager().getFilename(spellingLocation) };
-    return name;
+unsigned LoopVarTooSmall::getIntValueWidth(QualType type) const {
+    if (auto const et = type->getAs<EnumType>()) {
+        auto const ed = et->getDecl();
+        if (!ed->isFixed()) {
+            unsigned pos = ed->getNumPositiveBits();
+            unsigned neg = ed->getNumNegativeBits();
+            return neg == 0 ? std::max(pos, 1U) : std::max(pos + 1, neg);
+        }
+    }
+    return compiler.getASTContext().getIntWidth(type);
 }
 
-bool LoopVarTooSmall::VisitForStmt( const ForStmt* stmt )
-{
-    if (ignoreLocation( stmt ))
-        return true;
-    // ignore sal/ module for now
-    StringRef aFileName = getFilename(stmt->getLocStart());
-    if (aFileName.startswith(SRCDIR "/sal/")) {
-        return true;
+void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
+    auto const e = expr->IgnoreParenImpCasts();
+    if (auto const uo = dyn_cast<UnaryOperator>(e)) {
+        if (uo->getOpcode() == UO_LNot) {
+            checkSubExpr(uo->getSubExpr(), !positive);
+        }
+        return;
     }
-
-    const Stmt* initStmt = stmt->getInit();
-    if (!initStmt || !isa<DeclStmt>(initStmt))
-        return true;
-    const DeclStmt* declStmt = dyn_cast<DeclStmt>(initStmt);
-    if (!declStmt->getDeclGroup().isSingleDecl())
-        return true;
-    const Decl* decl = declStmt->getSingleDecl();
-    if (!decl || !isa<VarDecl>(decl))
-        return true;
-    const VarDecl* varDecl = dyn_cast<VarDecl>(decl);
-    QualType qt = varDecl->getType();
-    if (!qt->isIntegralType(compiler.getASTContext()))
-        return true;
-    uint64_t qt1BitWidth = compiler.getASTContext().getTypeSize(qt);
-
-    if (!stmt->getCond() || !isa<BinaryOperator>(stmt->getCond()))
-        return true;
-    const BinaryOperator* binOp = dyn_cast<BinaryOperator>(stmt->getCond());
-    if (binOp->getOpcode() != BO_LT && binOp->getOpcode() != BO_LE)
-        return true;
-    const Expr* binOpRHS = binOp->getRHS();
-    // ignore complex expressions for now, promotion rules on conditions like "i < (size()+1)"
-    // make it hard to guess at a correct type.
-    if (isa<BinaryOperator>(binOpRHS) || isa<ParenExpr>(binOpRHS))
-        return true;
-    if (isa<ImplicitCastExpr>(binOpRHS)) {
-        const ImplicitCastExpr* castExpr = dyn_cast<ImplicitCastExpr>(binOpRHS);
-        binOpRHS = castExpr->getSubExpr();
+    const BinaryOperator* binOp = dyn_cast<BinaryOperator>(e);
+    if (!binOp)
+        return;
+    bool less;
+    if (positive) {
+        switch (binOp->getOpcode()) {
+        case BO_LAnd:
+            checkSubExpr(binOp->getLHS(), true);
+            checkSubExpr(binOp->getRHS(), true);
+            return;
+        case BO_LT:
+        case BO_NE:
+            less = true;
+            break;
+        case BO_LE:
+            less = false;
+            break;
+        default:
+            return;
+        }
+    } else {
+        switch (binOp->getOpcode()) {
+        case BO_LOr:
+            checkSubExpr(binOp->getLHS(), false);
+            checkSubExpr(binOp->getRHS(), false);
+            return;
+        case BO_GE:
+        case BO_EQ:
+            less = true;
+            break;
+        case BO_GT:
+            less = false;
+            break;
+        default:
+            return;
+        }
     }
+    auto lhs = dyn_cast<DeclRefExpr>(binOp->getLHS()->IgnoreParenImpCasts());
+    if (!lhs)
+        return;
+    QualType qt = lhs->getType();
+    if (!qt->isIntegralOrEnumerationType())
+        return;
+    unsigned qt1BitWidth = getIntValueWidth(qt);
+    auto lhsDecl = lhs->getDecl();
+    if (!isa<VarDecl>(lhsDecl)) {
+        if (auto fd = dyn_cast<FieldDecl>(lhsDecl)) {
+            if (fd->isBitField()) {
+                qt1BitWidth = std::max(
+                    qt1BitWidth,
+                    fd->getBitWidthValue(compiler.getASTContext()));
+            }
+        } else {
+            return;
+        }
+    }
+    const Expr* binOpRHS = binOp->getRHS()->IgnoreParenImpCasts();
     QualType qt2 = binOpRHS->getType();
     if (!qt2->isIntegralType(compiler.getASTContext()))
-        return true;
-    // check for comparison with constants where the compiler just tends to give me the type as "int"
+        return;
+    unsigned qt2BitWidth;
     llvm::APSInt aIntResult;
-    uint64_t qt2BitWidth = compiler.getASTContext().getTypeSize(qt2);
     if (binOpRHS->EvaluateAsInt(aIntResult, compiler.getASTContext())) {
-        if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1<<7) {
-            qt2BitWidth = 8;
-        } else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1<<15) {
-            qt2BitWidth = 16;
-        } else if (aIntResult.getSExtValue() > 0 && aIntResult.getSExtValue() < 1L<<31) {
-            qt2BitWidth = 32;
+        if (less && aIntResult.isStrictlyPositive()) {
+            --aIntResult;
+        }
+        qt2BitWidth = aIntResult.isUnsigned() || !aIntResult.isNegative()
+            ? std::max(aIntResult.getActiveBits(), 1U)
+            : aIntResult.getBitWidth() - aIntResult.countLeadingOnes() + 1;
+    } else {
+        // Ignore complex expressions for now, promotion rules on conditions
+        // like "i < (size()+1)" make it hard to guess at a correct type:
+        if (isa<BinaryOperator>(binOpRHS) || isa<ConditionalOperator>(binOpRHS))
+        {
+            return;
+        }
+        qt2BitWidth = getIntValueWidth(qt2);
+        if (auto dre = dyn_cast<DeclRefExpr>(binOpRHS)) {
+            if (auto fd = dyn_cast<FieldDecl>(dre->getDecl())) {
+                if (fd->isBitField()) {
+                    qt2BitWidth = std::max(
+                        qt2BitWidth,
+                        fd->getBitWidthValue(compiler.getASTContext()));
+                }
+            }
         }
     }
 
-    if (qt1BitWidth < qt2BitWidth) {
-        report(
-            DiagnosticsEngine::Warning,
-            "loop index type %0 is narrower than length type %1",
-            stmt->getInit()->getLocStart())
-            << qt << qt2 << stmt->getInit()->getSourceRange();
-        //stmt->getCond()->dump();
+    auto i = comparisons_.find(lhsDecl);
+    if (i == comparisons_.end()) {
+        i = (comparisons_.insert(
+                 decltype(comparisons_)::value_type(lhsDecl, {{}, qt1BitWidth}))
+             .first);
+    } else {
+        assert(i->second.lhsWidth == qt1BitWidth);
     }
-    return true;
+    bool ins = true;
+    for (auto j = i->second.comparisons.begin();
+         j != i->second.comparisons.end();)
+    {
+        if (qt2BitWidth > j->rhsWidth) {
+            ins = false;
+            break;
+        } else if (qt2BitWidth < j->rhsWidth) {
+            j = i->second.comparisons.erase(j);
+        } else {
+            ++j;
+        }
+    }
+    if (ins) {
+        i->second.comparisons.push_back({binOp, qt2BitWidth});
+    }
 }
 
+void LoopVarTooSmall::checkExpr(Expr const * expr) {
+    if (expr != nullptr && !ignoreLocation(expr)) {
+        assert(comparisons_.empty());
+        checkSubExpr(expr, true);
+        for (auto const & i: comparisons_) {
+            for (auto const & j: i.second.comparisons) {
+                if (i.second.lhsWidth < j.rhsWidth) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "loop index type %0 is narrower than length type %1",
+                        j.op->getExprLoc())
+                        << j.op->getLHS()->IgnoreImpCasts()->getType()
+                        << j.op->getRHS()->IgnoreImpCasts()->getType()
+                        << j.op->getSourceRange();
+                }
+            }
+        }
+        comparisons_.clear();
+    }
+}
 
 loplugin::Plugin::Registration< LoopVarTooSmall > X("loopvartoosmall");
 
