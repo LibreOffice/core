@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_datafilterautofilter.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:zoom="41.7193"
+     inkscape:cx="10.036579"
+     inkscape:cy="5.2112872"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4137" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     inkscape:connector-curvature="0"
+     style="display:inline;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="M 2,0.9375 2,11.5 1.71875,11.21875 C 1.53057,11.03064 1.26531,10.93746 1,10.9375 l -1,0 0,1 c 0,0.26529 0.09304,0.53057 0.28125,0.71875 l 2,2 0.28125,0.28125 0.875,0 0.28125,-0.28125 2,-2 C 5.90689,12.46808 5.99997,12.20281 6,11.9375 l 0,-1 -1,0 c -0.2653,0 -0.53058,0.0931 -0.71875,0.28125 L 4,11.5 4,0.9375 l -2,0 z m 8.994141,0.359375 c -1.3337354,0 -2.540672,0.1149152 -3.4277348,0.3066406 C 7.122875,1.6993783 6.7590691,1.8137971 6.4902344,1.9511719 6.355817,2.0198593 6.2436408,2.0932425 6.15625,2.1855469 6.0688592,2.2778513 6.0039064,2.3985376 6.0039062,2.5332031 c 10e-8,0.00624 0.00363,0.011399 0.00391,0.017578 C 6.0073887,2.544726 6,2.5393005 6,2.5332031 l 0,2.40625 4,4.9980469 -0.00391,4.695312 c 0,0 -0.00261,0.304688 0.998047,0.304688 1.00022,0 1.007812,-0.304686 1.007812,-0.304688 L 12,9.9375 l 0.484375,-0.6054688 0.228516,0.052734 c 0.475061,0.1121735 0.941099,0.2317983 1.451171,0.1582032 0.510076,-0.073595 1.010697,-0.3802808 1.423829,-0.9296876 0.371537,-0.4940907 0.468062,-1.0621066 0.380859,-1.5527343 -0.0872,-0.4906278 -0.309485,-0.9158047 -0.519531,-1.34375 l -0.03125,-0.064453 0.568359,-0.7128907 0,-2.40625 c 0,0.0061 -0.0074,0.011523 -0.0078,0.017578 2.74e-4,-0.00618 0.0039,-0.011337 0.0039,-0.017578 0,-0.1346655 -0.06495,-0.2553518 -0.152344,-0.3476562 -0.0874,-0.092304 -0.199573,-0.1656873 -0.33399,-0.2343747 C 15.227259,1.8137971 14.865406,1.6993783 14.421875,1.6035156 13.534812,1.4117902 12.327874,1.296875 10.994141,1.296875 Z m 0,0.4042969 c 1.310101,0 2.496272,0.1160811 3.341797,0.2988281 0.42276,0.091373 0.760917,0.2003522 0.976562,0.3105469 0.107822,0.055097 0.184464,0.1118935 0.224609,0.1542969 0.04015,0.042403 0.04102,0.060168 0.04102,0.068359 0,0.00819 -8.66e-4,0.027909 -0.04102,0.070312 -0.04014,0.042403 -0.116787,0.097246 -0.224609,0.1523438 -0.215645,0.1101947 -0.553802,0.2191734 -0.976562,0.3105468 -0.845525,0.1827473 -2.031696,0.2988282 -3.341797,0.2988282 -1.3101026,0 -2.4982284,-0.116081 -3.3437504,-0.2988282 C 7.2276296,2.9750338 6.889473,2.8660541 6.6738281,2.7558594 6.5660057,2.700762 6.4913177,2.6459187 6.4511719,2.6035156 6.4110261,2.5611126 6.4082031,2.541394 6.4082031,2.5332031 c 0,-0.00819 0.00282,-0.025956 0.042969,-0.068359 0.040146,-0.042403 0.1148338,-0.0992 0.2226562,-0.1542969 C 6.8894728,2.2003519 7.2276296,2.0913735 7.6503906,2 8.4959126,1.817253 9.6840384,1.7011719 10.994141,1.7011719 Z M 10,3.9375 l 1,0 2,1.625 0,0.8691406 L 11,7.9375 10,7.9414062 10,3.9375 Z m 4.720703,2.5878906 c 0.123148,0.2680529 0.226857,0.5147995 0.261719,0.7109375 0.05046,0.2838823 0.03002,0.4757314 -0.195313,0.7753907 -0.305028,0.4056435 -0.511527,0.5043534 -0.765625,0.5410156 -0.205635,0.02967 -0.497086,-0.019519 -0.841796,-0.09375 l 1.541015,-1.9335938 z"
+     id="path5051-1-3-4-0-6" />
+  <path
+     inkscape:connector-curvature="0"
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="M 10.994141,1.5019531 A 4.9932156,1.0308053 0 0 0 6,2.5332031 a 4.9932156,1.0308053 0 0 0 4.994141,1.03125 4.9932156,1.0308053 0 0 0 4.992187,-1.03125 4.9932156,1.0308053 0 0 0 -4.992187,-1.03125 z"
+     id="path5051-11-7-7-4-2" />
+  <g
+     transform="matrix(0,-1,1,0,-655.99991,336.99996)"
+     id="g7284-2"
+     style="display:inline"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_datafilterautofilter.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+</svg>

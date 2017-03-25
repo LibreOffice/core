@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_insertapplet.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="m 3.9999887,5.4997958 0,13.8437502 c 0,0.90965 3.134006,1.65625 7.0000013,1.65625 3.865992,0 7,-0.7466 7,-1.65625 l 0,-13.8437502 c 0,0.90964 -3.134008,1.5 -7,1.5 -3.8659953,0 -7.0000013,-0.59036 -7.0000013,-1.5 z m 2,4.5 1.5,0 c 0.84047,0 1.5,0.6822902 1.5,1.5000002 l 0,3 0,0.5 -0.5,0 -2,0 c -0.454486,2e-5 -0.868435,-0.17955 -1.125,-0.46875 -0.256565,-0.2892 -0.3718,-0.67075 -0.375,-1.03125 -0.0032,-0.3605 0.117405,-0.73891 0.375,-1.03125 0.257595,-0.29234 0.664997,-0.46873 1.125,-0.46875 l 1.5,0 0,-0.5 c 0,-0.19237 -0.284443,-0.5 -0.5,-0.5 l -1.5,0 0,-1.0000002 z m 4,2.0000002 0.5000013,0 1.5,0 c 0.454486,0 0.868441,0.17954 1.125,0.46875 0.256559,0.28921 0.3718,0.67075 0.375,1.03125 0.0032,0.3605 -0.117399,0.73892 -0.375,1.03125 -0.257601,0.29233 -0.664997,0.46875 -1.125,0.46875 l -1,0 0,0.5 0,1.5 -1.0000013,0 0,-1.5 0,-3 0,-0.5 z m 4.0000013,0 0.5,0 1.5,0 c 0.454486,10e-6 0.868443,0.17954 1.125,0.46875 0.256557,0.28921 0.3718,0.67075 0.375,1.03125 0.0032,0.3605 -0.117397,0.73892 -0.375,1.03125 -0.257603,0.29233 -0.664997,0.46876 -1.125,0.46875 l -1,0 0,0.5 0,1.5 -1,0 0,-1.5 0,-3 0,-0.5 z m -7.5000013,1 c -0.21199,10e-6 -0.30215,0.0736 -0.375,0.15625 -0.07285,0.0827 -0.1262,0.20426 -0.125,0.34375 0.0012,0.13949 0.0489,0.25795 0.125,0.34375 0.0761,0.0857 0.175265,0.15626 0.375,0.15625 l 1.5,0 0,-1 -1.5,0 z m 4.5000013,0 0,1 1,0 c 0.21199,0 0.302159,-0.0736 0.375,-0.15625 0.07284,-0.0827 0.1262,-0.20426 0.125,-0.34375 -0.0012,-0.13949 -0.04889,-0.25795 -0.125,-0.34375 -0.07611,-0.0858 -0.175265,-0.15625 -0.375,-0.15625 l -1,0 z m 4,0 0,1 1,0 c 0.21199,0 0.302161,-0.0736 0.375,-0.15625 0.07284,-0.0827 0.1262,-0.20426 0.125,-0.34375 -0.0012,-0.13949 -0.04889,-0.25795 -0.125,-0.34375 -0.07611,-0.0858 -0.175265,-0.15625 -0.375,-0.15625 l -1,0 z"
+     id="path5051-1-3"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertapplet.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <ellipse
+     ry="1.4999998"
+     rx="7"
+     cy="5.4997563"
+     cx="10.999989"
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="path5051-11-7"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertapplet.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="display:inline;fill:none;stroke:#555753;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1"
+     d="m 17.49999,14.999756 c 3.5,0 3.5,-1.567 3.5,-3.5 0,-1.9330002 0,-3.5000002 -3.5,-3.5000002 l 0,0"
+     id="path5140-1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cscc"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertapplet.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <ellipse
+     ry="1.5056057"
+     rx="6.7110267"
+     cy="5.7051768"
+     cx="10.999989"
+     style="display:inline;fill:none;stroke:#555753;stroke-width:0.57794619;stroke-opacity:1"
+     id="path5051-11-0-8"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_insertapplet.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+</svg>

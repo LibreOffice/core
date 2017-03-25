@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 12 4.015625 C 7.58173 4.015625 4 7.5936825 4 12.007812 C 4 16.421943 7.58173 20 12 20 C 16.41827 20 20 16.421943 20 12.007812 C 20 7.5936825 16.41827 4.015625 12 4.015625 z M 11.990234 6.0371094 C 15.295614 6.0371094 17.974609 8.7152481 17.974609 12.017578 C 17.974609 15.319958 15.295614 17.996094 11.990234 17.996094 C 8.6848544 17.996094 6.0058594 15.319958 6.0058594 12.017578 C 6.0057894 8.7152481 8.6848544 6.0371094 11.990234 6.0371094 z M 12 9 A 2.9999993 2.9999688 0 0 0 9 12 A 2.9999993 2.9999688 0 0 0 12 15 A 2.9999993 2.9999688 0 0 0 15 12 A 2.9999993 2.9999688 0 0 0 12 9 z "
+     />
+</svg>

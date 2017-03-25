@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_drawchart.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     id="namedview7"
+     showgrid="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true"
+     inkscape:zoom="41.7193"
+     inkscape:cx="6.4051662"
+     inkscape:cy="5.2112872"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4137" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:0.34901961;stroke:#555753;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path31106-5"
+     sodipodi:type="arc"
+     sodipodi:cx="6.5041466"
+     sodipodi:cy="9.4966736"
+     sodipodi:rx="6.0041041"
+     sodipodi:ry="6.0030894"
+     sodipodi:start="0.00010117542"
+     sodipodi:end="4.7123699"
+     d="M 12.508251,9.4972809 A 6.0041041,6.0030894 0 0 1 6.5037798,15.499763 6.0041041,6.0030894 0 0 1 0.50004244,9.4965475 6.0041041,6.0030894 0 0 1 6.504032,3.4935842 l 1.146e-4,6.0030894 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="display:inline;opacity:1;fill:none;fill-opacity:0.34901961;stroke:#555753;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path31106-5-2"
+     sodipodi:type="arc"
+     sodipodi:cx="6.5000615"
+     sodipodi:cy="-9.4995079"
+     sodipodi:rx="6.0006194"
+     sodipodi:ry="6.000793"
+     sodipodi:start="3.1423803"
+     sodipodi:end="4.7123699"
+     d="M 0.49944396,-9.5042344 A 6.0006194,6.000793 0 0 1 6.499947,-15.500301 l 1.145e-4,6.0007931 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     transform="matrix(0,1,-1,0,0,0)" />
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:1;stroke:#555753;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path31106-5-2-5"
+     sodipodi:type="arc"
+     sodipodi:cx="-9.4971619"
+     sodipodi:cy="-6.5074425"
+     sodipodi:rx="6.0006194"
+     sodipodi:ry="6.000793"
+     sodipodi:start="3.1423803"
+     sodipodi:end="4.7123699"
+     d="m -15.497779,-6.512169 a 6.0006194,6.000793 0 0 1 6.0005026,-5.996066 l 1.145e-4,6.0007925 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     transform="matrix(0,-1,-1,0,0,0)" />
+</svg>

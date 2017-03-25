@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>LibreOffice Symbolic Icon Theme SIFR</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+ <path 
+     style="fill:#555753;fill-opacity:1;stroke:none" 
+     d="M 3 5 C 2 5 1 6 1 7 L 1 16 C 1 17 2 18 3 18 L 21 18 C 22 18 23 17 23 16 L 23 7 C 23 5.99954 22 5 21 5 L 3 5 z M 7.0195312 8.0117188 L 8.2539062 8.0117188 L 9.0195312 8.0117188 L 10.019531 9.0019531 L 10.019531 11.753906 L 10.019531 13.988281 L 9.0195312 14.962891 L 8.2695312 14.962891 L 7.0195312 14.962891 L 6.0351562 13.988281 L 6.0351562 11.736328 L 6.0351562 8.9667969 L 7.0195312 8.0117188 z M 14.019531 8.0117188 L 14.263672 8.0117188 L 15.019531 8.0117188 L 15.019531 9.5019531 L 15.019531 10.992188 L 15.753906 10.992188 L 17.003906 10.992188 L 17.003906 11.736328 L 17.003906 11.96875 L 15.753906 11.96875 L 15.019531 11.96875 L 15.019531 13.972656 L 15.019531 14.984375 L 14.263672 14.984375 L 14.019531 14.984375 L 14.019531 11.736328 L 14.019531 8.0117188 z M 17.037109 8.0117188 L 17.261719 8.0117188 L 17.990234 8.0117188 L 17.990234 9.5019531 L 17.990234 10.992188 L 17.261719 10.992188 L 17.037109 10.992188 L 17.037109 9.5019531 L 17.037109 8.0117188 z M 7.0195312 8.984375 L 7.0195312 11.236328 L 7.0195312 13.984375 L 8.2539062 13.984375 L 9.0195312 13.984375 L 9.0195312 11.236328 L 9.0195312 8.984375 L 8.2539062 8.984375 L 7.0195312 8.984375 z M 17.037109 12.001953 L 17.261719 12.001953 L 17.990234 12.001953 L 17.990234 13.988281 L 17.990234 14.984375 L 17.261719 14.984375 L 17.037109 14.984375 L 17.037109 13.988281 L 17.037109 12.001953 z "
+     />
+</svg>

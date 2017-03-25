@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_drawchart.svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="720"
+     inkscape:window-height="480"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:0.34901961;fill-rule:nonzero;stroke:#555753;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.5999999;stroke-opacity:1"
+     id="path5774-8-4"
+     sodipodi:type="arc"
+     sodipodi:cx="10.000004"
+     sodipodi:cy="13.999992"
+     sodipodi:rx="7"
+     sodipodi:ry="7"
+     sodipodi:start="6.2805662"
+     sodipodi:end="4.712389"
+     d="M 16.99998,13.981659 A 7,7 0 0 1 12.691486,20.461875 7,7 0 0 1 5.0567425,18.956218 7,7 0 0 1 3.5310945,11.325443 7,7 0 0 1 10.000004,6.9999924 l 0,6.9999996 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:0;fill-rule:nonzero;stroke:#555753;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.5999999;stroke-opacity:1"
+     id="path5774-4-7-8"
+     sodipodi:type="arc"
+     sodipodi:cx="14.000004"
+     sodipodi:cy="9.9999924"
+     sodipodi:rx="7"
+     sodipodi:ry="7"
+     sodipodi:start="4.7123496"
+     sodipodi:end="3.3870939e-09"
+     d="m 13.999728,2.9999924 a 7,7 0 0 1 4.949926,2.0501551 7,7 0 0 1 2.05035,4.9498449 l -7,0 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:#555753;stroke-width:1.77774727;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:4.5999999;stroke-opacity:1"
+     id="path5774-4-94-2-1"
+     sodipodi:type="arc"
+     sodipodi:cx="9.8891411"
+     sodipodi:cy="-13.888863"
+     sodipodi:rx="6.2219748"
+     sodipodi:ry="6.2222557"
+     sodipodi:start="4.7123496"
+     sodipodi:end="3.3870939e-09"
+     d="m 9.8888961,-20.111118 a 6.2219748,6.2222557 0 0 1 4.3997589,1.82237 6.2219748,6.2222557 0 0 1 1.822461,4.399885 l -6.2219749,0 z"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/lc_drawchart.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     transform="scale(1,-1)" />
+</svg>
