@@ -257,6 +257,7 @@ public:
         : Edit(pParent)
         , mpTabStops(nullptr)
     {
+        set_id("search_edit");
     }
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
