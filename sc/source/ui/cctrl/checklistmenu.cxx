@@ -906,6 +906,9 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     maChecks->SetTabStopsContainer( &maTabStops );
 
     set_id("check_list_menu");
+    maChkToggleAll->set_id("toggle_all");
+    maBtnSelectSingle->set_id("select_current");
+    maBtnUnselectSingle->set_id("unselect_current");
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -1610,6 +1613,7 @@ ScCheckListBox::ScCheckListBox( vcl::Window* pParent )
     :  SvTreeListBox( pParent, 0 ), mpCheckButton( nullptr ), mbSeenMouseButtonDown( false )
 {
     Init();
+    set_id("check_list_box");
 }
 
 SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
