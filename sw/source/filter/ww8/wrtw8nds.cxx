@@ -1630,7 +1630,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const
 
 /*
 Convert characters that need to be converted, the basic replacements and the
-ridicously complicated title case attribute mapping to hardcoded upper case
+ridiculously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
 OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,

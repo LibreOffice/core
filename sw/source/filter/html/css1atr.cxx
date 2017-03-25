@@ -234,7 +234,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     //
     //  p.leaders {
     //      /* FIXME:
-    //         (1) dots line up vertically only in the paragraphs with the same alignation/level
+    //         (1) dots line up vertically only in the paragraphs with the same alignment/level
     //         (2) max-width = 18 cm instead of 80em; possible improvement with the new CSS3 calc() */
     //      max-width: 18cm; /* note: need to overwrite max-width with max-width - border-left_of_the_actual_paragraph */
     //      padding: 0;

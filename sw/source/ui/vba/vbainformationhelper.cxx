@@ -55,7 +55,7 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
     SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
     SwViewShell* pViewSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     sal_Int32 nPageHeight = pViewSh ? pViewSh->GetPageSize( nCurrentPage, false ).Height() : 0;
-    // FIXME: handle multipul page style
+    // FIXME: handle multiple page style
     // it is very strange that the cursor position is incorrect when open Word file.
     // e.g. if current cursor in the top left of the text body of the first page without header,
     // the top value of current position should be 0, but is 201 when open a Word file.

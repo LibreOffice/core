@@ -5239,7 +5239,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                            == (0xFFFF0000 & pNextOrder->nTxBxComp))
                         pNextFlyFormat = pNextOrder->pFly;
                 }
-                // Determine precessor, if we can
+                // Determine predecessor, if we can
                 if( it != aTxBxSort.begin() )
                 {
                     SvxMSDffShapeTxBxSort::iterator tmpIter2 = it;

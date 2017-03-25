@@ -536,7 +536,7 @@ String FMT_REF_NUMBER_FULL_CONTEXT
     Text [ en-US ] = "Number (full context)";
 };
 /*--------------------------------------------------------------------
-    Description: paceholder
+    Description: placeholder
  --------------------------------------------------------------------*/
 String FMT_MARK_TEXT
 {

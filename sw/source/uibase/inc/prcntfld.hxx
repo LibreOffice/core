@@ -37,7 +37,7 @@ class SW_DLLPUBLIC PercentField
     sal_Int64   nLastValue;
     sal_uInt16  nOldDigits;
     FieldUnit   eOldUnit;
-    bool bLockAutoCalculation; //prevent recalcution of percent values when the
+    bool bLockAutoCalculation; //prevent recalculation of percent values when the
                                //reference value is changed
 
     SAL_DLLPRIVATE static sal_Int64 ImpPower10(sal_uInt16 n);

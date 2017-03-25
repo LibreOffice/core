@@ -1176,7 +1176,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                             *rProperties, nIndex);
     else if(pDocShell)
     {
-        // #i87650# - correction of cws swwarnings:
+        // #i87650# - correction of cws warnings:
         SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             *rProperties, nIndex);

@@ -229,7 +229,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 
     if( m_bKeep )
     {
-        // If pararagraph should not be split but is larger than
+        // If paragraph should not be split but is larger than
         // the page, then bKeep is overruled.
         if( bChkKeep && !m_pFrame->GetPrev() && !m_pFrame->IsInFootnote() &&
             m_pFrame->IsMoveable() &&

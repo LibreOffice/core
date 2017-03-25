@@ -1594,7 +1594,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 
         if(HasSelection())
         {
-                // Only parenthese here, because the regular insert
+                // Only parentheses here, because the regular insert
                 // is already clipped to the editshell
             StartAllAction();
 

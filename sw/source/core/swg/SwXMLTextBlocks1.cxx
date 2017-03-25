@@ -215,7 +215,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                         sFilterComponent, aFilterArguments, xContext),
                     UNO_QUERY );
                 OSL_ENSURE( xFilter.is(),
-                            "can't instantiate atevents filter");
+                            "can't instantiate atevent filter");
                 if ( xFilter.is() )
                 {
                     // connect parser and filter

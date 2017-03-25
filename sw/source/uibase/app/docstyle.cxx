@@ -2749,7 +2749,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         : pFormat->GetName() );
         }
 
-        // PoolFormate
+        // PoolFormat
         if( bAll )
         {
             if( ! rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
@@ -2963,7 +2963,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             aLst.Append( cFRAME, pFormat->GetName() );
         }
 
-        // PoolFormate
+        // PoolFormat
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetFrameFormatUINameArray(),
                                     bIsSearchUsed, bSearchHidden, bOnlyHidden, SwGetPoolIdFromName::FrmFmt, cFRAME);

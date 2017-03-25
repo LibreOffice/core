@@ -4914,7 +4914,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     }
     ReleaseMouse();
-    // Only processed MouseEvents arrive here; only at these the moduses can
+    // Only processed MouseEvents arrive here; only at these this mode can
     // be resetted.
     m_bMBPressed = false;
 

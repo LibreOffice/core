@@ -201,7 +201,7 @@ SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNodePos )
     , m_bFormatIgnoreEnd  (pTextHt->IsFormatIgnoreEnd  ())
 {
     // Caution: the following attributes generate no format attributes:
-    //  - NoLineBreak, NoHypen, Inserted, Deleted
+    //  - NoLineBreak, NoHyphen, Inserted, Deleted
     // These cases must be handled separately !!!
 
     // a little bit complicated but works: first assign a copy of the

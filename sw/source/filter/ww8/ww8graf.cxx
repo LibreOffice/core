@@ -465,7 +465,7 @@ ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd
 }
 
 // InsertTxbxStyAttrs() sets style attributes into the passed ItemSet.
-// SW styles are used since import-WW-styles are alreaday destroyed.
+// SW styles are used since import-WW-styles are already destroyed.
 // SW styles are examined in depth first search order (with parent styles)
 // for the attributes given in aSrcTab. They're cloned, and the clones'
 // Which-IDs are changed according to the aDstTab table so that the
@@ -1333,7 +1333,7 @@ SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
 {
     // This whole archaic word 6 graphic import can probably be refactored
-    // into an object hierarachy with a little effort.
+    // into an object hierarchy with a little effort.
     SdrObject *pRet=nullptr;
     WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
     bool bCouldRead = checkRead(*m_pStrm, &aHd, sizeof(WW8_DPHEAD));
