@@ -1669,10 +1669,10 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( SAL_W(rtl_uString_getStr( pItemImpl->m_pFullPath )),
+            sal_uInt32 nNewLen = GetLongPathName( SAL_W(rtl_uString_getStr( pItemImpl->m_pFullPath )),
                                                       ::osl::mingw_reinterpret_cast<LPWSTR>( aBuffer ),
-                                                      aBuffer.getBufSizeInSymbols(),
-                                                      true );
+                                                      aBuffer.getBufSizeInSymbols()
+                                                      );
 
             if ( nNewLen )
             {

@@ -450,38 +450,6 @@ static DWORD GetCaseCorrectPathNameEx(
         return _tcslen( lpszPath );
 }
 
-DWORD GetCaseCorrectPathName(
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer,      // size of path buffer
-    BOOL bCheckExistence
-)
-{
-    /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
-    {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
-        {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-        else
-        {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-    }
-    else if ( lpszShortPath )
-    {
-        if ( _tcslen( lpszShortPath ) <= cchBuffer )
-        {
-            _tcscpy( lpszLongPath, lpszShortPath );
-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
-        }
-    }
-
-    return 0;
-}
-
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
     sal_Char        *pBuffer;
@@ -683,10 +651,10 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 else
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( SAL_W(pDecodedURL) + nSkip,
+                    sal_uInt32 nNewLen = GetLongPathName( SAL_W(pDecodedURL) + nSkip,
                                                                  ::osl::mingw_reinterpret_cast<LPWSTR>(aBuf),
-                                                                 aBuf.getBufSizeInSymbols(),
-                                                                 false );
+                                                                 aBuf.getBufSizeInSymbols()
+                                                                 );
 
                     if ( nNewLen <= MAX_PATH - 12
                       || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, SAL_U(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
