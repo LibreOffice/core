@@ -803,8 +803,9 @@ void SAL_CALL ChartController::dispose()
 
         //--release all resources and references
         {
-            uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(getModel(), uno::UNO_QUERY_THROW);
-            x3DWindowProvider->setWindow(0);
+            uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(getModel(), uno::UNO_QUERY);
+            if(x3DWindowProvider.is())
+                x3DWindowProvider->setWindow(0);
 
             uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
             if( xViewBroadcaster.is() )
@@ -818,7 +819,8 @@ void SAL_CALL ChartController::dispose()
             m_apDropTargetHelper.reset();
 
             //the accessible view is disposed within window destructor of m_pChartWindow
-            m_xViewWindow->dispose(); //ChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
+            if(m_xViewWindow.is())
+                m_xViewWindow->dispose(); //ChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
             m_xChartView.clear();
         }
 
@@ -865,6 +867,7 @@ void SAL_CALL ChartController::dispose()
     }
     catch( const uno::Exception & ex )
     {
+        assert(!m_xChartView.is());
         ASSERT_EXCEPTION( ex );
     }
  }
