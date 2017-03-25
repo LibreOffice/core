@@ -945,7 +945,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         // At this moment we know that at position rPos the "winner"-attribute
         // causes a 2-line-portion. The end of the attribute is the end of the
         // portion, if there's no interrupting attribute.
-        // There are two kinds of interruptors:
+        // There are two kinds of interrupters:
         // - ruby attributes stops the 2-line-attribute, the end of the
         //   multiline is the start of the ruby attribute
         // - 2-line-attributes with value "Off" or with different brackets,

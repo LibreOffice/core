@@ -194,7 +194,7 @@ void SwCTBWrapper::Print( FILE* fp )
         indent_printf(fp,"    reserved3(0x%x)\n",reserved3);
         indent_printf(fp,"    reserved4(0x%x)\n",reserved4);
         indent_printf(fp,"    reserved5(0x%x)\n",reserved5);
-        indent_printf(fp,"Quiting dump");
+        indent_printf(fp,"Quitting dump");
         return;
     }
     indent_printf(fp,"  size of TBDelta structures 0x%x\n", cbTBD );

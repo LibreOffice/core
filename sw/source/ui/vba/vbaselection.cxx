@@ -87,7 +87,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange()
         uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
         if( xTextRanges->getCount() > 0 )
         {
-            // if there are multipul selection, just return the last selected Range.
+            // if there are multiple selection, just return the last selected Range.
             xTextRange.set( xTextRanges->getByIndex( xTextRanges->getCount()-1 ), uno::UNO_QUERY_THROW );
         }
     }
@@ -1063,7 +1063,7 @@ void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction )
     uno::Reference< text::XTextViewCursor > xTextViewCursor = word::getXTextViewCursor( mxModel );
     if( nDirection == word::WdCollapseDirection::wdCollapseStart )
     {
-        // it is inaccurate if current seleciton is multipul cells, so it needs to go to start
+        // it is inaccurate if current selection is multiple cells, so it needs to go to start
         uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
         xTextViewCursor->gotoRange( xTextRange, false );
         xTextViewCursor->collapseToStart();

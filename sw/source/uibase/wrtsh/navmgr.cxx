@@ -148,7 +148,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
                        // Indicates whether the index should be decremented before
                        // jumping back or not
     // The navigation history has recency with temporal ordering enhancement,
-    //  as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
+    // as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
     // If any forward history exists, twist the tail of the
     // list from the current position to the end
     if (bForwardWasEnabled) {
