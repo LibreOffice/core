@@ -33,9 +33,11 @@ public:
 
 private:
     void testMinus();
+    void testNospace();
 
     CPPUNIT_TEST_SUITE(ParseTest);
     CPPUNIT_TEST(testMinus);
+    CPPUNIT_TEST(testNospace);
     CPPUNIT_TEST_SUITE_END();
 
     SmDocShellRef mxDocShell;
@@ -88,6 +90,35 @@ void ParseTest::testMinus()
     CPPUNIT_ASSERT(static_cast<const SmTextNode *>(pNode001)->GetText().isEmpty());
     CPPUNIT_ASSERT_EQUAL(OUString("1.2"),
                          static_cast<const SmTextNode *>(pNode001)->GetToken().aText);
+}
+
+/*
+ * This shows that "nospace" turns off the expression's IsUseExtraSpaces(),
+ * but leaves its decendants' flag on.
+ */
+void ParseTest::testNospace()
+{
+    std::unique_ptr<SmTableNode> pNode(SmParser().Parse("nospace{ nitalic d {F(x) G(x)} }"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetNumSubNodes());
+    const SmNode *pNode0 = pNode->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode0);
+    CPPUNIT_ASSERT_EQUAL(NLINE, pNode0->GetType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode0->GetNumSubNodes());
+    const SmNode *pNode00 = pNode0->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode00);
+    CPPUNIT_ASSERT_EQUAL(NEXPRESSION, pNode00->GetType());
+    CPPUNIT_ASSERT(!static_cast<const SmExpressionNode *>(pNode00)->IsUseExtraSpaces());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode00->GetNumSubNodes());
+    const SmNode *pNode000 = pNode00->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode000);
+    CPPUNIT_ASSERT_EQUAL(NFONT, pNode000->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("nitalic"),
+                         static_cast<const SmFontNode *>(pNode000)->GetToken().aText);
+    const SmNode *pNode001 = pNode00->GetSubNode(1);
+    CPPUNIT_ASSERT(pNode001);
+    CPPUNIT_ASSERT_EQUAL(NEXPRESSION, pNode001->GetType());
+    CPPUNIT_ASSERT(static_cast<const SmExpressionNode *>(pNode001)->IsUseExtraSpaces());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode00->GetNumSubNodes());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ParseTest);
