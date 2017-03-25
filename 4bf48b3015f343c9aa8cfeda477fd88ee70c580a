@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_1d1e6d0c",
+        "filename": "sfx2/source/appl/appcfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-03-25T17:17:48Z",
+      "side": 1,
+      "message": "could it be \"referrer\"?",
+      "range": {
+        "startLine": 712,
+        "startChar": 14,
+        "endLine": 712,
+        "endChar": 20
+      },
+      "revId": "4bf48b3015f343c9aa8cfeda477fd88ee70c580a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
