@@ -31,7 +31,7 @@ namespace dbaui
 {
 
     // OBeamer
-    // tempoaray class until the beamer is implemented
+    // temporary class until the beamer is implemented
     class OBeamer : public DockingWindow
     {
     public:

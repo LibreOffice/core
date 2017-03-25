@@ -393,7 +393,7 @@ namespace
                             aRefFind->second->ShowAll(false);
                         }
                         else
-                            continue; // table name could not be found so we do not show this table releation
+                            continue; // table name could not be found so we do not show this table relation
                     }
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 

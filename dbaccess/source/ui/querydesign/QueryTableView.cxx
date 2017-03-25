@@ -195,7 +195,7 @@ namespace
                 else
                     OSL_FAIL("Column not found!");
             }
-            // get the position inside the tabe
+            // get the position inside the table
             Reference<XNameAccess> xRefColumns = _rDest.GetOriginalColumns();
             if(xRefColumns.is())
             {
@@ -305,7 +305,7 @@ void OQueryTableView::ReSync()
             continue;
         }
 
-        // adds a new connection to join view and notifies our accessible and invaldates the controller
+        // adds a new connection to join view and notifies our accessible and invalidates the controller
         addConnection(VclPtr<OQueryTableConnection>::Create(this, *aConIter));
     }
 }
