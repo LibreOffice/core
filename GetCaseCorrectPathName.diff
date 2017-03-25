@@ -1,0 +1,93 @@
+diff --git a/sal/osl/w32/file_dirvol.cxx b/sal/osl/w32/file_dirvol.cxx
+index 4351ba0..345e473 100644
+--- a/sal/osl/w32/file_dirvol.cxx
++++ b/sal/osl/w32/file_dirvol.cxx
+@@ -1669,10 +1669,10 @@ oslFileError SAL_CALL osl_getFileStatus(
+         if ( !pItemImpl->bFullPathNormalized )
+         {
+             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+-            sal_uInt32 nNewLen = GetCaseCorrectPathName( rtl_uString_getStr( pItemImpl->m_pFullPath ),
++            sal_uInt32 nNewLen = GetLongPathName( rtl_uString_getStr( pItemImpl->m_pFullPath ),
+                                                       ::osl::mingw_reinterpret_cast<LPWSTR>( aBuffer ),
+-                                                      aBuffer.getBufSizeInSymbols(),
+-                                                      true );
++                                                      aBuffer.getBufSizeInSymbols()
++                                                      );
+ 
+             if ( nNewLen )
+             {
+diff --git a/sal/osl/w32/file_url.cxx b/sal/osl/w32/file_url.cxx
+index ce61eb1..f99f0b1 100644
+--- a/sal/osl/w32/file_url.cxx
++++ b/sal/osl/w32/file_url.cxx
+@@ -450,38 +450,6 @@ static DWORD GetCaseCorrectPathNameEx(
+         return _tcslen( lpszPath );
+ }
+ 
+-DWORD GetCaseCorrectPathName(
+-    LPCWSTR lpszShortPath,  // file name
+-    LPWSTR  lpszLongPath,   // path buffer
+-    DWORD   cchBuffer,      // size of path buffer
+-    BOOL bCheckExistence
+-)
+-{
+-    /* Special handling for "\\.\" as system root */
+-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+-    {
+-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
+-        {
+-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
+-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+-        }
+-        else
+-        {
+-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+-        }
+-    }
+-    else if ( lpszShortPath )
+-    {
+-        if ( _tcslen( lpszShortPath ) <= cchBuffer )
+-        {
+-            _tcscpy( lpszLongPath, lpszShortPath );
+-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
+-        }
+-    }
+-
+-    return 0;
+-}
+-
+ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
+ {
+     sal_Char        *pBuffer;
+@@ -683,10 +651,10 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
+                 else
+                 {
+                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
+-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( pDecodedURL + nSkip,
++                    sal_uInt32 nNewLen = GetLongPathName( pDecodedURL + nSkip,
+                                                                  ::osl::mingw_reinterpret_cast<LPWSTR>(aBuf),
+-                                                                 aBuf.getBufSizeInSymbols(),
+-                                                                 false );
++                                                                 aBuf.getBufSizeInSymbols()
++                                                                 );
+ 
+                     if ( nNewLen <= MAX_PATH - 12
+                       || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_SYSTEM_ROOT_PATH, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
+diff --git a/sal/osl/w32/file_url.hxx b/sal/osl/w32/file_url.hxx
+index 6ccbc61..8296fdc 100644
+--- a/sal/osl/w32/file_url.hxx
++++ b/sal/osl/w32/file_url.hxx
+@@ -60,13 +60,6 @@ DWORD IsValidFilePath (
+     rtl_uString ** corrected
+ );
+ 
+-DWORD GetCaseCorrectPathName (
+-    LPCWSTR lpszShortPath,  // file name
+-    LPWSTR  lpszLongPath,   // path buffer
+-    DWORD   cchBuffer,      // size of path buffer
+-    BOOL bCheckExistence
+-);
+-
+ oslFileError osl_getSystemPathFromFileURL_ (
+     rtl_uString *  strURL,
+     rtl_uString ** pustrPath,
