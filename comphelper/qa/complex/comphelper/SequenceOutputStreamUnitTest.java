@@ -94,7 +94,7 @@ public class SequenceOutputStreamUnitTest
             oRandom.nextBytes (pBytesOriginal);
             xSeqOutStream.writeBytes (pBytesOriginal);
             byte pBytesWritten[] = xSeqOutStream.getWrittenBytes ();
-            m_aTestHelper.Message ( "SeuenceOutputStream filled." );
+            m_aTestHelper.Message ( "SequenceOutputStream filled." );
 
             //create SequenceInputstream
             Object pArgs[] = new Object[1];
