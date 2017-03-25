@@ -293,7 +293,7 @@ public class XSLTransformer
                             debug("TransformerFactory is '" + tfactory.getClass().getName() + "'");
                 // some external saxons (Debian, Ubuntu, ...) have this disabled
                 // per default
-                tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
+                tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, true);
                             xsltTemplate = tfactory.newTemplates(new StreamSource(stylesheeturl));
 
                             // store the transformation into the cache
