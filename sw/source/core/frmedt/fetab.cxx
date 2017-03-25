@@ -1044,7 +1044,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     const SwTableLine* pTabLine = static_cast<const SwRowFrame*>(pRow)->GetTabLine();
     sal_uInt16 nRet = USHRT_MAX;
     sal_uInt16 nI = 0;
-    while ( nI < pTabFrame->GetTable()->GetTabLines().size() )
+    while ( sal::static_int_cast<SwTableLines::size_type>(nI) < pTabFrame->GetTable()->GetTabLines().size() )
     {
         if ( pTabFrame->GetTable()->GetTabLines()[ nI ] == pTabLine )
         {

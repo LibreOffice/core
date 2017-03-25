@@ -1655,7 +1655,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             WW8FlyPara *pNowStyleApo=nullptr;
             sal_uInt16 nColl = pPap->GetIstd();
             ww::sti eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
-            while (eSti != ww::stiNil && nColl < pIo->m_vColl.size() && nullptr == (pNowStyleApo = pIo->m_vColl[nColl].m_xWWFly.get()))
+            while (eSti != ww::stiNil && sal::static_int_cast<size_t>(nColl) < pIo->m_vColl.size() && nullptr == (pNowStyleApo = pIo->m_vColl[nColl].m_xWWFly.get()))
             {
                 nColl = pIo->m_vColl[nColl].m_nBase;
                 eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);

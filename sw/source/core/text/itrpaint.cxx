@@ -579,7 +579,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         sal_uInt16 nMaxBaseLineOfst = 0;
         int nNumberOfPortions = 0;
 
-        while( nTmpIdx <= nUnderEnd && pPor )
+        while( sal::static_int_cast<long>(nTmpIdx) <= nUnderEnd && pPor )
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
                 pPor->IsBreakPortion() || pPor->IsMarginPortion() ||
