@@ -1446,7 +1446,7 @@ Dim i As Integer, l As Long
 			lNextPattern = InStr(lCurrentChar, psString, vPatterns(i), 1)		&apos;	Text (not case-sensitive) string comparison
 			If lNextPattern &gt; 0 And lNextPattern &lt; lPattern Then
 				lPattern = lNextPattern
-				sPattern = Mid(psString, lPattern, Len(vPatterns(i))
+				sPattern = Mid(psString, lPattern, Len(vPatterns(i)))
 			End If
 		Next i
 		&apos;	Up to the next pattern or to the end of the string, UTF8-encode each character

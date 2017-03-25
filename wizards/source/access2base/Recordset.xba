@@ -1124,6 +1124,7 @@ Private Function _PropertiesList() As Variant
 
 	_PropertiesList = Array(&quot;AbsolutePosition&quot;, &quot;BOF&quot;, &quot;Bookmarkable&quot;, &quot;Bookmark&quot;, &quot;EditMode&quot; _
 			, &quot;EOF&quot;, &quot;Filter&quot;, &quot;LastModified&quot;, &quot;Name&quot;, &quot;ObjectType&quot; , &quot;RecordCount&quot; _
+			)
 
 End Function	&apos;	_PropertiesList
 

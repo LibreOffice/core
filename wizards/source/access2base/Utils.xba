@@ -1059,7 +1059,7 @@ Const cstDot = &quot;.&quot;
 Dim sName As String
 
 	If InStr(psName, &quot;.&quot;) &gt; 0 Then
-		sName = Join(Split(psName, cstDot), cstSquareClose &amp; cstDot &amp; cstSquareOpen
+		sName = Join(Split(psName, cstDot), cstSquareClose &amp; cstDot &amp; cstSquareOpen)
 		_Surround = cstSquareOpen &amp; sName &amp; cstSquareClose
 	ElseIf InStr(psName, &quot; &quot;) &gt; 0 Then
 		_Surround = cstSquareOpen &amp; psName &amp; cstSquareClose

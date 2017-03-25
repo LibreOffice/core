@@ -1069,7 +1069,7 @@ Dim sOutput As String, l As Long, lLength As Long
 	If Len(pvString) &gt; 0 Then
 		For l = 1 To Len(pvString)
 			If lLength &gt; 0 And Len(sOutput) &gt; lLength Then Exit For
-			sOutput = sOutput &amp; Utils._UTF8Encode(Mid(pvString, l, 1)
+			sOutput = sOutput &amp; Utils._UTF8Encode(Mid(pvString, l, 1))
 		Next l
 	End If
 
