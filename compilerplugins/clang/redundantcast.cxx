@@ -306,9 +306,30 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
             << t1 << t2 << expr->getSourceRange();
         return true;
     }
-    if (loplugin::TypeCheck(t1).Typedef() && loplugin::TypeCheck(t2).Typedef() && t1 == t2
-        && !compiler.getSourceManager().isMacroBodyExpansion(expr->getLocStart()))
+    if (loplugin::TypeCheck(t1).Typedef() && loplugin::TypeCheck(t2).Typedef() && t1 == t2)
     {
+        // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
+        // winsock2.h (TODO: improve heuristic of determining that the whole
+        // expr is part of a single macro body expansion):
+        auto l1 = expr->getLocStart();
+        while (compiler.getSourceManager().isMacroArgExpansion(l1)) {
+            l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
+        }
+        auto l2 = expr->getExprLoc();
+        while (compiler.getSourceManager().isMacroArgExpansion(l2)) {
+            l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
+        }
+        auto l3 = expr->getLocEnd();
+        while (compiler.getSourceManager().isMacroArgExpansion(l3)) {
+            l3 = compiler.getSourceManager().getImmediateMacroCallerLoc(l3);
+        }
+        if (compiler.getSourceManager().isMacroBodyExpansion(l1)
+            && compiler.getSourceManager().isMacroBodyExpansion(l2)
+            && compiler.getSourceManager().isMacroBodyExpansion(l3)
+            && ignoreLocation(compiler.getSourceManager().getSpellingLoc(l2)))
+        {
+            return true;
+        }
         report(
             DiagnosticsEngine::Warning,
             "redundant cstyle typedef cast from %0 to %1", expr->getExprLoc())
