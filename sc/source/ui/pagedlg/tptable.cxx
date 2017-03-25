@@ -70,7 +70,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 
 #define WAS_DEFAULT(w,s)    (SfxItemState::DEFAULT==(s).GetItemState((w)))
 #define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
-#define GET_USHORT(sid,set) (sal_uInt16)static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
+#define GET_USHORT(sid,set) static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
 #define GET_SHOW(sid,set)   ( ScVObjMode( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() ) \
                               == VOBJ_MODE_SHOW )
 // List box entries "Scaling mode"
