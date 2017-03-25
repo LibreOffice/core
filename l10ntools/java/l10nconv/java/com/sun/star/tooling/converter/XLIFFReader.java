@@ -449,9 +449,9 @@ public class XLIFFReader extends DefaultHandler {
                 //TODO arraycopy might not be nessessary
                 System.arraycopy((String[]) DataStore.get(id), 0, data, 0,
                         data.length);
-                int help = (new Integer(data[FOUND_PARTS_COUNTER_IDX])).intValue(); //found one more part
+                int help = (Integer.valueOf(data[FOUND_PARTS_COUNTER_IDX])).intValue(); //found one more part
                 help++; // refresh the actual found parts
-                data[FOUND_PARTS_COUNTER_IDX] = (new Integer(help)).toString(); // belonging to this information
+                data[FOUND_PARTS_COUNTER_IDX] = Integer.toString(help); // belonging to this information
 
                 DataStore.remove(attrs.getValue("id")); // TODO this can be deleted?
             } else {

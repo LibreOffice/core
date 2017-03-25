@@ -618,7 +618,7 @@ public class SDFReader extends DataReader {
         for (int i = 0; i < line.length(); i++) {
             c = line.charAt(i);
             if (c < 30 && c != 9) {
-                return (new Character(c)).toString();
+                return Character.toString(c);
             }
 
         }
