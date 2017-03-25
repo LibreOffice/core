@@ -63,7 +63,7 @@ class SmParser
     // grammar
     SmTableNode *DoTable();
     void    DoLine();
-    SmNode *DoExpression();
+    SmNode *DoExpression(bool bUseExtraSpaces = true);
     SmNode *DoRelation();
     SmNode *DoSum();
     SmNode *DoProduct();
@@ -76,7 +76,7 @@ class SmParser
     SmOperNode *DoOperator();
     SmNode *DoOper();
     SmStructureNode *DoUnOper();
-    SmNode *DoAlign();
+    SmNode *DoAlign(bool bUseExtraSpaces = true);
     SmStructureNode *DoFontAttribut();
     SmAttributNode *DoAttribut();
     SmStructureNode *DoFont();

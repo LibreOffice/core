@@ -963,7 +963,7 @@ SmTableNode *SmParser::DoTable()
     return pSNode.release();
 }
 
-SmNode *SmParser::DoAlign()
+SmNode *SmParser::DoAlign(bool bUseExtraSpaces)
     // parse alignment info (if any), then go on with rest of expression
 {
     std::unique_ptr<SmStructureNode> pSNode;
@@ -979,7 +979,7 @@ SmNode *SmParser::DoAlign()
             return DoError(SmParseError::DoubleAlign);
     }
 
-    std::unique_ptr<SmNode> pNode(DoExpression());
+    std::unique_ptr<SmNode> pNode(DoExpression(bUseExtraSpaces));
 
     if (pSNode)
     {
@@ -1017,18 +1017,8 @@ void SmParser::DoLine()
     m_aNodeStack.push_front(std::move(pSNode));
 }
 
-SmNode *SmParser::DoExpression()
+SmNode *SmParser::DoExpression(bool bUseExtraSpaces)
 {
-    bool bUseExtraSpaces = true;
-    if (!m_aNodeStack.empty())
-    {
-        if (m_aNodeStack.front()->GetToken().eType == TNOSPACE)
-        {
-            m_aNodeStack.pop_front();
-            bUseExtraSpaces = false;
-        }
-    }
-
     SmNodeArray  RelationArray;
     RelationArray.push_back(DoRelation());
     while (m_aCurToken.nLevel >= 4)
@@ -1273,37 +1263,31 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
         case TLGROUP :
         {
             bool bNoSpace = m_aCurToken.eType == TNOSPACE;
-            if (bNoSpace)   // push 'no space' node and continue to parse expression
-            {
-                m_aNodeStack.push_front(o3tl::make_unique<SmExpressionNode>(m_aCurToken));
+            if (bNoSpace)
                 NextToken();
-            }
             if (m_aCurToken.eType != TLGROUP)
-            {
-                m_aNodeStack.pop_front();    // get rid of the 'no space' node pushed above
-                return DoTerm(false);
-            }
+                return DoTerm(false); // nospace is no loger concerned
+
             NextToken();
 
             // allow for empty group
             if (m_aCurToken.eType == TRGROUP)
             {
-                if (bNoSpace)   // get rid of the 'no space' node pushed above
-                    m_aNodeStack.pop_front();
                 std::unique_ptr<SmStructureNode> pSNode(new SmExpressionNode(m_aCurToken));
                 pSNode->SetSubNodes(nullptr, nullptr);
 
                 NextToken();
                 return pSNode.release();
             }
-            // go as usual
-            m_aNodeStack.emplace_front(DoAlign());
-            if (m_aCurToken.eType != TRGROUP)
-                return DoError(SmParseError::RgroupExpected);
-            NextToken();
-            auto pNode = std::move(m_aNodeStack.front());
-            m_aNodeStack.pop_front();
-            return pNode.release();
+
+            std::unique_ptr<SmNode> pNode(DoAlign(!bNoSpace));
+            if (m_aCurToken.eType == TRGROUP) {
+                NextToken();
+                return pNode.release();
+            }
+            auto pSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
+            pSNode->SetSubNodes(pNode.release(), DoError(SmParseError::RgroupExpected));
+            return pSNode.release();
         }
 
         case TLEFT :
