@@ -1161,7 +1161,7 @@ namespace dbmm
             // "too many" invalid characters, or the name composed with the base name was already used.
             // (The latter is valid, since there can be multiple sub documents with the same base name,
             // in different levels in the hierarchy.)
-            // In this case, just use the umambiguous sub document number.
+            // In this case, just use the unambiguous sub document number.
             return sPrefix + OUString::number( _rDocument.nNumber ) + "_" + _rSourceLibName;
         }
     }

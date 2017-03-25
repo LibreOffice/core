@@ -920,7 +920,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
         return;
 
     OUString sValue;
-    // Set indvidual fields
+    // Set individual fields
     switch( nColId )
     {
         case FIELD_NAME:

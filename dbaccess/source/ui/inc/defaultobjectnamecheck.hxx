@@ -44,7 +44,7 @@ namespace dbaui
     public:
         /** constructs a HierarchicalNameCheck instance
         @param _rxNames
-            the hierarchic container of named objects, against which given names should be
+            the hierarchical container of named objects, against which given names should be
             checked
         @param _rRelativeRoot
             the root in the hierarchy against which given names should be checked
