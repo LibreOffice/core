@@ -904,6 +904,8 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
 
     maEdSearch->SetTabStopsContainer( &maTabStops );
     maChecks->SetTabStopsContainer( &maTabStops );
+
+    set_id("check_list_menu");
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
