@@ -1328,66 +1328,56 @@ SmNode *SmParser::DoTerm(bool bGroupNumberIdent)
         case TIDENT :
         case TNUMBER :
         {
-            m_aNodeStack.push_front(o3tl::make_unique<SmTextNode>(m_aCurToken,
+            auto pTextNode = o3tl::make_unique<SmTextNode>(m_aCurToken,
                                              m_aCurToken.eType == TNUMBER ?
                                              FNT_NUMBER :
-                                             FNT_VARIABLE));
+                                             FNT_VARIABLE);
             if (!bGroupNumberIdent)
             {
                 NextToken();
+                return pTextNode.release();
             }
-            else
-            {
-                // Some people want to be able to write "x_2n" for "x_{2n}"
-                // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
-                // The tokenizer skips whitespaces so we need some additional
-                // work to distinguish from "x_2 n".
-                // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
-                // https://bugs.libreoffice.org/show_bug.cgi?id=55853
-                sal_Int32 nBufLen = m_aBufferString.getLength();
-                sal_Int32 nTokens = 1;
+            SmNodeArray aNodes;
+            // Some people want to be able to write "x_2n" for "x_{2n}"
+            // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
+            // The tokenizer skips whitespaces so we need some additional
+            // work to distinguish from "x_2 n".
+            // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
+            // https://bugs.libreoffice.org/show_bug.cgi?id=55853
+            sal_Int32 nBufLen = m_aBufferString.getLength();
 
-                // We need to be careful to call NextToken() only after having
-                // tested for a whitespace separator (otherwise it will be
-                // skipped!)
-                bool moveToNextToken = true;
-                while (m_nBufferIndex < nBufLen &&
-                       m_pSysCC->getType(m_aBufferString, m_nBufferIndex) !=
-                       UnicodeType::SPACE_SEPARATOR)
+            // We need to be careful to call NextToken() only after having
+            // tested for a whitespace separator (otherwise it will be
+            // skipped!)
+            bool moveToNextToken = true;
+            while (m_nBufferIndex < nBufLen &&
+                   m_pSysCC->getType(m_aBufferString, m_nBufferIndex) !=
+                   UnicodeType::SPACE_SEPARATOR)
+            {
+                NextToken();
+                if (m_aCurToken.eType != TNUMBER &&
+                    m_aCurToken.eType != TIDENT)
                 {
-                    NextToken();
-                    if (m_aCurToken.eType != TNUMBER &&
-                        m_aCurToken.eType != TIDENT)
-                    {
-                        // Neither a number nor an identifier. We just moved to
-                        // the next token, so no need to do that again.
-                        moveToNextToken = false;
-                        break;
-                    }
-                    m_aNodeStack.push_front(o3tl::make_unique<SmTextNode>(m_aCurToken,
-                                                     m_aCurToken.eType ==
-                                                     TNUMBER ?
-                                                     FNT_NUMBER :
-                                                     FNT_VARIABLE));
-                    nTokens++;
+                    // Neither a number nor an identifier. We just moved to
+                    // the next token, so no need to do that again.
+                    moveToNextToken = false;
+                    break;
                 }
-                if (moveToNextToken) NextToken();
-                if (nTokens > 1)
-                {
-                    // We have several concatenated identifiers and numbers.
-                    // Let's group them into one SmExpressionNode.
-                    SmNodeArray nodeArray(nTokens);
-                    for (auto rIt = nodeArray.rbegin(), rEnd = nodeArray.rend(); rIt != rEnd; ++rIt)
-                    {
-                        *rIt = popOrZero(m_aNodeStack);
-                    }
-                    std::unique_ptr<SmExpressionNode> pNode(new SmExpressionNode(SmToken()));
-                    pNode->SetSubNodes(nodeArray);
-                    return pNode.release();
-                }
+                aNodes.push_back(new SmTextNode(m_aCurToken,
+                                                m_aCurToken.eType ==
+                                                TNUMBER ?
+                                                FNT_NUMBER :
+                                                FNT_VARIABLE));
             }
-            auto pNode = std::move(m_aNodeStack.front());
-            m_aNodeStack.pop_front();
+            if (moveToNextToken)
+                NextToken();
+            if (aNodes.empty())
+                return pTextNode.release();
+            // We have several concatenated identifiers and numbers.
+            // Let's group them into one SmExpressionNode.
+            aNodes.insert(aNodes.begin(), pTextNode.release());
+            std::unique_ptr<SmExpressionNode> pNode(new SmExpressionNode(SmToken()));
+            pNode->SetSubNodes(aNodes);
             return pNode.release();
         }
         case TLEFTARROW :
