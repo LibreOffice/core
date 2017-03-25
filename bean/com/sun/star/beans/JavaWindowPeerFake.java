@@ -53,7 +53,7 @@ import com.sun.star.awt.*;
     {
 
         if (SystemType == localSystemType) {
-            return new Integer((int)hWindow);
+            return (int)hWindow;
         }
         else return null;
     }

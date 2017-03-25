@@ -131,7 +131,7 @@ public class LocalOfficeWindow
             // set real parent
             XVclWindowPeer xVclWindowPeer = (XVclWindowPeer)UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
-            xVclWindowPeer.setProperty( "PluginParent", new Long(getNativeWindow()) );
+            xVclWindowPeer.setProperty( "PluginParent", getNativeWindow() );
             bPeer = true;
 
                    // show document window
@@ -152,7 +152,7 @@ public class LocalOfficeWindow
             // set null parent
             XVclWindowPeer xVclWindowPeer = (XVclWindowPeer)UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
-            xVclWindowPeer.setProperty( "PluginParent", new Long(0) );
+            xVclWindowPeer.setProperty( "PluginParent", 0L );
             bPeer = false;
         }
     }
