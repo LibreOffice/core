@@ -172,6 +172,29 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         else
             SAL_WARN("sc.uitest", "can't activate the current selection");
     }
+    else if (rAction == "LAUNCH")
+    {
+        auto itr = rParameters.find("AUTOFILTER");
+        if (itr != rParameters.end())
+        {
+            auto itrCol = rParameters.find("COL");
+            if (itrCol == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing COL parameter");
+                return;
+            }
+
+            auto itrRow = rParameters.find("ROW");
+            if (itrRow == rParameters.end())
+            {
+                SAL_WARN("sc.uitest", "missing ROW parameter");
+                return;
+            }
+            SCROW nRow = itrRow->second.toUInt32();
+            SCCOL nCol = itrCol->second.toUInt32();
+            mxGridWindow->LaunchAutoFilterMenu(nCol, nRow);
+        }
+    }
     else
     {
         WindowUIObject::execute(rAction, rParameters);
