@@ -146,7 +146,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     nShapeType = nType;                                         \
     nShapeID = mpEscherEx->GenerateShapeId();                   \
     rObj.SetShapeId( nShapeID );                                \
-    mpEscherEx->AddShape( (sal_uInt32)nType, (sal_uInt32)nFlags, nShapeID );    \
+    mpEscherEx->AddShape( (sal_uInt32)nType, nFlags, nShapeID );    \
     rSolverContainer.AddShape( rObj.GetShapeRef(), nShapeID );  \
 }
 
