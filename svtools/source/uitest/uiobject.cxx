@@ -116,6 +116,15 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
     {
         mxTreeList->Expand(mpEntry);
     }
+    else if (rAction == "CLICK")
+    {
+        if (!isCheckBoxList(mxTreeList))
+            return;
+        SvButtonState eState = mxTreeList->GetCheckButtonState(mpEntry);
+        eState = eState == SvButtonState::Checked ? SvButtonState::Unchecked : SvButtonState::Checked;
+        mxTreeList->SetCheckButtonState(mpEntry, eState);
+        mxTreeList->CheckButtonHdl();
+    }
 }
 
 std::unique_ptr<UIObject> TreeListEntryUIObject::get_child(const OUString& rID)
