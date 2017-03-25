@@ -44,6 +44,8 @@ public:
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
+    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getFloatWindow() override;
+
     OUString SAL_CALL getImplementationName() override;
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
@@ -73,6 +75,13 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
+    return new UIObjectUnoObj(std::move(pObj));
+}
+
+css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFloatWindow()
+{
+    SolarMutexGuard aGuard;
+    std::unique_ptr<UIObject> pObj = UITest::getFloatWindow();
     return new UIObjectUnoObj(std::move(pObj));
 }
 

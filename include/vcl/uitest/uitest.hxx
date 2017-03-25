@@ -24,6 +24,8 @@ public:
     static void executeDialog(const OUString& rCommand);
 
     static std::unique_ptr<UIObject> getFocusTopWindow();
+
+    static std::unique_ptr<UIObject> getFloatWindow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
