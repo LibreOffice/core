@@ -292,7 +292,18 @@ struct ScCheckListMember
 class ScCheckListMenuWindow : public ScMenuFloatingWindow
 {
 public:
-    typedef std::unordered_map<OUString, bool, OUStringHash> ResultType;
+    struct ResultEntry
+    {
+        OUString aName;
+        bool bValid;
+        bool bDate;
+
+        bool operator<(const ResultEntry& rhs) const
+        {
+            return aName < rhs.aName;
+        }
+    };
+    typedef std::set<ResultEntry> ResultType;
 
     /**
      * Extended data that the client code may need to store.  Create a

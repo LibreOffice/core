@@ -568,29 +568,29 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     ScCheckListMenuWindow::ResultType aRawResult;
     mpDPFieldPopup->getResult(aRawResult);
 
-    ScCheckListMenuWindow::ResultType aResult;
+    std::unordered_map<OUString, bool, OUStringHash> aResult;
     ScCheckListMenuWindow::ResultType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end();
     for (; itr != itrEnd; ++itr)
     {
-        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->first);
+        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->aName);
         if (itrNameMap == aMemNameMap.end())
         {
             // This is an original member name.  Use it as-is.
-            OUString aName = itr->first;
+            OUString aName = itr->aName;
             if (aName.equals(ScGlobal::GetRscString(STR_EMPTYDATA)))
                 // Translate the special empty name into an empty string.
                 aName.clear();
 
             aResult.insert(
-                ScCheckListMenuWindow::ResultType::value_type(
-                    aName, itr->second));
+                std::unordered_map<OUString, bool, OUStringHash>::value_type(
+                    aName, itr->bValid));
         }
         else
         {
             // This is a layout name.  Get the original member name and use it.
             aResult.insert(
-                ScCheckListMenuWindow::ResultType::value_type(
-                    itrNameMap->second, itr->second));
+                std::unordered_map<OUString, bool, OUStringHash>::value_type(
+                    itrNameMap->second, itr->bValid));
         }
     }
     pDim->UpdateMemberVisibility(aResult);

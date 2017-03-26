@@ -1916,12 +1916,14 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
             bool bState =  maChecks->IsChecked( aLabel,  maMembers[i].mpParent );
-            OUString sName;
+            ResultEntry aResultEntry;
+            aResultEntry.bValid = bState;
             if ( maMembers[i].mbDate )
-                sName = maMembers[i].maRealName;
+                aResultEntry.aName = maMembers[i].maRealName;
             else
-                sName = maMembers[i].maName;
-            aResult.insert(ResultType::value_type(sName, bState));
+                aResultEntry.aName = maMembers[i].maName;
+            aResultEntry.bDate = maMembers[i].mbDate;
+            aResult.insert(aResultEntry);
         }
     }
     rResult.swap(aResult);

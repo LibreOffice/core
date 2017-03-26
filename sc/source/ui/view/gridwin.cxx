@@ -590,13 +590,16 @@ class AddItemToEntry : public std::unary_function<OUString, void>
 public:
     AddItemToEntry(ScQueryEntry::QueryItemsType& rItems, svl::SharedStringPool& rPool) :
         mrItems(rItems), mrPool(rPool) {}
-    void operator() (const OUString& rSelected)
+    void operator() (const ScCheckListMenuWindow::ResultEntry& rEntry)
     {
-        ScQueryEntry::Item aNew;
-        aNew.maString = mrPool.intern(rSelected);
-        aNew.meType = ScQueryEntry::ByString;
-        aNew.mfVal = 0.0;
-        mrItems.push_back(aNew);
+        if (rEntry.bValid)
+        {
+            ScQueryEntry::Item aNew;
+            aNew.maString = mrPool.intern(rEntry.aName);
+            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : ScQueryEntry::ByString;
+            aNew.mfVal = 0.0;
+            mrItems.push_back(aNew);
+        }
     }
 };
 
@@ -800,17 +803,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 ScCheckListMenuWindow::ResultType aResult;
                 mpAutoFilterPopup->getResult(aResult);
-                std::vector<OUString> aSelected;
-                ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
-                for (; itr != itrEnd; ++itr)
-                {
-                    if (itr->second)
-                        aSelected.push_back(itr->first);
-                }
 
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
-                std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems, rPool));
+                std::for_each(aResult.begin(), aResult.end(), AddItemToEntry(rItems, rPool));
             }
             break;
             case Top10:
