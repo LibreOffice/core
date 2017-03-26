@@ -176,7 +176,7 @@ public:
 
 class EquationExpression : public ExpressionNode
 {
-    sal_Int32                       mnIndex;
+    const sal_Int32                 mnIndex;
     const EnhancedCustomShape2d&    mrCustoShape;
     mutable bool                    mbGettingValueGuard;
 
