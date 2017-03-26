@@ -364,6 +364,9 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
     if (!pParent)
         return nullptr;
 
+    if (pParent->get_id() == rID)
+        return pParent;
+
     size_t nCount = pParent->GetChildCount();
     for (size_t i = 0; i < nCount; ++i)
     {
