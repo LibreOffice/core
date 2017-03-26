@@ -1461,6 +1461,10 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 gtk_widget_show(m_pWindow);
                 g_set_prgname(sOrigName.getStr());
             }
+            else
+            {
+                gtk_widget_show(m_pWindow);
+            }
 #else
             gtk_widget_show(m_pWindow);
 #endif
