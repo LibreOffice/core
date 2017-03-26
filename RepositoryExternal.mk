@@ -3412,11 +3412,15 @@ $(call gb_LinkTarget_use_package,$(1),gpgme)
 
 endef
 
+ifeq ($(OS),LINUX)
+
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	gpgme \
 	libassuan \
 	libgpg-error \
 ))
+
+endif
 
 endif
 
