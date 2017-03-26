@@ -151,11 +151,11 @@ Dim LocList() as String
 						DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
 					Else
 						If CommandType = com.sun.star.sdb.CommandType.QUERY Then
-							SelIndex = IndexInArray(sContent, QueryNames()
+							SelIndex = IndexInArray(sContent, QueryNames())
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
-							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)
+							SelIndex = IndexInArray(sContent, TableNames())
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True))
 						End If
 					End If
 					CurCommandType = CommandType
