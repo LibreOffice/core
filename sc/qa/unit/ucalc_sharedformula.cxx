@@ -794,11 +794,7 @@ void Test::testSharedFormulasInsertRow()
             for (size_t i = 0, n = SAL_N_ELEMENTS(pRows); i < n; ++i)
             {
                 ScAddress aPos(1, pRows[i], 0);
-                if (!checkFormula(*pDoc, aPos, "$A$5"))
-                {
-                    cerr << "Wrong formula!" << endl;
-                    return false;
-                }
+                ASSERT_FORMULA_EQUAL(*pDoc, aPos, "$A$5", "Wrong formula!");
             }
 
             // B1:B2 should be grouped.
@@ -825,11 +821,7 @@ void Test::testSharedFormulasInsertRow()
             for (SCROW i = 0; i <= 3; ++i)
             {
                 ScAddress aPos(1,i,0);
-                if (!checkFormula(*pDoc, aPos, "$A$4"))
-                {
-                    cerr << "Wrong formula!" << endl;
-                    return false;
-                }
+                ASSERT_FORMULA_EQUAL(*pDoc, aPos, "$A$4", "Wrong formula!");
             }
 
             // Ensure that B5 is empty.
