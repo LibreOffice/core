@@ -50,7 +50,7 @@ struct TransitionSettings
     {
     }
 
-    /** Whether to use mipmaping for slides textures
+    /** Whether to use mipmapping for slides textures
      */
     bool mbUseMipMapLeaving;
     bool mbUseMipMapEntering;

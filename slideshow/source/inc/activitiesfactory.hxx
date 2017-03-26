@@ -84,7 +84,7 @@ namespace ActivitiesFactory
 
             Specifies the minimal simple duration of the
             activity (minimal, because mnMinNumberOfFrames
-            might prolongue the activity). According to SMIL,
+            might prolong the activity). According to SMIL,
             this might also be indefinite, which for our
             framework does not make much sense, though
             (wouldn't have a clue, then, how to scale the
@@ -97,7 +97,7 @@ namespace ActivitiesFactory
             This specifies the minimal number of frames this
             activity will display per simple duration. If less
             than this number are displayed until mnMinDuration
-            is over, the activity will be prolongued until
+            is over, the activity will be prolonged until
             mnMinNumberOfFrames are rendered.
         */
         sal_uInt32                                      mnMinNumberOfFrames;

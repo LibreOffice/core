@@ -510,7 +510,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
     if (aKeyCode.IsShift() && bHasSelRange)
     {
-        //If the last elemented selected is the start range position
+        //If the last element selected is the start range position
         //search for the first selected item
         size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
 
@@ -1289,7 +1289,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     catch (const uno::Exception& rException)
     {
         SAL_WARN("sfx",
-            "caught exception while trying to access tuhmbnail of "
+            "caught exception while trying to access thumbnail of "
             << msURL << ": " << rException.Message);
     }
 
