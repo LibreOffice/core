@@ -147,6 +147,7 @@ private:
 private:
     LwpFrameLink m_Link;
     LwpFrame* m_pFrame;
+    bool m_bGettingMaxWidth;
 };
 
 /**
