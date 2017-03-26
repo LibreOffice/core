@@ -107,5 +107,8 @@ $(eval $(call gb_Module_add_perfcheck_targets,sc,\
 	CppunitTest_sc_tablesheetobj \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,sc,\
+	UITest_autofilter \
+))
 
 # vim: set noet sw=4 ts=4:
