@@ -31,23 +31,18 @@ class AutofilterTest(UITestCase):
         doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
 
         xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "1"}))
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
 
-        time.sleep(3)
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
 
-        print(xGridWin.getChildren())
-        xCheckListMenu = xGridWin.getChild("check_list_menu")
-        print("temp")
-        print(xCheckListMenu)
-        print(dir(xCheckListMenu))
-        print("temp")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        xFirstEntry = xTreeList.getChild("0")
 
-        json_string = xCheckListMenu.getHierarchy()
-        print(json_string)
-        json_content = json.loads(json_string)
-        print(json_content)
-        print(json.dumps(json_content, indent=4))
-        time.sleep(10)
+        xFirstEntry.executeAction("CLICK", tuple())
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
 
