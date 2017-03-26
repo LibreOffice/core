@@ -53,6 +53,10 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			$(if $(SYSTEM_LIBXML),,--with-libxml-src=$(call gb_UnpackedTarball_get_dir,xml2)) \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_Package_SOURCEDIR_xslt)/libxslt/.libs/libxslt.1.dylib \
+		) \
 	)
 endif
 
