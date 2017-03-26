@@ -89,7 +89,7 @@ Dim bIsDocCountry as Boolean
 	End If
 	sCurStockIDLabel = sMarket(Index,5)
 	sCurExtension = sMarket(Index,8)
-	iValueCol = Val(sMarket(Index,10)
+	iValueCol = Val(sMarket(Index,10))
 	If Instr(sCurExtension,&quot;;&quot;) &lt;&gt; 0 Then
 		&apos; Take the german extension as the stock place is Frankfurt
 		sCurExtension = &quot;407&quot;
