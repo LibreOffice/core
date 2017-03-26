@@ -141,6 +141,7 @@ private:
 private:
     LwpFrameLink m_Link;
     std::unique_ptr<LwpFrame> m_pFrame;
+    bool m_bGettingMaxWidth;
 };
 
 /**

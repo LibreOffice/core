@@ -761,7 +761,7 @@ void LwpFrameLink::Read(LwpObjectStream* pStrm)
 }
 
 LwpFrameLayout::LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpPlacableLayout(objHdr, pStrm), m_pFrame(nullptr)
+    : LwpPlacableLayout(objHdr, pStrm), m_pFrame(nullptr), m_bGettingMaxWidth(false)
 {
 }
 
@@ -945,6 +945,10 @@ double LwpFrameLayout::GetWidth()
  */
 double LwpFrameLayout::GetMaxWidth()
 {
+    if (m_bGettingMaxWidth)
+        throw std::runtime_error("recursive GetMaxWidth");
+
+    m_bGettingMaxWidth = true;
     double fActualWidth = 0;
     rtl::Reference<LwpVirtualLayout> xLayout(GetContainerLayout());
     LwpMiddleLayout* pParent = dynamic_cast<LwpMiddleLayout*>(xLayout.get());
@@ -973,6 +977,7 @@ double LwpFrameLayout::GetMaxWidth()
         fActualWidth = fParentWidth - fXOffset - fParentMarginRight - fWrapRight;
     }
 
+    m_bGettingMaxWidth = false;
     return fActualWidth;
 }
 
