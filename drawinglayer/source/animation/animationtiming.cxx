@@ -161,14 +161,14 @@ namespace drawinglayer
 
         sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
-            sal_uInt32 nIndex(0L);
+            size_t nIndex(0L);
 
             while(nIndex < maEntries.size() && basegfx::fTools::lessOrEqual(rfAddedTime + maEntries[nIndex]->getDuration(), fTime))
             {
                 rfAddedTime += maEntries[nIndex++]->getDuration();
             }
 
-            return nIndex;
+            return sal_uInt32(nIndex);
         }
 
         AnimationEntryList::AnimationEntryList()
