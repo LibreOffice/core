@@ -3413,7 +3413,7 @@ $(call gb_LinkTarget_use_package,$(1),gpgme)
 endef
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	gpgmepp \
+	gpgme \
 	libassuan \
 	libgpg-error \
 ))
