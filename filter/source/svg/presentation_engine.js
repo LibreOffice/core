@@ -4588,6 +4588,22 @@ function flipOnYAxis( aPath )
     return aPolyPath;
 }
 
+/** flipOnXAxis
+ *  Flips the SVG Path element along x-axis
+ *
+ *  @param aPath
+ *      An object of type SVGPathElement to be flipped
+ */
+function flipOnXAxis( aPath )
+{
+    var aPolyPath = aPath.cloneNode(true);
+    var aTransform = document.documentElement.createSVGMatrix();
+    aTransform.d = -1;
+    aTransform.f = 1;
+    aPolyPath.matrixTransform(aTransform);
+    return aPolyPath;
+}
+
 /** SVGPathElement.matrixTransform
  *  Apply the transformation defined by the passed matrix to the referenced
  *  svg <path> element.
@@ -5164,29 +5180,30 @@ aTransitionClassOutMap = ['invalid', 'clip polypolygon', 'special'];
  */
 
 // Transition Types
-BARWIPE_TRANSITION          = 1;
-BOXWIPE_TRANSITION          = 2;
-FOURBOXWIPE_TRANSITION      = 3;
-ELLIPSEWIPE_TRANSITION      = 4; // 17
-CLOCKWIPE_TRANSITION        = 5; // 22
-PINWHEELWIPE_TRANSITION     = 6; // 23
-PUSHWIPE_TRANSITION         = 7; // 35
-SLIDEWIPE_TRANSITION        = 8; // 36
-FADE_TRANSITION             = 9; // 37
-RANDOMBARWIPE_TRANSITION    = 10; // 38
-CHECKERBOARDWIPE_TRANSITION = 11; // 39
-DISSOLVE_TRANSITION         = 12; // 40
-SNAKEWIPE_TRANSITION        = 13; // 30
-IRISWIPE_TRANSITION         = 14; // 12
-BARNDOORWIPE_TRANSITION     = 15; // 4
-VEEWIPE_TRANSITION          = 16; // 8
-ZIGZAGWIPE_TRANSITION       = 17; // 10
-BARNZIGZAGWIPE_TRANSITION   = 18; // 11
-FANWIPE_TRANSITION          = 19; // 25
-SINGLESWEEPWIPE_TRANSITION  = 20; // 24
-WATERFALLWIPE_TRANSITION    = 21; // 34
-SPIRALWIPE_TRANSITION       = 22; // 31
-MISCDIAGONALWIPE_TRANSITION = 23; // 7
+BARWIPE_TRANSITION              = 1;
+BOXWIPE_TRANSITION              = 2;
+FOURBOXWIPE_TRANSITION          = 3;
+ELLIPSEWIPE_TRANSITION          = 4; // 17
+CLOCKWIPE_TRANSITION            = 5; // 22
+PINWHEELWIPE_TRANSITION         = 6; // 23
+PUSHWIPE_TRANSITION             = 7; // 35
+SLIDEWIPE_TRANSITION            = 8; // 36
+FADE_TRANSITION                 = 9; // 37
+RANDOMBARWIPE_TRANSITION        = 10; // 38
+CHECKERBOARDWIPE_TRANSITION     = 11; // 39
+DISSOLVE_TRANSITION             = 12; // 40
+SNAKEWIPE_TRANSITION            = 13; // 30
+PARALLELSNAKESWIPE_TRANSITION   = 14; // 32
+IRISWIPE_TRANSITION             = 15; // 12
+BARNDOORWIPE_TRANSITION         = 16; // 4
+VEEWIPE_TRANSITION              = 17; // 8
+ZIGZAGWIPE_TRANSITION           = 18; // 10
+BARNZIGZAGWIPE_TRANSITION       = 19; // 11
+FANWIPE_TRANSITION              = 20; // 25
+SINGLESWEEPWIPE_TRANSITION      = 21; // 24
+WATERFALLWIPE_TRANSITION        = 22; // 34
+SPIRALWIPE_TRANSITION           = 23; // 31
+MISCDIAGONALWIPE_TRANSITION     = 24; // 7
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5206,6 +5223,7 @@ aTransitionTypeInMap = {
     'dissolve'          : DISSOLVE_TRANSITION,
     'singleSweepWipe'   : SINGLESWEEPWIPE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
+    'parallelSnakesWipe': PARALLELSNAKESWIPE_TRANSITION,
     'spiralWipe'        : SPIRALWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION,
     'veeWipe'           : VEEWIPE_TRANSITION,
@@ -5297,6 +5315,16 @@ BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE   = 73; // 75
 BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE    = 74; // 76
 DOUBLEBARNDOOR_TRANS_SUBTYPE                = 75; // 17
 DOUBLEDIAMOND_TRANS_SUBTYPE                 = 76; // 18
+VERTICALTOPSAME_TRANS_SUBTYPE               = 77; // 77
+VERTICALBOTTOMSAME_TRANS_SUBTYPE            = 78; // 78
+VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 79; // 79
+VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 80; // 80
+HORIZONTALLEFTSAME_TRANS_SUBTYPE            = 81; // 81
+HORIZONTALRIGHTSAME_TRANS_SUBTYPE           = 82; // 82
+HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE     = 83; // 83
+HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE    = 84; // 84
+DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE    = 85; // 85
+DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE       = 86; // 86
 
 aTransitionSubtypeInMap = {
     'default'                       : DEFAULT_TRANS_SUBTYPE,
@@ -5375,7 +5403,17 @@ aTransitionSubtypeInMap = {
     'horizontalLeft'                : HORIZONTALLEFT_TRANS_SUBTYPE,
     'horizontalRight'               : HORIZONTALRIGHT_TRANS_SUBTYPE,
     'doubleBarnDoor'                : DOUBLEBARNDOOR_TRANS_SUBTYPE,
-    'doubleDiamond'                 : DOUBLEDIAMOND_TRANS_SUBTYPE
+    'doubleDiamond'                 : DOUBLEDIAMOND_TRANS_SUBTYPE,
+    'verticalTopSame'               : VERTICALTOPSAME_TRANS_SUBTYPE,
+    'verticalBottomSame'            : VERTICALBOTTOMSAME_TRANS_SUBTYPE,
+    'verticalTopLeftOpposite'       : VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
+    'verticalBottomLeftOpposite'    : VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE,
+    'horizontalLeftSame'            : HORIZONTALLEFTSAME_TRANS_SUBTYPE,
+    'horizontalRightSame'           : HORIZONTALRIGHTSAME_TRANS_SUBTYPE,
+    'horizontalTopLeftOpposite'     : HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
+    'horizontalTopRightOpposite'    : HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE,
+    'diagonalBottomLeftOpposite'    : DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE,
+    'diagonalTopLeftOpposite'       : DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5488,6 +5526,108 @@ aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE] =
     'outInvertSweep' : true,
     'scaleIsotropically' : false
 }
+
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION] = {};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][VERTICALTOPSAME_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][VERTICALBOTTOMSAME_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][HORIZONTALLEFTSAME_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][HORIZONTALRIGHTSAME_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[PARALLELSNAKESWIPE_TRANSITION][DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
 
 aTransitionInfoTable[SPIRALWIPE_TRANSITION] = {};
 aTransitionInfoTable[SPIRALWIPE_TRANSITION][TOPLEFTCLOCKWISE_TRANS_SUBTYPE] =
@@ -9906,6 +10046,25 @@ function createClipPolyPolygon( nType, nSubtype )
                                              nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
                                              nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE
                                              );
+        case PARALLELSNAKESWIPE_TRANSITION:
+            return new ParallelSnakesWipePath(
+                8 * 8, // elements
+                // diagonal
+                nSubtype == DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE ||
+                nSubtype == DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
+                // flipOnYAxis
+                nSubtype == VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE ||
+                nSubtype == HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE  ||
+                nSubtype == DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE,
+                // opposite
+                nSubtype == VERTICALTOPLEFTOPPOSITE_TRANS_SUBTYPE    ||
+                nSubtype == VERTICALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE ||
+                nSubtype == HORIZONTALTOPLEFTOPPOSITE_TRANS_SUBTYPE  ||
+                nSubtype == HORIZONTALTOPRIGHTOPPOSITE_TRANS_SUBTYPE ||
+                nSubtype == DIAGONALBOTTOMLEFTOPPOSITE_TRANS_SUBTYPE ||
+                nSubtype == DIAGONALTOPLEFTOPPOSITE_TRANS_SUBTYPE
+                );
+
         case SPIRALWIPE_TRANSITION:
             return new SpiralWipePath(
                 8 * 8, // elements
@@ -10756,6 +10915,55 @@ SnakeWipePath.prototype.perform = function(nT) {
     }
     else
         res = this.calcSnake(nT);
+
+    return this.flipOnYAxis ? flipOnYAxis(res) : res;
+}
+
+/** Class ParallelSnakesWipePath
+ *
+ *  @param nElements
+ *  @param bDiagonal
+ *  @param bFlipOnYAxis
+ *  @param bOpposite
+ */
+function ParallelSnakesWipePath(nElements, bDiagonal, bFlipOnYAxis, bOpposite) {
+    SnakeWipePath.call(this, nElements, bDiagonal, bFlipOnYAxis);
+    this.bOpposite = bOpposite;
+}
+
+ParallelSnakesWipePath.prototype = Object.create(SnakeWipePath);
+
+ParallelSnakesWipePath.prototype.perform = function( nT ) {
+    var res = createEmptyPath(), half, aTransform;
+    if(this.diagonal) {
+        assert(this.bOpposite);
+        half = SnakeWipePath.prototype.calcHalfDiagonalSnake.call(this, nT, false);
+        // flip on x axis and rotate 90 degrees:
+        aTransform = SVGIdentityMatrix.scale(1, -1);
+        aTransform.translate(-0.5, 0.5);
+        aTransform.rotate(Math.PI/2);
+        aTransform.translate(0.5, 0.5);
+        half.matrixTransform(aTransform);
+        half.changeOrientation();
+        res.appendPath(half);
+
+        // rotate 180 degrees:
+        aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+        aTransform.rotate(Math.PI);
+        aTransform.translate(0.5, 0.5);
+        half.matrixTransform(aTransform);
+        res.appendPath(half);
+    }
+    else {
+        half = SnakeWipePath.prototype.calcSnake.call(this, nT / 2.0 );
+        // rotate 90 degrees
+        aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+        aTransform.rotate(Math.PI/2);
+        aTransform.translate(0.5, 0.5);
+        half.matrixTransform(aTransform);
+        res.appendPath(flipOnYAxis(half));
+        res.appendPath(this.bOpposite ? flipOnXAxis(half) : half);
+    }
 
     return this.flipOnYAxis ? flipOnYAxis(res) : res;
 }
