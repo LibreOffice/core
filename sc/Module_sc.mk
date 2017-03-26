@@ -141,6 +141,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_conditional_format \
 	UITest_range_name \
 	UITest_hide_cols \
+	UITest_autofilter \
 ))
 
 # vim: set noet sw=4 ts=4:
