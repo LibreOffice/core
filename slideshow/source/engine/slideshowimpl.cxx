@@ -1974,7 +1974,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             maEventQueue.process();
 
             // #i118671# the call above may execute a macro bound to an object. In
-            // that case this macro may have destroyed this local sliseshow so that it
+            // that case this macro may have destroyed this local slideshow so that it
             // is disposed (see bugdoc at task). In that case, detect this and exit
             // gently from this slideshow. Do not forget to disable the scoped
             // call to mpPresTimer, this will be deleted if we are disposed.

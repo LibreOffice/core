@@ -2415,7 +2415,7 @@ void SfxMedium::GetMedium_Impl()
                     }
                     else
                     {
-                        // add a check for protocol, if it's http or https or provate webdav then add
+                        // add a check for protocol, if it's http or https or provide webdav then add
                         // the interaction handler to be used by the authentication dialog
                         if ( GetURLObject().isAnyKnownWebDAVScheme() )
                         {

@@ -709,7 +709,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
 
-    // Secure-Referers
+    // Secure-Referrer
     if ( SfxItemState::SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringListItem *>( pItem ) !=  nullptr, "StringListItem expected");
