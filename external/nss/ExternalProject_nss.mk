@@ -67,6 +67,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter MACOSX,$(OS)),\
 			$(if $(filter-out POWERPC,$(CPUNAME)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH)) \
 			NSS_USE_SYSTEM_SQLITE=1) \
+		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\
 			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
@@ -88,7 +89,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
-				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnsspem.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \
