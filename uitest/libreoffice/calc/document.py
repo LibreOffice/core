@@ -37,4 +37,15 @@ def get_column(document, column, tab = 0):
     sheet = get_sheet_from_doc(document, tab)
     return sheet.getColumns().getByIndex(column)
 
+def get_row(document, row, tab = 0):
+    """ Get the row object through the row index
+
+    Keyword arguments:
+    document -- The document that should be used
+    tab -- The 0-based sheet number
+    column -- The 0-based row number
+    """
+    sheet = get_sheet_from_doc(document, tab)
+    return sheet.getRows().getByIndex(row)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
