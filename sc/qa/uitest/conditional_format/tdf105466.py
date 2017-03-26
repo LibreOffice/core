@@ -17,9 +17,10 @@ class tdf105466(UITestCase):
         self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog")
 
         for i in range(0,4):
-            xCondFormatDlg = self.xUITest.getTopFocusWindow()
-            xTypeLstBox = xCondFormatDlg.getChild("type")
-            xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+            with self.subTest(i = i):
+                xCondFormatDlg = self.xUITest.getTopFocusWindow()
+                xTypeLstBox = xCondFormatDlg.getChild("type")
+                xTypeLstBox.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
         xCondFormatDlg = self.xUITest.getTopFocusWindow()
         xOkBtn = xCondFormatDlg.getChild("ok")
