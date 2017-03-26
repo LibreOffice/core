@@ -93,16 +93,25 @@ bool isDialogWindow(vcl::Window* pWindow)
     return false;
 }
 
-vcl::Window* get_dialog_parent(vcl::Window* pWindow)
+bool isTopWindow(vcl::Window* pWindow)
 {
-    if (isDialogWindow(pWindow))
+    WindowType eType = pWindow->GetType();
+    if (eType == WindowType::FLOATINGWINDOW)
+        return true;
+
+    return false;
+}
+
+vcl::Window* get_top_parent(vcl::Window* pWindow)
+{
+    if (isDialogWindow(pWindow) || isTopWindow(pWindow))
         return pWindow;
 
     vcl::Window* pParent = pWindow->GetParent();
     if (!pParent)
         return pWindow;
 
-    return get_dialog_parent(pParent);
+    return get_top_parent(pParent);
 }
 
 std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
@@ -409,7 +418,7 @@ void addChildren(vcl::Window* pParent, std::set<OUString>& rChildren)
 
 std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 {
-    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
     vcl::Window* pWindow = findChild(pDialogParent, rID);
 
     if (!pWindow)
@@ -421,7 +430,7 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 
 std::set<OUString> WindowUIObject::get_children() const
 {
-    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
     std::set<OUString> aChildren;
     aChildren.insert(pDialogParent->get_id());
     addChildren(pDialogParent, aChildren);
@@ -473,7 +482,7 @@ OUString WindowUIObject::dumpState() const
 
 OUString WindowUIObject::dumpHierarchy() const
 {
-    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    vcl::Window* pDialogParent = get_top_parent(mxWindow.get());
     std::unique_ptr<UIObject> pParentWrapper =
         pDialogParent->GetUITestFactory()(pDialogParent);
     return pParentWrapper->dumpState();
