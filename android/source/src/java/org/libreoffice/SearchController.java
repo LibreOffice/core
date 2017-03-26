@@ -1,5 +1,6 @@
 package org.libreoffice;
 
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +33,9 @@ class SearchController implements View.OnClickListener {
             addProperty(rootJson, "SearchItem.Command", "long", String.valueOf(0)); // search all == 1
 
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:ExecuteSearch", rootJson.toString()));
+            // send an empty KeyEvent in order to refresh the viewport when cursor gets out of the viewport after a search
+            // this seems to be the only workaround to achieve cursor update without changing native code library
+            LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_UNKNOWN)));
 
         } catch (JSONException e) {
             e.printStackTrace();
