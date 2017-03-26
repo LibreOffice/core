@@ -223,7 +223,7 @@ Dim iCellValue as Long
 		If iCellValue &gt; 0 Then
 			oCell.SetValue(oLinkSheet.GetCellByPosition(0,i).Value)
 		Else
-			oCell.SetValue(StringToDate(oLinkSheet.GetCellByPosition(0,i).String)
+			oCell.SetValue(StringToDate(oLinkSheet.GetCellByPosition(0,i).String))
 		End If
 		oCell = oSheet.GetCellbyPosition(SBVALUECOLUMN,iCurRow)
 		oCell.SetValue(oLinkSheet.GetCellByPosition(4,i).Value)

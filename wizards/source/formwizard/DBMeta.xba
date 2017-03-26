@@ -305,8 +305,8 @@ Dim MaxQueryIndex as Integer
 Dim MaxIndex as Integer
 Dim i as Integer
 Dim a as Integer
-	MaxTableIndex = Ubound(TableNames()
-	MaxQueryIndex = Ubound(QueryNames()
+	MaxTableIndex = Ubound(TableNames())
+	MaxQueryIndex = Ubound(QueryNames())
 	MaxIndex = MaxTableIndex + MaxQueryIndex + 1
 	If MaxIndex &gt; -1 Then
 		Dim LocCommandTypes(MaxIndex) as Integer
