@@ -761,230 +761,228 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
 {
     DIBV5Header aHeader;
     const sal_uLong nStmPos = rIStm.Tell();
-    bool bRet(false);
     bool bTopDown(false);
 
-    if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
+    if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
+        return false;
+
+    // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
+    // this method, nOffset is 0, that's OK.
+    if (nOffset && aHeader.nSize > nOffset)
     {
-        // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
-        // this method, nOffset is 0, that's OK.
-        if (nOffset && aHeader.nSize > nOffset)
+        // Header size claims to extend into the image data.
+        // Looks like an error.
+        return false;
+    }
+
+    const sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
+
+    sal_uInt16 nColors(0);
+    SvStream* pIStm;
+    std::unique_ptr<SvMemoryStream> pMemStm;
+    std::vector<sal_uInt8> aData;
+
+    if (aHeader.nBitCount <= 8)
+    {
+        if(aHeader.nColsUsed)
         {
-            // Header size claims to extend into the image data.
-            // Looks like an error.
-            return false;
-        }
-
-        const sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
-
-        sal_uInt16 nColors(0);
-        SvStream* pIStm;
-        std::unique_ptr<SvMemoryStream> pMemStm;
-        std::vector<sal_uInt8> aData;
-
-        if (aHeader.nBitCount <= 8)
-        {
-            if(aHeader.nColsUsed)
-            {
-                nColors = (sal_uInt16)aHeader.nColsUsed;
-            }
-            else
-            {
-                nColors = ( 1 << aHeader.nBitCount );
-            }
-        }
-
-        if(ZCOMPRESS == aHeader.nCompression)
-        {
-            sal_uInt32 nCodedSize(0);
-            sal_uInt32  nUncodedSize(0);
-
-            // read coding information
-            rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
-            if (nCodedSize > rIStm.remainingSize())
-               nCodedSize = sal_uInt32(rIStm.remainingSize());
-            size_t nSizeInc(4 * rIStm.remainingSize());
-            if (nUncodedSize < nSizeInc)
-                nSizeInc = nUncodedSize;
-
-            if (nSizeInc > 0)
-            {
-                // decode buffer
-                const sal_uLong nCodedPos = rIStm.Tell();
-                ZCodec aCodec;
-                aCodec.BeginCompression();
-                aData.resize(nSizeInc);
-                size_t nDataPos(0);
-                while (nUncodedSize > nDataPos)
-                {
-                    assert(aData.size() > nDataPos);
-                    const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
-                    assert(nToRead > 0);
-                    assert(!aData.empty());
-                    const long nRead = aCodec.Read(rIStm, aData.data() + nDataPos, sal_uInt32(nToRead));
-                    if (nRead > 0)
-                    {
-                        nDataPos += static_cast<unsigned long>(nRead);
-                        // we haven't read everything yet: resize buffer and continue
-                        if (nDataPos < nUncodedSize)
-                            aData.resize(aData.size() + nSizeInc);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                // truncate the data buffer to actually read size
-                aData.resize(nDataPos);
-                // set the real uncoded size
-                nUncodedSize = sal_uInt32(aData.size());
-                aCodec.EndCompression();
-
-                // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
-                rIStm.Seek(nCodedSize + nCodedPos);
-            }
-
-            if (aData.empty())
-            {
-                // add something so we can take address of the first element
-                aData.resize(1);
-                nUncodedSize = 0;
-            }
-
-            // set decoded bytes to memory stream,
-            // from which we will read the bitmap data
-            pMemStm.reset(new SvMemoryStream);
-            pIStm = pMemStm.get();
-            assert(!aData.empty());
-            pMemStm->SetBuffer(aData.data(), nUncodedSize, nUncodedSize);
-            nOffset = 0;
+            nColors = (sal_uInt16)aHeader.nColsUsed;
         }
         else
         {
-            pIStm = &rIStm;
+            nColors = ( 1 << aHeader.nBitCount );
+        }
+    }
+
+    if (ZCOMPRESS == aHeader.nCompression)
+    {
+        sal_uInt32 nCodedSize(0);
+        sal_uInt32  nUncodedSize(0);
+
+        // read coding information
+        rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
+        if (nCodedSize > rIStm.remainingSize())
+           nCodedSize = sal_uInt32(rIStm.remainingSize());
+        size_t nSizeInc(4 * rIStm.remainingSize());
+        if (nUncodedSize < nSizeInc)
+            nSizeInc = nUncodedSize;
+
+        if (nSizeInc > 0)
+        {
+            // decode buffer
+            const sal_uLong nCodedPos = rIStm.Tell();
+            ZCodec aCodec;
+            aCodec.BeginCompression();
+            aData.resize(nSizeInc);
+            size_t nDataPos(0);
+            while (nUncodedSize > nDataPos)
+            {
+                assert(aData.size() > nDataPos);
+                const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
+                assert(nToRead > 0);
+                assert(!aData.empty());
+                const long nRead = aCodec.Read(rIStm, aData.data() + nDataPos, sal_uInt32(nToRead));
+                if (nRead > 0)
+                {
+                    nDataPos += static_cast<unsigned long>(nRead);
+                    // we haven't read everything yet: resize buffer and continue
+                    if (nDataPos < nUncodedSize)
+                        aData.resize(aData.size() + nSizeInc);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            // truncate the data buffer to actually read size
+            aData.resize(nDataPos);
+            // set the real uncoded size
+            nUncodedSize = sal_uInt32(aData.size());
+            aCodec.EndCompression();
+
+            // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
+            rIStm.Seek(nCodedSize + nCodedPos);
         }
 
-        const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
-        if (nBitsPerLine > SAL_MAX_UINT32)
-            return false;
-        const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
-
-        switch (aHeader.nCompression)
+        if (aData.empty())
         {
-            case RLE_8:
-                if (aHeader.nBitCount != 8)
-                    return false;
-                break;
-            case RLE_4:
-                if (aHeader.nBitCount != 4)
-                    return false;
-                break;
-            case BITFIELDS:
-                break;
-            case ZCOMPRESS:
-            case COMPRESS_NONE:
-            {
-                // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
-                sal_uInt64 nMaxWidth = pIStm->remainingSize();
-                if (aHeader.nHeight != 0)
-                    nMaxWidth /= aHeader.nHeight;
-                if (nMaxWidth < nAlignedWidth)
-                    return false;
-                break;
-            }
-            default:
+            // add something so we can take address of the first element
+            aData.resize(1);
+            nUncodedSize = 0;
+        }
+
+        // set decoded bytes to memory stream,
+        // from which we will read the bitmap data
+        pMemStm.reset(new SvMemoryStream);
+        pIStm = pMemStm.get();
+        assert(!aData.empty());
+        pMemStm->SetBuffer(aData.data(), nUncodedSize, nUncodedSize);
+        nOffset = 0;
+    }
+    else
+    {
+        pIStm = &rIStm;
+    }
+
+    const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
+    if (nBitsPerLine > SAL_MAX_UINT32)
+        return false;
+    const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
+
+    switch (aHeader.nCompression)
+    {
+        case RLE_8:
+            if (aHeader.nBitCount != 8)
                 return false;
+            break;
+        case RLE_4:
+            if (aHeader.nBitCount != 4)
+                return false;
+            break;
+        case BITFIELDS:
+            break;
+        case ZCOMPRESS:
+        case COMPRESS_NONE:
+        {
+            // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
+            sal_uInt64 nMaxWidth = pIStm->remainingSize();
+            if (aHeader.nHeight != 0)
+                nMaxWidth /= aHeader.nHeight;
+            if (nMaxWidth < nAlignedWidth)
+                return false;
+            break;
         }
-
-        const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
-        BitmapPalette aPalette;
-        Bitmap aNewBmp(aSizePixel, nBitCount, &aPalette);
-        Bitmap::ScopedWriteAccess pAcc(aNewBmp);
-        if (!pAcc)
+        default:
             return false;
-        if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+    }
+
+    const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
+    BitmapPalette aPalette;
+    Bitmap aNewBmp(aSizePixel, nBitCount, &aPalette);
+    Bitmap::ScopedWriteAccess pAcc(aNewBmp);
+    if (!pAcc)
+        return false;
+    if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+    {
+        return false;
+    }
+    AlphaMask aNewBmpAlpha;
+    AlphaMask::ScopedWriteAccess pAccAlpha;
+    bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
+
+    if (bAlphaPossible)
+    {
+        const bool bRedSet(0 != aHeader.nV5RedMask);
+        const bool bGreenSet(0 != aHeader.nV5GreenMask);
+        const bool bBlueSet(0 != aHeader.nV5BlueMask);
+
+        // some clipboard entries have alpha mask on zero to say that there is
+        // no alpha; do only use this when the other masks are set. The MS docu
+        // says that masks are only to be set when bV5Compression is set to
+        // BI_BITFIELDS, but there seem to exist a wild variety of usages...
+        if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
         {
-            return false;
+            bAlphaPossible = false;
         }
-        AlphaMask aNewBmpAlpha;
-        AlphaMask::ScopedWriteAccess pAccAlpha;
-        bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
+    }
 
-        if (bAlphaPossible)
+    if (bAlphaPossible)
+    {
+        aNewBmpAlpha = AlphaMask(aSizePixel);
+        pAccAlpha = AlphaMask::ScopedWriteAccess(aNewBmpAlpha);
+    }
+
+    // read palette
+    if (nColors)
+    {
+        aPalette.SetEntryCount(nColors);
+        ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
+        pAcc->SetPalette(aPalette);
+    }
+
+    if (pIStm->GetError())
+        return false;
+
+    if(nOffset)
+    {
+        pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
+    }
+
+    // read bits
+    bool bAlphaUsed(false);
+    bool bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha.get(), bTopDown, bAlphaUsed, nAlignedWidth);
+
+    if (bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
+    {
+        MapMode aMapMode(
+            MapUnit::MapMM,
+            Point(),
+            Fraction(1000, aHeader.nXPelsPerMeter),
+            Fraction(1000, aHeader.nYPelsPerMeter));
+
+        aNewBmp.SetPrefMapMode(aMapMode);
+        aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));
+    }
+
+    pAcc.reset();
+
+    if (bAlphaPossible)
+    {
+        pAccAlpha.reset();
+
+        if(!bAlphaUsed)
         {
-            const bool bRedSet(0 != aHeader.nV5RedMask);
-            const bool bGreenSet(0 != aHeader.nV5GreenMask);
-            const bool bBlueSet(0 != aHeader.nV5BlueMask);
-
-            // some clipboard entries have alpha mask on zero to say that there is
-            // no alpha; do only use this when the other masks are set. The MS docu
-            // says that masks are only to be set when bV5Compression is set to
-            // BI_BITFIELDS, but there seem to exist a wild variety of usages...
-            if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
-            {
-                bAlphaPossible = false;
-            }
+            bAlphaPossible = false;
         }
+    }
 
-        if (bAlphaPossible)
-        {
-            aNewBmpAlpha = AlphaMask(aSizePixel);
-            pAccAlpha = AlphaMask::ScopedWriteAccess(aNewBmpAlpha);
-        }
-
-        // read palette
-        if (nColors)
-        {
-            aPalette.SetEntryCount(nColors);
-            ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
-            pAcc->SetPalette(aPalette);
-        }
-
-        // read bits
-        bool bAlphaUsed(false);
-
-        if(!pIStm->GetError())
-        {
-            if(nOffset)
-            {
-                pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
-            }
-
-            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha.get(), bTopDown, bAlphaUsed, nAlignedWidth);
-
-            if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
-            {
-                MapMode aMapMode(
-                    MapUnit::MapMM,
-                    Point(),
-                    Fraction(1000, aHeader.nXPelsPerMeter),
-                    Fraction(1000, aHeader.nYPelsPerMeter));
-
-                aNewBmp.SetPrefMapMode(aMapMode);
-                aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));
-            }
-        }
-
-        pAcc.reset();
+    if (bRet)
+    {
+        rBmp = aNewBmp;
 
         if(bAlphaPossible)
         {
-            pAccAlpha.reset();
-
-            if(!bAlphaUsed)
-            {
-                bAlphaPossible = false;
-            }
-        }
-
-        if(bRet)
-        {
-            rBmp = aNewBmp;
-
-            if(bAlphaPossible)
-            {
-                *pBmpAlpha = aNewBmpAlpha;
-            }
+            *pBmpAlpha = aNewBmpAlpha;
         }
     }
 
