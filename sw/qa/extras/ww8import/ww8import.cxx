@@ -108,6 +108,21 @@ DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(0), pTableNd->GetTable().GetRowsToRepeat() );
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
+{
+    sal_Int32 nCellWidths[3][4] = { { 9530, 0, 0, 0 },{ 2382, 2382, 2382, 2384 },{ 2382, 2382, 2382, 2384 } };
+    sal_Int32 nCellTxtLns[3][4] = { { 1, 0, 0, 0 },{ 1, 0, 0, 0},{ 1, 1, 1, 1 } };
+    // Table was distorted because of missing sprmPFInnerTableCell at paragraph marks (0x0D) with sprmPFInnerTtp
+    for (sal_Int32 nRow : { 0, 1, 2 })
+        for (sal_Int32 nCell : { 0, 1, 2, 3 })
+        {
+            OString cellXPath("/root/page/body/tab/row/cell/tab/row[" + OString::number(nRow+1) + "]/cell[" + OString::number(nCell+1) + "]/");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellWidths[nRow][nCell], parseDump(cellXPath + "infos/bounds", "width").toInt32());
+            if (nCellTxtLns[nRow][nCell] != 0)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(cellXPath.getStr(), nCellTxtLns[nRow][nCell], parseDump(cellXPath + "txt/Text", "nLength").toInt32());
+        }
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
