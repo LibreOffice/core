@@ -32,6 +32,9 @@ import org.libreoffice.kit.Document;
 
         mContext.findViewById(R.id.button_font_shrink).setOnClickListener(this);
         mContext.findViewById(R.id.button_font_grow).setOnClickListener(this);
+
+        mContext.findViewById(R.id.button_subscript).setOnClickListener(this);
+        mContext.findViewById(R.id.button_superscript).setOnClickListener(this);
     }
 
     @Override
@@ -89,6 +92,12 @@ import org.libreoffice.kit.Document;
                 break;
             case R.id.button_font_grow:
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Grow"));
+                break;
+            case R.id.button_subscript:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SubScript"));
+                break;
+            case R.id.button_superscript:
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SuperScript"));
                 break;
         }
     }
