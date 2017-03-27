@@ -193,12 +193,12 @@ void SwTableBoxFormula::Calc( SwTableCalcPara& rCalcPara, double& rValue )
 }
 
 SwTableBoxValue::SwTableBoxValue()
-    : SfxPoolItem( RES_BOXATR_VALUE ), nValue( 0 )
+    : SfxPoolItem( RES_BOXATR_VALUE ), m_nValue( 0 )
 {
 }
 
 SwTableBoxValue::SwTableBoxValue( const double nVal )
-    : SfxPoolItem( RES_BOXATR_VALUE ), nValue( nVal )
+    : SfxPoolItem( RES_BOXATR_VALUE ), m_nValue( nVal )
 {
 }
 
@@ -207,14 +207,14 @@ bool SwTableBoxValue::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     SwTableBoxValue const& rOther( static_cast<SwTableBoxValue const&>(rAttr) );
     // items with NaN should be equal to enable pooling
-    return ::rtl::math::isNan( nValue )
-        ?   ::rtl::math::isNan( rOther.nValue )
-        :   ( nValue == rOther.nValue );
+    return ::rtl::math::isNan( m_nValue )
+        ?   ::rtl::math::isNan( rOther.m_nValue )
+        :   ( m_nValue == rOther.m_nValue );
 }
 
 SfxPoolItem* SwTableBoxValue::Clone( SfxItemPool* ) const
 {
-    return new SwTableBoxValue( nValue );
+    return new SwTableBoxValue( m_nValue );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
