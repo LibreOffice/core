@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_83dda016",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-27T14:52:04Z",
+      "side": 1,
+      "message": "As far as I see the testcase doesn\u0027t enter this branch, as the sHint is \"99\" (without quotes).\n\nSo I\u0027m just trying to understand: if you want to drop the surrounding quotes, why don\u0027t you do copy(1, getLength() - 2)? I don\u0027t get why it\u0027s -3.\n\nAlso, as asked previously, please add a \u0026\u0026 getLength() \u003e\u003d 2 check, otherwise if sHint is just \u0027\"\u0027, you\u0027ll access the 2nd char of a string which is only of 1 char.",
+      "revId": "b887aebecfa15f6c7234ea4357f1b4e6368cd92a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
