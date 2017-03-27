@@ -4554,11 +4554,6 @@
           <value xml:lang="en-US">Chart Options</value>
         </prop>
       </node>
-      <node oor:name=".uno:SimEditOptions" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Image Options</value>
-        </prop>
-      </node>
       <node oor:name=".uno:FrameName" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Name</value>
@@ -5580,14 +5575,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:CountAll" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Records</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SbaNativeSql" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Run SQL command directly</value>
@@ -5777,14 +5764,6 @@
       <node oor:name=".uno:ViewFormAsGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Data source as Table</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:RemoveFilter" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reset Filter</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6091,11 +6070,6 @@
       <node oor:name=".uno:TextAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Alig~n</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:PolyFormen" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Shapes</value>
         </prop>
       </node>
       <node oor:name=".uno:Scan" oor:op="replace">
