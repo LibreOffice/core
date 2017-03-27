@@ -3673,7 +3673,9 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                         bParaMark = false;
                     }
                 }
-                else if (m_bWasTabCellEnd)
+                // tdf#106799: We expect TTP marks to be also cell marks,
+                // but sometimes sprmPFInnerTtp comes without sprmPFInnerTableCell
+                else if (m_bWasTabCellEnd || m_bWasTabRowEnd)
                 {
                     TabCellEnd();
                     bParaMark = false;
