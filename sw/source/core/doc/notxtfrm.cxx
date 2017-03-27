@@ -505,7 +505,7 @@ void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 }
 
 bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
-                              SwCursorMoveState *pCMS ) const
+                              SwCursorMoveState *pCMS, bool /*bAllowFarAway*/ ) const
 {
     if ( &rPos.nNode.GetNode() != static_cast<SwNode const *>(GetNode()) )
         return false;

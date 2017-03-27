@@ -47,7 +47,7 @@ public:
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
-                              SwCursorMoveState* = nullptr) const override;
+                              SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;
     virtual bool GetCursorOfst(SwPosition* pPos, Point& aPoint,
                      SwCursorMoveState* = nullptr, bool bTestBackground = false) const override;
 

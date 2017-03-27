@@ -173,7 +173,7 @@ SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos )
  */
 
 bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
-                            SwCursorMoveState *pCMS ) const
+                            SwCursorMoveState *pCMS, bool bAllowFarAway ) const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::GetCharRect with swapped frame" );
 
@@ -192,7 +192,10 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), rPos, bRightMargin,
                                      bNoScroll );
     pFrame->GetFormatted();
+
     const SwFrame* pTmpFrame = static_cast<SwFrame*>(pFrame->GetUpper());
+    if (pTmpFrame->Frame().Top() == FAR_AWAY && !bAllowFarAway)
+        return false;
 
     SwRectFnSet aRectFnSet(pFrame);
     const SwTwips nUpperMaxY = aRectFnSet.GetPrtBottom(*pTmpFrame);
