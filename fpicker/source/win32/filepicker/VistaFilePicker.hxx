@@ -249,6 +249,8 @@ public:
 
         using WeakComponentImplHelperBase::disposing;
 
+        void ensureInit();
+
     private:
 
 
