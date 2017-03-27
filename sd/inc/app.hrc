@@ -154,7 +154,6 @@
 #define SID_OBJECT_TRANSPARENCE             (SID_SD_START+100)
 #define SID_OBJECT_GRADIENT                 (SID_SD_START+101)
     // FREE
-// In svxids.hrc:  SID_INSERT_IMAGE             (SID_SD_START+105)
 // In svxids.hrc:  SID_INSERT_MATH              (SID_SD_START+106)
 #define SID_OBJECT_SHEAR                    (SID_SD_START+107)
 #define SID_DELETE_SNAPITEM                 (SID_SD_START+108)
