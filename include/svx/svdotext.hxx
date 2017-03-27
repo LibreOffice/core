@@ -328,8 +328,8 @@ public:
     // Currently ASCII and RTF are supported and the differentiation is done
     // internally.
     // rFilterName has no meaning and must be empty
-    // Normally the application only has to call SetTextLink() - der
-    // remainer is automatic (SfxLinkManager).
+    // Normally the application only has to call SetTextLink() - the
+    // remainder is automatic (SfxLinkManager).
     // The LoadText() method can also be used to load a file into a text
     // object (without linking.)
     // TextLinks can't be edited (if needed later could be ReadOnly).

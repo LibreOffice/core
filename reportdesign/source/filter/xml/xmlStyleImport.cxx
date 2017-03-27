@@ -128,7 +128,7 @@ void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
     sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
-    GetProperties().push_back(aPropState); // has to be insertes in a sort order later
+    GetProperties().push_back(aPropState); // has to be inserted in a sort order later
 }
 
 void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
