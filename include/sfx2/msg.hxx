@@ -178,17 +178,6 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
                  &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
                }
 
-#define SFX_NEW_SLOT_ENUM( SlaveId, GroupId, pMaster, pNext, MasterId, Value, Flags, DisableFlags, UnoName  ) \
-               { SlaveId, GroupId, Flags,   \
-                 MasterId,  Value, \
-                 0, \
-                 0, \
-                 (const SfxType*) &aSfxBoolItem_Impl, \
-                 pMaster, \
-                 pNext, \
-                 0, 0, DisableFlags, UnoName \
-               }
-
 struct SfxFormalArgument
 {
     const SfxType*  pType;    // Type of the parameter (SfxPoolItem subclass)
