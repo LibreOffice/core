@@ -44,7 +44,6 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_float;
     SvStringHashEntry* MM_double;
     SvStringHashEntry* MM_item;
-    SvStringHashEntry* MM_PseudoSlots;
     SvStringHashEntry* MM_import;
     SvStringHashEntry* MM_SlotIdFile;
     SvStringHashEntry* MM_include;
@@ -52,7 +51,6 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_StateMethod;
     SvStringHashEntry* MM_GroupId;
     SvStringHashEntry* MM_Export;
-    SvStringHashEntry* MM_PseudoPrefix;
     SvStringHashEntry* MM_define;
     SvStringHashEntry* MM_MenuConfig;
     SvStringHashEntry* MM_ToolBoxConfig;
@@ -106,7 +104,6 @@ HASH_INLINE(INT32)
 HASH_INLINE(BOOL)
 HASH_INLINE(BYTE)
 HASH_INLINE(item)
-HASH_INLINE(PseudoSlots)
 HASH_INLINE(import)
 HASH_INLINE(SlotIdFile)
 HASH_INLINE(include)
@@ -116,7 +113,6 @@ HASH_INLINE(GroupId)
 HASH_INLINE(float)
 HASH_INLINE(double)
 HASH_INLINE(Export)
-HASH_INLINE(PseudoPrefix)
 HASH_INLINE(define)
 HASH_INLINE(MenuConfig)
 HASH_INLINE(ToolBoxConfig)

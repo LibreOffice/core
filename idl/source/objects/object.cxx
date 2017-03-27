@@ -192,7 +192,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
             // Write only if not already written by subclass or
             // imported interface.
             rSuperList.push_back(nId);
-            pAttr->Insert(rList, rPrefix, rBase);
+            pAttr->Insert(rList);
         }
     }
 

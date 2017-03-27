@@ -115,7 +115,7 @@ sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
     }
 }
 
-void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&)
+void SvMetaAttribute::Insert(SvSlotElementList&)
 {
 }
 
