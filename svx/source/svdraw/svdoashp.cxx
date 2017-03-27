@@ -833,10 +833,11 @@ sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperti
     return new sdr::properties::CustomShapeProperties(*this);
 }
 
-SdrObjCustomShape::SdrObjCustomShape() :
-    SdrTextObj(),
-    fObjectRotation( 0.0 ),
-    mpLastShadowGeometry(nullptr)
+SdrObjCustomShape::SdrObjCustomShape()
+    : SdrTextObj()
+    , fObjectRotation(0.0)
+    , mbAdjustingTextFrameWidthAndHeight(false)
+    , mpLastShadowGeometry(nullptr)
 {
     bClosedObj = true; // custom shapes may be filled
     bTextFrame = true;
@@ -2429,10 +2430,12 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool 
 
 bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
-    Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
-    bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != maRect );
-    if ( bRet )
+    Rectangle aNewTextRect = ImpCalculateTextFrame(bHgt, bWdt);
+    const bool bRet = !aNewTextRect.IsEmpty() && aNewTextRect != maRect;
+    if (bRet && !mbAdjustingTextFrameWidthAndHeight)
     {
+        mbAdjustingTextFrameWidthAndHeight = true;
+
         // taking care of handles that should not been changed
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
@@ -2453,9 +2456,12 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
             }
         }
         InvalidateRenderGeometry();
+
+        mbAdjustingTextFrameWidthAndHeight = false;
     }
     return bRet;
 }
+
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( true/*bHgt*/, true/*bWdt*/ );
@@ -2767,6 +2773,8 @@ SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
         return *this;
     SdrTextObj::operator=( rObj );
     fObjectRotation = rObj.fObjectRotation;
+    mbAdjustingTextFrameWidthAndHeight = rObj.mbAdjustingTextFrameWidthAndHeight;
+    assert(!mbAdjustingTextFrameWidthAndHeight);
     InvalidateRenderGeometry();
     return *this;
 }
