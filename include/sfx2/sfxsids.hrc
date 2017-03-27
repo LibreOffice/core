@@ -49,7 +49,6 @@
 #define SID_PASTE_SPECIAL                   (SID_SFX_START + 311)
 #define SID_CLIPBOARD_FORMAT_ITEMS          (SID_SFX_START + 312)
 
-#define SID_VERSION_VISIBLE                 (SID_SFX_START + 313)
 #define SID_PASTE_UNFORMATTED               (SID_SFX_START + 314)
 #define SID_PRINTER_NOTFOUND_WARN           (SID_SFX_START + 320)
 #define SID_PRINTER_NAME                    (SID_SFX_START + 322)
@@ -62,10 +61,8 @@
 
 #define SID_MAIL_RECIPIENT                  (SID_SFX_START + 334)
 #define SID_MAIL_TEXT                       (SID_SFX_START + 335)
-#define SID_MAIL_ATTACH                     (SID_SFX_START + 336)
 #define SID_MAIL_PRIORITY                   (SID_SFX_START + 337)
 
-#define SID_MAIL_ATTACH_FILE                (SID_SFX_START + 375)
 #define SID_MAIL_PREPAREEXPORT              (SID_SFX_START + 385)
 
 #define SID_MAIL_EXPORT_FINISHED            (SID_SFX_START + 388)
@@ -79,7 +76,6 @@
 // 360-400 see SID_MAIL_...
 
 // default-ids for help
-#define SID_HELPONHELP                      (SID_SFX_START + 400)
 #define SID_HELPINDEX                       (SID_SFX_START + 401)
 #define SID_EXTENDEDHELP                    (SID_SFX_START + 402)
 #define SID_HELPBALLOONS                    (SID_SFX_START + 403)
@@ -91,7 +87,6 @@
 #define SID_DOCUMENTATION                   (SID_SFX_START + 423)
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
 #define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)
-#define SID_HELP_TUTORIALS                  (SID_SFX_START + 1695)
 
 // default-ids for document
 #define SID_NEWDOC                          (SID_SFX_START + 500)
@@ -112,8 +107,6 @@
 #define SID_CLOSEDOC_SAVE                   (SID_SFX_START +   1)
 #define SID_CLOSEDOC_FILENAME               (SID_SFX_START +   2)
 #define SID_PRINTDOC                        (SID_SFX_START + 504)
-#define SID_PRINT_FIRST_PAGE                (SID_SFX_START +   1)
-#define SID_PRINT_LAST_PAGE                 (SID_SFX_START +   2)
 #define SID_PRINT_COPIES                    (SID_SFX_START +   3)
 #define SID_PRINT_PAGES                     (SID_SFX_START +1589)
 #define SID_PRINT_COLLATE                   (SID_SFX_START +1590)
@@ -148,8 +141,6 @@
 #define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)
 #define SID_BROWSE_BACKWARD                 (SID_SFX_START + 1301)
 #define SID_CREATELINK                      (SID_SFX_START + 1309)
-#define SID_BOOKMARK_TITLE                  (SID_SFX_START + 1310)
-#define SID_BOOKMARK_URL                    (SID_SFX_START + 1311)
 #define SID_EDITDOC                         (SID_SFX_START + 1312)
 #define SID_BROWSER_MODE                    (SID_SFX_START + 1313)
 // FREE (was SID_PLUGINS_ACTIVE)                  (SID_SFX_START + 1314)
@@ -183,10 +174,8 @@
 #define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
 #define SID_CURRENT_URL                     (SID_SFX_START + 1613)
 
-#define SID_TIPWINDOW                           (SID_SFX_START + 1632)
 #define SID_CHARSET                         (SID_SFX_START + 1633)
 #define SID_OVERWRITE                           (SID_SFX_START + 1634)
-#define SID_PARTWIN                         (SID_SFX_START + 1640)
     // FREE (was: SID_CRASH)
 #define SID_FAIL_ON_WARNING                 (SID_SFX_START + 1646)
 #define SID_INPUTSTREAM                     (SID_SFX_START + 1648)
@@ -202,14 +191,12 @@
 #define SID_OUTPUTSTREAM                    (SID_SFX_START + 1666)
 #define SID_IMAGE_ORIENTATION               (SID_SFX_START + 1667)
 
-#define SID_SAVE_VERSION_ON_CLOSE           (SID_SFX_START + 1670)
 #define SID_STOP_RECORDING                  (SID_SFX_START + 1671)
 #define SID_INTERACTIONHANDLER              (SID_SFX_START + 1675)
 #define SID_OPENHYPERLINK                   (SID_SFX_START + 1676)
 #define SID_ADDONS                          (SID_SFX_START + 1678)
 #define SID_CONTENT                         (SID_SFX_START + 1679)
 #define SID_SHOW_IME_STATUS_WINDOW          (SID_SFX_START + 1680)
-#define SID_UPDATE_CONFIG                   (SID_SFX_START + 1681)
 #define SID_VIEWONLY                        (SID_SFX_START + 1682)
 #define SID_REPAIRPACKAGE                       (SID_SFX_START + 1683)
 #define SID_MINIMIZED                       (SID_SFX_START + 1687)
@@ -400,8 +387,6 @@
 #define SID_CURSORTOPOFSCREEN               (SID_SFX_START + 744)
 #define SID_CURSORHOME                      (SID_SFX_START + 745)
 #define SID_CURSOREND                       (SID_SFX_START + 746)
-#define SID_FORMATMENU                      (SID_SFX_START + 780)
-#define SID_FORMATMENUSTATE                 (SID_SFX_START + 791)
 #define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
 
 // default-ids for macros
@@ -434,8 +419,6 @@
 // Item-Id for the assigned event Tabpage
 #define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)
 
-#define SID_SAVECONFIG                      (SID_SFX_START + 930)
-#define SID_LOADCONFIG                      (SID_SFX_START + 933)
 #define SID_OPTIONS                         (SID_SFX_START + 940)
 #define SID_BASICLOAD                       (SID_SFX_START + 951)
 #define SID_BASICSAVEAS                     (SID_SFX_START + 953)
@@ -538,7 +521,6 @@
 #define SID_ZOOM_IN                         (SID_SVX_START +  98)
 #define SID_SIZE_REAL                       (SID_SVX_START +  99)
 #define SID_SIZE_PAGE                       (SID_SVX_START + 100)
-#define SID_SHOW_BROWSER                    (SID_SVX_START + 163)
 #define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
 #define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
 #define SID_SEARCH_ITEM                     (SID_SVX_START + 291)

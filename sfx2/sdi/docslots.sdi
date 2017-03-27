@@ -234,11 +234,6 @@ shell SfxObjectShell
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-    SID_SAVE_VERSION_ON_CLOSE
-    [
-        ExecMethod = ExecFile_Impl ;
-        StateMethod = GetState_Impl ;
-    ]
     SID_SIGNATURE
     [
         ExecMethod = ExecFile_Impl;

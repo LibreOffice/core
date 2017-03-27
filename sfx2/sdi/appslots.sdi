@@ -21,9 +21,6 @@ interface Application
     SID_AUTOPILOTMENU // ole(no) api(final/play/rec)
     [
     ]
-    SID_FORMATMENU // ole(no) api(no)
-    [
-    ]
     SID_HELPMENU // ole(no) api(no)
     [
     ]
@@ -53,10 +50,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
-    SID_HELPONHELP // ole(no) api(final/todo)
-    [
-        ExecMethod = MiscExec_Impl ;
-    ]
     SID_EXTENDEDHELP // ole(no) api(final/play/norec)
     [
         ExecMethod = MiscExec_Impl ;
@@ -71,14 +64,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
-    ]
-    SID_LOADCONFIG // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
-    ]
-    SID_SAVECONFIG // ole(no) api(final/play)
-    [
-        ExecMethod = MiscExec_Impl ;
     ]
     SID_CONFIG // ole(no) api(final/play/rec)
     [
@@ -134,10 +119,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
-    ]
-    SID_UPDATE_CONFIG
-    [
-        ExecMethod = MiscExec_Impl ;
     ]
     SID_ADDONS
     [
@@ -219,10 +200,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
-    ]
-    SID_HELP_TUTORIALS
-    [
-        ExecMethod = MiscExec_Impl ;
     ]
     SID_MENUBAR
     [

@@ -1540,11 +1540,6 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:HelpOnHelp" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Help on Help</value>
-        </prop>
-      </node>
       <node oor:name=".uno:Underline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Underline</value>
@@ -2876,14 +2871,6 @@
       <node oor:name=".uno:ChoosePolygon" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Symbol Selection</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ShowBrowser" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Properties</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4929,19 +4916,9 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:SaveConfiguration" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Save configuration</value>
-        </prop>
-      </node>
       <node oor:name=".uno:TaskBarVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value/>
-        </prop>
-      </node>
-      <node oor:name=".uno:LoadConfiguration" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Load Configuration</value>
         </prop>
       </node>
       <node oor:name=".uno:LoadBasic" oor:op="replace">
@@ -5400,11 +5377,6 @@
       <node oor:name=".uno:CurrentDate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Current Date</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:VersionVisible" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Version Visible</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowItemBrowser" oor:op="replace">

@@ -2830,13 +2830,6 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
-                case SID_FORMATMENUSTATE :
-                {
-                    OSL_FAIL("Outdated slot!");
-                    rSet.DisableItem( nWhich );
-                    break;
-                }
-
                 default:
                     break;
             }

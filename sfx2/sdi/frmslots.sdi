@@ -43,27 +43,12 @@ interface Window
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
-    SID_SHOW_BROWSER // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
     SID_BROWSER // ole(no) api()
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
     SID_VIEW_DATA_SOURCE_BROWSER// ole(no) api()
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
-    SID_PARTWIN // ole(no) api()
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
-    SID_TIPWINDOW
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
@@ -304,11 +289,6 @@ interface TopWindow : BrowseWindow
 shell SfxViewFrame
 {
     import TopWindow;
-
-    SID_FORMATMENUSTATE
-    [
-        StateMethod = MiscState_Impl ;
-    ]
 
     SID_ACTIVATE // ole(no) api(final/play/rec)
     [
