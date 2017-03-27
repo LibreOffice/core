@@ -46,6 +46,8 @@ using namespace ::com::sun::star;
 
 static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 {
+"OnStartApp",
+"OnCloseApp",
 "OnCreate",
 "OnNew",
 "OnLoadFinished",
