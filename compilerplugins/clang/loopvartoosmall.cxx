@@ -80,7 +80,7 @@ unsigned LoopVarTooSmall::getIntValueWidth(QualType type) const {
 }
 
 void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
-    auto const e = expr->IgnoreParenImpCasts();
+    auto const e = expr->IgnoreImplicit()->IgnoreParenImpCasts();
     if (auto const uo = dyn_cast<UnaryOperator>(e)) {
         if (uo->getOpcode() == UO_LNot) {
             checkSubExpr(uo->getSubExpr(), !positive);

@@ -1258,6 +1258,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             {
                 const XEditAttribute& rX = *pC->GetCharAttribs()[nAttr].get();
                 // Can happen when paragraphs > 16K, it is simply wrapped.
+                    //TODO! Still true, still needed?
                 if ( rX.GetEnd() <= aPaM.GetNode()->Len() )
                 {
                     if ( !bAllreadyHasAttribs || rX.IsFeature() )

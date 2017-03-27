@@ -48,24 +48,24 @@ class XEditAttribute
 {
 private:
     const SfxPoolItem*  pItem;
-    sal_uInt16          nStart;
-    sal_uInt16          nEnd;
+    sal_Int32           nStart;
+    sal_Int32           nEnd;
 
                         XEditAttribute( const XEditAttribute& rCopyFrom ) = delete;
 
 public:
-    XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     ~XEditAttribute();
 
     const SfxPoolItem*      GetItem() const             { return pItem; }
 
-    sal_uInt16&             GetStart()                  { return nStart; }
-    sal_uInt16&             GetEnd()                    { return nEnd; }
+    sal_Int32&              GetStart()                  { return nStart; }
+    sal_Int32&              GetEnd()                    { return nEnd; }
 
-    sal_uInt16              GetStart() const            { return nStart; }
-    sal_uInt16              GetEnd() const              { return nEnd; }
+    sal_Int32               GetStart() const            { return nStart; }
+    sal_Int32               GetEnd() const              { return nEnd; }
 
-    sal_uInt16              GetLen() const              { return nEnd-nStart; }
+    sal_Int32               GetLen() const              { return nEnd-nStart; }
 
     bool IsFeature() const;
     void SetItem(const SfxPoolItem& rNew);
@@ -211,7 +211,7 @@ public:
     void                    SetScriptType( SvtScriptType nType );
 
     ContentInfo*            CreateAndInsertContent();
-    XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
+    XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
     void                    DestroyAttrib( XEditAttribute* pAttr );
 
     ContentInfosType&       GetContents() { return aContents;}
