@@ -145,32 +145,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             assert( nIter == nCount ||
                     pIter->GetSlotId() != (pIter+1)->GetSlotId() );
 
-            // every master refers to his first slave (ENUM),
-            // all slaves refer to their master.
-            // Slaves refer in a circle to the other slaves with the same master
-            if ( pIter->GetKind() == SfxSlotKind::Enum )
-            {
-                pIter->pLinkedSlot = GetSlot( pIter->nMasterSlotId );
-                assert( pIter->pLinkedSlot );
-                if ( !pIter->pLinkedSlot->pLinkedSlot )
-                    const_cast<SfxSlot*>(pIter->pLinkedSlot)->pLinkedSlot = pIter;
-
-                if ( nullptr == pIter->GetNextSlot() )
-                {
-                    SfxSlot *pLastSlot = pIter;
-                    for ( sal_uInt16 n = nIter; n < Count(); ++n )
-                    {
-                        SfxSlot *pCurSlot = (pSlots+n);
-                        if ( pCurSlot->nMasterSlotId == pIter->nMasterSlotId )
-                        {
-                            pLastSlot->pNextSlot = pCurSlot;
-                            pLastSlot = pCurSlot;
-                        }
-                    }
-                    pLastSlot->pNextSlot = pIter;
-                }
-            }
-            else if ( nullptr == pIter->GetNextSlot() )
+            if ( nullptr == pIter->GetNextSlot() )
             {
                 // Slots referring in circle to the next with the same
                 // Status method.
@@ -198,70 +173,21 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
                 SAL_WARN( "sfx.control", "Wrong order" );
 
-            if ( pIter->GetKind() == SfxSlotKind::Enum )
+            const SfxSlot *pCurSlot = pIter;
+            do
             {
-                const SfxSlot *pMasterSlot = GetSlot(pIter->nMasterSlotId);
-                const SfxSlot *pFirstSlave = pMasterSlot->pLinkedSlot;
-                const SfxSlot *pSlave = pFirstSlave;
-                do
+                pCurSlot = pCurSlot->pNextSlot;
+                if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
                 {
-                    if ( pSlave->pLinkedSlot != pMasterSlot )
-                    {
-                        OStringBuffer aStr("Wrong Master/Slave- link: ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pMasterSlot->GetSlotId()));
-                        aStr.append(" , ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pSlave->GetSlotId()));
-                        SAL_WARN("sfx.control", aStr.getStr());
-                    }
-
-                    if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
-                    {
-                        OStringBuffer aStr("Wrong Master/Slave-Ids: ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pMasterSlot->GetSlotId()));
-                        aStr.append(" , ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pSlave->GetSlotId()));
-                        SAL_WARN("sfx.control", aStr.getStr());
-                    }
-
-                    pSlave = pSlave->pNextSlot;
+                    OStringBuffer aStr("Linked Slots with different State Methods : ");
+                    aStr.append(static_cast<sal_Int32>(
+                        pCurSlot->GetSlotId()));
+                    aStr.append(" , ");
+                    aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
+                    SAL_WARN("sfx.control", aStr.getStr());
                 }
-                while ( pSlave != pFirstSlave );
             }
-            else
-            {
-                if ( pIter->pLinkedSlot )
-                {
-                    if ( pIter->pLinkedSlot->GetKind() != SfxSlotKind::Enum )
-                    {
-                        OStringBuffer aStr("Slave is no enum: ");
-                        aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
-                        aStr.append(" , ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pIter->pLinkedSlot->GetSlotId()));
-                        SAL_WARN("sfx.control", aStr.getStr());
-                    }
-                }
-
-                const SfxSlot *pCurSlot = pIter;
-                do
-                {
-                    pCurSlot = pCurSlot->pNextSlot;
-                    if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
-                    {
-                        OStringBuffer aStr("Linked Slots with different State Methods : ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pCurSlot->GetSlotId()));
-                        aStr.append(" , ");
-                        aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
-                        SAL_WARN("sfx.control", aStr.getStr());
-                    }
-                }
-                while ( pCurSlot != pIter );
-            }
+            while ( pCurSlot != pIter );
 
             pIter = pNext;
         }
@@ -335,7 +261,7 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
         return nullptr;
     }
 
-    return pSlot->pLinkedSlot;
+    return nullptr;
 }
 
 
@@ -354,7 +280,7 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
         return nullptr;
     }
 
-    return pSlot->pLinkedSlot;
+    return nullptr;
 }
 
 void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )

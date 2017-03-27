@@ -111,8 +111,7 @@ private:
                                     SfxFoundCacheArr_Impl& );
     SAL_DLLPRIVATE std::size_t GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt = 0 );
     SAL_DLLPRIVATE void Update_Impl( SfxStateCache* pCache );
-    SAL_DLLPRIVATE void UpdateControllers_Impl(
-                            const SfxInterface* pIF,
+    static SAL_DLLPRIVATE void UpdateControllers_Impl(
                             const SfxFoundCache_Impl& rFound,
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );

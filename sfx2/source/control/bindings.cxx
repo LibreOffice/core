@@ -325,8 +325,6 @@ void SfxBindings::Update_Impl
         if ( rDispat.FillState_( *pMsgServer, *pSet, pRealSlot ) )
         {
             // Post Status
-            const SfxInterface *pInterface =
-                rDispat.GetShell(pMsgServer->GetShellLevel())->GetInterface();
             for ( size_t nPos = 0; nPos < aFound.size(); ++nPos )
             {
                 const SfxFoundCache_Impl& rFound = aFound[nPos];
@@ -335,7 +333,7 @@ void SfxBindings::Update_Impl
                 SfxItemState eState = pSet->GetItemState(nWhich, true, &pItem);
                 if ( eState == SfxItemState::DEFAULT && SfxItemPool::IsWhich(nWhich) )
                     pItem = &pSet->Get(nWhich);
-                UpdateControllers_Impl( pInterface, aFound[nPos], pItem, eState );
+                UpdateControllers_Impl( aFound[nPos], pItem, eState );
             }
             bUpdated = true;
         }
@@ -349,7 +347,7 @@ void SfxBindings::Update_Impl
         // (for example due to locked Dispatcher! ),
         // obviously do not try to update
         SfxFoundCache_Impl aFoundCache(0, pRealSlot, pCache );
-        UpdateControllers_Impl( nullptr, aFoundCache, nullptr, SfxItemState::DISABLED);
+        UpdateControllers_Impl( aFoundCache, nullptr, SfxItemState::DISABLED);
     }
 }
 
@@ -1059,17 +1057,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 {
     SfxItemPool &rPool = pShell->GetPool();
 
-    if ( SfxSlotKind::Enum == pSlot->GetKind() )
-    {
-        // for Enum-Slots, the Master has to be executed with the value
-        // of the enums
-        const SfxSlot *pRealSlot = pShell->GetInterface()->GetRealSlot(pSlot);
-        const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
-        aReq.SetSlot( nSlotId );
-        aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
-        pDispatcher->Execute_( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
-    }
-    else if ( SfxSlotKind::Attribute == pSlot->GetKind() )
+    if ( SfxSlotKind::Attribute == pSlot->GetKind() )
     {
         // Which value has to be mapped for Attribute slots
         const sal_uInt16 nSlotId = pSlot->GetSlotId();
@@ -1209,14 +1197,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
     // get the status method, which is served by the pCache
     SfxStateFunc pFnc = nullptr;
-    const SfxInterface *pInterface = pShell->GetInterface();
-    if ( SfxSlotKind::Enum == pMsgSvr->GetSlot()->GetKind() )
-    {
-        pRealSlot = pInterface->GetRealSlot(pMsgSvr->GetSlot());
-        pCache = GetStateCache( pRealSlot->GetSlotId() );
-    }
-    else
-        pRealSlot = pMsgSvr->GetSlot();
+    pRealSlot = pMsgSvr->GetSlot();
 
     // Note: pCache can be NULL!
 
@@ -1254,33 +1235,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         // It is not enough to ask for the same shell!!
         bool bSameMethod = pSiblingCache && pFnc == pSiblingFnc;
 
-        // If the slot is a non-dirty master slot, then maybe one of his slaves
-        // is dirty? Then the master slot is still inserted.
-        if ( !bInsert && bSameMethod && pSibling->GetLinkedSlot() )
-        {
-            // Also check slave slots for Binding
-            const SfxSlot* pFirstSlave = pSibling->GetLinkedSlot();
-            for ( const SfxSlot *pSlaveSlot = pFirstSlave;
-                  !bInsert;
-                  pSlaveSlot = pSlaveSlot->GetNextSlot())
-            {
-                // the slaves points to its master
-                DBG_ASSERT(pSlaveSlot->GetLinkedSlot() == pSibling,
-                    "Wrong Master/Slave relationship!");
-
-                std::size_t nCurMsgPos = pImpl->nMsgPos;
-                const SfxStateCache *pSlaveCache =
-                    GetStateCache( pSlaveSlot->GetSlotId(), &nCurMsgPos );
-
-                // Is the slave slot chached and dirty ?
-                bInsert = pSlaveCache && pSlaveCache->IsControllerDirty();
-
-                // Slaves are chained together in a circle
-                if (pSlaveSlot->GetNextSlot() == pFirstSlave)
-                    break;
-            }
-        }
-
         if ( bInsert && bSameMethod )
         {
             SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
@@ -1315,15 +1269,11 @@ SfxItemSet* SfxBindings::CreateSet_Impl
 
 void SfxBindings::UpdateControllers_Impl
 (
-    const SfxInterface*         pIF,    // Id of the current serving Interface
     const SfxFoundCache_Impl&   rFound, // Cache, Slot, Which etc.
     const SfxPoolItem*          pItem,  // item to send to controller
     SfxItemState                eState  // state of item
 )
 {
-    DBG_ASSERT( !rFound.pSlot || SfxSlotKind::Enum != rFound.pSlot->GetKind(),
-                "direct update of enum slot isn't allowed" );
-
     SfxStateCache* pCache = rFound.pCache;
     const SfxSlot* pSlot = rFound.pSlot;
     DBG_ASSERT( !pCache || !pSlot || pCache->GetId() == pSlot->GetSlotId(), "SID mismatch" );
@@ -1347,70 +1297,6 @@ void SfxBindings::UpdateControllers_Impl
             pCache->SetState(SfxItemState::DISABLED, nullptr);
         else
             pCache->SetState(SfxItemState::DEFAULT, pItem);
-    }
-
-    // Update the slots for so far available and bound Controllers for
-    // Slave-Slots (Enum-value)
-    DBG_ASSERT( !pSlot || nullptr == pSlot->GetLinkedSlot() || !pItem ||
-                dynamic_cast< const SfxEnumItemInterface *>( pItem ) !=  nullptr,
-                "master slot with non-enum-type found" );
-    const SfxSlot *pFirstSlave = pSlot ? pSlot->GetLinkedSlot() : nullptr;
-    if ( pIF && pFirstSlave)
-    {
-        // Items cast on EnumItem
-        const SfxEnumItemInterface *pEnumItem = dynamic_cast< const SfxEnumItemInterface* >(pItem);
-        if ( eState == SfxItemState::DEFAULT && !pEnumItem )
-            eState = SfxItemState::DONTCARE;
-        else
-            eState = SfxControllerItem::GetItemState( pEnumItem );
-
-        // Iterate over all Slaves-Slots
-        for ( const SfxSlot *pSlave = pFirstSlave; pSlave; pSlave = pSlave->GetNextSlot() )
-        {
-            DBG_ASSERT(pSlave, "Wrong SlaveSlot binding!");
-            DBG_ASSERT(SfxSlotKind::Enum == pSlave->GetKind(),"non enum slaves aren't allowed");
-            DBG_ASSERT(pSlave->GetMasterSlotId() == pSlot->GetSlotId(),"Wrong MasterSlot!");
-
-            // Binding exist for function ?
-            SfxStateCache *pEnumCache = GetStateCache( pSlave->GetSlotId() );
-            if ( pEnumCache )
-            {
-                pEnumCache->Invalidate(false);
-
-                // HACK(CONTROL/SELECT Kram) ???
-                if ( eState == SfxItemState::DONTCARE && rFound.nWhichId == 10144 )
-                {
-                    SfxVoidItem aVoid(0);
-                    pEnumCache->SetState( SfxItemState::UNKNOWN, &aVoid );
-
-                    if (pSlave->GetNextSlot() == pFirstSlave)
-                        break;
-
-                    continue;
-                }
-
-                if ( SfxItemState::DISABLED == eState || (pEnumItem && !pEnumItem->IsEnabled( pSlave->GetSlotId())) )
-                {
-                    // disabled
-                    pEnumCache->SetState(SfxItemState::DISABLED, nullptr);
-                }
-                else if ( SfxItemState::DEFAULT == eState && pEnumItem )
-                {
-                    // Determine enum value
-                    sal_uInt16 nValue = pEnumItem->GetEnumValue();
-                    SfxBoolItem aBool( rFound.nWhichId, pSlave->GetValue() == nValue );
-                    pEnumCache->SetState(SfxItemState::DEFAULT, &aBool);
-                }
-                else
-                {
-                    // ambiguous
-                    pEnumCache->SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
-                }
-            }
-
-            if (pSlave->GetNextSlot() == pFirstSlave)
-                break;
-        }
     }
 }
 
