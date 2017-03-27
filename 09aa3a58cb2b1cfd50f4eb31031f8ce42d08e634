@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_e373ccaf",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-27T09:32:58Z",
+      "side": 1,
+      "message": "This one is also unused if judge by its code.",
+      "range": {
+        "startLine": 390,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 27
+      },
+      "revId": "09aa3a58cb2b1cfd50f4eb31031f8ce42d08e634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

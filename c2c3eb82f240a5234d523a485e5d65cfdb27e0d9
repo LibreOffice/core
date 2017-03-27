@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_4363b8dc",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 5901,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-03-27T09:32:58Z",
+      "side": 0,
+      "message": "While the sdi slot is indeed unused, the string is used in various menubar xmls.",
+      "range": {
+        "startLine": 5901,
+        "startChar": 22,
+        "endLine": 5901,
+        "endChar": 37
+      },
+      "revId": "c2c3eb82f240a5234d523a485e5d65cfdb27e0d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
