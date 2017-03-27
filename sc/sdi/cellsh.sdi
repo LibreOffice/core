@@ -413,14 +413,6 @@ interface CellMovement
 }
 
 
-interface RangeSelection
-{
-    import CellSelection;
-    import FormatForSelection;
-    import TableFont ".Font";
-    import BaseSelection;
-}
-
 interface Cell
 {
     import CellSelection;
