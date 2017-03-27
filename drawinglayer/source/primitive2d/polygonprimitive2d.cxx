@@ -345,10 +345,16 @@ namespace drawinglayer
                     bUseDecomposition = true;
                 }
 
-                if(bUseDecomposition)
+                if (bUseDecomposition)
                 {
                     // get correct range by using the decomposition fallback, reasons see above cases
+
+                    // ofz#947 to optimize calculating the range, turn any slow dashes into a solid line
+                    // when just calculating bounds
+                    attribute::StrokeAttribute aOrigStrokeAttribute = maStrokeAttribute;
+                    const_cast<PolygonStrokePrimitive2D*>(this)->maStrokeAttribute = attribute::StrokeAttribute();
                     aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
+                    const_cast<PolygonStrokePrimitive2D*>(this)->maStrokeAttribute = aOrigStrokeAttribute;
                 }
                 else
                 {
