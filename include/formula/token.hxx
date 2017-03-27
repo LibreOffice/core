@@ -117,7 +117,9 @@ inline std::string StackVarEnumToString(StackVar const e)
         case svSep:               return "Sep";
         case svUnknown:           return "Unknown";
     }
-    return std::to_string(static_cast<int>(e));
+    std::ostringstream os;
+    os << static_cast<int>(e);
+    return os.str();
 }
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
