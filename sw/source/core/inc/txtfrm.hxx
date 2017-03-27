@@ -228,7 +228,7 @@ public:
      * Returns false if rPos > number of character is string
      */
     virtual bool GetCharRect( SwRect& rRect, const SwPosition& rPos,
-                                SwCursorMoveState* pCMS = nullptr ) const override;
+                                SwCursorMoveState* pCMS = nullptr, bool bAllowFarAway = true ) const override;
 
     /// A slimmer version of GetCharRect for autopositioning Frames
     bool GetAutoPos( SwRect &, const SwPosition& ) const;

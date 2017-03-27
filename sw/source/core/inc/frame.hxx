@@ -658,7 +658,7 @@ public:
     virtual bool    GetCursorOfst( SwPosition *, Point&,
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
-                                 SwCursorMoveState* = nullptr ) const;
+                                 SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const;
 

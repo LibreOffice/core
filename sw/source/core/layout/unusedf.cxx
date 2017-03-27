@@ -69,7 +69,7 @@ void SwFlyFrame::Paste( SwFrame *, SwFrame * )
 #endif
 
 bool SwFrame::GetCharRect( SwRect&, const SwPosition&,
-                         SwCursorMoveState* ) const
+                         SwCursorMoveState*, bool ) const
 {
     OSL_FAIL( "GetCharRect() of the base called." );
     return false;
