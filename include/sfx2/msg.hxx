@@ -85,7 +85,6 @@ namespace o3tl
 enum class SfxSlotKind
 {
     Standard,
-    Enum,
     Attribute
 };
 
@@ -155,7 +154,7 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 0, 0, \
+                 0, \
                  &a##aShellClass##Args_Impl[nArg0], nArgs, SfxDisableFlags::NONE, Name \
                }
 
@@ -165,16 +164,16 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 0, 0, 0, 0, 0 \
+                 0, 0, 0, 0 \
                }
 
-#define SFX_NEW_SLOT_ARG( aShellClass, id, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
+#define SFX_NEW_SLOT_ARG( aShellClass, id, GroupId, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
                { id, GroupId, Flags | Prop, \
                  USHRT_MAX, 0, \
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 pLinked, pNext, \
+                 pNext, \
                  &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
                }
 
@@ -204,7 +203,6 @@ public:
 
     const SfxType*  pType;       // SfxPoolItem-Type (Status)
 
-    const SfxSlot*  pLinkedSlot; // Master-Slot for Enum value
     const SfxSlot*  pNextSlot;   // with the same Status-Method
 
     const SfxFormalArgument*  pFirstArgDef;  // first formal Argument-Definition
@@ -236,7 +234,6 @@ public:
     SfxExecFunc     GetExecFnc() const { return fnExec; }
     SfxStateFunc    GetStateFnc() const { return fnState; }
 
-    const SfxSlot*  GetLinkedSlot() const { return pLinkedSlot; }
     const SfxSlot*  GetNextSlot() const { return pNextSlot; }
 };
 

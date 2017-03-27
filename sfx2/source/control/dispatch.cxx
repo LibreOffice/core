@@ -396,24 +396,11 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         {
             SfxBindings *pBindings = GetBindings();
 
-            // When AutoUpdate update immediately; "Pseudoslots" must not be
-            // Autoupdate!
+            // When AutoUpdate update immediately
             if ( bAutoUpdate && pBindings )
             {
-                const SfxSlot* pSlave = rSlot.GetLinkedSlot();
-                if (pSlave)
-                {
-                    // When enum slots take any bound slave slot
-                    while (!pBindings->IsBound(pSlave->GetSlotId()) && pSlave != &rSlot )
-                        pSlave = pSlave->GetLinkedSlot();
-                    pBindings->Invalidate(pSlave->GetSlotId());
-                    pBindings->Update(pSlave->GetSlotId());
-                }
-                else
-                {
-                    pBindings->Invalidate(rSlot.GetSlotId());
-                    pBindings->Update(rSlot.GetSlotId());
-                }
+                pBindings->Invalidate(rSlot.GetSlotId());
+                pBindings->Update(rSlot.GetSlotId());
             }
         }
     }

@@ -549,8 +549,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     }
 
 
-    rOutStm.WriteCharPtr( "0 ," );
-
     rOutStm.WriteCharPtr( "&a" ).WriteOString( rShellName ).WriteCharPtr( "Slots_Impl[" )
        .WriteOString( OString::number(pNextSlot->GetListPos()) )
        .WriteCharPtr( "] /*Offset Next*/, " ) << endl;

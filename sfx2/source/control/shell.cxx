@@ -263,18 +263,8 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
             const SfxSlot *pSlot = pIF->GetSlot(nId);
             if ( pSlot )
             {
-                // At Enum-Slots invalidate the Master-Slot
-                if ( SfxSlotKind::Enum == pSlot->GetKind() )
-                    pSlot = pSlot->GetLinkedSlot();
-
-                // Invalidate the Slot itself and possible also all Slave-Slots
+                // Invalidate the Slot itself
                 rBindings.Invalidate( pSlot->GetSlotId() );
-                for ( const SfxSlot *pSlave = pSlot->GetLinkedSlot();
-                      pSlave && pIF->ContainsSlot_Impl( pSlave ) &&
-                        pSlave->GetLinkedSlot() == pSlot;
-                      ++pSlave )
-                    rBindings.Invalidate( pSlave->GetSlotId() );
-
                 return;
             }
 
@@ -557,7 +547,6 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
         pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
         pNewSlot->pType = nullptr; // HACK(SFX_TYPE(SfxVoidItem)) ???
-        pNewSlot->pLinkedSlot = nullptr;
         pNewSlot->nArgDefCount = 0;
         pNewSlot->pFirstArgDef = nullptr;
         pNewSlot->pUnoName = nullptr;
