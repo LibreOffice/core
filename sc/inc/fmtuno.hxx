@@ -23,9 +23,9 @@
 #include <vector>
 
 #include <formula/grammar.hxx>
+#include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +37,6 @@
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/sheet/ConditionOperator2.hpp>
 
 #include "address.hxx"
 #include "conditio.hxx"
@@ -167,7 +166,7 @@ class ScTableValidationObj : public cppu::WeakImplHelper<
 {
 private:
     SfxItemPropertySet  aPropSet;
-    sal_uInt16          nMode;          // enum ScConditionMode
+    ScConditionMode     nMode;
     OUString            aExpr1;
     OUString            aExpr2;
     OUString            maExprNmsp1;
