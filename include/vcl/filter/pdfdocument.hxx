@@ -80,10 +80,12 @@ public:
     sal_uInt64 GetDictionaryOffset();
     void SetDictionaryLength(sal_uInt64 nDictionaryLength);
     sal_uInt64 GetDictionaryLength();
-    PDFDictionaryElement* GetDictionary() const;
+    PDFDictionaryElement* GetDictionary();
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
     /// Get access to the parsed key-value items from the object dictionary.
     const std::map<OString, PDFElement*>& GetDictionaryItems() const;
+    /// Same as GetDictionaryItems(), but entries are sorted by file offset.
+    std::vector< std::pair<OString, PDFElement*> > GetDictionaryItemsByOffset();
     void SetArray(PDFArrayElement* pArrayElement);
     void SetStream(PDFStreamElement* pStreamElement);
     /// Access to the stream of the object, if it has any.

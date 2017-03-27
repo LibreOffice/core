@@ -2443,14 +2443,35 @@ sal_uInt64 PDFObjectElement::GetArrayLength()
     return m_nArrayLength;
 }
 
-PDFDictionaryElement* PDFObjectElement::GetDictionary() const
+PDFDictionaryElement* PDFObjectElement::GetDictionary()
 {
+    if (m_aDictionary.empty())
+        PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
     return m_pDictionaryElement;
 }
 
 void PDFObjectElement::SetDictionary(PDFDictionaryElement* pDictionaryElement)
 {
     m_pDictionaryElement = pDictionaryElement;
+}
+
+std::vector< std::pair<OString, PDFElement*> > PDFObjectElement::GetDictionaryItemsByOffset()
+{
+    std::vector< std::pair<OString, PDFElement*> > aRet;
+
+    for (const auto& rItem : m_aDictionary)
+        aRet.push_back(rItem);
+
+    PDFDictionaryElement* pDictionary = GetDictionary();
+    if (!pDictionary)
+        return aRet;
+
+    std::sort(aRet.begin(), aRet.end(), [pDictionary](const std::pair<OString, PDFElement*>& a, const std::pair<OString, PDFElement*>& b) -> bool
+    {
+        return pDictionary->GetKeyOffset(a.first) < pDictionary->GetKeyOffset(b.first);
+    });
+
+    return aRet;
 }
 
 const std::map<OString, PDFElement*>& PDFObjectElement::GetDictionaryItems() const
