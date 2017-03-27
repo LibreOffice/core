@@ -436,7 +436,7 @@ bool TeleManager::init( bool bListen )
 
 void TeleManager::finalize()
 {
-    delete pImpl;
+    pImpl.reset();
 }
 
 bool TeleManager::createAccountManager()

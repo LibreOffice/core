@@ -145,7 +145,7 @@ public:
     TUBES_DLLPUBLIC static void addSuffixToNames( const char* pName );
 
 private:
-    static TeleManagerImpl* pImpl;
+    static std::unique_ptr<TeleManagerImpl> pImpl;
 
     static ::osl::Mutex&    GetMutex();
 };
