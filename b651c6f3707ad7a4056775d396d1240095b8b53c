@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_23f6b48f",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-03-27T15:27:26Z",
+      "side": 1,
+      "message": "perhaps better \u0027those entries\u0027?",
+      "revId": "b651c6f3707ad7a4056775d396d1240095b8b53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_43f3b89e",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-03-27T15:27:26Z",
+      "side": 1,
+      "message": "Why not remove the extraneous whitespace while at it?",
+      "revId": "b651c6f3707ad7a4056775d396d1240095b8b53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_63f0bc91",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-03-27T15:27:26Z",
+      "side": 1,
+      "message": "or is that zero-based?",
+      "revId": "b651c6f3707ad7a4056775d396d1240095b8b53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
