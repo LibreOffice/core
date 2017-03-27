@@ -10866,11 +10866,9 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
         // Complex case: can't copy the dictionary byte array as is, as it contains a reference.
         bool bDone = false;
         const std::map<OString, filter::PDFElement*>& rItems = rObject.GetDictionaryItems();
-        OString aReferenceName("ColorSpace");
-        auto it = rItems.find(aReferenceName);
-        if (it != rItems.end())
+        for (const auto& rItem : rItems)
         {
-            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(it->second);
+            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
             if (pReference)
             {
                 filter::PDFObjectElement* pReferenced = pReference->LookupObject();
@@ -10880,8 +10878,8 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
 
                     sal_uInt64 nDictStart = rObject.GetDictionaryOffset();
-                    sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(aReferenceName) + aReferenceName.getLength();
-                    sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(aReferenceName) + pDictionary->GetKeyValueLength(aReferenceName);
+                    sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(rItem.first) + rItem.first.getLength();
+                    sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(rItem.first) + pDictionary->GetKeyValueLength(rItem.first);
                     sal_uInt64 nDictEnd = nDictStart + rObject.GetDictionaryLength();
                     // Dict start -> reference start.
                     aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nDictStart, nReferenceStart - nDictStart);
@@ -10893,6 +10891,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nReferenceEnd, nDictEnd - nReferenceEnd);
 
                     bDone = true;
+                    break;
                 }
             }
         }
@@ -10968,7 +10967,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     return nObject;
 }
 
-std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind)
+OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind)
 {
     // A name - object ID map, IDs as they appear in our output, not the
     // original ones.
@@ -10977,11 +10976,11 @@ std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObj
     // Get the rKind subset of the resource dictionary.
     auto pResources = dynamic_cast<filter::PDFDictionaryElement*>(rPage.Lookup("Resources"));
     if (!pResources)
-        return aRet;
+        return OString();
 
     auto pDictionary = dynamic_cast<filter::PDFDictionaryElement*>(pResources->LookupElement(rKind));
     if (!pDictionary)
-        return aRet;
+        return OString();
 
     SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
 
@@ -11002,7 +11001,15 @@ std::map<OString, sal_Int32> PDFWriterImpl::copyExternalResources(filter::PDFObj
         aRet[rItem.first] = nObject;
     }
 
-    return aRet;
+    // Build the dictionary entry string.
+    OString sRet = "/" + rKind + "<<";
+    for (const auto& rPair : aRet)
+    {
+        sRet += "/" + rPair.first + " " + OString::number(rPair.second) + " 0 R";
+    }
+    sRet += ">>";
+
+    return sRet;
 }
 
 void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
@@ -11050,13 +11057,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        std::map<OString, sal_Int32> aXObjects = copyExternalResources(*pPage, "XObject");
-        OString sXObjects = "/XObject<<";
-        for (const auto& rPair : aXObjects)
-        {
-            sXObjects += "/" + rPair.first + " " + OString::number(rPair.second) + " 0 R";
-        }
-        sXObjects += ">>";
+        OString sXObjects = copyExternalResources(*pPage, "XObject");
 
         filter::PDFObjectElement* pPageContents = pPage->LookupObject("Contents");
         if (!pPageContents)

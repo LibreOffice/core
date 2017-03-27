@@ -853,8 +853,8 @@ i12626
     /// Writes the form XObject proxy for the image.
     void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
     /// Copies resources of a given kind from an external page to the output,
-    /// returning what has beeen copied (name) and where (object ID).
-    std::map<OString, sal_Int32> copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind);
+    /// returning what has to be included in the new resource dictionary.
+    OString copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind);
     /// Copies a single resource from an external document, returns the new
     /// object ID in our document.
     sal_Int32 copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject);
