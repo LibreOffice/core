@@ -123,6 +123,7 @@ INTERACTIVE VARIABLES:
        PARALLELISM     If not empty, pass argument on as the -j switch
                        to recursive make invocations. Useful to
                        lower/increase build parallelism individually.
+       verbose=t       Verbose mode: display all commands
        LEXFLAGS        Append flags for LEX scanner generator invocation.
        YACCFLAGS       Append flags for YACC parser generator invocation.
        CPPFLAGS        Append preprocessor flags for C/C++/ObjC/ObjC++ compilation.
