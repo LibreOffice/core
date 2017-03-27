@@ -110,6 +110,8 @@ void SAL_CALL VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*
 void SAL_CALL VistaFilePicker::setMultiSelectionMode(sal_Bool bMode)
     throw(css::uno::RuntimeException)
 {
+    ensureInit();
+
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SET_MULTISELECTION_MODE);
     rRequest->setArgument(PROP_MULTISELECTION_MODE, bMode);
@@ -120,6 +122,8 @@ void SAL_CALL VistaFilePicker::setMultiSelectionMode(sal_Bool bMode)
 void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
     throw(css::uno::RuntimeException)
 {
+    ensureInit();
+
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SET_TITLE);
     rRequest->setArgument(PROP_TITLE, sTitle);
@@ -178,6 +182,8 @@ void SAL_CALL VistaFilePicker::appendFilterGroup(const OUString&                
 void SAL_CALL VistaFilePicker::setDefaultName(const OUString& sName )
     throw(css::uno::RuntimeException)
 {
+    ensureInit();
+
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SET_DEFAULT_NAME);
     rRequest->setArgument(PROP_FILENAME, sName);
@@ -189,6 +195,8 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
+    ensureInit();
+
     bool bChanged = officecfg::Office::Common::Path::Info::WorkPathChanged::get(
         comphelper::getComponentContext(m_xSMGR));
     if (bChanged )
@@ -212,6 +220,8 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
 OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
     throw(css::uno::RuntimeException)
 {
+    ensureInit();
+
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
@@ -246,8 +256,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
     return lFiles;
 }
 
-::sal_Int16 SAL_CALL VistaFilePicker::execute()
-    throw(css::uno::RuntimeException)
+void VistaFilePicker::ensureInit()
 {
     bool bInitialized(false);
     {
@@ -262,6 +271,12 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
         aInitArguments[0] <<= nTemplateDescription;
         initialize(aInitArguments);
     }
+}
+
+::sal_Int16 SAL_CALL VistaFilePicker::execute()
+    throw(css::uno::RuntimeException)
+{
+    ensureInit();
 
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SHOW_DIALOG_MODAL);
