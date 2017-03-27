@@ -298,7 +298,7 @@ static SbxVariableRef Element
                 auto refPar = tools::make_ref<SbxArray>();
                 sal_uInt16 nArg = 0;
                 // We are once relaxed and accept as well
-                // the line- or commandend as delimiter
+                // the line- or command end as delimiter
                 // Search parameter always global!
                 while( *p && *p != ')' && *p != ']' )
                 {

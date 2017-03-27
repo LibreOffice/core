@@ -267,7 +267,7 @@ namespace
         if ( 0 == m_pBrowseBox->GetSelectColumnCount() )
         {
             m_pBrowseBox->DeactivateCell();
-            // we are in the right mode if a row hase been selected row
+            // we are in the right mode if a row has been selected row
             if ( nMode & BrowserMode::HIDESELECT )
             {
                 nMode &= ~BrowserMode::HIDESELECT;

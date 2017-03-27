@@ -668,7 +668,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //we want to me sure that volatile functions are always recalculated
         //regardless of cached results.  if you update the ods file, you must
         //update the values here.
-        //if NOW() is recalcuated, then it should never equal sTodayCache
+        //if NOW() is recalculated, then it should never equal sTodayCache
         OUString sTodayCache("01/25/13 01:06 PM");
         OUString sTodayRecalc(rDoc.GetString(0,0,1));
 

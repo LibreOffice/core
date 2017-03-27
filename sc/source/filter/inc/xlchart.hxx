@@ -1286,7 +1286,7 @@ public:
 
     /** Returns a named formatting object from the chart document. */
     css::uno::Any GetObject( const OUString& rObjName );
-    /** Insertes a named formatting object into the chart document. */
+    /** Inserts a named formatting object into the chart document. */
     OUString      InsertObject( const css::uno::Any& rObj );
 
 private:

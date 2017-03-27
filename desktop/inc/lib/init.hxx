@@ -97,7 +97,7 @@ namespace desktop {
 
     /// Helper function to extract the value from parameters delimited by
     /// comma, like: Name1=Value1,Name2=Value2,Name3=Value3.
-    /// @param rOptions When exctacted, the Param=Value is removed from it.
+    /// @param rOptions When exctracted, the Param=Value is removed from it.
     DESKTOP_DLLPUBLIC OUString extractParameter(OUString& aOptions, const OUString& rName);
 }
 

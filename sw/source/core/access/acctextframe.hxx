@@ -102,7 +102,7 @@ public:
     // XAccessibleContext::getAccessibleRelationSet
 
     // text frame may have accessible relations to their
-    // predecesor/successor frames
+    // predecessor/successor frames
 
 private:
     // helper methods for getAccessibleRelationSet:
