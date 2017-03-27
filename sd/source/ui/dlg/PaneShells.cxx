@@ -31,19 +31,6 @@ namespace sd {
 
 //===== LeftImpressPaneShell ==================================================
 
-static SfxSlot aLeftImpressPaneShellSlots_Impl[] =
-{
-    { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
-};
-
-SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell)
-
-void LeftImpressPaneShell::InitInterface_Impl()
-{
-    GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneImpressChildWindow::GetChildWindowId());
-}
-
-
 LeftImpressPaneShell::LeftImpressPaneShell()
     : SfxShell()
 {
@@ -55,19 +42,6 @@ LeftImpressPaneShell::~LeftImpressPaneShell()
 }
 
 //===== LeftDrawPaneShell =====================================================
-
-static SfxSlot aLeftDrawPaneShellSlots_Impl[] =
-{
-    { 0, 0, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
-};
-
-SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell)
-
-void LeftDrawPaneShell::InitInterface_Impl()
-{
-    GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneDrawChildWindow::GetChildWindowId());
-}
-
 
 LeftDrawPaneShell::LeftDrawPaneShell()
     : SfxShell()

@@ -33,13 +33,6 @@ class LeftImpressPaneShell
     : public SfxShell
 {
 public:
-    SFX_DECL_INTERFACE(SD_IF_SDLEFTIMPRESSPANESHELL)
-
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
-public:
     LeftImpressPaneShell();
     virtual ~LeftImpressPaneShell() override;
 };
@@ -50,13 +43,6 @@ public:
 class LeftDrawPaneShell
     : public SfxShell
 {
-public:
-    SFX_DECL_INTERFACE(SD_IF_SDLEFTDRAWPANESHELL)
-
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
 public:
     LeftDrawPaneShell();
     virtual ~LeftDrawPaneShell() override;
