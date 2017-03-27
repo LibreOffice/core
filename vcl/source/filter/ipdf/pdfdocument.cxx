@@ -944,7 +944,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 // The array is attached directly, inform the object.
                 pArray = pArr;
                 if (pObject)
+                {
                     pObject->SetArray(pArray);
+                    pObject->SetArrayOffset(rStream.Tell());
+                }
             }
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
@@ -959,6 +962,13 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
             pArray = nullptr;
             rStream.SeekRel(-1);
+            if (nDictionaryDepth == 0)
+            {
+                if (pObject)
+                {
+                    pObject->SetArrayLength(rStream.Tell() - pObject->GetArrayOffset());
+                }
+            }
             if (!rElements.back()->Read(rStream))
             {
                 SAL_WARN("vcl.filter", "PDFDocument::Tokenize: PDFEndArrayElement::Read() failed");
@@ -1049,7 +1059,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                     }
                     else
                     {
-                        rElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, pObjectNumber->GetValue(), pGenerationNumber->GetValue())));
+                        rElements.push_back(std::unique_ptr<PDFElement>(new PDFReferenceElement(*this, *pObjectNumber, *pGenerationNumber)));
                         if (pArray)
                             // Reference is part of a direct (non-dictionary) array, inform the array.
                             pArray->PushBack(rElements.back().get());
@@ -2068,6 +2078,8 @@ PDFObjectElement::PDFObjectElement(PDFDocument& rDoc, double fObjectValue, doubl
       m_nDictionaryOffset(0),
       m_nDictionaryLength(0),
       m_pDictionaryElement(nullptr),
+      m_nArrayOffset(0),
+      m_nArrayLength(0),
       m_pArrayElement(nullptr),
       m_pStreamElement(nullptr)
 {
@@ -2368,6 +2380,16 @@ sal_uInt64 PDFObjectElement::GetDictionaryOffset()
     return m_nDictionaryOffset;
 }
 
+void PDFObjectElement::SetArrayOffset(sal_uInt64 nArrayOffset)
+{
+    m_nArrayOffset = nArrayOffset;
+}
+
+sal_uInt64 PDFObjectElement::GetArrayOffset()
+{
+    return m_nArrayOffset;
+}
+
 void PDFDictionaryElement::SetKeyOffset(const OString& rKey, sal_uInt64 nOffset)
 {
     m_aDictionaryKeyOffset[rKey] = nOffset;
@@ -2412,6 +2434,16 @@ sal_uInt64 PDFObjectElement::GetDictionaryLength()
         PDFDictionaryElement::Parse(m_rDoc.GetElements(), this, m_aDictionary);
 
     return m_nDictionaryLength;
+}
+
+void PDFObjectElement::SetArrayLength(sal_uInt64 nArrayLength)
+{
+    m_nArrayLength = nArrayLength;
+}
+
+sal_uInt64 PDFObjectElement::GetArrayLength()
+{
+    return m_nArrayLength;
 }
 
 PDFDictionaryElement* PDFObjectElement::GetDictionary() const
@@ -2599,11 +2631,17 @@ PDFDocument& PDFObjectElement::GetDocument()
     return m_rDoc;
 }
 
-PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue)
+PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement& rGeneration)
     : m_rDoc(rDoc),
-      m_fObjectValue(fObjectValue),
-      m_fGenerationValue(fGenerationValue)
+      m_fObjectValue(rObject.GetValue()),
+      m_fGenerationValue(rGeneration.GetValue()),
+      m_rObject(rObject)
 {
+}
+
+PDFNumberElement& PDFReferenceElement::GetObjectElement() const
+{
+    return m_rObject;
 }
 
 bool PDFReferenceElement::Read(SvStream& rStream)

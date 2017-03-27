@@ -10912,6 +10912,51 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
         aLine.append("\nendstream\n");
     }
 
+    if (filter::PDFArrayElement* pArray = rObject.GetArray())
+    {
+        aLine.append("[");
+
+        const std::vector<filter::PDFElement*>& rElements = pArray->GetElements();
+        bool bDone = false;
+        // Complex case: can't copy the array byte array as is, as it contains a reference.
+        for (const auto pElement : rElements)
+        {
+            auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
+            if (pReference)
+            {
+                filter::PDFObjectElement* pReferenced = pReference->LookupObject();
+                if (pReferenced)
+                {
+                    // Copy the referenced object.
+                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
+
+                    sal_uInt64 nArrStart = rObject.GetArrayOffset();
+                    sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
+                    sal_uInt64 nReferenceEnd = pReference->GetOffset();
+                    sal_uInt64 nArrEnd = nArrStart + rObject.GetArrayLength();
+
+                    // Array start -> reference start.
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nArrStart, nReferenceStart - nArrStart);
+                    // Write the updated reference.
+                    aLine.append(" ");
+                    aLine.append(nRef);
+                    aLine.append(" 0 R");
+                    // Reference end -> array end.
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nReferenceEnd, nArrEnd - nReferenceEnd);
+
+                    bDone = true;
+                    break;
+                }
+            }
+        }
+
+        // Can copy it as-is.
+        if (!bDone)
+            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetArrayOffset(), rObject.GetArrayLength());
+
+        aLine.append("]\n");
+    }
+
     aLine.append("endobj\n\n");
 
     // We have the whole object, now write it to the output.
