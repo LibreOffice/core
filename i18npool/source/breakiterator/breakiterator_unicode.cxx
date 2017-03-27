@@ -65,7 +65,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
     public:
 #if (U_ICU_VERSION_MAJOR_NUM < 58)
     // RuleBasedBreakIterator::setBreakType() is private as of ICU 58.
-    inline void publicSetBreakType(int32_t type)
+    void publicSetBreakType(int32_t type)
         {
             setBreakType(type);
         };
