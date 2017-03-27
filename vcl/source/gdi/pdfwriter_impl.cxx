@@ -10863,10 +10863,11 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     {
         aLine.append("<<");
 
-        // Complex case: can't copy the dictionary byte array as is, as it contains a reference.
+        // Complex case: can't copy the dictionary byte array as is, as it may contain references.
         bool bDone = false;
-        const std::map<OString, filter::PDFElement*>& rItems = rObject.GetDictionaryItems();
-        for (const auto& rItem : rItems)
+        std::vector< std::pair<OString, filter::PDFElement*> > aItems = rObject.GetDictionaryItemsByOffset();
+        sal_uInt64 nCopyStart = 0;
+        for (const auto& rItem : aItems)
         {
             auto pReference = dynamic_cast<filter::PDFReferenceElement*>(rItem.second);
             if (pReference)
@@ -10877,27 +10878,36 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     // Copy the referenced object.
                     sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
 
-                    sal_uInt64 nDictStart = rObject.GetDictionaryOffset();
                     sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(rItem.first) + rItem.first.getLength();
                     sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(rItem.first) + pDictionary->GetKeyValueLength(rItem.first);
-                    sal_uInt64 nDictEnd = nDictStart + rObject.GetDictionaryLength();
-                    // Dict start -> reference start.
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nDictStart, nReferenceStart - nDictStart);
+                    sal_uInt64 nOffset = 0;
+                    if (nCopyStart == 0)
+                        // Dict start -> reference start.
+                        nOffset = rObject.GetDictionaryOffset();
+                    else
+                        // Previous reference end -> reference start.
+                        nOffset = nCopyStart;
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
                     // Write the updated reference.
                     aLine.append(" ");
                     aLine.append(nRef);
                     aLine.append(" 0 R");
-                    // Reference end -> dict end.
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nReferenceEnd, nDictEnd - nReferenceEnd);
+                    // Start copying here next time.
+                    nCopyStart = nReferenceEnd;
 
                     bDone = true;
-                    break;
                 }
             }
         }
 
-        // Can copy it as-is.
-        if (!bDone)
+        if (bDone)
+        {
+            // Copy the last part here, in the complex case.
+            sal_uInt64 nDictEnd = rObject.GetDictionaryOffset() + rObject.GetDictionaryLength();
+            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nDictEnd - nCopyStart);
+        }
+        else
+            // Can copy it as-is.
             aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetDictionaryOffset(), rObject.GetDictionaryLength());
 
         aLine.append(">>\n");
@@ -11057,6 +11067,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
+        OString sFonts = copyExternalResources(*pPage, "Font");
         OString sXObjects = copyExternalResources(*pPage, "XObject");
 
         filter::PDFObjectElement* pPageContents = pPage->LookupObject("Contents");
@@ -11078,6 +11089,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
         aLine.append(" /Resources <<");
+        aLine.append(sFonts);
         aLine.append(sXObjects);
         aLine.append(">>");
         aLine.append(" /BBox [ 0 0 ");
