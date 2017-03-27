@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_a3f38472",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-27T18:34:01Z",
+      "side": 1,
+      "message": "i suspect you mean \"blurb\"",
+      "revId": "8e52e3e0183eca3e86dd5222ac88b24282cc0789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c3e8887f",
+        "filename": "solenv/gbuild/gbuild.help.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-27T18:34:01Z",
+      "side": 1,
+      "message": "as it happens this doesn\u0027t work:\n\nthe upper-case spelling of the variable is no longer accepted, you have to use lower-case \"verbose\u003dt\" instead.\n\nwhy that was changed, i have no idea.\n\napparently it was commit a8db357874b3ab3f785457cd9a84c68a05d3c61e\n\nhttps://gerrit.libreoffice.org/17634",
+      "revId": "8e52e3e0183eca3e86dd5222ac88b24282cc0789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
