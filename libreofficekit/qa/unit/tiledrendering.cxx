@@ -19,6 +19,8 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 
+#include <com/sun/star/awt/Key.hpp>
+
 #if defined __clang__ && defined __linux__
 #include <cxxabi.h>
 #include <config_options.h>
@@ -263,16 +265,16 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // assert that '.' is the decimal separator
     insertString(*pDocument, "1.5");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1027); // right arrow
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1027);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1280); // enter
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1280);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1025); // up arrow
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1025);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
     // we've got a meaningful result
@@ -290,16 +292,16 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     // with cs-CZ, the decimal separator is ',' instead, assert that
     insertString(*pDocument, "1,5");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1027); // right arrow
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1027);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RIGHT);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RIGHT);
     processEventsToIdle();
 
     insertString(*pDocument, "=2*A1");
 
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1280); // enter
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1280);
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1025); // up arrow
-    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1025);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::RETURN);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::UP);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, css::awt::Key::UP);
     processEventsToIdle();
 
     // we've got a meaningful result
