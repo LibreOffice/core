@@ -1572,7 +1572,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svSep:
             case svUnknown:
                 // We don't support vectorization on these.
-                SAL_INFO("sc.opencl", "opcode ocPush: variable type disables vectorisation for formula group");
+                SAL_INFO("sc.opencl", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType()) << " disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabled;
             break;
             default:

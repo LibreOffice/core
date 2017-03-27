@@ -97,38 +97,6 @@ namespace sc { namespace opencl {
 
 namespace {
 
-std::string StackVarEnumToString(StackVar const e)
-{
-    switch (e)
-    {
-        case svByte:              return "Byte";
-        case svDouble:            return "Double";
-        case svString:            return "String";
-        case svSingleRef:         return "SingleRef";
-        case svDoubleRef:         return "DoubleRef";
-        case svMatrix:            return "Matrix";
-        case svIndex:             return "Index";
-        case svJump:              return "Jump";
-        case svExternal:          return "External";
-        case svFAP:               return "FAP";
-        case svJumpMatrix:        return "JumpMatrix";
-        case svRefList:           return "RefList";
-        case svEmptyCell:         return "EmptyCell";
-        case svMatrixCell:        return "MatrixCell";
-        case svHybridCell:        return "HybridCell";
-        case svExternalSingleRef: return "ExternalSingleRef";
-        case svExternalDoubleRef: return "ExternalDoubleRef";
-        case svExternalName:      return "ExternalName";
-        case svSingleVectorRef:   return "SingleVectorRef";
-        case svDoubleVectorRef:   return "DoubleVectorRef";
-        case svError:             return "Error";
-        case svMissing:           return "Missing";
-        case svSep:               return "Sep";
-        case svUnknown:           return "Unknown";
-    }
-    return std::to_string(static_cast<int>(e));
-}
-
 std::string linenumberify(const std::string& s)
 {
     std::stringstream ss;
