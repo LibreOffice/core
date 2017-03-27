@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8331200e",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-27T20:35:24Z",
+      "side": 1,
+      "message": "are you sure that \"not file:\" implies it\u0027s in a document, with a getDocumentStorage() ?\n\nwhat about \"http\" / \"cmis\" / etc. schemas?\n\nperhaps it\u0027s better to check for \"tdoc\" schema, which guarantees that there is a document?",
+      "revId": "d7bf4c38baa01ffbd6667c6d33fa3dca61d8e700",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6356fc2a",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-27T20:35:24Z",
+      "side": 1,
+      "message": "is this commit necessary? sounds a bit risky",
+      "revId": "d7bf4c38baa01ffbd6667c6d33fa3dca61d8e700",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
