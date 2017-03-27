@@ -57,15 +57,9 @@
 #include "shells.hrc"
 
 #define SwView
-#define GlobalContents
 #define Text
 #define TextDrawText
-#define TextInTable
-#define ListInText
-#define ListInTable
-#define WebTextInTable
-#define WebListInText
-#define WebListInTable
+
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>

@@ -65,9 +65,6 @@
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebView
 #define Text
-#define TextInTable
-#define ListInText
-#define ListInTable
 #include <swslots.hxx>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")

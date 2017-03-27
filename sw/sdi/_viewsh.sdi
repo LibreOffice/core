@@ -871,24 +871,3 @@ interface BaseTextEditView
     ]
 }
 
-interface GlobalContents
-{
-    UINT16  Type    FN_COLL_TYPE
-    (
-        UINT16  Position        FN_COLL_TYPE
-    )
-
-    // Areaname, Index-Titel or Empty String
-    String  Title FN_COLL_TITLE
-    (
-        UINT16  Position        FN_COLL_TITLE
-    )
-
-    // Without a FileName an area of the text is inserted at this location.
-    BOOL    InsertDocument  FN_COLL_ADD
-    (
-        UINT16  Position        FN_COLL_ADD,
-        UINT16  FileName        FN_PARAM_1
-    )
-}
-

@@ -16,25 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-interface TextInTable
-{
-    import Text;
-        import TextTable;
-}
-
-interface ListInTable
-{
-    import Text;
-        import TextList;
-        import TextTable;
-}
-
-interface ListInText
-{
-    import TextList;
-    import Text;
-}
-
 interface TextEditView : BaseTextEditView
 {
      // Slots, which are not needed in the WebDocShell

@@ -16,25 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-interface WebTextInTable
-{
-    import WebText;
-        import WebTable;
-}
-
-interface WebListInTable
-{
-    import WebText;
-        import WebList;
-        import WebTable;
-}
-
-interface WebListInText
-{
-    import WebList;
-    import WebText;
-}
-
 interface WebEditView : BaseTextEditView
 {
     SID_DRAW_TEXT_MARQUEE // status()
