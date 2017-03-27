@@ -217,7 +217,7 @@ static SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
         }
         nCurrLeft += pBox->GetFrameFormat()->GetFrameSize().GetWidth();
     }
-    OSL_FAIL( "Didn't found wished box" );
+    OSL_FAIL( "Didn't find wished box" );
     return nullptr;
 }
 
