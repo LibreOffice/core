@@ -12,6 +12,7 @@
 #include <tokenstringcontext.hxx>
 #include <address.hxx>
 
+#include <osl/file.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

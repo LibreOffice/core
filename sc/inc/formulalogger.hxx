@@ -8,7 +8,8 @@
 #ifndef INCLUDED_SC_INC_FORMULALOGGER_HXX
 #define INCLUDED_SC_INC_FORMULALOGGER_HXX
 
-#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+
 #include <memory>
 #include <vector>
 
@@ -25,6 +26,8 @@ class FormulaToken;
 struct VectorRefArray;
 
 }
+
+namespace osl { class File; }
 
 namespace sc {
 
