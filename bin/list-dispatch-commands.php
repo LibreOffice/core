@@ -48,11 +48,10 @@ function analyseFile($fileName) {
             $slotId = trim($tmp[1]);
             $index++;
             $aLine = $lines[$index];
-            $isEnumSlot = strpos($aLine, 'SFX_NEW_SLOT_ENUM') !== FALSE;
             $tmp = explode(',', $aLine);
             $slotRID = $tmp[1];
 
-            $index += $isEnumSlot ? 4 : 3;
+            $index += 3;
             $aLine = $lines[$index];
             $mode = "";
             addMode($mode, $aLine, "CACHABLE",      "C");
@@ -60,7 +59,7 @@ function analyseFile($fileName) {
             addMode($mode, $aLine, "MENUCONFIG",    "M");
             addMode($mode, $aLine, "TOOLBOXCONFIG", "T");
             addMode($mode, $aLine, "ACCELCONFIG",   "A");
-            $index += $isEnumSlot ? 1 : 3;
+            $index += 3;
             $aLine = $lines[$index];
             if (strpos($aLine, '"') === FALSE) {
                 $index++;

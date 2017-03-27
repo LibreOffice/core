@@ -44,8 +44,7 @@ public:
     virtual bool        Test( SvTokenStream & rInStm ) override;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
-    virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
-                                SvIdlDataBase& );
+    virtual void        Insert( SvSlotElementList& );
 };
 
 enum MetaTypeType { Method, Struct, Base, Enum, Interface, Shell };

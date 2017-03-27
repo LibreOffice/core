@@ -31,7 +31,6 @@ public:
     SvIdentifier     aGroupId;
     SvIdentifier     aExecMethod;
     SvIdentifier     aStateMethod;
-    SvBOOL           aPseudoSlots;
 
     SvBOOL           aToggle;
     SvBOOL           aAutoUpdate;
@@ -48,12 +47,9 @@ public:
     SvBOOL           aAccelConfig;
     SvBOOL           aFastCall;
     SvBOOL           aContainer;
-    SvIdentifier     aPseudoPrefix;
     OString          aDisableFlags;
-    SvMetaSlot*      pLinkedSlot;
     SvMetaSlot*      pNextSlot;
     sal_uLong        nListPos;
-    SvMetaEnumValue* pEnumValue;
     SvBOOL           aReadOnlyDoc;
     SvBOOL           aExport;
 
@@ -63,7 +59,6 @@ public:
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm );
 
-    void            SetEnumValue(SvMetaEnumValue *p) { pEnumValue = p; }
     OString         GetMangleName() const;
     bool            IsVariable() const;
     bool            IsMethod() const;
@@ -97,7 +92,6 @@ public:
     const OString&      GetExecMethod() const;
     const OString&      GetStateMethod() const;
     const OString&      GetDisableFlags() const;
-    bool                GetPseudoSlots() const;
     bool                GetToggle() const;
     bool                GetAutoUpdate() const;
 
@@ -108,7 +102,6 @@ public:
     bool                GetNoRecord() const;
     bool                GetRecordAbsolute() const;
 
-    const OString&      GetPseudoPrefix() const;
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
     bool                GetAccelConfig() const;
@@ -123,14 +116,13 @@ public:
     void                SetListPos(sal_uLong n)
                         { nListPos = n; }
     void                ResetSlotPointer()
-                        { pNextSlot = pLinkedSlot = nullptr; }
+                        { pNextSlot = nullptr; }
 
     virtual bool        Test( SvTokenStream & rInStm ) override;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm ) override;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-    virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
-                                SvIdlDataBase& ) override;
+    virtual void        Insert( SvSlotElementList& ) override;
     void                WriteSlotStubs( const OString& rShellName,
                                     ByteStringList & rList,
                                     SvStream & rOutStm );

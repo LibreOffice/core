@@ -382,7 +382,6 @@ bool SvIdlParser::ReadSlot(SvMetaSlot& rSlot)
 void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
 {
     bool bOk = false;
-    bOk |= ReadIfBoolAttribute(rSlot.aPseudoSlots, SvHash_PseudoSlots() );
     bOk |= ReadIfIdAttribute(rSlot.aGroupId, SvHash_GroupId() );
     bOk |= ReadIfIdAttribute(rSlot.aExecMethod, SvHash_ExecMethod() );
     bOk |= ReadIfIdAttribute(rSlot.aStateMethod, SvHash_StateMethod() );
@@ -417,7 +416,6 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
         bOk = true;
     }
 
-    bOk |= ReadIfIdAttribute(rSlot.aPseudoPrefix, SvHash_PseudoPrefix() );
     bOk |= ReadIfBoolAttribute(rSlot.aMenuConfig, SvHash_MenuConfig() );
     bOk |= ReadIfBoolAttribute(rSlot.aToolBoxConfig, SvHash_ToolBoxConfig() );
     bOk |= ReadIfBoolAttribute(rSlot.aAccelConfig, SvHash_AccelConfig() );
