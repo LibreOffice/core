@@ -288,9 +288,9 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     return rIStm.good();
 }
 
-bool ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, bool bQuad )
+bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
 {
-    const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
+    const sal_uInt16    nColors = rPal.GetEntryCount();
     const sal_uLong     nPalSize = nColors * ( bQuad ? 4UL : 3UL );
     BitmapColor     aPalColor;
 
@@ -310,7 +310,7 @@ bool ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, bool bQuad )
         if( bQuad )
             pTmpEntry++;
 
-        rAcc.SetPaletteColor( i, aPalColor );
+        rPal[i] = aPalColor;
     }
 
     return( rIStm.GetError() == 0UL );
@@ -935,8 +935,9 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
         // read palette
         if (nColors)
         {
-            pAcc->SetPaletteEntryCount(nColors);
-            ImplReadDIBPalette(*pIStm, *pAcc, aHeader.nSize != DIBCOREHEADERSIZE);
+            BitmapPalette aPalette(nColors);
+            ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
+            pAcc->SetPalette(aPalette);
         }
 
         // read bits
