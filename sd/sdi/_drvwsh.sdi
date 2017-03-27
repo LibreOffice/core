@@ -402,11 +402,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_INSERT_IMAGE // ole : yes, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_INSERT_MATH // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;

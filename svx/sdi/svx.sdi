@@ -488,25 +488,6 @@ SfxBoolItem Bezier_Unfilled SID_DRAW_BEZIER_NOFILL
 ]
 
 
-SfxBoolItem BezierAppend SID_BEZIER_APPEND
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_DRAWING;
-]
-
-
 SfxStringItem BezierClose SID_BEZIER_CLOSE
 
 [
@@ -2149,24 +2130,6 @@ SfxBoolItem ConvertToNavigationBar SID_FM_CONVERTTO_NAVIGATIONBAR
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
-]
-
-
-SfxVoidItem CountAll SID_FM_COUNTALL
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TABLE;
 ]
 
 
@@ -4710,25 +4673,6 @@ SfxBoolItem InsertGraphic SID_INSERT_GRAPHIC
 ]
 
 
-SfxVoidItem InsertImage SID_INSERT_IMAGE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-
 SfxVoidItem InsertMath SID_INSERT_MATH
 ()
 [
@@ -5675,24 +5619,6 @@ SfxVoidItem Merge SID_POLY_MERGE
 ]
 
 
-SfxVoidItem NewJavaModule SID_BASICIDE_NEWJAVAMODULE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
 
 SfxBoolItem NewRecord SID_FM_RECORD_NEW
 ()
@@ -6386,25 +6312,6 @@ SfxVoidItem Pie_Unfilled SID_DRAW_PIE_NOFILL
 ]
 
 
-SfxVoidItem PolyFormen SID_POLY_FORMEN
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
-
 SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
 
 [
@@ -6475,25 +6382,6 @@ SfxPointItem Position SID_ATTR_POSITION
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
-]
-
-
-SfxBoolItem Preview SID_INSERT_PREVIEW
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
 ]
 
 
@@ -7012,24 +6900,6 @@ SfxVoidItem RefreshFormControl SID_FM_REFRESH_FORM_CONTROL
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TABLE;
-]
-
-
-SfxVoidItem RemoveFilter SID_FM_FILTER_REMOVE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_TABLE;
 ]
@@ -7816,24 +7686,6 @@ SfxBoolItem ShowRuler SID_RULER
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
-]
-
-
-SfxVoidItem SimEditOptions SID_SIM_EDITOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
 ]
 
 
@@ -8682,25 +8534,6 @@ SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
-]
-
-
-SfxBoolItem URLButton SID_INSERT_URLBUTTON
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
 ]
 
 
@@ -11303,25 +11136,6 @@ SvxZoomSliderItem ZoomSlider SID_ATTR_ZOOMSLIDER
         MenuConfig = FALSE,
         ToolBoxConfig = FALSE,
         GroupId = GID_VIEW;
-]
-
-
- SfxStringListItem FontNameStringList SID_FONTNAMELIST
- [
-     // flags:
-     AutoUpdate = FALSE,
-     FastCall = FALSE,
-     ReadOnlyDoc = TRUE,
-     Toggle = FALSE,
-     Container = FALSE,
-     RecordAbsolute = FALSE,
-     RecordPerSet;
-
-     // config:
-     AccelConfig = FALSE,
-     MenuConfig = FALSE,
-     ToolBoxConfig = FALSE,
-     GroupId = GID_DOCUMENT;
 ]
 
 
