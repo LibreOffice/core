@@ -414,7 +414,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             SfxItemSet aTempSet(*pOutSet);
                             static_cast<SdStyleSheet*>(pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                            const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>(XATTR_FILLBACKGROUND);
+                            const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(aTempSet.GetItem(XATTR_FILLBACKGROUND));
                             if( pBrushItem )
                             {
                                SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
