@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
@@ -586,7 +587,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
         const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
         if (pData)
         {
-            nMode = sal::static_int_cast<sal_uInt16>( pData->GetOperation() );
+            nMode = pData->GetOperation();
             aSrcPos = pData->GetValidSrcPos();  // valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
@@ -622,7 +623,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, meGrammar2 );
 
     ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
-                                                   (ScConditionMode)nMode,
+                                                   nMode,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
                                                    maExprNmsp1, maExprNmsp2,
                                                    eGrammar1, eGrammar2 );
@@ -687,25 +688,25 @@ ScTableValidationObj::~ScTableValidationObj()
 sheet::ConditionOperator SAL_CALL ScTableValidationObj::getOperator()
 {
     SolarMutexGuard aGuard;
-    return lcl_ConditionModeToOperator( (ScConditionMode)nMode );
+    return lcl_ConditionModeToOperator( nMode );
 }
 
 void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOperator )
 {
     SolarMutexGuard aGuard;
-    nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToMode( nOperator ) );
+    nMode = lcl_ConditionOperatorToMode( nOperator );
 }
 
 sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
 {
     SolarMutexGuard aGuard;
-    return lcl_ConditionModeToOperatorNew( (ScConditionMode)nMode );
+    return lcl_ConditionModeToOperatorNew( nMode );
 }
 
 void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
-    nMode = sal::static_int_cast<sal_uInt16>( ScConditionEntry::GetModeFromApi( nOperator ) );
+    nMode = ScConditionEntry::GetModeFromApi( nOperator );
 }
 
 OUString SAL_CALL ScTableValidationObj::getFormula1()
