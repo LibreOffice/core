@@ -32,6 +32,7 @@ class PDFDocument;
 class PDFDictionaryElement;
 class PDFArrayElement;
 class PDFStreamElement;
+class PDFNumberElement;
 
 /// A byte range in a PDF file.
 class VCL_DLLPUBLIC PDFElement
@@ -54,6 +55,10 @@ class VCL_DLLPUBLIC PDFObjectElement : public PDFElement
     /// Length of the dictionary buffer till (before) the '>>' token.
     sal_uInt64 m_nDictionaryLength;
     PDFDictionaryElement* m_pDictionaryElement;
+    /// Position after the '[' token, if m_pArrayElement is set.
+    sal_uInt64 m_nArrayOffset;
+    /// Length of the array buffer till (before) the ']' token.
+    sal_uInt64 m_nArrayLength;
     /// The contained direct array, if any.
     PDFArrayElement* m_pArrayElement;
     /// The stream of this object, used when this is an object stream.
@@ -83,6 +88,10 @@ public:
     void SetStream(PDFStreamElement* pStreamElement);
     /// Access to the stream of the object, if it has any.
     PDFStreamElement* GetStream() const;
+    void SetArrayOffset(sal_uInt64 nArrayOffset);
+    sal_uInt64 GetArrayOffset();
+    void SetArrayLength(sal_uInt64 nArrayLength);
+    sal_uInt64 GetArrayLength();
     PDFArrayElement* GetArray() const;
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
@@ -113,9 +122,11 @@ class VCL_DLLPUBLIC PDFReferenceElement : public PDFElement
     int m_fGenerationValue;
     /// Location after the 'R' token.
     sal_uInt64 m_nOffset = 0;
+    /// The element providing the object number.
+    PDFNumberElement& m_rObject;
 
 public:
-    PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue);
+    PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement& rGeneration);
     bool Read(SvStream& rStream) override;
     /// Assuming the reference points to a number object, return its value.
     double LookupNumber(SvStream& rStream) const;
@@ -124,6 +135,7 @@ public:
     int GetObjectValue() const;
     int GetGenerationValue() const;
     sal_uInt64 GetOffset() const;
+    PDFNumberElement& GetObjectElement() const;
 };
 
 /// Stream object: a byte array with a known length.
