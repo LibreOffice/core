@@ -3579,7 +3579,7 @@ void GtkSalFrame::IMHandler::createIMContext()
                           G_CALLBACK (signalIMPreeditEnd), this );
 
         GetGenericData()->ErrorTrapPush();
-        gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
+        gtk_im_context_set_client_window(m_pIMContext, widget_get_window(m_pFrame->getMouseEventWidget()));
         gtk_im_context_focus_in( m_pIMContext );
         GetGenericData()->ErrorTrapPop();
         m_bFocused = true;
