@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -82,6 +84,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
     private String newDocumentType = null;
+
+    BottomSheetBehavior bottomToolbarSheetBehavior;
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
@@ -155,7 +159,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
-                    Log.e(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
+                    Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                     toolbarTop.setTitle(mInputFile.getName());
                 } else {
                     // TODO: can't open the file
@@ -163,7 +167,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
-                Log.e(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
+                Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
                 toolbarTop.setTitle(mInputFile.getName());
                 // Gather data to rebuild IFile object later
                 providerId = getIntent().getIntExtra(
@@ -229,6 +233,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         spec.setContent(R.id.tab_insert);
         spec.setIndicator("Insert");
         host.addTab(spec);
+
+        LinearLayout bottomToolbarLayout = (LinearLayout) findViewById(R.id.toolbar_bottom);
+        bottomToolbarSheetBehavior = BottomSheetBehavior.from(bottomToolbarLayout);
+        bottomToolbarSheetBehavior.setHideable(true);
     }
 
     private void openSelectPathIntent() {
@@ -505,8 +513,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
      * Show software keyboard.
      * Force the request on main thread.
      */
-
-
     public void showSoftKeyboard() {
 
         LOKitShell.getMainHandler().post(new Runnable() {
@@ -570,7 +576,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                findViewById(R.id.toolbar_bottom).setVisibility(View.VISIBLE);
+                bottomToolbarSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
     }
@@ -579,8 +585,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                findViewById(R.id.toolbar_bottom).setVisibility(View.GONE);
-                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+                bottomToolbarSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                 isFormattingToolbarOpen=false;
                 isSearchToolbarOpen=false;
@@ -592,12 +597,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(isFormattingToolbarOpen == true){
+                if (isFormattingToolbarOpen) {
                     hideBottomToolbar();
-                }else{
+                } else {
                     showBottomToolbar();
                     findViewById(R.id.formatting_toolbar).setVisibility(View.VISIBLE);
-                    findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                     hideSoftKeyboardDirect();
                     isSearchToolbarOpen=false;
                     isFormattingToolbarOpen=true;
@@ -612,7 +616,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 hideBottomToolbar();
-                findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
             }
         });
     }
@@ -621,9 +624,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(isSearchToolbarOpen==true){
-                    hideBottomToolbar();
-                }else{
+                if (isSearchToolbarOpen) {
+                    hideSearchToolbar();
+                } else {
                     showBottomToolbar();
                     findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
                     findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
@@ -640,7 +643,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 hideBottomToolbar();
-                findViewById(R.id.search_toolbar).setVisibility(View.GONE);
             }
         });
     }
@@ -687,6 +689,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
     public void openDrawer() {
         mDrawerLayout.openDrawer(mDrawerList);
+        hideBottomToolbar();
+        hideFormattingToolbar();
     }
 
     public void showAbout() {
