@@ -897,15 +897,6 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
     }
 
     const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
-    BitmapPalette aPalette;
-    Bitmap aNewBmp(aSizePixel, nBitCount, &aPalette);
-    Bitmap::ScopedWriteAccess pAcc(aNewBmp);
-    if (!pAcc)
-        return false;
-    if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
-    {
-        return false;
-    }
     AlphaMask aNewBmpAlpha;
     AlphaMask::ScopedWriteAccess pAccAlpha;
     bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
@@ -933,15 +924,24 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
     }
 
     // read palette
+    BitmapPalette aPalette;
     if (nColors)
     {
         aPalette.SetEntryCount(nColors);
         ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
-        pAcc->SetPalette(aPalette);
     }
 
     if (pIStm->GetError())
         return false;
+
+    Bitmap aNewBmp(aSizePixel, nBitCount, &aPalette);
+    Bitmap::ScopedWriteAccess pAcc(aNewBmp);
+    if (!pAcc)
+        return false;
+    if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+    {
+        return false;
+    }
 
     if(nOffset)
     {
