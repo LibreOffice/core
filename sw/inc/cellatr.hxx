@@ -75,7 +75,7 @@ public:
 
 class SW_DLLPUBLIC SwTableBoxValue : public SfxPoolItem
 {
-    double nValue;
+    double m_nValue;
 public:
     SwTableBoxValue();
     SwTableBoxValue( const double aVal );
@@ -86,11 +86,11 @@ public:
 
     SwTableBoxValue& operator=( const SwTableBoxValue& rCmp )
     {
-        nValue = rCmp.nValue;
+        m_nValue = rCmp.m_nValue;
         return *this;
     }
 
-    double GetValue() const                     { return nValue; }
+    double GetValue() const                     { return m_nValue; }
 };
 
 inline const SwTableBoxNumFormat      &SwAttrSet::GetTableBoxNumFormat(bool bInP) const
