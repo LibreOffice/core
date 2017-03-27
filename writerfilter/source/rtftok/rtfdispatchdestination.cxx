@@ -73,15 +73,15 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if ('\\' == ch)
                     bInKeyword = true;
                 if (!bInKeyword
-                    && rtl::isAsciiAlphanumeric(static_cast<unsigned char>(ch)))
+                        && rtl::isAsciiAlphanumeric(static_cast<unsigned char>(ch)))
                     aBuf.append(ch);
                 else if (bInKeyword
                          && rtl::isAsciiWhiteSpace(
                              static_cast<unsigned char>(ch)))
                     bInKeyword = false;
                 if (!aBuf.isEmpty()
-                    && !rtl::isAsciiAlphanumeric(
-                        static_cast<unsigned char>(ch)))
+                        && !rtl::isAsciiAlphanumeric(
+                            static_cast<unsigned char>(ch)))
                     bFoundCode = true;
             }
 

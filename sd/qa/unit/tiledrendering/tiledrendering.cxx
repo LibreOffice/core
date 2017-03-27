@@ -54,7 +54,8 @@ static const char* const DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
-    os << (sal_Int32)id; return os;
+    os << (sal_Int32)id;
+    return os;
 }
 
 class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools
