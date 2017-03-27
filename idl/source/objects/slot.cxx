@@ -480,7 +480,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 
             if ( m == rBase.GetSlotList().size() )
             {
-                OSL_FAIL("Invalid EnumSlot!");
+                OSL_FAIL(OString("Invalid EnumSlot! " + aSId).getStr());
                 xEnumSlot = new SvMetaSlot( *this );
                 sal_uLong nValue;
                 if ( rBase.FindId(aSId , &nValue) )
