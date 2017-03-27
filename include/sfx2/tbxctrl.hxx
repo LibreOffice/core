@@ -157,9 +157,6 @@ protected:
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
 
-    // helper methods
-    bool    hasBigImages() const;
-
 public:
     // XComponent
     virtual void SAL_CALL dispose() override;

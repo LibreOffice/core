@@ -336,6 +336,7 @@ public:
     // sets a fixed button size (small, large or dontcare (==autosize))
     void                SetToolboxButtonSize( ToolBoxButtonSize eSize );
     ToolBoxButtonSize   GetToolboxButtonSize() const;
+    vcl::ImageType      GetImageSize() const;
 
     void                SetAlign( WindowAlign eNewAlign = WindowAlign::Top );
     WindowAlign         GetAlign() const { return meAlign; }

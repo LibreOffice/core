@@ -346,7 +346,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/msg.hxx>

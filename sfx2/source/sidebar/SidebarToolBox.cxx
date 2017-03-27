@@ -255,13 +255,6 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
     if (mbUseDefaultButtonSize)
         SetToolboxButtonSize(GetDefaultButtonSize());
 
-    vcl::ImageType eImageType = vcl::ImageType::Size16;
-    ToolBoxButtonSize eSize = GetToolboxButtonSize();
-    if (eSize == ToolBoxButtonSize::Large)
-        eImageType = vcl::ImageType::Size26;
-    else if (eSize == ToolBoxButtonSize::Size32)
-        eImageType = vcl::ImageType::Size32;
-
     for (auto const& it : maControllers)
     {
         Reference<frame::XSubToolbarController> xController(it.second, UNO_QUERY);
@@ -275,7 +268,7 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
         {
             OUString aCommandURL = GetItemCommand(it.first);
             css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, eImageType);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
             SetItemImage(it.first, aImage);
         }
     }

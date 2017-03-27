@@ -37,7 +37,6 @@
 #include "fmhelp.hrc"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/imagemgr.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

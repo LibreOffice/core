@@ -21,7 +21,6 @@
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/layout.hxx>
 #include <comphelper/processfactory.hxx>

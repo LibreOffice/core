@@ -37,7 +37,6 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>

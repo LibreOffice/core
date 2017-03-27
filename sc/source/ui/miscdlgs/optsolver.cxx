@@ -20,9 +20,9 @@
 #include "rangelst.hxx"
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
@@ -349,13 +349,8 @@ void ScOptSolverDlg::dispose()
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 {
-    // Get the "Delete Rows" commandimagelist images from sfx instead of
-    // adding a second copy to sc (see ScTbxInsertCtrl::StateChanged)
-
-    OUString aSlotURL( "slot:" );
-    aSlotURL += OUString::number( SID_DEL_ROWS );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    Image aDelNm = ::GetImage( xFrame, aSlotURL, false );
+    Image aDelNm = vcl::CommandInfoProvider::GetImageForCommand(".uno:DeleteRows", xFrame);
 
     for (VclPtr<PushButton> & pButton : mpDelButton)
     {

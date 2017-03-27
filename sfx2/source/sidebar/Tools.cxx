@@ -21,9 +21,9 @@
 
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <sfx2/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -55,23 +55,9 @@ Image Tools::GetImage (
 {
     if (rsURL.getLength() > 0)
     {
-        const sal_Char  sUnoCommandPrefix[] = ".uno:";
-        const sal_Char  sCommandImagePrefix[] = "private:commandimage/";
-        const sal_Int32 nCommandImagePrefixLength = strlen(sCommandImagePrefix);
-
-        if (rsURL.startsWith(sUnoCommandPrefix))
+        if (rsURL.startsWith(".uno:"))
         {
-            const Image aPanelImage (::GetImage(rxFrame, rsURL, false));
-            return aPanelImage;
-        }
-        else if (rsURL.startsWith(sCommandImagePrefix))
-        {
-            ::rtl::OUStringBuffer aCommandName;
-            aCommandName.append(sUnoCommandPrefix);
-            aCommandName.append(rsURL.copy(nCommandImagePrefixLength));
-            const ::rtl::OUString sCommandName (aCommandName.makeStringAndClear());
-
-            const Image aPanelImage (::GetImage(rxFrame, sCommandName, false));
+            const Image aPanelImage(vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame));
             return aPanelImage;
         }
         else

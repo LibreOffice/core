@@ -100,7 +100,6 @@
 #include <rtl/strbuf.hxx>
 #include <memory>
 #include <framework/sfxhelperfunctions.hxx>
-#include <sfx2/imagemgr.hxx>
 #include "fwkhelper.hxx"
 
 using namespace ::com::sun::star;

@@ -19,6 +19,7 @@
 
 #include <memory>
 
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
@@ -32,7 +33,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <officecfg/Office/Common.hxx>
 
 #include <sfx2/sfxhelp.hxx>
@@ -2154,24 +2154,6 @@ VclPtr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
     return mxMenu;
 }
 
-static OUString lcl_GetLabel(uno::Any& rAny)
-{
-    OUString sRet;
-    uno::Sequence< beans::PropertyValue >aPropSeq;
-    if ( rAny >>= aPropSeq )
-    {
-        for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-        {
-            if ( aPropSeq[i].Name == "Label" )
-            {
-                aPropSeq[i].Value >>= sRet;
-                break;
-            }
-        }
-    }
-    return sRet;
-}
-
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
     : SfxCommonTemplateDialog_Impl(pB, pDlgWindow)
     , m_pFloat(pDlgWindow)
@@ -2414,45 +2396,25 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
     {
         //create a popup menu in Writer
         ScopedVclPtrInstance<PopupMenu> pMenu;
-        uno::Reference< container::XNameAccess > xNameAccess(
-                frame::theUICommandDescription::get(
-                    ::comphelper::getProcessComponentContext()) );
-        uno::Reference< container::XNameAccess > xUICommands;
         OUString sTextDoc("com.sun.star.text.TextDocument");
-        if(xNameAccess->hasByName(sTextDoc))
-        {
-            uno::Any a = xNameAccess->getByName( sTextDoc );
-            a >>= xUICommands;
-        }
-        if(!xUICommands.is())
-            return;
-        try
-        {
-            uno::Any aCommand = xUICommands->getByName(".uno:StyleNewByExample");
-            OUString sLabel = lcl_GetLabel( aCommand );
-            pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
-            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
-            sLabel = lcl_GetLabel( aCommand );
+        OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleNewByExample", sTextDoc);
+        pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+        pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
-            pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
+        sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:StyleUpdateByExample", sTextDoc);
+        pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+        pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(".uno:LoadStyles");
-            sLabel = lcl_GetLabel( aCommand );
-            pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
-            pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
+        sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:LoadStyles", sTextDoc);
+        pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
+        pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
 
-            pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
-            pMenu->Execute( pBox,
-                            pBox->GetItemRect(nEntry),
-                            PopupMenuFlags::ExecuteDown );
-            pBox->EndSelection();
-        }
-        catch (const uno::Exception&)
-        {
-        }
+        pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
+        pMenu->Execute( pBox,
+                        pBox->GetItemRect(nEntry),
+                        PopupMenuFlags::ExecuteDown );
+        pBox->EndSelection();
         pBox->Invalidate();
     }
 }

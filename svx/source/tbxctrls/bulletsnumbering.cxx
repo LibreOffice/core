@@ -12,12 +12,12 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/numvset.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
@@ -120,7 +120,8 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         AddStatusListener( ".uno:CurrentOutlineType" );
     }
 
-    appendEntry( 1, aMoreItemText, ::GetImage( mrController.getFrameInterface(), ".uno:OutlineBullet", false ) );
+    appendEntry( 1, aMoreItemText,
+        vcl::CommandInfoProvider::GetImageForCommand( ".uno:OutlineBullet", mrController.getFrameInterface() ) );
 
     SetOutputSizePixel( getMenuSize() );
     mpValueSet->SetSelectHdl( LINK( this, NumberingPopup, VSSelectValueSetHdl ) );

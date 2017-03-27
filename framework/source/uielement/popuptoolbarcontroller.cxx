@@ -56,16 +56,6 @@ using namespace framework;
 namespace
 {
 
-vcl::ImageType getImageType(ToolBoxButtonSize eSize)
-{
-    vcl::ImageType eImageType = vcl::ImageType::Size16;
-    if (eSize == ToolBoxButtonSize::Large)
-        eImageType = vcl::ImageType::Size26;
-    else if (eSize == ToolBoxButtonSize::Size32)
-        eImageType = vcl::ImageType::Size32;
-    return eImageType;
-}
-
 typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
                                     css::lang::XServiceInfo >
                 ToolBarBase;
@@ -383,9 +373,7 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
             pToolBox->SetItemText( nId, vcl::CommandInfoProvider::GetLabelForCommand( rCommand, m_sModuleName ) );
             pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand( rCommand, m_xFrame ) );
 
-            vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());
-
-            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, eImageType);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, pToolBox->GetImageSize());
             if ( !!aImage )
                 pToolBox->SetItemImage( nId, aImage );
         }
@@ -497,7 +485,7 @@ void SaveToolbarController::updateImage()
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());
+    vcl::ImageType eImageType = pToolBox->GetImageSize();
 
     Image aImage;
 

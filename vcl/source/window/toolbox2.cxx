@@ -434,15 +434,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
     OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(rCommand, aModuleName));
     OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
-
-    vcl::ImageType eImageType = vcl::ImageType::Size16;
-
-    if (GetToolboxButtonSize() == ToolBoxButtonSize::Large)
-        eImageType = vcl::ImageType::Size26;
-    else if (GetToolboxButtonSize() == ToolBoxButtonSize::Size32)
-        eImageType = vcl::ImageType::Size32;
-
-    Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame, eImageType));
+    Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame, GetImageSize()));
 
     sal_uInt16 nItemId = GetItemCount() + 1;
         //TODO: ImplToolItems::size_type -> sal_uInt16!
@@ -631,6 +623,17 @@ void ToolBox::SetToolboxButtonSize( ToolBoxButtonSize eSize )
 ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 {
     return mpData->meButtonSize;
+}
+
+ImageType ToolBox::GetImageSize() const
+{
+    ImageType eImageType = ImageType::Size16;
+    if (mpData->meButtonSize == ToolBoxButtonSize::Large)
+        eImageType = ImageType::Size26;
+    else if (mpData->meButtonSize == ToolBoxButtonSize::Size32)
+        eImageType = ImageType::Size32;
+
+    return eImageType;
 }
 
 /*static*/ Size ToolBox::GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize)

@@ -41,7 +41,6 @@
 #include <svl/stritem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
@@ -2915,7 +2914,7 @@ sal_Bool SvxColorToolBoxControl::opensSubToolbar()
 
 void SvxColorToolBoxControl::updateImage()
 {
-    Image aImage = GetImage( m_xFrame, m_aCommandURL, hasBigImages() );
+    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(m_aCommandURL, m_xFrame, GetToolBox().GetImageSize());
     if ( !!aImage )
     {
         GetToolBox().SetItemImage( GetId(), aImage );

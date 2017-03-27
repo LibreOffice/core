@@ -58,9 +58,9 @@
 #include <linguistic/misc.hxx>
 #include <osl/file.hxx>
 #include <rtl/string.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svl/itemset.hxx>
@@ -77,7 +77,6 @@
 
 #include <map>
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -86,7 +85,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 
 using namespace ::com::sun::star;
 
@@ -216,45 +214,6 @@ void SwSpellPopup::fillLangPopupMenu(
     pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )) );
 }
 
-OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
-{
-    OUString aLabel;
-    if ( !aCmdURL.isEmpty() )
-    {
-        try
-        {
-            uno::Reference< container::XNameAccess > const xNameAccess(
-                    frame::theUICommandDescription::get(
-                        ::comphelper::getProcessComponentContext() ),
-                    uno::UNO_QUERY_THROW );
-            uno::Reference< container::XNameAccess > xUICommandLabels;
-            uno::Any a = xNameAccess->getByName( "com.sun.star.text.TextDocument" );
-            uno::Reference< container::XNameAccess > xUICommands;
-            a >>= xUICommandLabels;
-            OUString aStr;
-            uno::Sequence< beans::PropertyValue > aPropSeq;
-            a = xUICommandLabels->getByName( aCmdURL );
-            if ( a >>= aPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                {
-                    if ( aPropSeq[i].Name == "Label" )
-                    {
-                        aPropSeq[i].Value >>= aStr;
-                        break;
-                    }
-                }
-            }
-            aLabel = aStr;
-        }
-        catch (const uno::Exception&)
-        {
-        }
-    }
-
-    return aLabel;
-}
-
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
@@ -331,10 +290,14 @@ SwSpellPopup::SwSpellPopup(
         }
     }
 
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+
     OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
-    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
-    m_xPopupMenu->SetItemText(m_nSpellDialogId, aSpellingAndGrammar);
-    m_xPopupMenu->SetItemText(m_nCorrectDialogId, RetrieveLabelFromCommand(".uno:AutoCorrectDlg"));
+    m_xPopupMenu->SetItemText(m_nSpellDialogId,
+        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
+    m_xPopupMenu->SetItemText(m_nCorrectDialogId,
+        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:AutoCorrectDlg", aModuleName));
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     m_xPopupMenu->SetHelpId(MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
@@ -448,11 +411,8 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->EnableItem(m_nLangParaMenuId);
 
     if (bUseImagesInMenus)
-    {
-        uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", false );
-        m_xPopupMenu->SetItemImage(m_nSpellDialogId, rImg);
-    }
+        m_xPopupMenu->SetItemImage(m_nSpellDialogId,
+            vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries( true, true );
@@ -548,9 +508,12 @@ SwSpellPopup::SwSpellPopup(
         m_xPopupMenu->InsertSeparator(OString(), nPos++);
     }
 
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+
     OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
-    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
-    m_xPopupMenu->SetItemText(m_nSpellDialogId, aSpellingAndGrammar);
+    m_xPopupMenu->SetItemText(m_nSpellDialogId,
+        vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
     m_xPopupMenu->InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     m_xPopupMenu->SetHelpId(MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
@@ -610,11 +573,8 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->EnableItem(m_nLangParaMenuId);
 
     if (bUseImagesInMenus)
-    {
-        uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", false );
-        m_xPopupMenu->SetItemImage(m_nSpellDialogId, rImg);
-    }
+        m_xPopupMenu->SetItemImage(m_nSpellDialogId,
+            vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
 
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries(true, true);

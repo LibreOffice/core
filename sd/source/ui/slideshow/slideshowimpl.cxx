@@ -40,7 +40,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <sfx2/infobar.hxx>
-#include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
@@ -65,6 +64,7 @@
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include <vcl/canvastools.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 
 #include "comphelper/anytostring.hxx"
@@ -2004,13 +2004,13 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         Reference< css::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage(pMenu->GetItemId("next"), GetImage(xFrame, "slot:10617" , false));
-            pMenu->SetItemImage(pMenu->GetItemId("prev"), GetImage(xFrame, "slot:10618" , false));
+            pMenu->SetItemImage(pMenu->GetItemId("next"), vcl::CommandInfoProvider::GetImageForCommand(".uno:NextRecord", xFrame));
+            pMenu->SetItemImage(pMenu->GetItemId("prev"), vcl::CommandInfoProvider::GetImageForCommand(".uno:PrevRecord", xFrame));
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage(pPageMenu->GetItemId("first"), GetImage(xFrame, "slot:10616" , false));
-                pPageMenu->SetItemImage(pPageMenu->GetItemId("last"), GetImage(xFrame, "slot:10619" , false));
+                pPageMenu->SetItemImage(pPageMenu->GetItemId("first"), vcl::CommandInfoProvider::GetImageForCommand(".uno:FirstRecord", xFrame));
+                pPageMenu->SetItemImage(pPageMenu->GetItemId("last"), vcl::CommandInfoProvider::GetImageForCommand(".uno:LastRecord", xFrame));
             }
         }
     }

@@ -9,6 +9,7 @@
       <object class="GtkMenuItem" id="reply">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:ReplyToAnnotation</property>
         <property name="label" translatable="yes">_Reply</property>
         <property name="use_underline">True</property>
       </object>
@@ -23,6 +24,7 @@
       <object class="GtkCheckMenuItem" id="bold">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Bold</property>
         <property name="label" translatable="yes">_Bold</property>
         <property name="use_underline">True</property>
       </object>
@@ -31,6 +33,7 @@
       <object class="GtkCheckMenuItem" id="italic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Italic</property>
         <property name="label" translatable="yes">_Italic</property>
         <property name="use_underline">True</property>
       </object>
@@ -39,6 +42,7 @@
       <object class="GtkCheckMenuItem" id="underline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Underline</property>
         <property name="label" translatable="yes">_Underline</property>
         <property name="use_underline">True</property>
       </object>
@@ -47,6 +51,7 @@
       <object class="GtkCheckMenuItem" id="strike">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Strikeout</property>
         <property name="label" translatable="yes">_Strikethrough</property>
         <property name="use_underline">True</property>
       </object>
@@ -61,6 +66,7 @@
       <object class="GtkMenuItem" id="copy">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Copy</property>
         <property name="label" translatable="yes">_Copy</property>
         <property name="use_underline">True</property>
       </object>
@@ -69,6 +75,7 @@
       <object class="GtkMenuItem" id="paste">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:Paste</property>
         <property name="label" translatable="yes">_Paste</property>
         <property name="use_underline">True</property>
       </object>
@@ -83,6 +90,7 @@
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteAnnotation</property>
         <property name="label" translatable="yes">_Delete Comment</property>
         <property name="use_underline">True</property>
       </object>
@@ -91,6 +99,7 @@
       <object class="GtkMenuItem" id="deleteby">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteAllAnnotationByAuthor</property>
         <property name="label" translatable="yes">Delete All Comments b_y %1</property>
         <property name="use_underline">True</property>
       </object>
@@ -99,6 +108,7 @@
       <object class="GtkMenuItem" id="deleteall">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:DeleteAllAnnotation</property>
         <property name="label" translatable="yes">Delete _All Comments</property>
         <property name="use_underline">True</property>
       </object>
