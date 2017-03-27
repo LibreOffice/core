@@ -897,8 +897,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
         }
 
         const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
-        BitmapPalette aDummyPal;
-        Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
+        BitmapPalette aPalette;
+        Bitmap aNewBmp(aSizePixel, nBitCount, &aPalette);
         Bitmap::ScopedWriteAccess pAcc(aNewBmp);
         if (!pAcc)
             return false;
@@ -935,7 +935,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
         // read palette
         if (nColors)
         {
-            BitmapPalette aPalette(nColors);
+            aPalette.SetEntryCount(nColors);
             ImplReadDIBPalette(*pIStm, aPalette, aHeader.nSize != DIBCOREHEADERSIZE);
             pAcc->SetPalette(aPalette);
         }
