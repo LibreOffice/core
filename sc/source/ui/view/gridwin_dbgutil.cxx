@@ -96,8 +96,8 @@ void ScGridWindow::dumpGraphicInformation()
         for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nPage);
-            sal_uInt16 nObjCount = pPage->GetObjCount();
-            for (sal_uInt16 nObj = 0; nObj < nObjCount; ++nObj)
+            size_t nObjCount = pPage->GetObjCount();
+            for (size_t nObj = 0; nObj < nObjCount; ++nObj)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
                 std::cout << "Graphic Object" << std::endl;
