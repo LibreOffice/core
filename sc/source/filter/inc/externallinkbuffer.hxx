@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXTERNALLINKBUFFER_HXX
 
+#include <ostream>
+
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <oox/helper/containerhelper.hxx>
 #include "defnamesbuffer.hxx"
@@ -160,11 +162,31 @@ enum class ExternalLinkType
     Self,          /// Link refers to the current workbook.
     Same,          /// Link refers to the current sheet.
     External,      /// Link refers to an external spreadsheet document.
+    // let's ignore xlStartup and xlAlternateStartup for now
+    PathMissing,   /// Just for round-tripping
     Library,       /// Link refers to an external add-in.
     DDE,           /// DDE link.
     OLE,           /// OLE link.
     Unknown        /// Unknown or unsupported link type.
 };
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const ExternalLinkType& type )
+{
+    switch (type)
+    {
+    case ExternalLinkType::Self: return stream << "self";
+    case ExternalLinkType::Same: return stream << "same";
+    case ExternalLinkType::External: return stream << "external";
+    case ExternalLinkType::PathMissing: return stream << "pathmissing";
+    case ExternalLinkType::Library: return stream << "library";
+    case ExternalLinkType::DDE: return stream << "dde";
+    case ExternalLinkType::OLE: return stream << "ole";
+    case ExternalLinkType::Unknown: return stream << "unknown";
+    default: return stream << static_cast<int>(type);
+    }
+}
 
 class ExternalLink : public WorkbookHelper
 {

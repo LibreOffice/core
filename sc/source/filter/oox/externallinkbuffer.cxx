@@ -360,8 +360,9 @@ void ExternalLink::importExternalBook( const Relations& rRelations, SequenceInpu
 void ExternalLink::importExtSheetNames( SequenceInputStream& rStrm )
 {
     // load external sheet names and create the sheet caches in the Calc document
-    OSL_ENSURE( (meLinkType == ExternalLinkType::External) || (meLinkType == ExternalLinkType::Library),
-        "ExternalLink::importExtSheetNames - invalid link type" );
+    SAL_WARN_IF( (meLinkType != ExternalLinkType::External) && (meLinkType != ExternalLinkType::Library),
+        "sc.filter",
+        "Invalid link type: " << meLinkType );
     if( meLinkType == ExternalLinkType::External )   // ignore sheets of external libraries
         for( sal_Int32 nSheet = 0, nCount = rStrm.readInt32(); !rStrm.isEof() && (nSheet < nCount); ++nSheet )
             insertExternalSheet( BiffHelper::readString( rStrm ) );
@@ -487,12 +488,16 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
         if( !maTargetUrl.isEmpty() )
             meLinkType = ExternalLinkType::External;
     }
+    else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlPathMissing" ) )
+    {
+        meLinkType = ExternalLinkType::PathMissing;
+    }
     else if( rTargetType == CREATE_MSOFFICE_RELATION_TYPE( "xlExternalLinkPath/xlLibrary" ) )
     {
         meLinkType = ExternalLinkType::Library;
         meFuncLibType = FunctionProvider::getFuncLibTypeFromLibraryName( rTargetUrl );
     }
-    OSL_ENSURE( meLinkType != ExternalLinkType::Unknown, "ExternalLink::setExternalTargetUrl - empty target URL or unknown target type" );
+    SAL_WARN_IF( meLinkType == ExternalLinkType::Unknown, "sc.filter", "Empty target URL or unknown target type, URL='" << rTargetUrl << "', type='" << rTargetType << "'" );
 
     // create the external document link API object that will contain the sheet caches
     if( meLinkType == ExternalLinkType::External ) try
