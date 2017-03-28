@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8604ce7e",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-28T11:36:43Z",
+      "side": 1,
+      "message": "It looks like items with id XATTR_FILLBACKGROUND\ncan be either of type\n  XFillBackgroundItem\nor\n  SvxBrushItem\n\nI strongly suspect that the old code here is wrong - it should probably not be casting the return from GetItem at all.\nThe old code probably works by accident.",
+      "revId": "21bf7e25aa185ff6e6086732f6387be19ca110a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
