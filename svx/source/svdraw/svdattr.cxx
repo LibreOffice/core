@@ -38,6 +38,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <i18nutil/unicode.hxx>
 #include <svl/solar.hrc>
 #include <tools/bigint.hxx>
@@ -319,6 +320,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
+    mppLocalPoolDefaults[SDRATTR_TABLE_TEXT_ROTATION - SDRATTR_START] = new SvxTextRotateItem(0, SDRATTR_TABLE_TEXT_ROTATION);
 
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;

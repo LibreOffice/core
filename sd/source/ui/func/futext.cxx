@@ -1055,7 +1055,9 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                 if( pTextObj )
                 {
                     OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
-                    if( ( pOPO && pOPO->IsVertical() ) || (nSlotId == SID_ATTR_CHAR_VERTICAL) || (nSlotId == SID_TEXT_FITTOSIZE_VERTICAL) )
+                    if( pOPO && pOPO->IsVertical() )
+                        pOutl->SetVertical( true, pOPO->IsTopToBottom());
+                    else if (nSlotId == SID_ATTR_CHAR_VERTICAL || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL)
                         pOutl->SetVertical( true );
 
                     if( pTextObj->getTextCount() > 1 )

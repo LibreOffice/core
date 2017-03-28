@@ -92,6 +92,7 @@ public:
     void testTdf62176();
     void testTransparentBackground();
     void testEmbeddedPdf();
+    void testTdf100926();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
+    CPPUNIT_TEST(testTdf100926);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -550,6 +552,35 @@ void SdExportTest::testEmbeddedPdf()
     CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
     xShell->DoClose();
 #endif
+}
+
+void SdExportTest::testTdf100926()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf100926_ODP.pptx"), PPTX);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT(pPage != nullptr);
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nRotation = 0;
+    uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(27000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9000), nRotation);
+
+    xCell.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RotateAngle") >>= nRotation;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);

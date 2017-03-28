@@ -51,6 +51,7 @@
 #include "svx/unoshape.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/boxitem.hxx"
+#include <editeng/charrotateitem.hxx>
 #include "svx/xflbstit.hxx"
 #include "svx/xflbmtit.hxx"
 #include <svx/svdpool.hxx>
@@ -89,6 +90,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER }, \
         { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER }, \
         { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER }, \
+        { OUString("RotateAngle"),                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 }, \
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -291,7 +293,6 @@ namespace sdr
 
                         OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
-
                         mxCell->SetOutlinerParaObject(pTemp);
                     }
 
@@ -314,8 +315,7 @@ namespace sdr
                 bool bVertical(css::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
 
                 sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
-                if( rObj.IsVerticalWriting() != bVertical )
-                    rObj.SetVerticalWriting(bVertical);
+                rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
@@ -332,6 +332,50 @@ namespace sdr
                     if( bOwnParaObj )
                         delete pParaObj;
                 }
+            }
+
+            if (pNewItem && (SDRATTR_TABLE_TEXT_ROTATION == nWhich))
+            {
+                const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
+
+                // Set a cell vertical property
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+
+                const bool bOwnParaObj = pParaObj != nullptr;
+
+                if (pParaObj == nullptr)
+                    pParaObj = mxCell->GetOutlinerParaObject();
+
+                if (pParaObj)
+                {
+                    pParaObj->SetVertical(pRotateItem->IsVertical(), pRotateItem->IsTopToBottom());
+
+                    if (bOwnParaObj)
+                        delete pParaObj;
+                }
+
+               // Change autogrow direction
+                SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+
+                // rescue object size
+                Rectangle aObjectRect = rObj.GetSnapRect();
+
+                const SfxItemSet& rSet = rObj.GetObjectItemSet();
+                bool bAutoGrowWidth = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+                bool bAutoGrowHeight = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+
+                // prepare ItemSet to set exchanged width and height items
+                SfxItemSet aNewSet(*rSet.GetPool(),
+                    SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                    0, 0);
+
+                aNewSet.Put(rSet);
+                aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
+                aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
+                rObj.SetObjectItemSet(aNewSet);
+
+                // restore object size
+                rObj.SetSnapRect(aObjectRect);
             }
 
             // call parent
@@ -1068,6 +1112,18 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
             return;
         }
+        case SDRATTR_TABLE_TEXT_ROTATION:
+        {
+            sal_Int32 nRotVal = 0;
+            if (!(rValue >>= nRotVal))
+                throw IllegalArgumentException();
+
+            if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
+                throw IllegalArgumentException();
+
+            mpProperties->SetObjectItem(SvxTextRotateItem(nRotVal/10, SDRATTR_TABLE_TEXT_ROTATION));
+            return;
+        }
         default:
         {
             SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
@@ -1182,6 +1238,11 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
             {
                 return Any(  BitmapMode_NO_REPEAT );
             }
+        }
+        case SDRATTR_TABLE_TEXT_ROTATION:
+        {
+            const SvxTextRotateItem& rTextRotate = static_cast<const SvxTextRotateItem&>(mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION));
+            return Any(sal_Int32(rTextRotate.GetValue() * 10));
         }
         default:
         {

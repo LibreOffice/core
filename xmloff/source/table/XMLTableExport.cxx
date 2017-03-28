@@ -44,6 +44,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltypes.hxx>
+#include "xmlsdtypes.hxx"
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/txtprmap.hxx>
@@ -62,6 +63,7 @@ using namespace ::com::sun::star::style;
 #define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
 #define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
 #define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
@@ -87,6 +89,17 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
     };
 
     return &aXMLRowProperties[0];
+}
+
+const XMLPropertyMapEntry* getCellPropertiesMap()
+{
+    static const XMLPropertyMapEntry aXMLCellProperties[] =
+    {
+        CELLMAP( "RotateAngle",     XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE,         XML_SD_TYPE_CELL_ROTATION_ANGLE,   0),
+        MAP_END
+    };
+
+    return &aXMLCellProperties[0];
 }
 
 class StringStatisticHelper
@@ -167,6 +180,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     {
         mxCellExportPropertySetMapper = xExportPropertyMapper;
         mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+        mxCellExportPropertySetMapper->ChainExportMapper(new SvXMLExportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef.get(), true)));
     }
 
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );

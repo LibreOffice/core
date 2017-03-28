@@ -1384,7 +1384,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
 
     if (pText && pText->GetOutlinerParaObject())
     {
-        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical()
+        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical() && pText->GetOutlinerParaObject()->IsTopToBottom()
             ? css::text::WritingMode_TB_RL
             : css::text::WritingMode_LR_TB,
             SDRATTR_TEXTDIRECTION);

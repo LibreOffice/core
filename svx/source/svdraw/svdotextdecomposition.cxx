@@ -759,6 +759,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
     const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
+    const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if((rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame()))
@@ -829,8 +830,9 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+    const double fStartInX(bVerticalWriting && bTopToBottom ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
+    aNewTransformA.translate(fStartInX, fStartInY);
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -922,6 +924,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
     const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bTopToBottom(rSdrBlockTextPrimitive.getOutlinerParaObject().IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(bIsCell)
@@ -1082,8 +1085,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // Translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
+    const double fStartInX(bVerticalWriting && bTopToBottom ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
+    const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
     basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
@@ -1162,10 +1166,14 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // needs to translate the text initially around object width to orient
     // it relative to the topper right instead of the topper left
     const bool bVertical(rSdrStretchTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bTopToBottom(rSdrStretchTextPrimitive.getOutlinerParaObject().IsTopToBottom());
 
     if(bVertical)
     {
-        aNewTransformA.translate(aScale.getX(), 0.0);
+        if(bTopToBottom)
+            aNewTransformA.translate(aScale.getX(), 0.0);
+        else
+            aNewTransformA.translate(0.0, aScale.getY());
     }
 
     // calculate global char stretching scale parameters. Use non-mirrored sizes
@@ -1517,6 +1525,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
 
     const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
+    const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(IsTextFrame())
@@ -1593,8 +1602,9 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+    const double fStartInX(bVerticalWriting && bTopToBottom ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
+    aNewTransformA.translate(fStartInX, fStartInY);
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.

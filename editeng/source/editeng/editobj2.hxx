@@ -182,6 +182,7 @@ private:
 
     bool                    bOwnerOfPool:1;
     bool                    bVertical:1;
+    bool                    bIsTopToBottomVert : 1;
     bool                    bStoreUnicodeStrings:1;
 
     bool ImpChangeStyleSheets( const OUString& rOldName, SfxStyleFamily eOldFamily,
@@ -204,8 +205,9 @@ public:
     void NormalizeString( svl::SharedStringPool& rPool );
     std::vector<svl::SharedString> GetSharedStrings() const;
 
-    bool                    IsVertical() const { return bVertical;}
-    void                    SetVertical( bool b );
+    bool                    IsVertical() const;
+    bool                    IsTopToBottom() const;
+    void                    SetVertical( bool bVert, bool bTopToBottom = true);
 
     SvtScriptType           GetScriptType() const { return nScriptType;}
     void                    SetScriptType( SvtScriptType nType );
