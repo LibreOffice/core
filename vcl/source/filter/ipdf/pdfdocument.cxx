@@ -876,6 +876,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
     bool bInStartXRef = false;
     // Dictionary depth, so we know when we're outside any dictionaries.
     int nDictionaryDepth = 0;
+    // Array depth, only the offset/length of the toplevel array is tracked.
+    int nArrayDepth = 0;
     // Last seen array token that's outside any dictionaries.
     PDFArrayElement* pArray = nullptr;
     while (true)
@@ -939,7 +941,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         {
             auto pArr = new PDFArrayElement();
             rElements.push_back(std::unique_ptr<PDFElement>(pArr));
-            if (nDictionaryDepth == 0)
+            if (nDictionaryDepth == 0 && nArrayDepth == 0)
             {
                 // The array is attached directly, inform the object.
                 pArray = pArr;
@@ -949,6 +951,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                     pObject->SetArrayOffset(rStream.Tell());
                 }
             }
+            ++nArrayDepth;
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
             {
@@ -962,7 +965,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
             pArray = nullptr;
             rStream.SeekRel(-1);
-            if (nDictionaryDepth == 0)
+            --nArrayDepth;
+            if (nDictionaryDepth == 0 && nArrayDepth == 0)
             {
                 if (pObject)
                 {
