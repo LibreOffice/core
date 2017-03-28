@@ -759,6 +759,10 @@ void TestBreakIterator::testWeak()
         {
             0x0001, 0x0002,
             0x0020, 0x00A0,
+            0x0300, 0x036F, //Combining Diacritical Marks
+            0x1AB0, 0x1AFF, //Combining Diacritical Marks Extended
+            0x1DC0, 0x1DFF, //Combining Diacritical Marks Supplement
+            0x20D0, 0x20FF, //Combining Diacritical Marks for Symbols
             0x2150, 0x215F, //Number Forms, fractions
             0x2160, 0x2180, //Number Forms, roman numerals
             0x2200, 0x22FF, //Mathematical Operators
