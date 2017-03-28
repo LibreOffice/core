@@ -371,6 +371,11 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     return false;
 }
 
+bool OpenGLSalBitmap::ScalingSupported() const
+{
+    return true;
+}
+
 bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     OpenGLVCLContextZone aContextZone;

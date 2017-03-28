@@ -57,6 +57,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
     virtual bool            GetSystemData( BitmapSystemData& rData ) override;
 
+    virtual bool            ScalingSupported() const override;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) override;
 };
