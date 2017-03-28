@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_a61712a2",
+        "filename": "vcl/inc/salbmp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-28T13:01:03Z",
+      "side": 1,
+      "message": "why not just make this default return false?",
+      "revId": "2717bc4ea96ceaad90ca32929efdac6c4f819205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
