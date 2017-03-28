@@ -77,7 +77,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
         GpgME::Key k = ctx->nextKey(err);
         if (err)
             break;
-        if (!k.isInvalid() && k.canEncrypt() && (k.ownerTrust() == GpgME::Key::Ultimate)) {
+        if (!k.isInvalid()) {
             xCert = new CertificateImpl();
             xCert->setCertificate(k);
             certsList.push_back(xCert);
