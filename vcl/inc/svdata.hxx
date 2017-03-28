@@ -102,6 +102,7 @@ typedef std::pair<VclPtr<vcl::Window>, ImplPostEventData *> ImplPostEventPair;
 
 struct ImplSVAppData
 {
+    ~ImplSVAppData();
     enum ImeStatusWindowMode
     {
         ImeStatusWindowMode_UNKNOWN,
@@ -182,6 +183,7 @@ struct ImplSVGDIData
 
 struct ImplSVWinData
 {
+    ~ImplSVWinData();
     VclPtr<vcl::Window>     mpFirstFrame;                   // First FrameWindow
     VclPtr<WorkWindow>      mpAppWin;                       // Application-Window
     VclPtr<vcl::Window>     mpFocusWin;                     // window, that has the focus
@@ -227,6 +229,7 @@ struct ImplSVCtrlData
 
 struct ImplSVHelpData
 {
+    ~ImplSVHelpData();
     bool                    mbContextHelp = false;          // is ContextHelp enabled
     bool                    mbExtHelp = false;              // is ExtendedHelp enabled
     bool                    mbExtHelpMode = false;          // is in ExtendedHelp Mode
@@ -308,6 +311,7 @@ struct BlendFrameCache
 
 struct ImplSVData
 {
+    ~ImplSVData();
     SalData*                mpSalData = nullptr;
     SalInstance*            mpDefInst = nullptr;            // Default SalInstance
     Application*            mpApp = nullptr;                // pApp
