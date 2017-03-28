@@ -35,7 +35,6 @@ struct SfxViewFrame_Impl
     OUString            aActualURL;
     SfxFrame&           rFrame;
     VclPtr<vcl::Window> pWindow;
-    SfxViewFrame*       pActiveChild;
     VclPtr<vcl::Window> pFocusWin;
     sal_uInt16          nDocViewNo;
     SfxInterfaceId      nCurViewId;
@@ -52,7 +51,6 @@ struct SfxViewFrame_Impl
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
         : rFrame(i_rFrame)
         , pWindow(nullptr)
-        , pActiveChild(nullptr)
         , pFocusWin(nullptr)
         , nDocViewNo(0)
         , nCurViewId(0)

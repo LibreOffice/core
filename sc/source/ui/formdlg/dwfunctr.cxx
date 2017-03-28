@@ -330,14 +330,11 @@ void ScFunctionWin::DoEnter()
                     for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {
-                        if (!pDesc->pDefArgFlags[nArg].bSuppress)
-                        {
-                            aArgStr += aArgSep;
-                            OUString sTmp = pDesc->maDefArgNames[nArg];
-                            sTmp = comphelper::string::strip(sTmp, ' ');
-                            sTmp = sTmp.replaceAll(" ", "_");
-                            aArgStr += sTmp;
-                        }
+                        aArgStr += aArgSep;
+                        OUString sTmp = pDesc->maDefArgNames[nArg];
+                        sTmp = comphelper::string::strip(sTmp, ' ');
+                        sTmp = sTmp.replaceAll(" ", "_");
+                        aArgStr += sTmp;
                     }
                 }
             }

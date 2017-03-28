@@ -134,7 +134,6 @@ struct ImplFrameData
     sal_uInt16          mnFirstMouseCode;       //< mouse code by mousebuttondown
     sal_uInt16          mnMouseCode;            //< mouse code
     MouseEventModifiers mnMouseMode;            //< mouse mode
-    MapUnit             meMapUnit;              //< last MapUnit for LogicUnitToPixel
     bool                mbHasFocus;             //< focus
     bool                mbInMouseMove;          //< is MouseMove on stack
     bool                mbMouseIn;              //> is Mouse inside the frame

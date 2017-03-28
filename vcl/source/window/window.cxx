@@ -803,7 +803,6 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     mnFirstMouseCode   = 0;
     mnMouseCode        = 0;
     mnMouseMode        = MouseEventModifiers::NONE;
-    meMapUnit          = MapUnit::MapPixel;
     mbHasFocus         = false;
     mbInMouseMove      = false;
     mbMouseIn          = false;

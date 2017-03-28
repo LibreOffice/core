@@ -476,7 +476,6 @@ public:
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
-    bool bSet;
 #if HAVE_FEATURE_OPENGL
     VclPtr<OpenGLWindow> mpOpenGLWindow;
 #endif

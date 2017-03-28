@@ -2059,7 +2059,6 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
             pImpl->nDocumentSignatureState = SignatureState::NOSIGNATURES;
             pImpl->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
             OSL_ENSURE( pImpl->nScriptingSignatureState != SignatureState::BROKEN, "The signature must not be broken at this place" );
-            pImpl->bSignatureErrorIsShown = false;
 
             // TODO/LATER: in future the medium must control own signature state, not the document
             pNewMed->SetCachedSignatureState_Impl( SignatureState::NOSIGNATURES ); // set the default value back

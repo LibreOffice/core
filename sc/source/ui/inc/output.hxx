@@ -179,7 +179,6 @@ private:
     SCROW nEditRow;
 
     bool bMetaFile;             // Output to metafile (not pixels!)
-    bool bSingleGrid;           // beim Gitter bChanged auswerten
 
     bool bPagebreakMode;        // Page break preview
     bool bSolidBackground;      // white instead of transparant

@@ -206,9 +206,8 @@ public:
     struct ParameterFlags
     {
         bool    bOptional   :1;     /**< Parameter is optional */
-        bool    bSuppress   :1;     /**< Suppress parameter in UI because not implemented yet */
 
-        ParameterFlags() : bOptional(false), bSuppress(false) {}
+        ParameterFlags() : bOptional(false) {}
     };
 
     OUString      *pFuncName;              /**< Function name */

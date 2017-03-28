@@ -93,7 +93,6 @@ struct sd::BluetoothServer::Impl {
     GMainContext *mpContext;
     DBusConnection *mpConnection;
     DBusObject *mpService;
-    volatile bool mbExitMainloop;
     enum BluezVersion { BLUEZ4, BLUEZ5, UNKNOWN };
     BluezVersion maBluezVersion;
 
@@ -101,7 +100,6 @@ struct sd::BluetoothServer::Impl {
         : mpContext( g_main_context_new() )
         , mpConnection( nullptr )
         , mpService( nullptr )
-        , mbExitMainloop( false )
         , maBluezVersion( UNKNOWN )
     { }
 
@@ -1204,7 +1202,7 @@ void SAL_CALL BluetoothServer::run()
 
         // TODO: exit on SD deinit
         // Probably best to do that in SdModule::~SdModule?
-        while (!mpImpl->mbExitMainloop)
+        while (true)
         {
             aDBusFD.revents = 0;
             g_main_context_iteration( mpImpl->mpContext, TRUE );
@@ -1244,7 +1242,7 @@ void SAL_CALL BluetoothServer::run()
 
     mpImpl->mpConnection = pConnection;
 
-    while( !mpImpl->mbExitMainloop )
+    while( true )
     {
         aDBusFD.revents = 0;
         aSocketFD.revents = 0;

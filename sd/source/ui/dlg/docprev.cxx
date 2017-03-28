@@ -53,7 +53,7 @@ const int SdDocPreviewWin::FRAME = 4;
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SdDocPreviewWin, 0)
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
-: Control(pParent, nStyle), pMetaFile( nullptr )
+: Control(pParent, nStyle)
 {
     SetBorderStyle( WindowBorderStyle::MONO );
     svtools::ColorConfig aColorConfig;
@@ -73,8 +73,6 @@ void SdDocPreviewWin::dispose()
         mxSlideShow->end();
         mxSlideShow.clear();
     }
-    delete pMetaFile;
-    pMetaFile = nullptr;
     Control::dispose();
 }
 
@@ -90,15 +88,14 @@ void SdDocPreviewWin::Resize()
         mxSlideShow->resize( GetSizePixel() );
 }
 
-void SdDocPreviewWin::CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint )
+void SdDocPreviewWin::CalcSizeAndPos( Size& rSize, Point& rPoint )
 {
-    Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1,1 );
     long nWidth = rSize.Width() - 2*FRAME;
     long nHeight = rSize.Height() - 2*FRAME;
     if( nWidth < 0 ) nWidth = 0;
     if( nHeight < 0 ) nHeight = 0;
 
-    double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
+    double dRatio = 1;
     double dRatioPreV = nHeight ? (((double) nWidth ) / nHeight) : 0.0;
 
     if (dRatio > dRatioPreV)
@@ -113,12 +110,12 @@ void SdDocPreviewWin::CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rP
     }
 }
 
-void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
+void SdDocPreviewWin::ImpPaint( OutputDevice* pVDev )
 {
     Point aPoint;
     Size aSize = pVDev->GetOutputSize();
     Point bPoint(aSize.Width()-2*FRAME, aSize.Height()-2*FRAME );
-    CalcSizeAndPos( pFile, aSize, aPoint );
+    CalcSizeAndPos( aSize, aPoint );
     bPoint -= aPoint;
     aPoint += Point( FRAME, FRAME );
 
@@ -127,13 +124,6 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
     pVDev->SetLineColor();
     pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
     pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
-    if( pFile )
-    {
-        pVDev->SetFillColor( maDocumentColor );
-        pVDev->DrawRect(Rectangle(aPoint, aSize));
-        pFile->WindStart();
-        pFile->Play( pVDev, aPoint, aSize  );
-    }
 }
 
 void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
@@ -146,7 +136,7 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
             ? ::sd::OUTPUT_DRAWMODE_CONTRAST
             : ::sd::OUTPUT_DRAWMODE_COLOR );
 
-        ImpPaint( pMetaFile, this );
+        ImpPaint( this );
     }
     else
     {
@@ -184,9 +174,6 @@ void SdDocPreviewWin::updateViewSettings()
         svtools::ColorConfig aColorConfig;
         maDocumentColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
-
-    delete pMetaFile;
-    pMetaFile = nullptr;
 
     Invalidate();
 }

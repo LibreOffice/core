@@ -64,22 +64,9 @@ namespace
 }
 
 
-static const ChildIndexToPointData* IndexToPoint( long nIndex, bool bAngleControl )
+static const ChildIndexToPointData* IndexToPoint( long nIndex )
 {
-    DBG_ASSERT( nIndex < ( bAngleControl? 8 : 9 ) && nIndex >= 0, "-IndexToPoint(): invalid child index! You have been warned..." );
-
-    // angles are counted reverse counter clock wise
-    static const ChildIndexToPointData  pAngleData[] =
-    {                                                   // index
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RectPoint::RM },    //  0
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RectPoint::RT },    //  1
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RectPoint::MT },    //  2
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RectPoint::LT },    //  3
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RectPoint::LM },    //  4
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RectPoint::LB },    //  5
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RectPoint::MB },    //  6
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RectPoint::RB }     //  7
-    };
+    DBG_ASSERT( nIndex < 9 && nIndex >= 0, "-IndexToPoint(): invalid child index! You have been warned..." );
 
     // corners are counted from left to right and top to bottom
     static const ChildIndexToPointData  pCornerData[] =
@@ -95,37 +82,19 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex, bool bAngleContro
         {   RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RectPoint::RB }     //  8
     };
 
-    return ( bAngleControl? pAngleData : pCornerData ) + nIndex;
+    return pCornerData + nIndex;
 }
 
 
-static long PointToIndex( RectPoint ePoint, bool bAngleControl )
+static long PointToIndex( RectPoint ePoint )
 {
     long    nRet( (long) ePoint );
-    if( bAngleControl )
-    {   // angle control
-        // angles are counted reverse counter clock wise
-        switch( ePoint )
-        {
-            case RectPoint::LT: nRet = 3;               break;
-            case RectPoint::MT: nRet = 2;               break;
-            case RectPoint::RT: nRet = 1;               break;
-            case RectPoint::LM: nRet = 4;               break;
-            case RectPoint::MM: nRet = NOCHILDSELECTED; break;
-            case RectPoint::RM: nRet = 0;               break;
-            case RectPoint::LB: nRet = 5;               break;
-            case RectPoint::MB: nRet = 6;               break;
-            case RectPoint::RB: nRet = 7;               break;
-        }
-    }
-    else
-    {   // corner control
-        // corners are counted from left to right and top to bottom
-        DBG_ASSERT( (int)RectPoint::LT == 0 && (int)RectPoint::MT == 1 && (int)RectPoint::RT == 2 && (int)RectPoint::LM == 3 && (int)RectPoint::MM == 4 && (int)RectPoint::RM == 5 &&
-                    (int)RectPoint::LB == 6 && (int)RectPoint::MB == 7 && (int)RectPoint::RB == 8, "*PointToIndex(): unexpected enum value!" );
+    // corner control
+    // corners are counted from left to right and top to bottom
+    DBG_ASSERT( (int)RectPoint::LT == 0 && (int)RectPoint::MT == 1 && (int)RectPoint::RT == 2 && (int)RectPoint::LM == 3 && (int)RectPoint::MM == 4 && (int)RectPoint::RM == 5 &&
+                (int)RectPoint::LB == 6 && (int)RectPoint::MB == 7 && (int)RectPoint::RB == 8, "*PointToIndex(): unexpected enum value!" );
 
-        nRet = ( long ) ePoint;
-    }
+    nRet = ( long ) ePoint;
 
     return nRet;
 }
@@ -140,13 +109,12 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     mpRepr( &rRepr ),
     mpChildren( nullptr ),
     mnClientId( 0 ),
-    mnSelectedChild( NOCHILDSELECTED ),
-    mbAngleMode( false )
+    mnSelectedChild( NOCHILDSELECTED )
 {
     {
         ::SolarMutexGuard aSolarGuard;
-        msName = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_NAME : RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
-        msDescription = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR : RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
+        msName = SVX_RESSTR( RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
+        msDescription = SVX_RESSTR( RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
     mpChildren = new SvxRectCtlChildAccessibleContext*[ MAX_NUM_OF_CHILDREN ];
@@ -189,7 +157,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 
     Reference< XAccessible >    xRet;
 
-    long                        nChild = PointToIndex( mpRepr->GetApproxRPFromPixPt( rPoint ), mbAngleMode );
+    long                        nChild = PointToIndex( mpRepr->GetApproxRPFromPixPt( rPoint ) );
 
     if( nChild != NOCHILDSELECTED )
         xRet = getAccessibleChild( nChild );
@@ -257,7 +225,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
         if( !xChild.is() )
         {
-            const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
+            const ChildIndexToPointData*    p = IndexToPoint( nIndex );
             OUString aName(SVX_RESSTR(p->nResIdName));
             OUString aDescr(SVX_RESSTR(p->nResIdDescr));
 
@@ -482,7 +450,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nInd
 
     ThrowExceptionIfNotAlive();
 
-    const ChildIndexToPointData*    pData = IndexToPoint( nIndex, mbAngleMode );
+    const ChildIndexToPointData*    pData = IndexToPoint( nIndex );
 
     DBG_ASSERT( pData,
         "SvxRectCtlAccessibleContext::selectAccessibleChild(): this is an impossible state! Or at least should be..." );
@@ -549,7 +517,7 @@ void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex )
 void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    long nNew = PointToIndex( eButton, mbAngleMode );
+    long nNew = PointToIndex( eButton );
     long nNumOfChildren = getAccessibleChildCount();
     if( nNew < nNumOfChildren )
     {
@@ -611,7 +579,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
 void SvxRectCtlAccessibleContext::selectChild(RectPoint eButton )
 {
     // no guard -> is done in next selectChild
-    selectChild(PointToIndex( eButton, mbAngleMode ));
+    selectChild(PointToIndex( eButton ));
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()

@@ -57,7 +57,7 @@ namespace
 {
     class ListWrapper {
         size_t mnCount;
-        const size_t mnMaximum;
+        static const size_t mnMaximum = 1000;
         OUStringBuffer maName;
         VclPtr<FixedText> mpLabel;
         VclPtr<SvSimpleTable> mpList;
@@ -65,7 +65,6 @@ namespace
         ListWrapper(const VclPtr<SvSimpleTable> &pList,
                     const VclPtr<FixedText> &pLabel) :
             mnCount(0),
-            mnMaximum(1000),
             mpLabel(pLabel),
             mpList(pList)
         {
