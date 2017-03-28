@@ -45,6 +45,8 @@ ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Referen
 
     get(m_pAboveSpacing, "aboveparaspacing");
     get(m_pBelowSpacing, "belowparaspacing");
+    get(m_pAboveContainer, "above");
+    get(m_pBelowContainer, "below");
 
     Link<Edit&,void> aLink = LINK(this, ParaULSpacingWindow, ModifySpacingHdl);
     m_pAboveSpacing->SetModifyHdl(aLink);
@@ -60,6 +62,8 @@ void ParaULSpacingWindow::dispose()
 {
     m_pAboveSpacing.clear();
     m_pBelowSpacing.clear();
+    m_pAboveContainer.clear();
+    m_pBelowContainer.clear();
 
     disposeBuilder();
     VclVBox::dispose();
@@ -101,6 +105,24 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
     }
 }
 
+// ParaAboveSpacingWindow
+
+ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+    : ParaULSpacingWindow(pParent, xFrame)
+{
+    m_pAboveContainer->Show();
+    m_pBelowContainer->Hide();
+}
+
+// ParaBelowSpacingWindow
+
+ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+    : ParaULSpacingWindow(pParent, xFrame)
+{
+    m_pAboveContainer->Hide();
+    m_pBelowContainer->Show();
+}
+
 // ParaLRSpacingWindow
 
 ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
@@ -115,6 +137,9 @@ ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Referen
     get(m_pBeforeSpacing, "beforetextindent");
     get(m_pAfterSpacing, "aftertextindent");
     get(m_pFLSpacing, "firstlineindent");
+    get(m_pBeforeContainer, "before");
+    get(m_pAfterContainer, "after");
+    get(m_pFirstLineContainer, "firstline");
 
     Link<Edit&,void> aLink = LINK(this, ParaLRSpacingWindow, ModifySpacingHdl);
     m_pBeforeSpacing->SetModifyHdl(aLink);
@@ -132,6 +157,9 @@ void ParaLRSpacingWindow::dispose()
     m_pBeforeSpacing.clear();
     m_pAfterSpacing.clear();
     m_pFLSpacing.clear();
+    m_pBeforeContainer.clear();
+    m_pAfterContainer.clear();
+    m_pFirstLineContainer.clear();
 
     disposeBuilder();
     VclVBox::dispose();
@@ -262,6 +290,36 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
 
         pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});
     }
+}
+
+// ParaLeftSpacingWindow
+
+ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+    : ParaLRSpacingWindow(pParent, xFrame)
+{
+    m_pBeforeContainer->Show();
+    m_pAfterContainer->Hide();
+    m_pFirstLineContainer->Hide();
+}
+
+// ParaRightSpacingWindow
+
+ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+    : ParaLRSpacingWindow(pParent, xFrame)
+{
+    m_pBeforeContainer->Hide();
+    m_pAfterContainer->Show();
+    m_pFirstLineContainer->Hide();
+}
+
+// ParaFirstLineSpacingWindow
+
+ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+    : ParaLRSpacingWindow(pParent, xFrame)
+{
+    m_pBeforeContainer->Hide();
+    m_pAfterContainer->Hide();
+    m_pFirstLineContainer->Show();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

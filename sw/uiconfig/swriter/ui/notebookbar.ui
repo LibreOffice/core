@@ -2653,26 +2653,35 @@
                         <property name="orientation">horizontal</property>
                         <property name="valign">center</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="ulspacing">
-                            <property name="width_request">200</property>
-                            <property name="height_request">75</property>
+                          <object class="GtkBox" id="box160">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Indent</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkToolButton" id="ULSpacing">
-                                <property name="use_action_appearance">False</property>
+                              <object class="sfxlo-NotebookbarToolBox" id="ulspacing">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="is_important">True</property>
-                                <property name="action_name">.uno:ULSpacing</property>
-                                <property name="use_underline">True</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip_text" translatable="yes">Indent</property>
+                                <child>
+                                  <object class="GtkToolButton" id="ULSpacing">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="is_important">True</property>
+                                    <property name="action_name">.uno:ULSpacing</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                           </object>
@@ -2683,33 +2692,65 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="lrspacing">
-                            <property name="width_request">200</property>
-                            <property name="height_request">75</property>
+                          <object class="GtkBox" id="box161">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Indent</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkToolButton" id="LeftRightParaMargin">
-                                <property name="use_action_appearance">False</property>
+                              <object class="sfxlo-NotebookbarToolBox" id="leftspacing">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="is_important">True</property>
-                                <property name="action_name">.uno:LeftRightParaMargin</property>
-                                <property name="use_underline">True</property>
+                                <child>
+                                  <object class="GtkToolButton" id="LeftParaMargin">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="is_important">True</property>
+                                    <property name="action_name">.uno:LeftParaMargin</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="rightspacing">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkToolButton" id="RightParaMargin">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="is_important">True</property>
+                                    <property name="action_name">.uno:RightParaMargin</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </object>

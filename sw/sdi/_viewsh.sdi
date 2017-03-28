@@ -213,6 +213,21 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_ATTR_PARA_LEFTSPACE
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ATTR_PARA_RIGHTSPACE
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ATTR_PARA_FIRSTLINESPACE
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_ATTR_PARA_LRSPACE_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
@@ -425,6 +440,16 @@ interface BaseTextEditView
     SID_ATTR_PARA_ULSPACE
     [
         ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+
+    SID_ATTR_PARA_ABOVESPACE
+    [
+        StateMethod = StateTabWin ;
+    ]
+
+    SID_ATTR_PARA_BELOWSPACE
+    [
         StateMethod = StateTabWin ;
     ]
 
