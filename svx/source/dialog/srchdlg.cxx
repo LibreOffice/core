@@ -1974,30 +1974,23 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     if ( !pSh || !pImpl->pRanges )
         return;
 
-    sal_sSize nCnt = 0;
+    std::vector<sal_uInt16> aWhRanges;
+
     const sal_uInt16* pPtr = pImpl->pRanges.get();
-    const sal_uInt16* pTmp = pPtr;
-
-    while( *pTmp )
-        pTmp++;
-    nCnt = pTmp - pPtr + 7;
-    std::unique_ptr<sal_uInt16[]> pWhRanges(new sal_uInt16[nCnt]);
-    sal_uInt16 nPos = 0;
-
-    while( *pPtr )
+    while (*pPtr)
     {
-        pWhRanges[nPos++] = *pPtr++;
+        aWhRanges.push_back(*pPtr++);
     }
 
-    pWhRanges[nPos++] = SID_ATTR_PARA_MODEL;
-    pWhRanges[nPos++] = SID_ATTR_PARA_MODEL;
+    aWhRanges.push_back(SID_ATTR_PARA_MODEL);
+    aWhRanges.push_back(SID_ATTR_PARA_MODEL);
 
     sal_uInt16 nBrushWhich = pSh->GetPool().GetWhich(SID_ATTR_BRUSH);
-    pWhRanges[nPos++] = nBrushWhich;
-    pWhRanges[nPos++] = nBrushWhich;
-    pWhRanges[nPos] = 0;
+    aWhRanges.push_back(nBrushWhich);
+    aWhRanges.push_back(nBrushWhich);
+    aWhRanges.push_back(0);
     SfxItemPool& rPool = pSh->GetPool();
-    SfxItemSet aSet( rPool, pWhRanges.get() );
+    SfxItemSet aSet(rPool, aWhRanges.data());
     OUString aTxt;
 
     aSet.InvalidateAllItems();
