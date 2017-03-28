@@ -109,8 +109,10 @@ class VCL_DLLPUBLIC PDFArrayElement : public PDFElement
     /// Location after the '[' token.
     sal_uInt64 m_nOffset = 0;
     std::vector<PDFElement*> m_aElements;
+    /// The object that contains this array.
+    PDFObjectElement* m_pObject;
 public:
-    PDFArrayElement();
+    PDFArrayElement(PDFObjectElement* pObject);
     bool Read(SvStream& rStream) override;
     void PushBack(PDFElement* pElement);
     const std::vector<PDFElement*>& GetElements();
