@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a57fde8_662d2aa7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-28T19:24:25Z",
+      "side": 1,
+      "message": "best to mention the commit sha1 where the problem was introduced, this is often helpful when backporting stuff etc.",
+      "revId": "b75e24cae140213ad375a74cca2d1d5385e2cf5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_06261ece",
         "filename": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
         "patchSetId": 2
