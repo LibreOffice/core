@@ -36,20 +36,17 @@ namespace sd {
     class SlideShow;
 }
 
-class GDIMetaFile;
-
 class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
-    GDIMetaFile*    pMetaFile;
     Link<SdDocPreviewWin&,void> aClickHdl;
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
     virtual Size    GetOptimalSize() const override;
-    static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
-    void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
+    static void     CalcSizeAndPos( Size& rSize, Point& rPoint );
+    static void     ImpPaint( OutputDevice* pVDev );
 
     static const int FRAME;
 

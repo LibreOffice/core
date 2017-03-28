@@ -1266,7 +1266,6 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
             rDesc.maDefArgNames[nArg] = pArgs[nArg].aName;
             rDesc.maDefArgDescs[nArg] = pArgs[nArg].aDescription;
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
-            rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
             if ( rDesc.maDefArgNames[nArg].isEmpty() )

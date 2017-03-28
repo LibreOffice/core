@@ -195,7 +195,6 @@ public:
 
     SAL_DLLPRIVATE void MakeActive_Impl( bool bActivate );
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
-    SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
     SAL_DLLPRIVATE OUString GetActualPresentationURL_Impl() const;
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);

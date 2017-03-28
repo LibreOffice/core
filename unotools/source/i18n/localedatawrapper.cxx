@@ -157,8 +157,6 @@ void LocaleDataWrapper::invalidateData()
         aGrouping[0] = 0;
     if (aDateAcceptancePatterns.getLength())
         aDateAcceptancePatterns = Sequence<OUString>();
-    // dummies
-    cCurrZeroChar = '0';
 }
 
 /* FIXME-BCP47: locale data should provide a language tag instead that could be

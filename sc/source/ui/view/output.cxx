@@ -170,7 +170,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nEditCol( 0 ),
     nEditRow( 0 ),
     bMetaFile( false ),
-    bSingleGrid( false ),
     bPagebreakMode( false ),
     bSolidBackground( false ),
     mbUseStyleColor( false ),
@@ -420,7 +419,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
-            bSingle = bSingleGrid; //! get into Fillinfo !!!!!
+            bSingle = false; //! get into Fillinfo !!!!!
             if ( nX<MAXCOL && !bSingle )
             {
                 bSingle = ( nWidthXplus2 == 0 );

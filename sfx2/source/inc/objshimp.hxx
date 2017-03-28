@@ -83,7 +83,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
                         bOwnsStorage:1,
                         bInitialized:1,
-                        bSignatureErrorIsShown:1,
                         bModelInitialized:1, // whether the related model is initialized
                         bPreserveVersions:1,
                         m_bMacroSignBroken:1, // whether the macro signature was explicitly broken

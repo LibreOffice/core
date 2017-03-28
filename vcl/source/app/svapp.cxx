@@ -723,9 +723,6 @@ void Application::SetSettings( const AllSettings& rSettings )
             vcl::Window* pFrame = pFirstFrame;
             while ( pFrame )
             {
-                // restore AppFont cache data
-                pFrame->mpWindowImpl->mpFrameData->meMapUnit = MapUnit::MapPixel;
-
                 // call UpdateSettings from ClientWindow in order to prevent updating data twice
                 vcl::Window* pClientWin = pFrame;
                 while ( pClientWin->ImplGetClientWindow() )

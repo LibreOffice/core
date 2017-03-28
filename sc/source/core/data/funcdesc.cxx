@@ -149,17 +149,12 @@ OUString ScFuncDesc::GetParamList() const
             sal_uInt16 nLastAdded = nArgCount;
             for ( sal_uInt16 i=0; i<nArgCount; i++ )
             {
-                if (pDefArgFlags[i].bSuppress)
-                    nLastSuppressed = i;
-                else
+                nLastAdded = i;
+                aSig.append(maDefArgNames[i]);
+                if ( i != nArgCount-1 )
                 {
-                    nLastAdded = i;
-                    aSig.append(maDefArgNames[i]);
-                    if ( i != nArgCount-1 )
-                    {
-                        aSig.append(sep);
-                        aSig.append( " " );
-                    }
+                    aSig.append(sep);
+                    aSig.append( " " );
                 }
             }
             // If only suppressed parameters follow the last added parameter,
@@ -172,12 +167,9 @@ OUString ScFuncDesc::GetParamList() const
         {
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
-                if (!pDefArgFlags[nArg].bSuppress)
-                {
-                    aSig.append(maDefArgNames[nArg]);
-                    aSig.append(sep);
-                    aSig.append( " " );
-                }
+                aSig.append(maDefArgNames[nArg]);
+                aSig.append(sep);
+                aSig.append( " " );
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
              * there were, we'd have to cope with it here and above for the fix
@@ -196,12 +188,9 @@ OUString ScFuncDesc::GetParamList() const
         {
             for ( sal_uInt16 nArg = 0; nArg < nVarArgsStart; nArg++ )
             {
-                if (!pDefArgFlags[nArg].bSuppress)
-                {
-                    aSig.append(maDefArgNames[nArg]);
-                    aSig.append(sep);
-                    aSig.append( " " );
-                }
+                aSig.append(maDefArgNames[nArg]);
+                aSig.append(sep);
+                aSig.append( " " );
             }
 
             aSig.append(maDefArgNames[nVarArgsStart]);
@@ -289,11 +278,6 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
     else if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     sal_uInt16 nCount = nArgs;
-    for (sal_uInt16 i=0; i < nArgs; ++i)
-    {
-        if (pDefArgFlags[i].bSuppress)
-            --nCount;
-    }
     if (nArgCount >= PAIRED_VAR_ARGS)
         nCount += PAIRED_VAR_ARGS - 2;
     else if (nArgCount >= VAR_ARGS)
@@ -346,8 +330,7 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
         nArgs -= VAR_ARGS - 1;
     for (sal_uInt16 i=0; i < nArgs; ++i)
     {
-        if (!pDefArgFlags || !pDefArgFlags[i].bSuppress)
-            _rArguments.push_back(i);
+        _rArguments.push_back(i);
     }
 }
 
@@ -907,7 +890,6 @@ ScFunctionList::ScFunctionList()
             for (sal_uInt16 j = 0; j < nArgs; ++j)
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
-                pDesc->pDefArgFlags[j].bSuppress = false;
                 pLegacyFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
                 if ( !aArgName.isEmpty() )
                     pDesc->maDefArgNames[j] = aArgName;

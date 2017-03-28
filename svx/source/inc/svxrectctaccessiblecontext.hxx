@@ -262,9 +262,6 @@ private:
 
     /// actual selected child
     long                                mnSelectedChild;
-
-    /// mode of control (true -> 8 points, false -> 9 points)
-    bool                            mbAngleMode;
 };
 
 inline bool SvxRectCtlAccessibleContext::IsAlive() const

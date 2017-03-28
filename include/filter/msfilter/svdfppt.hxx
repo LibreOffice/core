@@ -112,8 +112,6 @@ struct SdHyperlinkEntry
     OUString    aTarget;
     OUString    aSubAdress;
 
-    sal_Int32   nStartPos;
-
     OUString    aConvSubString;
 };
 

@@ -1442,8 +1442,6 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
             else
                 pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
 
-            pImpl->bSignatureErrorIsShown = false;
-
             Invalidate( SID_SIGNATURE );
             Invalidate( SID_MACRO_SIGNATURE );
             Broadcast( SfxHint(SfxHintId::TitleChanged) );

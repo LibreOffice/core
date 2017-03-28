@@ -83,9 +83,6 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     };
     mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem, Locale_Compare> maDataItemCache;
 
-    // dummies, to be implemented or provided by XML locale data
-    sal_Unicode                 cCurrZeroChar;
-
                                 // whenever Locale changes
     void                invalidateData();
 
@@ -287,7 +284,7 @@ public:
 
     // dummy returns, to be implemented
     sal_Unicode         getCurrZeroChar() const
-                                    { return cCurrZeroChar; }
+                                    { return '0'; }
     static bool         isNumLeadingZero()
                                     { return true; }
                                 /// standard decimal places

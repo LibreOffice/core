@@ -254,24 +254,6 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
-    if ( rReq.GetSlot() == SID_RELOAD )
-    {
-        // When CTRL-Reload, reload the active Frame
-        SfxViewFrame* pActFrame = this;
-        while ( pActFrame )
-            pActFrame = pActFrame->GetActiveChildFrame_Impl();
-
-        if ( pActFrame )
-        {
-            sal_uInt16 nModifier = rReq.GetModifier();
-            if ( nModifier & KEY_MOD1 )
-            {
-                pActFrame->ExecReload_Impl( rReq );
-                return;
-            }
-        }
-    }
-
     SfxObjectShell* pSh = GetObjectShell();
     switch ( rReq.GetSlot() )
     {
@@ -985,7 +967,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     GetFrame().ReleasingComponent_Impl();
     if ( GetWindow().HasChildPathFocus( true ) )
     {
-        DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
         GetWindow().GrabFocus();
     }
 
@@ -1324,7 +1305,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     m_pImpl->bResizeInToOut = true;
     m_pImpl->bObjLocked = false;
     m_pImpl->pFocusWin = nullptr;
-    m_pImpl->pActiveChild = nullptr;
     m_pImpl->nCurViewId = SfxInterfaceId(0);
     m_pImpl->bReloading = false;
     m_pImpl->bIsDowning = false;
@@ -1699,12 +1679,6 @@ SfxObjectShell* SfxViewFrame::GetObjectShell()
 const Size& SfxViewFrame::GetMargin_Impl() const
 {
     return m_pImpl->aMargin;
-}
-
-SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
-{
-    SfxViewFrame *pViewFrame = m_pImpl->pActiveChild;
-    return pViewFrame;
 }
 
 SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,

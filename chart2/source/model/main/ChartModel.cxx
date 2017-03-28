@@ -109,7 +109,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
     , mnStart(0)
     , mnEnd(0)
-    , bSet(false)
 #if HAVE_FEATURE_OPENGL
     , mpOpenGLWindow(nullptr)
 #endif
@@ -154,7 +153,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
-    , bSet(false)
 #if HAVE_FEATURE_OPENGL
     , mpOpenGLWindow(nullptr)
 #endif
@@ -1322,7 +1320,6 @@ OUString SAL_CALL ChartModel::dump()
 
 void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
 {
-    bSet = false;
     mnStart = nStart;
     mnEnd = nEnd;
     mbTimeBased = true;
