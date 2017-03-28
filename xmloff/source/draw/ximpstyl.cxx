@@ -290,12 +290,12 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID),
-    mnBorderBottom( 0L ),
-    mnBorderLeft( 0L ),
-    mnBorderRight( 0L ),
-    mnBorderTop( 0L ),
-    mnWidth( 0L ),
-    mnHeight( 0L ),
+    mnBorderBottom( 0 ),
+    mnBorderLeft( 0 ),
+    mnBorderRight( 0 ),
+    mnBorderTop( 0 ),
+    mnWidth( 0 ),
+    mnHeight( 0 ),
     meOrientation(GetSdImport().IsDraw() ? view::PaperOrientation_PORTRAIT : view::PaperOrientation_LANDSCAPE)
 {
     // set family to something special at SvXMLStyleContext
@@ -679,10 +679,10 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 :   SvXMLImportContext( rImport, nPrfx, rLName),
-    mnX(0L),
-    mnY(0L),
-    mnWidth(1L),
-    mnHeight(1L)
+    mnX(0),
+    mnY(0),
+    mnWidth(1),
+    mnHeight(1)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -1089,7 +1089,7 @@ void SdXMLStylesContext::EndElement()
         GetImport().GetFormImport()->setAutoStyleContext( this );
 
         // associate AutoStyles with styles in preparation to setting Styles on shapes
-        for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
+        for(sal_uInt32 a(0); a < GetStyleCount(); a++)
         {
             const SvXMLStyleContext* pStyle = GetStyle(a);
             if (const XMLShapeStyleContext* pDocStyle = dynamic_cast<const XMLShapeStyleContext*>(pStyle))
@@ -1347,7 +1347,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     }
 
     // now set parents for all styles (when necessary)
-    for(a = 0L; a < GetStyleCount(); a++)
+    for(a = 0; a < GetStyleCount(); a++)
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
 
@@ -1394,7 +1394,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 {
     uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
 
-    for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
+    for(sal_uInt32 a(0); a < GetStyleCount(); a++)
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
         if (const SdXMLPresentationPageLayoutContext* pContext = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
