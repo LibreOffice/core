@@ -2726,7 +2726,7 @@ void Window::setPosSizePixel( long nX, long nY,
         mpWindowImpl->mbDefSize = false;
 
     // The top BorderWindow is the window which is to be positioned
-    vcl::Window* pWindow = this;
+    VclPtr<vcl::Window> pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -2743,7 +2743,7 @@ void Window::setPosSizePixel( long nX, long nY,
             nHeight = pWindow->mnOutHeight;
 
         sal_uInt16 nSysFlags=0;
-        vcl::Window *pParent = GetParent();
+        VclPtr<vcl::Window> pParent = GetParent();
 
         if( nFlags & PosSizeFlags::Width )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
@@ -2787,7 +2787,7 @@ void Window::setPosSizePixel( long nX, long nY,
                     {
                         nFlags |= PosSizeFlags::Y;
                         nSysFlags |= SAL_FRAME_POSSIZE_Y;
-                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
+                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
                             mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
                     }
                 }
@@ -2807,7 +2807,7 @@ void Window::setPosSizePixel( long nX, long nY,
             // check for min/max client size and adjust size accordingly
             // otherwise it may happen that the resize event is ignored, i.e. the old size remains
             // unchanged but ImplHandleResize() is called with the wrong size
-            SystemWindow *pSystemWindow = dynamic_cast< SystemWindow* >( pWindow );
+            SystemWindow *pSystemWindow = dynamic_cast< SystemWindow* >( pWindow.get() );
             if( pSystemWindow )
             {
                 Size aMinSize = pSystemWindow->GetMinOutputSizePixel();
