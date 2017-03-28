@@ -613,7 +613,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     {
         if(!pRoot->IsChildDoc())
             return pRoot;
-        pRoot = pRoot->GetParentDivision();
+        LwpDocument* pNextRoot = pRoot->GetParentDivision();
+        if (pNextRoot == pRoot)
+            throw std::runtime_error("loop in ParentDivision");
+        pRoot = pNextRoot;
     }
     return nullptr;
 }
