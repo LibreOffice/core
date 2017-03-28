@@ -11067,6 +11067,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
+        OString sColorSpaces = copyExternalResources(*pPage, "ColorSpace");
+        OString sExtGStates = copyExternalResources(*pPage, "ExtGState");
         OString sFonts = copyExternalResources(*pPage, "Font");
         OString sXObjects = copyExternalResources(*pPage, "XObject");
 
@@ -11089,6 +11091,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
         aLine.append(" /Resources <<");
+        aLine.append(sColorSpaces);
+        aLine.append(sExtGStates);
         aLine.append(sFonts);
         aLine.append(sXObjects);
         aLine.append(">>");
