@@ -2971,7 +2971,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                     static_cast<const SvxCharRotateItem&>( rSet->Get( nWhich ));
             if (rItem.IsBottomToTop())
                 m_p90degRB->Check();
-            else if (rItem.IsTopToBotton())
+            else if (rItem.IsTopToBottom())
                 m_p270degRB->Check();
             else
             {
@@ -3128,7 +3128,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
         if (m_p90degRB->IsChecked())
             aItem.SetBottomToTop();
         else if (m_p270degRB->IsChecked())
-            aItem.SetTopToBotton();
+            aItem.SetTopToBottom();
         rSet->Put( aItem );
         bModified = true;
     }

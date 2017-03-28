@@ -67,9 +67,9 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
     // our currently only degree values
-    void SetTopToBotton()                   { SetValue( 2700 ); }
+    void SetTopToBottom()                   { SetValue( 2700 ); }
     void SetBottomToTop()                   { SetValue(  900 ); }
-    bool IsTopToBotton() const              { return 2700 == GetValue(); }
+    bool IsTopToBottom() const              { return 2700 == GetValue(); }
     bool IsBottomToTop() const              { return  900 == GetValue(); }
 
     bool IsFitToLine() const                { return bFitToLine; }
