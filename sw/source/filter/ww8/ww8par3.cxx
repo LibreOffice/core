@@ -319,7 +319,7 @@ struct WW8LST   // only THOSE entries, WE need!
     sal_uInt32 nIdLst;     // Unique List ID
     sal_uInt32 nTplC;      // Unique template code - What is this?
     bool bSimpleList:1;    // Flag: List only has ONE level
-    bool bRestartHdn:1;    // WW6-Combatibility-Flag:
+    bool bRestartHdn:1;    // WW6-Compatibility-Flag:
                                                         //   true if the list should start numbering over
 };                                                      //   at the beginning of each section
 
@@ -690,7 +690,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
 
         // The Read_xy() methods in WW8PAR6.cxx are calling their respective
         // NewAttr() or GetFormatAttr() which can determine, by using the assigned
-        // Reader-ItemSet-Pointer, whether this specificl ItemSet is relevant
+        // Reader-ItemSet-Pointer, whether this specific ItemSet is relevant
         // and not a Stack or Style!
         sal_uInt16 nOldFlags1 = rReader.GetToggleAttrFlags();
         sal_uInt16 nOldFlags2 = rReader.GetToggleBiDiAttrFlags();
@@ -714,7 +714,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
 
     OUString sNumString(sanitizeString(read_uInt16_PascalString(rSt)));
 
-    // 5. convert read values into Writer syntaxg
+    // 5. convert read values into Writer syntax
 
     if( 0 <= aLVL.nStartAt )
         nStartNo = (sal_uInt16)aLVL.nStartAt;
@@ -1734,7 +1734,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         if( m_pAktColl )
         {
             // only save the Parameters for now. The actual List will be appended
-            // at a later point, when whe Listdefinitions were read...
+            // at a later point, when the Listdefinitions is read...
             if (
                  (USHRT_MAX > nActLFO) &&
                  (WW8ListManager::nMaxLevel > nActLevel)
@@ -1814,7 +1814,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
     // Note: the method appends NumRule to the Text Node if
     // bSetAttr (of course the lists have to be read before)
     // and only sets the Level. It does not check if there is a NumRule
-    // attachted to the STYLE !!!
+    // attached to the STYLE !!!
 
     if (m_pLstManager) // are all list declarations read?
     {

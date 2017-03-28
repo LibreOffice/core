@@ -39,7 +39,7 @@ private:
         the selection maAttribsSelection */
     mutable SfxItemSet* mpAttribsCache;
 
-    /** if we have a chached attribute item set, this is the selection of it */
+    /** if we have a cached attribute item set, this is the selection of it */
     mutable ESelection  maAttribCacheSelection;
 
     /** this pointer may be null or point to an item set for the paragraph
