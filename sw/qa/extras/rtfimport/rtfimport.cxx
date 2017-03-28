@@ -2803,6 +2803,14 @@ DECLARE_RTFIMPORT_TEST(testTdf105729, "tdf105729.rtf")
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf106694, "tdf106694.rtf")
+{
+    auto aTabs = getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
+    // This was 0, tab position was incorrect, looked like it was missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14605), aTabs[0].Position);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
