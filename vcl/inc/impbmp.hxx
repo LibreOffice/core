@@ -66,6 +66,7 @@ public:
     BitmapChecksum      ImplGetChecksum() const;
     void                ImplInvalidateChecksum();
 
+    bool                ImplScalingSupported() const;
     bool                ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
     bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol );
     bool                ImplConvert( BmpConversion eConversion );

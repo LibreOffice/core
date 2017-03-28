@@ -66,6 +66,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
+    virtual bool            ScalingSupported() const = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 
