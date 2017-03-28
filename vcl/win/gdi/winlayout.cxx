@@ -210,6 +210,7 @@ HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;
 D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
 D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteCreateFactory = nullptr;
+bool D2DWriteTextOutRenderer::mbAliasedText = false;
 
 bool D2DWriteTextOutRenderer::InitModules()
 {
@@ -220,6 +221,10 @@ bool D2DWriteTextOutRenderer::InitModules()
         D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
         DWriteCreateFactory = pDWriteCreateFactory_t(GetProcAddress(mmDWrite, "DWriteCreateFactory"));
     }
+
+    OUString aEnable = vcl::SettingsConfigItem::get()->getValue( "Accessibility", "AliasedText" );
+    mbAliasedText = aEnable.equalsIgnoreAsciiCase("true");
+
 
     if (!D2D1CreateFactory || !DWriteCreateFactory)
     {
@@ -323,6 +328,8 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     {
         hr = mpDWriteFactory->GetGdiInterop(&mpGdiInterop);
         hr = CreateRenderTarget();
+        if (mbAliasedText && SUCCEEDED(hr))
+           mpRT->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_ALIASED);
     }
 }
 

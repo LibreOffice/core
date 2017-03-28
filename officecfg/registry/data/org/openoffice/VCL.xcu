@@ -24,6 +24,9 @@
         <value>false</value>
         <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend EnableATToolSupport"/>
       </prop>
+      <prop oor:name="AliasedText" oor:type="xs:string" oor:op="replace">
+        <value>false</value>
+      </prop>
     </node>
     <node oor:name="DesktopManagement" oor:op="replace">
       <prop oor:name="DisablePrinting" oor:type="xs:string" oor:op="replace">

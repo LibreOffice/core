@@ -204,6 +204,7 @@ class D2DWriteTextOutRenderer : public TextOutRenderer
         REFIID, IUnknown **);
 
     static HINSTANCE mmD2d1, mmDWrite;
+    static bool mbAliasedText;
     static pD2D1CreateFactory_t     D2D1CreateFactory;
     static pDWriteCreateFactory_t   DWriteCreateFactory;
 
