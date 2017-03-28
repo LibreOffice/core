@@ -57,6 +57,7 @@
 #include "unx/i18n_keysym.hxx"
 #include "unx/i18n_status.hxx"
 #include <unx/x11/xlimits.hxx>
+#include "opengl/zone.hxx"
 
 #include "unx/gensys.h"
 #include "sallayout.hxx"
@@ -256,6 +257,8 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
 {
     if( ! ImplGetResMgr() )
         return false;
+
+    PreDefaultWinNoOpenGLZone aGuard;
 
     CreateNetWmAppIcon( nIcon, netwm_icon );
 
