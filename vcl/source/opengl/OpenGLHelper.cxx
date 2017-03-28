@@ -965,18 +965,39 @@ OpenGLVCLContextZone::OpenGLVCLContextZone()
     OpenGLContext::makeVCLCurrent();
 }
 
+namespace
+{
+    bool bTempOpenGLDisabled = false;
+}
+
+PreDefaultWinNoOpenGLZone::PreDefaultWinNoOpenGLZone()
+{
+    bTempOpenGLDisabled = true;
+}
+
+PreDefaultWinNoOpenGLZone::~PreDefaultWinNoOpenGLZone()
+{
+    bTempOpenGLDisabled = false;
+}
+
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
     /**
      * The !bSet part should only be called once! Changing the results in the same
      * run will mix OpenGL and normal rendering.
      */
+
     static bool bSet = false;
     static bool bEnable = false;
     static bool bForceOpenGL = false;
 
     // If we are a console app, then we don't use OpenGL
     if ( Application::IsConsoleOnly() )
+        return false;
+
+    //tdf#106155, disable GL while loading certain bitmaps needed for the initial toplevel windows
+    //under raw X (kde4) vclplug
+    if (bTempOpenGLDisabled)
         return false;
 
     if (bSet)
