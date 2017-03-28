@@ -73,6 +73,10 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
     if ( functionDecl->getNameAsString() == "operator->") {
         return true;
     }
+    std::string aFunctionName = functionDecl->getQualifiedNameAsString();
+    if (aFunctionName == "SbxValue::data") {
+        return true;
+    }
     /*
     std::string aParentName = functionDecl->getParent()->getQualifiedNameAsString();
     std::string fqn = aParentName + "::" + functionDecl->getNameAsString();

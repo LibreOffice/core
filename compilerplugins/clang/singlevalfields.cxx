@@ -258,7 +258,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     std::string assignValue;
 
     // check for field being returned by non-const ref eg. Foo& getFoo() { return f; }
-    if (parent && isa<ReturnStmt>(parent)) {
+    if (parentFunction && parent && isa<ReturnStmt>(parent)) {
         const Stmt* parent2 = parentStmt(parent);
         if (parent2 && isa<CompoundStmt>(parent2)) {
             QualType qt = compat::getReturnType(*parentFunction).getDesugaredType(compiler.getASTContext());

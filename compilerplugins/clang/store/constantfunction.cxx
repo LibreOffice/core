@@ -67,6 +67,12 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (pFunctionDecl->isExternC()) {
         return true;
     }
+    if (pFunctionDecl->isConstexpr()) {
+        return true;
+    }
+    if (pFunctionDecl->isMain()) {
+        return true;
+    }
 
     StringRef aFileName = getFilename(pFunctionDecl);
 
@@ -151,7 +157,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (isa<CXXConstructorDecl>(pFunctionDecl) || isa<CXXDestructorDecl>(pFunctionDecl) || isa<CXXConversionDecl>(pFunctionDecl)) {
         return true;
     }
-    SourceLocation canonicalLoc = pFunctionDecl->getCanonicalDecl()->getNameInfo().getLoc();
     if (isInUnoIncludeFile(pFunctionDecl)) {
         return true;
     }
@@ -426,6 +431,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "doc_getTileMode") {
         return true;
     }
+
 
 
 
