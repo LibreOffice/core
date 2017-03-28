@@ -213,6 +213,21 @@ interface TextDrawText
         StateMethod = GetState ;
     ]
 
+    SID_ATTR_PARA_LEFTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_RIGHTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_FIRSTLINESPACE
+    [
+        StateMethod = GetState ;
+    ]
+
     SID_PARASPACE_INCREASE
     [
         ExecMethod = Execute;
@@ -236,6 +251,16 @@ interface TextDrawText
     SID_ATTR_PARA_ULSPACE
     [
         ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_BELOWSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ABOVESPACE
+    [
         StateMethod = GetState ;
     ]
 

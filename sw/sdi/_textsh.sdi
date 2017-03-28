@@ -1233,6 +1233,18 @@ interface BaseText
         ExecMethod = Execute ;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_PARA_LEFTSPACE
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_PARA_RIGHTSPACE
+    [
+        StateMethod = GetAttrState ;
+    ]
+    SID_ATTR_PARA_FIRSTLINESPACE
+    [
+        StateMethod = GetAttrState ;
+    ]
     FN_SELECT_PARA // status(final|play)
     [
         ExecMethod = Execute ;

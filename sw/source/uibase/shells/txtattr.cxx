@@ -718,12 +718,15 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 nSlot = 0;
             break;
             case SID_ATTR_PARA_LRSPACE:
+            case SID_ATTR_PARA_LEFTSPACE:
+            case SID_ATTR_PARA_RIGHTSPACE:
+            case SID_ATTR_PARA_FIRSTLINESPACE:
             {
                 eState = aCoreSet.GetItemState(RES_LR_SPACE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
                     SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aCoreSet.Get( RES_LR_SPACE ) );
-                    aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                    aLR.SetWhich(nSlot);
                     rSet.Put(aLR);
                 }
                 else

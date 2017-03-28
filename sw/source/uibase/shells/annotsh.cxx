@@ -642,12 +642,15 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
         switch( nSlotId )
         {
             case SID_ATTR_PARA_LRSPACE:
+            case SID_ATTR_PARA_LEFTSPACE:
+            case SID_ATTR_PARA_RIGHTSPACE:
+            case SID_ATTR_PARA_FIRSTLINESPACE:
             {
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
                 if( eState >= SfxItemState::DEFAULT )
                 {
                     SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
-                    aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                    aLR.SetWhich(nSlotId);
                     rSet.Put(aLR);
                 }
                 else
@@ -667,6 +670,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             }
             break;
             case SID_ATTR_PARA_ULSPACE:
+            case SID_ATTR_PARA_ABOVESPACE:
+            case SID_ATTR_PARA_BELOWSPACE:
             case SID_PARASPACE_INCREASE:
             case SID_PARASPACE_DECREASE:
                 {
@@ -678,9 +683,12 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                             rSet.DisableItem( SID_PARASPACE_DECREASE );
                         else if ( aULSpace.GetUpper() >= 5670 && aULSpace.GetLower() >= 5670 )
                             rSet.DisableItem( SID_PARASPACE_INCREASE );
-                        if ( nSlotId == SID_ATTR_PARA_ULSPACE )
+                        if ( nSlotId == SID_ATTR_PARA_ULSPACE
+                            || nSlotId == SID_ATTR_PARA_BELOWSPACE
+                            || nSlotId == SID_ATTR_PARA_ABOVESPACE
+                        )
                         {
-                            aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
+                            aULSpace.SetWhich(nSlotId);
                             rSet.Put(aULSpace);
                         }
                     }
@@ -689,6 +697,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( SID_PARASPACE_INCREASE );
                         rSet.DisableItem( SID_PARASPACE_DECREASE );
                         rSet.InvalidateItem( SID_ATTR_PARA_ULSPACE );
+                        rSet.InvalidateItem( SID_ATTR_PARA_ABOVESPACE );
+                        rSet.InvalidateItem( SID_ATTR_PARA_BELOWSPACE );
                     }
                 }
                 break;

@@ -290,8 +290,11 @@ void SwDLL::RegisterControls()
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
     svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
     svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
-    svx::ParaULSpacingControl::RegisterControl(SID_ATTR_PARA_ULSPACE, pMod);
-    svx::ParaLRSpacingControl::RegisterControl(SID_ATTR_PARA_LRSPACE, pMod);
+    svx::ParaAboveSpacingControl::RegisterControl(SID_ATTR_PARA_ABOVESPACE, pMod);
+    svx::ParaBelowSpacingControl::RegisterControl(SID_ATTR_PARA_BELOWSPACE, pMod);
+    svx::ParaLeftSpacingControl::RegisterControl(SID_ATTR_PARA_LEFTSPACE, pMod);
+    svx::ParaRightSpacingControl::RegisterControl(SID_ATTR_PARA_RIGHTSPACE, pMod);
+    svx::ParaFirstLineSpacingControl::RegisterControl(SID_ATTR_PARA_FIRSTLINESPACE, pMod);
     PageMarginPopup::RegisterControl(SID_ATTR_PAGE_MARGIN, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
     PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);

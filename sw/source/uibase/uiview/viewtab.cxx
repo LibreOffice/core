@@ -1423,6 +1423,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_ATTR_PARA_LRSPACE_VERTICAL:
         case SID_ATTR_PARA_LRSPACE:
+        case SID_ATTR_PARA_LEFTSPACE:
+        case SID_ATTR_PARA_RIGHTSPACE:
+        case SID_ATTR_PARA_FIRSTLINESPACE:
         {
             if ( nSelType & nsSelectionType::SEL_GRF ||
                  nSelType & nsSelectionType::SEL_FRM ||
@@ -1462,6 +1465,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         }
 
         case SID_ATTR_PARA_ULSPACE:
+        case SID_ATTR_PARA_ABOVESPACE:
+        case SID_ATTR_PARA_BELOWSPACE:
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
         {
@@ -1473,9 +1478,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     rSet.DisableItem( SID_PARASPACE_DECREASE );
                 else if ( aUL.GetUpper() >= 5670 && aUL.GetLower() >= 5670 )
                     rSet.DisableItem( SID_PARASPACE_INCREASE );
-                if ( nWhich == SID_ATTR_PARA_ULSPACE )
+                if ( nWhich == SID_ATTR_PARA_ULSPACE
+                    || nWhich == SID_ATTR_PARA_ABOVESPACE
+                    || nWhich == SID_ATTR_PARA_BELOWSPACE
+                )
                 {
-                    aUL.SetWhich( SID_ATTR_PARA_ULSPACE );
+                    aUL.SetWhich( nWhich );
                     rSet.Put( aUL );
                 }
             }
@@ -1484,6 +1492,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.DisableItem( SID_PARASPACE_INCREASE );
                 rSet.DisableItem( SID_PARASPACE_DECREASE );
                 rSet.InvalidateItem( SID_ATTR_PARA_ULSPACE );
+                rSet.InvalidateItem( SID_ATTR_PARA_ABOVESPACE );
+                rSet.InvalidateItem( SID_ATTR_PARA_BELOWSPACE );
             }
         }
         break;

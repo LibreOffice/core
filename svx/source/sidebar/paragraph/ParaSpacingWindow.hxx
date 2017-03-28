@@ -38,27 +38,40 @@ class ParaULSpacingWindow : public VclVBox,
 
 {
 public:
-    explicit ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
     virtual ~ParaULSpacingWindow() override;
     virtual void dispose() override;
 
     void SetValue(const SvxULSpaceItem* pItem);
     void SetUnit(FieldUnit eUnit);
 
-private:
+protected:
+    ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
     VclPtr<SvxRelativeField> m_pAboveSpacing;
     VclPtr<SvxRelativeField> m_pBelowSpacing;
+    VclPtr<VclHBox> m_pAboveContainer;
+    VclPtr<VclHBox> m_pBelowContainer;
 
     MapUnit m_eUnit;
 
     DECL_LINK(ModifySpacingHdl, Edit&, void);
 };
 
+class ParaAboveSpacingWindow : public ParaULSpacingWindow
+{
+public:
+    explicit ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+};
+
+class ParaBelowSpacingWindow : public ParaULSpacingWindow
+{
+public:
+    explicit ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+};
+
 class ParaLRSpacingWindow : public VclVBox,
                             public VclBuilderContainer
 {
 public:
-    explicit ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
     virtual ~ParaLRSpacingWindow() override;
     virtual void dispose() override;
 
@@ -66,16 +79,39 @@ public:
     void SetUnit(FieldUnit eUnit);
     void SetContext(const vcl::EnumContext& eContext);
 
-private:
+protected:
+    ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+
     VclPtr<SvxRelativeField> m_pBeforeSpacing;
     VclPtr<SvxRelativeField> m_pAfterSpacing;
     VclPtr<SvxRelativeField> m_pFLSpacing;
+    VclPtr<VclHBox> m_pBeforeContainer;
+    VclPtr<VclHBox> m_pAfterContainer;
+    VclPtr<VclHBox> m_pFirstLineContainer;
 
     MapUnit m_eUnit;
 
     vcl::EnumContext m_aContext;
 
     DECL_LINK(ModifySpacingHdl, Edit&, void);
+};
+
+class ParaLeftSpacingWindow : public ParaLRSpacingWindow
+{
+public:
+    explicit ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+};
+
+class ParaRightSpacingWindow : public ParaLRSpacingWindow
+{
+public:
+    explicit ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+};
+
+class ParaFirstLineSpacingWindow : public ParaLRSpacingWindow
+{
+public:
+    explicit ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
 };
 
 }

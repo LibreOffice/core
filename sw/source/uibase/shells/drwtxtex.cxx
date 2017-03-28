@@ -647,6 +647,9 @@ ASK_ADJUST:
             break;
 
         case SID_ATTR_PARA_LRSPACE:
+        case SID_ATTR_PARA_LEFTSPACE:
+        case SID_ATTR_PARA_RIGHTSPACE:
+        case SID_ATTR_PARA_FIRSTLINESPACE:
             {
                 SfxItemState eState = aEditAttr.GetItemState(EE_PARA_LRSPACE);
                 if( eState >= SfxItemState::DEFAULT )
@@ -674,6 +677,8 @@ ASK_ADJUST:
             }
             break;
         case SID_ATTR_PARA_ULSPACE:
+        case SID_ATTR_PARA_BELOWSPACE:
+        case SID_ATTR_PARA_ABOVESPACE:
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
             {
@@ -685,9 +690,12 @@ ASK_ADJUST:
                         rSet.DisableItem( SID_PARASPACE_DECREASE );
                     else if ( aULSpace.GetUpper() >= 5670 && aULSpace.GetLower() >= 5670 )
                         rSet.DisableItem( SID_PARASPACE_INCREASE );
-                    if ( nSlotId == SID_ATTR_PARA_ULSPACE )
+                    if ( nSlotId == SID_ATTR_PARA_ULSPACE
+                        || nSlotId == SID_ATTR_PARA_ABOVESPACE
+                        || nSlotId == SID_ATTR_PARA_BELOWSPACE
+                    )
                     {
-                        aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
+                        aULSpace.SetWhich(nSlotId);
                         rSet.Put(aULSpace);
                     }
                 }
@@ -696,6 +704,8 @@ ASK_ADJUST:
                     rSet.DisableItem( SID_PARASPACE_INCREASE );
                     rSet.DisableItem( SID_PARASPACE_DECREASE );
                     rSet.InvalidateItem( SID_ATTR_PARA_ULSPACE );
+                    rSet.InvalidateItem( SID_ATTR_PARA_ABOVESPACE );
+                    rSet.InvalidateItem( SID_ATTR_PARA_BELOWSPACE );
                 }
                 nSlotId = 0;
             }

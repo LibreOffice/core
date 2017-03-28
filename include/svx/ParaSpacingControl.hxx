@@ -38,6 +38,24 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override = 0;
+};
+
+class SVX_DLLPUBLIC ParaAboveSpacingControl : public ParaULSpacingControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaAboveSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+};
+
+class SVX_DLLPUBLIC ParaBelowSpacingControl : public ParaULSpacingControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaBelowSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
@@ -54,7 +72,7 @@ public:
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override = 0;
 
     // XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
@@ -69,6 +87,33 @@ public:
 
 private:
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;
+};
+
+class SVX_DLLPUBLIC ParaLeftSpacingControl : public ParaLRSpacingControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaLeftSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+};
+
+class SVX_DLLPUBLIC ParaRightSpacingControl : public ParaLRSpacingControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaRightSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+};
+
+class SVX_DLLPUBLIC ParaFirstLineSpacingControl : public ParaLRSpacingControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaFirstLineSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
 }

@@ -190,6 +190,21 @@ interface _Annotation
         StateMethod = GetState ;
     ]
 
+    SID_ATTR_PARA_LEFTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_RIGHTSPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_FIRSTLINESPACE
+    [
+        StateMethod = GetState ;
+    ]
+
     SID_ATTR_PARA_LINESPACE
     [
         ExecMethod = Exec;
@@ -199,6 +214,16 @@ interface _Annotation
     SID_ATTR_PARA_ULSPACE
     [
         ExecMethod = Exec;
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_ABOVESPACE
+    [
+        StateMethod = GetState ;
+    ]
+
+    SID_ATTR_PARA_BELOWSPACE
+    [
         StateMethod = GetState ;
     ]
 
