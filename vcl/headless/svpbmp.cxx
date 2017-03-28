@@ -267,6 +267,11 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
     return false;
 }
 
+bool SvpSalBitmap::ScalingSupported() const
+{
+    return false;
+}
+
 bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
 {
     return false;
