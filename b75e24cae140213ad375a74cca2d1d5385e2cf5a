@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_06261ece",
+        "filename": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-28T19:19:56Z",
+      "side": 1,
+      "message": "why modify the return value in this case? i don\u0027t see the need for it, just don\u0027t do anything if it\u0027s in footer should fix the problem too?\n\nproblem:\n\n1. insert footer\n2. in footer, insert frame\n3. position frame at top edge of page\n4. in footer, insert paragraph break\n5. frame is still anchored in 1st footer paragraph and now positioned above top edge of page",
+      "revId": "b75e24cae140213ad375a74cca2d1d5385e2cf5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
