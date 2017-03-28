@@ -28,14 +28,19 @@
 #include <tools/gen.hxx>
 #include <uno/current_context.hxx>
 
-#include <vcl/configsettings.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/button.hxx>
+#include <vcl/configsettings.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/print.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/wrkwin.hxx>
+#include <scrwnd.hxx>
+#include <helpwin.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/virdev.hxx>
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -77,14 +82,6 @@ SalSystem* ImplGetSalSystem()
     if( ! pSVData->mpSalSystem )
         pSVData->mpSalSystem = pSVData->mpDefInst->CreateSalSystem();
     return pSVData->mpSalSystem;
-}
-
-ImplSVGDIData::~ImplSVGDIData()
-{
-    // FIXME: deliberately leak any remaining OutputDevice
-    // until we have their pGraphics reference counted, doing
-    // any disposes so late in shutdown is rather unsafe.
-    memset( this, 0, sizeof( ImplSVGDIData ) );
 }
 
 void ImplDeInitSVData()
@@ -300,5 +297,12 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
 {
     AllSettings::LocaleSettingsChanged( nHint );
 }
+
+
+ImplSVData::~ImplSVData() {}
+ImplSVAppData::~ImplSVAppData() {}
+ImplSVGDIData::~ImplSVGDIData() {}
+ImplSVWinData::~ImplSVWinData() {}
+ImplSVHelpData::~ImplSVHelpData() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

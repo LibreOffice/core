@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
+#include <vcl/menu.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
