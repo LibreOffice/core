@@ -10855,6 +10855,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject)
 {
     sal_Int32 nObject = createObject();
+    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::copyExternalResource: " << rObject.GetObjectValue() << " -> " << nObject);
 
     OStringBuffer aLine;
     aLine.append(nObject);
@@ -10927,7 +10928,8 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
 
         const std::vector<filter::PDFElement*>& rElements = pArray->GetElements();
         bool bDone = false;
-        // Complex case: can't copy the array byte array as is, as it contains a reference.
+        // Complex case: can't copy the array byte array as is, as it may contain references.
+        sal_uInt64 nCopyStart = 0;
         for (const auto pElement : rElements)
         {
             auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
@@ -10939,28 +10941,37 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                     // Copy the referenced object.
                     sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
 
-                    sal_uInt64 nArrStart = rObject.GetArrayOffset();
                     sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
                     sal_uInt64 nReferenceEnd = pReference->GetOffset();
-                    sal_uInt64 nArrEnd = nArrStart + rObject.GetArrayLength();
+                    sal_uInt64 nOffset = 0;
+                    if (nCopyStart == 0)
+                        // Array start -> reference start.
+                        nOffset = rObject.GetArrayOffset();
+                    else
+                        // Previous reference end -> reference start.
+                        nOffset = nCopyStart;
+                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nOffset, nReferenceStart - nOffset);
 
-                    // Array start -> reference start.
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nArrStart, nReferenceStart - nArrStart);
                     // Write the updated reference.
                     aLine.append(" ");
                     aLine.append(nRef);
                     aLine.append(" 0 R");
-                    // Reference end -> array end.
-                    aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nReferenceEnd, nArrEnd - nReferenceEnd);
+                    // Start copying here next time.
+                    nCopyStart = nReferenceEnd;
 
                     bDone = true;
-                    break;
                 }
             }
         }
 
-        // Can copy it as-is.
-        if (!bDone)
+        if (bDone)
+        {
+            // Copy the last part here, in the complex case.
+            sal_uInt64 nArrEnd = rObject.GetArrayOffset() + rObject.GetArrayLength();
+            aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + nCopyStart, nArrEnd - nCopyStart);
+        }
+        else
+            // Can copy it as-is.
             aLine.append(static_cast<const sal_Char*>(rDocBuffer.GetData()) + rObject.GetArrayOffset(), rObject.GetArrayLength());
 
         aLine.append("]\n");

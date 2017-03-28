@@ -939,7 +939,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         }
         case '[':
         {
-            auto pArr = new PDFArrayElement();
+            auto pArr = new PDFArrayElement(pObject);
             rElements.push_back(std::unique_ptr<PDFElement>(pArr));
             if (nDictionaryDepth == 0 && nArrayDepth == 0)
             {
@@ -963,9 +963,10 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         case ']':
         {
             rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndArrayElement()));
-            pArray = nullptr;
-            rStream.SeekRel(-1);
             --nArrayDepth;
+            if (nArrayDepth == 0)
+                pArray = nullptr;
+            rStream.SeekRel(-1);
             if (nDictionaryDepth == 0 && nArrayDepth == 0)
             {
                 if (pObject)
@@ -2127,18 +2128,25 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
     PDFArrayElement* pArray = nullptr;
     sal_uInt64 nDictionaryOffset = 0;
     int nDictionaryDepth = 0;
+    // Toplevel dictionary found (not inside an array).
+    bool bDictionaryFound = false;
+    // Toplevel array found (not inside a dictionary).
+    bool bArrayFound = false;
     for (size_t i = nIndex; i < rElements.size(); ++i)
     {
         // Dictionary tokens can be nested, track enter/leave.
         if (auto pDictionary = dynamic_cast<PDFDictionaryElement*>(rElements[i].get()))
         {
+            bDictionaryFound = true;
             if (++nDictionaryDepth == 1)
             {
                 // First dictionary start, track start offset.
                 nDictionaryOffset = pDictionary->m_nLocation;
                 if (pThisObject)
                 {
-                    pThisObject->SetDictionary(pDictionary);
+                    if (!bArrayFound)
+                        // The the toplevel dictionary of the object.
+                        pThisObject->SetDictionary(pDictionary);
                     pThisDictionary = pDictionary;
                     pThisObject->SetDictionaryOffset(nDictionaryOffset);
                 }
@@ -2189,7 +2197,11 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             else
             {
                 if (pArray)
-                    pArray->PushBack(pName);
+                {
+                    if (bDictionaryFound)
+                        // Array inside dictionary.
+                        pArray->PushBack(pName);
+                }
                 else
                 {
                     // Name-name key-value.
@@ -2208,6 +2220,7 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
         auto pArr = dynamic_cast<PDFArrayElement*>(rElements[i].get());
         if (pArr)
         {
+            bArrayFound = true;
             pArray = pArr;
             continue;
         }
@@ -2248,7 +2261,9 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             }
             else
             {
-                pArray->PushBack(pReference);
+                if (bDictionaryFound)
+                    // Array inside dictionary.
+                    pArray->PushBack(pReference);
             }
             aNumbers.clear();
             continue;
@@ -2932,7 +2947,10 @@ bool PDFEndObjectElement::Read(SvStream& /*rStream*/)
     return true;
 }
 
-PDFArrayElement::PDFArrayElement() = default;
+PDFArrayElement::PDFArrayElement(PDFObjectElement* pObject)
+    : m_pObject(pObject)
+{
+}
 
 bool PDFArrayElement::Read(SvStream& rStream)
 {
@@ -2952,6 +2970,8 @@ bool PDFArrayElement::Read(SvStream& rStream)
 
 void PDFArrayElement::PushBack(PDFElement* pElement)
 {
+    if (m_pObject)
+        SAL_INFO("vcl.filter", "PDFArrayElement::PushBack: object is " << m_pObject->GetObjectValue());
     m_aElements.push_back(pElement);
 }
 
