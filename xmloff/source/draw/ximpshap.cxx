@@ -933,7 +933,7 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnRadius( 0L )
+    mnRadius( 0 )
 {
 }
 
@@ -998,10 +998,10 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnX1( 0L ),
-    mnY1( 0L ),
-    mnX2( 1L ),
-    mnY2( 1L )
+    mnX1( 0 ),
+    mnY1( 0 ),
+    mnX2( 1 ),
+    mnY2( 1 )
 {
 }
 
@@ -1077,9 +1077,9 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            drawing::PointSequenceSequence aPolyPoly(1L);
+            drawing::PointSequenceSequence aPolyPoly(1);
             drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
-            pOuterSequence->realloc(2L);
+            pOuterSequence->realloc(2);
             awt::Point* pInnerSequence = pOuterSequence->getArray();
 
             *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
@@ -1111,10 +1111,10 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     uno::Reference< drawing::XShapes >& rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnCX( 0L ),
-    mnCY( 0L ),
-    mnRX( 1L ),
-    mnRY( 1L ),
+    mnCX( 0 ),
+    mnCY( 0 ),
+    mnRX( 1 ),
+    mnRY( 1 ),
     meKind( drawing::CircleKind_FULL ),
     mnStartAngle( 0 ),
     mnEndAngle( 0 )
@@ -2242,7 +2242,7 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     // #86616# for correct edge rounding import mnRadius needs to be initialized
-    mnRadius( 0L )
+    mnRadius( 0 )
 {
 }
 

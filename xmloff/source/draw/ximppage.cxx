@@ -460,7 +460,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     while(mxShapes->getCount())
     {
         Reference< drawing::XShape > xShape;
-        uno::Any aAny(mxShapes->getByIndex(0L));
+        uno::Any aAny(mxShapes->getByIndex(0));
 
         aAny >>= xShape;
 

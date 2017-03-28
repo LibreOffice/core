@@ -253,12 +253,12 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   sStarBats( "StarBats"  )
 ,   sStarMath( "StarMath"  )
 ,   sNumFormat( OUString("1") )
-,   nLevel( -1L )
-,   nSpaceBefore( 0L )
-,   nMinLabelWidth( 0L )
-,   nMinLabelDist( 0L )
-,   nImageWidth( 0L )
-,   nImageHeight( 0L )
+,   nLevel( -1 )
+,   nSpaceBefore( 0 )
+,   nMinLabelWidth( 0 )
+,   nMinLabelDist( 0 )
+,   nImageWidth( 0 )
+,   nImageHeight( 0 )
 ,   nNumStartValue( 1 )
 ,   nNumDisplayLevels( 1 )
 ,   eAdjust( HoriOrientation::LEFT )
@@ -342,7 +342,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             {
                 sal_Int32 nTmp = rValue.toInt32();
                 nNumStartValue =
-                    (nTmp < 0L) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
+                    (nTmp < 0) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : (sal_Int16)nTmp );
             }
             break;
@@ -351,7 +351,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             {
                 sal_Int32 nTmp = rValue.toInt32();
                 nNumDisplayLevels =
-                    (nTmp < 1L) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
+                    (nTmp < 1) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : (sal_Int16)nTmp );
             }
             break;

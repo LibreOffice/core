@@ -777,7 +777,7 @@ void SvXMLExportPropertyMapper::exportXML(
                         nFlags, &aIndexArray,
                         nPropMapStartIdx, nPropMapEndIdx );
 
-            if( rExport.GetAttrList().getLength() > 0L ||
+            if( rExport.GetAttrList().getLength() > 0 ||
                 (nFlags & SvXmlExportFlags::EMPTY) ||
                 !aIndexArray.empty() )
             {
