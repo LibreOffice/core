@@ -2750,7 +2750,7 @@ void Window::setPosSizePixel( long nX, long nY,
         mpWindowImpl->mbDefSize = false;
 
     // The top BorderWindow is the window which is to be positioned
-    vcl::Window* pWindow = this;
+    VclPtr<vcl::Window> pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
@@ -2767,7 +2767,8 @@ void Window::setPosSizePixel( long nX, long nY,
             nHeight = pWindow->mnOutHeight;
 
         sal_uInt16 nSysFlags=0;
-        vcl::Window *pParent = GetParent();
+        VclPtr<vcl::Window> pParent = GetParent();
+        VclPtr<vcl::Window> pWinParent = pWindow->GetParent();
 
         if( nFlags & PosSizeFlags::Width )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
@@ -2776,9 +2777,9 @@ void Window::setPosSizePixel( long nX, long nY,
         if( nFlags & PosSizeFlags::X )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_X;
-            if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            if( pWinParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                nX += pParent->mnOutOffX;
+                nX += pWinParent->mnOutOffX;
             }
             if( pParent && pParent->ImplIsAntiparallel() )
             {
@@ -2793,9 +2794,9 @@ void Window::setPosSizePixel( long nX, long nY,
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
-            if ( pParent )
+            if ( pWinParent )
             {
-                OutputDevice *pParentOutDev = pParent->GetOutDev();
+                OutputDevice *pParentOutDev = pWinParent->GetOutDev();
                 if( pParentOutDev->HasMirroredGraphics() )
                 {
                     long myWidth = nOldWidth;
@@ -2805,13 +2806,13 @@ void Window::setPosSizePixel( long nX, long nY,
                         myWidth = nWidth;
                     nFlags |= PosSizeFlags::X;
                     nSysFlags |= SAL_FRAME_POSSIZE_X;
-                    nX = pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
-                        pParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
+                    nX = pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nLeftDecoration +
+                        pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpWindowImpl->mpFrame->GetUnmirroredGeometry().nX;
                     if(!(nFlags & PosSizeFlags::Y))
                     {
                         nFlags |= PosSizeFlags::Y;
                         nSysFlags |= SAL_FRAME_POSSIZE_Y;
-                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
+                        nY = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY - pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry().nY -
                             mpWindowImpl->mpFrame->GetUnmirroredGeometry().nTopDecoration;
                     }
                 }
@@ -2820,9 +2821,9 @@ void Window::setPosSizePixel( long nX, long nY,
         if( nFlags & PosSizeFlags::Y )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
-            if( pParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            if( pWinParent && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
             {
-                nY += pParent->mnOutOffY;
+                nY += pWinParent->mnOutOffY;
             }
         }
 
@@ -2831,7 +2832,7 @@ void Window::setPosSizePixel( long nX, long nY,
             // check for min/max client size and adjust size accordingly
             // otherwise it may happen that the resize event is ignored, i.e. the old size remains
             // unchanged but ImplHandleResize() is called with the wrong size
-            SystemWindow *pSystemWindow = dynamic_cast< SystemWindow* >( pWindow );
+            SystemWindow *pSystemWindow = dynamic_cast< SystemWindow* >( pWindow.get() );
             if( pSystemWindow )
             {
                 Size aMinSize = pSystemWindow->GetMinOutputSizePixel();
