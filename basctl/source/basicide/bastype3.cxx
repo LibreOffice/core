@@ -131,7 +131,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 void TreeListBox::ExpandedHdl()
 {
     SvTreeListEntry* pEntry = GetHdlEntry();
-    assert(pEntry && "Was wurde zugeklappt?");
+    assert(pEntry && "What was collapsed?");
     if ( !IsExpanded( pEntry ) && pEntry->HasChildrenOnDemand() )
     {
         SvTreeListEntry* pChild = FirstChild( pEntry );
@@ -298,9 +298,9 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
     {
         for (SvTreeListEntry* pLE : aEntries)
         {
-            assert(pLE && "Entrie im Array nicht gefunden");
+            assert(pLE && "Entry not found in array");
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
-            assert(pBE && "Keine Daten im Eintrag gefunden!");
+            assert(pBE && "No data found in entry!");
 
             switch ( pBE->GetType() )
             {
@@ -434,7 +434,7 @@ SvTreeListEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, Li
     SvTreeListEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
-        DBG_ASSERT( static_cast<Entry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );
+        DBG_ASSERT( static_cast<Entry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "No shell entry?" );
         DocumentEntry* pBDEntry = static_cast<DocumentEntry*>(pRootEntry->GetUserData());
         if (pBDEntry && pBDEntry->GetDocument() == rDocument && pBDEntry->GetLocation() == eLocation)
             return pRootEntry;

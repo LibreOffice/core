@@ -488,7 +488,7 @@ void ModulWindow::ImportDialog()
 
 void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 {
-    DBG_ASSERT( XModule().is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "No Modul!" );
 
     if ( XModule().is() )
     {
@@ -514,7 +514,7 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
                     for ( sal_uInt16 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++ )
                     {
                         SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get( nMethod ));
-                        assert(pMethod && "Methode nicht gefunden! (NULL)");
+                        assert(pMethod && "Method not found! (NULL)");
                         pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
                     }
                 }
@@ -1279,7 +1279,7 @@ void ModulWindow::BasicStarted()
             for ( sal_uInt16 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++ )
             {
                 SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get( nMethod ));
-                assert(pMethod && "Methode nicht gefunden! (NULL)");
+                assert(pMethod && "Method not found! (NULL)");
                 pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
             }
         }

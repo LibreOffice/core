@@ -444,7 +444,7 @@ IMPL_LINK( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
     BaseWindow* pWin = aWindowTable[ nCurId ].get();
-    DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
+    DBG_ASSERT( pWin, "Entry in TabBar is not matching a window!" );
     SetCurWindow( pWin );
 }
 
@@ -744,7 +744,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
 {
     VclPtr<BaseWindow> pWindowTmp( pWindow_ );
 
-    DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
+    DBG_ASSERT( pWindow_, "Cannot delete NULL-Pointer!" );
     sal_uLong nKey = GetWindowId( pWindow_ );
     pTabBar->RemovePage( (sal_uInt16)nKey );
     aWindowTable.erase( nKey );

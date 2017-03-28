@@ -280,7 +280,7 @@ SbMethod* MacroChooser::GetMacro()
 void MacroChooser::DeleteMacro()
 {
     SbMethod* pMethod = GetMacro();
-    DBG_ASSERT( pMethod, "DeleteMacro: Kein Macro !" );
+    DBG_ASSERT( pMethod, "DeleteMacro: No Macro !" );
     if ( pMethod && QueryDelMacro( pMethod->GetName(), this ) )
     {
         if (SfxDispatcher* pDispatcher = GetDispatcher())
@@ -374,7 +374,7 @@ SbMethod* MacroChooser::CreateMacro()
                 aDocument, *m_pBasicBox, aLibName, aModName, false );
         }
 
-        DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro existiert schon!" );
+        DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro exists already!" );
         pMethod = pModule ? basctl::CreateMacro( pModule, aSubName ) : nullptr;
     }
 
@@ -513,7 +513,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
             SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get( iMeth ));
             if( pMethod->IsHidden() )
                 continue;
-            DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+            DBG_ASSERT( pMethod, "Methode not found! (NULL)" );
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
             aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );

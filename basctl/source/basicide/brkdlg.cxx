@@ -165,7 +165,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
 
     sal_Int32 nEntry = rBox.GetEntryPos( rBox.GetText() );
     BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
-    DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
+    DBG_ASSERT( pBrk, "No matching break point to list?" );
     UpdateFields( pBrk );
 }
 

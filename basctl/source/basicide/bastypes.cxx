@@ -580,7 +580,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         nLine++;
     }
 
-    SAL_WARN_IF( nStartPos == -1, "basctl.basicide", "CutLines: Startzeile nicht gefunden!" );
+    SAL_WARN_IF( nStartPos == -1, "basctl.basicide", "CutLines: Start line not found!" );
 
     if ( nStartPos == -1 )
         return;

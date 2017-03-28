@@ -276,7 +276,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
             BasicManager* pBasMgr = const_cast<BasicManager*>(rInfo.GetBasicManager());
-            DBG_ASSERT( pBasMgr, "Nichts selektiert im Basic-Baum ?" );
+            DBG_ASSERT( pBasMgr, "Nothing selected in basic tree?" );
 
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
 
@@ -322,7 +322,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( pViewFrame )
                 pViewFrame->ToTop();
             VclPtr<ModulWindow> pWin = FindBasWin( aDocument, aLibName, rInfo.GetModule(), true );
-            DBG_ASSERT( pWin, "Edit/Create Macro: Fenster wurde nicht erzeugt/gefunden!" );
+            DBG_ASSERT( pWin, "Edit/Create Macro: Window was not created/found!" );
             SetCurWindow( pWin, true );
             pWin->EditMacro( rInfo.GetMethod() );
         }
@@ -486,14 +486,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_NEWMODULE:
         {
             VclPtr<ModulWindow> pWin = CreateBasWin( m_aCurDocument, m_aCurLibName, OUString() );
-            DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
+            DBG_ASSERT( pWin, "New Module: Could not create window!" );
             SetCurWindow( pWin, true );
         }
         break;
         case SID_BASICIDE_NEWDIALOG:
         {
             VclPtr<DialogWindow> pWin = CreateDlgWin( m_aCurDocument, m_aCurLibName, OUString() );
-            DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
+            DBG_ASSERT( pWin, "New Module: Could not create window!" );
             SetCurWindow( pWin, true );
         }
         break;
@@ -550,7 +550,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 pWin = FindBasWin( aDocument, aLibName, aName, true );
                 static_cast<ModulWindow*>(pWin)->EditMacro( rSbxItem.GetMethodName() );
             }
-            DBG_ASSERT( pWin, "Fenster wurde nicht erzeugt!" );
+            DBG_ASSERT( pWin, "Window was not created!" );
             SetCurWindow( pWin, true );
             pTabBar->MakeVisible( pTabBar->GetCurPageId() );
         }
