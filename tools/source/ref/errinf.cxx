@@ -22,6 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
+#include <vcl/menu.hxx>
 #include <vector>
 
 class ErrorHandler;
