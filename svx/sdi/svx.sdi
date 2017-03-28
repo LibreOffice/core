@@ -5195,6 +5195,66 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
 ]
 
 
+SfxVoidItem LeftParaMargin SID_ATTR_PARA_LEFTSPACE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    SlotType = SvxLRSpaceItem
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
+SfxVoidItem FirstLineParaMargin SID_ATTR_PARA_FIRSTLINESPACE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    SlotType = SvxLRSpaceItem
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
+SfxVoidItem RightParaMargin SID_ATTR_PARA_RIGHTSPACE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    SlotType = SvxLRSpaceItem
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
 SfxVoidItem LeftRightParaMargin_Vertical SID_ATTR_PARA_LRSPACE_VERTICAL
 (SvxLRSpaceItem LRSpace SID_ATTR_PARA_LRSPACE_VERTICAL)
 [
@@ -5488,6 +5548,44 @@ SvxLineSpacingItem LineSpacing SID_ATTR_PARA_LINESPACE
 ]
 
 SvxULSpaceItem ULSpacing SID_ATTR_PARA_ULSPACE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
+SvxULSpaceItem AboveSpacing SID_ATTR_PARA_ABOVESPACE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+
+SvxULSpaceItem BelowSpacing SID_ATTR_PARA_BELOWSPACE
 
 [
     AutoUpdate = FALSE,
