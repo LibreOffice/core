@@ -776,7 +776,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
     const sal_uInt16 nStartCount(GetBitCount());
 
-    if (mxImpBmp)
+    if (mxImpBmp && mxImpBmp->ImplScalingSupported())
     {
         // implementation specific scaling
         std::shared_ptr<ImpBitmap> xImpBmp(new ImpBitmap);
