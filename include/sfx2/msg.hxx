@@ -158,15 +158,6 @@ SFX_DECL_TYPE(23); // for SvxSearchItem
                  &a##aShellClass##Args_Impl[nArg0], nArgs, SfxDisableFlags::NONE, Name \
                }
 
-#define SFX_SLOT( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass ) \
-               { id, GroupId, Flags, \
-                 0, 0, \
-                 ExecMethodPtr, \
-                 StateMethodPtr, \
-                 (const SfxType*) &a##ItemClass##_Impl, \
-                 0, 0, 0, 0 \
-               }
-
 #define SFX_NEW_SLOT_ARG( aShellClass, id, GroupId, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
                { id, GroupId, Flags | Prop, \
                  USHRT_MAX, 0, \
