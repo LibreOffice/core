@@ -29,6 +29,12 @@
 #include <utility>
 #include <type_traits>
 
+#ifdef DBG_UTIL
+#ifndef WNT
+#include <vcl/vclmain.hxx>
+#endif
+#endif
+
 /// @cond INTERNAL
 namespace vcl { namespace detail {
 
@@ -135,6 +141,15 @@ public:
         : m_rInnerRef( static_cast<reference_type*>(rRef) )
     {
     }
+
+#ifdef DBG_UTIL
+#ifndef WNT
+    virtual ~VclPtr()
+    {
+        assert(m_rInnerRef.get() == nullptr || vclmain::isAlive());
+    }
+#endif
+#endif
 
     /**
      * A construction helper for VclPtr. Since VclPtr types are created

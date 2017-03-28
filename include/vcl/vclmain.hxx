@@ -12,6 +12,10 @@
 
 #include <sal/config.h>
 
+#ifdef DBG_UTIL
+#include <vcl/dllapi.h>
+#endif
+
 namespace vclmain {
 
 // Function called from vclmain's implementation of main, needs to be
@@ -19,7 +23,9 @@ namespace vclmain {
 // instance of Application (where the Application constructor takes care to link
 // that instance to ImplSVData.mpApp):
 void createApplication();
-
+#ifdef DBG_UTIL
+VCL_DLLPUBLIC bool isAlive();
+#endif
 }
 
 #endif
