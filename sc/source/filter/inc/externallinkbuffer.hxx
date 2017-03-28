@@ -268,8 +268,6 @@ private:
     ExternalNameRef     createExternalName();
 
 private:
-    typedef ::std::vector< sal_Int16 >  Int16Vector;
-    typedef ::std::vector< sal_Int32 >  Int32Vector;
     typedef RefVector< ExternalName >   ExternalNameVector;
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
@@ -279,7 +277,7 @@ private:
     OUString            maTargetUrl;        /// Target link, DDE topic, OLE target.
     css::uno::Reference< css::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
-    Int32Vector         maSheetCaches;      /// External sheet cache indexes.
+    std::vector< sal_Int32 > maSheetCaches; /// External sheet cache indexes.
     ExternalNameVector  maExtNames;         /// Defined names in external document.
 };
 
