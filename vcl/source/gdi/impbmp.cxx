@@ -102,6 +102,11 @@ void ImpBitmap::ImplInvalidateChecksum()
     mpSalBitmap->InvalidateChecksum();
 }
 
+bool ImpBitmap::ImplScalingSupported() const
+{
+    return mpSalBitmap->ScalingSupported();
+}
+
 bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
