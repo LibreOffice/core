@@ -153,6 +153,23 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
     }
 }
 
+/// Is it problematic to deduplicate this SPRM?
+static bool isSPRMDeduplicateBlacklist(Id nId)
+{
+    switch (nId)
+    {
+    case NS_ooxml::LN_CT_TabStop_val:
+    case NS_ooxml::LN_CT_TabStop_leader:
+    case NS_ooxml::LN_CT_TabStop_pos:
+        // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
+        // deduplication is explicitly not wanted for these tokens.
+        return true;
+
+    default:
+        return false;
+    }
+}
+
 /// Does the clone / deduplication of a single sprm.
 static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, RTFSprms& ret)
 {
@@ -161,7 +178,8 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, R
     {
         if (rSprm.second->equals(*pValue))
         {
-            ret.erase(rSprm.first); // duplicate to style
+            if (!isSPRMDeduplicateBlacklist(rSprm.first))
+                ret.erase(rSprm.first); // duplicate to style
         }
         else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
         {
