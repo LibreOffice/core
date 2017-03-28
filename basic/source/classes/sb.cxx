@@ -1611,8 +1611,8 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
     else if( nOldID != 0 )
     {
-        OUString aStdMsg = "Fehler " + OUString::number(nOldID) +
-                           ": Kein Fehlertext verfuegbar!";
+        OUString aStdMsg = "Error " + OUString::number(nOldID) +
+                           ": No error text available!";
         GetSbData()->aErrMsg = aStdMsg;
     }
     else
