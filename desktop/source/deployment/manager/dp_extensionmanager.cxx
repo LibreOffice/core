@@ -48,6 +48,9 @@
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/menu.hxx>
 #include "dp_interact.h"
 #include "dp_resource.h"
 #include "dp_services.hxx"
