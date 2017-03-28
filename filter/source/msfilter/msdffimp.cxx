@@ -1937,9 +1937,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             for ( sal_uInt16 i = 0; i < nNumElem; i++ )
             {
                 PropVec aHandlePropVec;
-                sal_uInt32  nFlagsTmp;
-                SvxMSDffHandleFlags nFlags;
-                sal_Int32   nPositionX, nPositionY, nCenterX, nCenterY, nRangeXMin, nRangeXMax, nRangeYMin, nRangeYMax;
+                sal_uInt32 nFlagsTmp(0);
+                sal_Int32  nPositionX(0), nPositionY(0), nCenterX(0), nCenterY(0), nRangeXMin(0), nRangeXMax(0), nRangeYMin(0), nRangeYMax(0);
                 rIn.ReadUInt32( nFlagsTmp )
                    .ReadInt32( nPositionX )
                    .ReadInt32( nPositionY )
@@ -1949,7 +1948,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                    .ReadInt32( nRangeXMax )
                    .ReadInt32( nRangeYMin )
                    .ReadInt32( nRangeYMax );
-                nFlags = static_cast<SvxMSDffHandleFlags>(nFlagsTmp);
+                SvxMSDffHandleFlags nFlags = static_cast<SvxMSDffHandleFlags>(nFlagsTmp);
                 if ( nPositionX == 2 )  // replacing center position with absolute value
                     nPositionX = nCoordWidth / 2;
                 if ( nPositionY == 2 )
@@ -2206,7 +2205,6 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
 
-            sal_uInt16 i, nTmp;
             sal_uInt16 nNumElemSeg = 0;
 
             if ( SeekToContent( DFF_Prop_pSegmentInfo, rIn ) )
@@ -2223,14 +2221,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             }
             if ( nNumElemSeg )
             {
-                sal_Int16 nCommand;
-                sal_Int16 nCnt;
                 aSegments.realloc( nNumElemSeg );
-                for ( i = 0; i < nNumElemSeg; i++ )
+                for (sal_uInt16 i = 0; i < nNumElemSeg; ++i)
                 {
+                    sal_uInt16 nTmp(0);
                     rIn.ReadUInt16( nTmp );
-                    nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
-                    nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
+                    sal_Int16 nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
+                    sal_Int16 nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
                     switch( nTmp >> 13 )//First 3 bits for command type
                     {
                         case 0x0:
@@ -3201,7 +3198,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_u
     if ( !maFidcls.empty() )
     {
         sal_uInt32 nMerk = rSt.Tell();
-        sal_uInt32 nShapeId, nSec = ( nId >> 10 ) - 1;
+        sal_uInt32 nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
             OffsetMap::const_iterator it = maDgOffsetTable.find( maFidcls[ nSec ].dgid );
@@ -3224,6 +3221,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_u
                         DffRecordHeader aShapeHd;
                         if ( SeekToRec( rSt, DFF_msofbtSp, aEscherObjListHd.GetRecEndFilePos(), &aShapeHd ) )
                         {
+                            sal_uInt32 nShapeId(0);
                             rSt.ReadUInt32( nShapeId );
                             if ( nId == nShapeId )
                             {
@@ -4232,7 +4230,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bChildAnchor )
     {
-        sal_Int32 l, o, r, u;
+        sal_Int32 l(0), o(0), r(0), u(0);
         rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
         Scale( l );
         Scale( o );
@@ -4864,14 +4862,14 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                 {
                     if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT )
                     {
-                        sal_Int32 l, t, r, b;
+                        sal_Int32 l(0), t(0), r(0), b(0);
                         if ( aShapeAtom.nRecLen == 16 )
                         {
                             rSt.ReadInt32( l ).ReadInt32( t ).ReadInt32( r ).ReadInt32( b );
                         }
                         else
                         {
-                            sal_Int16 ls, ts, rs, bs;
+                            sal_Int16 ls(0), ts(0), rs(0), bs(0);
                             rSt.ReadInt16( ts ).ReadInt16( ls ).ReadInt16( rs ).ReadInt16( bs ); // the order of coordinates is a bit strange...
                             l = ls;
                             t = ts;
@@ -4897,7 +4895,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                 }
                 else if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
                 {
-                    sal_Int32 l, o, r, u;
+                    sal_Int32 l(0), o(0), r(0), u(0);
                     rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
                     Scale( l );
                     Scale( o );
@@ -4943,7 +4941,7 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                     break;
                 if ( aShapeAtom.nRecType == DFF_msofbtChildAnchor )
                 {
-                    sal_Int32 l, o, r, u;
+                    sal_Int32 l(0), o(0), r(0), u(0);
                     rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
                     Scale( l );
                     Scale( o );
@@ -6061,12 +6059,13 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             // We've found the Property Table:
             // search for the Blip Property!
             sal_uLong  nPropRead = 0;
-            sal_uInt16 nPropId;
-            sal_uInt32  nPropVal;
             nLenShapePropTbl = nLength;
             long nStartShapePropTbl = rSt.Tell();
             do
             {
+                sal_uInt16 nPropId(0);
+                sal_uInt32 nPropVal(0);
+
                 rSt.ReadUInt16( nPropId )
                    .ReadUInt32( nPropVal );
                 nPropRead += 6;
@@ -6355,7 +6354,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                 rBLIPStream.SeekRel( nSkip + 20 );
 
                 // read in size of metafile in EMUS
-                sal_Int32 width, height;
+                sal_Int32 width(0), height(0);
                 rBLIPStream.ReadInt32( width ).ReadInt32( height );
                 aMtfSize100.Width() = width;
                 aMtfSize100.Height() = height;
@@ -6721,16 +6720,16 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
     if( xOle10Stm->GetError() )
         return false;
 
-    sal_uInt32 nType;
-    sal_uInt32 nRecType;
-    sal_uInt32 nStrLen;
     OUString   aSvrName;
     sal_uInt32 nDummy0;
     sal_uInt32 nDummy1;
-    sal_uInt32 nDataLen;
     sal_uInt32 nBytesRead = 0;
     do
     {
+        sal_uInt32 nType(0);
+        sal_uInt32 nRecType(0);
+        sal_uInt32 nStrLen(0);
+
         rStm.ReadUInt32( nType );
         rStm.ReadUInt32( nRecType );
         rStm.ReadUInt32( nStrLen );
@@ -6747,6 +6746,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         }
         rStm.ReadUInt32( nDummy0 );
         rStm.ReadUInt32( nDummy1 );
+        sal_uInt32 nDataLen(0);
         rStm.ReadUInt32( nDataLen );
 
         nBytesRead += 6 * sizeof( sal_uInt32 ) + nStrLen + nDataLen;
@@ -7166,7 +7166,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         }
         else if( pDataStrm )
         {
-            sal_uInt32 nLen, nDummy;
+            sal_uInt32 nLen(0), nDummy(0);
             pDataStrm->ReadUInt32( nLen ).ReadUInt32( nDummy );
             if( SVSTREAM_OK != pDataStrm->GetError() ||
                 // Id in BugDoc - exist there other Ids?
