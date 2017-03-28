@@ -309,10 +309,10 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove )
 {
     (void)pEntry;
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );  // ASS is ok here, should not be reached
-    DBG_ASSERT( pTarget, "Kein Ziel?" );    // with NULL (right at the beginning)
+    DBG_ASSERT( pEntry, "No entry?" );   // ASS is ok here, should not be reached
+    DBG_ASSERT( pTarget, "No target?" ); // with NULL (right at the beginning)
     sal_uInt16 nDepth = GetModel()->GetDepth( pTarget );
-    DBG_ASSERT( nDepth, "Tiefe?" );
+    DBG_ASSERT( nDepth, "Depth?" );
     if ( nDepth == 1 )
     {
         // Target = Basic => put module/dialog under the Basic
@@ -706,9 +706,9 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                         SfxCallMode::SYNCHRON, { &aSbxItem });
             }
         }
-        else    // Nur Lib selektiert
+        else    // only Lib selected
         {
-            DBG_ASSERT( m_pBasicBox->GetModel()->GetDepth( pCurEntry ) == 1, "Kein LibEntry?!" );
+            DBG_ASSERT( m_pBasicBox->GetModel()->GetDepth( pCurEntry ) == 1, "No LibEntry?!" );
             ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
             SvTreeListEntry* pParentEntry = m_pBasicBox->GetParent( pCurEntry );
             if ( pParentEntry )
@@ -839,7 +839,7 @@ void ObjectPage::NewDialog()
                     if ( !m_pBasicBox->IsExpanded( pRootEntry ) )
                         m_pBasicBox->Expand( pRootEntry );
                     SvTreeListEntry* pLibEntry = m_pBasicBox->FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
-                    DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
+                    DBG_ASSERT( pLibEntry, "LibEntry not found!" );
                     if ( pLibEntry )
                     {
                         if ( !m_pBasicBox->IsExpanded( pLibEntry ) )
@@ -852,7 +852,7 @@ void ObjectPage::NewDialog()
                                 Image(BitmapEx(IDEResId(RID_BMP_DIALOG))),
                                 pLibEntry, false,
                                 o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
-                            DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
+                            DBG_ASSERT( pEntry, "Insert entry failed!" );
                         }
                         m_pBasicBox->SetCurEntry( pEntry );
                         m_pBasicBox->Select( m_pBasicBox->GetCurEntry() );        // OV-Bug?!
@@ -866,7 +866,7 @@ void ObjectPage::NewDialog()
 void ObjectPage::DeleteCurrent()
 {
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
-    DBG_ASSERT( pCurEntry, "Kein aktueller Eintrag!" );
+    DBG_ASSERT( pCurEntry, "No current entry!" );
     EntryDescriptor aDesc( m_pBasicBox->GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
@@ -910,7 +910,7 @@ void ObjectPage::DeleteCurrent()
 
 void ObjectPage::EndTabDialog()
 {
-    DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
+    DBG_ASSERT( pTabDlg, "TabDlg not set!" );
     if ( pTabDlg )
         pTabDlg->EndDialog( 1 );
 }
@@ -997,7 +997,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 if ( !rBasicBox.IsExpanded( pRootEntry ) )
                     rBasicBox.Expand( pRootEntry );
                 SvTreeListEntry* pLibEntry = rBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
-                DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
+                DBG_ASSERT( pLibEntry, "LibEntry not found!" );
                 if ( pLibEntry )
                 {
                     if ( !rBasicBox.IsExpanded( pLibEntry ) )
@@ -1023,7 +1023,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                             Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
                             pSubRootEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
-                        DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
+                        DBG_ASSERT( pEntry, "Insert entry failed!" );
                     }
                     rBasicBox.SetCurEntry( pEntry );
                     rBasicBox.Select( rBasicBox.GetCurEntry() );        // OV-Bug?!

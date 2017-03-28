@@ -1255,7 +1255,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
 
 IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Timer *, void)
 {
-    DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
+    DBG_ASSERT( pEditView, "Not yet a View, but Syntax-Highlight?!" );
 
     bool const bWasModified = pEditEngine->IsModified();
     //pEditEngine->SetUpdateMode(false);
@@ -1309,7 +1309,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 
 void EditorWindow::CreateProgress( const OUString& rText, sal_uLong nRange )
 {
-    DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
+    DBG_ASSERT( !pProgress, "ProgressInfo exists already" );
     pProgress.reset(new ProgressInfo(
         GetShell()->GetViewFrame()->GetObjectShell(),
         rText,
@@ -2021,7 +2021,7 @@ IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
 {
     if (aEdtWindow->GetEditView())
     {
-        DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Wer scrollt hier ?" );
+        DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Who is scrolling?" );
         long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
         aEdtWindow->GetEditView()->Scroll( 0, nDiff );
         aBrkWindow->DoScroll( nDiff );

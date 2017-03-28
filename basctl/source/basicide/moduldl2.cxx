@@ -257,7 +257,7 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     if (eMode != ObjectMode::Module)
         return false;
 
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );
+    DBG_ASSERT( pEntry, "No entry?" );
 
     // check, if Standard library
     OUString aLibName = GetEntryText( pEntry, 0 );
@@ -1350,7 +1350,7 @@ void LibPage::DeleteCurrent()
 
 void LibPage::EndTabDialog()
 {
-    DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
+    DBG_ASSERT( pTabDlg, "TabDlg not set!" );
     if ( pTabDlg )
         pTabDlg->EndDialog( 1 );
 }
@@ -1533,7 +1533,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                         Image(BitmapEx(IDEResId(nId))),
                         pRootEntry, false,
                         o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                    DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
+                    DBG_ASSERT( pNewLibEntry, "Insert entry failed!" );
 
                     if( pNewLibEntry )
                     {
@@ -1542,7 +1542,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                             Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
                             pNewLibEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
-                        DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
+                        DBG_ASSERT( pEntry_, "Insert entry failed!" );
                         pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
                     }

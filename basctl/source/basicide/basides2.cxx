@@ -177,7 +177,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
     {
         pWin->SetStatus( pWin->GetStatus() & ~BASWIN_SUSPENDED );
         nKey = GetWindowId( pWin );
-        DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
+        DBG_ASSERT( nKey, "CreateBasWin: No Key - Window not found!" );
     }
     if( nKey && xLib.is() && rDocument.isInVBAMode() )
     {
