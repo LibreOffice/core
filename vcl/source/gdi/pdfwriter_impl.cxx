@@ -11078,11 +11078,6 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        OString sColorSpaces = copyExternalResources(*pPage, "ColorSpace");
-        OString sExtGStates = copyExternalResources(*pPage, "ExtGState");
-        OString sFonts = copyExternalResources(*pPage, "Font");
-        OString sXObjects = copyExternalResources(*pPage, "XObject");
-
         filter::PDFObjectElement* pPageContents = pPage->LookupObject("Contents");
         if (!pPageContents)
         {
@@ -11093,8 +11088,6 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         nWrappedFormObject = createObject();
         // Write the form XObject wrapped below. This is a separate object from
         // the wrapper, this way there is no need to alter the stream contents.
-        if (!updateObject(nWrappedFormObject))
-            return;
 
         OStringBuffer aLine;
         aLine.append(nWrappedFormObject);
@@ -11102,10 +11095,15 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
         aLine.append(" /Resources <<");
-        aLine.append(sColorSpaces);
-        aLine.append(sExtGStates);
-        aLine.append(sFonts);
-        aLine.append(sXObjects);
+        static const std::initializer_list<OString> aKeys =
+        {
+            "ColorSpace",
+            "ExtGState",
+            "Font",
+            "XObject"
+        };
+        for (const auto& rKey : aKeys)
+            aLine.append(copyExternalResources(*pPage, rKey));
         aLine.append(">>");
         aLine.append(" /BBox [ 0 0 ");
         aLine.append(aSize.Width());
@@ -11137,6 +11135,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         // Copy the original page stream to the form XObject stream.
         aLine.append(static_cast<const sal_Char*>(rPageStream.GetData()), rPageStream.GetSize());
         aLine.append("\nendstream\nendobj\n\n");
+        if (!updateObject(nWrappedFormObject))
+            return;
         CHECK_RETURN2(writeBuffer(aLine.getStr(), aLine.getLength()));
     }
 
