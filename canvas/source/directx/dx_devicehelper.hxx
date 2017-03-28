@@ -29,8 +29,9 @@
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 
-class OutputDevice;
 /* Definition of DeviceHelper class */
 
 namespace dxcanvas

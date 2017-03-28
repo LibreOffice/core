@@ -49,6 +49,7 @@
 #include <tools/urlobj.hxx>
 #include <algorithm>
 #include <map>
+#include <array>
 
 
 namespace svt
@@ -423,8 +424,8 @@ void AssignmentPersistentData::ImplCommit()
 
     struct AddressBookSourceDialogData
     {
-        VclPtr<FixedText>      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
-        VclPtr<ListBox>        pFields[FIELD_PAIRS_VISIBLE * 2];
+        std::array<VclPtr<FixedText>, FIELD_PAIRS_VISIBLE*2> pFieldLabels;
+        std::array<VclPtr<ListBox>, FIELD_PAIRS_VISIBLE*2> pFields;
 
         /// when working transient, we need the data source
         Reference< XDataSource >
@@ -449,27 +450,27 @@ void AssignmentPersistentData::ImplCommit()
 
 
         AddressBookSourceDialogData( )
-            :nFieldScrollPos(0)
+            :pFieldLabels{{nullptr}}
+            ,pFields{{nullptr}}
+            ,nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( true )
             ,pConfigData( new AssignmentPersistentData )
         {
-            memset(pFieldLabels, 0, sizeof(pFieldLabels));
-            memset(pFields, 0, sizeof(pFields));
         }
 
         AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
             const OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
-            :m_xTransientDataSource( _rxTransientDS )
+            :pFieldLabels{{nullptr}}
+            ,pFields{{nullptr}}
+            ,m_xTransientDataSource( _rxTransientDS )
             ,nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( false )
             ,pConfigData( new AssigmentTransientData( _rDataSourceName, _rTableName, _rFields ) )
         {
-            memset(pFieldLabels, 0, sizeof(pFieldLabels));
-            memset(pFields, 0, sizeof(pFields));
         }
 
         // Copy assignment is forbidden and not implemented.
@@ -977,14 +978,14 @@ void AssignmentPersistentData::ImplCommit()
 
         // loop through our field control rows and do some adjustments
         // for the new texts
-        VclPtr<FixedText>* pLeftLabelControl = m_pImpl->pFieldLabels;
-        VclPtr<FixedText>* pRightLabelControl = pLeftLabelControl + 1;
+        auto pLeftLabelControl = m_pImpl->pFieldLabels.begin();
+        auto pRightLabelControl = pLeftLabelControl+1;
         auto pLeftColumnLabel = m_pImpl->aFieldLabels.cbegin() + 2 * _nPos;
         auto pRightColumnLabel = pLeftColumnLabel + 1;
 
         // for the focus movement and the selection scroll
-        VclPtr<ListBox>* pLeftListControl = m_pImpl->pFields;
-        VclPtr<ListBox>* pRightListControl = pLeftListControl + 1;
+        auto pLeftListControl = m_pImpl->pFields.begin();
+        auto pRightListControl = pLeftListControl + 1;
 
         // for the focus movement
         sal_Int32 nOldFocusRow = -1;
