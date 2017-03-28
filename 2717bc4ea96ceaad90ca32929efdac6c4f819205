@@ -16,6 +16,24 @@
       "revId": "2717bc4ea96ceaad90ca32929efdac6c4f819205",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a67e32e2",
+        "filename": "vcl/inc/salbmp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-03-28T13:28:32Z",
+      "side": 1,
+      "message": "no reason, just following surrounding style, same can be said for Scale which has the same pattern",
+      "parentUuid": "9a57fde8_a61712a2",
+      "revId": "2717bc4ea96ceaad90ca32929efdac6c4f819205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
