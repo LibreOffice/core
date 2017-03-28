@@ -207,8 +207,6 @@ interface CellSelection
     SID_OPENDLG_ICONSET     [ ExecMethod = ExecuteEdit; ]
     SID_OPENDLG_CONDDATE    [ ExecMethod = ExecuteEdit; ]
     SID_OPENDLG_CONDFRMT_MANAGER    [ ExecMethod = ExecuteEdit; ]
-    SID_COLORSCALE          [ ExecMethod = ExecuteEdit; ]
-    SID_DATABAR             [ ExecMethod = ExecuteEdit; ]
     FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_HIDE_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_SHOW_NOTE           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

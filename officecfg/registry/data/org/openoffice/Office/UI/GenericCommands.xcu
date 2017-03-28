@@ -2868,14 +2868,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ChoosePolygon" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Symbol Selection</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:FillStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Area Style / Filling</value>

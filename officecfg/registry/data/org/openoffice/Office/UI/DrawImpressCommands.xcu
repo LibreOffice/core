@@ -375,22 +375,12 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:PreviewWindow" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pre~view</value>
-        </prop>
-      </node>
       <node oor:name=".uno:CustomAnimation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Animation</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:CustomAnimationSchemes" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Animation Schemes...</value>
         </prop>
       </node>
       <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
@@ -467,11 +457,6 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:HandoutMasterPage" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Handout Master</value>
         </prop>
       </node>
       <node oor:name=".uno:NotesMasterPage" oor:op="replace">
@@ -596,11 +581,6 @@
       <node oor:name=".uno:ConvertIntoMetaFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To ~Metafile</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:PackAndGo" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pack</value>
         </prop>
       </node>
       <node oor:name=".uno:convert_to_contour" oor:op="replace">

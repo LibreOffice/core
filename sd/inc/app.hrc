@@ -212,7 +212,7 @@
 #define SID_HELPLINES_VISIBLE               (SID_SD_START+179)
 #define SID_HELPLINES_FRONT                 (SID_SD_START+180)
 #define SID_BEFORE_OBJ                      (SID_SD_START+181)
-#define SID_PREVIEW_WIN                     (SID_SD_START+182)
+    // FREE
 #define SID_CUSTOM_ANIMATION_PANEL          (SID_SD_START+183)
     // FREE
 // and even more...
@@ -351,7 +351,6 @@
 
 #define SID_PREVIEW_STATE                   (SID_SD_START+329)
     // FREE
-#define SID_CUSTOM_ANIMATION_SCHEMES_PANEL  (SID_SD_START+333)
 #define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
     // FREE
 #define SID_PHOTOALBUM                      (SID_SD_START+336)
@@ -366,7 +365,7 @@
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
     // FREE
 #define SID_SLIDE_MASTER_MODE               (SID_SD_START+348)
-#define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
+    // FREE
 #define SID_NOTES_MASTER_MODE               (SID_SD_START+350)
     // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
@@ -390,7 +389,7 @@
     // FREE
 #define SID_CONVERT_TO_BITMAP               (SID_SD_START+378)
 #define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
-#define SID_PACKNGO                         (SID_SD_START+380)
+    // FREE
 #define SID_CONVERT_TO_CONTOUR              (SID_SD_START+381)
 #define SID_EDIT_HYPERLINK                  (SID_SD_START+382)
 #define ID_VAL_DUMMY1                       (SID_SD_START+383)
