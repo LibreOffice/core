@@ -48,6 +48,12 @@ public:
     OpenGLVCLContextZone();
 };
 
+class VCL_DLLPUBLIC PreDefaultWinNoOpenGLZone {
+public:
+    PreDefaultWinNoOpenGLZone();
+    ~PreDefaultWinNoOpenGLZone();
+};
+
 #endif // INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
