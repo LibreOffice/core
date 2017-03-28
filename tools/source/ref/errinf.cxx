@@ -18,6 +18,9 @@
  */
 
 #include <limits.h>
+#include <vcl/virdev.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/menu.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
