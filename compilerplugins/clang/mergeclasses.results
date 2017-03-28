@@ -64,7 +64,6 @@ merge IDocumentUndoRedo with sw::UndoManager
 merge IFinishedThreadListener with ThreadListener
 merge IGrammarContact with SwGrammarContact
 merge IInterface with SwDoc
-merge IMailDispatcherListener with SwMailDispatcherListener_Impl
 merge IStyleAccess with SwStyleManager
 merge IStylePoolIteratorAccess with (anonymous namespace)::Iterator
 merge ISwFrameControl with SwFrameMenuButtonBase
@@ -83,6 +82,7 @@ merge OpenGLDeviceInfo with X11OpenGLDeviceInfo
 merge OpenGLSalGraphicsImpl with X11OpenGLSalGraphicsImpl
 merge PPTExBulletProvider with PPTWriter
 merge RefNode with RscTop
+merge RscContWriteSrc with RscCont
 merge RscLongRange with RscLongEnumRange
 merge SOParagraph with ParagraphObj
 merge SalData with SalGenericData
@@ -158,6 +158,7 @@ merge SwUnoCursor with SwUnoTableCursor
 merge SwXParaFrameEnumeration with SwXParaFrameEnumerationImpl
 merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl
 merge SwXTextRanges with SwXTextRangesImpl
+merge Task with Timer
 merge TextObj with TextObjBinary
 merge TextRenderImpl with CairoTextRender
 merge UniqueIndexImpl with UniqueIndex
@@ -370,11 +371,9 @@ merge writerfilter::ooxml::OOXMLDocument with writerfilter::ooxml::OOXMLDocument
 merge writerfilter::ooxml::OOXMLFastContextHandlerLinear with writerfilter::ooxml::OOXMLFastContextHandlerMath
 merge writerfilter::ooxml::OOXMLStream with writerfilter::ooxml::OOXMLStreamImpl
 merge writerfilter::rtftok::RTFDocument with writerfilter::rtftok::RTFDocumentImpl
-merge writerperfect::test::WpftFilterFixture with writerperfect::test::WpftFilterTestBase
 merge xmloff::IEventAttacher with xmloff::OElementImport
 merge xmloff::IEventAttacherManager with xmloff::ODefaultEventAttacherManager
 merge xmloff::IFormsExportContext with xmloff::OFormLayerXMLExport_Impl
 merge xmloff::OPropertyExport with xmloff::OElementExport
 merge xmloff::OPropertyImport with xmloff::OElementImport
 merge xmloff::OURLReferenceImport with xmloff::OButtonImport
-merge xmlsecurity::Certificate with X509Certificate_NssImpl
