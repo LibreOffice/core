@@ -1354,23 +1354,6 @@ SfxBoolItem CustomAnimation SID_CUSTOM_ANIMATION_PANEL
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
 SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 
 [
@@ -1881,25 +1864,6 @@ SfxBoolItem HalfSphere SID_3D_HALF_SPHERE
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
-]
-
-SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    SlotType = SfxBoolItem
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
@@ -3006,23 +2970,6 @@ SfxBoolItem OutputQualityGrayscale SID_OUTPUT_QUALITY_GRAYSCALE
     GroupId = GID_VIEW;
 ]
 
-SfxVoidItem PackAndGo SID_PACKNGO
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
 SfxVoidItem PageMargin SID_PAGEMARGIN
 (SfxUInt32Item PageLeft ID_VAL_PAGELEFT,SfxUInt32Item PageRight ID_VAL_PAGERIGHT,SfxUInt32Item PageTop ID_VAL_PAGETOP,SfxUInt32Item PageBottom ID_VAL_PAGEBOTTOM,SfxBoolItem ScaleObjects ID_VAL_SCALEOBJECTS)
 [
@@ -3284,24 +3231,6 @@ SfxUInt32Item PreviewState SID_PREVIEW_STATE
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-SfxBoolItem PreviewWindow SID_PREVIEW_WIN
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
 

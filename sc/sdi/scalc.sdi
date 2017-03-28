@@ -864,42 +864,6 @@ SfxVoidItem ConditionalFormatManagerDialog SID_OPENDLG_CONDFRMT_MANAGER
 ]
 
 
-SfxVoidItem ColorScaleDialog SID_COLORSCALE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
-SfxVoidItem DataBarDialog SID_DATABAR
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-
 SfxVoidItem ConsolidateExec SID_CONSOLIDATE
 ()
 [
@@ -1121,24 +1085,6 @@ SfxVoidItem DataFilterStandardFilter SID_FILTER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DATA;
-]
-
-
-SfxVoidItem DataImport SID_IMPORT_DATA
-(SfxStringItem DatabaseName SID_IMPORT_DATA,SfxStringItem SqlCommand FN_PARAM_1)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
 
@@ -3211,25 +3157,6 @@ SfxVoidItem InsertName FID_INSERT_NAME
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
-]
-
-
-SfxVoidItem InsertObjectStarImage SID_INSERT_SIMAGE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
 
@@ -5676,24 +5603,6 @@ SfxVoidItem ToolProtectionDocument FID_PROTECT_DOC
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-
-SfxVoidItem ToolsOptions SID_SCOPTIONS
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
 

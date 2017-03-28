@@ -684,11 +684,6 @@ interface DrawView
         StateMethod = GetMenuState ;
         ReadOnlyDoc = FALSE ;
     ]
-    SID_CHOOSE_POLYGON // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     FN_NUM_BULLET_ON
     [
         ExecMethod = FuTemporary;

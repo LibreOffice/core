@@ -1486,14 +1486,6 @@
           <value xml:lang="en-US">Protect ~Spreadsheet...</value>
         </prop>
       </node>
-      <node oor:name=".uno:ToolsOptions" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Spreadsheet Options</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ScenarioManager" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sc~enarios...</value>
@@ -1617,14 +1609,6 @@
       <node oor:name=".uno:AutoOutline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~AutoOutline</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:DataImport" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Import Data</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DataReImport" oor:op="replace">
@@ -1896,11 +1880,6 @@
           <value xml:lang="en-US">Lin~ks...</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertObjectStarImage" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert from Image Editor</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SheetRightToLeft" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sheet R~ight-To-Left</value>
@@ -2146,16 +2125,6 @@
       <node oor:name=".uno:DeleteShapeHyperlink" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Remove Hyperlink</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ColorScaleDialog" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Color Scale...</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:DataBarDialog" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Data Bar...</value>
         </prop>
       </node>
       <node oor:name=".uno:PasteOnly" oor:op="replace">

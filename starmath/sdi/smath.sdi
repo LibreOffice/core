@@ -124,24 +124,6 @@ SfxVoidItem ElementsDockingWindow SID_ELEMENTSDOCKINGWINDOW
 ]
 
 
-SfxVoidItem Preferences SID_PREFERENCES
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-
 SfxStringItem ConfigName SID_TEXT
 
 [
@@ -509,24 +491,6 @@ SfxVoidItem SetPaperSize SID_GETEDITTEXT
 
 
 SfxVoidItem SymbolCatalogue SID_SYMBOLS_CATALOGUE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-
-SfxVoidItem Symbols SID_SYMBOLS
 ()
 [
     AutoUpdate = FALSE,

@@ -313,7 +313,6 @@
 #define SID_PRESENTATION_CURRENT_SLIDE                  ( SID_SVX_START + 158 )
 #define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
 #define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
-#define SID_CHOOSE_POLYGON                              ( SID_SVX_START + 162 )
 #define SID_ATTR_FILL_STYLE                             ( SID_SVX_START + 164 )
 #define SID_ATTR_FILL_COLOR                             ( SID_SVX_START + 165 )
 #define SID_ATTR_FILL_GRADIENT                          ( SID_SVX_START + 166 )
