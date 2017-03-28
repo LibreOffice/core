@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_666a8a82",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1001537
+      },
+      "writtenOn": "2017-03-28T08:08:08Z",
+      "side": 1,
+      "message": "Yes, you\u0027re definitly right of course.\nI just mimicked syntax samples elsewhere in pythonscript.py.\n\nI see two options:\n1.\n  if url.startswith( \"file:\" ):\n     [...]\n  elif url.startswith( \"vnd.sun.star.tdoc\" ):\n     [...]\n  else:\n     [...]\nbut what if we enter \"else:\" ?\n \n2.\n  if url.startswith( \"vnd.sun.star.tdoc\" ):\n     [...]\n  else:\n     [...]\nthis second sounds better, as hasChanged() should return a significant value for all other schemas. Am I wrong ?",
+      "parentUuid": "9a57fde8_8331200e",
+      "revId": "d7bf4c38baa01ffbd6667c6d33fa3dca61d8e700",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_6356fc2a",
         "filename": "scripting/source/pyprov/pythonscript.py",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-03-27T20:35:24Z",
       "side": 1,
       "message": "is this commit necessary? sounds a bit risky",
+      "revId": "d7bf4c38baa01ffbd6667c6d33fa3dca61d8e700",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8605aec3",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001537
+      },
+      "writtenOn": "2017-03-28T08:08:08Z",
+      "side": 1,
+      "message": "The goal is, of course, to reload the embedded script only when changes have been made : most of the time this will not occur and we need to prevent unnecessary reloading.\nThis could be better :\n    # storage.commit()\n    storage.setModified(False)\nbut I\u0027m not more sure of any side effects...",
+      "parentUuid": "9a57fde8_6356fc2a",
       "revId": "d7bf4c38baa01ffbd6667c6d33fa3dca61d8e700",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
