@@ -117,6 +117,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/numbers \
     comphelper/source/misc/officeresourcebundle \
     comphelper/source/misc/officerestartmanager \
+    comphelper/source/misc/profilezone \
     comphelper/source/misc/proxyaggregation \
     comphelper/source/misc/random \
     comphelper/source/misc/scopeguard \

@@ -121,6 +121,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>
+#include <comphelper/profilezone.hxx>
 
 #include "helper/unowrapper.hxx"
 
@@ -221,6 +222,12 @@ public:
     virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode) override;
 
     virtual void SAL_CALL pause(sal_Int32 nMilliseconds) override;
+
+    virtual void SAL_CALL startRecording() override;
+
+    virtual void SAL_CALL stopRecording() override;
+
+    css::uno::Sequence< OUString > SAL_CALL getRecordingAndClear() override;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) override;
@@ -1887,6 +1894,7 @@ void SAL_CALL VCLXToolkit::reschedule()
 void SAL_CALL VCLXToolkit::processEventsToIdle()
 {
     SolarMutexGuard aSolarGuard;
+    ::comphelper::ProfileZone aZone("processEvents");
     Scheduler::ProcessEventsToIdle();
 }
 
@@ -1908,6 +1916,21 @@ void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMod
 void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
 {
     new Pause(nMilliseconds);
+}
+
+void SAL_CALL VCLXToolkit::startRecording()
+{
+    ::comphelper::ProfileRecording::startRecording();
+}
+
+void SAL_CALL VCLXToolkit::stopRecording()
+{
+    ::comphelper::ProfileRecording::startRecording( false );
+}
+
+css::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
+{
+    return ::comphelper::ProfileRecording::getRecordingAndClear();
 }
 
 // css:awt:XToolkitRobot
