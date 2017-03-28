@@ -116,7 +116,7 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
     }
 }
 
-// Forward References upon label und procedures
+// Forward References upon label and procedures
 // establish a linkage. The beginning of the linkage is at the passed parameter,
 // the end of the linkage is 0.
 
