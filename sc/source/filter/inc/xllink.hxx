@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
 
+#include <ostream>
+
 #include <sal/types.h>
 
 // Constants and Enumerations =================================================
@@ -69,15 +71,31 @@ const sal_uInt16 EXC_SUPB_SELF              = 0x0401;
 const sal_uInt16 EXC_SUPB_ADDIN             = 0x3A01;
 
 /** This enumeration specifies the type of a SUPBOOK record. */
-enum XclSupbookType
+enum class XclSupbookType
 {
-    EXC_SBTYPE_UNKNOWN,     /// unknown SUPBOOK record type.
-    EXC_SBTYPE_SELF,        /// SUPBOOK is used for internal references.
-    EXC_SBTYPE_EXTERN,      /// SUPBOOK is used for external references.
-    EXC_SBTYPE_ADDIN,       /// SUPBOOK contains add-in functions.
-    EXC_SBTYPE_SPECIAL,     /// SUPBOOK is used for DDE or OLE links.
-    EXC_SBTYPE_EUROTOOL     /// SUPBOOK is used for EUROCONVERT.
+    Unknown,     /// unknown SUPBOOK record type.
+    Self,        /// SUPBOOK is used for internal references.
+    Extern,      /// SUPBOOK is used for external references.
+    Addin,       /// SUPBOOK contains add-in functions.
+    Special,     /// SUPBOOK is used for DDE or OLE links.
+    Eurotool     /// SUPBOOK is used for EUROCONVERT.
 };
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const XclSupbookType& type )
+{
+    switch (type)
+    {
+    case XclSupbookType::Unknown: return stream << "unknown";
+    case XclSupbookType::Self: return stream << "self";
+    case XclSupbookType::Extern: return stream << "extern";
+    case XclSupbookType::Addin: return stream << "addin";
+    case XclSupbookType::Special: return stream << "special";
+    case XclSupbookType::Eurotool: return stream << "eurotool";
+    default: return stream << static_cast<int>(type);
+    }
+}
 
 #endif
 

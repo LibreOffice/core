@@ -1497,7 +1497,7 @@ void XclExpExternSheet::WriteBody( XclExpStream& rStrm )
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, sal_uInt16 nXclTabCount ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK, 4 ),
-    meType( EXC_SBTYPE_SELF ),
+    meType( XclSupbookType::Self ),
     mnXclTabCount( nXclTabCount ),
     mnFileId( 0 )
 {
@@ -1505,7 +1505,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, sal_uInt16 nXclTabCount )
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK, 4 ),
-    meType( EXC_SBTYPE_ADDIN ),
+    meType( XclSupbookType::Addin ),
     mnXclTabCount( 1 ),
     mnFileId( 0 )
 {
@@ -1515,7 +1515,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl, Xcl
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
     maUrlEncoded( rUrl ),
-    meType( EXC_SBTYPE_EUROTOOL ),
+    meType( XclSupbookType::Eurotool ),
     mnXclTabCount( 0 ),
     mnFileId( 0 )
 {
@@ -1526,7 +1526,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
     maUrlEncoded( XclExpUrlHelper::EncodeUrl( rRoot, rUrl ) ),
-    meType( EXC_SBTYPE_EXTERN ),
+    meType( XclSupbookType::Extern ),
     mnXclTabCount( 0 ),
     mnFileId( 0 )
 {
@@ -1547,7 +1547,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rApplic, 
     maUrl( rApplic ),
     maDdeTopic( rTopic ),
     maUrlEncoded( XclExpUrlHelper::EncodeDde( rApplic, rTopic ) ),
-    meType( EXC_SBTYPE_SPECIAL ),
+    meType( XclSupbookType::Special ),
     mnXclTabCount( 0 ),
     mnFileId( 0 )
 {
@@ -1556,12 +1556,12 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rApplic, 
 
 bool XclExpSupbook::IsUrlLink( const OUString& rUrl ) const
 {
-    return (meType == EXC_SBTYPE_EXTERN || meType == EXC_SBTYPE_EUROTOOL) && (maUrl == rUrl);
+    return (meType == XclSupbookType::Extern || meType == XclSupbookType::Eurotool) && (maUrl == rUrl);
 }
 
 bool XclExpSupbook::IsDdeLink( const OUString& rApplic, const OUString& rTopic ) const
 {
-    return (meType == EXC_SBTYPE_SPECIAL) && (maUrl == rApplic) && (maDdeTopic == rTopic);
+    return (meType == XclSupbookType::Special) && (maUrl == rApplic) && (maDdeTopic == rTopic);
 }
 
 void XclExpSupbook::FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
@@ -1612,7 +1612,7 @@ sal_uInt16 XclExpSupbook::GetTabCount() const
 
 sal_uInt16 XclExpSupbook::InsertTabName( const OUString& rTabName, ScExternalRefCache::TableTypeRef const & xCacheTable )
 {
-    OSL_ENSURE( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
+    SAL_WARN_IF( meType != XclSupbookType::Extern, "sc.filter", "Don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
     XclExpXctRef xXct( new XclExpXct( GetRoot(), rTabName, nSBTab, xCacheTable ) );
     AddRecSize( xXct->GetTabName().GetSize() );
@@ -1731,12 +1731,12 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
 {
     switch( meType )
     {
-        case EXC_SBTYPE_SELF:
+        case XclSupbookType::Self:
             rStrm << mnXclTabCount << EXC_SUPB_SELF;
         break;
-        case EXC_SBTYPE_EXTERN:
-        case EXC_SBTYPE_SPECIAL:
-        case EXC_SBTYPE_EUROTOOL:
+        case XclSupbookType::Extern:
+        case XclSupbookType::Special:
+        case XclSupbookType::Eurotool:
         {
             sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
             rStrm << nCount << maUrlEncoded;
@@ -1745,11 +1745,11 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
                 rStrm << maXctList.GetRecord( nPos )->GetTabName();
         }
         break;
-        case EXC_SBTYPE_ADDIN:
+        case XclSupbookType::Addin:
             rStrm << mnXclTabCount << EXC_SUPB_ADDIN;
         break;
         default:
-            OSL_FAIL( "XclExpSupbook::WriteBody - unknown SUPBOOK type" );
+            SAL_WARN( "sc.filter", "Unhandled SUPBOOK type " << meType);
     }
 }
 
@@ -1978,7 +1978,7 @@ bool XclExpSupbookBuffer::InsertEuroTool(
     OUString aUrl( "\001\010EUROTOOL.XLA" );
     if( !GetSupbookUrl( xSupbook, rnSupbook, aUrl ) )
     {
-        xSupbook.reset( new XclExpSupbook( GetRoot(), aUrl, EXC_SBTYPE_EUROTOOL ) );
+        xSupbook.reset( new XclExpSupbook( GetRoot(), aUrl, XclSupbookType::Eurotool ) );
         rnSupbook = Append( xSupbook );
     }
     rnExtName = xSupbook->InsertEuroTool( rName );
@@ -2080,7 +2080,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
         XclExpSupbookRef xRef( maSupbookList.GetRecord( nPos));
-        if (xRef->GetType() != EXC_SBTYPE_EXTERN)
+        if (xRef->GetType() != XclSupbookType::Extern)
             continue;   // handle only external reference (for now?)
 
         sal_uInt16 nId = xRef->GetFileId();
@@ -2120,7 +2120,7 @@ bool XclExpSupbookBuffer::HasExternalReferences() const
 {
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
-        if (maSupbookList.GetRecord( nPos)->GetType() == EXC_SBTYPE_EXTERN)
+        if (maSupbookList.GetRecord( nPos)->GetType() == XclSupbookType::Extern)
             return true;
     }
     return false;

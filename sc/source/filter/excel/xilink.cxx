@@ -349,12 +349,12 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
     maName = rStrm.ReadUniString( nLen );
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
-        if( eSubType == EXC_SBTYPE_ADDIN )
+        if( eSubType == XclSupbookType::Addin )
         {
             meType = xlExtAddIn;
             maName = XclImpRoot::GetScAddInName( maName );
         }
-        else if ( (eSubType == EXC_SBTYPE_EUROTOOL) &&
+        else if ( (eSubType == XclSupbookType::Eurotool) &&
                 maName.equalsIgnoreAsciiCase( "EUROCONVERT" ) )
             meType = xlExtEuroConvert;
         else
@@ -619,7 +619,7 @@ void XclImpSupbookTab::LoadCachedValues( const ScExternalRefCache::TableTypeRef&
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     XclImpRoot( rStrm.GetRoot() ),
-    meType( EXC_SBTYPE_UNKNOWN ),
+    meType( XclSupbookType::Unknown ),
     mnSBTab( EXC_TAB_DELETED )
 {
     sal_uInt16 nSBTabCnt;
@@ -629,8 +629,8 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     {
         switch( rStrm.ReaduInt16() )
         {
-            case EXC_SUPB_SELF:     meType = EXC_SBTYPE_SELF;   break;
-            case EXC_SUPB_ADDIN:    meType = EXC_SBTYPE_ADDIN;  break;
+            case EXC_SUPB_SELF:     meType = XclSupbookType::Self;   break;
+            case EXC_SUPB_ADDIN:    meType = XclSupbookType::Addin;  break;
             default:    OSL_FAIL( "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
         }
         return;
@@ -642,12 +642,12 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
 
     if( maXclUrl.equalsIgnoreAsciiCase( "\010EUROTOOL.XLA" ) )
     {
-        meType = EXC_SBTYPE_EUROTOOL;
+        meType = XclSupbookType::Eurotool;
         maSupbTabList.push_back( o3tl::make_unique<XclImpSupbookTab>( maXclUrl ) );
     }
     else if( nSBTabCnt )
     {
-        meType = EXC_SBTYPE_EXTERN;
+        meType = XclSupbookType::Extern;
 
         //assuming all empty strings with just len header of 0
         const size_t nMinRecordSize = sizeof(sal_Int16);
@@ -667,7 +667,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     }
     else
     {
-        meType = EXC_SBTYPE_SPECIAL;
+        meType = XclSupbookType::Special;
         // create dummy list entry
         maSupbTabList.push_back( o3tl::make_unique<XclImpSupbookTab>( maXclUrl ) );
     }
@@ -706,20 +706,20 @@ const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
         SAL_WARN("sc", "XclImpSupbook::GetExternName - index must be >0");
         return nullptr;
     }
-    if (meType == EXC_SBTYPE_SELF || nXclIndex > maExtNameList.size())
+    if (meType == XclSupbookType::Self || nXclIndex > maExtNameList.size())
         return nullptr;
     return maExtNameList[nXclIndex-1].get();
 }
 
 bool XclImpSupbook::GetLinkData( OUString& rApplic, OUString& rTopic ) const
 {
-    return (meType == EXC_SBTYPE_SPECIAL) && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
+    return (meType == XclSupbookType::Special) && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
 }
 
 const OUString& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
-    const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : nullptr;
+    const XclImpName* pName = (meType == XclSupbookType::Self) ? GetNameManager().GetName( nXclNameIdx ) : nullptr;
     return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_OUSTRING;
 }
 
@@ -737,7 +737,7 @@ sal_uInt16 XclImpSupbook::GetTabCount() const
 
 void XclImpSupbook::LoadCachedValues()
 {
-    if (meType != EXC_SBTYPE_EXTERN || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0 || !GetDocShell())
+    if (meType != XclSupbookType::Extern || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0 || !GetDocShell())
         return;
 
     OUString aAbsUrl( ScGlobal::GetAbsDocName(maXclUrl, GetDocShell()) );
@@ -811,7 +811,7 @@ void XclImpLinkManagerImpl::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFor
 bool XclImpLinkManagerImpl::IsSelfRef( sal_uInt16 nXtiIndex ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( nXtiIndex );
-    return pSupbook && (pSupbook->GetType() == EXC_SBTYPE_SELF);
+    return pSupbook && (pSupbook->GetType() == XclSupbookType::Self);
 }
 
 bool XclImpLinkManagerImpl::GetScTabRange(
