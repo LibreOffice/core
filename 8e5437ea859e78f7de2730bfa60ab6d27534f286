@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_91796696",
+        "filename": "vcl/unx/generic/app/saldisp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-28T21:19:37Z",
+      "side": 0,
+      "message": "it doesn\u0027t hurt to write a null terminator in this case",
+      "revId": "8e5437ea859e78f7de2730bfa60ab6d27534f286",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

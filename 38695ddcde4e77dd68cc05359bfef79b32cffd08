@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_7174029c",
+        "filename": "vcl/unx/generic/app/saldisp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-28T21:19:37Z",
+      "side": 1,
+      "message": "it doesnt make sense to return a length value as a KeySym",
+      "revId": "38695ddcde4e77dd68cc05359bfef79b32cffd08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d173eeaf",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3009,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-28T21:19:37Z",
+      "side": 1,
+      "message": "actually at this point nLen already contains the \"required\" value since it is *pLen in the called function - you just need to add 1 to it, if that number does indeed not include the 0 terminator",
+      "revId": "38695ddcde4e77dd68cc05359bfef79b32cffd08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
