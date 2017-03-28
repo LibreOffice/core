@@ -46,6 +46,11 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/debugevent.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/print.hxx>
+#include <scrwnd.hxx>
 
 #ifdef _WIN32
 #include <svsys.h>
@@ -267,6 +272,17 @@ static bool isInitVCL()
             pSVData->mpDefInst != nullptr;
 }
 
+#ifdef DBG_UTIL
+namespace vclmain
+{
+    bool isAlive()
+    {
+        return ImplGetSVData()->mpDefInst;
+    }
+}
+#endif
+
+
 bool InitVCL()
 {
     if( pExceptionHandler != nullptr )
@@ -364,6 +380,7 @@ void DeInitVCL()
         ::comphelper::JoinAsyncEventNotifiers();
     }
     ImplSVData* pSVData = ImplGetSVData();
+
     // lp#1560328: clear cache before disposing rest of VCL
     if(pSVData->mpBlendFrameCache)
         pSVData->mpBlendFrameCache->m_aLastResult.Clear();
@@ -545,6 +562,31 @@ void DeInitVCL()
     delete pSVData->mpSalTimer;
     pSVData->mpSalTimer = nullptr;
 
+    pSVData->mpDefaultWin = nullptr;
+    pSVData->mpIntroWindow = nullptr;
+    pSVData->maAppData.mpActivePopupMenu = nullptr;
+    pSVData->maAppData.mpWheelWindow = nullptr;
+    pSVData->maGDIData.mpFirstWinGraphics = nullptr;
+    pSVData->maGDIData.mpLastWinGraphics = nullptr;
+    pSVData->maGDIData.mpFirstVirGraphics = nullptr;
+    pSVData->maGDIData.mpLastVirGraphics = nullptr;
+    pSVData->maGDIData.mpFirstPrnGraphics = nullptr;
+    pSVData->maGDIData.mpLastPrnGraphics = nullptr;
+    pSVData->maGDIData.mpFirstVirDev = nullptr;
+    pSVData->maGDIData.mpLastVirDev = nullptr;
+    pSVData->maGDIData.mpFirstPrinter = nullptr;
+    pSVData->maGDIData.mpLastPrinter = nullptr;
+    pSVData->maWinData.mpFirstFrame = nullptr;
+    pSVData->maWinData.mpAppWin = nullptr;
+    pSVData->maWinData.mpActiveApplicationFrame = nullptr;
+    pSVData->maWinData.mpCaptureWin = nullptr;
+    pSVData->maWinData.mpLastDeacWin = nullptr;
+    pSVData->maWinData.mpFirstFloat = nullptr;
+    pSVData->maWinData.mpLastExecuteDlg = nullptr;
+    pSVData->maWinData.mpExtTextInputWin = nullptr;
+    pSVData->maWinData.mpTrackWin = nullptr;
+    pSVData->maWinData.mpAutoScrollWin = nullptr;
+    pSVData->maWinData.mpLastWheelWindow = nullptr;
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
