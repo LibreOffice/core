@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
-<!-- V. https://github.com/Kruno-S/acor_hr-HR-LibreOffice/blob/master/README.md#documentlistxml -->
+<!-- V. https://github.com/krunose/libo-acorr-hr/blob/master/dokumentacija.md#documentlistxml -->
+  <block-list:block block-list:abbreviated-name="med. Biochem." block-list:name="med. biochem."/>
+  <block-list:block block-list:abbreviated-name="med. Chem." block-list:name="med. chem."/>
+  <block-list:block block-list:abbreviated-name="med. Dent." block-list:name="med. dent."/>
+  <block-list:block block-list:abbreviated-name="med. Lab." block-list:name="med. lab."/>
+  <block-list:block block-list:abbreviated-name="med. Techn." block-list:name="med. techn."/>
+  <block-list:block block-list:abbreviated-name="med. Vet." block-list:name="med. vet."/>
+  <block-list:block block-list:abbreviated-name=":-a:" block-list:name="ā"/>
+  <block-list:block block-list:abbreviated-name=":-e:" block-list:name="ē"/>
+  <block-list:block block-list:abbreviated-name=":-i:" block-list:name="ī"/>
+  <block-list:block block-list:abbreviated-name=":-o:" block-list:name="ō"/>
+  <block-list:block block-list:abbreviated-name=":-u:" block-list:name="ū"/>
   <block-list:block block-list:abbreviated-name=":'a:" block-list:name="ȁ"/>
   <block-list:block block-list:abbreviated-name=":'e:" block-list:name="ȅ"/>
   <block-list:block block-list:abbreviated-name=":'i:" block-list:name="ȉ"/>
@@ -63,6 +74,8 @@
   <block-list:block block-list:abbreviated-name=":9,30:" block-list:name="🕤"/>
   <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
   <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":^10:" block-list:name="¹⁰"/>
+  <block-list:block block-list:abbreviated-name=":_10:" block-list:name="₁₀"/>
   <block-list:block block-list:abbreviated-name=":9 h:" block-list:name="🕘"/>
   <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
   <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>

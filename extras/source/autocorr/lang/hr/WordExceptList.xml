@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
-﻿<!-- V. https://github.com/Kruno-S/acor_hr-HR-LibreOffice/blob/master/README.md#wordexceptlistxml -->
+﻿<!-- V. https://github.com/krunose/libo-acorr-hr/blob/master/dokumentacija.md#wordexceptlistxml -->
+	<block-list:block block-list:abbreviated-name="CTa"/><!-- [engl.] Computed Tomography [pogreška: CT-a] -->
+	<block-list:block block-list:abbreviated-name="CTom"/><!-- [engl.] Computed Tomography [pogreška: CT-om] -->
+	<block-list:block block-list:abbreviated-name="CTu"/><!-- [engl.] Computed Tomography [pogreška: CT-u] -->
+	<block-list:block block-list:abbreviated-name="CVa"/><!-- lat. curriculum vitae [pogreška: CV-a] -->
+	<block-list:block block-list:abbreviated-name="CVom"/><!-- lat. curriculum vitae [pogreška: CV-om -->
+	<block-list:block block-list:abbreviated-name="CVu"/><!-- lat. curriculum vitae [pogreška: CV-u -->
 	<block-list:block block-list:abbreviated-name="EUa"/><!-- Europska unija [pogreška: EU-a] -->
 	<block-list:block block-list:abbreviated-name="EUem"/><!-- Europska unija [pogreška: EU-om] -->
 	<block-list:block block-list:abbreviated-name="EUi"/><!-- Europska unija [pogreška: EU-a] -->
