@@ -1438,24 +1438,10 @@ StyleSettings::GetUseSystemUIFonts() const
     return mxData->mbUseSystemUIFonts;
 }
 
-void
-StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
-{
-    CopyData();
-    mxData->mnUseFlatBorders = bUseFlatBorders;
-}
-
 bool
 StyleSettings::GetUseFlatBorders() const
 {
     return (bool) mxData->mnUseFlatBorders;
-}
-
-void
-StyleSettings::SetUseFlatMenus( bool bUseFlatMenus )
-{
-    CopyData();
-    mxData->mnUseFlatMenus = bUseFlatMenus;
 }
 
 bool
@@ -1495,13 +1481,6 @@ bool
 StyleSettings::GetSkipDisabledInMenus() const
 {
     return mxData->mbSkipDisabledInMenus;
-}
-
-void
-StyleSettings::SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
-{
-    CopyData();
-    mxData->mbHideDisabledMenuItems = bHideDisabledMenuItems;
 }
 
 bool
@@ -1732,24 +1711,10 @@ StyleSettings::GetBorderSize() const
     return mxData->mnBorderSize;
 }
 
-void
-StyleSettings::SetTitleHeight( long nSize )
-{
-    CopyData();
-    mxData->mnTitleHeight = nSize;
-}
-
 long
 StyleSettings::GetTitleHeight() const
 {
     return mxData->mnTitleHeight;
-}
-
-void
-StyleSettings::SetFloatTitleHeight( long nSize )
-{
-    CopyData();
-    mxData->mnFloatTitleHeight = nSize;
 }
 
 long
@@ -1788,13 +1753,6 @@ long
 StyleSettings::GetMinThumbSize() const
 {
     return mxData->mnMinThumbSize;
-}
-
-void
-StyleSettings::SetSpinSize( long nSize )
-{
-    CopyData();
-    mxData->mnSpinSize = nSize;
 }
 
 long

@@ -409,10 +409,8 @@ public:
     void                            SetUseSystemUIFonts( bool bUseSystemUIFonts );
     bool                            GetUseSystemUIFonts() const;
 
-    void                            SetUseFlatBorders( bool bUseFlatBorders );
     bool                            GetUseFlatBorders() const;
 
-    void                            SetUseFlatMenus( bool bUseFlatMenus );
     bool                            GetUseFlatMenus() const;
 
     void                            SetUseImagesInMenus( TriState eUseImagesInMenus );
@@ -424,7 +422,6 @@ public:
     void                            SetSkipDisabledInMenus( bool bSkipDisabledInMenus );
     bool                            GetSkipDisabledInMenus() const;
 
-    void                            SetHideDisabledMenuItems( bool bHideDisabledMenuItems );
     bool                            GetHideDisabledMenuItems() const;
 
     void                            SetContextMenuShortcuts( TriState eContextMenuShortcuts );
@@ -477,10 +474,8 @@ public:
 
     long                            GetBorderSize() const;
 
-    void                            SetTitleHeight( long nSize );
     long                            GetTitleHeight() const;
 
-    void                            SetFloatTitleHeight( long nSize );
     long                            GetFloatTitleHeight() const;
 
     long                            GetTearOffTitleHeight() const;
@@ -491,7 +486,6 @@ public:
     void                            SetMinThumbSize( long nSize );
     long                            GetMinThumbSize() const;
 
-    void                            SetSpinSize( long nSize );
     long                            GetSpinSize() const;
 
     long                            GetSplitSize() const;
