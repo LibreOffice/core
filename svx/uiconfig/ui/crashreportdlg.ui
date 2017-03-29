@@ -5,7 +5,7 @@
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
 You can soon find the report at:
-crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
+crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer2">
     <property name="text" translatable="yes" context="crashreportdlg|ed_bugreport">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
