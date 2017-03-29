@@ -71,6 +71,7 @@ public class Document {
     public static final int CALLBACK_DOCUMENT_SIZE_CHANGED = 13;
     public static final int CALLBACK_SET_PART = 14;
     public static final int CALLBACK_SEARCH_RESULT_SELECTION = 15;
+    public static final int CALLBACK_INTERNAL_PASTE_ENABLED = 16;
 
     /**
      * Set text selection types
@@ -192,6 +193,19 @@ public class Document {
      * @param y - y coordinate
      */
     public native void setTextSelection(int type, int x, int y);
+
+    /**
+     * Gets the currently selected text.
+     * @param mimeType - text selection type for example text/plain;charset=utf-8.
+     */
+    public native String getTextSelection(String mimeType);
+
+    /**
+     * Paste the text on current cursor location.
+     * @param mimeType - text type for example text/plain;charset=utf-8.
+     * @param text - text to be pasted
+     */
+    public native boolean paste(String mimeType, String text);
 
     /**
      * Change graphic selection.

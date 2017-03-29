@@ -312,7 +312,8 @@
         android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/search_string"
@@ -338,6 +339,42 @@
             android:background="@drawable/image_button_background"
             android:padding="10dp"
             android:src="@drawable/ic_search_direction_up" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/text_selection_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/cut_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_cut" />
+
+        <ImageButton
+            android:id="@+id/copy_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_copy" />
+
+        <ImageButton
+            android:id="@+id/paste_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:background="@drawable/image_button_background"
+            android:padding="10dp"
+            android:src="@drawable/ic_paste" />
+
     </LinearLayout>
 
 </LinearLayout>

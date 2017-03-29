@@ -98,6 +98,8 @@
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
     <string name="create_new_file_success">"Created new file - "</string>
     <string name="create_new_file_error">Unable to create new file, please check entered file name.</string>
+    <string name="new_file_created">File created in Documents folder</string>
+    <string name="message_text_copied">Text Copied</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>

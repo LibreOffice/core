@@ -37,6 +37,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int LOAD_NEW = 16;
     public static final int SAVE_AS = 17;
     public static final int UPDATE_PART_PAGE_RECT= 18;
+    public static final int COPY_TEXT = 19;
+    public static final int PASTE = 20;
 
     public final int mType;
     public int mPriority = 0;
@@ -74,7 +76,7 @@ public class LOEvent implements Comparable<LOEvent> {
 
     public LOEvent(int type, String key, String value) {
         mType = type;
-        mTypeString = "key / value";
+        mTypeString = "key / value / paste";
         mString = key;
         mValue = value;
     }
