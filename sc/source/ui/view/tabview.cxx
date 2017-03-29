@@ -228,6 +228,8 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     nOldCurX( 0 ),
     nOldCurY( 0 ),
     mfPendingTabBarWidth( -1.0 ),
+    mnLOKStartHeaderRow( std::numeric_limits<SCROW>::min() ),
+    mnLOKEndHeaderRow( std::numeric_limits<SCROW>::min() ),
     bMinimized( false ),
     bInUpdateHeader( false ),
     bInActivatePart( false ),
@@ -2302,6 +2304,259 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
     }
 }
 
+namespace
+{
+
+inline
+long lcl_GetRowHeightPx(const ScDocument* pDoc, SCROW nRow, SCTAB nTab)
+{
+    const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, nTab);
+    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+}
+
+inline
+long lcl_GetColWidthPx(const ScDocument* pDoc, SCCOL nCol, SCTAB nTab)
+{
+    const sal_uInt16 nSize = pDoc->GetColWidth(nCol, nTab);
+    return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+}
+
+} // anonymous namespace
+
+template<typename IndexType>
+class BoundsProvider
+{
+    typedef ScPositionHelper::value_type value_type;
+    typedef IndexType index_type;
+
+    static const index_type MAX_INDEX;
+
+    ScDocument* pDoc;
+    const SCTAB nTab;
+
+    index_type nFirstIndex;
+    index_type nSecondIndex;
+    long nFirstPositionPx;
+    long nSecondPositionPx;
+
+public:
+    BoundsProvider(ScDocument* pD, SCTAB nT)
+        : pDoc(pD)
+        , nTab(nT)
+    {}
+
+    void GetStartIndexAndPosition(index_type& nIndex, long& nPosition) const
+    {
+        nIndex = nFirstIndex;
+        nPosition = nFirstPositionPx;
+    }
+
+    void GetEndIndexAndPosition(index_type& nIndex, long& nPosition) const
+    {
+        nIndex = nSecondIndex;
+        nPosition = nSecondPositionPx;
+    }
+
+    void Compute(value_type aFirstNearest, value_type aSecondNearest,
+                 long nFirstBound, long nSecondBound);
+
+    void EnlargeStartBy(long nOffset);
+
+    void EnlargeEndBy(long nOffset);
+
+    void EnlargeBy(long nOffset)
+    {
+        EnlargeStartBy(nOffset);
+        EnlargeEndBy(nOffset);
+    }
+
+private:
+    long GetSize(SCROW nIndex) const
+    {
+        return lcl_GetRowHeightPx(pDoc, nIndex, nTab);
+    }
+
+    long GetSize(SCCOL nIndex) const
+    {
+        return lcl_GetColWidthPx(pDoc, nIndex, nTab);
+    }
+
+    void GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
+                        long nBound, index_type& nFoundIndex, long& nPosition,
+                        bool bTowards, long nDiff)
+    {
+        if (nDiff > 0) // nBound < nNearestPosition
+            GeIndexBackwards(nNearestIndex, nNearestPosition, nBound,
+                             nFoundIndex, nPosition, bTowards);
+        else
+            GetIndexTowards(nNearestIndex, nNearestPosition, nBound,
+                            nFoundIndex, nPosition, bTowards);
+    }
+
+    void GeIndexBackwards(index_type nNearestIndex, long nNearestPosition,
+                          long nBound, index_type& nFoundIndex, long& nPosition,
+                          bool bTowards);
+
+    void GetIndexTowards(index_type nNearestIndex, long nNearestPosition,
+                         long nBound, index_type& nFoundIndex, long& nPosition,
+                         bool bTowards);
+};
+
+template<typename IndexType>
+const IndexType BoundsProvider<IndexType>::MAX_INDEX;
+
+template<>
+const SCROW BoundsProvider<SCROW>::MAX_INDEX = MAXTILEDROW;
+
+template<>
+const SCCOL BoundsProvider<SCCOL>::MAX_INDEX = MAXCOL;
+
+template<typename IndexType>
+void BoundsProvider<IndexType>::Compute(
+            value_type aFirstNearest, value_type aSecondNearest,
+            long nFirstBound, long nSecondBound)
+{
+    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstBound: " << nFirstBound
+            << ", nSecondBound: " << nSecondBound);
+
+    long nFirstDiff = aFirstNearest.second - nFirstBound;
+    long nSecondDiff = aSecondNearest.second - nSecondBound;
+    SAL_INFO("sc.lok.header", "BoundsProvider: rTopNearest: index: " << aFirstNearest.first
+            << ", pos: " << aFirstNearest.second << ", diff: " << nFirstDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
+            << ", pos: " << aSecondNearest.second << ", diff: " << nSecondDiff);
+
+    bool bReverse = !(std::abs(nFirstDiff) < std::abs(nSecondDiff));
+
+    if(bReverse)
+    {
+        std::swap(aFirstNearest, aSecondNearest);
+        std::swap(nFirstBound, nSecondBound);
+        std::swap(nFirstDiff, nSecondDiff);
+    }
+
+    index_type nNearestIndex = aFirstNearest.first;
+    long nNearestPosition = aFirstNearest.second;
+    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to first bound:  nNearestIndex: "
+            << nNearestIndex << ", nNearestPosition: " << nNearestPosition);
+
+    GetIndexAndPos(nNearestIndex, nNearestPosition, nFirstBound,
+                   nFirstIndex, nFirstPositionPx, !bReverse, nFirstDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: nFirstIndex: " << nFirstIndex
+            << ", nFirstPositionPx: " << nFirstPositionPx);
+
+    if (std::abs(nSecondDiff) < std::abs(nSecondBound - nFirstPositionPx))
+    {
+        nNearestIndex = aSecondNearest.first;
+        nNearestPosition = aSecondNearest.second;
+    }
+    else
+    {
+        nNearestPosition = nFirstPositionPx;
+        nNearestIndex = nFirstIndex;
+        nSecondDiff = !bReverse ? -1 : 1;
+    }
+    SAL_INFO("sc.lok.header", "BoundsProvider: nearest to second bound: nNearestIndex: "
+            << nNearestIndex << ", nNearestPosition: " << nNearestPosition
+            << ", diff: " << nSecondDiff);
+
+    GetIndexAndPos(nNearestIndex, nNearestPosition, nSecondBound,
+                   nSecondIndex, nSecondPositionPx, bReverse, nSecondDiff);
+    SAL_INFO("sc.lok.header", "BoundsProvider: nSecondIndex: " << nSecondIndex
+            << ", nSecondPositionPx: " << nSecondPositionPx);
+
+    if (bReverse)
+    {
+        std::swap(nFirstIndex, nSecondIndex);
+        std::swap(nFirstPositionPx, nSecondPositionPx);
+    }
+}
+
+template<typename IndexType>
+void BoundsProvider<IndexType>::EnlargeStartBy(long nOffset)
+{
+    const index_type nNewFirstIndex =
+            std::max(static_cast<index_type>(-1),
+                     static_cast<index_type>(nFirstIndex - nOffset));
+    for (index_type nIndex = nFirstIndex; nIndex > nNewFirstIndex; --nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nFirstPositionPx -= nSizePx;
+    }
+    nFirstIndex = nNewFirstIndex;
+    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nFirstIndex: " << nFirstIndex
+            << ", nFirstPositionPx: " << nFirstPositionPx);
+}
+
+template<typename IndexType>
+void BoundsProvider<IndexType>::EnlargeEndBy(long nOffset)
+{
+    const index_type nNewSecondIndex = std::min(MAX_INDEX, static_cast<index_type>(nSecondIndex + nOffset));
+    for (index_type nIndex = nSecondIndex + 1; nIndex <= nNewSecondIndex; ++nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nSecondPositionPx += nSizePx;
+    }
+    nSecondIndex = nNewSecondIndex;
+    SAL_INFO("sc.lok.header", "BoundsProvider: added offset: nSecondIndex: " << nSecondIndex
+            << ", nSecondPositionPx: " << nSecondPositionPx);
+}
+
+template<typename IndexType>
+void BoundsProvider<IndexType>::GeIndexBackwards(
+            index_type nNearestIndex, long nNearestPosition,
+            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+{
+    nFoundIndex = -1;
+    for (index_type nIndex = nNearestIndex; nIndex >= 0; --nIndex)
+    {
+        if (nBound > nNearestPosition)
+        {
+            nFoundIndex = nIndex; // last index whose nPosition is less than nBound
+            nPosition = nNearestPosition;
+            break;
+        }
+
+        const long nSizePx = GetSize(nIndex);
+        nNearestPosition -= nSizePx;
+    }
+    if (!bTowards && nFoundIndex != -1)
+    {
+        nFoundIndex += 1;
+        nPosition += GetSize(nFoundIndex);
+    }
+}
+
+template<typename IndexType>
+void BoundsProvider<IndexType>::GetIndexTowards(
+            index_type nNearestIndex, long nNearestPosition,
+            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+{
+    nFoundIndex = -2;
+    for (index_type nIndex = nNearestIndex + 1; nIndex <= MAX_INDEX; ++nIndex)
+    {
+        const long nSizePx = GetSize(nIndex);
+        nNearestPosition += nSizePx;
+
+        if (nNearestPosition > nBound)
+        {
+            nFoundIndex = nIndex; // first index whose nPosition is greater than nBound
+            nPosition = nNearestPosition;
+            break;
+        }
+    }
+    if (nFoundIndex == -2)
+    {
+        nFoundIndex = MAX_INDEX;
+        nPosition = nNearestPosition;
+    }
+    else if (bTowards)
+    {
+        nPosition -= GetSize(nFoundIndex);
+        nFoundIndex -= 1;
+    }
+}
+
 OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 {
     ScDocument* pDoc = aViewData.GetDocument();
@@ -2314,54 +2569,50 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     rtl::OUStringBuffer aBuffer(256);
     aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
 
-    SCROW nStartRow = 0;
-    SCROW nEndRow = 0;
-    SCCOL nStartCol = 0;
-    SCCOL nEndCol = 0;
+    SCTAB nTab = aViewData.GetTabNo();
+    SCROW nStartRow = -1;
+    SCROW nEndRow = -1;
+    long nStartHeightPx = 0;
+    long nEndHeightPx = 0;
+    SCCOL nStartCol = -1;
+    SCCOL nEndCol = -1;
+    long nStartWidthPx = 0;
+    long nEndWidthPx = 0;
+
 
     /// *** start collecting ROWS ***
 
     /// 1) compute start and end rows
 
-    long nTotalPixels = 0;
     if (rRectangle.Top() < rRectangle.Bottom())
     {
-        long nUpperBoundPx = rRectangle.Top() / TWIPS_PER_PIXEL;
-        long nLowerBoundPx = rRectangle.Bottom() / TWIPS_PER_PIXEL;
-        nEndRow = MAXTILEDROW;
-        for (SCROW nRow = 0; nRow <= MAXTILEDROW; ++nRow)
-        {
-            if (nTotalPixels > nLowerBoundPx)
-            {
-                nEndRow = nRow; // first row below the rectangle
-                break;
-            }
+        SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
+        long nRectTopPx = rRectangle.Top() / TWIPS_PER_PIXEL;
+        long nRectBottomPx = rRectangle.Bottom() / TWIPS_PER_PIXEL;
 
-            const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
-            const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+        const auto& rTopNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectTopPx);
+        const auto& rBottomNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectBottomPx);
 
-            nTotalPixels += nSizePx;
+        BoundsProvider<SCROW> aBoundingRowsProvider(pDoc, nTab);
+        aBoundingRowsProvider.Compute(rTopNearest, rBottomNearest, nRectTopPx, nRectBottomPx);
+        aBoundingRowsProvider.EnlargeBy(2);
+        aBoundingRowsProvider.GetStartIndexAndPosition(nStartRow, nStartHeightPx);
+        aBoundingRowsProvider.GetEndIndexAndPosition(nEndRow, nEndHeightPx);
 
-            if (nTotalPixels < nUpperBoundPx)
-            {
-                nStartRow = nRow; // last row above the rectangle
-                continue;
-            }
-        }
+        aViewData.GetLOKHeightHelper().removeByIndex(mnLOKStartHeaderRow);
+        aViewData.GetLOKHeightHelper().removeByIndex(mnLOKEndHeaderRow);
+        aViewData.GetLOKHeightHelper().insert(nStartRow, nStartHeightPx);
+        aViewData.GetLOKHeightHelper().insert(nEndRow, nEndHeightPx);
 
-        nStartRow -= 1;
-        nEndRow += 2;
-
-        if (nStartRow < 0) nStartRow = 0;
-        if (nEndRow > MAXTILEDROW) nEndRow = MAXTILEDROW;
+        mnLOKStartHeaderRow = nStartRow;
+        mnLOKEndHeaderRow = nEndRow;
     }
-
-    aBuffer.ensureCapacity( aBuffer.getCapacity() + (50 * (nEndRow - nStartRow + 1)) );
-
 
     long nVisibleRows = nEndRow - nStartRow;
     if (nVisibleRows < 25)
         nVisibleRows = 25;
+
+    SAL_INFO("sc.lok.header", "Row Header: visible rows: " << nVisibleRows);
 
 
     /// 2) if we are approaching current max tiled row, signal a size changed event
@@ -2381,6 +2632,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         if (pModelObj)
             aNewSize = pModelObj->getDocumentSize();
 
+        SAL_INFO("sc.lok.header", "Row Header: a new height: " << aNewSize.Height());
         if (pDocSh)
         {
             // Provide size in the payload, so clients don't have to
@@ -2408,39 +2660,27 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     aBuffer.append("\"rows\": [\n");
 
-    bool bFirstRow = true;
-    if (nStartRow  == 0 && nStartRow != nEndRow)
+    long nTotalPixels = aViewData.GetLOKHeightHelper().getPosition(nStartRow);
+    SAL_INFO("sc.lok.header", "Row Header: [create string data for rows]: start row: "
+            << nStartRow << " start height: " << nTotalPixels);
+
+    if (nStartRow != nEndRow)
     {
-        aBuffer.append("{ \"text\": \"").append("0").append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(0)).append("\" }");
-        bFirstRow = false;
-    }
-
-    nTotalPixels = 0;
-    for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
-    {
-        // nSize will be 0 for hidden rows.
-        const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-        nTotalPixels += nSizePx;
-
-        if (nRow < nStartRow)
-            continue;
-
-        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
-
-        if (!bFirstRow)
-        {
-            aBuffer.append(", ");
-        }
-        else
-        {
-            aText = OUString::number(nStartRow + 1);
-        }
-
+        OUString aText = OUString::number(nStartRow + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
-        bFirstRow = false;
+    }
+
+    for (SCROW nRow = nStartRow + 1; nRow < nEndRow; ++nRow)
+    {
+        // nSize will be 0 for hidden rows.
+        const long nSizePx = lcl_GetRowHeightPx(pDoc, nRow, nTab);
+        nTotalPixels += nSizePx;
+
+        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
+        aBuffer.append(", ");
+        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
     }
 
     aBuffer.append("]");
@@ -2453,35 +2693,28 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 
     /// 1) compute start and end columns
 
-    nTotalPixels = 0;
     if (rRectangle.Left() < rRectangle.Right())
     {
-        long nLeftBoundPx = rRectangle.Left() / TWIPS_PER_PIXEL;
-        long nRightBoundPx = rRectangle.Right() / TWIPS_PER_PIXEL;
-        nEndCol = MAXCOL;
-        for (SCCOL nCol : pDoc->GetColumnsRange(aViewData.GetTabNo(), 0, MAXCOL))
-        {
-            if (nTotalPixels > nRightBoundPx)
-            {
-                nEndCol = nCol;
-                break;
-            }
+        SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
+        long nRectLeftPx = rRectangle.Left() / TWIPS_PER_PIXEL;
+        long nRectRightPx = rRectangle.Right() / TWIPS_PER_PIXEL;
 
-            const sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-            const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-            nTotalPixels += nSizePx;
-            if (nTotalPixels < nLeftBoundPx)
-            {
-                nStartCol = nCol;
-                continue;
-            }
-        }
+        const auto& rLeftNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectLeftPx);
+        const auto& rRightNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectRightPx);
 
-        nStartCol -= 1;
-        nEndCol += 2;
+        BoundsProvider<SCCOL> aBoundingColsProvider(pDoc, nTab);
+        aBoundingColsProvider.Compute(rLeftNearest, rRightNearest, nRectLeftPx, nRectRightPx);
+        aBoundingColsProvider.EnlargeBy(2);
+        aBoundingColsProvider.GetStartIndexAndPosition(nStartCol, nStartWidthPx);
+        aBoundingColsProvider.GetEndIndexAndPosition(nEndCol, nEndWidthPx);
 
-        if (nStartCol < 0) nStartCol = 0;
-        if (nEndCol > MAXCOL) nEndCol = MAXCOL;
+        aViewData.GetLOKWidthHelper().removeByIndex(mnLOKStartHeaderCol);
+        aViewData.GetLOKWidthHelper().removeByIndex(mnLOKEndHeaderCol);
+        aViewData.GetLOKWidthHelper().insert(nStartCol, nStartWidthPx);
+        aViewData.GetLOKWidthHelper().insert(nEndCol, nEndWidthPx);
+
+        mnLOKStartHeaderCol = nStartCol;
+        mnLOKEndHeaderCol = nEndCol;
     }
 
     aBuffer.ensureCapacity( aBuffer.getCapacity() + (50 * (nEndCol - nStartCol + 1)) );
@@ -2530,44 +2763,31 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         }
     }
 
-
     /// 3) create string data for columns
 
     aBuffer.append("\"columns\": [\n");
 
-    bool bFirstCol = true;
-    if (nStartCol  == 0 && nStartCol != nEndCol )
+    nTotalPixels = aViewData.GetLOKWidthHelper().getPosition(nStartCol);
+    SAL_INFO("sc.lok.header", "Col Header: [create string data for cols]: start col: "
+            << nStartRow << " start width: " << nTotalPixels);
+
+    if (nStartCol != nEndCol)
     {
-        aBuffer.append("{ \"text\": \"").append("0").append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(0)).append("\" }");
-        bFirstCol = false;
-    }
-
-    nTotalPixels = 0;
-    for (SCCOL nCol = 0; nCol < nEndCol; ++nCol)
-    {
-        // nSize will be 0 for hidden columns.
-        const sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-        nTotalPixels += nSizePx;
-
-        if (nCol < nStartCol)
-            continue;
-
-        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
-
-        if (!bFirstCol)
-        {
-            aBuffer.append(", ");
-        }
-        else
-        {
-            aText = OUString::number(nStartCol + 1);
-        }
-
+        OUString aText = OUString::number(nStartCol + 1);
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
-        bFirstCol = false;
+    }
+
+    for (SCCOL nCol = nStartCol + 1; nCol < nEndCol; ++nCol)
+    {
+        // nSize will be 0 for hidden columns.
+        const long nSizePx = lcl_GetColWidthPx(pDoc, nCol, nTab);
+        nTotalPixels += nSizePx;
+
+        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+        aBuffer.append(", ");
+        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
     }
 
     aBuffer.append("]");
