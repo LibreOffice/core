@@ -203,7 +203,7 @@ void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
     DummyPredicate predicate; // returns always true, i.e., all style sheets match the predicate.
 
     std::vector<unsigned> v = iss.FindPositionsByNameAndPredicate(name, predicate,
-            IndexedStyleSheets::RETURN_FIRST);
+            IndexedStyleSheets::SearchBehavior::ReturnFirst);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Only one style sheet is returned.", static_cast<size_t>(1), v.size());
 
     std::vector<unsigned> w = iss.FindPositionsByNameAndPredicate(name, predicate);
