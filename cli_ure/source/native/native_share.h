@@ -91,10 +91,10 @@ inline void to_uno(
         reinterpret_cast< void ** >( &ret ),
         reinterpret_cast< void * >(
             ::System::Runtime::InteropServices::GCHandle::op_Explicit( handle )
-#if defined _WIN32
-            .ToInt32()
-#elif defined _WIN64
+#if defined _WIN64
             .ToInt64()
+#elif defined _WIN32
+            .ToInt32()
 #else
 #error ERROR: either _WIN64 or _WIN32 must be defined
             ERROR: either _WIN64 or _WIN32 must be defined
