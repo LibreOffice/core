@@ -91,11 +91,13 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC AnimationEntryList : public AnimationEntry
         {
         protected:
+            using Entries = std::vector<std::unique_ptr<AnimationEntry>>;
+
             double                                      mfDuration;
-            ::std::vector< std::unique_ptr<AnimationEntry> >  maEntries;
+            Entries maEntries;
 
             // helpers
-            sal_uInt32 impGetIndexAtTime(double fTime, double &rfAddedTime) const;
+            Entries::size_type impGetIndexAtTime(double fTime, double &rfAddedTime) const;
 
         public:
             AnimationEntryList();
