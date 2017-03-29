@@ -62,18 +62,18 @@ private:
     sal_uInt16          nLastWidth;
     bool                bNewDef;
 
-    DECL_LINK( RTFImportHdl, ImportInfo&, void );
+    DECL_LINK( RTFImportHdl, RtfImportInfo&, void );
     inline void         NextRow();
     void                EntryEnd( ScEEParseEntry*, const ESelection& );
-    void                ProcToken( ImportInfo* );
+    void                ProcToken( RtfImportInfo* );
     void                ColAdjust();
     bool                SeekTwips( sal_uInt16 nTwips, SCCOL* pCol );
-    void                NewCellRow( ImportInfo* );
+    void                NewCellRow( RtfImportInfo* );
 
 public:
                         ScRTFParser( EditEngine* );
     virtual             ~ScRTFParser() override;
-    virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL ) override;
+    virtual sal_uLong   Read( SvStream&, const OUString& rBaseURL ) override;
 };
 
 #endif

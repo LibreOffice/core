@@ -56,8 +56,8 @@ ScRTFParser::~ScRTFParser()
 
 sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
-    Link<ImportInfo&,void> aOldLink = pEdit->GetImportHdl();
-    pEdit->SetImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
+    Link<RtfImportInfo&,void> aOldLink = pEdit->GetRtfImportHdl();
+    pEdit->SetRtfImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
     sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
     if ( nLastToken == RTF_PAR )
     {
@@ -81,7 +81,7 @@ sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
         }
     }
     ColAdjust();
-    pEdit->SetImportHdl( aOldLink );
+    pEdit->SetRtfImportHdl( aOldLink );
     return nErr;
 }
 
@@ -152,17 +152,17 @@ void ScRTFParser::ColAdjust()
     }
 }
 
-IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
 {
     switch ( rInfo.eState )
     {
-        case RTFIMP_NEXTTOKEN:
+        case RtfImportState::NextToken:
             ProcToken( &rInfo );
             break;
-        case RTFIMP_UNKNOWNATTR:
+        case RtfImportState::UnknownAttr:
             ProcToken( &rInfo );
             break;
-        case RTFIMP_START:
+        case RtfImportState::Start:
         {
             SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( pPool );
@@ -172,7 +172,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
             rMap.nShadow = ATTR_SHADOW;
         }
             break;
-        case RTFIMP_END:
+        case RtfImportState::End:
             if ( rInfo.aSelection.nEndPos )
             {   // If still text: create last paragraph
                 pActDefault = nullptr;
@@ -183,11 +183,11 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
                 ProcToken( &rInfo );
             }
             break;
-        case RTFIMP_SETATTR:
+        case RtfImportState::SetAttr:
             break;
-        case RTFIMP_INSERTTEXT:
+        case RtfImportState::InsertText:
             break;
-        case RTFIMP_INSERTPARA:
+        case RtfImportState::InsertPara:
             break;
         default:
             OSL_FAIL("unknown ImportInfo.eState");
@@ -197,7 +197,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 // Bad behavior:
 // For RTF_INTBL or respectively at the start of the first RTF_CELL
 // after RTF_CELLX if there was no RTF_INTBL
-void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
+void ScRTFParser::NewCellRow( RtfImportInfo* /*pInfo*/ )
 {
     if ( bNewDef )
     {
@@ -261,7 +261,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 
  */
 
-void ScRTFParser::ProcToken( ImportInfo* pInfo )
+void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
 {
     switch ( pInfo->nToken )
     {

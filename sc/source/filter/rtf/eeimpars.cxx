@@ -616,7 +616,7 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         nColMax(0),
         nRowMax(0)
 {
-    // pPool is foisted on SvxRTFParser at RTFIMP_START later on
+    // pPool is foisted on SvxRTFParser at RtfImportState::Start later on
     pPool->SetSecondaryPool( pDocPool );
     pPool->FreezeIdRanges();
     NewActEntry( nullptr );

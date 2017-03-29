@@ -36,7 +36,7 @@
 
 using namespace com::sun::star;
 
-ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
+HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {
     pParser     = pPrsrs;
@@ -46,7 +46,21 @@ ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSe
     pAttrs      = nullptr;
 }
 
-ImportInfo::~ImportInfo()
+HtmlImportInfo::~HtmlImportInfo()
+{
+}
+
+RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
+    : aSelection( rSel )
+{
+    pParser     = pPrsrs;
+    eState      = eSt;
+    nToken      = 0;
+    nTokenValue = 0;
+    pAttrs      = nullptr;
+}
+
+RtfImportInfo::~RtfImportInfo()
 {
 }
 
@@ -91,18 +105,18 @@ SvParserState EditRTFParser::CallParser()
     EditPaM aEnd1PaM = mpEditEngine->InsertParaBreak(aCurSel.Max());
     // aCurCel now points to the gap
 
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_START, this, mpEditEngine->CreateESelection(aCurSel));
-        mpEditEngine->CallImportHandler(aImportInfo);
+        RtfImportInfo aImportInfo(RtfImportState::Start, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 
     SvParserState _eState = SvxRTFParser::CallParser();
 
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_END, this, mpEditEngine->CreateESelection(aCurSel));
-        mpEditEngine->CallImportHandler(aImportInfo);
+        RtfImportInfo aImportInfo(RtfImportState::End, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 
     if (bLastActionInsertParaBreak)
@@ -214,12 +228,12 @@ void EditRTFParser::NextToken( int nToken )
         }
         break;
     }
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_NEXTTOKEN, this, mpEditEngine->CreateESelection(aCurSel));
+        RtfImportInfo aImportInfo(RtfImportState::NextToken, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = short(nTokenValue);
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 }
 
@@ -227,23 +241,23 @@ void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 {
     // for Tokens which are not evaluated in ReadAttr
     // Actually, only for Calc (RTFTokenHdl), so that RTF_INTBL
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_UNKNOWNATTR, this, mpEditEngine->CreateESelection(aCurSel));
+        RtfImportInfo aImportInfo(RtfImportState::UnknownAttr, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = short(nTokenValue);
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 }
 
 void EditRTFParser::InsertText()
 {
     OUString aText( aToken );
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
+        RtfImportInfo aImportInfo(RtfImportState::InsertText, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.aText = aText;
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertText(aCurSel, aText);
     bLastActionInsertParaBreak = false;
@@ -251,10 +265,10 @@ void EditRTFParser::InsertText()
 
 void EditRTFParser::InsertPara()
 {
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
-        ImportInfo aImportInfo(RTFIMP_INSERTPARA, this, mpEditEngine->CreateESelection(aCurSel));
-        mpEditEngine->CallImportHandler(aImportInfo);
+        RtfImportInfo aImportInfo(RtfImportState::InsertPara, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
     bLastActionInsertParaBreak = true;
@@ -344,12 +358,12 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         }
     }
 
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsRtfImportHandlerSet())
     {
         EditSelection aSel( aStartPaM, aEndPaM );
-        ImportInfo aImportInfo(RTFIMP_SETATTR, this, mpEditEngine->CreateESelection(aSel));
+        RtfImportInfo aImportInfo(RtfImportState::SetAttr, this, mpEditEngine->CreateESelection(aSel));
         aImportInfo.pAttrs = &rSet;
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
