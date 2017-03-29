@@ -518,7 +518,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         {
             // Remove view options entry so the new work path
             // will be used for the next open dialog.
-            SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+            SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
             aDlgOpt.Delete();
             // Reset also last used dir in the sfx application instance
             SfxApplication *pSfxApp = SfxGetpApp();

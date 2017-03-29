@@ -309,7 +309,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     //but off in another
     if (!rInfo.aModule.isEmpty())
         sName = rInfo.aModule + "/" + sName;
-    SvtViewOptions aWinOpt(E_WINDOW, sName);
+    SvtViewOptions aWinOpt(EViewType::Window, sName);
     aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
@@ -367,11 +367,11 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     std::unique_ptr<SvtViewOptions> xWinOpt;
     // first see if a module specific id exists
     if (rInfo.aModule.getLength())
-        xWinOpt.reset(new SvtViewOptions(E_WINDOW, rInfo.aModule + "/" + OUString::number(nId)));
+        xWinOpt.reset(new SvtViewOptions(EViewType::Window, rInfo.aModule + "/" + OUString::number(nId)));
 
     // if not then try the generic id
     if (!xWinOpt || !xWinOpt->Exists())
-        xWinOpt.reset(new SvtViewOptions(E_WINDOW, OUString::number(nId)));
+        xWinOpt.reset(new SvtViewOptions(EViewType::Window, OUString::number(nId)));
 
     if (xWinOpt->Exists() && xWinOpt->HasVisible() )
         rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below

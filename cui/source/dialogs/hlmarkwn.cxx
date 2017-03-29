@@ -257,7 +257,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
 
     OUString sLastSelectedMark;
     std::deque<OUString> aLastSelectedPath;
-    SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
+    SvtViewOptions aViewSettings( EViewType::Dialog, TG_SETTING_MANAGER );
     if (aViewSettings.Exists())
     {
         //Maybe we might want to have some sort of mru list and keep a mapping
@@ -611,7 +611,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
         };
 
         // write
-        SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
+        SvtViewOptions aViewSettings( EViewType::Dialog, TG_SETTING_MANAGER );
         aViewSettings.SetUserData( aSettings );
     }
 

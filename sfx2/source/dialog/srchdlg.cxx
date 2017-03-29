@@ -79,7 +79,7 @@ void SearchDialog::dispose()
 
 void SearchDialog::LoadConfig()
 {
-    SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
+    SvtViewOptions aViewOpt( EViewType::Dialog, m_sConfigName );
     if ( aViewOpt.Exists() )
     {
         m_sWinState = OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
@@ -107,7 +107,7 @@ void SearchDialog::LoadConfig()
 
 void SearchDialog::SaveConfig()
 {
-    SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
+    SvtViewOptions aViewOpt( EViewType::Dialog, m_sConfigName );
     aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     OUString sUserData;
     sal_Int32 i = 0, nCount = std::min( m_pSearchEdit->GetEntryCount(), static_cast<sal_Int32>(MAX_SAVE_COUNT) );

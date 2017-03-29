@@ -100,7 +100,7 @@ void SfxModalDialog::SetDialogData_Impl()
         sConfigId = OUString::number(nUniqId);
     }
 
-    SvtViewOptions aDlgOpt(E_DIALOG, sConfigId);
+    SvtViewOptions aDlgOpt(EViewType::Dialog, sConfigId);
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WindowStateMask::Pos), RTL_TEXTENCODING_ASCII_US));
     if ( !aExtraData.isEmpty() )
@@ -126,7 +126,7 @@ void SfxModalDialog::GetDialogData_Impl()
         sConfigId = OUString::number(nUniqId);
     }
 
-    SvtViewOptions aDlgOpt(E_DIALOG, sConfigId);
+    SvtViewOptions aDlgOpt(EViewType::Dialog, sConfigId);
     if ( aDlgOpt.Exists() )
     {
         // load settings
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
             sConfigId = OUString::number(GetUniqId());
         }
 
-        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
         aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
     }
@@ -710,7 +710,7 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
             sConfigId = OUString::number(GetUniqId());
         }
 
-        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString sUserData;
         aUserItem >>= sUserData;
