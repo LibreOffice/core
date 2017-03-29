@@ -55,7 +55,6 @@ enum class ErrorHandlerFlags
     MessageError            = 0x1000,
     MessageWarning          = 0x2000,
     MessageInfo             = 0x3000,
-    MessageQuery            = 0x4000,
 
     MAX                     = USHRT_MAX,
 };

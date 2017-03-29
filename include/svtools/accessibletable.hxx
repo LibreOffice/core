@@ -30,17 +30,6 @@ namespace svt{ namespace table
 
 typedef sal_Int32   RowPos;
 
-
-enum AccessibleTableType
-{
-    /** Child index of the column header bar (first row). */
-    TCINDEX_COLUMNHEADERBAR = 0,
-    /** Child index of the row header bar ("handle column"). */
-    TCINDEX_ROWHEADERBAR    = 1,
-    /** Child index of the data table. */
-    TCINDEX_TABLE           = 2
-};
-
 enum AccessibleTableControlObjType
 {
     TCTYPE_GRIDCONTROL,           /// The GridControl itself.

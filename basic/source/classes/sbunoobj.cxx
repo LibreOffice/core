@@ -1503,7 +1503,6 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOL
 enum class INVOKETYPE
 {
    GetProp = 0,
-   SetProp,
    Func
 };
 Any invokeAutomationMethod( const OUString& Name, Sequence< Any >& args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation >& rxInvocation, INVOKETYPE invokeType )

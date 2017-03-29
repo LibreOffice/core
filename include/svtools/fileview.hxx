@@ -206,7 +206,6 @@ namespace svtools {
 
 enum QueryDeleteResult_Impl
 {
-    QUERYDELETE_CANCEL = RET_CANCEL,
     QUERYDELETE_YES = RET_YES,
     QUERYDELETE_ALL = -1
 };

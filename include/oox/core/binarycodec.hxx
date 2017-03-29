@@ -54,8 +54,7 @@ public:
     /** Enumerates codec types supported by this XOR codec implementation. */
     enum CodecType
     {
-        CODEC_WORD,     ///< MS Word XOR codec.
-        CODEC_EXCEL     ///< MS Excel XOR codec.
+        Excel     ///< MS Excel XOR codec.
     };
 
 public:

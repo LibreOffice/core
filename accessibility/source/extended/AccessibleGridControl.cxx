@@ -266,13 +266,16 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     switch( nChildIndex )
     {
-          case TCINDEX_COLUMNHEADERBAR:
+        /** Child index of the column header bar (first row). */
+        case 0:
             xRet = implGetHeaderBar( TCTYPE_COLUMNHEADERBAR );
         break;
-        case TCINDEX_ROWHEADERBAR:
+        /** Child index of the row header bar ("handle column"). */
+        case 1:
             xRet = implGetHeaderBar( TCTYPE_ROWHEADERBAR );
         break;
-        case TCINDEX_TABLE:
+        /** Child index of the data table. */
+        case 2:
             xRet = implGetTable();
         break;
     }

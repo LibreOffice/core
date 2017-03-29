@@ -151,8 +151,7 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     size_t nRotateSize = 0;
     switch( meCodecType )
     {
-        case CODEC_WORD:    nRotateSize = 7;    break;
-        case CODEC_EXCEL:   nRotateSize = 2;    break;
+        case CodecType::Excel:   nRotateSize = 2;    break;
         // compiler will warn, if new codec type is introduced and not handled here
     }
 
