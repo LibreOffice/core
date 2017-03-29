@@ -161,14 +161,14 @@ void SvxCaptionTabPage::dispose()
 void SvxCaptionTabPage::Construct()
 {
     // set rectangle and working area
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
+    DBG_ASSERT( pView, "No valid View transfered!" );
 }
 
 
 bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 {
     SfxItemPool*    pPool = _rOutAttrs->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
 
     MapUnit      eUnit;
 
@@ -258,7 +258,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetFieldUnit( *m_pMF_LAENGE, eFUnit );
 
     SfxItemPool*    pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
 
     sal_uInt16   nWhich;
     MapUnit      eUnit;
@@ -515,7 +515,7 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pS
     , m_nPositionSizePageId(0)
     , m_nCaptionPageId(0)
 {
-    assert(pView); //Keine gueltige View Uebergeben!
+    assert(pView); // No valid View transfered!
 
     //different positioning page in Writer
     if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))

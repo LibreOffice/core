@@ -409,7 +409,7 @@ void SvxPageDescPage::Init_Impl()
 void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemPool* pPool = rSet->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     MapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
     // adjust margins (right/left)
@@ -648,7 +648,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false;
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemPool* pPool = rOldSet.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     MapUnit eUnit = pPool->GetMetric( nWhich );
     const SfxPoolItem* pOld = nullptr;

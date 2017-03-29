@@ -382,7 +382,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl, Button*, void)
     ResetPageImpl ();
 
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
-    DBG_ASSERT( pData, "Id nicht bekannt" );
+    DBG_ASSERT( pData, "ID not known" );
 
     pData->pPage->Reset( *pSet );
 }
@@ -401,9 +401,9 @@ IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl, Button*, void)
 
 void IconChoiceDialog::ActivatePageImpl ()
 {
-    DBG_ASSERT( !maPageList.empty(), "keine Pages angemeldet" );
+    DBG_ASSERT( !maPageList.empty(), "no Pages registered" );
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
-    DBG_ASSERT( pData, "Id nicht bekannt" );
+    DBG_ASSERT( pData, "ID not known" );
     if ( pData )
     {
         if ( !pData->pPage )
@@ -504,7 +504,7 @@ void IconChoiceDialog::ResetPageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
 
-    DBG_ASSERT( pData, "Id nicht bekannt" );
+    DBG_ASSERT( pData, "ID not known" );
 
     pData->pPage->Reset( *pSet );
 }

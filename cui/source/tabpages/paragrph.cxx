@@ -162,7 +162,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit =
         MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
@@ -206,7 +206,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     SfxItemState eState = SfxItemState::UNKNOWN;
     const SfxPoolItem* pOld = nullptr;
     SfxItemPool* pPool = rOutSet->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
 
     bool bModified = false;
     sal_uInt16 nWhich;
@@ -407,7 +407,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemPool* pPool = rSet->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
 
     // adjust metric
     FieldUnit eFUnit = GetModuleFieldUnit( *rSet );
@@ -870,7 +870,7 @@ void SvxStdParagraphTabPage::Init_Impl()
 
     m_pAutoCB->SetClickHdl( LINK( this, SvxStdParagraphTabPage, AutoHdl_Impl ));
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
     m_pTopDist->SetMax( m_pTopDist->Normalize( nAbst ), eUnit );

@@ -120,7 +120,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemS
 
     eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     m_pLbEffect->SetSelectHdl( LINK( this, SvxTextAnimationPage, SelectEffectHdl_Impl ) );

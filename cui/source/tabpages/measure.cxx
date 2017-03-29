@@ -181,7 +181,7 @@ void SvxMeasurePage::dispose()
 void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 {
     SfxItemPool* pPool = rAttrs->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     eUnit = pPool->GetMetric( SDRATTR_MEASURELINEDIST );
 
     const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_MEASURELINEDIST );
@@ -597,7 +597,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
 void SvxMeasurePage::Construct()
 {
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
+    DBG_ASSERT( pView, "No valid View transfered!" );
 
     m_pCtlPreview->pMeasureObj->SetModel( pView->GetModel() );
     m_pCtlPreview->Invalidate();

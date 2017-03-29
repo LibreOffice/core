@@ -92,7 +92,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     get(m_pCtlPreview,"CTL_PREVIEW");
 
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool" );
     eUnit = pPool->GetMetric( SDRATTR_EDGENODE1HORZDIST );
 
     FillTypeLB();
@@ -377,7 +377,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
 
 void SvxConnectionPage::Construct()
 {
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
+    DBG_ASSERT( pView, "No valid View transfer!" );
 
     m_pCtlPreview->SetView( pView );
     m_pCtlPreview->Construct();

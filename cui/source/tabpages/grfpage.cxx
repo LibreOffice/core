@@ -326,7 +326,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 {
 #ifdef DBG_UTIL
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
 #endif
 
     bSetOrigSize = false;
@@ -417,7 +417,7 @@ DeactivateRC SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 IMPL_LINK( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -446,7 +446,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
 IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -482,7 +482,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
 IMPL_LINK( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -566,7 +566,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
 IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, Button*, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -589,7 +589,7 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, Button*, void)
 void SvxGrfCropPage::CalcZoom()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
@@ -618,7 +618,7 @@ void SvxGrfCropPage::CalcZoom()
 void SvxGrfCropPage::CalcMinMaxBorder()
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
     long nR = lcl_GetValue(*m_pRightMF, eUnit );
@@ -649,7 +649,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
     if( bFound )
     {
         SfxItemPool* pPool = GetItemSet().GetPool();
-        DBG_ASSERT( pPool, "Wo ist der Pool" );
+        DBG_ASSERT( pPool, "Where is the pool?" );
         FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ));
 
