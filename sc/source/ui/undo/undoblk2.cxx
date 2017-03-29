@@ -101,6 +101,9 @@ void ScUndoWidthOrHeight::Undo()
     ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
+        if (pViewShell)
+            pViewShell->OnLOKSetWidthOrHeight(nStart, bWidth);
+
         if (bWidth) // Width
         {
             pUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart), 0, *itr,
