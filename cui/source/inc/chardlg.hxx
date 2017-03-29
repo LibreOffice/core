@@ -173,6 +173,9 @@ class SvxCharEffectsPage : public SvxCharBasePage
 
 private:
     static const sal_uInt16 pEffectsRanges[];
+    bool                       m_bOrigFontColor;
+    bool                       m_bNewFontColor;
+    Color                      m_aOrigFontColor;
     VclPtr<FixedText>          m_pFontColorFT;
     VclPtr<SvxColorListBox>    m_pFontColorLB;
 
