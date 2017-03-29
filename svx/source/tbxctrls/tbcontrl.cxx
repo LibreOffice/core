@@ -1391,6 +1391,46 @@ NamedColor SvxColorWindow::GetSelectEntryColor(ValueSet* pColorSet)
     return std::make_pair(aColor, sColorName);
 }
 
+namespace
+{
+    NamedColor GetAutoColor(sal_uInt16 nSlotId)
+    {
+        Color aColor;
+        OUString sColorName;
+        switch (nSlotId)
+        {
+            case SID_ATTR_CHAR_COLOR_BACKGROUND:
+            case SID_BACKGROUND_COLOR:
+            case SID_ATTR_CHAR_BACK_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_NOFILL);
+                break;
+            case SID_AUTHOR_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_BY_AUTHOR);
+                break;
+            case SID_BMPMASK_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_TRANSPARENT);
+                break;
+            case SID_ATTR_CHAR_COLOR:
+            case SID_ATTR_CHAR_COLOR2:
+            case SID_EXTRUSION_3D_COLOR:
+            default:
+                aColor = COL_AUTO;
+                sColorName = EditResId::GetString(RID_SVXSTR_AUTOMATIC);
+                break;
+        }
+
+        return std::make_pair(aColor, sColorName);
+    }
+
+    NamedColor GetNoneColor()
+    {
+        return std::make_pair(Color(COL_NONE_COLOR), SVX_RESSTR(RID_SVXSTR_NONE));
+    }
+}
+
 NamedColor SvxColorWindow::GetSelectEntryColor() const
 {
     if (!mpColorSet->IsNoSelection())
@@ -1433,54 +1473,6 @@ IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
-}
-
-NamedColor SvxColorWindow::GetNoneColor() const
-{
-    Color aColor;
-    OUString sColorName;
-    if (theSlotId == SID_AUTHOR_COLOR)
-    {
-        aColor = COL_NONE_COLOR;
-        sColorName = SVX_RESSTR(RID_SVXSTR_NONE);
-    }
-
-    return std::make_pair(aColor, sColorName);
-}
-
-namespace
-{
-    NamedColor GetAutoColor(sal_uInt16 nSlotId)
-    {
-        Color aColor;
-        OUString sColorName;
-        switch (nSlotId)
-        {
-            case SID_ATTR_CHAR_COLOR_BACKGROUND:
-            case SID_BACKGROUND_COLOR:
-            case SID_ATTR_CHAR_BACK_COLOR:
-                aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_NOFILL);
-                break;
-            case SID_AUTHOR_COLOR:
-                aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_BY_AUTHOR);
-                break;
-            case SID_BMPMASK_COLOR:
-                aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_TRANSPARENT);
-                break;
-            case SID_ATTR_CHAR_COLOR:
-            case SID_ATTR_CHAR_COLOR2:
-            case SID_EXTRUSION_3D_COLOR:
-            default:
-                aColor = COL_AUTO;
-                sColorName = EditResId::GetString(RID_SVXSTR_AUTOMATIC);
-                break;
-        }
-
-        return std::make_pair(aColor, sColorName);
-    }
 }
 
 NamedColor SvxColorWindow::GetAutoColor() const
@@ -3234,6 +3226,8 @@ void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     m_nSlotId = nSlotId;
     m_bShowNoneButton = bShowNoneButton;
     m_xColorWindow.disposeAndClear();
+    m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
+    ShowPreview(m_aSelectedColor);
     createColorWindow();
 }
 
@@ -3270,11 +3264,20 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     xDevice->SetOutputSize(aImageSize);
     const Rectangle aRect(Point(0, 0), aImageSize);
     if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
-        xDevice->SetFillColor(COL_BLACK);
-    else if (rColor.first == COL_AUTO)
-        xDevice->SetFillColor(m_aAutoDisplayColor);
+    {
+        const Color aW(COL_WHITE);
+        const Color aG(0xef, 0xef, 0xef);
+        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
+        xDevice->SetFillColor();
+    }
     else
-        xDevice->SetFillColor(rColor.first);
+    {
+        if (rColor.first == COL_AUTO)
+            xDevice->SetFillColor(m_aAutoDisplayColor);
+        else
+            xDevice->SetFillColor(rColor.first);
+    }
+
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);
 

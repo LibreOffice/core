@@ -175,6 +175,7 @@ private:
     static const sal_uInt16 pEffectsRanges[];
     bool                       m_bOrigFontColor;
     bool                       m_bNewFontColor;
+    bool                       m_bEnableNoneFontColor;
     Color                      m_aOrigFontColor;
     VclPtr<FixedText>          m_pFontColorFT;
     VclPtr<SvxColorListBox>    m_pFontColorLB;
@@ -219,6 +220,8 @@ private:
     void                SetCaseMap_Impl( SvxCaseMap eCaseMap );
     void                ResetColor_Impl( const SfxItemSet& rSet );
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
+    Color               GetPreviewFontColor(const Color& rColor) const;
+    void                EnableNoneFontColor();
 
     void SelectHdl_Impl(ListBox*);
     DECL_LINK(SelectListBoxHdl_Impl, ListBox&, void);

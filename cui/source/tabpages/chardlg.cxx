@@ -1336,6 +1336,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
     : SvxCharBasePage(pParent, "EffectsPage", "cui/ui/effectspage.ui", rInSet)
     , m_bOrigFontColor(false)
     , m_bNewFontColor(false)
+    , m_bEnableNoneFontColor(false)
 {
     get(m_pFontColorFT, "fontcolorft");
     get(m_pFontColorLB, "fontcolorlb");
@@ -1366,6 +1367,21 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
 
     get(m_pPreviewWin, "preview");
     Initialize();
+}
+
+void SvxCharEffectsPage::EnableNoneFontColor()
+{
+    m_pFontColorLB->SetSlotId(SID_ATTR_CHAR_COLOR, true);
+    m_bEnableNoneFontColor = true;
+}
+
+Color SvxCharEffectsPage::GetPreviewFontColor(const Color& rColor) const
+{
+    if (rColor.GetColor() == COL_AUTO)
+        return Color(COL_BLACK);
+    if (m_bEnableNoneFontColor && rColor.GetColor() == COL_NONE_COLOR)
+        return Color(COL_BLACK);
+    return rColor;
 }
 
 SvxCharEffectsPage::~SvxCharEffectsPage()
@@ -1468,9 +1484,9 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
     const Color& rSelectedColor = m_pFontColorLB->GetSelectEntryColor();
-    rFont.SetColor(rSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : rSelectedColor);
-    rCJKFont.SetColor(rSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : rSelectedColor);
-    rCTLFont.SetColor(rSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : rSelectedColor);
+    rFont.SetColor(GetPreviewFontColor(rSelectedColor));
+    rCJKFont.SetColor(GetPreviewFontColor(rSelectedColor));
+    rCTLFont.SetColor(GetPreviewFontColor(rSelectedColor));
 
     sal_Int32 nPos = m_pUnderlineLB->GetSelectEntryPos();
     FontLineStyle eUnderline = (FontLineStyle)reinterpret_cast<sal_uLong>(m_pUnderlineLB->GetEntryData( nPos ));
@@ -1572,6 +1588,9 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             break;
 
         case SfxItemState::DONTCARE:
+            //Related: tdf#106080 if there is no font color, then allow "none"
+            //as a color so the listbox can display that state.
+            EnableNoneFontColor();
             m_pFontColorLB->SetNoSelection();
             break;
 
@@ -1584,9 +1603,9 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 
             const SvxColorItem& rItem = static_cast<const SvxColorItem&>(rSet.Get( nWhich ));
             Color aColor = rItem.GetValue();
-            rFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
-            rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
+            rFont.SetColor(GetPreviewFontColor(aColor));
+            rCJKFont.SetColor(GetPreviewFontColor(aColor));
+            rCTLFont.SetColor(GetPreviewFontColor(aColor));
 
             m_pPreviewWin->Invalidate();
 
@@ -1613,6 +1632,8 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         aSelectedColor = m_pFontColorLB->GetSelectEntryColor();
         if (m_bOrigFontColor)
             bChanged = aSelectedColor != m_aOrigFontColor;
+        if (m_bEnableNoneFontColor && bChanged && aSelectedColor == COL_NONE_COLOR)
+            bChanged = false;
     }
 
     if (bChanged)
