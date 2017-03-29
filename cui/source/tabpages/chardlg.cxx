@@ -1334,6 +1334,8 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 
 SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "EffectsPage", "cui/ui/effectspage.ui", rInSet)
+    , m_bOrigFontColor(false)
+    , m_bNewFontColor(false)
 {
     get(m_pFontColorFT, "fontcolorft");
     get(m_pFontColorLB, "fontcolorlb");
@@ -1555,6 +1557,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
+    m_bOrigFontColor = false;
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
@@ -1588,22 +1591,29 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             m_pPreviewWin->Invalidate();
 
             m_pFontColorLB->SelectEntry(aColor);
+
+            m_aOrigFontColor = aColor;
+            m_bOrigFontColor = true;
             break;
         }
     }
+    m_bNewFontColor = false;
 }
 
 bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
-    const SvxColorItem* pOld = static_cast<const SvxColorItem*>(GetOldItem( rSet, SID_ATTR_CHAR_COLOR ));
-    bool bChanged = true;
     const SfxItemSet& rOldSet = GetItemSet();
 
-    Color aSelectedColor = m_pFontColorLB->GetSelectEntryColor();
+    Color aSelectedColor;
+    bool bChanged = m_bNewFontColor;
 
-    if (pOld && pOld->GetValue() == aSelectedColor)
-        bChanged = false;
+    if (bChanged)
+    {
+        aSelectedColor = m_pFontColorLB->GetSelectEntryColor();
+        if (m_bOrigFontColor)
+            bChanged = aSelectedColor != m_aOrigFontColor;
+    }
 
     if (bChanged)
         rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
@@ -1673,8 +1683,10 @@ IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, SvxColorListBox&, void)
+IMPL_LINK(SvxCharEffectsPage, ColorBoxSelectHdl_Impl, SvxColorListBox&, rBox, void)
 {
+    if (m_pFontColorLB == &rBox)
+        m_bNewFontColor = true;
     UpdatePreview_Impl();
 }
 
@@ -2109,7 +2121,6 @@ void SvxCharEffectsPage::ChangesApplied()
     m_pShadowBtn->SaveValue();
     m_pBlinkingBtn->SaveValue();
     m_pHiddenBtn->SaveValue();
-    m_pFontColorLB->SaveValue();
 }
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
