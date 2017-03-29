@@ -440,13 +440,14 @@ void SwView::ExecSearch(SfxRequest& rReq)
 /* 8 */         RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
 /*10 */         RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE,
 /*12 */         RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF,
+/*14 */         RES_CHRATR_OVERLINE,    RES_CHRATR_OVERLINE,
 // insert position for CJK/CTL attributes!
-/*14 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-/*16 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
-/*18 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
-/*20 */         RES_LR_SPACE,           RES_UL_SPACE,
-/*22 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-/*24 */         0
+/*16 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
+/*18 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
+/*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
+/*22 */         RES_LR_SPACE,           RES_UL_SPACE,
+/*24 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
+/*26 */         0
             };
 
             static const sal_uInt16 aCJKAttr[] =
@@ -465,13 +466,13 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     aNormalAttr + SAL_N_ELEMENTS( aNormalAttr ));
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
             {
-                aArr.insert( aArr.begin() + 14, aCTLAttr,
+                aArr.insert( aArr.begin() + 16, aCTLAttr,
                         aCTLAttr + SAL_N_ELEMENTS( aCTLAttr ));
             }
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
             {
-                aArr.insert( aArr.begin() + 14, aCJKAttr,
+                aArr.insert( aArr.begin() + 16, aCJKAttr,
                         aCJKAttr + SAL_N_ELEMENTS( aCJKAttr ));
             }
 
