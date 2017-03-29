@@ -79,6 +79,7 @@
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -1461,7 +1462,14 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
         {
             bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if (bInsertCols)
+                    GetViewData().GetLOKWidthHelper().invalidateByIndex(aRange.aStart.Col());
 
+                if (bInsertRows)
+                    GetViewData().GetLOKHeightHelper().invalidateByIndex(aRange.aStart.Row());
+            }
             pDocSh->UpdateOle(&GetViewData());
             CellContentChanged();
             ResetAutoSpell();
@@ -1526,6 +1534,15 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 #endif
         {
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
+        }
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (eCmd == DEL_DELCOLS)
+                GetViewData().GetLOKWidthHelper().invalidateByIndex(aRange.aStart.Col());
+
+            if (eCmd == DEL_DELROWS)
+                GetViewData().GetLOKHeightHelper().invalidateByIndex(aRange.aStart.Row());
         }
 
         pDocSh->UpdateOle(&GetViewData());
@@ -1896,6 +1913,11 @@ void ScViewFunc::SetWidthOrHeight(
 
     SCCOLROW nStart = rRanges.front().mnStart;
     SCCOLROW nEnd = rRanges.back().mnEnd;
+
+    if (bWidth)
+        GetViewData().GetLOKWidthHelper().invalidateByIndex(nStart);
+    else
+        GetViewData().GetLOKHeightHelper().invalidateByIndex(nStart);
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
