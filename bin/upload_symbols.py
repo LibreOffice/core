@@ -19,8 +19,8 @@ def main():
         print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
         sys.exit(1)
 
-    upload_url = "http://crashreport.libreoffice.org/upload/"
-    login_url = "http://crashreport.libreoffice.org/accounts/login/"
+    upload_url = "http://crashreport.collaboraoffice.com/upload/"
+    login_url = "http://crashreport.collaboraoffice.com/accounts/login/"
 
     config = configparser.ConfigParser()
     config.read(sys.argv[2])
