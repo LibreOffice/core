@@ -161,7 +161,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     return fRx;
 }
 
-// Allgemeine Funktionen
+// General functions
 
 void ScInterpreter::ScNoName()
 {
@@ -2241,9 +2241,9 @@ void ScInterpreter::ScBetaInv()
         PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
 }
 
-                                                            // Achtung: T, F und Chi
-                                                            // sind monoton fallend,
-                                                            // deshalb 1-Dist als Funktion
+                                                            // Note: T, F, and Chi are
+                                                            // monotonically decreasing,
+                                                            // therefore 1-Dist as function
 
 class ScTDistFunction : public ScDistFunc
 {

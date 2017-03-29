@@ -192,11 +192,11 @@ bool InitExternalFunc(const OUString& rModuleName)
         (*reinterpret_cast<SetLanguagePtr>(fpSetLanguage))( nLanguage );
     }
 
-    // Module in die Collection aufnehmen
+    // include module into the collection
     ModuleData* pModuleData = new ModuleData(rModuleName, pLib.release());
     aModuleCollection.insert(pModuleData);
 
-    // Schnittstelle initialisieren
+    // initialize interface
     AdvData pfCallBack = &ScAddInAsyncCallBack;
     LegacyFuncCollection* pLegacyFuncCol = ScGlobal::GetLegacyFuncCollection();
     sal_uInt16 nCount;
