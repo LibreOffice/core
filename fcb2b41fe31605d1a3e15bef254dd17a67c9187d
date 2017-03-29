@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_9165e646",
+        "filename": "sc/source/ui/docshell/dbdocfun.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-29T12:27:41Z",
+      "side": 1,
+      "message": "untranslated line left over",
+      "revId": "fcb2b41fe31605d1a3e15bef254dd17a67c9187d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3178baf2",
+        "filename": "sc/source/ui/docshell/docsh6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-29T12:27:41Z",
+      "side": 1,
+      "message": "prefer \"styles\" instead of \"templates\" here since the latter is confusing with template documents",
+      "revId": "fcb2b41fe31605d1a3e15bef254dd17a67c9187d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

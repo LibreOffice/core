@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_b15aea81",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-29T12:27:41Z",
+      "side": 0,
+      "message": "i think the \"0 kein Wert\" has a specific meaning",
+      "revId": "a4034d56813b6716ae93d455204079cdd2ff9f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
