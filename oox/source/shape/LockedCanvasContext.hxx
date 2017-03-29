@@ -23,9 +23,9 @@ class LockedCanvasContext : public oox::core::ContextHandler2
 {
 public:
     explicit LockedCanvasContext(oox::core::ContextHandler2Helper& rParent);
-    virtual ~LockedCanvasContext() override;
+    ~LockedCanvasContext() override;
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
+    oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 
     const oox::drawingml::ShapePtr& getShape()
     {
