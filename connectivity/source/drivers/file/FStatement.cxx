@@ -319,13 +319,13 @@ void OStatement_Base::anylizeSQL()
     if(pOrderbyClause)
     {
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
-        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Error in Parse Tree");
 
         for (size_t m = 0; m < pOrderingSpecCommalist->count(); m++)
         {
             OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
-            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Error in Parse Tree");
+            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Error in Parse Tree");
 
             OSQLParseNode * pColumnRef = pOrderingSpec->getChild(0);
             if(!SQL_ISRULE(pColumnRef,column_ref))
@@ -499,11 +499,11 @@ void OStatement_Base::GetAssignValues()
         // List of Column-Names, that exist in the column_commalist (separated by ;):
         std::vector<OUString> aColumnNameList;
 
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Error in Parse Tree");
 
         OSQLParseNode * pOptColumnCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pOptColumnCommalist != nullptr,"OResultSet: Fehler im Parse Tree");
-        OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(pOptColumnCommalist != nullptr,"OResultSet: Error in Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Error in Parse Tree");
         if (pOptColumnCommalist->count() == 0)
         {
             const Sequence< OUString>& aNames = m_xColNames->getElementNames();
@@ -514,18 +514,18 @@ void OStatement_Base::GetAssignValues()
         }
         else
         {
-            OSL_ENSURE(pOptColumnCommalist->count() == 3,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pOptColumnCommalist->count() == 3,"OResultSet: Error in Parse Tree");
 
             OSQLParseNode * pColumnCommalist = pOptColumnCommalist->getChild(1);
-            OSL_ENSURE(pColumnCommalist != nullptr,"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pColumnCommalist != nullptr,"OResultSet: Error in Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Error in Parse Tree");
+            OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Error in Parse Tree");
 
             // All Columns in the column_commalist ...
             for (size_t i = 0; i < pColumnCommalist->count(); i++)
             {
                 OSQLParseNode * pCol = pColumnCommalist->getChild(i);
-                OSL_ENSURE(pCol != nullptr,"OResultSet: Fehler im Parse Tree");
+                OSL_ENSURE(pCol != nullptr,"OResultSet: Error in Parse Tree");
                 aColumnNameList.push_back(pCol->getTokenValue());
             }
         }
@@ -534,7 +534,7 @@ void OStatement_Base::GetAssignValues()
 
         // Values ...
         OSQLParseNode * pValuesOrQuerySpec = m_pParseTree->getChild(4);
-        OSL_ENSURE(pValuesOrQuerySpec != nullptr,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
+        OSL_ENSURE(pValuesOrQuerySpec != nullptr,"OResultSet: pValuesOrQuerySpec must not be NULL!");
         OSL_ENSURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
         OSL_ENSURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
 
@@ -546,14 +546,14 @@ void OStatement_Base::GetAssignValues()
 
         // List of values
         OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(2);
-        OSL_ENSURE(pInsertAtomCommalist != nullptr,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
+        OSL_ENSURE(pInsertAtomCommalist != nullptr,"OResultSet: pInsertAtomCommalist must not be NULL!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
         sal_Int32 nIndex=0;
         for (size_t i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             OSQLParseNode * pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
-            OSL_ENSURE(pRow_Value_Const != nullptr,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
+            OSL_ENSURE(pRow_Value_Const != nullptr,"OResultSet: pRow_Value_Const must not be NULL!");
             if(SQL_ISRULE(pRow_Value_Const,parameter))
             {
                 ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // only one Columnname allowed per loop
@@ -583,11 +583,11 @@ void OStatement_Base::GetAssignValues()
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Error in Parse Tree");
 
         OSQLParseNode * pAssignmentCommalist = m_pParseTree->getChild(3);
         OSL_ENSURE(pAssignmentCommalist != nullptr,"OResultSet: pAssignmentCommalist == NULL");
-        OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Error in Parse Tree");
         OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
         // work on all assignments (commalist) ...
@@ -596,7 +596,7 @@ void OStatement_Base::GetAssignValues()
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
             OSL_ENSURE(pAssignment != nullptr,"OResultSet: pAssignment == NULL");
-            OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Error in Parse Tree");
             OSL_ENSURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
 
             OSQLParseNode * pCol = pAssignment->getChild(0);
@@ -623,8 +623,8 @@ void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNam
 {
     OSL_ENSURE(size_t(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     OUString aColumnName(aColumnNameList[nIndex]);
-    OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name nicht gefunden");
-    OSL_ENSURE(pRow_Value_Constructor_Elem != nullptr,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
+    OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name not found");
+    OSL_ENSURE(pRow_Value_Constructor_Elem != nullptr,"OResultSet: pRow_Value_Constructor_Elem must not be NULL!");
 
     if (pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::String ||
         pRow_Value_Constructor_Elem->getNodeType() == SQLNodeType::IntNum ||

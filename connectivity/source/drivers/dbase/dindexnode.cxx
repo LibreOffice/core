@@ -496,7 +496,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
             sal_uInt16 nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
-                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage and THIS must not be the same: infinite loop");
                 // shift all nodes from xPage to the left node (append)
                 while (xPage->Count())
                 {
@@ -506,7 +506,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
             }
             else
             {
-                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage and THIS must not be the same: infinite loop");
                 // xPage is the left page and THIS the right one
                 while (xPage->Count())
                 {
@@ -576,7 +576,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
         {
             if (bRight)
             {
-                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage and THIS must not be the same: infinite loop");
                 // Parent node will be integrated; is initialized with Child from xPage
                 (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
                 Append((*aParent)[nParentNodePos]);
@@ -585,7 +585,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
             }
             else
             {
-                DBG_ASSERT(xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(xPage != this,"xPage and THIS must not be the same: infinite loop");
                 // Parent-node will be integrated; is initialized with child
                 (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent memorizes my child
                 Insert(0,(*aParent)[nParentNodePos]); // insert parent node into myself

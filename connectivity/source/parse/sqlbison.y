@@ -211,7 +211,7 @@ using namespace connectivity;
 %type <pParseNode> all_or_any_predicate any_all_some existence_test subquery quantified_comparison_predicate_part_2
 %type <pParseNode> scalar_exp_commalist parameter_ref literal parenthesized_boolean_value_expression
 %type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/
-/* neue Regeln bei OJ */
+/* new rules at OJ */
 %type <pParseNode> derived_column as_clause table_name num_primary term num_value_exp
 %type <pParseNode> value_exp_primary num_value_fct unsigned_value_spec cast_spec set_fct_spec  scalar_subquery
 %type <pParseNode> position_exp extract_exp length_exp general_value_spec
@@ -255,8 +255,8 @@ using namespace connectivity;
 %type <pParseNode> opt_limit_offset_clause limit_offset_clause opt_fetch_first_clause
 %%
 
-/* Parse Tree an OSQLParser zurueckliefern
- * (der Zugriff ueber yyval nach Aufruf des Parsers scheitert,
+/* Return Parse Tree to OSQLParser
+ * (the access over yyval after calling the parser fails,
  *
  */
 sql_single_statement:
@@ -2611,7 +2611,7 @@ cross_union:
 	;
 
 qualified_join:
-		/* wenn SQL_TOKEN_NATURAL, dann keine join_spec */
+		/* when SQL_TOKEN_NATURAL, then no join_spec */
 		table_ref SQL_TOKEN_NATURAL join_type SQL_TOKEN_JOIN table_ref
 		{
 			$$ = SQL_NEW_RULE;
@@ -4408,11 +4408,11 @@ const Locale& OParseContext::getDefaultLocale()
 	return impl_getLocaleInstance();
 }
 
-// Der (leider globale) yylval fuer die Uebergabe von
-// Werten vom Scanner an den Parser. Die globale Variable
-// wird nur kurzzeitig verwendet, der Parser liest die Variable
-// sofort nach dem Scanner-Aufruf in eine gleichnamige eigene
-// Member-Variable.
+// The (unfortunately global) yylval for the handing over of
+// values from the Scanner to the Parser. The global variable
+// is only used for a short term, the Parser reads the variable
+// immediately after the call of the Scanner into a same named own
+// member variable.
 
 
 OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, bool bInternational)
@@ -4424,7 +4424,7 @@ OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* 
 		if (pEscapeNode->count())
 			cEscape = pEscapeNode->getChild(1)->getTokenValue().toChar();
 
-		// Platzhalter austauschen
+		// Change place holder
 		aMatchStr = pTokenNode->getTokenValue();
 		const sal_Int32 nLen = aMatchStr.getLength();
 		OUStringBuffer sSearch,sReplace;

@@ -43,8 +43,7 @@ namespace connectivity
     protected:
         virtual ~ODatabaseMetaDataResultSetMetaData() override;
     public:
-        // a Constructor, that is needed for when Returning the Object is needed:
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // a Constructor, that is needed for when returning the object is needed:
         ODatabaseMetaDataResultSetMetaData( )
         {
         }

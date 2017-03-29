@@ -937,7 +937,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
-        // SELECT column[,column] oder SELECT COUNT(*) ...
+        // SELECT column[,column] or SELECT COUNT(*) ...
         OSQLParseNode * pSelection = pSelectNode->getChild(2);
 
         for (size_t i = 0; i < pSelection->count(); i++)
@@ -1527,7 +1527,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
 
     /*if (SQL_ISRULE(pParseNode,parameter))
         traverseParameter( pParseNode, pColumnRef, aColumnName, aTableRange, sColumnAlias );
-    else */if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
+    else */if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (and TableRange):
         getColumnRange(pParseNode,aName,rValue);
     else
     {
