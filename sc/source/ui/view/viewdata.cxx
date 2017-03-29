@@ -2501,6 +2501,8 @@ void ScViewData::UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY 
 
 void ScViewData::CalcPPT()
 {
+    double nOldPPTX = nPPTX;
+    double nOldPPTY = nPPTY;
     nPPTX = ScGlobal::nScreenPPTX * (double) GetZoomX();
     if (pDocShell)
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Factor is printer to screen
@@ -2537,6 +2539,11 @@ void ScViewData::CalcPPT()
             }
         }
     }
+
+    if (nPPTX != nOldPPTX)
+        GetLOKWidthHelper().invalidateByPosition(0L);
+    if (nPPTY != nOldPPTY)
+        GetLOKHeightHelper().invalidateByPosition(0L);
 }
 
 #define SC_OLD_TABSEP   '/'
