@@ -733,7 +733,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     OUString aURL;
 
     OString sDialogPosition;
-    while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
+    while ( pEntry )
     {
         SvTreeListEntry *pCurEntry = pEntry;
         pEntry = NextSelected( pEntry );

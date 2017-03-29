@@ -106,10 +106,6 @@ static ErrorHandlerFlags aWndFunc(
             pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageQuery:
-            pBox.reset(VclPtr<QueryBox>::Create(pWin, eBits, aErr));
-            break;
-
         default:
         {
             SAL_WARN( "svtools.misc", "no MessBox type");
