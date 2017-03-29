@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_acca919f",
+        "filename": "android/source/src/java/org/libreoffice/LOEvent.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-03-29T16:30:49Z",
+      "side": 1,
+      "message": "no need to shuffle existing IDs around, right?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "e1c7607562a0e51d600b1d883618a0ec9c873b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0cc2bd85",
+        "filename": "android/source/src/java/org/libreoffice/LOKitThread.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-03-29T16:30:49Z",
+      "side": 1,
+      "message": "don\u0027t do that, rather pass mContext as parameter if needed",
+      "revId": "e1c7607562a0e51d600b1d883618a0ec9c873b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2cbf81fc",
+        "filename": "android/source/src/java/org/libreoffice/LibreOfficeMainActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-03-29T16:30:49Z",
+      "side": 1,
+      "message": "No, *you* deal with this! :-) https://xkcd.com/1790/",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 616,
+        "endChar": 5
+      },
+      "revId": "e1c7607562a0e51d600b1d883618a0ec9c873b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
