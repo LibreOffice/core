@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ac0ff1df",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-03-29T17:04:03Z",
+      "side": 1,
+      "message": "Now I see what it means. But shouldn\u0027t the \"no\" at the beginning be removed then? (Or just something like \"differentiate between 0 with value and 0 no-value\"?)",
+      "revId": "5ddef1648005756cfb811f9e6261851d4df712c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
