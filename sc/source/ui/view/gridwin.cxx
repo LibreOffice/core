@@ -5543,6 +5543,13 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
 
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
+    pViewData->GetLOKWidthHelper().remove(pViewData->GetLOKOldCurX() - 1);
+    pViewData->GetLOKWidthHelper().insert(nX - 1, aScrPos.getX());
+    pViewData->SetLOKOldCurX(nX);
+    pViewData->GetLOKHeightHelper().remove(pViewData->GetLOKOldCurY() - 1);
+    pViewData->GetLOKHeightHelper().insert(nY - 1, aScrPos.getY());
+    pViewData->SetLOKOldCurY(nY);
+
     return aRect.toString();
 }
 
