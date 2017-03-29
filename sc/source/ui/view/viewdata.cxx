@@ -1163,9 +1163,95 @@ void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
     maTabData[nTabIndex]->nCurY = nNewCurY;
 }
 
+void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
+{
+    if (nNewMaxCol < 0)
+        nNewMaxCol = 0;
+    if (nNewMaxCol > MAXCOL)
+        nNewMaxCol = MAXCOL;
+
+    const SCTAB nTab = GetTabNo();
+    ScDocument* pThisDoc = pDoc;
+    auto GetColWidthPx = [pThisDoc, nTab](SCCOL nCol) {
+        const sal_uInt16 nSize = pThisDoc->GetColWidth(nCol, nTab);
+        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+        return nSizePx;
+    };
+
+    const auto& rNearest = GetLOKWidthHelper().getNearestByIndex(nNewMaxCol);
+    SCCOL nStartCol = rNearest.first;
+    long nTotalPixels = rNearest.second;
+
+    if (nStartCol < nNewMaxCol)
+    {
+        for (SCCOL nCol = nStartCol + 1; nCol <= nNewMaxCol; ++nCol)
+        {
+            nTotalPixels += GetColWidthPx(nCol);
+        }
+    }
+    else
+    {
+        for (SCCOL nCol = nStartCol; nCol > nNewMaxCol; --nCol)
+        {
+            nTotalPixels -= GetColWidthPx(nCol);
+        }
+    }
+
+    SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
+            << nNewMaxCol << ", nTotalPixels: " << nTotalPixels);
+
+    GetLOKWidthHelper().removeByIndex(pThisTab->nMaxTiledCol);
+    GetLOKWidthHelper().insert(nNewMaxCol, nTotalPixels);
+
+    pThisTab->nMaxTiledCol = nNewMaxCol;
+}
+
+void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
+{
+    if (nNewMaxRow < 0)
+        nNewMaxRow = 0;
+    if (nNewMaxRow > MAXTILEDROW)
+        nNewMaxRow = MAXTILEDROW;
+
+    const SCTAB nTab = GetTabNo();
+    ScDocument* pThisDoc = pDoc;
+    auto GetRowHeightPx = [pThisDoc, nTab](SCROW nRow) {
+        const sal_uInt16 nSize = pThisDoc->GetRowHeight(nRow, nTab);
+        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+        return nSizePx;
+    };
+
+    const auto& rNearest = GetLOKHeightHelper().getNearestByIndex(nNewMaxRow);
+    SCROW nStartRow = rNearest.first;
+    long nTotalPixels = rNearest.second;
+
+    if (nStartRow < nNewMaxRow)
+    {
+        for (SCROW nRow = nStartRow + 1; nRow <= nNewMaxRow; ++nRow)
+        {
+            nTotalPixels += GetRowHeightPx(nRow);
+        }
+    }
+    else
+    {
+        for (SCROW nRow = nStartRow; nRow > nNewMaxRow; --nRow)
+        {
+            nTotalPixels -= GetRowHeightPx(nRow);
+        }
+    }
+
+    SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
+            << nNewMaxRow << ", nTotalPixels: " << nTotalPixels);
+
+    GetLOKHeightHelper().removeByIndex(pThisTab->nMaxTiledRow);
+    GetLOKHeightHelper().insert(nNewMaxRow, nTotalPixels);
+
+    pThisTab->nMaxTiledRow = nNewMaxRow;
+}
+
 tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
-                                    vcl::Window* pWin, const ScPatternAttr* pPattern,
-                                    bool bForceToTop )
+                                          vcl::Window* pWin, const ScPatternAttr* pPattern,
+                                          bool bForceToTop )
 {
     return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, GetScrPos(nPosX,nPosY,eWhich,true),
                         pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY() ).
