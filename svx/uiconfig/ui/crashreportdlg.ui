@@ -87,7 +87,7 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
             <property name="xalign">0</property>
             <property name="label" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
 You can soon find the report at:
-crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
+crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
             <property name="wrap">True</property>
             <property name="selectable">True</property>
           </object>
