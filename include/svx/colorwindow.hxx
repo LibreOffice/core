@@ -76,7 +76,6 @@ private:
     static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
     static NamedColor GetSelectEntryColor(ValueSet* pColorSet);
     NamedColor GetAutoColor() const;
-    NamedColor GetNoneColor() const;
 
 public:
     SvxColorWindow(const OUString& rCommand,
