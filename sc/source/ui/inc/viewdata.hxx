@@ -335,6 +335,9 @@ public:
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
+    long            GetLOKDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
+    long            GetLOKDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
+
     ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
     ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
 
@@ -363,8 +366,8 @@ public:
     void            SetVSplitPos( long nPos )                       { pThisTab->nVSplitPos = nPos; }
     void            SetFixPosX( SCCOL nPos )                        { pThisTab->nFixPosX = nPos; }
     void            SetFixPosY( SCROW nPos )                        { pThisTab->nFixPosY = nPos; }
-    void            SetMaxTiledCol( SCCOL nCol )                    { pThisTab->nMaxTiledCol = nCol; }
-    void            SetMaxTiledRow( SCROW nRow )                    { pThisTab->nMaxTiledRow = nRow; }
+    void            SetMaxTiledCol( SCCOL nCol );
+    void            SetMaxTiledRow( SCROW nRow );
 
     void            SetPagebreakMode( bool bSet );
     void            SetPasteMode ( ScPasteFlags nFlags )            { nPasteFlags = nFlags; }
