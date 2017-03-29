@@ -118,6 +118,7 @@ def is_ignore(srcLoc):
          "basic/source/inc/opcodes.hxx", #  SbiOpcode
          "sc/source/filter/inc/flttypes.hxx", # BiffTyp
          "sc/inc/optutil.hxx", # ScOptionsUtil::KeyBindingType
+         "include/sfx2/chalign.hxx", # SfxChildAlignment
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

@@ -54,7 +54,7 @@ BiffDecoderBase::~BiffDecoderBase()
 
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
-    maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
+    maCodec( ::oox::core::BinaryCodec_XOR::CodecType::Excel ),
     maEncryptionData( rDecoder.maEncryptionData ),
     mnKey( rDecoder.mnKey ),
     mnHash( rDecoder.mnHash )

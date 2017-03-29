@@ -220,8 +220,6 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
                     aDlg->EnableAllButton();
 
                 eResult = aDlg->Execute();
-                if (eResult == svtools::QUERYDELETE_CANCEL)
-                    return;
 
                 sDialogPosition = aDlg->GetWindowState( );
             }
