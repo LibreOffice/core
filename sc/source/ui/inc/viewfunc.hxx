@@ -325,6 +325,7 @@ public:
 
     void            OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset);
     void            OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset);
+    void            OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
 
                                                 // Internal helper functions
 protected:

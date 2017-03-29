@@ -3668,6 +3668,10 @@ bool ScDocFunc::SetWidthOrHeight(
 
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if (pViewSh)
+        pViewSh->OnLOKSetWidthOrHeight(nStart, bWidth);
+
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::All);
     aModificator.SetDocumentModified();
 
