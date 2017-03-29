@@ -43,6 +43,7 @@ public:
     void testIsdigitAsciiString();
     void testReverseString();
     void testSplit();
+    void testRemoveAny();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testReverseString);
     CPPUNIT_TEST(testSplit);
+    CPPUNIT_TEST(testRemoveAny);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -380,6 +382,26 @@ void TestString::testSplit()
     CPPUNIT_ASSERT_EQUAL(OUString("CTRL"), aRet[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("ALT"), aRet[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("F1"), aRet[2]);
+}
+
+void TestString::testRemoveAny()
+{
+    using namespace ::comphelper::string;
+    OUString in("abcAAAbbC");
+    sal_Unicode const test1 [] = { 'a', 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString("bcAAAbbC"), removeAny(in, test1));
+    sal_Unicode const test2 [] = { 0 };
+    CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test2));
+    sal_Unicode const test3 [] = { 'A', 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString("abcbbC"), removeAny(in, test3));
+    sal_Unicode const test4 [] = { 'A', 'a', 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString("bcbbC"), removeAny(in, test4));
+    sal_Unicode const test5 [] = { 'C', 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString("abcAAAbb"), removeAny(in, test5));
+    sal_Unicode const test6 [] = { 'X', 0 };
+    CPPUNIT_ASSERT_EQUAL(in, removeAny(in, test6));
+    sal_Unicode const test7 [] = { 'A', 'B', 'C', 'a', 'b', 'c', 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString(""), removeAny(in, test7));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

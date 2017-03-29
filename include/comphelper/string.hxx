@@ -255,6 +255,15 @@ COMPHELPER_DLLPUBLIC OUString setToken(const OUString& rIn, sal_Int32 nToken, sa
 COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos);
 
+/** Remove any of a list of code units in the string.
+    @param rIn      OUString to search
+    @param pChars   0-terminated array of sal_Unicode code units to search for
+
+    @return OUString that has all of the pChars code units removed
+ */
+COMPHELPER_DLLPUBLIC OUString removeAny(OUString const& rIn,
+        sal_Unicode const*const pChars);
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.
