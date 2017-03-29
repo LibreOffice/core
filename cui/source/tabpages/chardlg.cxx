@@ -75,12 +75,6 @@
 
 using namespace ::com::sun::star;
 
-// define ----------------------------------------------------------------
-
-#define ISITEMSET   rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT
-
-#define CLEARTITEM  rSet.InvalidateItem(nWhich)
-
 // static ----------------------------------------------------------------
 
 const sal_uInt16 SvxCharNamePage::pNameRanges[] =
@@ -188,23 +182,20 @@ void SvxCharBasePage::dispose()
     SfxTabPage::dispose();
 }
 
-
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 {
     m_pPreviewWin->SetFromItemSet( rSet, m_bPreviewBackgroundToCharacter );
 }
 
-
 void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if( ISITEMSET )
+    if (rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT)
     {
         const SvxCharScaleWidthItem &rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
         m_pPreviewWin->SetFontWidthScale( rItem.GetValue() );
     }
 }
-
 
 namespace
 {
@@ -996,7 +987,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        CLEARTITEM;
+        rSet.InvalidateItem(nWhich);
 
     bChanged = true;
     switch ( eLangGrp )
@@ -1043,7 +1034,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        CLEARTITEM;
+        rSet.InvalidateItem(nWhich);
 
     // FontSize
     long nSize = static_cast<long>(pSizeBox->GetValue());
@@ -1103,7 +1094,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        CLEARTITEM;
+        rSet.InvalidateItem(nWhich);
 
     bChanged = true;
     switch ( eLangGrp )
@@ -1158,7 +1149,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        CLEARTITEM;
+        rSet.InvalidateItem(nWhich);
 
     return bModified;
 }
@@ -1617,7 +1608,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     if (bChanged)
         rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        CLEARTITEM;
+        rSet.InvalidateItem(nWhich);
 
     return bChanged;
 }
