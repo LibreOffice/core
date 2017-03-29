@@ -1145,7 +1145,7 @@ void OResultSet::sortRows()
         // Other types aren't implemented (so they are always FALSE)
             default:
                 eKeyType[i] = OKeyType::NONE;
-                SAL_WARN( "connectivity.drivers","OFILECursor::Execute: Datentyp nicht implementiert");
+                SAL_WARN( "connectivity.drivers","OFILECursor::Execute: Data type not implemented");
                 break;
         }
         (m_aSelectRow->get())[*aOrderByIter]->setBound(true);

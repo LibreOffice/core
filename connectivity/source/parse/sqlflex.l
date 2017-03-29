@@ -59,8 +59,8 @@
 
 using namespace connectivity;
 
-// Erzeugung der Blaetter fuer die Token
-// Blaetter werden generell vom Lexer erzeugt
+// Creation of the pages for the tokens
+// Pages generally are created from the Lexer
 
 static sal_Int32    gatherString(int delim, sal_Int32 nTyp);
 static sal_Int32    gatherName(const sal_Char*);

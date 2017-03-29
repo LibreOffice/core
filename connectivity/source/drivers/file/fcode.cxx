@@ -68,8 +68,8 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
     : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {
-    OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
-    OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
+    OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument is not a parameter");
+    OSL_ENSURE(pNode->count() > 0,"Error in Parse Tree");
     OSQLParseNode *pMark = pNode->getChild(0);
 
     OUString aParameterName;
@@ -79,7 +79,7 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
-        SAL_WARN( "connectivity.drivers","Fehler im Parse Tree");
+        SAL_WARN( "connectivity.drivers","Error in Parse Tree");
     }
 
     // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
