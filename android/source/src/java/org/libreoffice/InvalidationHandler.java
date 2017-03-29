@@ -6,6 +6,9 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
 import org.libreoffice.overlay.DocumentOverlay;
@@ -79,9 +82,85 @@ public class InvalidationHandler implements Document.MessageCallback {
             case Document.CALLBACK_STATE_CHANGED:
                 stateChanged(payload);
                 break;
+            case Document.CALLBACK_SEARCH_RESULT_SELECTION:
+                searchResultSelection(payload);
+                break;
+            case Document.CALLBACK_SEARCH_NOT_FOUND:
+                Log.d(LOGTAG, "LOK_CALLBACK: Search not found.");
+                // this callback is never caught. Hope someone fix this.
+                break;
             default:
-                Log.d(LOGTAG, "LOK_CALLBACK uncatched: " + messageID + " : " + payload);
+                Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
+    }
+
+    /**
+     * Handles the search result selection message, which is a JSONObject
+     *
+     * @param payload
+     */
+    private void searchResultSelection(String payload) {
+        RectF selectionRectangle = null;
+        try {
+            JSONObject collectiveResult = new JSONObject(payload);
+            JSONArray searchResult = collectiveResult.getJSONArray("searchResultSelection");
+            if (searchResult.length() == 1) {
+                String rectangle = searchResult.getJSONObject(0).getString("rectangles");
+                selectionRectangle = convertPayloadToRectangle(rectangle);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (selectionRectangle != null) {
+            moveViewportToMakeSelectionVisible(selectionRectangle);
+        }
+    }
+
+    /**
+     * Move the viewport to show the selection. The selection will appear at the
+     * viewport position depending on where the selection is relative to the
+     * viewport (either selection is above, below, on left or right). The difference
+     * between this method and moveViewportToMakeCursorVisible() is that this method
+     * takes into account the width and height of the selection and zooms out
+     * accordingly.
+     *
+     * @param selectionRectangle - selection position on the document
+     */
+    public void moveViewportToMakeSelectionVisible(RectF selectionRectangle) {
+        RectF moveToRect = mLayerClient.getViewportMetrics().getCssViewport();
+        if (moveToRect.contains(selectionRectangle)) {
+            return;
+        }
+
+        float newLeft = moveToRect.left;
+        float newTop = moveToRect.top;
+
+        // if selection rectangle is wider or taller than current viewport, we need to zoom out
+        float oldZoom = mLayerClient.getViewportMetrics().getZoomFactor();
+        float widthRatio = 1f;
+        float heightRatio = 1f;
+        if (moveToRect.width() < selectionRectangle.width()) {
+            widthRatio = selectionRectangle.width() / moveToRect.width() / 0.85f; // 0.85f gives some margin (must < 0.9)
+        }
+        if (moveToRect.height() < selectionRectangle.height()) {
+            heightRatio = selectionRectangle.height() / moveToRect.height() / 0.45f; // 0.45f gives some margin (must < 0.5)
+        }
+        float newZoom = widthRatio > heightRatio ? oldZoom/widthRatio : oldZoom/heightRatio;
+
+        // if selection is out of viewport we need to adjust accordingly
+        if (selectionRectangle.right < moveToRect.left || selectionRectangle.left < moveToRect.left) {
+            newLeft = selectionRectangle.left - (moveToRect.width() * 0.1f) * oldZoom / newZoom; // 0.1f gives left margin
+        } else if (selectionRectangle.right > moveToRect.right || selectionRectangle.left > moveToRect.right) {
+            newLeft = selectionRectangle.right - (moveToRect.width() * 0.9f) * oldZoom / newZoom; // 0.9f gives right margin
+        }
+
+        if (selectionRectangle.top < moveToRect.top || selectionRectangle.bottom < moveToRect.top) {
+            newTop = selectionRectangle.top - (moveToRect.height() * 0.1f) * oldZoom / newZoom; // 0.1f gives top margin
+        } else if (selectionRectangle.bottom > moveToRect.bottom || selectionRectangle.top > moveToRect.bottom){
+            newTop = selectionRectangle.bottom - (moveToRect.height() * 0.5f) * oldZoom / newZoom; // 0.5 f gives bottom margin
+        }
+
+        LOKitShell.moveViewportTo(mContext, new PointF(newLeft, newTop), newZoom);
     }
 
     private void stateChanged(String payload) {
