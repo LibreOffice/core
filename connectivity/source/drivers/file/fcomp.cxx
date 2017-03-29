@@ -77,12 +77,12 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
         OSQLParseNode * pOrderbyClause = nullptr;
-        DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Error in Parse Tree");
 
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-        DBG_ASSERT(pTableExp != nullptr,"Fehler im Parse Tree");
-        DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
-        DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Fehler im Parse Tree");
+        DBG_ASSERT(pTableExp != nullptr,"Error in Parse Tree");
+        DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Error in Parse Tree");
+        DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Error in Parse Tree");
 
         // check that we don't use anything other than count(*) as function
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
@@ -105,12 +105,12 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     }
     else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
     {
-        DBG_ASSERT(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pSQLParseNode->count() == 5,"OFILECursor: Error in Parse Tree");
         pWhereClause = pSQLParseNode->getChild(4);
     }
     else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
     {
-        DBG_ASSERT(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
+        DBG_ASSERT(pSQLParseNode->count() == 4,"Error in Parse Tree");
         pWhereClause = pSQLParseNode->getChild(3);
     }
     else
@@ -120,17 +120,17 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     if (SQL_ISRULE(pWhereClause,where_clause))
     {
         // a where-clause is not allowed to be empty:
-        DBG_ASSERT(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pWhereClause->count() == 2,"OFILECursor: Error in Parse Tree");
 
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-        DBG_ASSERT(pComparisonPredicate != nullptr,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pComparisonPredicate != nullptr,"OFILECursor: Error in Parse Tree");
 
         execute( pComparisonPredicate );
     }
     else
     {
         // The where-clause is optionally in the majority of cases, i.e. it might be an "optional-where-clause".
-        DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OPredicateCompiler: Fehler im Parse Tree");
+        DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OPredicateCompiler: Error in Parse Tree");
     }
 }
 
@@ -160,7 +160,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_AND);
         else
         {
-            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree");
+            OSL_FAIL("OPredicateCompiler: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,boolean_factor))
@@ -196,7 +196,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_SUB);
         else
         {
-            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+            OSL_FAIL("OPredicateCompiler: Error in Parse Tree num_value_exp");
         }
     }
     else if(SQL_ISRULE(pPredicateNode,term))
@@ -211,7 +211,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_DIV);
         else
         {
-            OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+            OSL_FAIL("OPredicateCompiler: Error in Parse Tree num_value_exp");
         }
     }
     else
@@ -223,7 +223,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 
 void OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
 {
-    DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Error in Parse Tree");
 
     if ( !(SQL_ISRULE(pPredicateNode->getChild(0),column_ref)               ||
           pPredicateNode->getChild(2)->getNodeType() == SQLNodeType::String     ||
@@ -269,7 +269,7 @@ void OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
 
 void OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
 {
-    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Error in Parse Tree");
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
 
     sal_Unicode cEscape = L'\0';
@@ -317,7 +317,7 @@ void OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
 
 void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode)
 {
-    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Error in Parse Tree");
 
     OSQLParseNode* pColumn = pPredicateNode->getChild(0);
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
@@ -394,9 +394,9 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode)
 
 void OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode)
 {
-    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Error in Parse Tree");
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
-    DBG_ASSERT(SQL_ISTOKEN(pPart2->getChild(0),IS),"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(SQL_ISTOKEN(pPart2->getChild(0),IS),"OFILECursor: Error in Parse Tree");
 
     sal_Int32 ePredicateType;
     if (SQL_ISTOKEN(pPart2->getChild(1),NOT))
@@ -591,7 +591,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
 
 void OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)
 {
-    DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+    DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Error in Parse Tree");
 
     bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
 

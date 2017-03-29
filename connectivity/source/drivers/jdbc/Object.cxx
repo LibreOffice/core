@@ -468,7 +468,7 @@ jclass java_lang_Object::findMyClass(const char* _pClassName)
 {
     // the class must be fetched only once, therefore static
     SDBThreadAttach t;
-    jclass tempClass = t.pEnv->FindClass(_pClassName); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
+    jclass tempClass = t.pEnv->FindClass(_pClassName); OSL_ENSURE(tempClass,"Java : FindClass not successful!");
     if(!tempClass)
     {
         t.pEnv->ExceptionDescribe();

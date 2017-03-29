@@ -58,7 +58,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
-        DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Error in Parse Tree");
 
         // check that we don't use anything other than count(*) as function
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);

@@ -426,13 +426,13 @@ void OCommonStatement::analyseSQL()
     if(pOrderbyClause)
     {
         OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
-        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Error in Parse Tree");
 
         for (size_t m = 0; m < pOrderingSpecCommalist->count(); m++)
         {
             OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
-            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Error in Parse Tree");
+            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Error in Parse Tree");
 
             OSQLParseNode * pColumnRef = pOrderingSpec->getChild(0);
             if(!SQL_ISRULE(pColumnRef,column_ref))
