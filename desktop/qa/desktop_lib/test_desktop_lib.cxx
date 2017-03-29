@@ -636,7 +636,7 @@ void DesktopLOKTest::testRowColumnHeaders()
         if (bFirstHeader)
         {
             CPPUNIT_ASSERT(nSize <= nY);
-            CPPUNIT_ASSERT_EQUAL(OString("11"), aText);
+            CPPUNIT_ASSERT_EQUAL(OString("10"), aText);
             bFirstHeader = false;
         }
         else
@@ -663,7 +663,7 @@ void DesktopLOKTest::testRowColumnHeaders()
         if (bFirstHeader)
         {
             CPPUNIT_ASSERT(nSize <= nX);
-            CPPUNIT_ASSERT_EQUAL(OString("4"), aText);
+            CPPUNIT_ASSERT_EQUAL(OString("3"), aText);
             bFirstHeader = false;
         }
         else
