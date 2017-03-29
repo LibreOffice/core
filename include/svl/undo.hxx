@@ -154,7 +154,7 @@ public:
     /// See SfxUndoAction::GetViewShellId().
     ViewShellId GetViewShellId() const override;
     virtual OUString        GetRepeatComment(SfxRepeatTarget&) const override;
-    virtual sal_uInt16      GetId() const;
+    sal_uInt16              GetId() const;
 
     void SetComment(const OUString& rComment);
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
