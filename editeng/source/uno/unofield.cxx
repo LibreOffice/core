@@ -316,7 +316,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                     mpImpl->mbBoolean2 = true;
                     // #i35416# for variable date field, don't use invalid "0000-00-00" date,
                     // use current date instead
-                    bool bFixed = static_cast<const SvxDateField*>(pData)->GetType() == SVXDATETYPE_FIX;
+                    bool bFixed = static_cast<const SvxDateField*>(pData)->GetType() == SvxDateType::Fix;
                     mpImpl->maDateTime = getDate( bFixed ?
                                             static_cast<const SvxDateField*>(pData)->GetFixDate() :
                                             Date( Date::SYSTEM ).GetDate() );
@@ -392,7 +392,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
             Date aDate( setDate( mpImpl->maDateTime ) );
-            pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
+            pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SvxDateType::Fix:SvxDateType::Var );
             if( mpImpl->mnInt32 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXDATEFORMAT_F )
                 static_cast<SvxDateField*>(pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
         }

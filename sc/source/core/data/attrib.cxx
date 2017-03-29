@@ -673,7 +673,7 @@ static bool lcl_ConvertFields(EditEngine& rEng, const OUString* pCommands)
         while ((nPos = aStr.indexOf(pCommands[2])) != -1)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].getLength() );
-            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
+            rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SvxDateType::Var), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
         while ((nPos = aStr.indexOf(pCommands[3])) != -1)

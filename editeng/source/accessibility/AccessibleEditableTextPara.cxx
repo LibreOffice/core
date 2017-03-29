@@ -865,9 +865,9 @@ namespace
                 const SvxDateField* pDateField = static_cast< const SvxDateField* >(ree.pFieldItem->GetField());
                 if (pDateField)
                 {
-                    if (pDateField->GetType() == SVXDATETYPE_FIX)
+                    if (pDateField->GetType() == SvxDateType::Fix)
                         strFldType = "date (fixed)";
-                    else if (pDateField->GetType() == SVXDATETYPE_VAR)
+                    else if (pDateField->GetType() == SvxDateType::Var)
                         strFldType = "date (variable)";
                 }
                 break;

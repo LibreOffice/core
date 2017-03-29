@@ -490,7 +490,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 case SID_INSERT_FLD_DATE_FIX:
                     pFieldItem.reset(new SvxFieldItem(
-                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD ));
+                        SvxDateField( Date( Date::SYSTEM ), SvxDateType::Fix ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:

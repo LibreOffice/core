@@ -6466,7 +6466,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     SvxTimeFormat eTimeFormat;
     GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
-        xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_VAR, eDateFormat ), EE_FEATURE_FIELD));
+        xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SvxDateType::Var, eDateFormat ), EE_FEATURE_FIELD));
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
         std::unique_ptr<SvxFieldItem> xFieldItem(new SvxFieldItem(SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD));
@@ -6869,7 +6869,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     if (!xEntry->xString)
                                                     {
                                                         // Handle as previously
-                                                        xEntry->xField1.reset(new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD ));
+                                                        xEntry->xField1.reset(new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SvxDateType::Fix ), EE_FEATURE_FIELD ));
                                                     }
                                                 }
                                             }

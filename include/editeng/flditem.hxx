@@ -89,7 +89,7 @@ public:
 // The following are the derivatives of SvxFieldData ...
 
 
-enum SvxDateType { SVXDATETYPE_FIX, SVXDATETYPE_VAR };
+enum class SvxDateType { Fix, Var };
 enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App
                         SVXDATEFORMAT_SYSTEM,       // Set as in System
                         SVXDATEFORMAT_STDSMALL,
