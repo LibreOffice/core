@@ -173,11 +173,10 @@ enum ApiControlType
 
 
 /** Specifies how a form control supports transparent background. */
-enum ApiTransparencyMode
+enum class ApiTransparencyMode
 {
-    API_TRANSPARENCY_NOTSUPPORTED,      ///< Control does not support transparency.
-    API_TRANSPARENCY_VOID,              ///< Transparency is enabled by missing fill color.
-    API_TRANSPARENCY_PAINTTRANSPARENT   ///< Transparency is enabled by the 'PaintTransparent' property.
+    NotSupported,      ///< Control does not support transparency.
+    Void,              ///< Transparency is enabled by missing fill color.
 };
 
 /** Specifies how a form control supports the DefaultState property. */
