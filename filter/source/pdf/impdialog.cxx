@@ -83,6 +83,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbUseTaggedPDF( false ),
     mbExportNotes( true ),
     mbViewPDF( false ),
+    mbUseReferenceXObject( false ),
     mbExportNotesPages( false ),
     mbExportOnlyNotesPages( false ),
     mbUseTransitionEffects( false ),
@@ -472,6 +473,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     aRet.push_back(comphelper::makePropertyValue("SignaturePassword", msSignPassword));
     aRet.push_back(comphelper::makePropertyValue("SignatureCertificate", maSignCertificate));
     aRet.push_back(comphelper::makePropertyValue("SignatureTSA", msSignTSA));
+    aRet.push_back(comphelper::makePropertyValue("UseReferenceXObject", mbUseReferenceXObject));
 
     return comphelper::concatSequences(maConfigItem.GetFilterData(), comphelper::containerToSequence(aRet));
 }
@@ -516,6 +518,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     get(mpCbExportEmptyPages, "emptypages");
     get(mpCbExportPlaceholders, "exportplaceholders" );
     get(mpCbViewPDF, "viewpdf");
+    get(mpCbUseReferenceXObject, "usereferencexobject");
 
     get(mpCbWatermark, "watermark");
     get(mpFtWatermark, "watermarklabel");
@@ -552,6 +555,7 @@ void ImpPDFTabGeneralPage::dispose()
     mpCbExportHiddenSlides.clear();
     mpCbExportNotes.clear();
     mpCbViewPDF.clear();
+    mpCbUseReferenceXObject.clear();
     mpCbExportNotesPages.clear();
     mpCbExportOnlyNotesPages.clear();
     mpCbExportEmptyPages.clear();
@@ -689,6 +693,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mnMaxImageResolution = mpCoReduceImageResolution->GetText().toInt32();
     paParent->mbExportNotes = mpCbExportNotes->IsChecked();
     paParent->mbViewPDF = mpCbViewPDF->IsChecked();
+    paParent->mbUseReferenceXObject = mpCbUseReferenceXObject->IsChecked();
     if ( mbIsPresentation )
     {
         paParent->mbExportNotesPages = mpCbExportNotesPages->IsChecked();

@@ -47,7 +47,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include "pdfexport.hxx"
 #include "impdialog.hxx"
@@ -97,6 +96,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbExportNotes               ( true ),
     mbExportPlaceholders        ( false ),
     mbViewPDF                   ( true ),
+    mbUseReferenceXObject       ( false ),
     mbExportNotesPages          ( false ),
     mbExportOnlyNotesPages      ( false ),
     mbUseTransitionEffects      ( true ),
@@ -554,6 +554,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= msSignTSA;
                 else if ( rFilterData[ nData ].Name == "ExportPlaceholders" )
                     rFilterData[ nData ].Value >>= mbExportPlaceholders;
+                else if ( rFilterData[ nData ].Name == "UseReferenceXObject" )
+                    rFilterData[ nData ].Value >>= mbUseReferenceXObject;
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
@@ -777,8 +779,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignPassword = msSignPassword;
             aContext.SignCertificate = maSignCertificate;
             aContext.SignTSA = msSignTSA;
-            // Not using reference XObjects is experimental for now.
-            aContext.UseReferenceXObject = !officecfg::Office::Common::Misc::ExperimentalMode::get();
+            aContext.UseReferenceXObject = mbUseReferenceXObject;
 
             // all context data set, time to create the printing device
             std::unique_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));

@@ -13,6 +13,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -87,6 +88,12 @@ void PdfExportTest::testTdf106059()
     aTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    // Explicitly enable the usage of the reference XObject markup.
+    uno::Sequence<beans::PropertyValue> aFilterData =
+    {
+        comphelper::makePropertyValue("UseReferenceXObject", true)
+    };
+    aMediaDescriptor["FilterData"] <<= aFilterData;
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.

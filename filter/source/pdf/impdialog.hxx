@@ -105,6 +105,7 @@ protected:
     sal_Int32                   mnPDFTypeSelection;
     bool                        mbExportNotes;
     bool                        mbViewPDF;
+    bool                        mbUseReferenceXObject;
     bool                        mbExportNotesPages;
     bool                        mbExportOnlyNotesPages;
     bool                        mbUseTransitionEffects;
@@ -222,6 +223,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<CheckBox>             mpCbExportHiddenSlides;
     VclPtr<CheckBox>             mpCbExportNotes;
     VclPtr<CheckBox>             mpCbViewPDF;
+    VclPtr<CheckBox>             mpCbUseReferenceXObject;
     VclPtr<CheckBox>             mpCbExportNotesPages;
     VclPtr<CheckBox>             mpCbExportOnlyNotesPages;
 
