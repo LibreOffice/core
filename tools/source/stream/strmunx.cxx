@@ -300,8 +300,6 @@ SvFileStream::~SvFileStream()
 {
     Close();
 
-    unlockFile( 0, 0, this );
-
     delete pInstanceData;
 }
 
