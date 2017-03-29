@@ -2067,7 +2067,7 @@ void ImpEditEngine::AddPortionIterated(
                     pFieldAttr->GetStart() == aCursor.GetIndex() &&
                     pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
                     pFieldAttr->Which() == EE_FEATURE_FIELD;
-            sal_Int32 nEndField = bIsField ? pFieldAttr->GetEnd() : USHRT_MAX;
+            sal_Int32 nEndField = bIsField ? pFieldAttr->GetEnd() : -1;
             do
             {
                 aCursor = CursorRight( aCursor);

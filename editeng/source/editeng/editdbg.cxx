@@ -358,9 +358,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             aCharAttribs.append(":  ");
             aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetItem()->Which()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetStart()));
+            aCharAttribs.append(rAttr->GetStart());
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(rAttr->GetEnd()));
+            aCharAttribs.append(rAttr->GetEnd());
             if ( rAttr->IsEmpty() )
                 bZeroAttr = true;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
