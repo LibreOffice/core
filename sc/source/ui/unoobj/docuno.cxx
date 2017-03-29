@@ -551,7 +551,7 @@ Size ScModelObj::getDocumentSize()
 {
     Size aSize(10, 10); // minimum size
 
-    const ScViewData* pViewData = ScDocShell::GetViewData();
+    ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return aSize;
 
@@ -562,9 +562,21 @@ Size ScModelObj::getDocumentSize()
 
     rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
-    // convert to twips
-    aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab));
-    aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab));
+    pViewData->SetMaxTiledCol(nEndCol);
+    pViewData->SetMaxTiledRow(nEndRow);
+
+    if (pViewData->GetLOKDocWidthPixel() > 0 && pViewData->GetLOKDocHeightPixel() > 0)
+    {
+        // convert to twips
+        aSize.setWidth(pViewData->GetLOKDocWidthPixel() * TWIPS_PER_PIXEL);
+        aSize.setHeight(pViewData->GetLOKDocHeightPixel() * TWIPS_PER_PIXEL);
+    }
+    else
+    {
+        // convert to twips
+        aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab));
+        aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab));
+    }
 
     return aSize;
 }
