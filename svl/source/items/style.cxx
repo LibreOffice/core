@@ -541,7 +541,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
 
     std::vector<unsigned> positions =
             pBasePool->pImpl->mxIndexedStyleSheets->FindPositionsByNameAndPredicate(rStr, predicate,
-                    svl::IndexedStyleSheets::RETURN_FIRST);
+                    svl::IndexedStyleSheets::SearchBehavior::ReturnFirst);
     if (positions.empty()) {
         return nullptr;
     }

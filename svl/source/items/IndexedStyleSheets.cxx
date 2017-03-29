@@ -142,7 +142,7 @@ IndexedStyleSheets::FindPositionsByNameAndPredicate(const rtl::OUString& name,
         SfxStyleSheetBase *ssheet = mStyleSheets.at(pos).get();
         if (predicate.Check(*ssheet)) {
             r.push_back(pos);
-            if (behavior == RETURN_FIRST) {
+            if (behavior == SearchBehavior::ReturnFirst) {
                 break;
             }
         }
