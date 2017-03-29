@@ -68,7 +68,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                         bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
 
-                        SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SVXDATETYPE_FIX : SVXDATETYPE_VAR);
+                        SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SvxDateType::Fix : SvxDateType::Var);
                         sal_Int32 nNumFmt = -1;
                         xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
                         if (nNumFmt >= SVXDATEFORMAT_APPDEFAULT && nNumFmt <= SVXDATEFORMAT_F)
@@ -363,7 +363,7 @@ SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
 SvxDateField::SvxDateField()
 {
     nFixDate = Date( Date::SYSTEM ).GetDate();
-    eType = SVXDATETYPE_VAR;
+    eType = SvxDateType::Var;
     eFormat = SVXDATEFORMAT_STDSMALL;
 }
 
@@ -410,7 +410,7 @@ void SvxDateField::Load( SvPersistStream & rStm )
 void SvxDateField::Save( SvPersistStream & rStm )
 {
     rStm.WriteInt32( nFixDate );
-    rStm.WriteUInt16( eType );
+    rStm.WriteUInt16( (sal_uInt16)eType );
     rStm.WriteUInt16( eFormat );
 }
 
@@ -418,7 +418,7 @@ void SvxDateField::Save( SvPersistStream & rStm )
 OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
     Date aDate( Date::EMPTY );
-    if ( eType == SVXDATETYPE_FIX )
+    if ( eType == SvxDateType::Fix )
         aDate.SetDate( nFixDate );
     else
         aDate = Date( Date::SYSTEM ); // current date
