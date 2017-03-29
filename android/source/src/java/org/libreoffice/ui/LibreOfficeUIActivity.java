@@ -62,6 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.libreoffice.AboutDialogFragment;
+import org.libreoffice.FileUtilities;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.SettingsActivity;

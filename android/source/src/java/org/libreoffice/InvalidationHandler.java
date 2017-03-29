@@ -375,6 +375,8 @@ public class InvalidationHandler implements Document.MessageCallback {
             changeStateTo(OverlayState.SELECTION);
             mDocumentOverlay.changeSelections(rectangles);
         }
+        // Show the text selection control toolbar
+        mContext.textSelectionController.showTextSelectionControls();
     }
 
     /**
@@ -480,6 +482,7 @@ public class InvalidationHandler implements Document.MessageCallback {
         mDocumentOverlay.hideCursor();
         mDocumentOverlay.hideGraphicSelection();
         mContext.hideSoftKeyboard();
+        mContext.textSelectionController.hideTextSelectionControls();
     }
 
     /**
@@ -489,6 +492,8 @@ public class InvalidationHandler implements Document.MessageCallback {
         mDocumentOverlay.showHandle(SelectionHandle.HandleType.START);
         mDocumentOverlay.showHandle(SelectionHandle.HandleType.END);
         mDocumentOverlay.showSelections();
+        // Show the text selection control toolbar
+        mContext.textSelectionController.showTextSelectionControls();
     }
 
     /**
@@ -510,6 +515,7 @@ public class InvalidationHandler implements Document.MessageCallback {
             mDocumentOverlay.hideHandle(SelectionHandle.HandleType.START);
             mDocumentOverlay.hideHandle(SelectionHandle.HandleType.END);
             mDocumentOverlay.hideSelections();
+            mContext.textSelectionController.hideTextSelectionControls();
         } else if (previous == OverlayState.CURSOR) {
             mDocumentOverlay.hideHandle(SelectionHandle.HandleType.MIDDLE);
         } else if (previous == OverlayState.GRAPHIC_SELECTION) {
@@ -523,6 +529,7 @@ public class InvalidationHandler implements Document.MessageCallback {
     private void handleGraphicSelectionState(OverlayState previous) {
         mDocumentOverlay.showGraphicSelection();
         mContext.hideSoftKeyboard();
+        mContext.textSelectionController.hideTextSelectionControls();
     }
 
     /**
