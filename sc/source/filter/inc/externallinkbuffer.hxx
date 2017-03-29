@@ -163,7 +163,7 @@ enum class ExternalLinkType
     Same,          /// Link refers to the current sheet.
     External,      /// Link refers to an external spreadsheet document.
     // let's ignore xlStartup and xlAlternateStartup for now
-    PathMissing,   /// Just for round-tripping
+    PathMissing,   /// Just for round-tripping (FIXME: Functionality not actually implemented after all.)
     Library,       /// Link refers to an external add-in.
     DDE,           /// DDE link.
     OLE,           /// OLE link.
