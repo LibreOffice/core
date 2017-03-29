@@ -1078,7 +1078,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pFileDlg->GetFilePicker(), uno::UNO_QUERY );
     if ( xExtFileDlg.is() )
     {
-        if ( SfxStoringHelper::CheckFilterOptionsAppearence( m_pOwner->GetFilterConfiguration(), aFilterName ) )
+        if ( SfxStoringHelper::CheckFilterOptionsAppearance( m_pOwner->GetFilterConfiguration(), aFilterName ) )
             bUseFilterOptions = true;
 
         if ( ( !( nStoreMode & EXPORT_REQUESTED ) || ( nStoreMode & WIDEEXPORT_REQUESTED ) ) && bUseFilterOptions )
@@ -1698,7 +1698,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
 
 
 // static
-bool SfxStoringHelper::CheckFilterOptionsAppearence(
+bool SfxStoringHelper::CheckFilterOptionsAppearance(
                                                     const uno::Reference< container::XNameAccess >& xFilterCFG,
                                                     const OUString& aFilterName )
 {

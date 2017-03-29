@@ -65,7 +65,7 @@ public:
                     const OUString& aUserSelectedName,
                     SignatureState nDocumentSignatureState );
 
-    static bool CheckFilterOptionsAppearence(
+    static bool CheckFilterOptionsAppearance(
                     const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,
                     const OUString& aFilterName );
 
