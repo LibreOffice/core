@@ -1368,7 +1368,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
 
     rHTMLWrt.ChangeParaToken( 0 );
 
-    // Die aktulle <DL> beenden!
+    // Die aktuelle <DL> beenden!
     rHTMLWrt.OutAndSetDefList( 0 );
 
     // als Multicol ausgeben
@@ -1478,7 +1478,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     {
         rHTMLWrt.ChangeParaToken( 0 );
 
-        // Die aktulle <DL> beenden!
+        // Die aktuelle <DL> beenden!
         rHTMLWrt.OutAndSetDefList( 0 );
         pStr = OOO_STRING_SVTOOLS_HTML_division;
     }
