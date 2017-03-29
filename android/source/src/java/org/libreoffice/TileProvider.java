@@ -129,6 +129,13 @@ public interface TileProvider {
     void setTextSelectionEnd(PointF documentCoordinate);
 
     /**
+     * get text selection
+     * @param mimeType
+     * returns the selected text in the document
+     */
+    String getTextSelection(String mimeType);
+
+    /**
      * Send text selection reset coordinate.
      * @param documentCoordinate
      */

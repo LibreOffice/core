@@ -445,6 +445,14 @@ class LOKitTileProvider implements TileProvider {
     }
 
     /**
+     * @param mimeType Type of the text to be copied
+     */
+    @Override
+    public String getTextSelection(String mimeType) {
+        return mDocument.getTextSelection(mimeType);
+    }
+
+    /**
      * @see TileProvider#setTextSelectionStart(android.graphics.PointF)
      */
     @Override

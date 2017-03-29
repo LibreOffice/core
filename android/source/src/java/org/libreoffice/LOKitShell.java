@@ -102,6 +102,10 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.SWIPE_LEFT));
     }
 
+    public static void sendTextCopyEvent(String mimeType) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.COPY_TEXT, mimeType));
+    }
+
     public static void sendChangePartEvent(int part) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_PART, part));
     }

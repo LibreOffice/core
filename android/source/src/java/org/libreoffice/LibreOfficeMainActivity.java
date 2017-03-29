@@ -48,7 +48,7 @@ import java.util.List;
 /**
  * Main activity of the LibreOffice App. It is started in the UI thread.
  */
-public class LibreOfficeMainActivity extends AppCompatActivity {
+public class LibreOfficeMainActivity extends AppCompatActivity implements TextSelectionEventListener{
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
@@ -514,6 +514,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     public void showFormattingToolbar() {
+        LOKitShell.sendTextCopyEvent("text/plain;charset=utf-8");
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -610,6 +611,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         return mFormattingController;
     }
 
+    public String getCopiedText(String copiedText) {
+        return copiedText;
+    }
+
     public void openDrawer() {
         mDrawerLayout.openDrawer(mDrawerList);
     }
@@ -627,6 +632,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
         return !isDrawerOpen && !isDrawerLocked;
+    }
+
+    @Override
+    public void copySelectedText(String text) {
+        //whooho!
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
