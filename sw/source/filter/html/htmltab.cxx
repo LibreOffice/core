@@ -2270,7 +2270,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
 inline void HTMLTable::CloseSection( sal_Bool bHead )
 {
     // die vorhergende Section beenden, falls es schon eine Zeile gibt
-    ASSERT( nCurRow<=nRows, "ungeultige aktuelle Zeile" );
+    ASSERT( nCurRow<=nRows, "ungueltige aktuelle Zeile" );
     if( nCurRow>0 && nCurRow<=nRows )
         ((*pRows)[nCurRow-1])->SetEndOfGroup();
     if( bHead /*&& nCurRow==1*/ )
@@ -2309,7 +2309,7 @@ void HTMLTable::OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOrient,
 
 void HTMLTable::CloseRow( sal_Bool bEmpty )
 {
-    ASSERT( nCurRow<nRows, "aktulle Zeile hinter dem Tabellenende" );
+    ASSERT( nCurRow<nRows, "aktuelle Zeile hinter dem Tabellenende" );
 
     // leere Zellen bekommen einfach einen etwas dickeren unteren Rand!
     if( bEmpty )
@@ -2323,7 +2323,7 @@ void HTMLTable::CloseRow( sal_Bool bEmpty )
 
     // den COLSPAN aller leeren Zellen am Zeilenende so anpassen, dass
     // eine Zelle daraus wird. Das kann man hier machen (und auf keinen
-    // Fall frueher), weill jetzt keine Zellen mehr in die Zeile eingefuegt
+    // Fall frueher), weil jetzt keine Zellen mehr in die Zeile eingefuegt
     // werden.
     sal_uInt16 i=nCols;
     while( i )
@@ -3953,7 +3953,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                                             bReadOptions );
 
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
@@ -4358,7 +4358,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
                              aId, aClass );
         pCurTable->OpenRow( eAdjust, eVertOri, pBrushItem );
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
@@ -4537,7 +4537,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         }
 
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
@@ -4735,7 +4735,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             }
         }
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
@@ -4971,7 +4971,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         pCurTable->SetCaption( pStNd, bTop );
 
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
@@ -5330,7 +5330,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         delete pTblOptions;
 
         // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // wiederaufsetzen auf jeden Fall neu gelesen werden!
         SaveState( 0 );
     }
 
