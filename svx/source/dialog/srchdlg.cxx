@@ -1066,16 +1066,14 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
     if ( !pImpl->pRanges && pSSet )
     {
-        sal_sSize nCnt = 0;
         const sal_uInt16* pPtr = pSSet->GetRanges();
         const sal_uInt16* pTmp = pPtr;
 
         while( *pPtr )
         {
-            nCnt += ( *(pPtr+1) - *pPtr ) + 1;
             pPtr += 2;
         }
-        nCnt = pPtr - pTmp + 1;
+        sal_sSize nCnt = pPtr - pTmp + 1;
         pImpl->pRanges.reset( new sal_uInt16[nCnt] );
         memcpy( pImpl->pRanges.get(), pTmp, sizeof(sal_uInt16) * nCnt );
     }
