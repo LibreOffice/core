@@ -304,7 +304,7 @@ void RemoteFilesDialog::dispose()
     // save window state
     if( !m_sIniKey.isEmpty() )
     {
-        SvtViewOptions aDlgOpt( E_DIALOG, m_sIniKey );
+        SvtViewOptions aDlgOpt( EViewType::Dialog, m_sIniKey );
         aDlgOpt.SetWindowState( OStringToOUString( GetWindowState(), osl_getThreadTextEncoding() ) );
 
         Size aSize( GetSizePixel() );
@@ -443,7 +443,7 @@ void RemoteFilesDialog::InitSize()
         return;
 
     // initialize from config
-    SvtViewOptions aDlgOpt( E_DIALOG, m_sIniKey );
+    SvtViewOptions aDlgOpt( EViewType::Dialog, m_sIniKey );
 
     if( aDlgOpt.Exists() )
     {

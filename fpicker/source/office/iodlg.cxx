@@ -487,7 +487,7 @@ void SvtFileDialog::dispose()
     if ( !pImpl->_aIniKey.isEmpty() )
     {
         // save window state
-        SvtViewOptions aDlgOpt( E_DIALOG, pImpl->_aIniKey );
+        SvtViewOptions aDlgOpt( EViewType::Dialog, pImpl->_aIniKey );
         aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(), osl_getThreadTextEncoding()));
         OUString sUserData = _pFileView->GetConfigString();
         aDlgOpt.SetUserItem( "UserData",
@@ -2151,7 +2151,7 @@ void SvtFileDialog::InitSize()
         return;
 
     // initialize from config
-    SvtViewOptions aDlgOpt( E_DIALOG, pImpl->_aIniKey );
+    SvtViewOptions aDlgOpt( EViewType::Dialog, pImpl->_aIniKey );
 
     if ( aDlgOpt.Exists() )
     {

@@ -558,7 +558,7 @@ void OfaTreeOptionsDialog::dispose()
                 OUString aPageData(pPageInfo->m_pPage->GetUserData());
                 if ( !aPageData.isEmpty() )
                 {
-                    SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
+                    SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
                     SetViewOptUserItem( aTabPageOpt, aPageData );
                 }
                 pPageInfo->m_pPage.disposeAndClear();
@@ -1021,7 +1021,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
         if ( pPageInfo->m_pPage )
         {
-            SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
+            SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
             pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
         }

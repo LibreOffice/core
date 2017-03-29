@@ -501,7 +501,7 @@ bool PageMarginControl::GetUserCustomValues()
 {
     bool bUserCustomValuesAvailable = false;
 
-    SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
+    SvtViewOptions aWinOpt( EViewType::Window, SWPAGE_LEFT_GVALUE );
     if ( aWinOpt.Exists() )
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt.GetUserData();
@@ -513,7 +513,7 @@ bool PageMarginControl::GetUserCustomValues()
         bUserCustomValuesAvailable = true;
     }
 
-    SvtViewOptions aWinOpt2( E_WINDOW, SWPAGE_RIGHT_GVALUE );
+    SvtViewOptions aWinOpt2( EViewType::Window, SWPAGE_RIGHT_GVALUE );
     if ( aWinOpt2.Exists() )
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt2.GetUserData();
@@ -525,7 +525,7 @@ bool PageMarginControl::GetUserCustomValues()
         bUserCustomValuesAvailable = true;
     }
 
-    SvtViewOptions aWinOpt3( E_WINDOW, SWPAGE_TOP_GVALUE );
+    SvtViewOptions aWinOpt3( EViewType::Window, SWPAGE_TOP_GVALUE );
     if ( aWinOpt3.Exists() )
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt3.GetUserData();
@@ -537,7 +537,7 @@ bool PageMarginControl::GetUserCustomValues()
         bUserCustomValuesAvailable = true;
     }
 
-    SvtViewOptions aWinOpt4( E_WINDOW, SWPAGE_DOWN_GVALUE );
+    SvtViewOptions aWinOpt4( EViewType::Window, SWPAGE_DOWN_GVALUE );
     if ( aWinOpt4.Exists() )
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt4.GetUserData();
@@ -549,7 +549,7 @@ bool PageMarginControl::GetUserCustomValues()
         bUserCustomValuesAvailable = true;
     }
 
-    SvtViewOptions aWinOpt5( E_WINDOW, SWPAGE_MIRROR_GVALUE );
+    SvtViewOptions aWinOpt5( EViewType::Window, SWPAGE_MIRROR_GVALUE );
     if ( aWinOpt5.Exists() )
     {
         css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt5.GetUserData();
@@ -572,28 +572,28 @@ void PageMarginControl::StoreUserCustomValues()
     }
 
     css::uno::Sequence < css::beans::NamedValue > aSeq( 1 );
-    SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
+    SvtViewOptions aWinOpt( EViewType::Window, SWPAGE_LEFT_GVALUE );
 
     aSeq[0].Name = "mnPageLeftMargin";
     aSeq[0].Value <<= OUString::number( m_nPageLeftMargin );
     aWinOpt.SetUserData( aSeq );
 
-    SvtViewOptions aWinOpt2( E_WINDOW, SWPAGE_RIGHT_GVALUE );
+    SvtViewOptions aWinOpt2( EViewType::Window, SWPAGE_RIGHT_GVALUE );
     aSeq[0].Name = "mnPageRightMargin";
     aSeq[0].Value <<= OUString::number( m_nPageRightMargin );
     aWinOpt2.SetUserData( aSeq );
 
-    SvtViewOptions aWinOpt3( E_WINDOW, SWPAGE_TOP_GVALUE );
+    SvtViewOptions aWinOpt3( EViewType::Window, SWPAGE_TOP_GVALUE );
     aSeq[0].Name = "mnPageTopMargin";
     aSeq[0].Value <<= OUString::number( m_nPageTopMargin );
     aWinOpt3.SetUserData( aSeq );
 
-    SvtViewOptions aWinOpt4( E_WINDOW, SWPAGE_DOWN_GVALUE );
+    SvtViewOptions aWinOpt4( EViewType::Window, SWPAGE_DOWN_GVALUE );
     aSeq[0].Name = "mnPageBottomMargin";
     aSeq[0].Value <<= OUString::number( m_nPageBottomMargin );
     aWinOpt4.SetUserData( aSeq );
 
-    SvtViewOptions aWinOpt5( E_WINDOW, SWPAGE_MIRROR_GVALUE );
+    SvtViewOptions aWinOpt5( EViewType::Window, SWPAGE_MIRROR_GVALUE );
     aSeq[0].Name = "mbMirrored";
     aSeq[0].Value <<= OUString::number( (m_bMirrored ? 1 : 0) );
     aWinOpt5.SetUserData( aSeq );

@@ -338,7 +338,7 @@ OUString FileDialogHelper_Impl::getCurrentFilterUIName() const
 
 void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentifier )
 {
-    SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+    SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
 
     if( aDlgOpt.Exists() )
     {
@@ -352,7 +352,7 @@ void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
     const OUString* pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
-        SvtViewOptions( E_DIALOG, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
+        SvtViewOptions( EViewType::Dialog, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
                             makeAny( getFilterWithExtension( getFilter() ) ) );
 }
 
@@ -1921,7 +1921,7 @@ void FileDialogHelper_Impl::saveConfig()
 
     if ( mbHasPreview )
     {
-        SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+        SvtViewOptions aDlgOpt( EViewType::Dialog, IMPGRF_CONFIGNAME );
         OUString aUserData(GRF_CONFIG_STR);
 
         try
@@ -1947,7 +1947,7 @@ void FileDialogHelper_Impl::saveConfig()
     else
     {
         bool bWriteConfig = false;
-        SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+        SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
         OUString aUserData(STD_CONFIG_STR);
 
         if ( aDlgOpt.Exists() )
@@ -2049,7 +2049,7 @@ void FileDialogHelper_Impl::loadConfig()
 
     if ( mbHasPreview )
     {
-        SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+        SvtViewOptions aViewOpt( EViewType::Dialog, IMPGRF_CONFIGNAME );
         OUString aUserData;
 
         if ( aViewOpt.Exists() )
@@ -2095,7 +2095,7 @@ void FileDialogHelper_Impl::loadConfig()
     }
     else
     {
-        SvtViewOptions aViewOpt( E_DIALOG, IODLG_CONFIGNAME );
+        SvtViewOptions aViewOpt( EViewType::Dialog, IODLG_CONFIGNAME );
         OUString aUserData;
 
         if ( aViewOpt.Exists() )

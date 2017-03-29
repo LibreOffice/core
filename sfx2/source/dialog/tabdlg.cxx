@@ -358,7 +358,7 @@ void SfxTabDialog::dispose()
                     sConfigId = OUString::number(pDataObject->nId);
                 }
 
-                SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
+                SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -546,7 +546,7 @@ void SfxTabDialog::Start_Impl()
     sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
     // load old settings, when exists
-    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     if ( aDlgOpt.Exists() )
     {
         SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
@@ -662,7 +662,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
                     sConfigId = OUString::number(pDataObject->nId);
                 }
 
-                SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
+                SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -733,7 +733,7 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 void SfxTabDialog::SavePosAndId()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WindowStateMask::Pos),RTL_TEXTENCODING_ASCII_US));
     // to-do replace with name of page when all pages are converted to .ui
     aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
@@ -1091,7 +1091,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
             SAL_WARN("sfx.dialog", "Tabpage needs to be converted to .ui format");
             sConfigId = OUString::number(pDataObject->nId);
         }
-        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
         OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;

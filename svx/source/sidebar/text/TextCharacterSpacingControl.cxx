@@ -76,7 +76,7 @@ void TextCharacterSpacingControl::dispose()
 {
     if (mnLastCus == SPACING_CLOSE_BY_CUS_EDIT)
     {
-        SvtViewOptions aWinOpt(E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE);
+        SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
         css::uno::Sequence<css::beans::NamedValue> aSeq
             { { "Spacing", css::uno::makeAny(OUString::number(GetLastCustomValue())) } };
         aWinOpt.SetUserData(aSeq);
@@ -105,7 +105,7 @@ void TextCharacterSpacingControl::Initialize()
     if(pKerningItem)
         nKerning = pKerningItem->GetValue();
 
-    SvtViewOptions aWinOpt(E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE);
+    SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
     if(aWinOpt.Exists())
     {
         css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();

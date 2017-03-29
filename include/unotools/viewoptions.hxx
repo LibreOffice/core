@@ -35,12 +35,12 @@ class SvtViewOptionsBase_Impl;
     @descr          Use these enum values to specify right list in configuration in which your view data are saved.
 *//*-*************************************************************************************************************/
 
-enum EViewType
+enum class EViewType
 {
-    E_DIALOG    =   0,
-    E_TABDIALOG =   1,
-    E_TABPAGE   =   2,
-    E_WINDOW    =   3
+    Dialog    =   0,
+    TabDialog =   1,
+    TabPage   =   2,
+    Window    =   3
 };
 
 /*-************************************************************************************************************

@@ -320,7 +320,7 @@ void OReportController::disposing()
     }
     if ( m_pGroupsFloater )
     {
-        SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater.disposeAndClear();
     }
@@ -2551,7 +2551,7 @@ void OReportController::openSortingAndGroupingDialog()
     if ( !m_pGroupsFloater )
     {
         m_pGroupsFloater = VclPtr<OGroupsSortingDialog>::Create(getView(),!isEditable(),this);
-        SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pGroupsFloater->GetHelpId(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
             m_pGroupsFloater->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));

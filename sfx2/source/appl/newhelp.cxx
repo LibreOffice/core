@@ -926,7 +926,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
     m_pSearchED->SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
     m_pOpenBtn->SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
-    SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
+    SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
     if ( aViewOpt.Exists() )
     {
         OUString aUserData;
@@ -957,7 +957,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 
 void SearchTabPage_Impl::dispose()
 {
-    SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
+    SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
     sal_Int32 nChecked = m_pFullWordsCB->IsChecked() ? 1 : 0;
     OUString aUserData = OUString::number( nChecked );
     aUserData += ";";
@@ -1422,7 +1422,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     m_pTabCtrl->SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
 
     sal_Int32 nPageId = m_pTabCtrl->GetPageId("index");
-    SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
+    SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
         nPageId = aViewOpt.GetPageID();
     m_pTabCtrl->SetCurPageId( (sal_uInt16)nPageId );
@@ -1455,7 +1455,7 @@ void SfxHelpIndexWindow_Impl::dispose()
     for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
 
-    SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
+    SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
 
     disposeBuilder();
@@ -2714,7 +2714,7 @@ void SfxHelpWindow_Impl::InitSizes()
 
 void SfxHelpWindow_Impl::LoadConfig()
 {
-     SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
+     SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
     if ( aViewOpt.Exists() )
     {
         bIndex = aViewOpt.IsVisible();
@@ -2751,7 +2751,7 @@ void SfxHelpWindow_Impl::LoadConfig()
 
 void SfxHelpWindow_Impl::SaveConfig()
 {
-    SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
+    SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
     sal_Int32 nW = 0, nH = 0;
 
     if ( xWindow.is() )

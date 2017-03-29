@@ -1375,7 +1375,7 @@ namespace svxform
         // init tabcontrol
         m_pTabCtrl->Show();
         sal_Int32 nPageId = m_pTabCtrl->GetPageId("instance");
-        SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
+        SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
         {
             nPageId = aViewOpt.GetPageID();
@@ -1412,7 +1412,7 @@ namespace svxform
 
     void DataNavigatorWindow::dispose()
     {
-        SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
+        SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
 
