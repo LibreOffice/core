@@ -343,6 +343,9 @@ public:
     ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
     ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
 
+    ScPositionHelper* GetLOKWidthHelper(SCTAB nTabIndex);
+    ScPositionHelper* GetLOKHeightHelper(SCTAB nTabIndex);
+
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
     long            GetHSplitPos() const                    { return pThisTab->nHSplitPos; }

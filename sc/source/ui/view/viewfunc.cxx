@@ -80,6 +80,7 @@
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -1478,6 +1479,8 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
+            pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStartCol);
+
             // if we remove a column the cursor position  and the current selection
             // in other views could need to be moved on the left by one column.
             if (pTabViewShell != this)
@@ -1526,6 +1529,8 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
+            pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex)->invalidateByIndex(nStartRow);
+
             // if we remove a row the cursor position and the current selection
             // in other views could need to be moved up by one row.
             if (pTabViewShell != this)
@@ -1557,6 +1562,27 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
                     }
                 }
             }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SCTAB nCurTab = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            if (bWidth)
+                pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab)->invalidateByIndex(nStart);
+            else
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nCurTab)->invalidateByIndex(nStart);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -2011,6 +2037,8 @@ void ScViewFunc::SetWidthOrHeight(
 
     SCCOLROW nStart = rRanges.front().mnStart;
     SCCOLROW nEnd = rRanges.back().mnEnd;
+
+    OnLOKSetWidthOrHeight(nStart, bWidth);
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
