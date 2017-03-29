@@ -32,7 +32,6 @@ private:
     XBitmapType     eType;
     std::unique_ptr<GraphicObject> xGraphicObject;
     std::unique_ptr<sal_uInt16[]>  pPixelArray;
-    Size            aArraySize;
     Color           aPixelColor;
     Color           aBckgrColor;
     bool            bGraphicDirty;
