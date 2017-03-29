@@ -32,7 +32,6 @@
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
 #define RID_SVXSTR_COLOR                    (RID_SVX_START + 179)
 #define RID_SVXSTR_NOFILL                   (RID_SVX_START + 190)
-#define RID_SVXSTR_AUTOMATIC                (RID_SVX_START + 841)
 #define RID_SVXSTR_BY_AUTHOR                (RID_SVX_START + 842)
 #define RID_SVXSTR_TRANSPARENT              (RID_SVX_START + 843)
 #define RID_SVXSTR_INVISIBLE                (RID_SVX_START + 178)

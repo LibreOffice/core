@@ -148,11 +148,6 @@ Menu RID_SVX_PRESET_MENU
     };
 };
 
-String RID_SVXSTR_AUTOMATIC
-{
-    Text [ en-US ] = "Automatic";
-};
-
 String RID_SVXSTR_BY_AUTHOR
 {
     Text [ en-US ] = "By author";

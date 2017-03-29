@@ -75,4 +75,9 @@ String RID_STR_PARAGRAPH
     Text [ en-US ] = "Paragraph is %x";
 };
 
+String RID_SVXSTR_AUTOMATIC
+{
+    Text [ en-US ] = "Automatic";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

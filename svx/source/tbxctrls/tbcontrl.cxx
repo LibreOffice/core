@@ -1301,7 +1301,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         case SID_ATTR_CHAR_COLOR2:
         case SID_EXTRUSION_3D_COLOR:
         {
-            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+            mpButtonAutoColor->SetText(EditResId::GetString(RID_SVXSTR_AUTOMATIC));
             break;
         }
         default:
@@ -1475,7 +1475,7 @@ namespace
             case SID_EXTRUSION_3D_COLOR:
             default:
                 aColor = COL_AUTO;
-                sColorName = SVX_RESSTR(RID_SVXSTR_AUTOMATIC);
+                sColorName = EditResId::GetString(RID_SVXSTR_AUTOMATIC);
                 break;
         }
 

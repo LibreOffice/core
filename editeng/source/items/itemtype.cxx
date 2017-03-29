@@ -134,6 +134,9 @@ OUString GetSvxString( sal_uInt16 nId )
 
 OUString GetColorString( const Color& rCol )
 {
+    if (rCol.GetColor() == COL_AUTO)
+        return EditResId::GetString(RID_SVXSTR_AUTOMATIC);
+
     OUString sStr;
 
     ColorData nColData =
