@@ -22,7 +22,7 @@ def main():
     group.add_argument('--platform', choices=('Windows', 'Linux'))
     args = parser.parse_args()
 
-    base_url = "https://crashreport.libreoffice.org/"
+    base_url = "https://crashreport.collaboraoffice.com/"
     upload_url = base_url + "upload/"
     login_url = base_url + "accounts/login/"
 
