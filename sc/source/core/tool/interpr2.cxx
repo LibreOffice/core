@@ -2759,7 +2759,7 @@ void ScInterpreter::ScDde()
         if ( rArr.IsRecalcModeNormal() )
             rArr.SetExclusiveRecalcModeOnLoad();
 
-            //  while the link ist not evaluated idle must be disabled (to avoid circular references)
+            //  while the link is not evaluated, idle must be disabled (to avoid circular references)
 
         bool bOldEnabled = pDok->IsIdleEnabled();
         pDok->EnableIdle(false);
@@ -2905,7 +2905,7 @@ void ScInterpreter::ScBase()
                     // fDebug1 := 1,3848924157003e+275  <- RoundOff-Error
                     // fVal != fMult, aber: ::rtl::math::approxEqual( fVal, fMult ) == TRUE
                     double fDebug2 = ::rtl::math::approxSub( fVal, fMult );
-                    // und ::rtl::math::approxSub( fVal, fMult ) == 0
+                    // and ::rtl::math::approxSub( fVal, fMult ) == 0
                     double fDebug3 = ( fInt ? fVal / fInt : 0.0 );
 
                     // Actual after strange fDebug1 and fVal < fMult is fDebug2 == fBase, but

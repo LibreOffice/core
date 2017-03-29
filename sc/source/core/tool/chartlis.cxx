@@ -716,7 +716,7 @@ void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 
 bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r ) const
 {
-    // Do not use ScStrCollection::operator==() here that uses IsEqual und Compare.
+    // Do not use ScStrCollection::operator==() here that uses IsEqual and Compare.
     // Use ScChartListener::operator==() instead.
     if (pDoc != r.pDoc || m_Listeners.size() != r.m_Listeners.size())
         return false;

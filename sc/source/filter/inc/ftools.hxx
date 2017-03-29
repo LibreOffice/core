@@ -266,10 +266,10 @@ public:
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) override;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
-        // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
-        // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
-        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
-        // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
+        // eFormat == EIF_AUTO  -> matching filter is used automatically
+        // eFormat == EIF_BIFF5 -> only Biff5 stream leads to success (even in an Excel97 doc)
+        // eFormat == EIF_BIFF8 -> only Biff8 stream leads to success (only in Excel97 docs)
+        // eFormat == EIF_BIFF_LE4 -> only non-storage files _could_ lead to success
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) override;

@@ -45,7 +45,7 @@ struct LotAttrWK3
     bool HasStyles () const
     {
         return ( nFont || nLineStyle || nFontCol || ( nBack & 0x7F ) );
-                    // !! ohne Center-Bit!!
+                    // !! without center bit!!
     }
 
     bool IsCentered () const
@@ -93,7 +93,7 @@ private:
     const Color& GetColor( const sal_uInt8 nLotIndex ) const;
 
     ScDocumentPool*     pDocPool;
-    SvxColorItem*       ppColorItems[6];        // 0 und 7 fehlen!
+    SvxColorItem*       ppColorItems[6];        // 0 and 7 are missing!
     SvxColorItem*       pBlack;
     SvxColorItem*       pWhite;
     Color*              pColTab;
