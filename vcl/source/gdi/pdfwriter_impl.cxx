@@ -10858,9 +10858,16 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     writeReferenceXObject(rObject.m_aReferenceXObject);
 }
 
-sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject)
+sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject, std::map<sal_Int32, sal_Int32>& rCopiedResources)
 {
+    auto it = rCopiedResources.find(rObject.GetObjectValue());
+    if (it != rCopiedResources.end())
+        // This resource was already copied once, nothing to do.
+        return it->second;
+
     sal_Int32 nObject = createObject();
+    // Remember what is the ID of this object in our output.
+    rCopiedResources[rObject.GetObjectValue()] = nObject;
     SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::copyExternalResource: " << rObject.GetObjectValue() << " -> " << nObject);
 
     OStringBuffer aLine;
@@ -10883,7 +10890,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                 if (pReferenced)
                 {
                     // Copy the referenced object.
-                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
+                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
 
                     sal_uInt64 nReferenceStart = pDictionary->GetKeyOffset(rItem.first) + rItem.first.getLength();
                     sal_uInt64 nReferenceEnd = pDictionary->GetKeyOffset(rItem.first) + pDictionary->GetKeyValueLength(rItem.first);
@@ -10945,7 +10952,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
                 if (pReferenced)
                 {
                     // Copy the referenced object.
-                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced);
+                    sal_Int32 nRef = copyExternalResource(rDocBuffer, *pReferenced, rCopiedResources);
 
                     sal_uInt64 nReferenceStart = pReference->GetObjectElement().GetLocation();
                     sal_uInt64 nReferenceEnd = pReference->GetOffset();
@@ -10994,7 +11001,7 @@ sal_Int32 PDFWriterImpl::copyExternalResource(SvMemoryStream& rDocBuffer, filter
     return nObject;
 }
 
-OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind)
+OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind, std::map<sal_Int32, sal_Int32>& rCopiedResources)
 {
     // A name - object ID map, IDs as they appear in our output, not the
     // original ones.
@@ -11024,7 +11031,7 @@ OString PDFWriterImpl::copyExternalResources(filter::PDFObjectElement& rPage, co
             continue;
 
         // Then copying over an object copy its dictionary and its stream.
-        sal_Int32 nObject = copyExternalResource(rDocBuffer, *pValue);
+        sal_Int32 nObject = copyExternalResource(rDocBuffer, *pValue, rCopiedResources);
         aRet[rItem.first] = nObject;
     }
 
@@ -11108,8 +11115,10 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             "Font",
             "XObject"
         };
+        // Maps from source object id (PDF image) to target object id (export result).
+        std::map<sal_Int32, sal_Int32> aCopiedResources;
         for (const auto& rKey : aKeys)
-            aLine.append(copyExternalResources(*pPage, rKey));
+            aLine.append(copyExternalResources(*pPage, rKey, aCopiedResources));
         aLine.append(">>");
         aLine.append(" /BBox [ 0 0 ");
         aLine.append(aSize.Width());
