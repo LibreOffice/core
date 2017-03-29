@@ -2805,22 +2805,38 @@ void ScInterpreter::ScChiTest()
         return;
     }
     double fChi = 0.0;
+    bool bEmpty = true;
     for (SCSIZE i = 0; i < nC1; i++)
     {
         for (SCSIZE j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!(pMat1->IsEmpty(i,j) || pMat2->IsEmpty(i,j)))
             {
-                double fValX = pMat1->GetDouble(i,j);
-                double fValE = pMat2->GetDouble(i,j);
-                fChi += sc::divide( (fValX - fValE) * (fValX - fValE), fValE);
-            }
-            else
-            {
-                PushIllegalArgument();
-                return;
+                bEmpty = false;
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValE = pMat2->GetDouble(i,j);
+                    if ( fValE == 0.0 )
+                    {
+                        PushError(FormulaError::DivisionByZero);
+                        return;
+                    }
+                    fChi += sc::divide( (fValX - fValE) * (fValX - fValE), fValE);
+                }
+                else
+                {
+                    PushIllegalArgument();
+                    return;
+                }
             }
         }
+    }
+    if ( bEmpty )
+    {
+        // not in ODFF1.2, but for interoperability with Excel
+        PushIllegalArgument();
+        return;
     }
     double fDF;
     if (nC1 == 1 || nR1 == 1)
