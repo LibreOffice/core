@@ -854,10 +854,10 @@ i12626
     void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
     /// Copies resources of a given kind from an external page to the output,
     /// returning what has to be included in the new resource dictionary.
-    OString copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind);
+    OString copyExternalResources(filter::PDFObjectElement& rPage, const OString& rKind, std::map<sal_Int32, sal_Int32>& rCopiedResources);
     /// Copies a single resource from an external document, returns the new
     /// object ID in our document.
-    sal_Int32 copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject);
+    sal_Int32 copyExternalResource(SvMemoryStream& rDocBuffer, filter::PDFObjectElement& rObject, std::map<sal_Int32, sal_Int32>& rCopiedResources);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
