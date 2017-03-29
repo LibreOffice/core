@@ -88,6 +88,8 @@ typedef sal_uInt8 StackVar;
 typedef StackVarEnum StackVar;
 #endif
 
+// Only to be used for debugging output. No guarantee of stability of the
+// return value.
 inline std::string StackVarEnumToString(StackVar const e)
 {
     switch (e)
