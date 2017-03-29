@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice.ui;
+package org.libreoffice;
 
 import org.libreoffice.storage.IFile;
 
@@ -25,26 +25,26 @@ public class FileUtilities {
 
     private static String LOGTAG = FileUtilities.class.getSimpleName();
 
-    static final int ALL = -1;
+    public static final int ALL = -1;
 
     // These have to be in sync with the file_view_modes resource.
-    static final int DOC = 0;
-    static final int CALC = 1;
-    static final int IMPRESS = 2;
-    static final int DRAWING = 3;
+    public static final int DOC = 0;
+    public static final int CALC = 1;
+    public static final int IMPRESS = 2;
+    public static final int DRAWING = 3;
 
-    static final int UNKNOWN = 10;
+    public static final int UNKNOWN = 10;
 
-    static final int SORT_AZ = 0;
-    static final int SORT_ZA = 1;
+    public static final int SORT_AZ = 0;
+    public static final int SORT_ZA = 1;
     /** Oldest Files First*/
-    static final int SORT_OLDEST = 2;
+    public static final int SORT_OLDEST = 2;
     /** Newest Files First*/
-    static final int SORT_NEWEST = 3;
+    public static final int SORT_NEWEST = 3;
     /** Largest Files First */
-    static final int SORT_LARGEST = 4;
+    public static final int SORT_LARGEST = 4;
     /** Smallest Files First */
-    static final int SORT_SMALLEST = 5;
+    public static final int SORT_SMALLEST = 5;
 
     public static final String DEFAULT_WRITER_EXTENSION = ".odt";
     public static final String DEFAULT_IMPRESS_EXTENSION = ".odp";
@@ -142,13 +142,13 @@ public class FileUtilities {
         return mExtnMap.get(extn);
     }
 
-    static int getType(String filename) {
+    public static int getType(String filename) {
         int type = lookupExtension (filename);
         Log.d(LOGTAG, "extn : " + filename + " -> " + type);
         return type;
     }
 
-    static String getMimeType(String filename) {
+    public static String getMimeType(String filename) {
         String extension = MimeTypeMap.getFileExtensionFromUrl(filename);
         String mime = extensionToMimeTypeMap.get(extension);
         if (mime == null) {
@@ -179,7 +179,7 @@ public class FileUtilities {
         return true;
     }
 
-    static FileFilter getFileFilter(final int mode) {
+    public static FileFilter getFileFilter(final int mode) {
         return new FileFilter() {
             public boolean accept(File pathname) {
                 if (pathname.isDirectory())
@@ -191,7 +191,7 @@ public class FileUtilities {
         };
     }
 
-    static FilenameFilter getFilenameFilter(final int mode) {
+    public static FilenameFilter getFilenameFilter(final int mode) {
         return new FilenameFilter() {
             public boolean accept(File dir, String filename) {
                 if (new File(dir , filename).isDirectory())
@@ -201,7 +201,7 @@ public class FileUtilities {
         };
     }
 
-    static void sortFiles(List<IFile> files, int sortMode) {
+    public static void sortFiles(List<IFile> files, int sortMode) {
         if (files == null)
             return;
         switch (sortMode) {
@@ -252,15 +252,15 @@ public class FileUtilities {
         }
     }
 
-    static boolean isHidden(File file) {
+    public static boolean isHidden(File file) {
         return file.getName().startsWith(".");
     }
 
-    static boolean isThumbnail(File file) {
+    public static boolean isThumbnail(File file) {
         return isHidden(file) && file.getName().endsWith(".png");
     }
 
-    static boolean hasThumbnail(File file) {
+    public static boolean hasThumbnail(File file) {
         String filename = file.getName();
         if (lookupExtension(filename) == DOC) // only do this for docs for now
         {
@@ -270,7 +270,7 @@ public class FileUtilities {
         return true;
     }
 
-    static String getThumbnailName(File file) {
+    public static String getThumbnailName(File file) {
         return "." + file.getName().split("[.]")[0] + ".png" ;
     }
 }

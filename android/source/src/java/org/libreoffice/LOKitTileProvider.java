@@ -468,12 +468,32 @@ class LOKitTileProvider implements TileProvider {
     @Override
     public void postUnoCommand(String command, String arguments) {
         mDocument.postUnoCommand(command, arguments);
+        if (mOffice.getError() != null) {
+            Log.e(LOGTAG, "Uno Error: " + mOffice.getError());
+        }
     }
 
     private void setTextSelection(int type, PointF documentCoordinate) {
         int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
         int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
         mDocument.setTextSelection(type, x, y);
+    }
+
+    /**
+     * @param mimeType Type of the text to be copied
+     */
+    @Override
+    public String getTextSelection(String mimeType) {
+        return mDocument.getTextSelection(mimeType);
+    }
+
+    @Override
+    public boolean paste(String mimeType, String text) {
+        boolean result = mDocument.paste(mimeType, text);
+        if (mOffice.getError() !=null) {
+            Log.e("Paste error:", mOffice.getError());
+        }
+        return result;
     }
 
     /**
