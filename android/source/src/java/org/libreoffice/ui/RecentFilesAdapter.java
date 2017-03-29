@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.libreoffice.FileUtilities;
 import org.libreoffice.R;
 import org.libreoffice.storage.IFile;
 
