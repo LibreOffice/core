@@ -307,6 +307,9 @@ class LOKitThread extends Thread {
             case LOEvent.SWIPE_RIGHT:
                 onSwipeRight();
                 break;
+            case LOEvent.COPY_TEXT:
+                onCopyPressed(event.mString);
+                break;
             case LOEvent.NAVIGATION_CLICK:
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
@@ -355,6 +358,18 @@ class LOKitThread extends Thread {
      */
     private void onSwipeRight() {
         mTileProvider.onSwipeRight();
+    }
+
+    /**
+     * Process text copy event.
+     */
+    private void onCopyPressed(final String mimeType) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mContext.textSelectionController.copySelectedText(mTileProvider.getTextSelection(mimeType));
+            }
+        });
     }
 
     /**

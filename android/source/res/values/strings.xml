@@ -94,6 +94,7 @@
     <string name="message_saving">Saving the document…</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
     <string name="new_file_created">File created in Documents folder</string>
+    <string name="message_text_copied">Text Copied</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>

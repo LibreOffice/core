@@ -31,6 +31,8 @@ import android.widget.Toast;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
+import org.libreoffice.textselection.TextSelectionController;
+import org.libreoffice.textselection.TextSelectionEventListener;
 import org.libreoffice.ui.FileUtilities;
 import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.ZoomConstraints;
@@ -85,6 +87,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
+    public TextSelectionController textSelectionController;
     private SearchController mSearchController;
     private static final int PICKFOLDER_RESULT_CODE = 1;
 
@@ -101,8 +104,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     private boolean isKeyboardOpen = false;
-    private boolean isFormattingToolbarOpen = false;
-    private boolean isSearchToolbarOpen = false;
+    public boolean isFormattingToolbarOpen = false;
+    public boolean isSearchToolbarOpen = false;
     private boolean isDocumentChanged = false;
     public boolean isNewDocument = false;
     @Override
@@ -134,6 +137,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
 
         mFontController = new FontController(this);
         mSearchController = new SearchController(this);
+        textSelectionController = new TextSelectionController(this);
 
         // New document type string is not null, it means we want to open a new document
         if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
@@ -505,8 +509,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
      * Show software keyboard.
      * Force the request on main thread.
      */
-
-
     public void showSoftKeyboard() {
 
         LOKitShell.getMainHandler().post(new Runnable() {
@@ -558,7 +560,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     /**
      * Hides software keyboard.
      */
-    private void hideSoftKeyboardDirect() {
+    public void hideSoftKeyboardDirect() {
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -582,8 +584,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 findViewById(R.id.toolbar_bottom).setVisibility(View.GONE);
                 findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
                 findViewById(R.id.search_toolbar).setVisibility(View.GONE);
-                isFormattingToolbarOpen=false;
-                isSearchToolbarOpen=false;
+                findViewById(R.id.text_selection_toolbar).setVisibility(View.GONE);
+                isFormattingToolbarOpen = false;
+                isSearchToolbarOpen = false;
             }
         });
     }

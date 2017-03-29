@@ -194,6 +194,12 @@ public class Document {
     public native void setTextSelection(int type, int x, int y);
 
     /**
+     * Gets the currently selected text.
+     * @param mimeType - text selection type for example text/plain;charset=utf-8.
+     */
+    public native String getTextSelection(String mimeType);
+
+    /**
      * Change graphic selection.
      * @param type - graphic selection type
      * @param x - x coordinate
