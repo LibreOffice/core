@@ -486,8 +486,12 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
             nAdjustedRelPosY = aPgAlignArea.Top() - nTopOfAnch;
         }
 
-        // tdf#91260 - allow textboxes extending beyond the page bottom
-        if ( nAdjustedRelPosY < nProposedRelPosY )
+        // tdf#91260  - allow textboxes extending beyond the page bottom
+        // tdf#101627 - the patch a4dee94afed9ade6ac50237c8d99a6e49d3bebc1
+        //              for tdf#91260 causes problems if the textbox
+        //              is anchored in the footer, so exclude this case
+        if ( !( GetAnchorFrame().GetUpper() && GetAnchorFrame().GetUpper()->IsFooterFrame() )
+             && nAdjustedRelPosY < nProposedRelPosY )
         {
             const SwFrameFormat* pFormat = &(GetFrameFormat());
             if ( SwTextBoxHelper::isTextBox(&GetObject()) )
