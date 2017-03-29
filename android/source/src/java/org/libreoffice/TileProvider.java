@@ -135,6 +135,21 @@ public interface TileProvider {
     void setTextSelectionEnd(PointF documentCoordinate);
 
     /**
+     * get text selection
+     * @param mimeType
+     * returns the selected text in the document
+     */
+    String getTextSelection(String mimeType);
+
+    /**
+     * paste text
+     * @param mimeType
+     * @param text
+     * returns if the supplied data was pasted successfully.
+     */
+    boolean paste(String mimeType, String text);
+
+    /**
      * Send text selection reset coordinate.
      * @param documentCoordinate
      */

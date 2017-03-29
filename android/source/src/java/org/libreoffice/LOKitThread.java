@@ -324,6 +324,12 @@ class LOKitThread extends Thread {
             case LOEvent.SWIPE_RIGHT:
                 onSwipeRight();
                 break;
+            case LOEvent.COPY_TEXT:
+                onCopyPressed(event.mString);
+                break;
+            case LOEvent.PASTE:
+                onPastePressed(event.mString, event.mValue);
+                break;
             case LOEvent.NAVIGATION_CLICK:
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
@@ -378,6 +384,30 @@ class LOKitThread extends Thread {
     }
 
     /**
+     * Process text copy event.
+     */
+    private void onCopyPressed(final String mimeType) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mContext.textSelectionController.copySelectedText(mTileProvider.getTextSelection(mimeType));
+            }
+        });
+    }
+
+    /**
+     * Process paste text event.
+     */
+    private void onPastePressed(final String mimeType, final String text) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mContext.textSelectionController.onTextPaste(mTileProvider.paste(mimeType, text));
+            }
+        });
+    }
+
+    /**
      * Processes touch events.
      */
     private void touch(String touchType, PointF documentCoordinate) {
@@ -386,10 +416,11 @@ class LOKitThread extends Thread {
         }
 
         // to handle hyperlinks, enable single tap even in the Viewer
+        // to enable text copy, enable long press as well
         boolean editing = LOKitShell.isEditingEnabled();
         float zoomFactor = mViewportMetrics.getZoomFactor();
 
-        if (touchType.equals("LongPress") && editing) {
+        if (touchType.equals("LongPress")) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1, zoomFactor);
             mTileProvider.mouseButtonUp(documentCoordinate, 1, zoomFactor);
