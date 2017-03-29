@@ -159,16 +159,16 @@ namespace drawinglayer
         }
 
 
-        sal_uInt32 AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
+        AnimationEntryList::Entries::size_type AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
-            size_t nIndex(0L);
+            Entries::size_type nIndex(0L);
 
             while(nIndex < maEntries.size() && basegfx::fTools::lessOrEqual(rfAddedTime + maEntries[nIndex]->getDuration(), fTime))
             {
                 rfAddedTime += maEntries[nIndex++]->getDuration();
             }
 
-            return sal_uInt32(nIndex);
+            return nIndex;
         }
 
         AnimationEntryList::AnimationEntryList()
@@ -233,7 +233,7 @@ namespace drawinglayer
             if(!basegfx::fTools::equalZero(mfDuration))
             {
                 double fAddedTime(0.0);
-                const sal_uInt32 nIndex(impGetIndexAtTime(fTime, fAddedTime));
+                const auto nIndex(impGetIndexAtTime(fTime, fAddedTime));
 
                 if(nIndex < maEntries.size())
                 {
@@ -251,7 +251,7 @@ namespace drawinglayer
             if(!basegfx::fTools::equalZero(mfDuration))
             {
                 double fAddedTime(0.0);
-                const sal_uInt32 nIndex(impGetIndexAtTime(fTime, fAddedTime));
+                const auto nIndex(impGetIndexAtTime(fTime, fAddedTime));
 
                 if(nIndex < maEntries.size())
                 {
