@@ -19,7 +19,7 @@ def main():
         print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
         sys.exit(1)
 
-    base_url = "https://crashreport.libreoffice.org/"
+    base_url = "https://crashreport.collaboraoffice.com/"
     upload_url = base_url + "upload/"
     login_url = base_url + "accounts/login/"
 
