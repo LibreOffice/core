@@ -778,12 +778,6 @@ void SfxBindings::Invalidate
 }
 
 
-bool SfxBindings::IsBound( sal_uInt16 nSlotId )
-{
-    return GetStateCache(nSlotId) != nullptr;
-}
-
-
 std::size_t SfxBindings::GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt )
 {
     // answer immediately if a function-seek comes repeated

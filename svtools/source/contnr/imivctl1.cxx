@@ -2691,33 +2691,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)
     }
 }
 
-// Aligns a rectangle to the grid, but doesn't guarantee that the new position
-// is vacant. The position can be used for SetEntryPos. The CenterRect describes
-// a part of the bounding rectangle that is used for calculating the target
-// rectangle.
-Point SvxIconChoiceCtrl_Impl::AdjustAtGrid( const Rectangle& rCenterRect,
-    const Rectangle& rBoundRect ) const
-{
-    Point aPos( rCenterRect.TopLeft() );
-    Size aSize( rCenterRect.GetSize() );
-
-    aPos.X() -= LROFFS_WINBORDER;
-    aPos.Y() -= TBOFFS_WINBORDER;
-
-    // align (the center of the rectangle is the reference)
-    short nGridX = (short)((aPos.X()+(aSize.Width()/2)) / nGridDX);
-    short nGridY = (short)((aPos.Y()+(aSize.Height()/2)) / nGridDY);
-    aPos.X() = nGridX * nGridDX;
-    aPos.Y() = nGridY * nGridDY;
-    // horizontal center
-    aPos.X() += (nGridDX - rBoundRect.GetSize().Width() ) / 2;
-
-    aPos.X() += LROFFS_WINBORDER;
-    aPos.Y() += TBOFFS_WINBORDER;
-
-    return aPos;
-}
-
 #ifdef DBG_UTIL
 void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
 {

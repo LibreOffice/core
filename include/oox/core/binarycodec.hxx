@@ -109,35 +109,6 @@ public:
      */
     bool                verifyKey( sal_uInt16 nKey, sal_uInt16 nHash ) const;
 
-    /** Reinitializes the codec to start a new memory block.
-
-        Resets the internal key offset to 0.
-
-        @precond
-            The codec must be initialized with the initKey() function before
-            this function can be used.
-     */
-    void                startBlock();
-
-    /** Decodes a block of memory.
-
-        @precond
-            The codec must be initialized with the initKey() function before
-            this function can be used.
-
-        @param pnDestData
-            Destination buffer. Will contain the decrypted data afterwards.
-        @param pnSrcData
-            Encrypted data block.
-        @param nBytes
-            Size of the passed data blocks. pnDestData and pnSrcData must be of
-            this size.
-    */
-    void                decode(
-                            sal_uInt8* pnDestData,
-                            const sal_uInt8* pnSrcData,
-                            sal_Int32 nBytes );
-
     /** Lets the cipher skip a specific amount of bytes.
 
         This function sets the cipher to the same state as if the specified
@@ -269,20 +240,6 @@ public:
                             sal_uInt8* pnDestData,
                             const sal_uInt8* pnSrcData,
                             sal_Int32 nBytes );
-
-    /** Lets the cipher skip a specific amount of bytes.
-
-        This function sets the cipher to the same state as if the specified
-        amount of data has been decoded with one or more calls of decode().
-
-        @precond
-            The codec must be initialized with the initKey() function before
-            this function can be used.
-
-        @param nBytes
-            Number of bytes to be skipped (cipher "seeks" forward).
-     */
-    void                skip( sal_Int32 nBytes );
 
 private:
     rtlCipher           mhCipher;

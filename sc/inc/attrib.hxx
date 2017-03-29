@@ -56,7 +56,6 @@ class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
     SCsCOL      nColMerge;
     SCsROW      nRowMerge;
 public:
-                static SfxPoolItem* CreateDefault();
                 ScMergeAttr();
                 ScMergeAttr( SCsCOL nCol, SCsROW nRow );
                 ScMergeAttr( const ScMergeAttr& );

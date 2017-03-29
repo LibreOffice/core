@@ -97,12 +97,6 @@ void ChartWindow::dispose()
     vcl::Window::dispose();
 }
 
-void ChartWindow::clear()
-{
-    m_pWindowController=nullptr;
-    this->ReleaseMouse();
-}
-
 void ChartWindow::PrePaint(vcl::RenderContext& rRenderContext)
 {
     // forward VCLs PrePaint window event to DrawingLayer

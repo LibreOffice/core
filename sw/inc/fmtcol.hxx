@@ -179,7 +179,6 @@ public:
 
     SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
                     sal_uLong nSubCond );
-    SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond );
     virtual ~SwCollCondition() override;
 
     /// @@@ public copy ctor, but no copy assignment?

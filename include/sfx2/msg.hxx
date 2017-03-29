@@ -210,9 +210,7 @@ public:
     SfxSlotMode         GetMode() const;
     bool                IsMode( SfxSlotMode nMode ) const;
     sal_uInt16          GetGroupId() const;
-    sal_uInt16          GetMasterSlotId() const { return nMasterSlotId; }
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
-    sal_uInt16          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
     SFX2_DLLPUBLIC OString    GetCommand() const;

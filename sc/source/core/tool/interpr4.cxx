@@ -106,30 +106,6 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
     }
 }
 
-void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
-{
-    ScAddress aCellPos( rCol, rRow, rTab );
-    size_t ListSize = pDok->m_TableOpList.size();
-    for ( size_t i = 0; i < ListSize; ++i )
-    {
-        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
-        if ( aCellPos == pTOp->aOld1 )
-        {
-            rCol = pTOp->aNew1.Col();
-            rRow = pTOp->aNew1.Row();
-            rTab = pTOp->aNew1.Tab();
-            return ;
-        }
-        else if ( aCellPos == pTOp->aOld2 )
-        {
-            rCol = pTOp->aNew2.Col();
-            rRow = pTOp->aNew2.Row();
-            rTab = pTOp->aNew2.Tab();
-            return ;
-        }
-    }
-}
-
 bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 {
     if ( rRange.aStart == rRange.aEnd )

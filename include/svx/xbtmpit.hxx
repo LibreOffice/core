@@ -64,7 +64,6 @@ public:
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     const GraphicObject& GetGraphicObject() const { return maGraphicObject;}
-    void SetGraphicObject(const GraphicObject& rGraphicObject);
     bool isPattern() const;
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

@@ -37,8 +37,6 @@ public:
     virtual ~ChartWindow() override;
     virtual void dispose() override;
 
-    void clear();
-
     //from base class Window:
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

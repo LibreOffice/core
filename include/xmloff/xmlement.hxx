@@ -39,7 +39,6 @@ public:
     SvXMLEnumMapEntry(::xmloff::token::XMLTokenEnum eToken_, EnumT nValue_)
         : eToken(eToken_), nValue(nValue_) {}
     ::xmloff::token::XMLTokenEnum   GetToken() const { return eToken; }
-    EnumT                           GetValue() const { return static_cast<EnumT>(nValue); }
 };
 
 // specialisation to avoid lots of "C2398: conversion from 'const sal_Int16' to 'sal_uInt16' requires a narrowing conversion"

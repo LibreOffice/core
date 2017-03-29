@@ -49,8 +49,6 @@ public:
 
     virtual sal_uInt16 GetValueByPos(sal_uInt16 nPos) const;
 
-    virtual bool IsEnabled(sal_uInt16 nValue) const;
-
     virtual sal_uInt16 GetEnumValue() const = 0;
 
     virtual void SetEnumValue(sal_uInt16 nValue) = 0;

@@ -175,19 +175,6 @@ inline MouseEvent::MouseEvent( const Point& rPos, sal_uInt16 nClicks,
     mnCode      = nButtons | nModifier;
 }
 
-class VCL_DLLPUBLIC ZoomEvent
-{
-public:
-    ZoomEvent() {}
-};
-
-class VCL_DLLPUBLIC ScrollEvent
-{
-public:
-    ScrollEvent() {}
-};
-
-
 enum class HelpEventMode
 {
     NONE           = 0x0000,

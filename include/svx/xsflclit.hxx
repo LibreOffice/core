@@ -28,9 +28,8 @@
 class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 {
 public:
-            SVX_DLLPRIVATE XSecondaryFillColorItem() {}
-            XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
-            SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);
+    XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
+    SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     SVX_DLLPRIVATE virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;

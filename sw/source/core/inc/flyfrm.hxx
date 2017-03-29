@@ -70,8 +70,6 @@ class SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
 
     using SwLayoutFrame::CalcRel;
 
-    SwVirtFlyDrawObj* CreateNewRef( SwFlyDrawContact* );
-
 protected:
     // Predecessor/Successor for chaining with text flow
     SwFlyFrame *m_pPrevLink, *m_pNextLink;

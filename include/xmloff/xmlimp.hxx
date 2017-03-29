@@ -573,7 +573,6 @@ public:
     virtual void NotifyEmbeddedFontRead() {};
 
     bool needFixPositionAfterZ() const;
-    const css::uno::Reference< css::xml::sax::XFastNamespaceHandler > getNamespaceHandler() { return maNamespaceHandler.get(); }
 };
 
 inline rtl::Reference< XMLTextImportHelper > const & SvXMLImport::GetTextImport()

@@ -272,16 +272,6 @@ struct GlyphItem
     int     mnFallbackLevel;
 
 public:
-            GlyphItem()
-            :   mnFlags(0)
-            ,   mnCharPos(0)
-            ,   mnOrigWidth(0)
-            ,   mnNewWidth(0)
-            ,   mnXOffset(0)
-            ,   maGlyphId(0)
-            ,   mnFallbackLevel(0)
-            { }
-
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags)

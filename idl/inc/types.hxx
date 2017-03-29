@@ -104,11 +104,6 @@ public:
     SvRefMemberList<SvMetaEnumValue *> aEnumValueList;
     OString                            aPrefix;
             SvMetaTypeEnum();
-
-    sal_uLong           Count() const { return aEnumValueList.size(); }
-    const OString&      GetPrefix() const { return aPrefix; }
-    SvMetaEnumValue *   GetObject( sal_uLong n ) const
-                        { return aEnumValueList[n]; }
 };
 
 class SvMetaTypevoid : public SvMetaType

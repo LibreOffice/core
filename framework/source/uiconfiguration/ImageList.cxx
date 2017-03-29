@@ -164,34 +164,6 @@ void ImageList::RemoveImage( sal_uInt16 nId )
     }
 }
 
-Image ImageList::GetImage( sal_uInt16 nId ) const
-{
-    Image aRet;
-
-    if (mpImplData)
-    {
-        for (ImageAryData* pImageData : mpImplData->maImages)
-        {
-            if (pImageData->mnId == nId)
-            {
-                if (pImageData->IsLoadable())
-                    pImageData->Load(mpImplData->maPrefix);
-                aRet = Image(pImageData->maBitmapEx);
-            }
-        }
-    }
-
-    if (!aRet)
-    {
-        BitmapEx rBitmap;
-        bool bResult = vcl::ImageRepository::loadDefaultImage(rBitmap);
-        if (bResult)
-            aRet = Image(rBitmap);
-    }
-
-    return aRet;
-}
-
 Image ImageList::GetImage( const OUString& rImageName ) const
 {
     if( mpImplData )
@@ -212,21 +184,6 @@ Image ImageList::GetImage( const OUString& rImageName ) const
 sal_uInt16 ImageList::GetImageCount() const
 {
     return mpImplData ? static_cast< sal_uInt16 >( mpImplData->maImages.size() ) : 0;
-}
-
-sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
-{
-
-    if( mpImplData && nId )
-    {
-        for( size_t i = 0; i < mpImplData->maImages.size(); ++i )
-        {
-            if (mpImplData->maImages[ i ]->mnId == nId)
-                return static_cast< sal_uInt16 >( i );
-        }
-    }
-
-    return IMAGELIST_IMAGE_NOTFOUND;
 }
 
 sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const

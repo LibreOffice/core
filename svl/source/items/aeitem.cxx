@@ -23,9 +23,6 @@
 #include <cstddef>
 #include <vector>
 
-SfxPoolItem* SfxAllEnumItem::CreateDefault() { return new SfxAllEnumItem; }
-
-
 struct SfxAllEnumValue_Impl
 {
     sal_uInt16 nValue;
@@ -167,27 +164,6 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
 
     pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
 }
-
-void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
-{
-    if ( !pDisabledValues )
-        pDisabledValues = new std::vector<sal_uInt16>;
-
-    pDisabledValues->push_back( nValue );
-}
-
-bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
-{
-    if ( pDisabledValues )
-    {
-        for (sal_uInt16 nDisabledValue : *pDisabledValues)
-            if ( nDisabledValue == nValue )
-                return false;
-    }
-
-    return true;
-}
-
 
 void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {

@@ -83,7 +83,6 @@
 #include <editeng/langitem.hxx>
 #include <editeng/nlbkitem.hxx>
 #include <editeng/nhypitem.hxx>
-#include <editeng/lcolitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
@@ -2521,39 +2520,6 @@ bool SvxNoHyphenItem::GetPresentation
  *
  */
 
-
-// class SvxLineColorItem (== SvxColorItem)
-
-
-SvxLineColorItem::SvxLineColorItem( const sal_uInt16 nId ) :
-    SvxColorItem( nId )
-{
-}
-
-
-SvxLineColorItem::SvxLineColorItem( const SvxLineColorItem &rCopy ) :
-    SvxColorItem( rCopy )
-{
-}
-
-
-SvxLineColorItem::~SvxLineColorItem()
-{
-}
-
-
-bool SvxLineColorItem::GetPresentation
-(
-    SfxItemPresentation ePres,
-    MapUnit             eCoreUnit,
-    MapUnit             ePresUnit,
-    OUString&           rText,
-    const IntlWrapper * pIntlWrapper
-)   const
-{
-    return SvxColorItem::GetPresentation( ePres, eCoreUnit, ePresUnit,
-                                          rText, pIntlWrapper );
-}
 
 // class SvxBlinkItem -------------------------------------------------
 
