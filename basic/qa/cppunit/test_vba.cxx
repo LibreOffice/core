@@ -72,6 +72,8 @@ void VBATest::testMiscVBAFunctions()
         "cvdate.vb",
         "cverr.vb",
         "dateadd.vb",
+        "datediff.vb",
+        "datepart.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
