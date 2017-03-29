@@ -117,7 +117,6 @@ namespace rptui
         OReportPage*         getPage() const { return m_pPage; }
         const css::uno::Reference< css::report::XSection >& getSection() const { return m_xSection; }
 
-        DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
 
         /** checks if the keycode is known by the child windows

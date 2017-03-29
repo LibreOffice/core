@@ -141,8 +141,6 @@ public:
     bool             IsInUpdate() const;
     void             SetVisibleState( sal_uInt16 nId, bool bShow );
 
-    bool             IsBound( sal_uInt16 nMsgId );
-
     SfxStateCache*   GetStateCache( sal_uInt16 nId);
     SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
     /**

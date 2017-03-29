@@ -39,7 +39,6 @@
 #include <editeng/langitem.hxx>
 #include <editeng/nlbkitem.hxx>
 #include <editeng/nhypitem.hxx>
-#include <editeng/lcolitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>

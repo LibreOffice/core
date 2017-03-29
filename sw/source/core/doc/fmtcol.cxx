@@ -484,12 +484,6 @@ SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition 
 {
 }
 
-SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond )
-    : SwClient( pColl ), m_nCondition( nMasterCond ),
-      m_nSubCondition( 0 )
-{
-}
-
 SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
     : SwClient( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ),
       m_nCondition( rCopy.m_nCondition ),

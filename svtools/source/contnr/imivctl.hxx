@@ -271,10 +271,6 @@ class SvxIconChoiceCtrl_Impl
     Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( Rectangle& rRect ) const;
-    Point               AdjustAtGrid(
-                            const Rectangle& rCenterRect, // balance point of object (typically Bmp-Rect)
-                            const Rectangle& rBoundRect
-                        ) const;
     sal_uLong           GetPredecessorGrid( const Point& rDocPos) const;
 
     void                InitPredecessors();

@@ -66,7 +66,6 @@ private:
 
     void enableDisableWidgets();
     void applyChanges();
-    static void openWebBrowser(const OUString & sURL, const OUString &sTitle);
 
     DECL_LINK(RadioBtnHdl, Button*, void);
     DECL_LINK(CheckBoxHdl, CheckBox&, void);

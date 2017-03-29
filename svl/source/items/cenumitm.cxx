@@ -80,11 +80,6 @@ sal_uInt16 SfxEnumItemInterface::GetValueByPos(sal_uInt16 nPos) const
     return nPos;
 }
 
-bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
-{
-    return true;
-}
-
 // virtual
 bool SfxEnumItemInterface::HasBoolValue() const
 {

@@ -38,10 +38,8 @@ public:
 
     void            RemoveImage( sal_uInt16 nId );
 
-    Image           GetImage( sal_uInt16 nId ) const;
     Image           GetImage( const OUString& rImageName ) const;
 
-    sal_uInt16      GetImagePos( sal_uInt16 nId ) const;
     sal_uInt16      GetImagePos( const OUString& rImageName ) const;
 
     sal_uInt16      GetImageId( sal_uInt16 nPos ) const;

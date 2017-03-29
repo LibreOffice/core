@@ -306,11 +306,6 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
 }
 
 
-void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
-{
-    maGraphicObject = rGraphicObject;
-}
-
 bool XFillBitmapItem::isPattern() const
 {
     BitmapColor aBack, aFront;

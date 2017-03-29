@@ -52,7 +52,6 @@ public:
 
     void SetBitmapType( XBitmapType eNewType )          { eType = eNewType; }
     void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = true; }
-    void SetPixelSize( const Size& rSize )              { aArraySize  = rSize;  bGraphicDirty = true; }
     void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
 
     Bitmap                  GetBitmap() const;

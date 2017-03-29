@@ -1391,31 +1391,6 @@ Rectangle Polygon::GetBoundRect() const
     return Rectangle( nXMin, nYMin, nXMax, nYMax );
 }
 
-double Polygon::GetSignedArea() const
-{
-    DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetArea could fail with beziers!" );
-
-    double fArea = 0.0;
-
-    if( mpImplPolygon->mnPoints > 2 )
-    {
-        const sal_uInt16 nCount1 = mpImplPolygon->mnPoints - 1;
-
-        for( sal_uInt16 i = 0; i < nCount1; )
-        {
-            const Point& rPt = mpImplPolygon->mpPointAry[ i ];
-            const Point& rPt1 = mpImplPolygon->mpPointAry[ ++i ];
-            fArea += ( rPt.X() - rPt1.X() ) * ( rPt.Y() + rPt1.Y() );
-        }
-
-        const Point& rPt = mpImplPolygon->mpPointAry[ nCount1 ];
-        const Point& rPt0 = mpImplPolygon->mpPointAry[ 0 ];
-        fArea += ( rPt.X() - rPt0.X() ) * ( rPt.Y() + rPt0.Y() );
-    }
-
-    return fArea;
-}
-
 bool Polygon::IsInside( const Point& rPoint ) const
 {
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "IsInside could fail with beziers!" );

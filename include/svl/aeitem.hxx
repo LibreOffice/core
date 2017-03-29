@@ -49,8 +49,6 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
     std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;
 
 public:
-    static SfxPoolItem*     CreateDefault();
-
                             SfxAllEnumItem();
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
@@ -67,8 +65,6 @@ public:
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override;
-    virtual bool            IsEnabled( sal_uInt16 ) const override;
-    void                    DisableValue( sal_uInt16 );
 };
 
 #endif

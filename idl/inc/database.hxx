@@ -94,7 +94,6 @@ public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
 
-    SvRefMemberList<SvMetaSlot *>&     GetSlotList() { return aSlotList; }
     SvRefMemberList<SvMetaType *>&     GetTypeList();
     SvRefMemberList<SvMetaClass *>&    GetClassList()  { return aClassList; }
     SvRefMemberList<SvMetaModule *>&   GetModuleList() { return aModuleList; }

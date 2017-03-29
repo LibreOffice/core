@@ -118,7 +118,6 @@ public:
     void                Clear();
 
     Rectangle           GetBoundRect() const;
-    double              GetSignedArea() const;
     bool                IsInside( const Point& rPt ) const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
     void                Clip( const Rectangle& rRect );

@@ -31,7 +31,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/lcolitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/prntitem.hxx>

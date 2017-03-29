@@ -256,17 +256,6 @@ private:
                                const sal_Unicode * pEnd);
 
 public:
-    /** Write a sequence of octets.
-
-        @descr  The supplied sequence of Unicode characters is interpreted as
-        a sequence of octets.  It is an error if any of the elements of the
-        sequence has a numerical value greater than 255.
-
-        @param pBegin  Points to the start of the sequence, must not be null.
-
-        @param pEnd  Points past the end of the sequence, must be >= pBegin.
-     */
-    inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
 
     /** Write a single octet.
 
@@ -292,12 +281,6 @@ public:
     }
 };
 
-
-inline void INetMIMEOutputSink::write(const sal_Unicode * pBegin,
-                                      const sal_Unicode * pEnd)
-{
-    writeSequence(pBegin, pEnd);
-}
 
 inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(sal_Char nOctet)
 {

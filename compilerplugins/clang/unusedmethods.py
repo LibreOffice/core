@@ -56,8 +56,11 @@ unusedMethodsExclusionSet = set([
     "_Bool ScImportExport::ImportData(const class rtl::OUString &,const class com::sun::star::uno::Any &)",
 	"void* ScannerManager::GetData()",
 	"void ScannerManager::SetData(void *)",
+    "class rtl::OUString FilterConfigCache::GetImportFormatMediaType(unsigned short)",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
+    "_Bool TabitemValue::isLast() const",
+    "ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)",
     # debugging methods
     "void oox::drawingml::TextParagraphProperties::dump() const",
     "void oox::PropertyMap::dumpCode(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet>)",
@@ -93,6 +96,11 @@ unusedMethodsExclusionSet = set([
     "class vcl::Window * CreateWindow(class VCLXWindow **,const struct com::sun::star::awt::WindowDescriptor *,class vcl::Window *,long)",
     # only used when the ODBC driver is enabled
     "_Bool getImplementation(type-parameter-?-? *&,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)",
+    # called from extensions
+    "unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)",
+    "void MenuBar::SetMenuBarButtonHighlightHdl(unsigned short,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &)",
+    "class Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)",
+    "void MenuBar::RemoveMenuBarButton(unsigned short)",
     ])
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates

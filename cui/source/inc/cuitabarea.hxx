@@ -750,7 +750,6 @@ private:
 
     void ImpColorCountChanged();
     void FillPaletteLB();
-    long FindColorInPalette(const OUString& rPaletteName) const;
 
     DECL_LINK( ClickAddHdl_Impl, Button*, void );
     DECL_LINK( ClickWorkOnHdl_Impl, Button*, void );

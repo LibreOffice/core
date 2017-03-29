@@ -76,7 +76,6 @@ public:
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
     void            SetPopover(FloatingWindow* pFloatingWindow);
-    FloatingWindow* GetPopover() const { return mpFloatingWindow; }
 
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
     OString         GetCurItemIdent() const;

@@ -59,8 +59,6 @@ class Reflection;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
-class ZoomEvent;
-class ScrollEvent;
 struct ImplSVEvent;
 struct ConvertData;
 
