@@ -398,7 +398,7 @@ void SfxTemplateManagerDlg::getApplicationSpecificSettings()
 void SfxTemplateManagerDlg::readSettings ()
 {
     OUString aLastFolder;
-    SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
+    SvtViewOptions aViewSettings( EViewType::Dialog, TM_SETTING_MANAGER );
 
     if ( aViewSettings.Exists() )
     {
@@ -462,7 +462,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     };
 
     // write
-    SvtViewOptions aViewSettings(E_DIALOG, TM_SETTING_MANAGER);
+    SvtViewOptions aViewSettings(EViewType::Dialog, TM_SETTING_MANAGER);
     aViewSettings.SetUserData(aSettings);
 }
 

@@ -94,7 +94,7 @@ void FormulaDialog::dispose()
 {
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, HID_RPT_FIELD_SEL_WIN );
+        SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState((WindowStateMask::X | WindowStateMask::Y | WindowStateMask::State | WindowStateMask::Minimized)), RTL_TEXTENCODING_ASCII_US));
     }
 
@@ -203,7 +203,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_pAddField = VclPtr<OAddFieldWindow>::Create(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, HID_RPT_FIELD_SEL_WIN );
+        SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
         if ( aDlgOpt.Exists() )
         {
             m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));

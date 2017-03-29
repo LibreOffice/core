@@ -139,14 +139,14 @@ void ODesignView::dispose()
     }
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, UID_RPT_RPT_APP_VIEW );
+        SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pAddField.disposeAndClear();
     }
     if ( m_pReportExplorer )
     {
-        SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pReportExplorer.disposeAndClear();
@@ -476,7 +476,7 @@ void ODesignView::toggleReportExplorer()
     {
         OReportController& rReportController = getController();
         m_pReportExplorer = VclPtr<ONavigator>::Create(this,rReportController);
-        SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
+        SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
         if ( aDlgOpt.Exists() )
             m_pReportExplorer->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
@@ -513,7 +513,7 @@ void ODesignView::toggleAddField()
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
         m_pAddField = VclPtr<OAddFieldWindow>::Create(this,xSet);
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, UID_RPT_RPT_APP_VIEW );
+        SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
         if ( aDlgOpt.Exists() )
             m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pAddField->Update();

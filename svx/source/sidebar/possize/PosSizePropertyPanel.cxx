@@ -409,7 +409,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
     }
 
     // mpCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
-    SvtViewOptions aPageOpt(E_TABPAGE, "cui/ui/possizetabpage/PositionAndSize");
+    SvtViewOptions aPageOpt(EViewType::TabPage, "cui/ui/possizetabpage/PositionAndSize");
     aPageOpt.SetUserItem( USERITEM_NAME, css::uno::makeAny( ::rtl::OUString::number( int(mpCbxScale->IsChecked()) ) ) );
 }
 
@@ -811,7 +811,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     DisableControls();
 
     // mpCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
-    SvtViewOptions aPageOpt(E_TABPAGE, "cui/ui/possizetabpage/PositionAndSize");
+    SvtViewOptions aPageOpt(EViewType::TabPage, "cui/ui/possizetabpage/PositionAndSize");
     OUString  sUserData;
     css::uno::Any  aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
     ::rtl::OUString aTemp;

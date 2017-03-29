@@ -198,19 +198,19 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         case EItem::ViewOptionsDialog :
-            rItem.pItem = new SvtViewOptions(E_DIALOG, OUString());
+            rItem.pItem = new SvtViewOptions(EViewType::Dialog, OUString());
             break;
 
         case EItem::ViewOptionsTabDialog :
-            rItem.pItem = new SvtViewOptions(E_TABDIALOG, OUString());
+            rItem.pItem = new SvtViewOptions(EViewType::TabDialog, OUString());
             break;
 
         case EItem::ViewOptionsTabPage :
-            rItem.pItem = new SvtViewOptions(E_TABPAGE, OUString());
+            rItem.pItem = new SvtViewOptions(EViewType::TabPage, OUString());
             break;
 
         case EItem::ViewOptionsWindow :
-            rItem.pItem = new SvtViewOptions(E_WINDOW, OUString());
+            rItem.pItem = new SvtViewOptions(EViewType::Window, OUString());
             break;
 
         case EItem::UserOptions :
