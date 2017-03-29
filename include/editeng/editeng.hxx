@@ -380,8 +380,11 @@ public:
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
     Link<EENotify&,void>  GetNotifyHdl() const;
 
-    void            SetImportHdl( const Link<ImportInfo&,void>& rLink );
-    const Link<ImportInfo&,void>& GetImportHdl() const;
+    void            SetRtfImportHdl( const Link<RtfImportInfo&,void>& rLink );
+    const Link<RtfImportInfo&,void>& GetRtfImportHdl() const;
+
+    void            SetHtmlImportHdl( const Link<HtmlImportInfo&,void>& rLink );
+    const Link<HtmlImportInfo&,void>& GetHtmlImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
     bool            IsFlatMode() const;
@@ -543,10 +546,12 @@ public:
     const ParaPortionList& GetParaPortions() const;
 
     bool IsFormatted() const;
-    bool IsImportHandlerSet() const;
+    bool IsHtmlImportHandlerSet() const;
+    bool IsRtfImportHandlerSet() const;
     bool IsImportRTFStyleSheetsSet() const;
 
-    void CallImportHandler(ImportInfo& rInfo);
+    void CallRtfImportHandler(RtfImportInfo& rInfo);
+    void CallHtmlImportHandler(HtmlImportInfo& rInfo);
 
     void ParaAttribsToCharAttribs(ContentNode* pNode);
 

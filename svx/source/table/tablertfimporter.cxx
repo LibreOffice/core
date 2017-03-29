@@ -85,18 +85,18 @@ public:
 
     void Read( SvStream& rStream );
 
-    void ProcToken( ImportInfo* pInfo );
+    void ProcToken( RtfImportInfo* pInfo );
 
     void NextRow();
     void NextColumn();
     void NewCellRow();
 
-    void InsertCell( ImportInfo* pInfo );
+    void InsertCell( RtfImportInfo* pInfo );
     void InsertColumnEdge( sal_Int32 nEdge );
 
     void FillTable();
 
-    DECL_LINK( RTFImportHdl, ImportInfo&, void );
+    DECL_LINK( RTFImportHdl, RtfImportInfo&, void );
 
 private:
     SdrTableObj&    mrTableObj;
@@ -161,25 +161,25 @@ void SdrTableRTFParser::Read( SvStream& rStream )
 {
     EditEngine& rEdit = const_cast< EditEngine& >( mpOutliner->GetEditEngine() );
 
-    Link<ImportInfo&,void> aOldLink( rEdit.GetImportHdl() );
-    rEdit.SetImportHdl( LINK( this, SdrTableRTFParser, RTFImportHdl ) );
+    Link<RtfImportInfo&,void> aOldLink( rEdit.GetRtfImportHdl() );
+    rEdit.SetRtfImportHdl( LINK( this, SdrTableRTFParser, RTFImportHdl ) );
     mpOutliner->Read( rStream, OUString(), EE_FORMAT_RTF );
-    rEdit.SetImportHdl( aOldLink );
+    rEdit.SetRtfImportHdl( aOldLink );
 
     FillTable();
 }
 
-IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( SdrTableRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
 {
     switch ( rInfo.eState )
     {
-        case RTFIMP_NEXTTOKEN:
+        case RtfImportState::NextToken:
             ProcToken( &rInfo );
             break;
-        case RTFIMP_UNKNOWNATTR:
+        case RtfImportState::UnknownAttr:
             ProcToken( &rInfo );
             break;
-        case RTFIMP_START:
+        case RtfImportState::Start:
         {
             SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( &mrItemPool );
@@ -187,7 +187,7 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
             rMap.nBox = SDRATTR_TABLE_BORDER;
         }
             break;
-        case RTFIMP_END:
+        case RtfImportState::End:
             if ( rInfo.aSelection.nEndPos )
             {
                 mpActDefault = nullptr;
@@ -196,11 +196,9 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
                 ProcToken( &rInfo );
             }
             break;
-        case RTFIMP_SETATTR:
-            break;
-        case RTFIMP_INSERTTEXT:
-            break;
-        case RTFIMP_INSERTPARA:
+        case RtfImportState::SetAttr:
+        case RtfImportState::InsertText:
+        case RtfImportState::InsertPara:
             break;
         default:
             SAL_WARN( "svx.table","unknown ImportInfo.eState");
@@ -214,7 +212,7 @@ void SdrTableRTFParser::NextRow()
     ++mnRowCnt;
 }
 
-void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
+void SdrTableRTFParser::InsertCell( RtfImportInfo* pInfo )
 {
 
     RTFCellInfoPtr xCellInfo( new RTFCellInfo(mrItemPool) );
@@ -390,7 +388,7 @@ long TwipsToHundMM( long nIn )
     return nRet;
 }
 
-void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
+void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
 {
     switch ( pInfo->nToken )
     {

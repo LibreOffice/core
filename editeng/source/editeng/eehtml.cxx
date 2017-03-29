@@ -79,19 +79,19 @@ SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
         // Build in wrap mimic in RTF import?
         aCurSel = EditSelection( rPaM, rPaM );
 
-        if (mpEditEngine->IsImportHandlerSet())
+        if (mpEditEngine->IsHtmlImportHandlerSet())
         {
-            ImportInfo aImportInfo(HTMLIMP_START, this, mpEditEngine->CreateESelection(aCurSel));
-            mpEditEngine->CallImportHandler(aImportInfo);
+            HtmlImportInfo aImportInfo(HtmlImportState::Start, this, mpEditEngine->CreateESelection(aCurSel));
+            mpEditEngine->CallHtmlImportHandler(aImportInfo);
         }
 
         ImpSetStyleSheet( 0 );
         _eState = HTMLParser::CallParser();
 
-        if (mpEditEngine->IsImportHandlerSet())
+        if (mpEditEngine->IsHtmlImportHandlerSet())
         {
-            ImportInfo aImportInfo(HTMLIMP_END, this, mpEditEngine->CreateESelection(aCurSel));
-            mpEditEngine->CallImportHandler(aImportInfo);
+            HtmlImportInfo aImportInfo(HtmlImportState::End, this, mpEditEngine->CreateESelection(aCurSel));
+            mpEditEngine->CallHtmlImportHandler(aImportInfo);
         }
 
         if ( bFieldsInserted )
@@ -491,26 +491,26 @@ void EditHTMLParser::NextToken( int nToken )
     }
     }   // SWITCH
 
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsHtmlImportHandlerSet())
     {
-        ImportInfo aImportInfo(HTMLIMP_NEXTTOKEN, this, mpEditEngine->CreateESelection(aCurSel));
+        HtmlImportInfo aImportInfo(HtmlImportState::NextToken, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
         aImportInfo.nTokenValue = (short)nTokenValue;
         if ( nToken == HTML_TEXTTOKEN )
             aImportInfo.aText = aToken;
         else if (nToken == HTML_STYLE_OFF)
             aImportInfo.aText = maStyleSource.makeStringAndClear();
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
 
 }
 
 void EditHTMLParser::ImpInsertParaBreak()
 {
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsHtmlImportHandlerSet())
     {
-        ImportInfo aImportInfo(HTMLIMP_INSERTPARA, this, mpEditEngine->CreateESelection(aCurSel));
-        mpEditEngine->CallImportHandler(aImportInfo);
+        HtmlImportInfo aImportInfo(HtmlImportState::InsertPara, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
 }
@@ -527,12 +527,12 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems )
     aStartPaM.SetIndex( 0 );
     aEndPaM.SetIndex( aEndPaM.GetNode()->Len() );
 
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsHtmlImportHandlerSet())
     {
         EditSelection aSel( aStartPaM, aEndPaM );
-        ImportInfo aImportInfo(HTMLIMP_SETATTR, this, mpEditEngine->CreateESelection(aSel));
+        HtmlImportInfo aImportInfo(HtmlImportState::SetAttr, this, mpEditEngine->CreateESelection(aSel));
         aImportInfo.pAttrs = const_cast<SfxItemSet *>(&rItems);
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
@@ -659,11 +659,11 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 
 void EditHTMLParser::ImpInsertText( const OUString& rText )
 {
-    if (mpEditEngine->IsImportHandlerSet())
+    if (mpEditEngine->IsHtmlImportHandlerSet())
     {
-        ImportInfo aImportInfo(HTMLIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
+        HtmlImportInfo aImportInfo(HtmlImportState::InsertText, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.aText = rText;
-        mpEditEngine->CallImportHandler(aImportInfo);
+        mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
 
     aCurSel = mpEditEngine->InsertText(aCurSel, rText);
@@ -795,10 +795,10 @@ void EditHTMLParser::AnchorEnd()
         bFieldsInserted = true;
         pCurAnchor.reset();
 
-        if (mpEditEngine->IsImportHandlerSet())
+        if (mpEditEngine->IsHtmlImportHandlerSet())
         {
-            ImportInfo aImportInfo(HTMLIMP_INSERTFIELD, this, mpEditEngine->CreateESelection(aCurSel));
-            mpEditEngine->CallImportHandler(aImportInfo);
+            HtmlImportInfo aImportInfo(HtmlImportState::InsertField, this, mpEditEngine->CreateESelection(aCurSel));
+            mpEditEngine->CallHtmlImportHandler(aImportInfo);
         }
     }
 }

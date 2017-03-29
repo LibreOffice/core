@@ -29,6 +29,7 @@ class SfxItemSet;
 class SfxPoolItem;
 class SvParser;
 class SvxFieldItem;
+class SvxRTFItemStackType;
 
 enum EETextFormat       { EE_FORMAT_TEXT = 0x20, EE_FORMAT_RTF, EE_FORMAT_BIN = 0x31, EE_FORMAT_HTML, EE_FORMAT_XML };
 enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTDIR_R2L };
@@ -201,34 +202,53 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     EFieldInfo& operator= ( const EFieldInfo& );
 };
 
-enum ImportState {
-                    RTFIMP_START, RTFIMP_END,               // only pParser, nPara, nIndex
-                    RTFIMP_NEXTTOKEN, RTFIMP_UNKNOWNATTR,   // nToken+nTokenValue
-                    RTFIMP_SETATTR,                         // pAttrs
-                    RTFIMP_INSERTTEXT,                      // aText
-                    RTFIMP_INSERTPARA,                      // -
-                    HTMLIMP_START, HTMLIMP_END,             // only pParser, nPara, nIndex
-                    HTMLIMP_NEXTTOKEN, HTMLIMP_UNKNOWNATTR, // nToken
-                    HTMLIMP_SETATTR,                        // pAttrs
-                    HTMLIMP_INSERTTEXT,                     // aText
-                    HTMLIMP_INSERTPARA, HTMLIMP_INSERTFIELD // -
+enum class RtfImportState {
+                    Start, End,               // only pParser, nPara, nIndex
+                    NextToken, UnknownAttr,   // nToken+nTokenValue
+                    SetAttr,                  // pAttrs
+                    InsertText,               // aText
+                    InsertPara,               // -
+                    };
+enum class HtmlImportState {
+                    Start, End,               // only pParser, nPara, nIndex
+                    NextToken,                // nToken
+                    SetAttr,                  // pAttrs
+                    InsertText,               // aText
+                    InsertPara, InsertField   // -
                     };
 
-struct ImportInfo
+struct HtmlImportInfo
 {
     SvParser*               pParser;
     ESelection              aSelection;
-    ImportState             eState;
+    HtmlImportState         eState;
 
     int                     nToken;
     short                   nTokenValue;
 
     OUString                aText;
 
-    void*                   pAttrs; // RTF: SvxRTFItemStackType*, HTML: SfxItemSet*
+    SfxItemSet*             pAttrs;
 
-    ImportInfo( ImportState eState, SvParser* pPrsrs, const ESelection& rSel );
-    ~ImportInfo();
+    HtmlImportInfo( HtmlImportState eState, SvParser* pPrsrs, const ESelection& rSel );
+    ~HtmlImportInfo();
+};
+
+struct RtfImportInfo
+{
+    SvParser*               pParser;
+    ESelection              aSelection;
+    RtfImportState          eState;
+
+    int                     nToken;
+    short                   nTokenValue;
+
+    OUString                aText;
+
+    SvxRTFItemStackType*    pAttrs;
+
+    RtfImportInfo( RtfImportState eState, SvParser* pPrsrs, const ESelection& rSel );
+    ~RtfImportInfo();
 };
 
 struct ParagraphInfos

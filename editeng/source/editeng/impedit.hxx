@@ -487,9 +487,10 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
-    Link<EditStatus&,void>  aStatusHdlLink;
-    Link<EENotify&,void>    aNotifyHdl;
-    Link<ImportInfo&,void>  aImportHdl;
+    Link<EditStatus&,void>         aStatusHdlLink;
+    Link<EENotify&,void>           aNotifyHdl;
+    Link<HtmlImportInfo&,void>     aHtmlImportHdl;
+    Link<RtfImportInfo&,void>      aRtfImportHdl;
     Link<MoveParagraphsInfo&,void> aBeginMovingParagraphsHdl;
     Link<MoveParagraphsInfo&,void> aEndMovingParagraphsHdl;
     Link<PasteOrDropInfos&,void>   aBeginPasteOrDropHdl;

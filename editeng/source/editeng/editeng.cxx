@@ -1530,14 +1530,24 @@ Link<EditStatus&, void> EditEngine::GetStatusEventHdl() const
     return pImpEditEngine->GetStatusEventHdl();
 }
 
-void EditEngine::SetImportHdl( const Link<ImportInfo&,void>& rLink )
+void EditEngine::SetHtmlImportHdl( const Link<HtmlImportInfo&,void>& rLink )
 {
-    pImpEditEngine->aImportHdl = rLink;
+    pImpEditEngine->aHtmlImportHdl = rLink;
 }
 
-const Link<ImportInfo&,void>& EditEngine::GetImportHdl() const
+const Link<HtmlImportInfo&,void>& EditEngine::GetHtmlImportHdl() const
 {
-    return pImpEditEngine->aImportHdl;
+    return pImpEditEngine->aHtmlImportHdl;
+}
+
+void EditEngine::SetRtfImportHdl( const Link<RtfImportInfo&,void>& rLink )
+{
+    pImpEditEngine->aRtfImportHdl = rLink;
+}
+
+const Link<RtfImportInfo&,void>& EditEngine::GetRtfImportHdl() const
+{
+    return pImpEditEngine->aRtfImportHdl;
 }
 
 void EditEngine::SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink )
@@ -2727,9 +2737,14 @@ void EditEngine::SetReplaceLeadingSingleQuotationMark( bool bReplace )
     pImpEditEngine->SetReplaceLeadingSingleQuotationMark( bReplace );
 }
 
-bool EditEngine::IsImportHandlerSet() const
+bool EditEngine::IsHtmlImportHandlerSet() const
 {
-    return pImpEditEngine->aImportHdl.IsSet();
+    return pImpEditEngine->aHtmlImportHdl.IsSet();
+}
+
+bool EditEngine::IsRtfImportHandlerSet() const
+{
+    return pImpEditEngine->aRtfImportHdl.IsSet();
 }
 
 bool EditEngine::IsImportRTFStyleSheetsSet() const
@@ -2737,9 +2752,14 @@ bool EditEngine::IsImportRTFStyleSheetsSet() const
     return pImpEditEngine->GetStatus().DoImportRTFStyleSheets();
 }
 
-void EditEngine::CallImportHandler(ImportInfo& rInfo)
+void EditEngine::CallHtmlImportHandler(HtmlImportInfo& rInfo)
 {
-    pImpEditEngine->aImportHdl.Call(rInfo);
+    pImpEditEngine->aHtmlImportHdl.Call(rInfo);
+}
+
+void EditEngine::CallRtfImportHandler(RtfImportInfo& rInfo)
+{
+    pImpEditEngine->aRtfImportHdl.Call(rInfo);
 }
 
 EditPaM EditEngine::InsertParaBreak(const EditSelection& rEditSelection)
