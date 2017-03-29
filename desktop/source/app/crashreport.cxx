@@ -112,7 +112,7 @@ void CrashReporter::writeCommonInfo()
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     const OUString protocol = "https";
-    const OUString url = "crashreport.libreoffice.org";
+    const OUString url = "crashreport.collaboraoffice.com";
     const sal_Int32 port = 443;
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
@@ -123,7 +123,7 @@ void CrashReporter::writeCommonInfo()
     maKeyValues.clear();
 
     // limit the amount of code that needs to be executed before the crash reporting
-    addKeyValue("ProductName", "LibreOffice", AddItem);
+    addKeyValue("ProductName", "CollaboraOffice", AddItem);
     addKeyValue("Version", LIBO_VERSION_DOTTED, AddItem);
     addKeyValue("BuildID", utl::Bootstrap::getBuildIdData(""), AddItem);
     addKeyValue("URL", protocol + "://" + url + "/submit/", AddItem);
