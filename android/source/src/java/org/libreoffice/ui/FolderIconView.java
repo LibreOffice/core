@@ -19,6 +19,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import org.libreoffice.FileUtilities;
+
 import java.io.File;
 import java.util.Stack;
 
