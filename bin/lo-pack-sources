@@ -126,7 +126,7 @@ sub generate_lo_module_changelog($$$)
     $log_name .= "-$module_dirname{$module}" if ($module_dirname{$module});
     print "Generating changelog for $module...\n";
     system ("cd $source_dir/$module_dirname{$module} && " .
-            "git log --date=short --pretty='format:%cd  %an  <%ae>  [%H]%n%n%w(0,8,8)%s%n%e%+b' | " .
+            "git log --date=short --pretty='format:%cd  %an  <%ae>  [%H]%n%n%w(0,8,8)%s%n%e%+b' " .
             ">$lo_module_release_topdir/$log_name" ) &&
         die "Error: generating failed: $!\n";
 }
