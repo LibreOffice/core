@@ -196,6 +196,11 @@ private:
 
     double              mfPendingTabBarWidth;       // Tab bar width relative to frame window width.
 
+    SCROW               mnLOKStartHeaderRow;
+    SCROW               mnLOKEndHeaderRow;
+    SCCOL               mnLOKStartHeaderCol;
+    SCCOL               mnLOKEndHeaderCol;
+
     bool                bMinimized:1;
     bool                bInUpdateHeader:1;
     bool                bInActivatePart:1;
