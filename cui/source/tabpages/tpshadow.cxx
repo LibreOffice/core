@@ -88,7 +88,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     m_ePoolUnit = pPool->GetMetric( SDRATTR_SHADOWXDIST );
 
     // setting the output device

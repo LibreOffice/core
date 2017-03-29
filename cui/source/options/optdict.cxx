@@ -587,7 +587,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
 
     if(pBtn == pDeletePB)
     {
-        DBG_ASSERT(pEntry, "keine Eintrag selektiert");
+        DBG_ASSERT(pEntry, "no entry selected");
         OUString aStr;
 
         pWordED->SetText(aStr);

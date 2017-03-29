@@ -114,7 +114,7 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
                  ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
-            // Erase, Copy, Paste, Select All und Undo soll funktionieren
+            // Erase, Copy, Paste, Select All and Undo should work
             bValid = true;
     }
     if (bValid)

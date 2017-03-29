@@ -282,7 +282,7 @@ IMPL_LINK_NOARG( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
-        DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
+        DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return;
     }
 
@@ -325,7 +325,7 @@ bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
-        DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
+        DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return false;
     }
 

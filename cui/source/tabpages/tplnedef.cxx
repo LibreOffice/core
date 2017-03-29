@@ -114,7 +114,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
     // determine PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
     rXLSet.Put( aXLStyle );

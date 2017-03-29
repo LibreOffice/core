@@ -134,7 +134,7 @@ void SvxTextAttrPage::dispose()
 void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
 {
     SfxItemPool* pPool = rAttrs->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     MapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_TEXT_LEFTDIST );
@@ -345,7 +345,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
 bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 {
     SfxItemPool* pPool = rAttrs->GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "Where is the pool?" );
     MapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
     sal_Int32    nValue;

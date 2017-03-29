@@ -188,11 +188,11 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
             {
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
-                DBG_ASSERT(pEntry, "Wo ist der Entry?");
+                DBG_ASSERT(pEntry, "Where is the Entry?");
                 if (!pEntry)
                     continue;
                 pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
-                DBG_ASSERT(pLink, "Wo ist der Link?");
+                DBG_ASSERT(pLink, "Where is the Link?");
                 if (!pLink)
                     continue;
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
@@ -659,7 +659,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
     if( pE && TREELIST_ENTRY_NOTFOUND !=
         ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {
-        DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
+        DBG_ASSERT( pE, "Where does the empty entry come from?" );
 
         if( pPos )
             *pPos = nPos;
