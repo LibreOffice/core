@@ -10780,6 +10780,12 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
 void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 {
+    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    {
+        writeReferenceXObject(rObject.m_aReferenceXObject);
+        return;
+    }
+
     CHECK_RETURN2( rObject.m_pStream );
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
@@ -11241,6 +11247,12 @@ namespace
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
+    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    {
+        writeReferenceXObject(rObject.m_aReferenceXObject);
+        return true;
+    }
+
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
 
     Bitmap  aBitmap;
@@ -11713,7 +11725,8 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        m_aBitmaps.front().m_nObject    = createObject();
+        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
+            m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
     }
