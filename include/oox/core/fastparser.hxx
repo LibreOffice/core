@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
@@ -54,7 +55,7 @@ namespace core {
 /** Wrapper for a fast SAX parser that works on automatically generated OOXML
     token and namespace identifiers.
  */
-class FastParser
+class OOX_DLLPUBLIC FastParser
 {
 public:
     /// @throws css::uno::RuntimeException
@@ -63,7 +64,7 @@ public:
                         FastParser(const FastParser&) = delete;
                         FastParser& operator=(const FastParser&) = delete;
 
-    virtual             ~FastParser();
+                        ~FastParser();
 
     /** Registers an OOXML namespace at the parser.
         @throws css::lang::IllegalArgumentException
