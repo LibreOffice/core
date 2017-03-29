@@ -420,6 +420,42 @@ sal_Int32 indexOfAny(OUString const& rIn,
     return -1;
 }
 
+OUString removeAny(OUString const& rIn,
+        sal_Unicode const*const pChars)
+{
+    OUStringBuffer buf;
+    bool isFound(false);
+    for (sal_Int32 i = 0; i < rIn.getLength(); ++i)
+    {
+        sal_Unicode const c = rIn[i];
+        bool removeC(false);
+        for (sal_Unicode const* pChar = pChars; *pChar; ++pChar)
+        {
+            if (c == *pChar)
+            {
+                removeC = true;
+                break;
+            }
+        }
+        if (removeC)
+        {
+            if (!isFound)
+            {
+                if (i > 0)
+                {
+                    buf.append(rIn.copy(0, i));
+                }
+                isFound = true;
+            }
+        }
+        else if (isFound)
+        {
+            buf.append(c);
+        }
+    }
+    return (isFound) ? buf.makeStringAndClear() : rIn;
+}
+
 OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     const OUString& rNewToken)
 {

@@ -206,6 +206,18 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
             if ( !bExportSoftHyphens )
                 aOutStr = aOutStr.replaceAll(OUStringLiteral1(CHAR_SOFTHYPHEN), "");
 
+            // all INWORD/BREAKWORD should be already removed by OutAttr
+            // but the field-marks are not attributes so filter those
+            static sal_Unicode const forbidden [] = {
+                    CH_TXT_ATR_INPUTFIELDSTART,
+                    CH_TXT_ATR_INPUTFIELDEND,
+                    CH_TXT_ATR_FORMELEMENT,
+                    CH_TXT_ATR_FIELDSTART,
+                    CH_TXT_ATR_FIELDEND,
+                    0
+                };
+            aOutStr = comphelper::string::removeAny(aOutStr, forbidden);
+
             rWrt.Strm().WriteUnicodeOrByteText( aOutStr );
         }
         nStrPos = nNextAttr;
