@@ -268,6 +268,8 @@ ScViewDataTable::ScViewDataTable() :
                 nCurY( 0 ),
                 nOldCurX( 0 ),
                 nOldCurY( 0 ),
+                nLOKOldCurX( 0 ),
+                nLOKOldCurY( 0 ),
                 nMaxTiledCol( 20 ),
                 nMaxTiledRow( 50 ),
                 bShowGrid( true ),
@@ -1881,6 +1883,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     SCCOL   nX;
 
     long nScrPosX=0;
+    if (bIsTiledRendering)
+    {
+        const auto& rNearest = pThisTab->aWidthHelper.getNearestByIndex(nWhereX - 1);
+        nPosX = rNearest.first + 1;
+        nScrPosX = rNearest.second;
+    }
+
     if (nWhereX >= nPosX)
         for (nX = nPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
         {
@@ -1912,6 +1921,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     SCROW   nY;
 
     long nScrPosY=0;
+    if (bIsTiledRendering)
+    {
+        const auto& rNearest = pThisTab->aHeightHelper.getNearestByIndex(nWhereY - 1);
+        nPosY = rNearest.first + 1;
+        nScrPosY = rNearest.second;
+    }
+
     if (nWhereY >= nPosY)
         for (nY = nPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
         {
