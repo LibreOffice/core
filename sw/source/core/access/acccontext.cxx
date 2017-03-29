@@ -583,10 +583,6 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
 
     ThrowIfDisposed();
 
-    //Notify the frame is a document
-    if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
-        m_bIsAccDocUse = true;
-
     return m_isDisposing ? 0 : GetChildCount( *(GetMap()) );
 }
 
@@ -596,10 +592,6 @@ uno::Reference< XAccessible> SAL_CALL
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
-
-    //Notify the frame is a document
-    if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
-        m_bIsAccDocUse = true;
 
     const SwAccessibleChild aChild( GetChild( *(GetMap()), nIndex ) );
     if( !aChild.IsValid() )

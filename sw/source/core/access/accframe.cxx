@@ -415,8 +415,7 @@ SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
                                       bool bIsPagePreview ) :
     maVisArea( rVisArea ),
     mpFrame( pF ),
-    mbIsInPagePreview( bIsPagePreview ),
-    m_bIsAccDocUse( false )
+    mbIsInPagePreview( bIsPagePreview )
 {
 }
 

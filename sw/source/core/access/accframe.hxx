@@ -101,9 +101,6 @@ protected:
                        const SwFrame *pFrame,
                        bool bIsPagePreview );
     virtual ~SwAccessibleFrame();
-
-    // Move to private area?
-    bool m_bIsAccDocUse;
 public:
     // Return the SwFrame this context is attached to.
     const SwFrame* GetFrame() const { return mpFrame; };
