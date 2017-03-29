@@ -144,15 +144,14 @@ void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();
 
-    // binaere Suche
+    // binary search
     const Property* pProperties = _rProps.getConstArray();
     Property aNameProp(_rPropName, 0, Type(), 0);
     const Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
     {
-        OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties nicht sortiert");
+        OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties not sorted");
         removeElementAt(_rProps, pResult - pProperties);
     }
 }
@@ -162,12 +161,11 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPro
 {
     sal_Int32 nLen = seqProps.getLength();
 
-    // binaere Suche
+    // binary search
     Property* pProperties = seqProps.getArray();
     Property aNameProp(sPropName, 0, Type(), 0);
     Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )
     {
         pResult->Attributes |= nAddAttrib;
