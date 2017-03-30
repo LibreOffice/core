@@ -1581,18 +1581,16 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
 
         return osl_Socket_Ok;
     }
-    else
-    {
-        /* really an error or just delayed? */
-        if (errno != EINPROGRESS)
-        {
-            pSocket->m_nLastError=errno;
-            int nErrno = errno;
-            SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
 
-            osl_enableNonBlockingMode(pSocket, false);
-            return osl_Socket_Error;
-        }
+    /* really an error or just delayed? */
+    if (errno != EINPROGRESS)
+    {
+        pSocket->m_nLastError=errno;
+        int nErrno = errno;
+        SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
+
+        osl_enableNonBlockingMode(pSocket, false);
+        return osl_Socket_Error;
     }
 
     /* prepare select set for socket  */
@@ -1645,11 +1643,8 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             /* already destroyed */
             return osl_Socket_Interrupted;
         }
-        else
-        {
-            pSocket->m_nLastError=errno;
-            Result= osl_Socket_Error;
-        }
+        pSocket->m_nLastError=errno;
+        Result= osl_Socket_Error;
     }
     else    /* timeout */
     {

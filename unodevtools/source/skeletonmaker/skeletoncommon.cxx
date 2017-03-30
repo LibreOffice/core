@@ -588,8 +588,7 @@ void generateFunctionParameterMap(std::ostream& o,
 
     if ( generated.contains(u2b(name)) )
         return;
-    else
-        generated.add(u2b(name));
+    generated.add(u2b(name));
 
     for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
              ent2->getDirectMethods().begin());

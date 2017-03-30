@@ -359,8 +359,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             pEntry->lateInit = false;
             return pEntry->value;
         }
-        else
-            ret = pEntry->value;
+        ret = pEntry->value;
     }
     guard.clear();
     if (ret != xInstance) {

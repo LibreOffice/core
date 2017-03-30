@@ -305,9 +305,8 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         } else {
             if (bStrict) {
                 return false;
-            } else {
-                writeUcs4(pBuffer, pCapacity, nUtf32);
             }
+            writeUcs4(pBuffer, pCapacity, nUtf32);
         }
     }
     return true;

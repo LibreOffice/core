@@ -444,31 +444,29 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         return nullptr;
     }
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
-    else
+
+    /* alloc memory */
+    pAcceptedPipe = createPipeImpl();
+
+    OSL_ASSERT(pAcceptedPipe);
+    if(pAcceptedPipe==nullptr)
     {
-        /* alloc memory */
-        pAcceptedPipe = createPipeImpl();
-
-        OSL_ASSERT(pAcceptedPipe);
-        if(pAcceptedPipe==nullptr)
-        {
-            close(s);
-            return nullptr;
-        }
-
-        /* set close-on-exec flag */
-        int flags;
-        if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
-        {
-            flags |= FD_CLOEXEC;
-            if (fcntl(s, F_SETFD, flags) < 0)
-            {
-                SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  strerror(errno));
-            }
-        }
-
-        pAcceptedPipe->m_Socket = s;
+        close(s);
+        return nullptr;
     }
+
+    /* set close-on-exec flag */
+    int flags;
+    if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
+    {
+        flags |= FD_CLOEXEC;
+        if (fcntl(s, F_SETFD, flags) < 0)
+        {
+            SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  strerror(errno));
+        }
+    }
+
+    pAcceptedPipe->m_Socket = s;
 
     return pAcceptedPipe;
 }

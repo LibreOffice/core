@@ -1489,11 +1489,8 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                         ::typelib_typedescriptionreference_release( pTDR );
                         return;
                     }
-                    else
-                    {
-                        // destruction of this type in progress (another thread!)
-                        (void)osl_atomic_decrement( &pTDR->pType->nRefCount );
-                    }
+                    // destruction of this type in progress (another thread!)
+                    (void)osl_atomic_decrement( &pTDR->pType->nRefCount );
                 }
                 // take new descr
                 pTDR->pType = *ppNewDescription;
@@ -2193,26 +2190,23 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
     }
 
     {
-    MutexGuard aGuard( Init::get().getMutex() );
-    // pRef->pType->pWeakRef == 0 means that the description is empty
-    if( pRef->pType && pRef->pType->pWeakRef )
-    {
-        sal_Int32 n = osl_atomic_increment( &pRef->pType->nRefCount );
-        if( n > 1 )
+        MutexGuard aGuard( Init::get().getMutex() );
+        // pRef->pType->pWeakRef == 0 means that the description is empty
+        if( pRef->pType && pRef->pType->pWeakRef )
         {
-            // The reference is incremented. The object cannot be destroyed.
-            // Release the guard at the earliest point.
-            *ppRet = pRef->pType;
-            return;
-        }
-        else
-        {
+            sal_Int32 n = osl_atomic_increment( &pRef->pType->nRefCount );
+            if( n > 1 )
+            {
+                // The reference is incremented. The object cannot be destroyed.
+                // Release the guard at the earliest point.
+                *ppRet = pRef->pType;
+                return;
+            }
             (void)osl_atomic_decrement( &pRef->pType->nRefCount );
             // destruction of this type in progress (another thread!)
             // no access through this weak reference
             pRef->pType = nullptr;
         }
-    }
     }
 
     typelib_typedescription_getByName( ppRet, pRef->pTypeName );
@@ -2336,54 +2330,48 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
         if (eAssignable == eFrom)
         {
             if (type_equals( pAssignable, pFrom )) // first shot
-            {
                 return true;
-            }
-            else
+
+            switch (eAssignable)
             {
-                switch (eAssignable)
+            case typelib_TypeClass_STRUCT:
+            case typelib_TypeClass_EXCEPTION:
+            {
+                typelib_TypeDescription * pFromDescr = nullptr;
+                TYPELIB_DANGER_GET( &pFromDescr, pFrom );
+                if (!reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription)
                 {
-                case typelib_TypeClass_STRUCT:
-                case typelib_TypeClass_EXCEPTION:
-                {
-                    typelib_TypeDescription * pFromDescr = nullptr;
-                    TYPELIB_DANGER_GET( &pFromDescr, pFrom );
-                    if (!reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription)
-                    {
-                        TYPELIB_DANGER_RELEASE( pFromDescr );
-                        return false;
-                    }
-                    bool bRet = typelib_typedescriptionreference_isAssignableFrom(
-                        pAssignable,
-                        reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription->aBase.pWeakRef );
                     TYPELIB_DANGER_RELEASE( pFromDescr );
-                    return bRet;
-                }
-                case typelib_TypeClass_INTERFACE:
-                {
-                    typelib_TypeDescription * pFromDescr = nullptr;
-                    TYPELIB_DANGER_GET( &pFromDescr, pFrom );
-                    typelib_InterfaceTypeDescription * pFromIfc
-                        = reinterpret_cast<
-                            typelib_InterfaceTypeDescription * >(pFromDescr);
-                    bool bRet = false;
-                    for (sal_Int32 i = 0; i < pFromIfc->nBaseTypes; ++i) {
-                        if (typelib_typedescriptionreference_isAssignableFrom(
-                                pAssignable,
-                                pFromIfc->ppBaseTypes[i]->aBase.pWeakRef))
-                        {
-                            bRet = true;
-                            break;
-                        }
-                    }
-                    TYPELIB_DANGER_RELEASE( pFromDescr );
-                    return bRet;
-                }
-                default:
-                {
                     return false;
                 }
+                bool bRet = typelib_typedescriptionreference_isAssignableFrom(
+                   pAssignable,
+                   reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription->aBase.pWeakRef );
+                TYPELIB_DANGER_RELEASE( pFromDescr );
+                return bRet;
+           }
+           case typelib_TypeClass_INTERFACE:
+           {
+                typelib_TypeDescription * pFromDescr = nullptr;
+                TYPELIB_DANGER_GET( &pFromDescr, pFrom );
+                typelib_InterfaceTypeDescription * pFromIfc
+                    = reinterpret_cast<
+                        typelib_InterfaceTypeDescription * >(pFromDescr);
+                bool bRet = false;
+                for (sal_Int32 i = 0; i < pFromIfc->nBaseTypes; ++i) {
+                    if (typelib_typedescriptionreference_isAssignableFrom(
+                            pAssignable,
+                            pFromIfc->ppBaseTypes[i]->aBase.pWeakRef))
+                    {
+                        bRet = true;
+                        break;
+                    }
                 }
+                TYPELIB_DANGER_RELEASE( pFromDescr );
+                return bRet;
+            }
+            default:
+                return false;
             }
         }
         return (eAssignable >= typelib_TypeClass_CHAR && eAssignable <= typelib_TypeClass_DOUBLE &&

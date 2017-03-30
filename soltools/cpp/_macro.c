@@ -193,8 +193,7 @@ void
             np->vp = &onetr;
             return;
         }
-        else
-            error(FATAL, "Illegal -A argument %r", trp);
+        error(FATAL, "Illegal -A argument %r", trp);
     }
 
     if (trp->tp >= trp->lp || trp->tp->type != NAME)

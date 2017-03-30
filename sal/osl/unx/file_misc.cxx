@@ -207,11 +207,8 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
                     *pDirectory = static_cast<oslDirectory>(pDirImpl);
                     return osl_File_E_None;
                 }
-                else
-                {
-                    errno = ENOMEM;
-                    closedir( pdir );
-                }
+                errno = ENOMEM;
+                closedir( pdir );
             }
             else
             {
@@ -775,10 +772,8 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     {
         return osl_File_E_ISDIR;
     }
-    else
-    {
-        /* mfe: file does not exists or is no dir */
-    }
+
+    /* mfe: file does not exists or is no dir */
 
     tErr = oslDoCopy(pszPath,pszDestPath,nMode,nSourceSize,DestFileExists);
 
@@ -924,8 +919,8 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
         nRet=errno;
         return nRet;
     }
-    else
-        pszLinkContent[ nRet ] = 0;
+
+    pszLinkContent[ nRet ] = 0;
 
     nRet = symlink(pszLinkContent,pszDestFileName);
 

@@ -421,15 +421,16 @@ Found findEntity(
                                 case FOUND_TYPE:
                                     break;
                                 case FOUND_ENTITY:
-                                    if (argEnt == nullptr) {
-                                        error(
-                                            location, yyscanner,
-                                            (("inconsistent type manager: bad"
-                                              " instantiated polymorphic struct"
-                                              " type template type argument ")
-                                             + argName));
-                                        return FOUND_ERROR;
-                                    } else {
+                                    {
+                                        if (argEnt == nullptr) {
+                                            error(
+                                                location, yyscanner,
+                                                (("inconsistent type manager: bad"
+                                                  " instantiated polymorphic struct"
+                                                  " type template type argument ")
+                                                 + argName));
+                                            return FOUND_ERROR;
+                                        }
                                         unoidl::detail::SourceProviderType::Type
                                             argT
                                             = unoidl::detail::SourceProviderType::Type();
@@ -484,8 +485,8 @@ Found findEntity(
                                         argType
                                             = unoidl::detail::SourceProviderType(
                                                 argT, argName, argEnt);
+                                        break;
                                     }
-                                    break;
                                 }
                                 args.push_back(argType);
                             }

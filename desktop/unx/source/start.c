@@ -621,6 +621,8 @@ exec_javaldx (Args *args)
     rtl_uString *pApp;
     rtl_uString **ppArgs;
     rtl_uString *pTmp, *pTmp2;
+    char *chomp;
+    sal_uInt64 bytes_read;
 
     oslProcess javaldx = NULL;
     oslFileHandle fileOut= NULL;
@@ -673,26 +675,23 @@ exec_javaldx (Args *args)
         if (fileOut)
             osl_closeFile(fileOut);
         return;
-    } else {
-        char *chomp;
-        sal_uInt64 bytes_read;
-
-        /* Magically osl_readLine doesn't work with pipes with E_SPIPE - so be this lame instead: */
-        while (osl_readFile (fileOut, newpath, SAL_N_ELEMENTS (newpath), &bytes_read) == osl_File_E_INTR);
-
-        if (bytes_read <= 0) {
-            fprintf (stderr, "Warning: failed to read path from javaldx\n");
-            if (javaldx)
-                osl_freeProcessHandle(javaldx);
-            if (fileOut)
-                osl_closeFile(fileOut);
-            return;
-        }
-        newpath[bytes_read] = '\0';
-
-        if ((chomp = strstr (newpath, "\n")))
-            *chomp = '\0';
     }
+
+    /* Magically osl_readLine doesn't work with pipes with E_SPIPE - so be this lame instead: */
+    while (osl_readFile (fileOut, newpath, SAL_N_ELEMENTS (newpath), &bytes_read) == osl_File_E_INTR);
+
+    if (bytes_read <= 0) {
+        fprintf (stderr, "Warning: failed to read path from javaldx\n");
+        if (javaldx)
+            osl_freeProcessHandle(javaldx);
+        if (fileOut)
+            osl_closeFile(fileOut);
+        return;
+    }
+    newpath[bytes_read] = '\0';
+
+    if ((chomp = strstr (newpath, "\n")))
+        *chomp = '\0';
 
     extend_library_path (newpath);
 
