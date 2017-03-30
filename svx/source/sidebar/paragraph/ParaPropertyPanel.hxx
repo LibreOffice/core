@@ -83,13 +83,9 @@ private:
     //Paragraph spacing
     VclPtr<SvxRelativeField>   mpTopDist;
     VclPtr<SvxRelativeField>   mpBottomDist;
-    VclPtr<ToolBox>            mpTbxIndent_IncDec;
     VclPtr<SvxRelativeField>   mpLeftIndent;
     VclPtr<SvxRelativeField>   mpRightIndent;
     VclPtr<SvxRelativeField>   mpFLineIndent;
-
-    // Resources
-    Image  maIndHang;
 
     // Data Member
     long                maTxtLeft;
@@ -103,8 +99,6 @@ private:
     // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;
-    ::sfx2::sidebar::ControllerItem  maDecIndentControl;
-    ::sfx2::sidebar::ControllerItem  maIncIndentControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
 
     vcl::EnumContext maContext;
@@ -112,12 +106,10 @@ private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK(ModifyIndentHdl_Impl, Edit&, void);
-    DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*, void);
     DECL_LINK(ULSpaceHdl_Impl, Edit&, void);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();
     void ReSize(bool bSize);

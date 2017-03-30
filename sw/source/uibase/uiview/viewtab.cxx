@@ -654,6 +654,21 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
         break;
 
+    case SID_HANGING_INDENT:
+    {
+        SfxItemSet aLRSpaceSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
+        rSh.GetCurAttr( aLRSpaceSet );
+        SvxLRSpaceItem aParaMargin( static_cast<const SvxLRSpaceItem&>( aLRSpaceSet.Get( RES_LR_SPACE ) ) );
+
+        SvxLRSpaceItem aNewMargin( RES_LR_SPACE );
+        aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
+        aNewMargin.SetRight( aParaMargin.GetRight() );
+        aNewMargin.SetTextFirstLineOfst( (aParaMargin.GetTextFirstLineOfst()) * (-1) );
+
+        rSh.SetAttrItem( aNewMargin );
+        break;
+    }
+
     case SID_ATTR_PARA_LRSPACE_VERTICAL:
     case SID_ATTR_PARA_LRSPACE:
         if ( pReqArgs )
@@ -1418,6 +1433,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aTabStops.SetWhich(nWhich);
                 rSet.Put(aTabStops);
             }
+            break;
+        }
+
+        case SID_HANGING_INDENT:
+        {
+            SfxItemState e = aCoreSet.GetItemState(RES_LR_SPACE);
+            if( e == SfxItemState::DISABLED )
+                rSet.DisableItem(nWhich);
             break;
         }
 
