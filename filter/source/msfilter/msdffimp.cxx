@@ -5796,7 +5796,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
 
     Reading the Shape-Infos in the Ctor:
     ---------------------------------
-    remembering the Shape-Ids and the associated Blip-Numbers und TextBox-Infos
+    remembering the Shape-Ids and the associated Blip-Numbers and TextBox-Infos
                     =========                    ============     =============
     and remembering the File-Offsets for each Blip
                        ============
@@ -6045,7 +6045,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         // FSP ?
         if( ( DFF_msofbtSp == nFbt ) && ( 4 <= nLength ) )
         {
-            // we've found the FSP gefunden: note Shape Type and Id!
+            // we've found the FSP: note Shape Type and Id!
             eShapeType = (MSO_SPT)nInst;
             rSt.ReadUInt32( aInfo.nShapeId );
             rSt.SeekRel( nLength - 4 );
@@ -6224,7 +6224,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         else
             rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect );
 
-        // restore old alte FilePos of the stream(s)
+        // restore old FilePos of the stream(s)
         rStCtrl.Seek( nOldPosCtrl );
         if( &rStCtrl != pStData && pStData )
             pStData->Seek( nOldPosData );

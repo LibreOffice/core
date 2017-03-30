@@ -372,10 +372,10 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 // until the next blank or "\" or closing quotation mark
 // or the end of the string of pStr.
 //
-// Output ppNext (if ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
+// Output ppNext (if ppNext != 0) search begin of next parameter resp. 0
 //
 // Return value: 0 if end of string reached,
-//             ansonsten Anfang des Paramters bzw. der Zeichenkette
+//             otherwise beginning of the parameter resp. string
 //
 sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {

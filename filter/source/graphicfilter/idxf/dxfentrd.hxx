@@ -524,8 +524,8 @@ public:
     mutable bool mbBeingDrawn; // guard for loop in entity parsing
 
     void Read(DXFGroupReader & rDGR);
-        // read entities per rGDR of a DXF file until a
-        // ENDBLK, ENDSEC oder EOF (of group 0).
+        // read entities by rGDR of a DXF file until a
+        // ENDBLK, ENDSEC or EOF (of group 0).
         // (all unknown thing will be skipped)
 
     void Clear();
