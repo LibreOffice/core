@@ -662,8 +662,8 @@ namespace
 
     struct EnumConversionMap
     {
-        sal_Int16   nAPIValue;
-        sal_Int16   nFormValue;
+        style::ParagraphAdjust   nAPIValue;
+        sal_Int16                nFormValue;
     };
 
     EnumConversionMap aMapAdjustToAlign[] =
@@ -676,51 +676,33 @@ namespace
         {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
         {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
         {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
-        {-1,-1}
+        {(style::ParagraphAdjust)-1,-1}
     };
 
-    void lcl_mapFormToAPIValue( Any& _rValue, const EnumConversionMap* _pMap )
+    void lcl_convertTextAlignmentToParaAdjustment( Any& _rValue )
     {
         sal_Int16 nValue = sal_Int16();
         OSL_VERIFY( _rValue >>= nValue );
 
-        const EnumConversionMap* pEntry = _pMap;
-        while ( pEntry && ( pEntry->nFormValue != -1 ) )
-        {
-            if ( nValue == pEntry->nFormValue )
+        for ( auto const & rEntry : aMapAdjustToAlign )
+            if ( nValue == rEntry.nFormValue )
             {
-                _rValue <<= pEntry->nAPIValue;
+                _rValue <<= rEntry.nAPIValue;
                 return;
             }
-            ++pEntry;
-        }
     }
 
-    void lcl_mapAPIToFormValue( Any& _rValue, const EnumConversionMap* _pMap )
+    void lcl_convertParaAdjustmentToTextAlignment( Any& _rValue )
     {
         sal_Int32 nValue = 0;
         OSL_VERIFY( _rValue >>= nValue );
 
-        const EnumConversionMap* pEntry = _pMap;
-        while ( pEntry && ( pEntry->nAPIValue != -1 ) )
-        {
-            if ( nValue == pEntry->nAPIValue )
+        for ( auto const & rEntry : aMapAdjustToAlign )
+            if ( (style::ParagraphAdjust)nValue == rEntry.nAPIValue )
             {
-                _rValue <<= pEntry->nFormValue;
+                _rValue <<= rEntry.nFormValue;
                 return;
             }
-            ++pEntry;
-        }
-    }
-
-    void lcl_convertTextAlignmentToParaAdjustment( Any& rValue )
-    {
-        lcl_mapFormToAPIValue( rValue, aMapAdjustToAlign );
-    }
-
-    void lcl_convertParaAdjustmentToTextAlignment( Any& rValue )
-    {
-        lcl_mapAPIToFormValue( rValue, aMapAdjustToAlign );
     }
 
     void convertVerticalAdjustToVerticalAlign( Any& _rValue )

@@ -1346,7 +1346,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
 
     XGradient aTmpGradient;
 
-    switch(nSelectType)
+    switch((css::awt::GradientStyle)nSelectType)
     {
         case css::awt::GradientStyle_LINEAR:
             aTmpGradient = maGradientLinear;

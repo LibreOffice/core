@@ -18,16 +18,18 @@
  */
 #ifndef INCLUDED_SVX_SWFRAMEVALIDATION_HXX
 #define INCLUDED_SVX_SWFRAMEVALIDATION_HXX
+
 #include <sal/types.h>
 #include <tools/gen.hxx>
 #include <limits.h>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 /*
   struct to determine min/max values for fly frame positioning in Writer
  */
 struct SvxSwFrameValidation
 {
-    sal_Int16           nAnchorType; //css::text::TextContentAnchorType
+    css::text::TextContentAnchorType nAnchorType;
     sal_Int16           nHoriOrient; //css::text::HoriOrientation
     sal_Int16           nVertOrient; //css::text::VertOrientation
     sal_Int16           nHRelOrient; //css::text::RelOrientation
@@ -56,7 +58,7 @@ struct SvxSwFrameValidation
     Size    aPercentSize;   // Size for 100% value
 
     SvxSwFrameValidation() :
-        nAnchorType(0),
+        nAnchorType(css::text::TextContentAnchorType_AT_PARAGRAPH),
         nHoriOrient(0),
         nVertOrient(0),
         nHRelOrient(0),

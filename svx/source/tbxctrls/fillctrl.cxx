@@ -64,7 +64,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpFillControl(nullptr)
     , mpLbFillType(nullptr)
     , mpLbFillAttr(nullptr)
-    , meLastXFS(static_cast<sal_uInt16>(-1))
+    , meLastXFS(static_cast<drawing::FillStyle>(-1))
     , mnLastPosGradient(0)
     , mnLastPosHatch(0)
     , mnLastPosBitmap(0)
@@ -102,7 +102,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpLbFillAttr->Disable();
                 mpLbFillAttr->SetNoSelection();
                 mpToolBoxColor->Hide();
-                meLastXFS = static_cast<sal_uInt16>(-1);
+                meLastXFS = static_cast<drawing::FillStyle>(-1);
                 mpStyleItem.reset();
             }
 
@@ -134,7 +134,7 @@ void SvxFillToolBoxControl::StateChanged(
             mpLbFillAttr->Disable();
             mpLbFillAttr->SetNoSelection();
             mpToolBoxColor->Hide();
-            meLastXFS = static_cast<sal_uInt16>(-1);
+            meLastXFS = static_cast<drawing::FillStyle>(-1);
             mpStyleItem.reset();
             break;
         }
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
             }
         }
 
-        meLastXFS = (sal_uInt16)eXFS;
+        meLastXFS = eXFS;
 
         if(drawing::FillStyle_NONE != eXFS)
         {

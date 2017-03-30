@@ -1417,7 +1417,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
         switch(eLineJoint)
         {
-            case css::drawing::LineJoint_MAKE_FIXED_SIZE: // fallback to round, unused value
+            case css::drawing::LineJoint::LineJoint_MAKE_FIXED_SIZE: // fallback to round, unused value
             case css::drawing::LineJoint_ROUND : m_pLBEdgeStyle->SelectEntryPos(0); break;
             case css::drawing::LineJoint_NONE : m_pLBEdgeStyle->SelectEntryPos(1); break;
             case css::drawing::LineJoint_MIDDLE : // fallback to mitre, unused value

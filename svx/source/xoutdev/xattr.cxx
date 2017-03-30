@@ -390,7 +390,7 @@ bool XLineStyleItem::GetPresentation
 
     sal_uInt16 nId = 0;
 
-    switch( (sal_uInt16)GetValue() )
+    switch( GetValue() )
     {
         case css::drawing::LineStyle_NONE:
             nId = RID_SVXSTR_INVISIBLE;
@@ -398,6 +398,7 @@ bool XLineStyleItem::GetPresentation
         case css::drawing::LineStyle_SOLID:
             nId = RID_SVXSTR_SOLID;
             break;
+        default: break;
     }
 
     if ( nId )
@@ -707,7 +708,7 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut.WriteInt32( aDash.GetDashStyle() );
+        rOut.WriteInt32( (sal_Int32)aDash.GetDashStyle() );
         rOut.WriteUInt16( aDash.GetDots() );
         rOut.WriteUInt32( aDash.GetDotLen() );
         rOut.WriteUInt16( aDash.GetDashes() );
@@ -2138,7 +2139,7 @@ bool XFillStyleItem::GetPresentation
 
     sal_uInt16 nId = 0;
 
-    switch( (sal_uInt16)GetValue() )
+    switch( GetValue() )
     {
         case drawing::FillStyle_NONE:
             nId = RID_SVXSTR_INVISIBLE;
@@ -2155,6 +2156,7 @@ bool XFillStyleItem::GetPresentation
         case drawing::FillStyle_BITMAP:
             nId = RID_SVXSTR_BITMAP;
             break;
+        default: break;
     }
 
     if ( nId )
@@ -2197,7 +2199,7 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int16)GetValue()).getStr()));
 
     OUString aPresentation;
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
@@ -2449,7 +2451,7 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 
     if (!IsIndex())
     {
-        rOut.WriteInt16( aGradient.GetGradientStyle() );
+        rOut.WriteInt16( (sal_Int16)aGradient.GetGradientStyle() );
 
         sal_uInt16 nTmp;
 
@@ -2936,7 +2938,7 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut.WriteInt16( aHatch.GetHatchStyle() );
+        rOut.WriteInt16( (sal_Int16)aHatch.GetHatchStyle() );
 
         sal_uInt16 nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut.WriteUInt16( nTmp );
