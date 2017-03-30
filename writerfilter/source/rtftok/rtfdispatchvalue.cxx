@@ -793,6 +793,11 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_CELLX:
     {
+        if(m_bNeedTableBreak && !m_bFirstRun)
+          dispatchSymbol(RTF_PAR);
+
+        m_bNeedTableBreak = false;
+
         int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination) ? m_nNestedCurrentCellX : m_nTopLevelCurrentCellX);
         int nCellX = nParam - rCurrentCellX;
         const int COL_DFLT_WIDTH = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.

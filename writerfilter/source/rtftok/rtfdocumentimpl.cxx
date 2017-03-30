@@ -259,6 +259,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bNeedCrOrig(false),
       m_bNeedPar(true),
       m_bNeedFinalPar(false),
+      m_bNeedTableBreak(false),
       m_nNestedCells(0),
       m_nTopLevelCells(0),
       m_nInheritingCells(0),
@@ -628,6 +629,8 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
         Mapper().endSectionGroup();
     m_bNeedPar = false;
     m_bNeedSect = false;
+
+    m_bNeedTableBreak = true;
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
