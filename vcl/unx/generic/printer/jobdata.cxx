@@ -269,7 +269,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
             if( bPrinter )
             {
                 PrinterInfoManager& rManager = PrinterInfoManager::get();
-                const PrinterInfo& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
+                const JobData& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
                 rJobData.m_pParser = PPDParser::getParser( rInfo.m_aDriverName );
                 if( rJobData.m_pParser )
                 {

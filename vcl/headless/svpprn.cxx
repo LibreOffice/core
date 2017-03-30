@@ -37,7 +37,7 @@ using namespace psp;
  *  static helpers
  */
 
-static OUString getPdfDir( const PrinterInfo& rInfo )
+static OUString getPdfDir( const JobData& rInfo )
 {
     OUString aDir;
     sal_Int32 nIndex = 0;
@@ -166,7 +166,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     if( pJobSetup )
     {
         PrinterInfoManager& rManager( PrinterInfoManager::get() );
-        PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
+        JobData aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
         pPrinter->m_aJobData = aInfo;
         pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
 
@@ -216,7 +216,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
     for( ::std::list< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
-        const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
+        const JobData& rInfo( rManager.getPrinterInfo( *it ) );
         // Neuen Eintrag anlegen
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
         pInfo->maPrinterName    = *it;

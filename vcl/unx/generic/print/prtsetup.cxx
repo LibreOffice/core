@@ -71,7 +71,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
+RTSDialog::RTSDialog(const JobData& rJobData, vcl::Window* pParent)
     : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
     , m_pPaperPage(nullptr)
@@ -511,7 +511,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     }
 }
 
-int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
+int SetupPrinterDriver(::psp::JobData& rJobData)
 {
     int nRet = 0;
     ScopedVclPtrInstance< RTSDialog > aDialog(  rJobData, nullptr  );

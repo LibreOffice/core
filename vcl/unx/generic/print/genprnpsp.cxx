@@ -66,7 +66,7 @@ using namespace com::sun::star;
 /*
  *  static helpers
  */
-static OUString getPdfDir( const PrinterInfo& rInfo )
+static OUString getPdfDir( const JobData& rInfo )
 {
     OUString aDir;
     sal_Int32 nIndex = 0;
@@ -371,7 +371,7 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
     if( pJobSetup )
     {
         PrinterInfoManager& rManager( PrinterInfoManager::get() );
-        PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
+        JobData aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
         pPrinter->m_aJobData = aInfo;
         pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
 
@@ -431,7 +431,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
     for( ::std::list< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
-        const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
+        const JobData& rInfo( rManager.getPrinterInfo( *it ) );
         // Neuen Eintrag anlegen
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
         pInfo->maPrinterName    = *it;
@@ -547,7 +547,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
     PrinterInfoManager& rManager = PrinterInfoManager::get();
 
-    PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->GetPrinterName() ) );
+    JobData aInfo( rManager.getPrinterInfo( pJobSetup->GetPrinterName() ) );
     if ( pJobSetup->GetDriverData() )
     {
         SetData( JobSetFlags::ALL, pJobSetup );
@@ -892,7 +892,7 @@ bool PspSalPrinter::StartJob(
     int nMode = 0;
     // check whether this printer is configured as fax
     sal_Int32 nIndex = 0;
-    const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+    const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
@@ -930,7 +930,7 @@ bool PspSalPrinter::EndJob()
 
         if( bSuccess && m_bPdf )
         {
-            const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+            const JobData& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
             bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }

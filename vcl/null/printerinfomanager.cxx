@@ -80,9 +80,9 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
     rList.clear();
 }
 
-const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrinter */ ) const
+const JobData& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrinter */ ) const
 {
-    static PrinterInfo aEmptyInfo;
+    static JobData aEmptyInfo;
 
     (void) this;
 

@@ -35,29 +35,6 @@ namespace psp
 
 class SystemQueueInfo;
 
-struct PrinterInfo : JobData
-{
-    // basename of PPD
-    OUString             m_aDriverName;
-    // can be the queue
-    OUString             m_aLocation;
-    // a user defined comment
-    OUString             m_aComment;
-    // a command line to pipe a PS-file to
-    OUString             m_aCommand;
-    // a command line to pipe a PS-file to in case of direct print
-    OUString             m_aQuickCommand;
-    // a list of special features separated by ',' not used by psprint
-    // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
-    OUString             m_aFeatures;
-    bool                 m_bPapersizeFromSetup;
-
-    PrinterInfo()
-        : JobData()
-        , m_bPapersizeFromSetup(false)
-    {}
-};
-
 class VCL_DLLPUBLIC PrinterInfoManager
 {
 public:
@@ -75,7 +52,7 @@ protected:
     struct WatchFile
     {
         // the file in question
-        OUString         m_aFilePath;
+        OUString                m_aFilePath;
         // the last know modification time or 0, if file did not exist
         TimeValue               m_aModified;
     };
@@ -85,25 +62,25 @@ protected:
     {
         // configuration file containing this printer
         // empty means a freshly added printer that has to be saved yet
-        OUString         m_aFile;
+        OUString                m_aFile;
         // details other config files that have this printer
         // in case of removal all have to be removed
-        std::list< OUString > m_aAlternateFiles;
+        std::list< OUString >   m_aAlternateFiles;
         // group in m_aFile containing the printer
         // this must be unique over all configuration files
         // it usually should be the printer name
-        OString          m_aGroup;
+        OString                 m_aGroup;
         // whether changes need to be saved
         bool                    m_bModified;
         // the corresponding info and job data
-        PrinterInfo             m_aInfo;
+        JobData                 m_aInfo;
     };
 
     std::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
-    PrinterInfo                         m_aGlobalDefaults;
+    JobData                           m_aGlobalDefaults;
     std::list< WatchFile >            m_aWatchFiles;
-    OUString                     m_aDefaultPrinter;
-    OUString                     m_aSystemPrintCommand;
+    OUString                          m_aDefaultPrinter;
+    OUString                          m_aSystemPrintCommand;
 
     std::list< SystemPrintQueue >     m_aSystemPrintQueues;
 
@@ -113,7 +90,7 @@ protected:
     Type                              m_eType;
     bool                              m_bUseIncludeFeature;
     bool                              m_bUseJobPatch;
-    OUString                     m_aSystemDefaultPaper;
+    OUString                          m_aSystemDefaultPaper;
 
     PrinterInfoManager( Type eType = Type::Default );
 
@@ -138,7 +115,7 @@ public:
     void listPrinters( std::list< OUString >& rList ) const;
 
     // gets info about a named printer
-    const PrinterInfo& getPrinterInfo( const OUString& rPrinter ) const;
+    const JobData& getPrinterInfo( const OUString& rPrinter ) const;
 
     // gets the name of the default printer
     const OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }

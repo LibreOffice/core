@@ -186,7 +186,7 @@ void PrinterInfoManager::initialize()
     // have to iterate over all possible files
     // there should be only one global setup section in all
     // available config files
-    m_aGlobalDefaults = PrinterInfo();
+    m_aGlobalDefaults = JobData();
 
     // need a parser for the PPDContext. generic printer should do.
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( "SGENPRT" );
@@ -483,13 +483,13 @@ void PrinterInfoManager::initialize()
 
     // add a default printer for every available print queue
     // merge paper default printer, all else from global defaults
-    PrinterInfo aMergeInfo( m_aGlobalDefaults );
+    JobData aMergeInfo( m_aGlobalDefaults );
     aMergeInfo.m_aDriverName    = "SGENPRT";
     aMergeInfo.m_aFeatures      = "autoqueue";
 
     if( !m_aDefaultPrinter.isEmpty() )
     {
-        PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
+        JobData aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
 
         const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( OUString( "PageSize" ) );
         const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( OUString( "PageSize" ) );
@@ -541,9 +541,9 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
         rList.push_back( it->first );
 }
 
-const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
+const JobData& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
-    static PrinterInfo aEmptyInfo;
+    static JobData aEmptyInfo;
     std::unordered_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
 
     SAL_WARN_IF( it == m_aPrinters.end(), "vcl", "Do not ask for info about nonexistent printers" );
@@ -822,7 +822,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 
 bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
 {
-    const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
+    const JobData& rPrinterInfo( getPrinterInfo( rPrinterName ) );
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
@@ -837,7 +837,7 @@ bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const 
 
 FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
-    const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
+    const JobData&   rPrinterInfo   = getPrinterInfo (rPrintername);
     const OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
     OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);

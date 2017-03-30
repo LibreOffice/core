@@ -331,7 +331,7 @@ void CUPSManager::initialize()
         OUStringBuffer aBuf( 256 );
         aBuf.append( "CUPS:" );
         aBuf.append( aPrinterName );
-        // note: the parser that goes with the PrinterInfo
+        // note: the parser that goes with the JobData
         // is created implicitly by the JobData::operator=()
         // when it detects the NULL ptr m_pParser.
         // if we wanted to fill in the parser here this
@@ -459,7 +459,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                             SAL_INFO("vcl.unx.print",
                                 "   \"" << pDest->options[k].name <<
                                 "\" = \"" << pDest->options[k].value << "\"");
-                        PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
+                        JobData& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
                         // remember the default context for later use
                         PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
@@ -498,7 +498,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
         // get the default PPD
         pNewParser = PPDParser::getParser( "SGENPRT" );
 
-        PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
+        JobData& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
         rInfo.m_pParser = pNewParser;
         rInfo.m_aContext.setParser( pNewParser );
@@ -797,7 +797,7 @@ bool CUPSManager::writePrinterConfig()
         {
             bDestModified = true;
             cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + nit->second;
-            PrinterInfo& rInfo = prt->second.m_aInfo;
+            JobData& rInfo = prt->second.m_aInfo;
 
             // create new option list
             int nNewOptions = 0;

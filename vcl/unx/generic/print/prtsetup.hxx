@@ -42,7 +42,7 @@ class RTSDialog : public TabDialog
     friend class RTSPaperPage;
     friend class RTSDevicePage;
 
-    ::psp::PrinterInfo      m_aJobData;
+    ::psp::JobData          m_aJobData;
 
     // controls
     VclPtr<TabControl>      m_pTabControl;
@@ -64,11 +64,11 @@ class RTSDialog : public TabDialog
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
-    RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent);
+    RTSDialog(const ::psp::JobData& rJobData, vcl::Window* pParent);
     virtual ~RTSDialog() override;
     virtual void dispose() override;
 
-    const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
+    const ::psp::JobData& getSetup() const { return m_aJobData; }
 
     void SetDataModified( bool bModified ) { mbDataModified = bModified; }
     bool GetDataModified() const { return mbDataModified; }
@@ -128,7 +128,7 @@ public:
     sal_uLong getColorDevice();
 };
 
-int SetupPrinterDriver(::psp::PrinterInfo& rJobData);
+int SetupPrinterDriver(::psp::JobData& rJobData);
 
 #endif // _PAD_PRTSETUP_HXX
 

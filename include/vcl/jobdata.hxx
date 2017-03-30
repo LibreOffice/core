@@ -47,6 +47,21 @@ struct VCL_DLLPUBLIC JobData
     const PPDParser*        m_pParser;
     PPDContext              m_aContext;
 
+    // basename of PPD
+    OUString             m_aDriverName;
+    // can be the queue
+    OUString             m_aLocation;
+    // a user defined comment
+    OUString             m_aComment;
+    // a command line to pipe a PS-file to
+    OUString             m_aCommand;
+    // a command line to pipe a PS-file to in case of direct print
+    OUString             m_aQuickCommand;
+    // a list of special features separated by ',' not used by psprint
+    // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
+    OUString             m_aFeatures;
+    bool                 m_bPapersizeFromSetup;
+
     JobData() :
             m_nCopies( 1 ),
             m_bCollate(false),
@@ -59,7 +74,8 @@ struct VCL_DLLPUBLIC JobData
             m_nColorDevice( 0 ),
             m_nPDFDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
-            m_pParser( nullptr ) {}
+            m_pParser( nullptr ),
+            m_bPapersizeFromSetup(false) {}
 
     JobData& operator=(const psp::JobData& rRight);
 
