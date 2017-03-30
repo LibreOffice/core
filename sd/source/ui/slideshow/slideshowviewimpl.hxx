@@ -243,7 +243,7 @@ private:
                                             mpMouseMotionListeners;
     SdDrawDocument*                         mpDoc;
     bool                                    mbIsMouseMotionListener;
-    Rectangle                               maPresentationArea;
+    ::tools::Rectangle                               maPresentationArea;
     AnimationMode                           meAnimationMode;
     bool                                    mbFirstPaint;
     bool                                    mbFullScreen;

@@ -161,7 +161,7 @@ namespace cppcanvas
             {
                 // simple rect case
 
-                const ::Rectangle aLocalClipRect( rOutdevState.clipRect );
+                const ::tools::Rectangle aLocalClipRect( rOutdevState.clipRect );
 
                 if( bRotation )
                 {

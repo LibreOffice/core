@@ -1021,7 +1021,7 @@ void DataBrowser::SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink )
 
 // implementations for ::svt::EditBrowseBox (pure virtual methods)
 void DataBrowser::PaintCell(
-    OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+    OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     Point aPos( rRect.TopLeft());
     aPos.X() += 1;

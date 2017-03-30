@@ -881,7 +881,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             ::std::unique_ptr< OutlinerParaObject > xOutlinerObj;
             if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
                 xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
-            Rectangle aCaptionRect;
+            tools::Rectangle aCaptionRect;
             if( mxAnnotationData->mbUseShapePos )
                 aCaptionRect = pObject->GetLogicRect();
             // remove the shape from the drawing page, this invalidates pObject

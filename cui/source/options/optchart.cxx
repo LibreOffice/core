@@ -45,7 +45,7 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
 
     VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
     xDevice->SetOutputSize(aImageSize);
-    const Rectangle aRect(Point(0, 0), aImageSize);
+    const ::tools::Rectangle aRect(Point(0, 0), aImageSize);
     xDevice->SetFillColor(rColor);
     xDevice->SetLineColor(rStyleSettings.GetDisableColor());
     xDevice->DrawRect(aRect);

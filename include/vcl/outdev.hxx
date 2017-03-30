@@ -146,7 +146,7 @@ namespace o3tl
     template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x2e77> {};
 }
 
-typedef std::vector< Rectangle > MetricVector;
+typedef std::vector< tools::Rectangle > MetricVector;
 
 // OutputDevice-Types
 
@@ -301,7 +301,7 @@ enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
-void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
+void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect );
 
 class OutputDevice;
 
@@ -678,7 +678,7 @@ public:
     bool                        IsClipRegion() const { return mbClipRegion; }
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
-    void                        IntersectClipRegion( const Rectangle& rRect );
+    void                        IntersectClipRegion( const tools::Rectangle& rRect );
     void                        IntersectClipRegion( const vcl::Region& rRegion );
 
     virtual vcl::Region         GetActiveClipRegion() const;
@@ -686,7 +686,7 @@ public:
 protected:
 
     virtual void                InitClipRegion();
-    virtual void                ClipToPaintRegion    ( Rectangle& rDstRect );
+    virtual void                ClipToPaintRegion    ( tools::Rectangle& rDstRect );
 
 private:
 
@@ -715,8 +715,8 @@ public:
 
 public:
 
-    void                        DrawRect( const Rectangle& rRect );
-    void                        DrawRect( const Rectangle& rRect,
+    void                        DrawRect( const tools::Rectangle& rRect );
+    void                        DrawRect( const tools::Rectangle& rRect,
                                           sal_uLong nHorzRount, sal_uLong nVertRound );
 
     /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
@@ -727,7 +727,7 @@ public:
                                     Color aStart = Color(COL_WHITE),
                                     Color aEnd = Color(COL_BLACK));
 
-    void                        DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags );
+    void                        DrawGrid( const tools::Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags );
 
     ///@}
 
@@ -735,7 +735,7 @@ public:
      */
     ///@{
 public:
-    void Invert( const Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
+    void Invert( const tools::Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
     void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
     ///@}
 
@@ -865,18 +865,18 @@ private:
 
 public:
 
-    void                        DrawEllipse( const Rectangle& rRect );
+    void                        DrawEllipse( const tools::Rectangle& rRect );
 
     void                        DrawArc(
-                                    const Rectangle& rRect,
+                                    const tools::Rectangle& rRect,
                                     const Point& rStartPt, const Point& rEndPt );
 
     void                        DrawPie(
-                                    const Rectangle& rRect,
+                                    const tools::Rectangle& rRect,
                                     const Point& rStartPt, const Point& rEndPt );
 
     void                        DrawChord(
-                                    const Rectangle& rRect,
+                                    const tools::Rectangle& rRect,
                                     const Point& rStartPt, const Point& rEndPt );
 
     ///@}
@@ -887,11 +887,11 @@ public:
     ///@{
 
 public:
-    void                        DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void                        DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
     void                        AddGradientActions(
-                                    const Rectangle& rRect,
+                                    const tools::Rectangle& rRect,
                                     const Gradient& rGradient,
                                     GDIMetaFile& rMtf );
 
@@ -903,14 +903,14 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawLinearGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
 
     SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const Rectangle& rRect, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const Rectangle& rRect, const Gradient& rGradient );
+    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
+    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
 
-    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
+    SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex=false );
 
     SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
     SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
@@ -939,7 +939,7 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void         CalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
     SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
@@ -949,10 +949,10 @@ private:
     ///@{
 
 public:
-    void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+    void                        DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper );
 
     void                        Erase();
-    void                        Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
+    void                        Erase( const tools::Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
 protected:
     void                        DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
@@ -974,12 +974,12 @@ public:
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                           MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
 
-    void                        DrawText( const Rectangle& rRect,
+    void                        DrawText( const tools::Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
                                           MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
                                           vcl::ITextLayout* _pTextLayout = nullptr );
 
-    static void                 ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
+    static void                 ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
@@ -1008,7 +1008,7 @@ public:
 
     bool                        ImplDrawRotateText( SalLayout& );
 
-    Rectangle                   GetTextRect( const Rectangle& rRect,
+    tools::Rectangle                   GetTextRect( const tools::Rectangle& rRect,
                                              const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
                                              TextRectInfo* pInfo = nullptr,
                                              const vcl::ITextLayout* _pTextLayout = nullptr ) const;
@@ -1062,11 +1062,11 @@ public:
         Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetOutputSize()));
         </code>
     */
-    bool                        GetTextBoundRect( Rectangle& rRect,
+    bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
 
-    Rectangle                   ImplGetTextBoundRect( const SalLayout& );
+    tools::Rectangle                   ImplGetTextBoundRect( const SalLayout& );
 
     bool                        GetTextOutline( tools::PolyPolygon&,
                                                 const OUString& rStr,
@@ -1102,7 +1102,7 @@ public:
         constituent polygons. Parameter semantics fully compatible to
         DrawText().
      */
-    void                        AddTextRectActions( const Rectangle& rRect,
+    void                        AddTextRectActions( const tools::Rectangle& rRect,
                                                     const OUString&  rOrigStr,
                                                     DrawTextFlags    nStyle,
                                                     GDIMetaFile&     rMtf );
@@ -1225,7 +1225,7 @@ public:
      */
     SystemFontData              GetSysFontData( int nFallbacklevel ) const;
 
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2,
+    SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, tools::Rectangle& rRect1, tools::Rectangle& rRect2,
                                                      long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE static FontEmphasisMark
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
@@ -1294,7 +1294,7 @@ private:
     SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
                                                        long nMaxWidth, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
 
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );
     ///@}
 
@@ -1311,7 +1311,7 @@ public:
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
-    SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
+    SAL_DLLPRIVATE void         ReMirror( tools::Rectangle &rRect ) const;
     SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
@@ -1505,7 +1505,7 @@ private:
 
     SAL_DLLPRIVATE void DrawDeviceAlphaBitmapSlowPath(
                                 const Bitmap& rBitmap, const AlphaMask& rAlpha,
-                                Rectangle aDstRect, Rectangle aBmpRect,
+                                tools::Rectangle aDstRect, tools::Rectangle aBmpRect,
                                 Size& aOutSz, Point& aOutPt);
 
 
@@ -1521,7 +1521,7 @@ private:
                                     const sal_Int32     nDstHeight,
                                     const sal_Int32     nOffX,
                                     const sal_Int32     nDstWidth,
-                                    const Rectangle&    aBmpRect,
+                                    const tools::Rectangle&    aBmpRect,
                                     const Size&         aOutSz,
                                     const bool          bHMirr,
                                     const bool          bVMirr,
@@ -1532,7 +1532,7 @@ private:
                                     Bitmap&             aBmp,
                                     BitmapReadAccess*   pP,
                                     BitmapReadAccess*   pA,
-                                    const Rectangle&    aDstRect,
+                                    const tools::Rectangle&    aDstRect,
                                     const sal_Int32     nOffY,
                                     const sal_Int32     nDstHeight,
                                     const sal_Int32     nOffX,
@@ -1689,7 +1689,7 @@ public:
 
     Point                       LogicToPixel( const Point& rLogicPt ) const;
     Size                        LogicToPixel( const Size& rLogicSize ) const;
-    Rectangle                   LogicToPixel( const Rectangle& rLogicRect ) const;
+    tools::Rectangle                   LogicToPixel( const tools::Rectangle& rLogicRect ) const;
     tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly ) const;
     tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
@@ -1698,7 +1698,7 @@ public:
                                               const MapMode& rMapMode ) const;
     Size                        LogicToPixel( const Size& rLogicSize,
                                               const MapMode& rMapMode ) const;
-    Rectangle                   LogicToPixel( const Rectangle& rLogicRect,
+    tools::Rectangle                   LogicToPixel( const tools::Rectangle& rLogicRect,
                                               const MapMode& rMapMode ) const;
     tools::Polygon              LogicToPixel( const tools::Polygon& rLogicPoly,
                                               const MapMode& rMapMode ) const;
@@ -1707,7 +1707,7 @@ public:
 
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
-    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect ) const;
+    tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
     tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
@@ -1716,7 +1716,7 @@ public:
                                               const MapMode& rMapMode ) const;
     Size                        PixelToLogic( const Size& rDeviceSize,
                                               const MapMode& rMapMode ) const;
-    Rectangle                   PixelToLogic( const Rectangle& rDeviceRect,
+    tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect,
                                               const MapMode& rMapMode ) const;
     tools::Polygon              PixelToLogic( const tools::Polygon& rDevicePoly,
                                               const MapMode& rMapMode ) const;
@@ -1731,7 +1731,7 @@ public:
     Size                        LogicToLogic( const Size&       rSzSource,
                                               const MapMode*    pMapModeSource,
                                               const MapMode*    pMapModeDest ) const;
-    Rectangle                   LogicToLogic( const Rectangle&  rRectSource,
+    tools::Rectangle                   LogicToLogic( const tools::Rectangle&  rRectSource,
                                               const MapMode*    pMapModeSource,
                                               const MapMode*    pMapModeDest ) const;
     static Point                LogicToLogic( const Point&      rPtSource,
@@ -1740,7 +1740,7 @@ public:
     static Size                 LogicToLogic( const Size&       rSzSource,
                                               const MapMode&    rMapModeSource,
                                               const MapMode&    rMapModeDest );
-    static Rectangle            LogicToLogic( const Rectangle&  rRectSource,
+    static tools::Rectangle            LogicToLogic( const tools::Rectangle&  rRectSource,
                                               const MapMode&    rMapModeSource,
                                               const MapMode&    rMapModeDest );
     static long                 LogicToLogic( long              nLongSource,
@@ -1761,7 +1761,7 @@ public:
 
      @returns Rectangle based on physical device pixel coordinates and units.
      */
-    SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
+    SAL_DLLPRIVATE tools::Rectangle    ImplLogicToDevicePixel( const tools::Rectangle& rLogicRect ) const;
 
     /** Convert a logical point to a physical point on the device.
 
@@ -1791,7 +1791,7 @@ protected:
      *
      * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
      */
-    virtual void LogicInvalidate(const Rectangle* pRectangle) { (void)pRectangle; }
+    virtual void LogicInvalidate(const tools::Rectangle* pRectangle) { (void)pRectangle; }
 
 private:
 
@@ -1880,7 +1880,7 @@ private:
 
      @returns Rectangle based on logical coordinates and units.
      */
-    SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const;
+    SAL_DLLPRIVATE tools::Rectangle    ImplDevicePixelToLogic( const tools::Rectangle& rPixelRect ) const;
 
     /** Convert a logical polygon to a polygon in physical device pixel units.
 
@@ -1944,7 +1944,7 @@ public:
      */
     bool                        HitTestNativeScrollbar(
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     const Point& aPos,
                                     bool& rIsInside ) const;
 
@@ -1953,7 +1953,7 @@ public:
     bool                        DrawNativeControl(
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption );
@@ -1963,12 +1963,12 @@ public:
     bool                        GetNativeControlRegion(
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
-                                    Rectangle &rNativeBoundingRegion,
-                                    Rectangle &rNativeContentRegion ) const;
+                                    tools::Rectangle &rNativeBoundingRegion,
+                                    tools::Rectangle &rNativeContentRegion ) const;
     ///@}
 
     /** @name EPS functions

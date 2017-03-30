@@ -94,7 +94,7 @@ enum class IcnViewFieldType
 struct LocalFocus
 {
     bool        bOn;
-    Rectangle   aRect;
+    tools::Rectangle   aRect;
     Color       aPenColor;
 
     LocalFocus() { bOn = false; }
@@ -159,8 +159,8 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<ScrollBar>       aVerSBar;
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
-    Rectangle               aCurSelectionRect;
-    std::vector<Rectangle*> aSelectedRectList;
+    tools::Rectangle               aCurSelectionRect;
+    std::vector<tools::Rectangle*> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place
     Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
@@ -212,7 +212,7 @@ class SvxIconChoiceCtrl_Impl
     void                ShowCursor( bool bShow );
 
     void                ImpArrange( bool bKeepPredecessors );
-    void                AdjustVirtSize( const Rectangle& );
+    void                AdjustVirtSize( const tools::Rectangle& );
     void                ResetVirtSize();
     void                CheckScrollBars();
 
@@ -251,7 +251,7 @@ class SvxIconChoiceCtrl_Impl
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
                             bool bAdd,
-                            std::vector<Rectangle*>* pOtherRects
+                            std::vector<tools::Rectangle*>* pOtherRects
                         );
 
     void                SelectRange(
@@ -260,7 +260,7 @@ class SvxIconChoiceCtrl_Impl
                             bool bAdd
                         );
 
-    void                AddSelectedRect( const Rectangle& );
+    void                AddSelectedRect( const tools::Rectangle& );
     void                AddSelectedRect(
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2
@@ -268,9 +268,9 @@ class SvxIconChoiceCtrl_Impl
 
     void                ClearSelectedRectList();
     void                ClearColumnList();
-    Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
+    tools::Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
-    void                ClipAtVirtOutRect( Rectangle& rRect ) const;
+    void                ClipAtVirtOutRect( tools::Rectangle& rRect ) const;
     sal_uLong           GetPredecessorGrid( const Point& rDocPos) const;
 
     void                InitPredecessors();
@@ -297,7 +297,7 @@ class SvxIconChoiceCtrl_Impl
 
                         DECL_LINK(TextEditEndedHdl, LinkParamNone*, void);
 
-    void                ShowFocus ( Rectangle& rRect );
+    void                ShowFocus ( tools::Rectangle& rRect );
     void                DrawFocusRect(vcl::RenderContext& rRenderContext);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
@@ -330,7 +330,7 @@ public:
                             bool bAddToSelection = false,
                             bool bSyncPaint = false
                         );
-    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void                Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     bool                MouseButtonDown( const MouseEvent& );
     bool                MouseButtonUp( const MouseEvent& );
     bool                MouseMove( const MouseEvent&);
@@ -372,9 +372,9 @@ public:
                             long nSetMaxVirtHeight
                         );
 
-    Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
-    Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );
-    Rectangle           CalcTextRect(
+    tools::Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
+    tools::Rectangle           CalcBmpRect( SvxIconChoiceCtrlEntry*, const Point* pPos = nullptr );
+    tools::Rectangle           CalcTextRect(
                             SvxIconChoiceCtrlEntry*,
                             const Point* pPos = nullptr,
                             bool bForInplaceEdit = false,
@@ -392,18 +392,18 @@ public:
                         );
     // recalculates all invalid BoundRects
     void                RecalcAllBoundingRectsSmart();
-    const Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
-    void                InvalidateBoundingRect( Rectangle& rRect )
+    const tools::Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
+    void                InvalidateBoundingRect( tools::Rectangle& rRect )
                         {
                             rRect.Right() = LONG_MAX;
                             bBoundRectsDirty = true;
                         }
-    static bool         IsBoundingRectValid( const Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
+    static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
-    void                PaintEmphasis(const Rectangle& rRect1, bool bSelected,
+    void                PaintEmphasis(const tools::Rectangle& rRect1, bool bSelected,
                                       bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext );
 
-    void                PaintItem(const Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
+    void                PaintItem(const tools::Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
                             sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
@@ -420,19 +420,19 @@ public:
     void                HideDDIcon();
 
     static bool         IsOver(
-                            std::vector<Rectangle*>* pSelectedRectList,
-                            const Rectangle& rEntryBoundRect
+                            std::vector<tools::Rectangle*>* pSelectedRectList,
+                            const tools::Rectangle& rEntryBoundRect
                         );
 
     void                SelectRect(
-                            const Rectangle&,
+                            const tools::Rectangle&,
                             bool bAdd,
-                            std::vector<Rectangle*>* pOtherRects
+                            std::vector<tools::Rectangle*>* pOtherRects
                         );
 
     bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
     void               MakeVisible(
-                            const Rectangle& rDocPos,
+                            const tools::Rectangle& rDocPos,
                             bool bInScrollBarEvent=false
                         );
 
@@ -458,7 +458,7 @@ public:
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
     void                InitSettings();
-    Rectangle           GetOutputRect() const;
+    tools::Rectangle           GetOutputRect() const;
 
     void                SetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry* pPredecessor);
     // only delivers valid results when in AutoArrange mode!
@@ -473,7 +473,7 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bKeepHighlightFlags
                         );
-    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect);
+    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect);
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
 
@@ -537,7 +537,7 @@ typedef sal_uLong GridId;
 
 class IcnGridMap_Impl
 {
-    Rectangle               _aLastOccupiedGrid;
+    tools::Rectangle               _aLastOccupiedGrid;
     SvxIconChoiceCtrl_Impl* _pView;
     bool    *               _pGridMap;
     sal_uInt16              _nGridCols, _nGridRows;
@@ -566,7 +566,7 @@ public:
                                 _pGridMap[ nId ] = true;
                         }
 
-    Rectangle           GetGridRect( GridId );
+    tools::Rectangle           GetGridRect( GridId );
     void                GetGridCoord( GridId, sal_uInt16& rGridX, sal_uInt16& rGridY );
     static sal_uLong    GetGridCount(
                             const Size& rSizePixel,

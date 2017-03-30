@@ -116,7 +116,7 @@ public:
 
     /** Call this method when the VisArea has changed.
     */
-    void FireVisAreaChanged (const Rectangle& rVisArea) throw();
+    void FireVisAreaChanged (const ::tools::Rectangle& rVisArea) throw();
 
     /** Call this method when the selection has changed.
     */
@@ -288,7 +288,7 @@ private:
     */
     ViewShellBase* mpBase;
 
-    Rectangle maLastVisArea;
+    ::tools::Rectangle maLastVisArea;
     ::tools::WeakReference<SdrPage> mpCurrentPage;
     bool mbMasterPageMode;
     bool mbLayerMode;

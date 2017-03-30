@@ -362,7 +362,7 @@ public:
     // static helpers ---------------------------------------------------------
 
     /** Inverts a rectangle in the specified output device. */
-    static void                 ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect );
+    static void                 ImplInvertRect( OutputDevice& rOutDev, const tools::Rectangle& rRect );
 
     /** Returns direction code for the keys LEFT, RIGHT, HOME, END.
         @param bHomeEnd  false = ignore HOME and END key. */

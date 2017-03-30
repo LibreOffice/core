@@ -235,7 +235,7 @@ private:
         const Context& rContext);
 
     void ShowPopupMenu (
-        const Rectangle& rButtonBox,
+        const tools::Rectangle& rButtonBox,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     VclPtr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;

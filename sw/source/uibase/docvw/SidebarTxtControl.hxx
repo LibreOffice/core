@@ -39,9 +39,9 @@ class SidebarTextControl : public Control
         SwPostItMgr& mrPostItMgr;
 
     protected:
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         /// @see OutputDevice::LogicInvalidate().
-        void LogicInvalidate(const Rectangle* pRectangle) override;
+        void LogicInvalidate(const tools::Rectangle* pRectangle) override;
         virtual void    Command( const CommandEvent& rCEvt ) override;
         virtual void    LoseFocus() override;
         virtual void    RequestHelp(const HelpEvent &rEvt) override;

@@ -88,7 +88,7 @@ SdrAttrObj::~SdrAttrObj()
 {
 }
 
-const Rectangle& SdrAttrObj::GetSnapRect() const
+const tools::Rectangle& SdrAttrObj::GetSnapRect() const
 {
     if(bSnapRectDirty)
     {
@@ -125,7 +125,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 
     if(bDataChg)
     {
-        Rectangle aBoundRect = GetLastBoundRect();
+        tools::Rectangle aBoundRect = GetLastBoundRect();
         SetBoundRectDirty();
         SetRectsDirty(true);
 

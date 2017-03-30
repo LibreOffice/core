@@ -60,12 +60,12 @@ class GridWindow : public vcl::Window
         bool isHit(vcl::Window& rWin, const Point& rPos)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
-            const Rectangle aTarget(maPos - aOffset, maPos + aOffset);
+            const tools::Rectangle aTarget(maPos - aOffset, maPos + aOffset);
             return aTarget.IsInside(rPos);
         }
     };
 
-    Rectangle       m_aGridArea;
+    tools::Rectangle       m_aGridArea;
 
     double          m_fMinX;
     double          m_fMinY;
@@ -132,7 +132,7 @@ public:
 
     void ChangeMode(ResetType nType);
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 };
 
 GridWindow::GridWindow(vcl::Window* pParent)
@@ -528,7 +528,7 @@ void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
     }
 }
 
-void GridWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void GridWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
     drawGrid(rRenderContext);

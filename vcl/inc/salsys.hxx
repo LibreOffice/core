@@ -63,7 +63,7 @@ public:
                            else position relative to whole display
                  size: size of the screen
     */
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
+    virtual tools::Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
 
     /*  Shows a native message box with the specified title, message and button
         combination.

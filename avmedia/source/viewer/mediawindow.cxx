@@ -122,7 +122,7 @@ Size MediaWindow::getPreferredSize() const
 }
 
 
-void MediaWindow::setPosSize( const Rectangle& rNewRect )
+void MediaWindow::setPosSize( const tools::Rectangle& rNewRect )
 {
     mpImpl->setPosSize( rNewRect );
 }

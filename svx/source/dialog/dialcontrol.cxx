@@ -86,7 +86,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
 
         long nX = static_cast< long >( mnCenterX - fWidth * fCos - fHeight * fSin );
         long nY = static_cast< long >( mnCenterY + fWidth * fSin - fHeight * fCos );
-        Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
+        tools::Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
         DrawText( aRect, rText, mbEnabled ? DrawTextFlags::NONE : DrawTextFlags::Disable );
     }
     else
@@ -110,7 +110,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     long nX = mnCenterX - static_cast< long >( (DIAL_OUTER_WIDTH / 2 - mnCenterX) * fCos );
     long nY = mnCenterY - static_cast< long >( (mnCenterY - DIAL_OUTER_WIDTH / 2) * fSin );
     long nSize = bMain ? (DIAL_OUTER_WIDTH / 4) : (DIAL_OUTER_WIDTH / 2 - 1);
-    DrawEllipse( Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
+    DrawEllipse( tools::Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
 }
 
 const Color& DialControlBmp::GetBackgroundColor() const
@@ -213,7 +213,7 @@ void DialControlBmp::DrawBackground()
 
     SetLineColor();
     SetFillColor( GetBackgroundColor() );
-    DrawEllipse( Rectangle( maRect.Left() + DIAL_OUTER_WIDTH, maRect.Top() + DIAL_OUTER_WIDTH,
+    DrawEllipse( tools::Rectangle( maRect.Left() + DIAL_OUTER_WIDTH, maRect.Top() + DIAL_OUTER_WIDTH,
         maRect.Right() - DIAL_OUTER_WIDTH, maRect.Bottom() - DIAL_OUTER_WIDTH ) );
 }
 
@@ -273,7 +273,7 @@ void DialControl::Resize()
     InvalidateControl();
 }
 
-void DialControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void DialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Point aPos;
     rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));

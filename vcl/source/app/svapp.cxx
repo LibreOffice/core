@@ -1276,14 +1276,14 @@ unsigned int Application::GetDisplayExternalScreen()
     return nExternal;
 }
 
-Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
+tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayScreenPosSizePixel( nScreen ) : Rectangle();
+    return pSys ? pSys->GetDisplayScreenPosSizePixel( nScreen ) : tools::Rectangle();
 }
 
 namespace {
-unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
+unsigned long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
 {
     const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
                        (i_rRect.Top() + i_rRect.Bottom())/ 2 );
@@ -1293,7 +1293,7 @@ unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
 }
 }
 
-unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
+unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
 {
     if( !IsUnifiedDisplay() )
         return GetDisplayBuiltInScreen();
@@ -1303,12 +1303,12 @@ unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
     unsigned long nOverlap = 0;
     for( unsigned int i = 0; i < nScreens; i++ )
     {
-        const Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
         // if a screen contains the rectangle completely it is obviously the best screen
         if( aCurScreenRect.IsInside( i_rRect ) )
             return i;
         // next the screen which contains most of the area of the rect is the best
-        Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
+        tools::Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
         if( ! aIntersection.IsEmpty() )
         {
             const unsigned long nCurOverlap( aIntersection.GetWidth() * aIntersection.GetHeight() );
@@ -1328,7 +1328,7 @@ unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
     unsigned long nDist = ULONG_MAX;
     for( unsigned int i = 0; i < nScreens; i++ )
     {
-        const Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
+        const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
         const unsigned long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
         if( nCurDist < nDist )
         {

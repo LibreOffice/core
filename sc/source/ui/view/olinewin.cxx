@@ -136,7 +136,7 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
 
 void ScOutlineWindow::ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd )
 {
-    Rectangle aRect( GetRectangle( 0, nEntryStart, GetOutputSizeLevel() - 1, nEntryEnd ) );
+    tools::Rectangle aRect( GetRectangle( 0, nEntryStart, GetOutputSizeLevel() - 1, nEntryEnd ) );
     if ( mbHoriz )
         Scroll( nEntryDiff, 0, aRect );
     else
@@ -210,10 +210,10 @@ Point ScOutlineWindow::GetPoint( long nLevelPos, long nEntryPos ) const
     return mbHoriz ? Point( nEntryPos, nLevelPos ) : Point( nLevelPos, nEntryPos );
 }
 
-Rectangle ScOutlineWindow::GetRectangle(
+tools::Rectangle ScOutlineWindow::GetRectangle(
         long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd ) const
 {
-    return Rectangle( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
+    return tools::Rectangle( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
 long ScOutlineWindow::GetOutputSizeLevel() const
@@ -510,7 +510,7 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
-    SetClipRegion( vcl::Region(Rectangle(
+    SetClipRegion( vcl::Region(tools::Rectangle(
         GetPoint( 0, mnMainFirstPos ),
         GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ))));
 }
@@ -541,7 +541,7 @@ void ScOutlineWindow::DrawImageRel(long nLevelPos, long nEntryPos, sal_uInt16 nI
     SetLineColor();
     SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
-    DrawRect( Rectangle( aPos, rImage.GetSizePixel() ) );
+    DrawRect( tools::Rectangle( aPos, rImage.GetSizePixel() ) );
     DrawImage( aPos, rImage );
 }
 
@@ -574,7 +574,7 @@ void ScOutlineWindow::ShowFocus()
             if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
             {
                 aPos += Point( 1, 1 );
-                maFocusRect = Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
+                maFocusRect = tools::Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
                 bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
                 if ( bClip )
                     SetEntryAreaClipRegion();
@@ -600,7 +600,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
+void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
     long nEntriesSign = mbMirrorEntries ? -1 : 1;
     long nLevelsSign  = mbMirrorLevels  ? -1 : 1;

@@ -245,7 +245,7 @@ void ScSpellDialogChildWindow::Init()
     mpViewShell->MakeEditView( mxEngine.get(), nCol, nRow );
     EditView* pEditView = mpViewData->GetEditView( mpViewData->GetActivePart() );
     mpViewData->SetSpellingView( pEditView );
-    Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
+    tools::Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
     mxEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     mxEngine->EnableUndo( false );

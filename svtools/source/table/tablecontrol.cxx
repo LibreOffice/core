@@ -498,7 +498,7 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+    tools::Rectangle TableControl::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
     {
         return Control::GetWindowExtentsRelative( pRelativeWindow );
     }
@@ -600,7 +600,7 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
+    tools::Rectangle TableControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
     {
         (void)_nRow;
         (void)_nColumnPos;
@@ -616,25 +616,25 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar )
+    tools::Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar )
     {
         return m_pImpl->calcHeaderRect( !_bIsColumnBar );
     }
 
 
-    Rectangle TableControl::calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos )
+    tools::Rectangle TableControl::calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos )
     {
         return m_pImpl->calcHeaderCellRect( _bIsColumnBar, nPos );
     }
 
 
-    Rectangle TableControl::calcTableRect()
+    tools::Rectangle TableControl::calcTableRect()
     {
         return m_pImpl->calcTableRect();
     }
 
 
-    Rectangle TableControl::calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos )
+    tools::Rectangle TableControl::calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos )
     {
         return m_pImpl->calcCellRect( _nRowPos, _nColPos );
     }

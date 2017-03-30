@@ -1041,7 +1041,7 @@ void Theme::ProcessNewValue (
             awt::Rectangle aBox;
             if (rValue >>= aBox)
             {
-                maRectangles[nIndex] = Rectangle(
+                maRectangles[nIndex] = tools::Rectangle(
                     aBox.X,
                     aBox.Y,
                     aBox.Width,

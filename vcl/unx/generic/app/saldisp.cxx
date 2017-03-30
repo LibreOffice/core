@@ -2251,7 +2251,7 @@ void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nW
         }
     }
     m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
-    m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
+    m_aXineramaScreens.push_back( tools::Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
 }
 
 void SalDisplay::InitXinerama()
@@ -2270,7 +2270,7 @@ void SalDisplay::InitXinerama()
         {
             if( nFramebuffers > 1 )
             {
-                m_aXineramaScreens = std::vector<Rectangle>();
+                m_aXineramaScreens = std::vector<tools::Rectangle>();
                 m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
                 for( int i = 0; i < nFramebuffers; i++ )
                 {

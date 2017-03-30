@@ -85,10 +85,10 @@ public:
 
     void RequestRepaint();
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
-    void RequestRepaint (const Rectangle& rRepaintBox);
+    void RequestRepaint (const ::tools::Rectangle& rRepaintBox);
     void RequestRepaint (const vcl::Region& rRepaintRegion);
 
-    Rectangle GetModelArea();
+    ::tools::Rectangle GetModelArea();
 
     /** Return the index of the page that is rendered at the given position.
         @param rPosition
@@ -129,7 +129,7 @@ public:
         OutputDevice* pDevice,
         const vcl::Region& rPaintArea,
         sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
-    void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
+    void Paint (OutputDevice& rDevice, const ::tools::Rectangle& rRepaintArea);
 
     virtual void ConfigurationChanged (
         utl::ConfigurationBroadcaster* pBroadcaster,

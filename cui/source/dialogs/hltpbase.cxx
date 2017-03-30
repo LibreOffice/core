@@ -200,12 +200,12 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
     static_cast<vcl::Window*>(mpMarkWnd)->Show();
 
     // Size of dialog-window in screen pixels
-    Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( nullptr ) );
+    ::tools::Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( nullptr ) );
     Point aDlgPos ( aDlgRect.TopLeft() );
     Size aDlgSize ( mpDialog->GetSizePixel () );
 
     // Absolute size of the screen
-    Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
+    ::tools::Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
 
     // Size of Extrawindow
     Size aExtraWndSize( mpMarkWnd->GetSizePixel () );

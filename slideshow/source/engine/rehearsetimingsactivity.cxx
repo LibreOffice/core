@@ -162,7 +162,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     blackHole->EnableOutput(false);
     blackHole->SetFont( maFont );
     blackHole->SetMapMode( MapUnit::MapPixel );
-    Rectangle rect;
+    tools::Rectangle rect;
     const FontMetric metric( blackHole->GetFontMetric() );
     blackHole->GetTextBoundRect( rect, "XX:XX:XX" );
     maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
@@ -439,7 +439,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     blackHole->EnableOutput(false);
     blackHole->SetMapMode( MapUnit::MapPixel );
     blackHole->SetFont( maFont );
-    Rectangle rect = Rectangle( 0,0,
+    tools::Rectangle rect = tools::Rectangle( 0,0,
                                 maSpriteSizePixel.getX(),
                                 maSpriteSizePixel.getY());
     if (mbDrawPressed)

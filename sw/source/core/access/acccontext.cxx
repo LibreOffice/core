@@ -853,7 +853,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
     }
 
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip relative to document root
-    Rectangle aPixBounds( 0, 0, 0, 0 );
+    tools::Rectangle aPixBounds( 0, 0, 0, 0 );
     if( GetFrame()->IsPageFrame() &&
         static_cast < const SwPageFrame * >( GetFrame() )->IsEmptyPage() )
     {

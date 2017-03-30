@@ -462,7 +462,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         if ( aVirDev->GetOutputSizePixel() != aVirSize )
             aVirDev->SetOutputSizePixel( aVirSize );
         aVirDev->SetFillColor( aColorDist );
-        aVirDev->DrawRect( Rectangle( Point(), aSize ) );
+        aVirDev->DrawRect( tools::Rectangle( Point(), aSize ) );
 
         aVirDev->SetFillColor( aColor1 );
 
@@ -858,7 +858,7 @@ void FontNameBox::ImplCalcUserItemSize()
 
 namespace
 {
-    long shrinkFontToFit(OUString &rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
+    long shrinkFontToFit(OUString &rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, tools::Rectangle &rTextRect)
     {
         long nWidth = 0;
 
@@ -910,7 +910,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         pRenderContext->SetTextColor(aTextColor);
 
         bool bUsingCorrectFont = true;
-        Rectangle aTextRect;
+        tools::Rectangle aTextRect;
 
         // Preview the font name
         OUString sFontName = rFontMetric.GetFamilyName();

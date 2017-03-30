@@ -77,7 +77,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
     awt::Rectangle aBounds;
     if (pWin)
     {
-        Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
         aBounds.X       = aRect.Left();
         aBounds.Y       = aRect.Top();
         aBounds.Width   = aRect.GetWidth();
@@ -85,7 +85,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
         vcl::Window* pParent = pWin->GetAccessibleParentWindow();
         if (pParent)
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
+            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             awt::Point aParentScreenLoc( aParentRect.Left(), aParentRect.Top() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -101,7 +101,7 @@ static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
     awt::Point aPos;
     if (pWin)
     {
-        Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = pWin->GetWindowExtentsRelative( nullptr );
         aPos.X = aRect.Left();
         aPos.Y = aRect.Top();
     }
@@ -549,7 +549,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             aTLPos.X() -= 0;
             Size  aSize( pNode->GetSize() );
 
-            Rectangle aRect( aTLPos, aSize );
+            tools::Rectangle aRect( aTLPos, aSize );
             if (aRect.IsInside( aPos ))
             {
                 OSL_ENSURE( pNode->IsVisible(), "node is not a leaf" );
@@ -813,14 +813,14 @@ bool SmViewForwarder::IsValid() const
     return rEditAcc.GetEditView() != nullptr;
 }
 
-Rectangle SmViewForwarder::GetVisArea() const
+tools::Rectangle SmViewForwarder::GetVisArea() const
 {
     EditView *pEditView = rEditAcc.GetEditView();
     OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev && pEditView)
     {
-        Rectangle aVisArea = pEditView->GetVisArea();
+        tools::Rectangle aVisArea = pEditView->GetVisArea();
 
         // figure out map mode from edit engine
         EditEngine* pEditEngine = pEditView->GetEditEngine();
@@ -836,7 +836,7 @@ Rectangle SmViewForwarder::GetVisArea() const
         }
     }
 
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
@@ -1176,9 +1176,9 @@ EBulletInfo SmTextForwarder::GetBulletInfo( sal_Int32 /*nPara*/ ) const
     return EBulletInfo();
 }
 
-Rectangle SmTextForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
+tools::Rectangle SmTextForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    Rectangle aRect(0,0,0,0);
+    tools::Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
 
     if (pEditEngine)
@@ -1200,9 +1200,9 @@ Rectangle SmTextForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) co
     return aRect;
 }
 
-Rectangle SmTextForwarder::GetParaBounds( sal_Int32 nPara ) const
+tools::Rectangle SmTextForwarder::GetParaBounds( sal_Int32 nPara ) const
 {
-    Rectangle aRect(0,0,0,0);
+    tools::Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
 
     if (pEditEngine)
@@ -1210,7 +1210,7 @@ Rectangle SmTextForwarder::GetParaBounds( sal_Int32 nPara ) const
         const Point aPnt = pEditEngine->GetDocPosTopLeft( nPara );
         const sal_uLong nWidth = pEditEngine->CalcTextWidth();
         const sal_uLong nHeight = pEditEngine->GetTextHeight( nPara );
-        aRect = Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight );
+        aRect = tools::Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight );
     }
 
     return aRect;
@@ -1417,16 +1417,16 @@ bool SmEditViewForwarder::IsValid() const
     return rEditAcc.GetEditView() != nullptr;
 }
 
-Rectangle SmEditViewForwarder::GetVisArea() const
+tools::Rectangle SmEditViewForwarder::GetVisArea() const
 {
-    Rectangle aRect(0,0,0,0);
+    tools::Rectangle aRect(0,0,0,0);
 
     EditView *pEditView = rEditAcc.GetEditView();
     OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
 
     if( pOutDev && pEditView)
     {
-        Rectangle aVisArea = pEditView->GetVisArea();
+        tools::Rectangle aVisArea = pEditView->GetVisArea();
 
         // figure out map mode from edit engine
         EditEngine* pEditEngine = pEditView->GetEditEngine();

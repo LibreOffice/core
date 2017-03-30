@@ -3159,7 +3159,7 @@ bool SwXTextDocument::isMimeTypeSupported()
     return aDataHelper.GetXTransferable().is() && SwTransferable::IsPaste(*pWrtShell, aDataHelper);
 }
 
-void SwXTextDocument::setClientVisibleArea(const Rectangle& rRectangle)
+void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 {
     SwView* pView = pDocShell->GetView();
     if (!pView)
@@ -3242,7 +3242,7 @@ OUString SwXTextDocument::getPostIts()
 
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();
-        const Rectangle aSVRect(aRect.Pos().getX(),
+        const tools::Rectangle aSVRect(aRect.Pos().getX(),
                                 aRect.Pos().getY(),
                                 aRect.Pos().getX() + aRect.SSize().Width(),
                                 aRect.Pos().getY() + aRect.SSize().Height());

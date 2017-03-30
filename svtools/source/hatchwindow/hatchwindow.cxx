@@ -67,7 +67,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     //pHatchWindow->Show();
 }
 
-void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
+void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
 {
     if ( m_xController.is() )
     {
@@ -84,7 +84,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
     }
 }
 
-void VCLXHatchWindow::RequestObjAreaPixel( const Rectangle & aRect )
+void VCLXHatchWindow::RequestObjAreaPixel( const tools::Rectangle & aRect )
 {
     if ( m_xController.is() )
     {

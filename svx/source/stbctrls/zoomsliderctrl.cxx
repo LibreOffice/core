@@ -229,10 +229,10 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     if ( !mxImpl->mbValuesSet )
         return;
 
-    const Rectangle     aControlRect = getControlRect();
+    const tools::Rectangle     aControlRect = getControlRect();
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
-    Rectangle           aRect = rUsrEvt.GetRect();
-    Rectangle           aSlider = aRect;
+    tools::Rectangle           aRect = rUsrEvt.GetRect();
+    tools::Rectangle           aSlider = aRect;
 
     long nSliderHeight  = 2 * pDev->GetDPIScaleFactor();
     long nSnappingHeight = 4 * pDev->GetDPIScaleFactor();
@@ -258,7 +258,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     {
         long nSnapPosX = aRect.Left() + *aSnappingPointIter;
 
-        pDev->DrawRect( Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
+        pDev->DrawRect( tools::Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
                     nSnapPosX, aSlider.Bottom() + nSnappingHeight ) );
     }
 
@@ -291,7 +291,7 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     if ( !mxImpl->mbValuesSet )
         return true;
 
-    const Rectangle aControlRect = getControlRect();
+    const tools::Rectangle aControlRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
 
@@ -341,7 +341,7 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         return true;
 
     const short nButtons = rEvt.GetButtons();
-    const Rectangle aControlRect = getControlRect();
+    const tools::Rectangle aControlRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
 

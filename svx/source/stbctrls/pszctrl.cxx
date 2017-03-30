@@ -342,7 +342,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
 
-    const Rectangle& rRect = rUsrEvt.GetRect();
+    const tools::Rectangle& rRect = rUsrEvt.GetRect();
     StatusBar& rBar = GetStatusBar();
     Point aItemPos = rBar.GetItemTextPos( GetId() );
     Color aOldLineColor = pDev->GetLineColor();
@@ -365,7 +365,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         OUString aStr = GetMetricStr_Impl( pImpl->aPos.X());
         aStr += " / ";
         aStr += GetMetricStr_Impl( pImpl->aPos.Y());
-        Rectangle aRect(aPnt, Point(nSizePosX, rRect.Bottom()));
+        tools::Rectangle aRect(aPnt, Point(nSizePosX, rRect.Bottom()));
         pDev->DrawRect(aRect);
         vcl::Region aOrigRegion(pDev->GetClipRegion());
         pDev->SetClipRegion(vcl::Region(aRect));
@@ -384,7 +384,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             aStr = GetMetricStr_Impl( pImpl->aSize.Width() );
             aStr += " x ";
             aStr += GetMetricStr_Impl( pImpl->aSize.Height() );
-            aRect = Rectangle(aDrwPnt, rRect.BottomRight());
+            aRect = tools::Rectangle(aDrwPnt, rRect.BottomRight());
             pDev->DrawRect(aRect);
             aOrigRegion = pDev->GetClipRegion();
             pDev->SetClipRegion(vcl::Region(aRect));
@@ -392,7 +392,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             pDev->SetClipRegion(aOrigRegion);
         }
         else
-            pDev->DrawRect( Rectangle( aPnt, rRect.BottomRight() ) );
+            pDev->DrawRect( tools::Rectangle( aPnt, rRect.BottomRight() ) );
     }
     else if ( pImpl->bTable )
     {

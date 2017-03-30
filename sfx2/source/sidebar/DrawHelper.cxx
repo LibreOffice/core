@@ -24,7 +24,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const SvBorder& rBorderSize,
+void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
                             const Paint& rHorizontalPaint, const Paint& rVerticalPaint)
 {
     // Draw top line.
@@ -60,7 +60,7 @@ void DrawHelper::DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sa
             break;
         }
         case Paint::GradientPaint:
-            rRenderContext.DrawGradient(Rectangle(nLeft, nY, nRight, nY + nHeight - 1),
+            rRenderContext.DrawGradient(tools::Rectangle(nLeft, nY, nRight, nY + nHeight - 1),
                                         rPaint.GetGradient());
             break;
 
@@ -87,7 +87,7 @@ void DrawHelper::DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_
             break;
         }
         case Paint::GradientPaint:
-            rRenderContext.DrawGradient(Rectangle(nX, nTop, nX + nWidth - 1, nBottom),
+            rRenderContext.DrawGradient(tools::Rectangle(nX, nTop, nX + nWidth - 1, nBottom),
                                         rPaint.GetGradient());
             break;
 
@@ -97,7 +97,7 @@ void DrawHelper::DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_
     }
 }
 
-void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const sal_Int32 nCornerRadius,
+void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const sal_Int32 nCornerRadius,
                                       const Color& rBorderColor, const Paint& rFillPaint)
 {
     rRenderContext.SetLineColor(rBorderColor);

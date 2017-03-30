@@ -1961,7 +1961,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
         case SID_RULER_LR_MIN_MAX:
         {
-            Rectangle aRectangle;
+            tools::Rectangle aRectangle;
             if( ( nFrameType & FrameTypeFlags::COLSECT ) && !IsTabColFromDoc() &&
                 ( nFrameType & ( FrameTypeFlags::TABLE|FrameTypeFlags::COLUMN ) ) )
             {

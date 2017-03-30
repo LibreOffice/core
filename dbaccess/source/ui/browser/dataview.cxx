@@ -71,11 +71,11 @@ namespace dbaui
         vcl::Window::dispose();
     }
 
-    void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
+    void ODataView::resizeDocumentView( tools::Rectangle& /*_rPlayground*/ )
     {
     }
 
-    void ODataView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect)
+    void ODataView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
     {
         // draw the background
         {
@@ -90,9 +90,9 @@ namespace dbaui
         Window::Paint(rRenderContext, _rRect);
     }
 
-    void ODataView::resizeAll( const Rectangle& _rPlayground )
+    void ODataView::resizeAll( const tools::Rectangle& _rPlayground )
     {
-        Rectangle aPlayground( _rPlayground );
+        tools::Rectangle aPlayground( _rPlayground );
 
         // position the separator
         const Size aSeparatorSize( aPlayground.GetWidth(), 2 );
@@ -106,7 +106,7 @@ namespace dbaui
     void ODataView::Resize()
     {
         Window::Resize();
-        resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
+        resizeAll( tools::Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
     bool ODataView::PreNotify( NotifyEvent& _rNEvt )
     {

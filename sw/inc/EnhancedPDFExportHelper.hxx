@@ -247,8 +247,8 @@ class SwEnhancedPDFExportHelper
     static LanguageType GetDefaultLanguage() {return eLanguageDefault; }
 
     //scale and position rRectangle if we're scaling due to notes in margins.
-    Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,
-        const Rectangle& rRectangle) const;
+    tools::Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,
+        const tools::Rectangle& rRectangle) const;
 };
 
 #endif

@@ -45,7 +45,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
     bool        bFilled = ( pBitmap != nullptr || pBitmapEx != nullptr || pFont != nullptr );
-    Rectangle   aBorderRect( aPoint, aSize );
+    tools::Rectangle   aBorderRect( aPoint, aSize );
 
     pOutDev->Push();
 

@@ -313,7 +313,7 @@ protected:
         at least partly, to be accessible through this class.  Used to
         detect changes of the visible area after changes of the view forwarder.
     */
-    Rectangle maVisibleArea;
+    tools::Rectangle maVisibleArea;
 
     /** The parent of the shapes.  It is used for creating accessible
         objects for given shapes.

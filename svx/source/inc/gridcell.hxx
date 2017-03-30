@@ -140,7 +140,7 @@ public:
     //      Zeichnen eines Feldes an einer Position, ist ein View gesetzt
     //      uebernimmt dieser das Zeichnen, z.B. fuer CheckBoxen
     void    Paint(OutputDevice& rDev,
-                  const Rectangle& rRect,
+                  const tools::Rectangle& rRect,
                   const DbGridRow* pRow,
                   const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
 
@@ -292,8 +292,8 @@ public:
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) = 0;
 
     // Painten eines Zellinhalts im vorgegeben Rechteck
-    virtual void PaintFieldToCell( OutputDevice& rDev, const Rectangle& rRect, const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
-    virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect );
+    virtual void PaintFieldToCell( OutputDevice& rDev, const tools::Rectangle& rRect, const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
+    virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect );
 
     void  ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
 
@@ -397,7 +397,7 @@ public:
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
-    virtual void PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect,
+    virtual void PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect,
                         const css::uno::Reference< css::sdb::XColumn >& _rxField,
                         const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter ) override;
 
@@ -445,7 +445,7 @@ public:
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
-    virtual void PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
+    virtual void PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                           const css::uno::Reference< css::sdb::XColumn >& _rxField,
                           const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
@@ -676,7 +676,7 @@ public:
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual ::svt::CellControllerRef CreateController() const override;
-    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect) override;
+    virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
     virtual void Update() override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -813,7 +813,7 @@ public:
     }
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
-               const Rectangle& rRect,
+               const tools::Rectangle& rRect,
                const css::uno::Reference< css::sdb::XColumn >& xField,
                const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
 
@@ -848,7 +848,7 @@ public:
     FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
-               const Rectangle& rRect,
+               const tools::Rectangle& rRect,
                const css::uno::Reference< css::sdb::XColumn >& xField,
                const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
@@ -1085,7 +1085,7 @@ public:
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
 //  painting the filter text
-    void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
+    void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect);
     void Update(){m_pCellControl->Update();}
 
 // OComponentHelper

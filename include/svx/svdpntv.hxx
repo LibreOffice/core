@@ -135,7 +135,7 @@ protected:
     Size                        maGridBig;   // FIXME: We need to get rid of this eventually
     Size                        maGridFin;   // FIXME: We need to get rid of this eventually
     SdrDragStat                 maDragStat;
-    Rectangle                   maMaxWorkArea;
+    tools::Rectangle                   maMaxWorkArea;
     SfxItemSet                  maDefaultAttr;
     Idle                        maComeBackIdle;
 
@@ -260,7 +260,7 @@ public:
     virtual void EndAction();
     virtual void BckAction();
     virtual void BrkAction(); // Cancel all Actions (e.g. cancel dragging)
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual void TakeActionRect(tools::Rectangle& rRect) const;
 
     // Info about TextEdit. Default is sal_False.
     virtual bool IsTextEdit() const;
@@ -407,12 +407,12 @@ public:
     const Size& GetGridFine() const { return maGridFin; }
 
     void InvalidateAllWin();
-    void InvalidateAllWin(const Rectangle& rRect);
+    void InvalidateAllWin(const tools::Rectangle& rRect);
 
     /// If the View should not call Invalidate() on the windows, override
     /// the following 2 methods and do something else.
     virtual void InvalidateOneWin(vcl::Window& rWin);
-    virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect);
+    virtual void InvalidateOneWin(vcl::Window& rWin, const tools::Rectangle& rRect);
 
     void SetActiveLayer(const OUString& rName) { maActualLayer=rName; }
     const OUString&  GetActiveLayer() const { return maActualLayer; }
@@ -455,7 +455,7 @@ public:
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
-    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
+    virtual void MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin);
 
     /// For Plugins
     /// Is called by the Paint of the OLE object

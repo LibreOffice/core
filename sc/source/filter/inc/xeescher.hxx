@@ -54,11 +54,11 @@ public:
 
     /** Called from SVX DFF converter.
         @param rRect  The object anchor rectangle to be exported (in twips). */
-    virtual void        WriteData( EscherEx& rEscherEx, const Rectangle& rRect ) override;
+    virtual void        WriteData( EscherEx& rEscherEx, const tools::Rectangle& rRect ) override;
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj );
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+    virtual void        ImplCalcAnchorRect( const tools::Rectangle& rRect, MapUnit eMapUnit );
 
 protected:  // for access in derived classes
     XclObjAnchor        maAnchor;       /// The client anchor data.
@@ -73,7 +73,7 @@ public:
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj ) override;
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) override;
+    virtual void        ImplCalcAnchorRect( const tools::Rectangle& rRect, MapUnit eMapUnit ) override;
 
 private:
     SCTAB               mnScTab;        /// Calc sheet index.
@@ -88,7 +88,7 @@ public:
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj ) override;
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit ) override;
+    virtual void        ImplCalcAnchorRect( const tools::Rectangle& rRect, MapUnit eMapUnit ) override;
 
 private:
     Size                maPageSize;
@@ -100,7 +100,7 @@ private:
 class XclExpDffNoteAnchor : public XclExpDffAnchorBase
 {
 public:
-    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
+    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const tools::Rectangle& rRect );
 };
 
 /** Represents the position (anchor) of a cell dropdown object. */
@@ -227,7 +227,7 @@ public:
     explicit            XclExpOcxControlObj(
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const Rectangle* pChildAnchor,
+                            const tools::Rectangle* pChildAnchor,
                             const OUString& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
@@ -249,7 +249,7 @@ public:
     explicit            XclExpTbxControlObj(
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const Rectangle* pChildAnchor );
+                            const tools::Rectangle* pChildAnchor );
 
     /** Sets the name of a macro attached to this control.
         @return  true = The passed event descriptor was valid, macro name has been found. */
@@ -292,7 +292,7 @@ public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > const & xShape,
-                            const Rectangle* pChildAnchor );
+                            const tools::Rectangle* pChildAnchor );
     virtual             ~XclExpChartObj() override;
 
     /** Writes the OBJ record and the entire chart substream. */
@@ -357,8 +357,8 @@ private:
     bool                mbAutoFill;     /// Auto Fill Style
     bool                mbColHidden;    /// Column containing the comment is hidden
     bool                mbRowHidden;    /// Row containing the comment is hidden
-    Rectangle           maCommentFrom;  /// From and From Offset
-    Rectangle           maCommentTo;    /// To and To Offsets
+    tools::Rectangle           maCommentFrom;  /// From and From Offset
+    tools::Rectangle           maCommentTo;    /// To and To Offsets
 };
 
 class XclExpComments : public XclExpRecord

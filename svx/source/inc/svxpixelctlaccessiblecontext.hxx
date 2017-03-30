@@ -69,14 +69,14 @@ class SvxPixelCtlAccessibleChild :
     SvxPixelCtl& mrParentWindow;
     css::uno::Reference< css::accessibility::XAccessible > mxParent;
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
-    Rectangle*  mpBoundingBox;
+    tools::Rectangle*  mpBoundingBox;
     /// index of child in parent
     long                                mnIndexInParent;
 public:
     SvxPixelCtlAccessibleChild(
                 SvxPixelCtl& rWindow,
                 bool bPixelColorOrBG,
-                const Rectangle& rBounds,
+                const tools::Rectangle& rBounds,
                 const css::uno::Reference< css::accessibility::XAccessible >& xParent,
                 long nIndexInParent );
     virtual ~SvxPixelCtlAccessibleChild() override;
@@ -129,10 +129,10 @@ public:
     virtual void SAL_CALL disposing() override;
 
     /// @throws css::uno::RuntimeException
-    Rectangle GetBoundingBoxOnScreen();
+    tools::Rectangle GetBoundingBoxOnScreen();
 
     /// @throws css::uno::RuntimeException
-    Rectangle const & GetBoundingBox();
+    tools::Rectangle const & GetBoundingBox();
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;

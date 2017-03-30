@@ -1443,9 +1443,9 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
 }
 
 void SwWW8ImplReader::GetBorderDistance(const WW8_BRCVer9* pbrc,
-    Rectangle& rInnerDist)
+    tools::Rectangle& rInnerDist)
 {
-    rInnerDist = Rectangle( pbrc[ 1 ].dptSpace() * 20,
+    rInnerDist = tools::Rectangle( pbrc[ 1 ].dptSpace() * 20,
                             pbrc[ 0 ].dptSpace() * 20,
                             pbrc[ 3 ].dptSpace() * 20,
                             pbrc[ 2 ].dptSpace() * 20 );
@@ -4840,7 +4840,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
 
                 SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder);
 
-                Rectangle aInnerDist;
+                tools::Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
 
                 if (nBorder & (1 << WW8_LEFT))

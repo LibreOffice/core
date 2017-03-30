@@ -170,7 +170,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
 
 bool OutputDevice::HitTestNativeScrollbar(
                               ControlPart nPart,
-                              const Rectangle& rControlRegion,
+                              const tools::Rectangle& rControlRegion,
                               const Point& aPos,
                               bool& rIsInside ) const
 {
@@ -182,7 +182,7 @@ bool OutputDevice::HitTestNativeScrollbar(
             return false;
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
-    Rectangle screenRegion( rControlRegion );
+    tools::Rectangle screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
     return mpGraphics->HitTestNativeScrollbar( nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
@@ -270,7 +270,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
 }
 bool OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
-                            const Rectangle& rControlRegion,
+                            const tools::Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
@@ -298,7 +298,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
     std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
-    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
+    tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     vcl::Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
@@ -315,12 +315,12 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 
 bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
-                                const Rectangle& rControlRegion,
+                                const tools::Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
                                 const OUString& aCaption,
-                                Rectangle &rNativeBoundingRegion,
-                                Rectangle &rNativeContentRegion ) const
+                                tools::Rectangle &rNativeBoundingRegion,
+                                tools::Rectangle &rNativeContentRegion ) const
 {
     if( !EnableNativeWidget( *this ) )
         return false;
@@ -332,7 +332,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
     std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
-    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
+    tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
                                 aCaption, rNativeBoundingRegion,

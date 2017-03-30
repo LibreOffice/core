@@ -92,7 +92,7 @@ public:
     /** selects the paragraph for the given page at the outliner view*/
     void            SetActualPage( SdPage* pActual );
 
-    void Paint (const Rectangle& rRect, ::sd::Window* pWin);
+    void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin);
 
                     // Callbacks fuer LINKs
     DECL_LINK( ParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );

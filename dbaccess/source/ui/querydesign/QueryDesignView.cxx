@@ -2526,7 +2526,7 @@ void OQueryDesignView::initialize()
     reset();
 }
 
-void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
+void OQueryDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     Point aPlaygroundPos( _rPlayground.TopLeft() );
     Size aPlaygroundSize( _rPlayground.GetSize() );

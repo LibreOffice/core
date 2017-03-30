@@ -424,7 +424,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
     // positioning of the controls
     // calculate base size
-    Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
+    tools::Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
     long nH = aRect.GetSize().Height();
     long nW = GetParent()->GetOutputSizePixel().Width();
     Size aBorder = LogicToPixel(Size(2, 2),MapUnit::MapAppFont);
@@ -770,7 +770,7 @@ void DbGridControl::NavigationBar::Resize()
     ArrangeControls();
 }
 
-void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
     Point aAbsolutePos = m_aAbsolute->GetPosPixel();
@@ -1198,7 +1198,7 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     // positioning of the controls
     if (m_bNavigationBar)
     {
-        Rectangle aRect(GetControlArea());
+        tools::Rectangle aRect(GetControlArea());
         m_aBar->SetPosSizePixel(Point(0, nY + 1), Size(aRect.GetSize().Width(), aRect.GetSize().Height() - 1));
         nX = m_aBar->ArrangeControls();
     }
@@ -2034,7 +2034,7 @@ svt::EditBrowseBox::RowStatus DbGridControl::GetRowStatus(long nRow) const
         return EditBrowseBox::CLEAN;
 }
 
-void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
+void DbGridControl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     if (!IsValid(m_xPaintRow))
         return;
@@ -2043,7 +2043,7 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
     DbGridColumn* pColumn = (Location < m_aColumns.size() ) ? m_aColumns[ Location ] : nullptr;
     if (pColumn)
     {
-        Rectangle aArea(rRect);
+        tools::Rectangle aArea(rRect);
         if ((GetMode() & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
         {
             aArea.Top() += 1;
@@ -2850,7 +2850,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 {
                     long nRow = FirstSelectedRow( );
 
-                    ::Rectangle aRowRect( GetRowRectPixel( nRow ) );
+                    ::tools::Rectangle aRowRect( GetRowRectPixel( nRow ) );
                     executeRowContextMenu( nRow, aRowRect.LeftCenter() );
 
                     // handled

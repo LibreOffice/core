@@ -816,7 +816,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         m_pDoc->getIDocumentDeviceAccess().setJobsetup( rSetup );
     }
 
-    Rectangle aRect( nAspect == ASPECT_THUMBNAIL ?
+    tools::Rectangle aRect( nAspect == ASPECT_THUMBNAIL ?
             GetVisArea( nAspect ) : GetVisArea( ASPECT_CONTENT ) );
 
     pDev->Push();
@@ -837,9 +837,9 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         EnableSetModified();
 }
 
-void SwDocShell::SetVisArea( const Rectangle &rRect )
+void SwDocShell::SetVisArea( const tools::Rectangle &rRect )
 {
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
     if (m_pView)
     {
         Size aSz( m_pView->GetDocSz() );
@@ -861,7 +861,7 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
         SfxObjectShell::SetVisArea( aRect );
 }
 
-Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
+tools::Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if ( nAspect == ASPECT_THUMBNAIL )
     {
@@ -870,7 +870,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
         const SwRect aPageRect = pNd->FindPageFrameRect();
-        Rectangle aRect(aPageRect.SVRect());
+        tools::Rectangle aRect(aPageRect.SVRect());
 
         // tdf#81219 sanitize - nobody is interested in a thumbnail where's
         // nothing visible

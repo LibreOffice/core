@@ -197,7 +197,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             // placement: centered
             if (xMyFrameLayout->GetScaleCenter())
             {
-                Rectangle aBoundRect(static_cast<long>(left*m_aTransformData.fScaleX + fLeftMargin),
+                tools::Rectangle aBoundRect(static_cast<long>(left*m_aTransformData.fScaleX + fLeftMargin),
                     static_cast<long>(top    * m_aTransformData.fScaleY + fTopMargin),
                     static_cast<long>(right  * m_aTransformData.fScaleX),
                     static_cast<long>(bottom * m_aTransformData.fScaleY));

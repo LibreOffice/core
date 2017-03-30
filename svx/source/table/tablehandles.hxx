@@ -70,7 +70,7 @@ class TableBorderHdl : public SdrHdl
 {
 public:
     TableBorderHdl(
-        const Rectangle& rRect,
+        const tools::Rectangle& rRect,
         bool bAnimate);
 
     virtual Pointer GetPointer() const override;
@@ -81,7 +81,7 @@ protected:
     virtual void CreateB2dIAObject() override;
 
 private:
-    Rectangle maRectangle;
+    tools::Rectangle maRectangle;
 
     bool            mbAnimate : 1;
 };

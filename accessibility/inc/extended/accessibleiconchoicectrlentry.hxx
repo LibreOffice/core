@@ -73,17 +73,17 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
     private:
-        Rectangle               GetBoundingBox_Impl() const;
-        Rectangle               GetBoundingBoxOnScreen_Impl() const;
+        tools::Rectangle               GetBoundingBox_Impl() const;
+        tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
-        Rectangle               GetBoundingBox();
+        tools::Rectangle               GetBoundingBox();
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
-        Rectangle               GetBoundingBoxOnScreen();
+        tools::Rectangle               GetBoundingBoxOnScreen();
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;
 

@@ -258,7 +258,7 @@ protected:
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
 public:
     /** Redraws the entire data grid. */

@@ -59,7 +59,7 @@ namespace svx
         sal_uInt16      mnSlotId;
         VclPtr<ToolBox> mpTbx;
         Color       maCurColor;
-        Rectangle   maUpdRect;
+        tools::Rectangle   maUpdRect;
         Size        maBmpSize;
         bool        mbWasHiContrastMode;
     };

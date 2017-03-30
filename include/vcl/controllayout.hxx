@@ -37,7 +37,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     OUString                            m_aDisplayText;
     // the bounding rectangle of every character
     // where one character may consist of many glyphs
-    std::vector< Rectangle >            m_aUnicodeBoundRects;
+    std::vector< tools::Rectangle >            m_aUnicodeBoundRects;
     // start indices of lines
     std::vector< long >                 m_aLineIndices;
     // notify parent control on destruction
@@ -46,7 +46,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     ControlLayoutData();
     ~ControlLayoutData();
 
-    Rectangle GetCharacterBounds( long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( long nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)
     // -1 is returned if no character is at that point
     long GetIndexForPoint( const Point& rPoint ) const;

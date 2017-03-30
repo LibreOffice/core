@@ -111,7 +111,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicS
 
     if ( !rUniqueId.isEmpty() )
     {
-        Rectangle       aRect;
+        ::tools::Rectangle       aRect;
         std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(rUniqueId));
         Graphic         aMappedGraphic, aGraphic(xGraphicObject->GetGraphic());
         Size            aPrefSize( aGraphic.GetPrefSize() );
@@ -832,7 +832,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     case css::drawing::FillStyle_GRADIENT :
                     {
                         Point aEmptyPoint;
-                        Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                        ::tools::Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
                         EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
@@ -855,7 +855,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             case css::drawing::FillStyle_GRADIENT :
                             {
                                 Point aEmptyPoint;
-                                Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+                                ::tools::Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
                                 EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
@@ -1022,7 +1022,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
         const long nRotatedWidth(maRect.GetHeight());
         const long nRotatedHeight(maRect.GetWidth());
         const Size aNewSize(nRotatedWidth, nRotatedHeight);
-        maRect = Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
+        maRect = ::tools::Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
     }
 }
 
@@ -1702,7 +1702,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             const css::awt::Size   aSize100thmm( mXShape->getSize() );
             const css::awt::Point  aPoint100thmm( mXShape->getPosition() );
-            Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+            ::tools::Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
             EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
             if ( bGroup )
@@ -1744,7 +1744,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         auto aRect = o3tl::doAccess<css::awt::Rectangle>(mAny);
                         maPosition = MapPoint( css::awt::Point( aRect->X, aRect->Y ) );
                         maSize = MapSize( css::awt::Size( aRect->Width, aRect->Height ) );
-                        maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                        maRect = ::tools::Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                     }
                     mType = "drawing.dontknow";
                 }
@@ -1769,10 +1769,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
                         if ( pObj )
                         {
-                            Rectangle aBound = pObj->GetCurrentBoundRect();
+                            ::tools::Rectangle aBound = pObj->GetCurrentBoundRect();
                             maPosition = MapPoint( css::awt::Point( aBound.Left(), aBound.Top() ) );
                             maSize = MapSize( css::awt::Size ( aBound.GetWidth(), aBound.GetHeight() ) );
-                            maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                            maRect = ::tools::Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                             mnAngle = 0;
                         }
                     }
@@ -1869,7 +1869,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::awt::Point aPoint( mXShape->getPosition() );
                     css::awt::Size  aSize( mXShape->getSize() );
                     css::awt::Point aStart, aEnd, aCenter;
-                    Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
+                    ::tools::Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
                     aStart.X = (sal_Int32)( ( cos( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
                     aStart.Y = - (sal_Int32)( ( sin( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
                     aEnd.X = (sal_Int32)( ( cos( (double)( nEndAngle * F_PI18000 ) ) * 100.0 ) );
@@ -2864,7 +2864,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             if ( mType == "drawing.Line" )
             {
                 double fDist = hypot( maRect.GetWidth(), maRect.GetHeight() );
-                maRect = Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
+                maRect = ::tools::Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
                                         Point( (sal_Int32)( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
                 ImplCreateTextShape( aPropOpt, aSolverContainer, false );
                 aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );        // Size Shape To Fit Text
@@ -2968,7 +2968,7 @@ bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
 
 //get merged cell's width
 sal_Int32 GetCellRight( sal_Int32 nColumn,
-    Rectangle& rect,
+    ::tools::Rectangle& rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aColumns,
     uno::Reference< table::XMergeableCell >& xCell )
 {
@@ -2985,7 +2985,7 @@ sal_Int32 GetCellRight( sal_Int32 nColumn,
 }
 //get merged cell's height
 sal_Int32 GetCellBottom( sal_Int32 nRow,
-    Rectangle& rect,
+    ::tools::Rectangle& rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aRows,
     uno::Reference< table::XMergeableCell >& xCell )
 {

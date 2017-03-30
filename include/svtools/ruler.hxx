@@ -628,7 +628,7 @@ private:
     ImplRulerData*  mpSaveData;
     ImplRulerData*  mpData;
     ImplRulerData*  mpDragData;
-    Rectangle       maExtraRect;
+    tools::Rectangle       maExtraRect;
     WinBits         mnWinStyle;
     sal_uInt16      mnUnitIndex;
     sal_uInt16      mnDragAryPos;
@@ -719,7 +719,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -740,7 +740,7 @@ public:
     long            GetPageOffset() const;
     void            SetBorderPos( long nOff = 0 );
     long            GetBorderOffset() const { return mnBorderOff; }
-    const Rectangle& GetExtraRect() const { return maExtraRect; }
+    const tools::Rectangle& GetExtraRect() const { return maExtraRect; }
 
     void            SetUnit( FieldUnit eNewUnit );
     FieldUnit       GetUnit() const { return meUnit; }

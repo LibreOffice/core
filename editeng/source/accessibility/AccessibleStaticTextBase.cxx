@@ -148,7 +148,7 @@ namespace accessibility
         bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
 
-        Rectangle                   GetParagraphBoundingBox() const;
+        tools::Rectangle                   GetParagraphBoundingBox() const;
         bool                    RemoveLineBreakCount( sal_Int32& rIndex );
 
     private:
@@ -367,13 +367,13 @@ namespace accessibility
         }
     }
 
-    Rectangle AccessibleStaticTextBase_Impl::GetParagraphBoundingBox() const
+    tools::Rectangle AccessibleStaticTextBase_Impl::GetParagraphBoundingBox() const
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         if( mxTextParagraph.is() )
         {
             awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
-            aRect = Rectangle( Point( aAwtRect.X, aAwtRect.Y ), Size( aAwtRect.Width, aAwtRect.Height ) );
+            aRect = tools::Rectangle( Point( aAwtRect.X, aAwtRect.Y ), Size( aAwtRect.Width, aAwtRect.Height ) );
         }
         else
         {
@@ -962,7 +962,7 @@ namespace accessibility
         return ::comphelper::concatSequences( aRunAttrSeq, comphelper::containerToSequence(aDiffVec) );
     }
 
-    Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
+    tools::Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
     {
         return mpImpl->GetParagraphBoundingBox();
     }

@@ -539,7 +539,7 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
-    Rectangle aRect( pDocShell->GetVisArea() );
+    tools::Rectangle aRect( pDocShell->GetVisArea() );
 
     pValue[nIndex].Name = "ViewAreaTop";
     pValue[nIndex++].Value <<= aRect.Top();

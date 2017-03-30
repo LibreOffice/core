@@ -106,7 +106,7 @@ public:
 
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
 
-    SVX_DLLPRIVATE void DragResizeCustomShape( const Rectangle& rNewRect );
+    SVX_DLLPRIVATE void DragResizeCustomShape( const tools::Rectangle& rNewRect );
     SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point& rDestination,
             const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle );
 
@@ -117,13 +117,13 @@ public:
     void ImpCheckCustomGluePointsAreAdded();
 
     // returns the new text rect that corresponds to the current logic rect, the return value can be empty if nothing changed.
-    Rectangle ImpCalculateTextFrame( const bool bHgt, const bool bWdt );
+    tools::Rectangle ImpCalculateTextFrame( const bool bHgt, const bool bWdt );
 
 public:
     // #i37011#
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
-    bool GetTextBounds( Rectangle& rTextBound ) const;
+    bool GetTextBounds( tools::Rectangle& rTextBound ) const;
     bool IsTextPath() const;
     basegfx::B2DPolyPolygon GetLineGeometry( const bool bBezierAllowed ) const;
 
@@ -176,16 +176,16 @@ public:
 
     virtual void Move(const Size& rSiz) override;
     virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
-    virtual void SetSnapRect(const Rectangle& rRect) override;
-    virtual void SetLogicRect(const Rectangle& rRect) override;
+    virtual void SetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void SetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual void NbcMove(const Size& rSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
 
@@ -205,17 +205,17 @@ public:
      * text.
      */
     void SuggestTextFrameSize(Size aSuggestedTextFrameSize);
-    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
+    virtual bool AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true) override;
     virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual bool IsAutoGrowHeight() const override;
     virtual bool IsAutoGrowWidth() const override;
     virtual void SetVerticalWriting( bool bVertical ) override;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
     virtual void EndTextEdit( SdrOutliner& rOutl ) override;
-    virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const override;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-        Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
+    virtual void TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) const override;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+        tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     virtual SdrObjCustomShape* Clone() const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 

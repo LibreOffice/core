@@ -83,7 +83,7 @@ public:
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
     */
-    void Resize (const Rectangle& rAvailableSpace);
+    void Resize (const ::tools::Rectangle& rAvailableSpace);
 
     /** Determine which of the UI elements--the scroll bars, the scroll bar
         filler, the actual slide sorter view--are visible and place them in
@@ -124,7 +124,7 @@ public:
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
     */
-    void Paint (const Rectangle& rRect, vcl::Window* pWin);
+    void Paint (const ::tools::Rectangle& rRect, vcl::Window* pWin);
 
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);
@@ -261,7 +261,7 @@ private:
     /** This rectangle in the parent window encloses scroll bars and slide
         sorter window.  It is set when Resize() is called.
     */
-    Rectangle maTotalWindowArea;
+    ::tools::Rectangle maTotalWindowArea;
 
     /** This counter is used to avoid processing of reentrant calls to
         Paint().

@@ -448,7 +448,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
 
     bitmapLayout = getMemoryLayout();
 
-    const ::Rectangle aRequestedArea( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+    const ::tools::Rectangle aRequestedArea( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
     if( aRequestedArea.IsEmpty() )
         return uno::Sequence< sal_Int8 >();
 
@@ -466,7 +466,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     }
 
     uno::Sequence< sal_Int8 > aRet;
-    Rectangle aRequestedBytes( aRequestedArea );
+    tools::Rectangle aRequestedBytes( aRequestedArea );
 
     // adapt to byte boundaries
     aRequestedBytes.Left()  = aRequestedArea.Left()*m_nBitsPerOutputPixel/8;

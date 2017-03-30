@@ -47,7 +47,7 @@ void ImageControl::Resize()
 
 namespace
 {
-    Size lcl_calcPaintSize( const Rectangle& _rPaintRect, const Size& _rBitmapSize )
+    Size lcl_calcPaintSize( const tools::Rectangle& _rPaintRect, const Size& _rBitmapSize )
     {
         const Size aPaintSize = _rPaintRect.GetSize();
 
@@ -58,7 +58,7 @@ namespace
         return Size( long( _rBitmapSize.Width() * nRatioMin ), long( _rBitmapSize.Height() * nRatioMin ) );
     }
 
-    Point lcl_centerWithin( const Rectangle& _rArea, const Size& _rObjectSize )
+    Point lcl_centerWithin( const tools::Rectangle& _rArea, const Size& _rObjectSize )
     {
         Point aPos( _rArea.TopLeft() );
         aPos.X() += ( _rArea.GetWidth() - _rObjectSize.Width() ) / 2;
@@ -77,7 +77,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
     }
 
     const Image& rImage( GetModeImage() );
-    const Rectangle aDrawRect( rPos, rSize );
+    const tools::Rectangle aDrawRect( rPos, rSize );
     if (!rImage)
     {
         OUString  sText( GetText() );
@@ -127,7 +127,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
     }   // switch ( mnScaleMode )
 }
 
-void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDraw(rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 
@@ -136,7 +136,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*
         vcl::Window* pBorderWindow = GetWindow(GetWindowType::Border);
 
         bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
-        Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
+        tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
         Color oldLineCol = pBorderWindow->GetLineColor();
         Color oldFillCol = pBorderWindow->GetFillColor();
         pBorderWindow->SetFillColor();
@@ -157,7 +157,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );
-          Rectangle aRect( aPos, aSize );
+          tools::Rectangle aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();

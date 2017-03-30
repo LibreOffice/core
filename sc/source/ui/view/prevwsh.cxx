@@ -440,7 +440,7 @@ IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
             Point  aMousePos = pScroll->OutputToNormalizedScreenPixel( pScroll->GetPointerPosPixel() );
             Point  aPos      = pScroll->GetParent()->OutputToNormalizedScreenPixel( pScroll->GetPosPixel() );
             OUString aHelpStr;
-            Rectangle aRect;
+            tools::Rectangle aRect;
             QuickHelpFlags nAlign;
 
             if( nDelta < 0 )

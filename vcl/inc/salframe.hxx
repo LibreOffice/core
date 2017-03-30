@@ -147,7 +147,7 @@ public:
     virtual void            SetMaxClientSize( long nWidth, long nHeight ) = 0;
     virtual void            SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) = 0;
     virtual void            GetClientSize( long& rWidth, long& rHeight ) = 0;
-    virtual void            GetWorkArea( Rectangle& rRect ) = 0;
+    virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active
     SalFrameGeometry        GetGeometry();
@@ -175,7 +175,7 @@ public:
 
     // flush output buffer
     virtual void            Flush() = 0;
-    virtual void            Flush( const Rectangle& );
+    virtual void            Flush( const tools::Rectangle& );
 
     virtual void            SetInputContext( SalInputContext* pContext ) = 0;
     virtual void            EndExtTextInput( EndExtTextInputFlags nFlags ) = 0;
@@ -239,19 +239,19 @@ public:
     }
 
     // return true to indicate tooltips are shown natively, false otherwise
-    virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/)
+    virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
     {
         return false;
     }
 
     // return !0 to indicate popovers are shown natively, 0 otherwise
-    virtual sal_uIntPtr     ShowPopover(const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
+    virtual sal_uIntPtr     ShowPopover(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/, QuickHelpFlags /*nFlags*/)
     {
         return 0;
     }
 
     // return true to indicate popovers are shown natively, false otherwise
-    virtual bool            UpdatePopover(sal_uIntPtr /*nId*/, const OUString& /*rHelpText*/, const Rectangle& /*rHelpArea*/)
+    virtual bool            UpdatePopover(sal_uIntPtr /*nId*/, const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
     {
         return false;
     }

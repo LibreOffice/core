@@ -38,7 +38,7 @@ class CandidateMgr
     std::set<VclPtr<vcl::Window> > m_aDeletedCandidates;
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 public:
-    void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
+    void PaintTransparentChildren(vcl::Window & rWindow, tools::Rectangle const& rPixelRect);
     ~CandidateMgr();
 };
 
@@ -62,7 +62,7 @@ CandidateMgr::~CandidateMgr()
     }
 }
 
-void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect)
+void PaintTransparentChildren(vcl::Window & rWindow, tools::Rectangle const& rPixelRect)
 {
     if (!rWindow.IsChildTransparentModeEnabled())
         return;
@@ -71,14 +71,14 @@ void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect
     aManager.PaintTransparentChildren(rWindow, rPixelRect);
 }
 
-void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect)
+void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, tools::Rectangle const& rPixelRect)
 {
     vcl::Window * pCandidate = rWindow.GetWindow( GetWindowType::FirstChild );
     while (pCandidate)
     {
         if (pCandidate->IsPaintTransparent())
         {
-            const Rectangle aCandidatePosSizePixel(
+            const tools::Rectangle aCandidatePosSizePixel(
                             pCandidate->GetPosPixel(),
                             pCandidate->GetSizePixel());
 
@@ -268,10 +268,10 @@ rtl::Reference< sdr::overlay::OverlayManager > const & SdrPaintWindow::GetOverla
     return mxOverlayManager;
 }
 
-Rectangle SdrPaintWindow::GetVisibleArea() const
+tools::Rectangle SdrPaintWindow::GetVisibleArea() const
 {
     Size aVisSizePixel(GetOutputDevice().GetOutputSizePixel());
-    return Rectangle(GetOutputDevice().PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
+    return tools::Rectangle(GetOutputDevice().PixelToLogic(tools::Rectangle(Point(0,0), aVisSizePixel)));
 }
 
 bool SdrPaintWindow::OutputToRecordingMetaFile() const

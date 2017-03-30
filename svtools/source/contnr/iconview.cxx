@@ -47,7 +47,7 @@ void IconView::Resize()
     SvTreeListBox::Resize();
 }
 
-Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
+tools::Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
 {
     Size aSize;
     aSize.Height() = nEntryHeight;
@@ -57,7 +57,7 @@ Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
     aPos.X() = 0;
     aPos.Y() = 0;
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     short nCols = GetColumnsCount();
 
@@ -85,7 +85,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
                             vcl::RenderContext& rRenderContext)
 {
 
-    Rectangle aRect; // multi purpose
+    tools::Rectangle aRect; // multi purpose
 
     PreparePaint(rRenderContext, rEntry);
 

@@ -99,7 +99,7 @@ class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
 
 public:
     SdrTableObj(SdrModel* _pModel);
-    SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
+    SdrTableObj(SdrModel* _pModel, const ::tools::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
     virtual ~SdrTableObj() override;
 
 
@@ -138,7 +138,7 @@ public:
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
     sal_Int32 getColumnCount() const;
-    void getCellBounds( const sdr::table::CellPos& rPos, ::Rectangle& rCellRect );
+    void getCellBounds( const sdr::table::CellPos& rPos, ::tools::Rectangle& rCellRect );
 
     const SfxItemSet& GetActiveCellItemSet() const;
     void SetMergedItemSetAndBroadcastOnActiveCell(const SfxItemSet& rSet, bool bClearAllItems);
@@ -175,10 +175,10 @@ public:
     /** At the same time, we set the text in the outliner (if applicable the EditOutliners')
      * as well as the PaperSize
      */
-    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText, ::Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
-    void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
-    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const override;
+    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::tools::Rectangle& rTextRect, bool bNoEditText, ::tools::Rectangle* pAnchorRect=nullptr, bool bLineWidth = true ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
+    void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::tools::Rectangle& rAnchorRect ) const;
+    virtual void TakeTextAnchorRect(::tools::Rectangle& rAnchorRect) const override;
 
     virtual bool IsAutoGrowHeight() const override;
     virtual bool IsAutoGrowWidth() const override;
@@ -190,19 +190,19 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void SetChanged() override;
 
-    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
+    virtual bool AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt = true, bool bWdt = true) const override;
     virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual SdrTableObj* Clone() const override;
     SdrTableObj& operator=(const SdrTableObj& rObj);
     virtual void RecalcSnapRect() override;
-    virtual const Rectangle& GetSnapRect() const override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetSnapRect() const override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
 
-    virtual const Rectangle& GetLogicRect() const override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
-    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual void AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
     virtual sal_uInt32 GetHdlCount() const override;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
@@ -227,8 +227,8 @@ public:
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual void EndTextEdit(SdrOutliner& rOutl) override;
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
-    void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
+    void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
@@ -277,7 +277,7 @@ private:
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 
-    Rectangle   maLogicRect;
+    tools::Rectangle   maLogicRect;
 private:
     rtl::Reference<SdrTableObjImpl>    mpImpl;
 };

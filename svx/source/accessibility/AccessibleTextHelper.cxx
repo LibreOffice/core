@@ -764,19 +764,19 @@ namespace accessibility
             SvxTextForwarder& rCacheTF = GetTextForwarder();
             SvxViewForwarder& rCacheVF = GetViewForwarder();
 
-            Rectangle aViewArea = rCacheVF.GetVisArea();
+            tools::Rectangle aViewArea = rCacheVF.GetVisArea();
 
             if( IsActive() )
             {
                 // maybe the edit view scrolls, adapt aViewArea
-                Rectangle aEditViewArea = GetEditViewForwarder().GetVisArea();
+                tools::Rectangle aEditViewArea = GetEditViewForwarder().GetVisArea();
                 aViewArea += aEditViewArea.TopLeft();
 
                 // now determine intersection
                 aViewArea.Intersection( aEditViewArea );
             }
 
-            Rectangle aTmpBB, aParaBB;
+            tools::Rectangle aTmpBB, aParaBB;
             bool bFirstChild = true;
             sal_Int32 nCurrPara;
             sal_Int32 nParas=rCacheTF.GetParagraphCount();
@@ -1585,7 +1585,7 @@ namespace accessibility
             DBG_ASSERT(nChild >= 0 && nChild <= USHRT_MAX,
                        "AccessibleTextHelper_Impl::getAccessibleAt: index value overflow");
 
-            Rectangle aParaBounds( rCacheTF.GetParaBounds( nChild ) );
+            tools::Rectangle aParaBounds( rCacheTF.GetParaBounds( nChild ) );
 
             if( aParaBounds.IsInside( aLogPoint ) )
                 return getAccessibleChild( nChild - mnFirstVisibleChild + GetStartIndex() );

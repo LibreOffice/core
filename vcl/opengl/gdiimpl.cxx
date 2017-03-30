@@ -222,7 +222,7 @@ void OpenGLSalGraphicsImpl::InitializePreDrawState(XOROption eOpt)
     CheckOffscreenTexture();
     CHECK_GL_ERROR();
 
-    mpContext->state().viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
+    mpContext->state().viewport(tools::Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
 
     ImplInitClipRegion();
     CHECK_GL_ERROR();
@@ -355,7 +355,7 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
 
     if (mbUseScissor)
     {
-        Rectangle aRect(maClipRegion.GetBoundRect());
+        tools::Rectangle aRect(maClipRegion.GetBoundRect());
         mpContext->state().scissor().set(aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight());
         mpContext->state().scissor().enable();
     }
@@ -867,7 +867,7 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
     DrawConvexPolygon( 4, aPoints, true );
 }
 
-void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
+void OpenGLSalGraphicsImpl::DrawRect( const tools::Rectangle& rRect )
 {
     long nX1( rRect.Left() );
     long nY1( rRect.Top() );
@@ -927,7 +927,7 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
     aVertices.push_back(GLfloat(pt.X())); \
     aVertices.push_back(GLfloat(pt.Y()));
 
-    for(Rectangle & rRect : aRects)
+    for(tools::Rectangle & rRect : aRects)
     {
         rRect.Bottom() += 1;
         rRect.Right() += 1;
@@ -1412,7 +1412,7 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
     VCL_GL_INFO("End FlushDeferredDrawing");
 }
 
-void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
+void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const tools::Rectangle& rRect )
 {
     OpenGLZone aZone;
 
@@ -1425,7 +1425,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     nFactor = rGradient.GetEndIntensity();
     mpProgram->SetColorWithIntensity( "end_color", aEndCol, nFactor );
 
-    Rectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     Point aCenter;
     rGradient.GetBoundRect( rRect, aBoundRect, aCenter );
     tools::Polygon aPoly( aBoundRect );
@@ -1438,7 +1438,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     DrawConvexPolygon( aPoly, true );
 }
 
-void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect )
+void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const tools::Rectangle& rRect )
 {
     OpenGLZone aZone;
 
@@ -1465,7 +1465,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
      *
      */
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     Point aCenter;
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
@@ -1490,7 +1490,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
     DrawConvexPolygon( aPoly, true );
 }
 
-void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
+void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const tools::Rectangle& rRect )
 {
     OpenGLZone aZone;
 
@@ -1503,7 +1503,7 @@ void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const
     nFactor = rGradient.GetEndIntensity();
     mpProgram->SetColorWithIntensity( "end_color", aEndCol, nFactor );
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     Point aCenter;
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
@@ -1962,7 +1962,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
 bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         const Gradient& rGradient)
 {
-    Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+    tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
     VCL_GL_INFO("::drawGradient " << rPolyPoly.GetBoundRect());
 
@@ -2116,7 +2116,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     CHECK_GL_ERROR();
 
     mpWindowContext->state().sync();
-    mpWindowContext->state().viewport(Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
+    mpWindowContext->state().viewport(tools::Rectangle(Point(0, 0), Size(GetWidth(), GetHeight())));
     mpWindowContext->state().scissor().disable();
     mpWindowContext->state().stencil().disable();
 

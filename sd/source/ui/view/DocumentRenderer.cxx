@@ -308,7 +308,7 @@ namespace {
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
-                    vcl::Region(Rectangle(Point(0,0), rPage.GetSize())));
+                    vcl::Region(::tools::Rectangle(Point(0,0), rPage.GetSize())));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 
@@ -1106,7 +1106,7 @@ namespace {
             rPrinter.SetMapMode(maMap);
 
             // Get and set up the outliner.
-            const Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
+            const ::tools::Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
             Outliner* pOutliner = rDocument.GetInternalOutliner();
             const OutlinerMode nSavedOutlMode (pOutliner->GetMode());
             const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
@@ -1535,17 +1535,17 @@ private:
 
         const bool bDrawLines (eLayout == AUTOLAYOUT_HANDOUT3);
 
-        std::vector< Rectangle > aAreas;
+        std::vector< ::tools::Rectangle > aAreas;
         SdPage::CalculateHandoutAreas( rModel, eLayout, bHandoutHorizontal, aAreas );
 
-        std::vector< Rectangle >::iterator iter( aAreas.begin() );
+        std::vector< ::tools::Rectangle >::iterator iter( aAreas.begin() );
         while( iter != aAreas.end() )
         {
             pHandout->NbcInsertObject( new SdrPageObj((*iter++)) );
 
             if( bDrawLines && (iter != aAreas.end())  )
             {
-                Rectangle aRect( (*iter++) );
+                ::tools::Rectangle aRect( (*iter++) );
 
                 basegfx::B2DPolygon aPoly;
                 aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );
@@ -1606,7 +1606,7 @@ private:
         aMap.SetScaleY(Fraction(1,2));
         mpPrinter->SetMapMode(aMap);
 
-        Rectangle aOutRect(aPageOfs, rInfo.mpPrinter->GetOutputSize());
+        ::tools::Rectangle aOutRect(aPageOfs, rInfo.mpPrinter->GetOutputSize());
         if( aOutRect.GetWidth() > aOutRect.GetHeight() )
         {
             Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
@@ -1614,7 +1614,7 @@ private:
             maPrintSize.Height = aPaperSize.Width();
             const long nRotatedWidth = aOutRect.GetHeight();
             const long nRotatedHeight = aOutRect.GetWidth();
-            aOutRect = Rectangle( Point( aPageOfs.Y(), aPageOfs.X() ),
+            aOutRect = ::tools::Rectangle( Point( aPageOfs.Y(), aPageOfs.X() ),
                                   Size( nRotatedWidth, nRotatedHeight ) );
         }
 

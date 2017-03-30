@@ -71,7 +71,7 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
+    virtual tools::Rectangle GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible()= 0;
     virtual vcl::Window* GetAccessibleParentWindow() const= 0;
@@ -81,11 +81,11 @@ public:
     virtual long GetRowCount() const= 0;
     virtual long GetColumnCount() const= 0;
     virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
-    virtual Rectangle calcHeaderRect( bool _bIsColumnBar ) = 0;
-    virtual Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;
-    virtual Rectangle calcTableRect() = 0;
-    virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
-    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
+    virtual tools::Rectangle calcHeaderRect( bool _bIsColumnBar ) = 0;
+    virtual tools::Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;
+    virtual tools::Rectangle calcTableRect() = 0;
+    virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
+    virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
     virtual OUString GetRowDescription( sal_Int32 _nRow ) const = 0;

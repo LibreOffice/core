@@ -282,9 +282,9 @@ uno::Any SwTextBoxHelper::queryInterface(SwFrameFormat* pShape, const uno::Type&
     return aRet;
 }
 
-Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool bAbsolute)
+tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool bAbsolute)
 {
-    Rectangle aRet;
+    tools::Rectangle aRet;
     aRet.SetEmpty();
     auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
     if (pCustomShape)
@@ -308,7 +308,7 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool bAbsolut
         Size aSize(pCustomShape->GetLogicRect().GetSize());
         aPoint.X() -= aSize.Width() / 2;
         aPoint.Y() -= aSize.Height() / 2;
-        Rectangle aLogicRect(aPoint, aSize);
+        tools::Rectangle aLogicRect(aPoint, aSize);
         aRet.Move(-1 * aLogicRect.Left(), -1 * aLogicRect.Top());
     }
 
@@ -325,7 +325,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         SdrObject* pObject = pShape->FindRealSdrObject();
         if (pObject)
         {
-            Rectangle aRectangle(pObject->GetSnapRect());
+            tools::Rectangle aRectangle(pObject->GetSnapRect());
             syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
             syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
         }
@@ -524,7 +524,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             // Position/size should be the text position/size, not the shape one as-is.
             if (bAdjustX || bAdjustY || bAdjustSize)
             {
-                Rectangle aRect = getTextRectangle(pShape, /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(pShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
                 {
                     if (bAdjustX || bAdjustY)
@@ -611,7 +611,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
                 auto& rOrient = static_cast<const SwFormatVertOrient&>(*aIter.GetCurItem());
                 SwFormatVertOrient aOrient(rOrient);
 
-                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
                     aOrient.SetPos(aOrient.GetPos() + aRect.getY());
 
@@ -631,7 +631,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
                 auto& rOrient = static_cast<const SwFormatHoriOrient&>(*aIter.GetCurItem());
                 SwFormatHoriOrient aOrient(rOrient);
 
-                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
                     aOrient.SetPos(aOrient.GetPos() + aRect.getX());
 
@@ -648,7 +648,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet& rSet)
                 SwFormatHoriOrient aHoriOrient(rShape.GetHoriOrient());
                 SwFormatFrameSize aSize(pFormat->GetFrameSize());
 
-                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
                 {
                     aVertOrient.SetPos(aVertOrient.GetPos() + aRect.getY());

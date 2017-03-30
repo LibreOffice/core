@@ -33,7 +33,7 @@ class SwOleClient : public SfxInPlaceClient
     bool m_IsOldCheckForOLEInCaption;
 
     virtual void ObjectAreaChanged() override;
-    virtual void RequestNewObjectArea( Rectangle& ) override;
+    virtual void RequestNewObjectArea( tools::Rectangle& ) override;
     virtual void ViewChanged() override;
 
 public:

@@ -534,7 +534,7 @@ bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, 
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-Rectangle BrowseBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+tools::Rectangle BrowseBox::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

@@ -243,7 +243,7 @@ void WMFWriter::WriteHeightWidth(const Size & rSize)
     pWMF->WriteInt16( aSz.Height() ).WriteInt16( aSz.Width() );
 }
 
-void WMFWriter::WriteRectangle(const Rectangle & rRect)
+void WMFWriter::WriteRectangle(const tools::Rectangle & rRect)
 {
     WritePointYX(Point(rRect.Right()+1,rRect.Bottom()+1));
     WritePointYX(rRect.TopLeft());
@@ -278,7 +278,7 @@ void WMFWriter::UpdateRecordHeader()
     pWMF->Seek(nPos);
 }
 
-void WMFWriter::WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
+void WMFWriter::WMFRecord_Arc(const tools::Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
 {
     WriteRecordHeader(0x0000000b,W_META_ARC);
     WritePointYX(rEndPt);
@@ -286,7 +286,7 @@ void WMFWriter::WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, c
     WriteRectangle(rRect);
 }
 
-void WMFWriter::WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
+void WMFWriter::WMFRecord_Chord(const tools::Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
 {
     WriteRecordHeader(0x0000000b,W_META_CHORD);
     WritePointYX(rEndPt);
@@ -411,7 +411,7 @@ void WMFWriter::WMFRecord_DeleteObject(sal_uInt16 nObjectHandle)
     pWMF->WriteUInt16( nObjectHandle );
 }
 
-void WMFWriter::WMFRecord_Ellipse(const Rectangle & rRect)
+void WMFWriter::WMFRecord_Ellipse(const tools::Rectangle & rRect)
 {
     WriteRecordHeader(0x00000007,W_META_ELLIPSE);
     WriteRectangle(rRect);
@@ -605,7 +605,7 @@ void WMFWriter::WMFRecord_MoveTo(const Point & rPoint)
     WritePointYX(rPoint);
 }
 
-void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
+void WMFWriter::WMFRecord_Pie(const tools::Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
 {
     WriteRecordHeader(0x0000000b,W_META_PIE);
     WritePointYX(rEndPt);
@@ -668,7 +668,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
     UpdateRecordHeader();
 }
 
-void WMFWriter::WMFRecord_Rectangle(const Rectangle & rRect)
+void WMFWriter::WMFRecord_Rectangle(const tools::Rectangle & rRect)
 {
     WriteRecordHeader( 0x00000007,W_META_RECTANGLE );
     WriteRectangle( rRect );
@@ -680,7 +680,7 @@ void WMFWriter::WMFRecord_RestoreDC()
     pWMF->WriteInt16( -1 );
 }
 
-void WMFWriter::WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound)
+void WMFWriter::WMFRecord_RoundRect(const tools::Rectangle & rRect, long nHorzRound, long nVertRound)
 {
     WriteRecordHeader(0x00000009,W_META_ROUNDRECT);
     WriteHeightWidth(Size(nHorzRound,nVertRound));
@@ -838,7 +838,7 @@ void WMFWriter::TrueTextOut(const Point & rPoint, const OString& rString)
     UpdateRecordHeader();
 }
 
-void WMFWriter::WMFRecord_IntersectClipRect( const Rectangle& rRect )
+void WMFWriter::WMFRecord_IntersectClipRect( const tools::Rectangle& rRect )
 {
     WriteRecordHeader( 0x00000007, W_META_INTERSECTCLIPRECT );
     WriteRectangle(rRect);
@@ -1238,7 +1238,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
                     Bitmap                          aTmp( pA->GetBitmap() );
 
-                    if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
+                    if( aTmp.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
                         WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
                 }
                 break;
@@ -1283,7 +1283,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                     BitmapEx                        aBmpEx( pA->GetBitmapEx() );
-                    aBmpEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                    aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Bitmap                          aBmp( aBmpEx.GetBitmap() );
                     Bitmap                          aMsk( aBmpEx.GetMask() );
 

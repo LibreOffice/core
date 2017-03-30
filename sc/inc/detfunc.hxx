@@ -69,10 +69,10 @@ class SC_DLLPUBLIC ScDetectiveFunc
     Point       GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const;
 
     /** @return the drawing layer rectangle for the passed cell range. */
-    Rectangle   GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    tools::Rectangle   GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
     /** @return the drawing layer rectangle for the passed cell address. */
-    Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
+    tools::Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
 
     bool        HasArrow( const ScAddress& rStart,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );

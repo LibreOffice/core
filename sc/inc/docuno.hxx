@@ -340,7 +340,7 @@ public:
     virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight) override;
 
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
-    virtual OUString getRowColumnHeaders(const Rectangle& rRectangle) override;
+    virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle) override;
 
     /// @see vcl::ITiledRenderable::getCellCursor().
     virtual OString getCellCursor( int nOutputWidth,
@@ -355,7 +355,7 @@ public:
     OUString getTrackedChanges() override;
 
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
-    virtual void setClientVisibleArea(const Rectangle& rRectangle) override;
+    virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
 
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;

@@ -380,25 +380,25 @@ void BackingWindow::checkInstalledModules()
     mpDBAllButton->Enable(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ));
 }
 
-void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Resize();
 
     Wallpaper aBack(svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
-    vcl::Region aClip(Rectangle(Point(0, 0), GetOutputSizePixel()));
+    vcl::Region aClip(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
 
     aClip.Exclude(maStartCentButtons);
 
     rRenderContext.Push(PushFlags::CLIPREGION);
     rRenderContext.IntersectClipRegion(aClip);
-    rRenderContext.DrawWallpaper(Rectangle(Point(0, 0), GetOutputSizePixel()), aBack);
+    rRenderContext.DrawWallpaper(tools::Rectangle(Point(0, 0), GetOutputSizePixel()), aBack);
     rRenderContext.Pop();
 
     ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
     pVDev->EnableRTL(rRenderContext.IsRTLEnabled());
     pVDev->SetOutputSizePixel(maStartCentButtons.GetSize());
     Point aOffset(Point(0, 0) - maStartCentButtons.TopLeft());
-    pVDev->DrawWallpaper(Rectangle(aOffset, GetOutputSizePixel()), aBack);
+    pVDev->DrawWallpaper(tools::Rectangle(aOffset, GetOutputSizePixel()), aBack);
 
     rRenderContext.DrawOutDev(maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
                               Point(0, 0), maStartCentButtons.GetSize(),
@@ -512,7 +512,7 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
 
 void BackingWindow::Resize()
 {
-    maStartCentButtons = Rectangle( Point(0, 0), GetOutputSizePixel() );
+    maStartCentButtons = tools::Rectangle( Point(0, 0), GetOutputSizePixel() );
 
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild),

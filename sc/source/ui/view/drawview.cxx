@@ -267,7 +267,7 @@ void ScDrawView::UpdateWorkArea()
     {
         Point aPos;
         Size aPageSize( pPage->GetSize() );
-        Rectangle aNewArea( aPos, aPageSize );
+        tools::Rectangle aNewArea( aPos, aPageSize );
         if ( aPageSize.Width() < 0 )
         {
             //  RTL: from max.negative (left) to zero (right)
@@ -558,7 +558,7 @@ bool ScDrawView::SdrBeginTextEdit(
     {
         if (OutlinerView* pView = GetTextEditOutlinerView())
         {
-            Rectangle aRectangle = pView->GetOutputArea();
+            tools::Rectangle aRectangle = pView->GetOutputArea();
             if (pWinL && pWinL->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
             OString sRectangle = aRectangle.toString();
@@ -836,7 +836,7 @@ void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
         SetLayerLocked( pLockLayer->GetName(), bLock );
 }
 
-void ScDrawView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
+void ScDrawView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
 {
     //! Evaluate rWin properly
     //! change zoom if necessary

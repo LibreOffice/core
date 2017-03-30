@@ -34,7 +34,7 @@ public:
     SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle );
     virtual ~SdHtmlAttrPreview() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void    SetColors( Color& aBack, Color& aText, Color& aLink,
                        Color& aVLink, Color& aALink );

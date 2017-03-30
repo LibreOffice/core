@@ -55,7 +55,7 @@ SvxFont::SvxFont( const SvxFont &rFont )
     SetLanguage(rFont.GetLanguage());
 }
 
-void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
+void SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
     const Size& rSize, const Color& rCol, bool bLeft )
 {
     long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;

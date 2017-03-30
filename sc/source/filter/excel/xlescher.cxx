@@ -119,7 +119,7 @@ void lclGetRowFromY(
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
-void lclMirrorRectangle( Rectangle& rRect )
+void lclMirrorRectangle( tools::Rectangle& rRect )
 {
     long nLeft = rRect.Left();
     rRect.Left() = -rRect.Right();
@@ -141,11 +141,11 @@ XclObjAnchor::XclObjAnchor() :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
+tools::Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
 {
     ScDocument& rDoc = rRoot.GetDoc();
     double fScale = lclGetTwipsScale( eMapUnit );
-    Rectangle aRect(
+    tools::Rectangle aRect(
         lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
         lclGetYFromRow( rDoc, nScTab, maFirst.mnRow, mnTY, fScale ),
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
@@ -157,14 +157,14 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
     return aRect;
 }
 
-void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const tools::Rectangle& rRect, MapUnit eMapUnit )
 {
     ScDocument& rDoc = rRoot.GetDoc();
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
     // adjust coordinates in mirrored sheets
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
 
@@ -178,7 +178,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
 }
 
 void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-        const Rectangle& rRect, MapUnit eMapUnit )
+        const tools::Rectangle& rRect, MapUnit eMapUnit )
 {
     double fScale = 1.0;
     switch( eMapUnit )

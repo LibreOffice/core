@@ -46,7 +46,7 @@ public:
     virtual SdrObject* ReplaceObject( SdrObject* pNewObj, size_t nObjNum ) override;
 
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
-                                    const Rectangle *pRect) const override;
+                                    const tools::Rectangle *pRect) const override;
 
     bool RequestHelp( vcl::Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 

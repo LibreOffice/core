@@ -75,7 +75,7 @@ namespace uno {
 
 struct EscherConnectorListEntry;
 class OutlinerParaObject;
-class Rectangle;
+namespace tools { class Rectangle; }
 
 namespace tools {
     class PolyPolygon;
@@ -190,7 +190,7 @@ public:
 
     void WriteShapeTransformation( const css::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false );
-    void WriteTransformation( const Rectangle& rRectangle,
+    void WriteTransformation( const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);

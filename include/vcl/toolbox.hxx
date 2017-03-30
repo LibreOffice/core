@@ -101,11 +101,11 @@ private:
     ImplToolBoxPrivateData*   mpData;
     std::vector<ImplToolSize> maFloatSizes;
     Idle               *mpIdle;
-    Rectangle           maUpperRect;
-    Rectangle           maLowerRect;
-    Rectangle           maOutDockRect;
-    Rectangle           maInDockRect;
-    Rectangle           maPaintRect;
+    tools::Rectangle           maUpperRect;
+    tools::Rectangle           maLowerRect;
+    tools::Rectangle           maOutDockRect;
+    tools::Rectangle           maInDockRect;
+    tools::Rectangle           maPaintRect;
     VclPtr<FloatingWindow> mpFloatWin;
     sal_uInt16          mnKeyModifier;
     long                mnDX;
@@ -186,7 +186,7 @@ private:
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const Rectangle& rRect);
+    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
@@ -204,7 +204,7 @@ private:
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
     SAL_DLLPRIVATE void            ImplFillLayoutData();
     SAL_DLLPRIVATE bool            ImplHasClippedItems();
-    SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
+    SAL_DLLPRIVATE Point           ImplGetPopupPosition( const tools::Rectangle& rRect, const Size& rSize ) const;
     SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
@@ -232,7 +232,7 @@ public:
                                                long& rRight, long& rBottom ) const;
     SAL_DLLPRIVATE void ImplCheckUpdate();
     static SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext,
-                                            const Rectangle &aDragArea, int nDragWidth,
+                                            const tools::Rectangle &aDragArea, int nDragWidth,
                                             WindowAlign eAlign, bool bHorz);
 
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
@@ -240,9 +240,9 @@ public:
     SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
     SAL_DLLPRIVATE void ImplDrawTransparentBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
     SAL_DLLPRIVATE static void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
-    SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
+    SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
 
-    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
+    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem() const;
@@ -253,10 +253,10 @@ public:
     SAL_DLLPRIVATE void ImplSetMinMaxFloatSize();
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( long nToolSize ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
-    SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
+    SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
     SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
-    SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
+    SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCountLineBreaks() const;
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
@@ -285,7 +285,7 @@ public:
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
@@ -298,8 +298,8 @@ public:
 
     virtual void        ToggleFloatingMode() override;
     virtual void        StartDocking() override;
-    virtual bool        Docking( const Point& rPos, Rectangle& rRect ) override;
-    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) override;
+    virtual bool        Docking( const Point& rPos, tools::Rectangle& rRect ) override;
+    virtual void        EndDocking( const tools::Rectangle& rRect, bool bFloatMode ) override;
     virtual void        Resizing( Size& rSize ) override;
     virtual Size        GetOptimalSize() const override;
     virtual void        doDeferredInit(WinBits nBits) override;
@@ -355,9 +355,9 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     /// Map the command name (like .uno:Save) back to item id.
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
-    Rectangle           GetItemRect( sal_uInt16 nItemId );
-    Rectangle           GetItemPosRect( ImplToolItems::size_type nPos );
-    Rectangle           GetOverflowRect() const;
+    tools::Rectangle           GetItemRect( sal_uInt16 nItemId );
+    tools::Rectangle           GetItemPosRect( ImplToolItems::size_type nPos );
+    tools::Rectangle           GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
     Size                GetItemContentSize( sal_uInt16 nItemId );
@@ -487,7 +487,7 @@ public:
     void                SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink );
 
     // open custommenu
-    void                ExecuteCustomMenu( const Rectangle& rRect = Rectangle() );
+    void                ExecuteCustomMenu( const tools::Rectangle& rRect = tools::Rectangle() );
 
     // allow Click Handler to distinguish between mouse and key input
     bool                IsKeyEvent() const { return mbIsKeyEvent; }
@@ -503,7 +503,7 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex );
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex );
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID );

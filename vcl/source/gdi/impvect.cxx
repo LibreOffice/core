@@ -741,7 +741,7 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 
             for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
             {
-                const Rectangle aBound( rPolyPoly[ i ].GetBoundRect() );
+                const tools::Rectangle aBound( rPolyPoly[ i ].GetBoundRect() );
 
                 if( aBound.GetWidth() > nReduce && aBound.GetHeight() > nReduce )
                 {
@@ -881,7 +881,7 @@ void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 
                 {
                     if( cReduce )
                     {
-                        const Rectangle aBound( rPoly.GetBoundRect() );
+                        const tools::Rectangle aBound( rPoly.GetBoundRect() );
 
                         if( aBound.GetWidth() > cReduce && aBound.GetHeight() > cReduce )
                             rPolyPoly.Insert( rPoly );

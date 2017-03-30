@@ -1077,7 +1077,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     // Then that stored data are not persistent!
 
     const SwRect& rRect = m_pWrtShell->GetCharRect();
-    const Rectangle& rVis = GetVisArea();
+    const tools::Rectangle& rVis = GetVisArea();
 
     rUserData = OUString::number( rRect.Left() );
     rUserData += ";";
@@ -1147,7 +1147,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
         {
             m_pWrtShell->EnableSmooth( false );
 
-            const Rectangle aVis( nLeft, nTop, nRight, nBottom );
+            const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
 
             sal_Int32 nOff = 0;
             SvxZoomType eZoom;
@@ -1244,7 +1244,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         SET_CURR_SHELL(m_pWrtShell);
         const beans::PropertyValue *pValue = rSequence.getConstArray();
         const SwRect& rRect = m_pWrtShell->GetCharRect();
-        const Rectangle &rVis = GetVisArea();
+        const tools::Rectangle &rVis = GetVisArea();
         const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
 
         sal_Int64 nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
@@ -1345,7 +1345,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             if (nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
             {
                 m_pWrtShell->EnableSmooth( false );
-                const Rectangle aVis( nLeft, nTop, nRight, nBottom );
+                const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
 
                 SvxZoomType eZoom;
                 if ( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
@@ -1466,7 +1466,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence )
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
-    const Rectangle& rVis = GetVisArea();
+    const tools::Rectangle& rVis = GetVisArea();
 
     std::vector<beans::PropertyValue> aVector;
 

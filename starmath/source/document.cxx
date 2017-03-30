@@ -719,7 +719,7 @@ bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
     if ( SfxObjectShell::InitNew( xStorage ) )
     {
         bRet = true;
-        SetVisArea(Rectangle(Point(0, 0), Size(2000, 1000)));
+        SetVisArea(tools::Rectangle(Point(0, 0), Size(2000, 1000)));
     }
     return bRet;
 }
@@ -1234,9 +1234,9 @@ SfxItemPool& SmDocShell::GetPool()
     return SfxGetpApp()->GetPool();
 }
 
-void SmDocShell::SetVisArea(const Rectangle & rVisArea)
+void SmDocShell::SetVisArea(const tools::Rectangle & rVisArea)
 {
-    Rectangle aNewRect(rVisArea);
+    tools::Rectangle aNewRect(rVisArea);
 
     aNewRect.SetPos(Point());
 

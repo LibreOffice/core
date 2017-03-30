@@ -46,7 +46,7 @@ private:
     Idle            maDockIdle;
     Idle            maEndDockIdle;
     Point           maDockPos;
-    Rectangle       maDockRect;
+    tools::Rectangle       maDockRect;
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
@@ -169,7 +169,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
         if( pBorder != this )
         {
-            Rectangle aBorderRect( Point(), pBorder->GetSizePixel() );
+            tools::Rectangle aBorderRect( Point(), pBorder->GetSizePixel() );
             sal_Int32 nLeft, nTop, nRight, nBottom;
             GetBorder( nLeft, nTop, nRight, nBottom );
             // limit borderrect to the caption part only and without the resizing borders
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
         bRealMove )
     {
         maDockPos = Point( pDockingArea->OutputToScreenPixel( pDockingArea->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) ) );
-        maDockRect = Rectangle( maDockPos, mpDockWin->GetSizePixel() );
+        maDockRect = tools::Rectangle( maDockPos, mpDockWin->GetSizePixel() );
 
         // mouse pos in screen pixels
         Point aMousePos = pDockingArea->OutputToScreenPixel( aState.maPos );
@@ -417,12 +417,12 @@ void DockingManager::SetPosSizePixel( vcl::Window *pWindow, long nX, long nY,
         pWrapper->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
-Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
+tools::Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
-        aRect = Rectangle( pWrapper->GetPosPixel(), pWrapper->GetSizePixel() );
+        aRect = tools::Rectangle( pWrapper->GetPosPixel(), pWrapper->GetSizePixel() );
 
     return aRect;
 }
@@ -443,14 +443,14 @@ public:
     virtual void dispose() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
     virtual void        Resize() override;
 
-    Rectangle           GetDragRect() const;
+    tools::Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;
     void                DrawGrip(vcl::RenderContext& rRenderContext);
     void                DrawBorder(vcl::RenderContext& rRenderContext);
@@ -513,11 +513,11 @@ void ImplPopupFloatWin::Resize()
     ImplSetBorder();
 }
 
-Rectangle ImplPopupFloatWin::GetDragRect() const
+tools::Rectangle ImplPopupFloatWin::GetDragRect() const
 {
     if( !hasGrip() )
-        return Rectangle();
-    return Rectangle( 1, 1, GetOutputSizePixel().Width() - 1,
+        return tools::Rectangle();
+    return tools::Rectangle( 1, 1, GetOutputSizePixel().Width() - 1,
                       2 + ToolBox::ImplGetDragWidth( *this, false ) );
 }
 
@@ -530,11 +530,11 @@ Point ImplPopupFloatWin::GetToolboxPosition() const
 void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetFillColor();
-    Rectangle aRect( Point(), GetOutputSizePixel() );
+    tools::Rectangle aRect( Point(), GetOutputSizePixel() );
 
     vcl::Region oldClipRgn( GetClipRegion( ) );
     vcl::Region aClipRgn( aRect );
-    Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
+    tools::Rectangle aItemClipRect( ImplGetItemEdgeClipRect() );
     if( !aItemClipRect.IsEmpty() )
     {
         aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
@@ -575,7 +575,7 @@ void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
         rRenderContext.SetFillColor();
 }
 
-void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     DrawBorder(rRenderContext);
     if (hasGrip())
@@ -737,7 +737,7 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     // mouse pos in screen pixels
     Point aMousePos = pDockingArea->OutputToScreenPixel( aState.maPos );
     Point aDockPos = Point( pDockingArea->AbsoluteScreenToOutputPixel( GetWindow()->OutputToAbsoluteScreenPixel( GetWindow()->GetPosPixel() ) ) );
-    Rectangle aDockRect( aDockPos, GetWindow()->GetSizePixel() );
+    tools::Rectangle aDockRect( aDockPos, GetWindow()->GetSizePixel() );
     StartDocking( aMousePos, aDockRect );
 
     GetWindow()->ImplUpdateAll();
@@ -759,11 +759,11 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             if ( rTEvt.IsTrackingCanceled() )
             {
                 mbDockCanceled = true;
-                EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
+                EndDocking( tools::Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
                 mbDockCanceled = false;
             }
             else
-                EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
+                EndDocking( tools::Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
         }
         // Docking only upon non-synthetic MouseEvents
         else if ( !rTEvt.GetMouseEvent().IsSynthetic() || rTEvt.GetMouseEvent().IsModifierChanged() )
@@ -783,8 +783,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             aMousePos.X() -= maMouseOff.X();
             aMousePos.Y() -= maMouseOff.Y();
             Point aPos = GetWindow()->ImplOutputToFrame( aMousePos );
-            Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
-            Rectangle aCompRect = aTrackRect;
+            tools::Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
+            tools::Rectangle aCompRect = aTrackRect;
             aPos.X()    += maMouseOff.X();
             aPos.Y()    += maMouseOff.Y();
 
@@ -817,7 +817,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
                 nTrackStyle = ShowTrackFlags::Object;
             else
                 nTrackStyle = ShowTrackFlags::Big;
-            Rectangle aShowTrackRect = aTrackRect;
+            tools::Rectangle aShowTrackRect = aTrackRect;
             aShowTrackRect.SetPos( GetWindow()->ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
 
             GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
@@ -834,7 +834,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRect )
+void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, tools::Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
@@ -842,7 +842,7 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
     mbDocking = true;
 }
 
-bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
+bool ImplDockingWindowWrapper::Docking( const Point& rPoint, tools::Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
@@ -851,9 +851,9 @@ bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
     return data.mbFloating;
 }
 
-void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMode )
+void ImplDockingWindowWrapper::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 {
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
 
     bool bOrigDockCanceled = mbDockCanceled;
     if (bFloatMode && !StyleSettings::GetDockingFloatsSupported())
@@ -1220,7 +1220,7 @@ bool ImplDockingWindowWrapper::IsFloatingMode() const
     return (mpFloatWin != nullptr);
 }
 
-void    ImplDockingWindowWrapper::SetDragArea( const Rectangle& rRect )
+void    ImplDockingWindowWrapper::SetDragArea( const tools::Rectangle& rRect )
 {
     maDragArea = rRect;
 }

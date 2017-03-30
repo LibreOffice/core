@@ -69,12 +69,12 @@ struct ScPrintPageLocation
 {
     long        nPage;
     ScRange     aCellRange;
-    Rectangle   aRectangle;     // pixels
+    tools::Rectangle   aRectangle;     // pixels
 
     ScPrintPageLocation() :
         nPage(-1) {}            // default: invalid
 
-    ScPrintPageLocation( long nP, const ScRange& rRange, const Rectangle& rRect ) :
+    ScPrintPageLocation( long nP, const ScRange& rRange, const tools::Rectangle& rRect ) :
         nPage(nP), aCellRange(rRange), aRectangle(rRect) {}
 };
 

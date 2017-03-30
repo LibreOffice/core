@@ -314,7 +314,7 @@ long FreetypeFont::Release() const
     return --mnRefCount;
 }
 
-const Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
+const tools::Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
 {
     // usually the GlyphData is cached
     GlyphList::iterator it = maGlyphList.find(rGlyph.maGlyphId);

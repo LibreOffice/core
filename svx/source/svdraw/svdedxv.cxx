@@ -204,7 +204,7 @@ void SdrObjEditView::HideSdrPage()
     SdrGlueEditView::HideSdrPage();
 }
 
-void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
+void SdrObjEditView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if (IsMacroObj()) {
         rRect=pMacroObj->GetCurrentBoundRect();
@@ -245,14 +245,14 @@ void SdrObjEditView::ModelHasChanged()
             bool bColorChg=false;
             bool bContourFrame=pTextObj->IsContourTextFrame();
             EVAnchorMode eNewAnchor(ANCHOR_VCENTER_HCENTER);
-            Rectangle aOldArea(aMinTextEditArea);
+            tools::Rectangle aOldArea(aMinTextEditArea);
             aOldArea.Union(aTextEditArea);
             Color aNewColor;
             { // check area
                 Size aPaperMin1;
                 Size aPaperMax1;
-                Rectangle aEditArea1;
-                Rectangle aMinArea1;
+                tools::Rectangle aEditArea1;
+                tools::Rectangle aMinArea1;
                 pTextObj->TakeTextEditArea(&aPaperMin1,&aPaperMax1,&aEditArea1,&aMinArea1);
 
                 Point aPvOfs(pTextObj->GetTextEditOffset());
@@ -263,7 +263,7 @@ void SdrObjEditView::ModelHasChanged()
                 aMinArea1 += pTextObj->GetGridOffset();
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
-                Rectangle aNewArea(aMinArea1);
+                tools::Rectangle aNewArea(aMinArea1);
                 aNewArea.Union(aEditArea1);
 
                 if (aNewArea!=aOldArea || aEditArea1!=aTextEditArea || aMinArea1!=aMinTextEditArea ||
@@ -283,7 +283,7 @@ void SdrObjEditView::ModelHasChanged()
                         EEControlBits nStat=pTextEditOutliner->GetControlWord();
                         nStat&=~EEControlBits::AUTOPAGESIZE;
                         pTextEditOutliner->SetControlWord(nStat);
-                        Rectangle aAnchorRect;
+                        tools::Rectangle aAnchorRect;
                         pTextObj->TakeTextAnchorRect(aAnchorRect);
                         pTextObj->ImpSetContourPolygon(*pTextEditOutliner,aAnchorRect, true);
                     }
@@ -330,7 +330,7 @@ void SdrObjEditView::ModelHasChanged()
                     OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
                     { // invalidate old OutlinerView area
                         vcl::Window* pWin=pOLV->GetWindow();
-                        Rectangle aTmpRect(aOldArea);
+                        tools::Rectangle aTmpRect(aOldArea);
                         sal_uInt16 nPixSiz=pOLV->GetInvalidateMore()+1;
                         Size aMore(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
                         aTmpRect.Left()-=aMore.Width();
@@ -372,7 +372,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
             if(nViewCount)
             {
                 const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
-                const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+                const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
                 for(sal_uInt32 i(0); i < nViewCount; i++)
                 {
@@ -394,15 +394,15 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
     }
 }
 
-void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const
+void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect, OutputDevice& rTargetDevice) const
 {
     const SdrTextObj* pText = dynamic_cast<SdrTextObj*>( GetTextEditObject() );
     bool bTextFrame(pText && pText->IsTextFrame());
     bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
     bool bModifyMerk(pTextEditOutliner->IsModified());
-    Rectangle aBlankRect(rOutlView.GetOutputArea());
+    tools::Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);
-    Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
+    tools::Rectangle aPixRect(rTargetDevice.LogicToPixel(aBlankRect));
 
     // in the tiled rendering case, the setup is incomplete, and we very
     // easily get an empty rRect on input - that will cause that everything is
@@ -467,9 +467,9 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
 
         if(bTextFrame && !bFitToSize)
         {
-            Rectangle aBlankRect(rOutlView.GetOutputArea());
+            tools::Rectangle aBlankRect(rOutlView.GetOutputArea());
             aBlankRect.Union(aMinTextEditArea);
-            Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
+            tools::Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
             sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
 
             aPixRect.Left()--;
@@ -490,7 +490,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
                 if (aPixRect.Bottom()>nMaxY) aPixRect.Bottom()=nMaxY;
             }
 
-            Rectangle aOuterPix(aPixRect);
+            tools::Rectangle aOuterPix(aPixRect);
             aOuterPix.Left()-=nPixSiz;
             aOuterPix.Top()-=nPixSiz;
             aOuterPix.Right()+=nPixSiz;
@@ -827,8 +827,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // but aMinTextEditArea has to happen, too (therefore leaving this in right now)
             pTextObj->TakeTextEditArea(nullptr,nullptr,&aTextEditArea,&aMinTextEditArea);
 
-            Rectangle aTextRect;
-            Rectangle aAnchorRect;
+            tools::Rectangle aTextRect;
+            tools::Rectangle aAnchorRect;
             pTextObj->TakeTextRect(*pTextEditOutliner, aTextRect, true,
                 &aAnchorRect /* Give true here, not false */);
 
@@ -1078,7 +1078,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     pTextEditOutliner=nullptr;
     pTextEditOutlinerView=nullptr;
     pTextEditCursorMerker=nullptr;
-    aTextEditArea=Rectangle();
+    aTextEditArea=tools::Rectangle();
 
     if (pTEOutliner!=nullptr)
     {
@@ -1202,7 +1202,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             OutlinerView* pOLV=pTEOutliner->GetView(i);
             sal_uInt16 nMorePix=pOLV->GetInvalidateMore() + 10;
             vcl::Window* pWin=pOLV->GetWindow();
-            Rectangle aRect(pOLV->GetOutputArea());
+            tools::Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
             if (!bTextEditDontDelete || i!=0)
             {
@@ -1320,7 +1320,7 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
     bool bOk=false;
     if(mxTextEditObj.is())
     {
-        Rectangle aEditArea;
+        tools::Rectangle aEditArea;
         OutlinerView* pOLV=pTextEditOutliner->GetView(0);
         if (pOLV!=nullptr)
         {
@@ -1353,7 +1353,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
             vcl::Window* pWin=pOLV->GetWindow();
             if (pText!=nullptr && pText->IsTextFrame() && pOLV!=nullptr && pWin!=nullptr) {
                 sal_uInt16 nPixSiz=pOLV->GetInvalidateMore();
-                Rectangle aEditArea(aMinTextEditArea);
+                tools::Rectangle aEditArea(aMinTextEditArea);
                 aEditArea.Union(pOLV->GetOutputArea());
                 if (!aEditArea.IsInside(rHit)) {
                     Size aSiz(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
@@ -1447,7 +1447,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             Point aPixPos(rMEvt.GetPosPixel());
             if (pWin)
             {
-                Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
+                tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
                 if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
                 if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
                 if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
@@ -1480,7 +1480,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
         }
         if (bPostIt && pWin) {
             Point aPixPos(rMEvt.GetPosPixel());
-            Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
+            tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
             if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
             if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
             if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
@@ -1514,7 +1514,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
-            Rectangle aR(pTextEditOutlinerView->GetOutputArea());
+            tools::Rectangle aR(pTextEditOutlinerView->GetOutputArea());
             if (pWin)
                 aR = pWin->LogicToPixel(aR);
             else if (pTextEditWin)
@@ -1553,7 +1553,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
             if (bPostIt) {
                 Point aPixPos(rCEvt.GetMousePosPixel());
                 if (rCEvt.IsMouseEvent() && pWin) {
-                    Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
+                    tools::Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
                     if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
                     if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
                     if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
@@ -1618,7 +1618,7 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
         if (pCsr!=nullptr) {
             Size aSiz(pCsr->GetSize());
             if (aSiz.Width()!=0 && aSiz.Height()!=0) {
-                MakeVisible(Rectangle(pCsr->GetPos(),aSiz),*pTextEditWin);
+                MakeVisible(tools::Rectangle(pCsr->GetPos(),aSiz),*pTextEditWin);
             }
         }
     }
@@ -1953,7 +1953,7 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.pOut=pMacroWin.get();
-        pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
+        pMacroObj->PaintMacro(*pMacroWin,tools::Rectangle(),aHitRec);
         bMacroDown=false;
     }
 }
@@ -1970,7 +1970,7 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=true;
         aHitRec.pOut=pMacroWin.get();
-        pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
+        pMacroObj->PaintMacro(*pMacroWin,tools::Rectangle(),aHitRec);
         bMacroDown=true;
     }
 }

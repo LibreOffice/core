@@ -102,8 +102,8 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
         aBmpExDst.Erase( aEraseColor );
         aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
 
-        Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
-        Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
+        tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
+        tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
                                 (lastSize - maImage.GetSizePixel().Height())/2 ),
                             maImage.GetSizePixel() );
 
@@ -320,7 +320,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             // #99071# do not grab the focus, otherwise it will be restored to the menubar
             // when the frame is reactivated later
             //GrabFocus();
-            pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement, pMenu, bPreSelectFirst );
+            pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement, pMenu, bPreSelectFirst );
             // does not have a window, if aborted before or if there are no entries
             if ( pActivePopup->ImplGetFloatingWindow() )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
@@ -569,7 +569,7 @@ static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& 
 
         rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetSeparatorColor());
         Point aPt;
-        Rectangle aRect(aPt, rSize);
+        tools::Rectangle aRect(aPt, rSize);
         rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
     }
 }
@@ -589,7 +589,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
             if (pData->eType != MenuItemType::SEPARATOR)
             {
                 // #107747# give menuitems the height of the menubar
-                Rectangle aRect = Rectangle(Point(nX, 1), Size(pData->aSz.Width(), GetOutputSizePixel().Height() - 2));
+                tools::Rectangle aRect = tools::Rectangle(Point(nX, 1), Size(pData->aSz.Width(), GetOutputSizePixel().Height() - 2));
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
                 bool bRollover, bHighlight;
@@ -614,7 +614,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                          Erase(rRenderContext);
                     else
                     {
-                        Rectangle aBgRegion(Point(), GetOutputSizePixel());
+                        tools::Rectangle aBgRegion(Point(), GetOutputSizePixel());
                         rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aBgRegion,
                                                          ControlState::ENABLED, aControlValue, OUString());
                     }
@@ -649,9 +649,9 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     }
 }
 
-Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
+tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( pMenu )
     {
         long nX = 0;
@@ -663,7 +663,7 @@ Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
             {
                 if ( pData->eType != MenuItemType::SEPARATOR )
                     // #107747# give menuitems the height of the menubar
-                    aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
+                    aRect = tools::Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
                 break;
             }
 
@@ -848,7 +848,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (!pMenu)
         return;
@@ -872,7 +872,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         else
         {
             Point aPt;
-            Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
+            tools::Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
             rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aMenubarValue, OUString());
@@ -963,7 +963,7 @@ void MenuBarWindow::RequestHelp( const HelpEvent& rHEvt )
     if ( rHEvt.GetMode() & (HelpEventMode::CONTEXT | HelpEventMode::EXTENDED) )
         ChangeHighlightItem( ITEMPOS_INVALID, true );
 
-    Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
+    tools::Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
     if( !ImplHandleHelpEvent( this, pMenu, nId, rHEvt, aHighlightRect ) )
         Window::RequestHelp( rHEvt );
 }
@@ -1143,18 +1143,18 @@ void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<Men
         it->second.m_aHighlightLink = rLink;
 }
 
-Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
+tools::Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( m_aAddButtons.find( nId ) != m_aAddButtons.end() )
     {
         if( pMenu->mpSalMenu )
         {
             aRect = pMenu->mpSalMenu->GetMenuBarButtonRectPixel( nId, ImplGetWindowImpl()->mpFrame );
-            if( aRect == Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) )
+            if( aRect == tools::Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) )
             {
                 // system menu button is somewhere but location cannot be determined
-                return Rectangle();
+                return tools::Rectangle();
             }
         }
 

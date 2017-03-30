@@ -380,7 +380,7 @@ void SdrUndoAttrObj::Undo()
         // losing the geometry size info for the object when it is
         // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
-        const Rectangle aSnapRect = pObj->GetSnapRect();
+        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
 
         if(pUndoSet)
         {
@@ -457,7 +457,7 @@ void SdrUndoAttrObj::Redo()
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
-        const Rectangle aSnapRect = pObj->GetSnapRect();
+        const tools::Rectangle aSnapRect = pObj->GetSnapRect();
 
         if(pRedoSet)
         {

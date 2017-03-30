@@ -536,13 +536,13 @@ void ScTabView::ScrollToObject( SdrObject* pDrawObj )
     }
 }
 
-void ScTabView::MakeVisible( const Rectangle& rHMMRect )
+void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
 {
     vcl::Window* pWin = GetActiveWin();
     Size aWinSize = pWin->GetOutputSizePixel();
     SCTAB nTab = aViewData.GetTabNo();
 
-    Rectangle aRect = pWin->LogicToPixel( rHMMRect );
+    tools::Rectangle aRect = pWin->LogicToPixel( rHMMRect );
 
     long nScrollX=0, nScrollY=0;        // Pixel
 
@@ -655,9 +655,9 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     const SdrCaptionObj* pCaption = pNote->GetCaption();
     if (!pCaption) return;
 
-    Rectangle aRect = pCaption->GetLogicRect();
+    tools::Rectangle aRect = pCaption->GetLogicRect();
     basegfx::B2DRange aTailRange = pCaption->getTailPolygon().getB2DRange();
-    Rectangle aTailRect(aTailRange.getMinX(), aTailRange.getMinY(),
+    tools::Rectangle aTailRect(aTailRange.getMinX(), aTailRange.getMinY(),
                         aTailRange.getMaxX(), aTailRange.getMaxY());
     aRect.Union( aTailRect );
 
@@ -666,7 +666,7 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     // The value used below is enough to get the tile, where the arrow tip is
     // placed, invalidated.
     const int nBorderSize = 200;
-    Rectangle aInvalidRect = aRect;
+    tools::Rectangle aInvalidRect = aRect;
     aInvalidRect.Left() -= nBorderSize;
     aInvalidRect.Right() += nBorderSize;
     aInvalidRect.Top() -= nBorderSize;

@@ -800,7 +800,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 OutlinerView* pOutView = pView->IsTextEdit() ?
                                 pView->GetTextEditOutlinerView() : nullptr;
                 if ( pOutView )
-                    pOutView->Paint( Rectangle() );
+                    pOutView->Paint( tools::Rectangle() );
 
                 SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), EE_ITEMS_START, EE_ITEMS_END );
                 pView->SetAttributes( aEmptyAttr, true );

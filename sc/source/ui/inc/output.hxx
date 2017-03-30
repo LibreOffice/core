@@ -35,7 +35,7 @@ namespace editeng {
     struct MisspellRanges;
 }
 
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Font; }
 class OutputDevice;
 class EditEngine;
@@ -64,8 +64,8 @@ friend class ScGridWindow;
 private:
     struct OutputAreaParam
     {
-        Rectangle   maAlignRect;
-        Rectangle   maClipRect;
+        tools::Rectangle   maAlignRect;
+        tools::Rectangle   maClipRect;
         long        mnColWidth;
         long        mnLeftClipLength; /// length of the string getting cut off on the left.
         long        mnRightClipLength; /// length of the string getting cut off on the right.
@@ -113,7 +113,7 @@ private:
         bool readCellContent(ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
         void setPatternToEngine(bool bUseStyleColor);
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
-        void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+        void calcPaperSize(Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
         void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
         bool hasLineBreak() const;
         bool isHyperlinkCell() const;
@@ -226,7 +226,7 @@ private:
                                    bool bBreak, bool bOverwrite,
                                    OutputAreaParam& rParam );
 
-    void            ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
+    void            ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
                                     long nLeftM, long nTopM, long nRightM, long nBottomM,
                                     bool bWidth, sal_uInt16 nOrient, long nAttrRotate, bool bPixelToLogic,
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
@@ -297,7 +297,7 @@ public:
     void    DrawStrings( bool bPixelToLogic = false );
 
     /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
-    Rectangle LayoutStrings(bool bPixelToLogic, bool bPaint = true, const ScAddress &rAddress = ScAddress());
+    tools::Rectangle LayoutStrings(bool bPixelToLogic, bool bPaint = true, const ScAddress &rAddress = ScAddress());
 
     void    DrawDocumentBackground();
     void    DrawBackground(vcl::RenderContext& rRenderContext);

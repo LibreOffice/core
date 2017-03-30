@@ -68,9 +68,9 @@ bool SdrTextObj::hasSpecialDrag() const
     return true;
 }
 
-Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
+tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
-    Rectangle aTmpRect(maRect);
+    tools::Rectangle aTmpRect(maRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==nullptr ? SdrHdlKind::Move : pHdl->GetKind();
     bool bEcke=(eHdl==SdrHdlKind::UpperLeft || eHdl==SdrHdlKind::UpperRight || eHdl==SdrHdlKind::LowerLeft || eHdl==SdrHdlKind::LowerRight);
@@ -147,7 +147,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 
 bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    Rectangle aNewRect(ImpDragCalcRect(rDrag));
+    tools::Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
     if(aNewRect.TopLeft() != maRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearAngle))
     {
@@ -183,7 +183,7 @@ OUString SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 bool SdrTextObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
-    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     maRect = aRect1;
@@ -192,7 +192,7 @@ bool SdrTextObj::BegCreate(SdrDragStat& rStat)
 
 bool SdrTextObj::MovCreate(SdrDragStat& rStat)
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
@@ -230,7 +230,7 @@ bool SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
 

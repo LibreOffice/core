@@ -152,11 +152,11 @@ void VisibleAreaManager::MakeVisible()
         return ::boost::optional<Point>();
 
     // Get the currently visible area and the model area.
-    const Rectangle aVisibleArea (pWindow->PixelToLogic(
-        Rectangle(
+    const ::tools::Rectangle aVisibleArea (pWindow->PixelToLogic(
+        ::tools::Rectangle(
             Point(0,0),
             pWindow->GetOutputSizePixel())));
-    const Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
+    const ::tools::Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
 
     sal_Int32 nVisibleTop (aVisibleArea.Top());
     const sal_Int32 nVisibleWidth (aVisibleArea.GetWidth());
@@ -164,7 +164,7 @@ void VisibleAreaManager::MakeVisible()
     const sal_Int32 nVisibleHeight (aVisibleArea.GetHeight());
 
     // Find the longest run of boxes whose union fits into the visible area.
-    for (::std::vector<Rectangle>::const_iterator
+    for (::std::vector<::tools::Rectangle>::const_iterator
              iBox(maVisibleRequests.begin()),
              iEnd(maVisibleRequests.end());
          iBox!=iEnd;

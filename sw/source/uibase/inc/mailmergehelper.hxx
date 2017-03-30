@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
     void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;

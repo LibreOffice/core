@@ -603,7 +603,7 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
                 GetView().FindIPClient( xObj.GetObject(), &(GetView().GetEditWin()) );
             if ( pCli )
             {
-                Rectangle aArea = pCli->GetObjArea();
+                tools::Rectangle aArea = pCli->GetObjArea();
                 aArea += rOffset;
                 pCli->SetObjArea( aArea );
             }

@@ -54,9 +54,9 @@ public:
     SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               sal_uLong nImageSep, DrawFlags nDrawFlags,
-                                              DrawTextFlags nTextStyle, Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
-    SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
-    SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
+                                              DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
+    SAL_DLLPRIVATE void             ImplSetFocusRect( const tools::Rectangle &rFocusRect );
+    SAL_DLLPRIVATE const tools::Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
     /// The x-coordinate of the vertical separator line, use in MenuButton subclass only.
     SAL_DLLPRIVATE long             ImplGetSeparatorX() const;
@@ -89,7 +89,7 @@ public:
     void                EnableImageDisplay( bool bEnable );
     void                EnableTextDisplay( bool bEnable );
 
-    void                SetFocusRect( const Rectangle& rFocusRect );
+    void                SetFocusRect( const tools::Rectangle& rFocusRect );
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
     virtual bool        set_property(const OString &rKey, const OString &rValue) override;
@@ -117,7 +117,7 @@ class VCL_DLLPUBLIC PushButton : public Button
 {
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
-    SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, DrawButtonFlags nStyle);
+    SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, tools::Rectangle& rRect, DrawButtonFlags nStyle);
     SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
@@ -127,7 +127,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
@@ -163,7 +163,7 @@ public:
     virtual Size    GetOptimalSize() const override;
 
     virtual bool    set_property(const OString &rKey, const OString &rValue) override;
-    virtual void    ShowFocus(const Rectangle& rRect) override;
+    virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
 protected:
     PushButtonDropdownStyle mnDDStyle;
@@ -173,7 +173,7 @@ protected:
     SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
-                                                             const Rectangle& rRect, bool bMenuBtnSep);
+                                                             const tools::Rectangle& rRect, bool bMenuBtnSep);
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext);
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( DrawFlags nDrawFlags ) const;
@@ -271,8 +271,8 @@ class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
     std::shared_ptr< std::vector< VclPtr< RadioButton > > > m_xGroup;
-    Rectangle       maStateRect;
-    Rectangle       maMouseRect;
+    tools::Rectangle       maStateRect;
+    tools::Rectangle       maMouseRect;
     Image           maImage;
     bool            mbChecked;
     bool            mbSaveValue;
@@ -290,8 +290,8 @@ private:
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize,
-                              const Size& rImageSize, Rectangle& rStateRect,
-                              Rectangle& rMouseRect );
+                              const Size& rImageSize, tools::Rectangle& rStateRect,
+                              tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
@@ -316,8 +316,8 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
-    void     SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
-    void     SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
+    void     SetMouseRect( const tools::Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
+    void     SetStateRect( const tools::Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
 
     // draws the radio button (the knob image), in its current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect
@@ -332,7 +332,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
@@ -387,7 +387,7 @@ public:
      * Group this RadioButton with another
      */
     void group(RadioButton &rOther);
-    virtual void ShowFocus(const Rectangle& rRect) override;
+    virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
@@ -395,8 +395,8 @@ public:
 class VCL_DLLPUBLIC CheckBox : public Button
 {
 private:
-    Rectangle       maStateRect;
-    Rectangle       maMouseRect;
+    tools::Rectangle       maStateRect;
+    tools::Rectangle       maMouseRect;
     TriState        meState;
     TriState        meSaveValue;
     bool            mbTriState;
@@ -411,8 +411,8 @@ private:
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                                     const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, Rectangle& rStateRect,
-                                    Rectangle& rMouseRect );
+                                    const Size& rImageSize, tools::Rectangle& rStateRect,
+                                    tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
@@ -429,8 +429,8 @@ protected:
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
     virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
-    SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
+    SAL_DLLPRIVATE const tools::Rectangle& GetStateRect() const { return maStateRect; }
+    SAL_DLLPRIVATE const tools::Rectangle& GetMouseRect() const { return maMouseRect; }
 
 public:
     SAL_DLLPRIVATE void         ImplCheck();
@@ -442,7 +442,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    KeyUp( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
@@ -475,7 +475,7 @@ public:
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
-    virtual void ShowFocus(const Rectangle& rRect) override;
+    virtual void ShowFocus(const tools::Rectangle& rRect) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };

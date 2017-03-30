@@ -513,7 +513,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     if( aTwipSz.Width() < MINFLY )
         aTwipSz.Width() = MINFLY;
-    m_pMarquee->SetLogicRect( Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
+    m_pMarquee->SetLogicRect( tools::Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
 
     // und das Objekt in das Dok einfuegen
     InsertDrawObject( m_pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
@@ -538,8 +538,8 @@ void SwHTMLParser::EndMarquee()
     {
         // Da es keine fixe Hoehe gibt, das Text-Objekt erstmal breiter
         // als den Text machen, damit nicht umgebrochen wird.
-        const Rectangle& rOldRect = m_pMarquee->GetLogicRect();
-        m_pMarquee->SetLogicRect( Rectangle( rOldRect.TopLeft(),
+        const tools::Rectangle& rOldRect = m_pMarquee->GetLogicRect();
+        m_pMarquee->SetLogicRect( tools::Rectangle( rOldRect.TopLeft(),
                                            Size( USHRT_MAX, 240 ) ) );
     }
 
@@ -575,9 +575,9 @@ void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
         return;
 
     // die alte Groesse
-    const Rectangle& rOldRect = pObj->GetLogicRect();
+    const tools::Rectangle& rOldRect = pObj->GetLogicRect();
     Size aNewSz( nWidth, rOldRect.GetSize().Height() );
-    pObj->SetLogicRect( Rectangle( rOldRect.TopLeft(), aNewSz ) );
+    pObj->SetLogicRect( tools::Rectangle( rOldRect.TopLeft(), aNewSz ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

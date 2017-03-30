@@ -30,13 +30,13 @@
 
 #define MIN_COLUMNWIDTH  2
 
-typedef ::std::vector< Rectangle* > RectangleList;
+typedef ::std::vector< tools::Rectangle* > RectangleList;
 
 
 class ButtonFrame
 {
-    Rectangle   aRect;
-    Rectangle   aInnerRect;
+    tools::Rectangle   aRect;
+    tools::Rectangle   aInnerRect;
     OUString    aText;
     bool        m_bDrawDisabled;
 
@@ -129,7 +129,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
@@ -160,7 +160,7 @@ public:
     void            Update();
     void            DoOutstandingInvalidations();
     void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    void            Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    void            Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     using Control::Invalidate;
 
 protected:

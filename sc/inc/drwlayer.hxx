@@ -148,20 +148,20 @@ public:
                                             SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
-    void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
+    void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
-                                    SCTAB nSourceTab, const Rectangle& rSourceRange,
-                                    const ScAddress& rDestPos, const Rectangle& rDestRange );
+                                    SCTAB nSourceTab, const tools::Rectangle& rSourceRange,
+                                    const ScAddress& rDestPos, const tools::Rectangle& rDestRange );
 
     void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos );
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );
-    static void     MirrorRectRTL( Rectangle& rRect );      // for bounding rectangles etc.
+    static void     MirrorRectRTL( tools::Rectangle& rRect );      // for bounding rectangles etc.
 
     /** Returns the rectangle for the passed cell address in 1/100 mm.
         @param bMergedCell  True = regards merged cells. False = use single column/row size. */
-    static Rectangle GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
+    static tools::Rectangle GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)

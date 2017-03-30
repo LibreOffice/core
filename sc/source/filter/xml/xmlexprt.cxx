@@ -3502,7 +3502,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc )
     {
         awt::Point aPoint;
-        Rectangle aRect = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
+        tools::Rectangle aRect = pDoc->GetMMRect(rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(),
             rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab());
         bool bNegativePage = pDoc->IsNegativePage(rMyCell.maCellAddress.Tab());
         if (bNegativePage)
@@ -4835,7 +4835,7 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                 SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
                 if (pEmbeddedObj)
                 {
-                    Rectangle aRect(pEmbeddedObj->GetVisArea());
+                    tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
                     sal_uInt16 i(0);
                     pProps[i].Name = "VisibleAreaTop";
                     pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());

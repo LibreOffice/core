@@ -241,9 +241,9 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
     }
 }
 
-Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
+tools::Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( (mnBits & ToolBoxItemBits::DROPDOWN) && !maRect.IsEmpty() )
     {
         aRect = maRect;
@@ -281,7 +281,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
         // do we need to redraw?
         if ( IsReallyVisible() && IsUpdateMode() )
         {
-            Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
+            Invalidate( tools::Rectangle( mnLeftBorder, mnTopBorder,
                                    mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
             mpIdle->Stop();
         }
@@ -310,7 +310,7 @@ void ToolBox::ImplUpdateItem( ImplToolItems::size_type nIndex )
         if ( nIndex == ITEM_NOTFOUND )
         {
             // #i52217# no immediate draw as this might lead to paint problems
-            Invalidate( Rectangle( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
+            Invalidate( tools::Rectangle( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
         }
         else
         {
@@ -801,12 +801,12 @@ sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
     return 0;
 }
 
-Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const
+Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect, const Size& rSize ) const
 {
     Point aPos;
     if( !rRect.IsEmpty() )
     {
-        Rectangle aScreen = GetDesktopRectPixel();
+        tools::Rectangle aScreen = GetDesktopRectPixel();
 
         // the popup should be positioned so that it will not cover
         // the item rect and that it fits the desktop
@@ -855,7 +855,7 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
     return aPos;
 }
 
-Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId )
+tools::Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId )
 {
     if ( mbCalc || mbFormat )
         ImplFormat();
@@ -864,7 +864,7 @@ Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId )
     return GetItemPosRect( nPos );
 }
 
-Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos )
+tools::Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos )
 {
     if ( mbCalc || mbFormat )
         ImplFormat();
@@ -872,10 +872,10 @@ Rectangle ToolBox::GetItemPosRect( ImplToolItems::size_type nPos )
     if ( nPos < mpData->m_aItems.size() )
         return mpData->m_aItems[nPos].maRect;
     else
-        return Rectangle();
+        return tools::Rectangle();
 }
 
-Rectangle ToolBox::GetOverflowRect() const
+tools::Rectangle ToolBox::GetOverflowRect() const
 {
     return mpData->maMenubuttonItem.maRect;
 }
@@ -1346,7 +1346,7 @@ bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
 {
     // is the item on the visible area of the toolbox?
     bool bRet = false;
-    Rectangle aRect( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder, mnDY-mnBottomBorder );
+    tools::Rectangle aRect( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder, mnDY-mnBottomBorder );
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem && pItem->mbVisible &&
@@ -1491,7 +1491,7 @@ OUString ToolBox::GetDisplayText() const
     return mpData->m_pLayoutData ? OUString(mpData->m_pLayoutData->m_aDisplayText) : OUString();
 }
 
-Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
+tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
 {
     long nItemIndex = -1;
     if( ! mpData->m_pLayoutData )
@@ -1507,7 +1507,7 @@ Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
             }
         }
     }
-    return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : Rectangle();
+    return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : tools::Rectangle();
 }
 
 long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID )
@@ -1693,7 +1693,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
         bool bBorderDel = false;
 
         VclPtr<vcl::Window> pWin = this;
-        Rectangle aMenuRect = mpData->maMenuRect;
+        tools::Rectangle aMenuRect = mpData->maMenuRect;
         mpData->maMenuRect.SetEmpty();
         VclPtr<ImplBorderWindow> pBorderWin;
         if( aMenuRect.IsEmpty() && IsFloatingMode() )
@@ -1708,7 +1708,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
             }
         }
 
-        sal_uInt16 uId = GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
+        sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
                                 PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
         if ( pWin->IsDisposed() )
@@ -1729,7 +1729,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
     }
 }
 
-void ToolBox::ExecuteCustomMenu( const Rectangle& rRect )
+void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
 {
     if( IsMenuEnabled() )
     {

@@ -146,7 +146,7 @@ void GalleryControl::Resize()
             Size( nSplitSize, aNewSize.Height() ) );
 
         mpSplitter->SetDragRectPixel(
-            Rectangle(
+            tools::Rectangle(
                 Point( nFrameLen2, 0 ),
                 Size( aNewSize.Width() - ( nFrameLen2 << 1 ) - nSplitSize, aNewSize.Height() ) ) );
 
@@ -165,7 +165,7 @@ void GalleryControl::Resize()
             Size( aNewSize.Width(), nSplitSize ) );
 
         mpSplitter->SetDragRectPixel(
-            Rectangle(
+            tools::Rectangle(
                 Point( 0, nFrameLen2 ),
                 Size( aNewSize.Width(), aNewSize.Height() - ( nFrameLen2 << 1 ) - nSplitSize ) ));
 

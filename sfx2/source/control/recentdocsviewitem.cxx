@@ -93,8 +93,8 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         aThumbnail = BitmapEx(Bitmap(aThumbnailSize, 24), AlphaMask(aThumbnailSize, &nAlpha));
 
         aThumbnail.CopyPixel(
-                Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),
-                Rectangle(Point(0, 0), aExtSize),
+                ::tools::Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),
+                ::tools::Rectangle(Point(0, 0), aExtSize),
                 &aExt);
     }
 
@@ -102,9 +102,9 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     maPreview1 = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
 
-Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
+::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
 {
-    Rectangle aRect(ThumbnailViewItem::updateHighlight(bVisible, rPoint));
+    ::tools::Rectangle aRect(ThumbnailViewItem::updateHighlight(bVisible, rPoint));
 
     if (bVisible && getRemoveIconArea().IsInside(rPoint))
     {
@@ -124,12 +124,12 @@ Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint
     return aRect;
 }
 
-Rectangle RecentDocsViewItem::getRemoveIconArea() const
+::tools::Rectangle RecentDocsViewItem::getRemoveIconArea() const
 {
-    Rectangle aArea(getDrawArea());
+    ::tools::Rectangle aArea(getDrawArea());
     Size aSize(m_aRemoveRecentBitmap.GetSizePixel());
 
-    return Rectangle(
+    return ::tools::Rectangle(
             Point(aArea.Right() - aSize.Width() - THUMBNAILVIEW_ITEM_CORNER, aArea.Top() + THUMBNAILVIEW_ITEM_CORNER),
             aSize);
 }

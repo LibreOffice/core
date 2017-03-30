@@ -28,7 +28,7 @@
 #include <set>
 #include <vector>
 
-class Rectangle;
+namespace tools { class Rectangle; }
 class SdrPage;
 class SdrObjList;
 class SdrObject;
@@ -217,8 +217,8 @@ public:
     }
 
     // pPage=0L: Selection of everything! Respect Pages
-    bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
-    bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
+    bool TakeBoundRect(SdrPageView* pPageView, tools::Rectangle& rRect) const;
+    bool TakeSnapRect(SdrPageView* pPageView, tools::Rectangle& rRect) const;
 
     // All Entries are copied!
     SdrMarkList& operator=(const SdrMarkList& rLst);

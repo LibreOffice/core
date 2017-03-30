@@ -444,11 +444,11 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                 long nDefaultObjectSizeWidth = 4000;
                 long nDefaultObjectSizeHeight = 2500;
                 Size aObjectSize( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight );
-                Rectangle aPageRect( Rectangle( Point( 0, 0 ), pPage->GetSize() ) );
+                tools::Rectangle aPageRect( tools::Rectangle( Point( 0, 0 ), pPage->GetSize() ) );
                 Point aObjectPos = aPageRect.Center();
                 aObjectPos.X() -= aObjectSize.Width() / 2;
                 aObjectPos.Y() -= aObjectSize.Height() / 2;
-                Rectangle aRect( aObjectPos, aObjectSize );
+                tools::Rectangle aRect( aObjectPos, aObjectSize );
 
                 switch ( nID )
                 {

@@ -140,7 +140,7 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
     GetDocSh()->Connect( this );
 }
 
-void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
+void PresentationViewShell::Paint( const ::tools::Rectangle& rRect, ::sd::Window* )
 {
     rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideShow.is() )

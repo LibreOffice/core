@@ -28,9 +28,9 @@ enum class QuickHelpFlags;
 class HelpTextWindow : public FloatingWindow
 {
 private:
-    Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window
+    tools::Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window
 
-    Rectangle           maTextRect; // For wrapped text in QuickHelp
+    tools::Rectangle           maTextRect; // For wrapped text in QuickHelp
 
     OUString            maHelpText;
     OUString            maStatusText;
@@ -44,7 +44,7 @@ private:
 private:
     DECL_LINK( TimerHdl, Timer*, void );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void StateChanged(StateChangedType nType) override;
@@ -64,20 +64,20 @@ public:
 
     // Nur merken:
     void                SetStatusText( const OUString& rStatusText ) { maStatusText = rStatusText; }
-    void                SetHelpArea( const Rectangle& rRect ) { maHelpArea = rRect; }
+    void                SetHelpArea( const tools::Rectangle& rRect ) { maHelpArea = rRect; }
 
     void                ShowHelp( sal_uInt16 nDelayMode );
 
     Size                CalcOutSize() const;
-    const Rectangle&    GetHelpArea() const { return maHelpArea; }
+    const tools::Rectangle&    GetHelpArea() const { return maHelpArea; }
 };
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
         const OUString& rHelpText, const OUString& rStatusText,
-        const Point& rScreenPos, const Rectangle& rHelpArea );
+        const Point& rScreenPos, const tools::Rectangle& rHelpArea );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                            const Point& rPos, const Rectangle& rHelpArea );
+                            const Point& rPos, const tools::Rectangle& rHelpArea );
 
 #endif // INCLUDED_VCL_INC_HELPWIN_HXX
 

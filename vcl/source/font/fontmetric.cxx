@@ -325,7 +325,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     if (MsLangId::isCJK(rFont.GetLanguage()))
     {
         const OUString sFullstop( sal_Unicode( 0x3001 ) ); // Fullwidth fullstop
-        Rectangle aRect;
+        tools::Rectangle aRect;
         pDev->GetTextBoundRect( aRect, sFullstop );
         const sal_uInt16 nH = rFont.GetFontSize().Height();
         const sal_uInt16 nB = aRect.Left();

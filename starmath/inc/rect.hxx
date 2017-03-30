@@ -180,7 +180,7 @@ public:
             bool    IsInsideRect(const Point &rPoint) const;
             bool    IsInsideItalicRect(const Point &rPoint) const;
 
-    inline  Rectangle   AsRectangle() const;
+    inline  tools::Rectangle   AsRectangle() const;
             SmRect      AsGlyphRect() const;
 };
 
@@ -210,9 +210,9 @@ inline long SmRect::GetBaseline() const
 }
 
 
-inline Rectangle SmRect::AsRectangle() const
+inline tools::Rectangle SmRect::AsRectangle() const
 {
-    return Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
+    return tools::Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
 }
 
 #endif

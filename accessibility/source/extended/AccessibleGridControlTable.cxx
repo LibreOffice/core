@@ -316,29 +316,29 @@ OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 
 // internal virtual methods ---------------------------------------------------
 
-Rectangle AccessibleGridControlTable::implGetBoundingBox()
+tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
     vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
-    Rectangle aTableRect( m_aTable.calcTableRect() );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
+    tools::Rectangle aTableRect( m_aTable.calcTableRect() );
     long nX = aGridRect.Left() + aTableRect.Left();
     long nY = aGridRect.Top() + aTableRect.Top();
     long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
     long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
-    Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
+    tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
     return aTable;
 }
 
-Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ));
-    Rectangle aTableRect( m_aTable.calcTableRect() );
+    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ));
+    tools::Rectangle aTableRect( m_aTable.calcTableRect() );
     long nX = aGridRect.Left() + aTableRect.Left();
     long nY = aGridRect.Top() + aTableRect.Top();
     long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
     long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
-    Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
+    tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
     return aTable;
 }
 // internal helper methods ----------------------------------------------------

@@ -134,9 +134,9 @@ void SwPageBreakWin::dispose()
     SwFrameMenuButtonBase::dispose();
 }
 
-void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
 
     // Properly paint the control
     BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
@@ -342,13 +342,13 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     while ( pPrevPage && ( ( pPrevPage->Frame().Top( ) == pPageFrame->Frame().Top( ) )
                 || static_cast< const SwPageFrame* >( pPrevPage )->IsEmptyPage( ) ) );
 
-    Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()).SVRect() );
-    Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->Frame().SVRect() );
+    ::tools::Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()).SVRect() );
+    ::tools::Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->Frame().SVRect() );
 
     long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;
     if ( pPrevPage )
     {
-        Rectangle aPrevFrameRect = GetEditWin()->LogicToPixel( pPrevPage->Frame().SVRect() );
+        ::tools::Rectangle aPrevFrameRect = GetEditWin()->LogicToPixel( pPrevPage->Frame().SVRect() );
         nYLineOffset = ( aPrevFrameRect.Bottom() + aFrameRect.Top() ) / 2;
     }
 
@@ -369,7 +369,7 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
 
     // Place the button on the left or right?
-    Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
+    ::tools::Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
 
     long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
     long nLineRight = std::min( nPgRight, aVisArea.Right() );
@@ -402,11 +402,11 @@ void SwPageBreakWin::ShowAll( bool bShow )
 
 bool SwPageBreakWin::Contains( const Point &rDocPt ) const
 {
-    Rectangle aRect( GetPosPixel(), GetSizePixel() );
+    ::tools::Rectangle aRect( GetPosPixel(), GetSizePixel() );
     if ( aRect.IsInside( rDocPt ) )
         return true;
 
-    Rectangle aLineRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
+    ::tools::Rectangle aLineRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
     if ( aLineRect.IsInside( rDocPt ) )
         return true;
 

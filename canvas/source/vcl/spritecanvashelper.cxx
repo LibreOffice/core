@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-#define FPS_BOUNDS Rectangle(0,0,130,90)
+#define FPS_BOUNDS ::tools::Rectangle(0,0,130,90)
 #define INFO_COLOR COL_RED
 
 namespace vclcanvas
@@ -79,7 +79,7 @@ namespace vclcanvas
                                      OutputDevice&                      rOutDev,
                                      const ::basegfx::B2IRange&         rArea )
         {
-            const Rectangle& rRequestedArea(
+            const ::tools::Rectangle& rRequestedArea(
                 vcl::unotools::rectangleFromB2IRectangle( rArea ) );
 
             // clip output to actual update region (otherwise a)
@@ -222,7 +222,7 @@ namespace vclcanvas
             // clips. besides that, will interfere with animations (as for
             // Window-invalidate repaints, only parts of the window will
             // be redrawn otherwise)
-            const vcl::Region aFullWindowRegion( Rectangle(aEmptyPoint,
+            const vcl::Region aFullWindowRegion( ::tools::Rectangle(aEmptyPoint,
                                                       aOutDevSize) );
             pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
         }

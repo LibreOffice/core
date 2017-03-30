@@ -88,7 +88,7 @@ namespace dbaui
     protected:
         virtual void Command( const CommandEvent& rEvt ) override;
         virtual bool SeekRow(long nRow) override;
-        virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect,
+        virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                                sal_uInt16 nColumnId ) const override;
 
         virtual void CursorMoved() override;

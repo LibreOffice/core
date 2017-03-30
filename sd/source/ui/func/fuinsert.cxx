@@ -174,10 +174,10 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             Point aPos;
             // For LOK, set position to center of the page
             if (comphelper::LibreOfficeKit::isActive())
-                aPos = Rectangle(aPos, mpView->GetSdrPageView()->GetPage()->GetSize()).Center();
+                aPos = ::tools::Rectangle(aPos, mpView->GetSdrPageView()->GetPage()->GetSize()).Center();
             else
             {
-                Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
+                ::tools::Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
                 mpWindow->EnableMapMode(/*true*/);
@@ -264,7 +264,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
             DrawViewShell* pDrViewSh = nullptr;
 
             if (!mpView->InsertData( aDataHelper,
-                                    mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                                    mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
                                     nAction, false, nFormatId ))
             {
                 pDrViewSh = dynamic_cast<DrawViewShell*>(mpViewShell);
@@ -342,7 +342,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
-            Rectangle aRect;
+            ::tools::Rectangle aRect;
             if( pPickObj )
             {
                 aRect = pPickObj->GetLogicRect();
@@ -382,12 +382,12 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
 
                 Point aPos;
-                Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
+                ::tools::Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aWinRect.Center();
                 aPos = mpWindow->PixelToLogic(aPos);
                 aPos.X() -= aSize.Width() / 2;
                 aPos.Y() -= aSize.Height() / 2;
-                aRect = Rectangle(aPos, aSize);
+                aRect = ::tools::Rectangle(aPos, aSize);
             }
 
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
@@ -585,7 +585,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 static_cast<SdrOle2Obj*>(pObj)->SetPersistName(aName);
                                 static_cast<SdrOle2Obj*>(pObj)->SetName(aName);
                                 static_cast<SdrOle2Obj*>(pObj)->SetAspect(nAspect);
-                                Rectangle aRect = static_cast<SdrOle2Obj*>(pObj)->GetLogicRect();
+                                ::tools::Rectangle aRect = static_cast<SdrOle2Obj*>(pObj)->GetLogicRect();
 
                                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                                 {
@@ -620,7 +620,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                         (aPageSize.Height() - aSize.Height()) / 2);
-                    Rectangle aRect (aPnt, aSize);
+                    ::tools::Rectangle aRect (aPnt, aSize);
 
                     SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
 
@@ -663,7 +663,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         }
 
                         Size aVisSizePixel = mpWindow->GetOutputSizePixel();
-                        Rectangle aVisAreaWin = mpWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+                        ::tools::Rectangle aVisAreaWin = mpWindow->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
                         mpViewShell->VisAreaChanged(aVisAreaWin);
                         mpDocSh->SetVisArea(aVisAreaWin);
                     }
@@ -747,7 +747,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 
             if( mpWindow )
             {
-                aPos = mpWindow->PixelToLogic( Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
+                aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
                 aPos.X() -= aSize.Width() >> 1;
                 aPos.Y() -= aSize.Height() >> 1;
             }
@@ -823,7 +823,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
 
         if( mpWindow )
         {
-            aPos = mpWindow->PixelToLogic( Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
+            aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
             aPos.X() -= aSize.Width() >> 1;
             aPos.Y() -= aSize.Height() >> 1;
         }

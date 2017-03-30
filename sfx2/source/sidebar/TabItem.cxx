@@ -41,13 +41,13 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*UpdateArea*/)
+void TabItem::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*UpdateArea*/)
 {
     const bool bIsSelected (IsChecked());
     const bool bIsHighlighted (IsMouseOver() || HasFocus());
     DrawHelper::DrawRoundedRectangle(
                 rRenderContext,
-                Rectangle(Point(0,0), GetSizePixel()),
+                tools::Rectangle(Point(0,0), GetSizePixel()),
                 Theme::GetInteger(Theme::Int_ButtonCornerRadius),
                 bIsHighlighted||bIsSelected
                     ? Theme::GetColor(Theme::Color_TabItemBorder)

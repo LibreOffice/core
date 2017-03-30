@@ -292,7 +292,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if ( bHelpEnabled && !bDone && !nButtonDown )       // only without pressed button
     {
         OUString aHelpText;
-        Rectangle aPixRect;
+        tools::Rectangle aPixRect;
         Point aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
 
         if ( pDrView )                                      // URL / Image-Map
@@ -406,7 +406,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
         if ( !aHelpText.isEmpty() )
         {
-            Rectangle aScreenRect(OutputToScreenPixel(aPixRect.TopLeft()),
+            tools::Rectangle aScreenRect(OutputToScreenPixel(aPixRect.TopLeft()),
                                     OutputToScreenPixel(aPixRect.BottomRight()));
 
             if ( rHEvt.GetMode() & HelpEventMode::BALLOON )

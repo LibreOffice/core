@@ -328,7 +328,7 @@ protected:
     css::uno::Reference< css::drawing::XShape >               mXShape;
     css::awt::Size         maSize;
     css::awt::Point        maPosition;
-    Rectangle           maRect;
+    ::tools::Rectangle           maRect;
     OString        mType;
     bool            mbPresObj;
     bool            mbEmptyPresObj;
@@ -370,7 +370,7 @@ protected:
 
     css::awt::Size   MapSize( const css::awt::Size& );
     css::awt::Point  MapPoint( const css::awt::Point& );
-    Rectangle        MapRectangle( const css::awt::Rectangle& );
+    ::tools::Rectangle        MapRectangle( const css::awt::Rectangle& );
 
     bool ContainsOtherShapeThanPlaceholders();
 

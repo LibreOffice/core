@@ -215,7 +215,7 @@ namespace ww8
                     // #i43447# - determine layout size
                     {
                         SwRect aLayRect( rFormat.FindLayoutRect() );
-                        Rectangle aRect( aLayRect.SVRect() );
+                        tools::Rectangle aRect( aLayRect.SVRect() );
                         // The Object is not rendered (e.g. something in unused
                         // header/footer) - thus, get the values from the format.
                         if ( aLayRect.IsEmpty() )

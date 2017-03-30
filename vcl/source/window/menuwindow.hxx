@@ -29,7 +29,7 @@ class HelpEvent;
 class Image;
 class Menu;
 class MenuBar;
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 
 /** Common ancestor for MenuFloatingWindow and MenuBarWindow.
@@ -53,7 +53,7 @@ class MenuWindow
 protected:
     /// Show the appropriate help tooltip.
     static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
-            const HelpEvent& rHEvt, const Rectangle &rHighlightRect);
+            const HelpEvent& rHEvt, const tools::Rectangle &rHighlightRect);
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX

@@ -99,7 +99,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     long                    nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     OUString                aText( GetText() );
-    Rectangle               aRect( rPos, rSize );
+    tools::Rectangle               aRect( rPos, rSize );
     DrawTextFlags           nTextStyle = DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::EndEllipsis | DrawTextFlags::Mnemonic;
 
     if ( GetStyle() & WB_NOLABEL )
@@ -188,7 +188,7 @@ void GroupBox::FillLayoutData() const
     const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this), DrawFlags::NONE, Point(), GetOutputSizePixel(), true );
 }
 
-void GroupBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void GroupBox::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }

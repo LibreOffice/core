@@ -405,7 +405,7 @@ static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in,
 }
 #endif
 
-bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRect,
+bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                      FloatWinPopupFlags nFlags)
 {
 #if GTK_CHECK_VERSION(3,0,0)

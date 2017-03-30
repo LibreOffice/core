@@ -831,7 +831,7 @@ double ScOutputData::GetStretch()
 
 //  output strings
 
-static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
+static void lcl_DoHyperlinkResult( OutputDevice* pDev, const tools::Rectangle& rRect, ScRefCellValue& rCell )
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
@@ -1442,7 +1442,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     LayoutStrings(bPixelToLogic);
 }
 
-Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
+tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScAddress &rAddress)
 {
     OSL_ENSURE( mpDev == mpRefDevice ||
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
@@ -2070,7 +2070,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             // the area of the text that covers the specified cell
                             if (!bPaint && rAddress.Col() == nX)
                             {
-                                Rectangle aRect;
+                                tools::Rectangle aRect;
                                 mpDev->GetTextBoundRect(aRect, aShort);
                                 aRect += aDrawTextPos;
                                 return aRect;
@@ -2114,7 +2114,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                         bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
                         if (bPaint && bHasURL)
                         {
-                            Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
+                            tools::Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
                             lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
                         }
                     }
@@ -2127,7 +2127,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
 
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
@@ -2250,7 +2250,7 @@ static long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, long 
         return rEngine.GetTextHeight();
 }
 
-void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
+void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
             long nLeftM, long nTopM, long nRightM, long nBottomM,
             bool bWidth, sal_uInt16 nOrient, long nAttrRotate, bool bPixelToLogic,
             long& rEngineWidth, long& rEngineHeight, long& rNeededPixel, bool& rLeftClip, bool& rRightClip )
@@ -2487,7 +2487,7 @@ void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& r
 }
 
 void ScOutputData::DrawEditParam::calcPaperSize(
-    Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const
+    Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const
 {
     long nTopM, nLeftM, nBottomM, nRightM;
     calcMargins(nTopM, nLeftM, nBottomM, nRightM, nPPTX, nPPTY);
@@ -2746,7 +2746,7 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, Outpu
     else if (mbAsianVertical)
         aURLStart.X() -= nURLWidth;
 
-    Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
+    tools::Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
     lcl_DoHyperlinkResult(pDev, aURLRect, maCell);
 }
 
@@ -2832,7 +2832,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
@@ -3063,7 +3063,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         }
     }
 
-    Rectangle aLogicClip;
+    tools::Rectangle aLogicClip;
     if (bClip || bSimClip)
     {
         // Clip marks are already handled in GetOutputArea
@@ -3249,7 +3249,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         ShowClipMarks( rParam, nEngineHeight, aCellSize, bMerged, aAreaParam);
     }
 
-    Rectangle aLogicClip;
+    tools::Rectangle aLogicClip;
     if (bClip || bSimClip)
     {
         // Clip marks are already handled in GetOutputArea
@@ -3853,7 +3853,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
@@ -4038,7 +4038,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         }
     }
 
-    Rectangle aLogicClip;
+    tools::Rectangle aLogicClip;
     if (bClip || bSimClip)
     {
         // Clip marks are already handled in GetOutputArea
@@ -4207,7 +4207,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
+            tools::Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
@@ -4385,7 +4385,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         }
     }
 
-    Rectangle aLogicClip;
+    tools::Rectangle aLogicClip;
     if (bClip || bSimClip)
     {
         // Clip marks are already handled in GetOutputArea
@@ -5113,10 +5113,10 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
 
                                     if (bPixelToLogic)
-                                        aAreaParam.maClipRect = mpRefDevice->PixelToLogic( Rectangle(
+                                        aAreaParam.maClipRect = mpRefDevice->PixelToLogic( tools::Rectangle(
                                                         Point(nClipStartX,nClipStartY), aClipSize ) );
                                     else
-                                        aAreaParam.maClipRect = Rectangle(Point(nClipStartX, nClipStartY),
+                                        aAreaParam.maClipRect = tools::Rectangle(Point(nClipStartX, nClipStartY),
                                                                 aClipSize );    // Scale = 1
 
                                     if (bMetaFile)

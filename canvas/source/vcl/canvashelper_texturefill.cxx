@@ -106,7 +106,7 @@ namespace vclcanvas
          */
         void fillLinearGradient( OutputDevice&                                  rOutDev,
                                  const ::basegfx::B2DHomMatrix&                 rTextureTransform,
-                                 const ::Rectangle&                             rBounds,
+                                 const ::tools::Rectangle&                             rBounds,
                                  unsigned int                                   nStepCount,
                                  const ::canvas::ParametricPolyPolygon::Values& rValues,
                                  const std::vector< ::Color >&                  rColors )
@@ -264,7 +264,7 @@ namespace vclcanvas
 
         void fillPolygonalGradient( OutputDevice&                                  rOutDev,
                                     const ::basegfx::B2DHomMatrix&                 rTextureTransform,
-                                    const ::Rectangle&                             rBounds,
+                                    const ::tools::Rectangle&                             rBounds,
                                     unsigned int                                   nStepCount,
                                     bool                                           bFillNonOverlapping,
                                     const ::canvas::ParametricPolyPolygon::Values& rValues,
@@ -488,7 +488,7 @@ namespace vclcanvas
                              const ::canvas::ParametricPolyPolygon::Values& rValues,
                              const std::vector< ::Color >&                  rColors,
                              const ::basegfx::B2DHomMatrix&                 rTextureTransform,
-                             const ::Rectangle&                             rBounds,
+                             const ::tools::Rectangle&                             rBounds,
                              unsigned int                                   nStepCount,
                              bool                                           bFillNonOverlapping )
         {
@@ -563,7 +563,7 @@ namespace vclcanvas
 
             // determine maximal bound rect of texture-filled
             // polygon
-            const ::Rectangle aPolygonDeviceRectOrig(
+            const ::tools::Rectangle aPolygonDeviceRectOrig(
                 rPoly.GetBoundRect() );
 
             if( tools::isRectangle( rPoly ) )
@@ -734,7 +734,7 @@ namespace vclcanvas
 
                 // determine maximal bound rect of texture-filled
                 // polygon
-                const ::Rectangle aPolygonDeviceRect(
+                const ::tools::Rectangle aPolygonDeviceRect(
                     aPolyPoly.GetBoundRect() );
 
 
@@ -760,7 +760,7 @@ namespace vclcanvas
                                                             aRect,
                                                             aTotalTransform );
 
-                const ::Rectangle aIntegerTextureDeviceRect(
+                const ::tools::Rectangle aIntegerTextureDeviceRect(
                     vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 if( bRectangularPolygon &&

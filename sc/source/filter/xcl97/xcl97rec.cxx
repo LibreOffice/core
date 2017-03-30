@@ -102,7 +102,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
     pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
     // open the DGCONTAINER and the patriarch group shape
     mrEscherEx.OpenContainer( ESCHER_DgContainer );
-    Rectangle aRect( 0, 0, 0, 0 );
+    tools::Rectangle aRect( 0, 0, 0, 0 );
     mrEscherEx.EnterGroup( &aRect );
     mrEscherEx.UpdateDffFragmentEnd();
 }
@@ -364,7 +364,7 @@ XclObj::~XclObj()
     delete pTxo;
 }
 
-void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdrObj, const Rectangle* pChildAnchor )
+void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdrObj, const tools::Rectangle* pChildAnchor )
 {
     if( pChildAnchor )
     {
@@ -493,7 +493,7 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 
   // --- class XclObjComment ------------------------------------------
 
-XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &rTo ) :
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, tools::Rectangle &rFrom, tools::Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
             , mpCaption( pCaption->Clone() )
@@ -555,7 +555,7 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
     rPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
 }
 
-void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& rRect, SdrObject* pCaption, const bool bVisible )
+void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const tools::Rectangle& rRect, SdrObject* pCaption, const bool bVisible )
 {
     EscherPropertyContainer aPropOpt;
 
@@ -594,13 +594,13 @@ class VmlCommentExporter : public VMLExport
     ScAddress           maScPos;
     SdrCaptionObj*      mpCaption;
     bool                mbVisible;
-    Rectangle           maFrom;
-    Rectangle           maTo;
+    tools::Rectangle           maFrom;
+    tools::Rectangle           maTo;
 
 public:
-                        VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
+                        VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo );
 protected:
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) override;
+    virtual void        Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect ) override;
     using VMLExport::StartShape;
     virtual sal_Int32   StartShape() override;
     using VMLExport::EndShape;
@@ -608,7 +608,7 @@ protected:
 };
 
 VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption,
-                                        bool bVisible, Rectangle &aFrom, Rectangle &aTo )
+                                        bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo )
     : VMLExport( p )
     , maScPos( aScPos )
     , mpCaption( pCaption )
@@ -618,7 +618,7 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 {
 }
 
-void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect )
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
     rProps.AddOpt( ESCHER_Prop_fHidden, sal_uInt32(mbVisible) ); // bool field
@@ -1015,9 +1015,9 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
 
     awt::Point  aTopLeft    = rShape->getPosition();
     awt::Size   aSize       = rShape->getSize();
-    Rectangle   aLocation( aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height );
+    tools::Rectangle   aLocation( aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height );
     ScRange     aRange      = rStrm.GetRoot().GetDoc().GetRange( nTab, aLocation );
-    Rectangle   aRangeRect  = rStrm.GetRoot().GetDoc().GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
+    tools::Rectangle   aRangeRect  = rStrm.GetRoot().GetDoc().GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
             aRange.aEnd.Col()-1, aRange.aEnd.Row()-1,
             nTab );
 

@@ -278,7 +278,7 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
         VclPtr<CheckBox>             pBox;
-        Rectangle                    aFocusRect;
+        tools::Rectangle                    aFocusRect;
         Link<VclPtr<CheckBox>,void>  m_aClickLink;
         Link<LinkParamNone*,void>    m_aModifyLink;
 
@@ -289,7 +289,7 @@ namespace svt
 
         virtual void GetFocus() override;
         virtual bool PreNotify(NotifyEvent& rEvt) override;
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rClientRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect) override;
         virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
         virtual void DataChanged( const DataChangedEvent& _rEvent ) override;
@@ -528,12 +528,12 @@ namespace svt
         virtual void EndScroll() override;
 
         // should be used instead of GetFieldRectPixel, 'cause this method here takes into account the borders
-        Rectangle GetCellRect(long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
+        tools::Rectangle GetCellRect(long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
         sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
 
-        virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
-        virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const = 0;
+        virtual void PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const;
+        virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const = 0;
 
         virtual RowStatus GetRowStatus(long nRow) const;
 
@@ -559,7 +559,7 @@ namespace svt
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
-        static void ResizeController(CellControllerRef& rController, const Rectangle&);
+        static void ResizeController(CellControllerRef& rController, const tools::Rectangle&);
         virtual void DoubleClick(const BrowserMouseEvent&) override;
 
         void ActivateCell() { ActivateCell(GetCurRow(), GetCurColumnId()); }
@@ -578,7 +578,7 @@ namespace svt
 
         virtual bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const override;
 
-        void    PaintTristate(OutputDevice& rDev, const Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
+        void    PaintTristate(OutputDevice& rDev, const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
 
         void AsynchGetFocus();
             // secure starting of StartEditHdl
@@ -619,7 +619,7 @@ namespace svt
         /** Sets focus to current cell of the data table. */
         virtual void GrabTableFocus() override;
 
-        virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+        virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
@@ -628,7 +628,7 @@ namespace svt
         void    implCreateActiveAccessible( );
 
     private:
-        virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect,
+        virtual void PaintField(OutputDevice& rDev, const tools::Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const override;
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );

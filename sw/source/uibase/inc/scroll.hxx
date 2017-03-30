@@ -41,7 +41,7 @@ public:
         // changing of document size
     void    DocSzChgd(const Size &rNewSize);
         // changing of visible region
-    void    ViewPortChgd(const Rectangle &rRectangle);
+    void    ViewPortChgd(const tools::Rectangle &rRectangle);
         // what is it??
     bool    IsHoriScroll() const { return bHori; }
 

@@ -209,16 +209,16 @@ public:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
                                 sal_uInt16 nAspect = ASPECT_CONTENT ) override;
 
-    virtual void    SetVisArea( const Rectangle & rVisArea ) override;
+    virtual void    SetVisArea( const tools::Rectangle & rVisArea ) override;
 
     using SfxObjectShell::GetVisArea;
-    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const override;
+    virtual tools::Rectangle GetVisArea( sal_uInt16 nAspect ) const override;
 
     virtual Printer* GetDocumentPrinter() override;
 
     virtual void    SetModified( bool = true ) override;
 
-    void            SetVisAreaOrSize( const Rectangle& rVisArea );
+    void            SetVisAreaOrSize( const tools::Rectangle& rVisArea );
 
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet &rSet ) override;
 
@@ -424,7 +424,7 @@ public:
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
-    void SnapVisArea( Rectangle& rRect ) const;
+    void SnapVisArea( tools::Rectangle& rRect ) const;
 
     void SetIsInUcalc();
 };

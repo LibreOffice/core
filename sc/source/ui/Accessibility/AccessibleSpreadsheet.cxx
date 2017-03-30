@@ -1310,9 +1310,9 @@ void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Ref
 
 //====  internal  =========================================================
 
-Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
@@ -1322,9 +1322,9 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
     return aRect;
 }
 
-Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
+tools::Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
@@ -1393,9 +1393,9 @@ ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
+tools::Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
 {
-    Rectangle aVisArea;
+    tools::Rectangle aVisArea;
     if (pViewShell)
     {
         vcl::Window* pWindow = pViewShell->GetWindowByPos(eSplitPos);
@@ -1408,7 +1408,7 @@ Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSpli
     return aVisArea;
 }
 
-Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
+tools::Rectangle ScAccessibleSpreadsheet::GetVisCells(const tools::Rectangle& rVisArea)
 {
     if (mpViewShell)
     {
@@ -1418,10 +1418,10 @@ Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
         mpViewShell->GetViewData().GetPosFromPixel( 1, 1, meSplitPos, nStartX, nStartY);
         mpViewShell->GetViewData().GetPosFromPixel( rVisArea.GetWidth(), rVisArea.GetHeight(), meSplitPos, nEndX, nEndY);
 
-        return Rectangle(nStartX, nStartY, nEndX, nEndY);
+        return tools::Rectangle(nStartX, nStartY, nEndX, nEndY);
     }
     else
-        return Rectangle();
+        return tools::Rectangle();
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )

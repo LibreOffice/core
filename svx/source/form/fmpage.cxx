@@ -198,7 +198,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
     if ( !aHelpText.isEmpty() )
     {
         // Hilfe anzeigen
-        Rectangle aItemRect = pObj->GetCurrentBoundRect();
+        tools::Rectangle aItemRect = pObj->GetCurrentBoundRect();
         aItemRect = pWindow->LogicToPixel( aItemRect );
         Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();

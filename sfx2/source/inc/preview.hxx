@@ -39,13 +39,13 @@ public:
 class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 {
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 public:
     SfxPreviewWin_Impl(vcl::Window* pParent, WinBits nStyle)
         : SfxPreviewBase_Impl(pParent, nStyle)
     {}
 
-    static void ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, GDIMetaFile* pFile);
+    static void ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, GDIMetaFile* pFile);
 };
 
 #endif

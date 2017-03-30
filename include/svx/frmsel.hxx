@@ -171,11 +171,11 @@ public:
     /** Returns true, if the passed point is inside the click area of any enabled frame border. */
     bool                ContainsClickPoint( const Point& rPos ) const;
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
-    Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
+    tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
 
 protected:
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;

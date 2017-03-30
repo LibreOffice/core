@@ -228,7 +228,7 @@ void SvxAngleTabPage::Construct()
     }
 
     { // #i75273#
-        Rectangle aTempRect(pView->GetAllMarkedRect());
+        ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aTempRect);
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
@@ -473,7 +473,7 @@ void SvxSlantTabPage::Construct()
     SetFieldUnit(*m_pMtrRadius, eDlgUnit, true);
 
     { // #i75273#
-        Rectangle aTempRect(pView->GetAllMarkedRect());
+        ::tools::Rectangle aTempRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aTempRect);
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
@@ -507,7 +507,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if( bModified )
     {
         // set reference points
-        Rectangle aObjectRect(pView->GetAllMarkedRect());
+        ::tools::Rectangle aObjectRect(pView->GetAllMarkedRect());
         pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
         Point aPt = aObjectRect.Center();
 
@@ -536,7 +536,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         pModel->BegUndo(pUndo->GetComment());
 
     EnhancedCustomShape2d aShape(pObj);
-    Rectangle aLogicRect = aShape.GetLogicRect();
+    ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
 
     for (int i = 0; i < 2; ++i)
     {
@@ -651,7 +651,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                 Point aMinPosition;
                 aShape.GetHandlePosition(i, aMinPosition);
 
-                Rectangle aLogicRect = aShape.GetLogicRect();
+                ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
                 aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
                 aMaxPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
                 aMinPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
@@ -697,7 +697,7 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {
-        const Rectangle aTempRect(pRectItem->GetValue());
+        const ::tools::Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
 }
@@ -829,13 +829,13 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     { // #i75273#
-        Rectangle aTempRect(mpView->GetAllMarkedRect());
+        ::tools::Rectangle aTempRect(mpView->GetAllMarkedRect());
         mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
 
     { // #i75273#
-        Rectangle aTempRect(mpView->GetWorkArea());
+        ::tools::Rectangle aTempRect(mpView->GetWorkArea());
         mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
         maWorkRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
@@ -930,7 +930,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             double fY((GetCoreValue( *m_pMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
 
             { // #i75273#
-                Rectangle aTempRect(mpView->GetAllMarkedRect());
+                ::tools::Rectangle aTempRect(mpView->GetAllMarkedRect());
                 mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
                 maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
             }
@@ -1149,7 +1149,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {
         { // #i75273#
-            const Rectangle aTempRect(pRectItem->GetValue());
+            const ::tools::Rectangle aTempRect(pRectItem->GetValue());
             maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
         }
 
@@ -1166,7 +1166,7 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
         double fY((double)m_pMtrPosY->GetValue());
 
         GetTopLeftPosition(fX, fY, maRange);
-        const Rectangle aOutRectangle(
+        const ::tools::Rectangle aOutRectangle(
             basegfx::fround(fX), basegfx::fround(fY),
             basegfx::fround(fX + maRange.getWidth()), basegfx::fround(fY + maRange.getHeight()));
         _pSet->Put(SfxRectangleItem(SID_ATTR_TRANSFORM_INTERN, aOutRectangle));

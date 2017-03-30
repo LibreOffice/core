@@ -159,7 +159,7 @@ namespace svt { namespace table
 
         /** paints the table control content which intersects with the given rectangle
         */
-        void    doPaintContent(vcl::RenderContext& rRenderContext, const Rectangle& _rUpdateRect);
+        void    doPaintContent(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rUpdateRect);
 
         /** moves the cursor to the cell with the given coordinates
 
@@ -185,7 +185,7 @@ namespace svt { namespace table
         /** returns the position of the current row in the selection vector */
         static int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
-        void invalidateRect(const Rectangle &rInvalidateRect);
+        void invalidateRect(const tools::Rectangle &rInvalidateRect);
 
         /** ??? */
         void    invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow );
@@ -258,7 +258,7 @@ namespace svt { namespace table
         virtual void                invalidate( TableArea const i_what ) override;
         virtual long                pixelWidthToAppFont( long const i_pixels ) const override;
         virtual void                hideTracking() override;
-        virtual void                showTracking( Rectangle const & i_location, ShowTrackFlags const i_flags ) override;
+        virtual void                showTracking( tools::Rectangle const & i_location, ShowTrackFlags const i_flags ) override;
         RowPos                      getRowAtPoint( const Point& rPoint ) const;
         ColPos                      getColAtPoint( const Point& rPoint ) const;
         virtual TableCell           hitTest( const Point& rPoint ) const override;
@@ -273,10 +273,10 @@ namespace svt { namespace table
         ScrollBar* getHorzScrollbar() { return m_pHScroll; }
         ScrollBar* getVertScrollbar() { return m_pVScroll; }
 
-        Rectangle calcHeaderRect( bool bColHeader );
-        Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
-        Rectangle calcTableRect();
-        Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
+        tools::Rectangle calcHeaderRect( bool bColHeader );
+        tools::Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
+        tools::Rectangle calcTableRect();
+        tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
 
         // A11Y
         css::uno::Reference< css::accessibility::XAccessible >
@@ -334,7 +334,7 @@ namespace svt { namespace table
 
         /** determines the rectangle occupied by the given cell
         */
-        void        impl_getCellRect( ColPos _nColumn, RowPos _nRow, Rectangle& _rCellRect ) const;
+        void        impl_getCellRect( ColPos _nColumn, RowPos _nRow, tools::Rectangle& _rCellRect ) const;
 
         /** updates all cached model values
 
@@ -382,7 +382,7 @@ namespace svt { namespace table
         /** positions all child windows, e.g. the both scrollbars, the corner window, and the data window
         */
         void        impl_ni_positionChildWindows(
-                        Rectangle const & i_dataCellPlayground,
+                        tools::Rectangle const & i_dataCellPlayground,
                         bool const i_verticalScrollbar,
                         bool const i_horizontalScrollbar
                     );
@@ -428,14 +428,14 @@ namespace svt { namespace table
             As a result of respecting the partial visibility of rows and columns,
             the returned area might be larger than the data window's output size.
         */
-        Rectangle   impl_getAllVisibleCellsArea() const;
+        tools::Rectangle   impl_getAllVisibleCellsArea() const;
 
         /** retrieves the area occupied by all (at least partially) visible data cells.
 
             Effectively, the returned area is the same as returned by ->impl_getAllVisibleCellsArea,
             minus the row and column header areas.
         */
-        Rectangle   impl_getAllVisibleDataCellArea() const;
+        tools::Rectangle   impl_getAllVisibleDataCellArea() const;
 
         /** retrieves the column which covers the given ordinate
         */

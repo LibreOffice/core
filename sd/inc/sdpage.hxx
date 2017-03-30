@@ -169,7 +169,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInsert=false);
+    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInsert=false);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind);
     void            DestroyDefaultPresObj(PresObjKind eObjKind);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
@@ -192,7 +192,7 @@ public:
     void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
-    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInit);
+    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit);
 
     virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
@@ -253,7 +253,7 @@ public:
     void        setTransitionDuration( double fTranstionDuration );
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
-                         const Rectangle& rOldBoundRect) override;
+                         const ::tools::Rectangle& rOldBoundRect) override;
 
     void             SetLayoutName(const OUString& aName);
     virtual OUString GetLayoutName() const override       { return maLayoutName; }
@@ -266,7 +266,7 @@ public:
     void            ConnectLink();
     void            DisconnectLink();
 
-    void            ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
+    void            ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rNewBorderRect,
                          bool bScaleAllObj);
 
     const OUString& GetName() const;
@@ -353,10 +353,10 @@ public:
     /** removes all empty presentation objects from this slide */
     void RemoveEmptyPresentationObjects();
 
-    Rectangle   GetTitleRect() const;
-    Rectangle   GetLayoutRect() const;
+    ::tools::Rectangle   GetTitleRect() const;
+    ::tools::Rectangle   GetLayoutRect() const;
 
-    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas );
+    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< ::tools::Rectangle >& rAreas );
 
     /** Set the "precious" flag to the given value.
     */

@@ -35,7 +35,7 @@ class TabItem
 public:
     TabItem (vcl::Window* pParentWindow);
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
+    virtual void Paint (vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
     virtual void MouseMove (const MouseEvent& rEvent) override;
     virtual void MouseButtonDown (const MouseEvent& rMouseEvent) override;
     virtual void MouseButtonUp (const MouseEvent& rMouseEvent) override;

@@ -427,7 +427,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
 
                         if ( pModelObj && pModelObj->HasChangesListeners() )
                         {
-                            Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
+                            tools::Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
                             ScRange aRange( pDoc->GetRange( nTab, aRectangle ) );
                             ScRangeList aChangeRanges;
                             aChangeRanges.Append( aRange );

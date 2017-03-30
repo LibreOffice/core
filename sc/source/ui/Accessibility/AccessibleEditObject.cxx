@@ -167,9 +167,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     return xRet;
 }
 
-Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
 {
-    Rectangle aScreenBounds;
+    tools::Rectangle aScreenBounds;
 
     if ( mpWindow )
     {
@@ -180,7 +180,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
                 MapMode aMapMode( mpEditView->GetEditEngine()->GetRefMapMode() );
                 aScreenBounds = mpWindow->LogicToPixel( mpEditView->GetOutputArea(), aMapMode );
                 Point aCellLoc = aScreenBounds.TopLeft();
-                Rectangle aWindowRect = mpWindow->GetWindowExtentsRelative( nullptr );
+                tools::Rectangle aWindowRect = mpWindow->GetWindowExtentsRelative( nullptr );
                 Point aWindowLoc = aWindowRect.TopLeft();
                 Point aPos( aCellLoc.getX() + aWindowLoc.getX(), aCellLoc.getY() + aWindowLoc.getY() );
                 aScreenBounds.SetPos( aPos );
@@ -195,9 +195,9 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen() const
     return aScreenBounds;
 }
 
-Rectangle ScAccessibleEditObject::GetBoundingBox() const
+tools::Rectangle ScAccessibleEditObject::GetBoundingBox() const
 {
-    Rectangle aBounds( GetBoundingBoxOnScreen() );
+    tools::Rectangle aBounds( GetBoundingBoxOnScreen() );
 
     if ( mpWindow )
     {

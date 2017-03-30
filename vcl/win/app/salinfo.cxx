@@ -66,7 +66,7 @@ bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
         if( it != m_aDeviceNameToMonitor.end() )
         {
             DisplayMonitor& rMon( m_aMonitors[ it->second ] );
-            rMon.m_aArea = Rectangle( Point( aInfo.rcMonitor.left,
+            rMon.m_aArea = tools::Rectangle( Point( aInfo.rcMonitor.left,
                                              aInfo.rcMonitor.top ),
                                       Size( aInfo.rcMonitor.right - aInfo.rcMonitor.left,
                                             aInfo.rcMonitor.bottom - aInfo.rcMonitor.top ) );
@@ -94,7 +94,7 @@ bool WinSalSystem::initMonitors()
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
         m_aMonitors.push_back( DisplayMonitor( OUString(),
-                                               Rectangle( Point(), Size( w, h ) ) ) );
+                                               tools::Rectangle( Point(), Size( w, h ) ) ) );
         m_aDeviceNameToMonitor[ OUString() ] = 0;
         m_nPrimary = 0;
     }
@@ -119,7 +119,7 @@ bool WinSalSystem::initMonitors()
                     aDeviceStringCount[ aDeviceString ]++;
                 m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                 m_aMonitors.push_back( DisplayMonitor( aDeviceString,
-                                                       Rectangle() ) );
+                                                       tools::Rectangle() ) );
             }
         }
         HDC aDesktopRC = GetDC( nullptr );
@@ -159,10 +159,10 @@ unsigned int WinSalSystem::GetDisplayBuiltInScreen()
     return m_nPrimary;
 }
 
-Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+tools::Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
-    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : Rectangle();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : tools::Rectangle();
 }
 
 int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)

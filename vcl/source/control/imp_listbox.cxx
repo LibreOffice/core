@@ -628,7 +628,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
             // set the current size to a large number
             // GetTextRect should shrink it to the actual size
             aCurSize.Height() = 0x7fffff;
-            Rectangle aTextRect( Point( 0, 0 ), aCurSize );
+            tools::Rectangle aTextRect( Point( 0, 0 ), aCurSize );
             aTextRect = GetTextRect( aTextRect, rEntry.maStr, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine );
             aMetrics.nTextWidth = aTextRect.GetWidth();
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
@@ -895,7 +895,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
     else if ( ( ( !mbMulti && IsMouseMoveSelect() ) || mbStackMode ) && mpEntryList->GetEntryCount() )
     {
         Point aPoint;
-        Rectangle aRect( aPoint, GetOutputSizePixel() );
+        tools::Rectangle aRect( aPoint, GetOutputSizePixel() );
         if( aRect.IsInside( rMEvt.GetPosPixel() ) )
         {
             if ( IsMouseMoveSelect() )
@@ -1166,7 +1166,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
 void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
 {
     Point aPoint;
-    Rectangle aRect( aPoint, GetOutputSizePixel() );
+    tools::Rectangle aRect( aPoint, GetOutputSizePixel() );
     bool bInside = aRect.IsInside( rTEvt.GetMouseEvent().GetPosPixel() );
 
     if( rTEvt.IsTrackingCanceled() || rTEvt.IsTrackingEnded() ) // MouseButtonUp
@@ -1700,7 +1700,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
 
     long nWidth = GetOutputSizePixel().Width();
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
-    Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
+    tools::Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
 
     if (mpEntryList->IsEntryPosSelected(nPos))
     {
@@ -1806,7 +1806,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
 
-            Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
+            tools::Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
                                 Size(nMaxWidth, pEntry->mnHeight));
 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
@@ -1852,10 +1852,10 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 void ImplListBoxWindow::FillLayoutData() const
 {
     mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
-    const_cast<ImplListBoxWindow*>(this)->Invalidate(Rectangle(Point(0, 0), GetOutputSize()));
+    const_cast<ImplListBoxWindow*>(this)->Invalidate(tools::Rectangle(Point(0, 0), GetOutputSize()));
 }
 
-void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     sal_Int32 nCount = mpEntryList->GetEntryCount();
 
@@ -1885,7 +1885,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const Re
         ImplShowFocusRect();
 }
 
-void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ImplDoPaint(rRenderContext, rRect);
 }
@@ -2030,12 +2030,12 @@ Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
     return aSz;
 }
 
-Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_Int32 nItem ) const
+tools::Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nItem );
     Size aSz( GetSizePixel().Width(), pEntry ? pEntry->mnHeight : GetEntryHeight() );
     long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeight();
-    Rectangle aRect( Point( 0, nY ), aSz );
+    tools::Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
 }
 
@@ -2644,7 +2644,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             sal_Int32 nLeft, nTop, nRight, nBottom;
             pWin->GetBorder( nLeft, nTop, nRight, nBottom );
             Point aPoint( -nLeft, -nTop );
-            Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
+            tools::Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
 
             bool bMouseOver = false;
             vcl::Window *pChild = pWin->GetWindow( GetWindowType::FirstChild );
@@ -2658,7 +2658,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             WinBits nParentStyle = pWin->GetStyle();
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
-                Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
+                tools::Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
                 pWin->DrawNativeControl( ControlType::Listbox, ControlPart::Entire, aParentRect,
                                          nState, aControlValue, OUString() );
             }
@@ -2751,7 +2751,7 @@ void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
         rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 }
 
-void ImplWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void ImplWin::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(rRenderContext);
 }
@@ -2812,7 +2812,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
         else
             nTextStyle |= DrawTextFlags::Left;
 
-        Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
+        tools::Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
 
         if ( !bDrawTextAtImagePos && ( bImage || IsUserDrawEnabled() ) )
         {
@@ -2869,14 +2869,14 @@ void ImplWin::LoseFocus()
     Control::LoseFocus();
 }
 
-void ImplWin::ShowFocus(const Rectangle& rRect)
+void ImplWin::ShowFocus(const tools::Rectangle& rRect)
 {
     if (IsNativeControlSupported(ControlType::Listbox, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
 
         vcl::Window *pWin = GetParent();
-        Rectangle aParentRect(Point(0, 0), pWin->GetSizePixel());
+        tools::Rectangle aParentRect(Point(0, 0), pWin->GetSizePixel());
         pWin->DrawNativeControl(ControlType::Listbox, ControlPart::Focus, aParentRect,
                                 ControlState::FOCUSED, aControlValue, OUString());
     }
@@ -2962,7 +2962,7 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
             aPos.Y() = nY;
 
         sal_uInt16 nIndex;
-        SetPosPixel( ImplCalcPos( this, Rectangle( aPos, GetParent()->GetSizePixel() ), FloatWinPopupFlags::Down, nIndex ) );
+        SetPosPixel( ImplCalcPos( this, tools::Rectangle( aPos, GetParent()->GetSizePixel() ), FloatWinPopupFlags::Down, nIndex ) );
     }
 
 //  if( !IsReallyVisible() )
@@ -3082,7 +3082,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
             aSz.Width() -= nLeft + nRight;
             aSz.Height() -= nTop + nBottom;
         }
-        Rectangle aRect( aPos, aSz );
+        tools::Rectangle aRect( aPos, aSz );
 
         // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
         // where the document is unmirrored

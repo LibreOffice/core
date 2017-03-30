@@ -2389,8 +2389,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     // clipping, ... over all views. Probably not worthwhile.
                     EditPaM aStartPaM( pNode, nPaintFrom );
                     EditPaM aEndPaM( pNode, nPaintTo );
-                    Rectangle aStartCursor( PaMtoEditCursor( aStartPaM ) );
-                    Rectangle aEndCursor( PaMtoEditCursor( aEndPaM ) );
+                    tools::Rectangle aStartCursor( PaMtoEditCursor( aStartPaM ) );
+                    tools::Rectangle aEndCursor( PaMtoEditCursor( aEndPaM ) );
                     DBG_ASSERT( aInvalidRect.IsEmpty(), "InvalidRect set!" );
                     aInvalidRect.Left() = 0;
                     aInvalidRect.Right() = GetPaperSize().Width();
@@ -2405,7 +2405,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     {
                         for (EditView* pView : aEditViews)
                         {
-                            Rectangle aClipRect( aInvalidRect );
+                            tools::Rectangle aClipRect( aInvalidRect );
                             aClipRect.Intersection( pView->GetVisArea() );
                             if ( !aClipRect.IsEmpty() )
                             {
@@ -2419,7 +2419,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     {
                         UpdateViews( pActiveView );
                     }
-                    aInvalidRect = Rectangle();
+                    aInvalidRect = tools::Rectangle();
                 }
             }
             // After two corrected nodes give up the control ...
@@ -2693,7 +2693,7 @@ void ImpEditEngine::SetAutoCompleteText(const OUString& rStr, bool bClearTipWind
 {
     aAutoCompleteText = rStr;
     if ( bClearTipWindow && pActiveView )
-        Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), OUString() );
+        Help::ShowQuickHelp( pActiveView->GetWindow(), tools::Rectangle(), OUString() );
 }
 
 namespace

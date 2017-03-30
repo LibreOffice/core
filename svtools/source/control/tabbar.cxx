@@ -53,7 +53,7 @@ private:
     vcl::RenderContext& mrRenderContext;
     const StyleSettings& mrStyleSettings;
 
-    Rectangle maRect;
+    tools::Rectangle maRect;
 
     Color maSelectedColor;
     Color maCustomColor;
@@ -82,7 +82,7 @@ public:
         if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
         {
             Size aOutputSize(mrParent.GetOutputSizePixel());
-            Rectangle aOutRect = mrParent.GetPageArea();
+            tools::Rectangle aOutRect = mrParent.GetPageArea();
 
             // also draw border in 3D for 3D-tabs
             if (nWinStyle & WB_3DTAB)
@@ -121,7 +121,7 @@ public:
 
     void drawText(const OUString& aText)
     {
-        Rectangle aRect = maRect;
+        tools::Rectangle aRect = maRect;
         long nTextWidth = mrRenderContext.GetTextWidth(aText);
         long nTextHeight = mrRenderContext.GetTextHeight();
         Point aPos = aRect.TopLeft();
@@ -139,7 +139,7 @@ public:
         Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
         Point aTopRight = maRect.TopRight() + Point(-1, 0);
 
-        Rectangle aDelRect(aTopLeft, aTopRight);
+        tools::Rectangle aDelRect(aTopLeft, aTopRight);
         mrRenderContext.DrawRect(aDelRect);
     }
 
@@ -148,7 +148,7 @@ public:
         mrRenderContext.SetFillColor(maCustomColor);
         mrRenderContext.SetLineColor(maCustomColor);
 
-        Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
+        tools::Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
         aLineRect.Top() -= 3;
 
         mrRenderContext.DrawRect(aLineRect);
@@ -164,7 +164,7 @@ public:
         }
     }
 
-    void setRect(const Rectangle& rRect)
+    void setRect(const tools::Rectangle& rRect)
     {
         maRect = rRect;
     }
@@ -208,7 +208,7 @@ struct ImplTabBarItem
     TabBarPageBits mnBits;
     OUString maText;
     OUString maHelpText;
-    Rectangle maRect;
+    tools::Rectangle maRect;
     long mnWidth;
     OString maHelpId;
     bool mbShort : 1;
@@ -313,7 +313,7 @@ private:
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 
     Point           maStartPos;
     long            mnStartWidth;
@@ -366,10 +366,10 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     DecorationView aDecoView(&rRenderContext);
-    Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
+    tools::Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
     aDecoView.DrawHandle(aOutputRect);
 }
 
@@ -1143,7 +1143,7 @@ void TabBar::MouseButtonUp(const MouseEvent& rMEvt)
     Window::MouseButtonUp(rMEvt);
 }
 
-void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
+void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rect)
 {
     if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground,ControlPart::Entire))
     {
@@ -1196,7 +1196,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
 
         if (!pItem->maRect.IsEmpty())
         {
-            Rectangle aRect = pItem->maRect;
+            tools::Rectangle aRect = pItem->maRect;
             bool bSelected = pItem->IsSelected(pCurItem);
             // We disable custom background color in high contrast mode.
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
@@ -1384,7 +1384,7 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
             OUString aStr = GetHelpText(nItemId);
             if (!aStr.isEmpty())
             {
-                Rectangle aItemRect = GetPageRect(nItemId);
+                tools::Rectangle aItemRect = GetPageRect(nItemId);
                 Point aPt = OutputToScreenPixel(aItemRect.TopLeft());
                 aItemRect.Left()   = aPt.X();
                 aItemRect.Top()    = aPt.Y();
@@ -1416,7 +1416,7 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
             ImplTabBarItem* pItem = mpImpl->mpItemList[nPos];
             if (pItem->mbShort || (pItem->maRect.Right() - 5 > mnLastOffX))
             {
-                Rectangle aItemRect = GetPageRect(nItemId);
+                tools::Rectangle aItemRect = GetPageRect(nItemId);
                 Point aPt = OutputToScreenPixel(aItemRect.TopLeft());
                 aItemRect.Left()   = aPt.X();
                 aItemRect.Top()    = aPt.Y();
@@ -1845,14 +1845,14 @@ sal_uInt16 TabBar::GetPageId(const Point& rPos) const
     return 0;
 }
 
-Rectangle TabBar::GetPageRect(sal_uInt16 nPageId) const
+tools::Rectangle TabBar::GetPageRect(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->mpItemList[nPos]->maRect;
     else
-        return Rectangle();
+        return tools::Rectangle();
 }
 
 void TabBar::SetCurPageId(sal_uInt16 nPageId)
@@ -2069,7 +2069,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         Update();
 
         mpImpl->mpEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
-        Rectangle aRect = GetPageRect( mnEditId );
+        tools::Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
         if (mnEditId != GetCurPageId())
@@ -2361,7 +2361,7 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
         // draw immediately, as Paint not possible during Drag and Drop
         if (nOldFirstPos != mnFirstPos)
         {
-            Rectangle aRect(mnOffX, 0, mnLastOffX, maWinSize.Height());
+            tools::Rectangle aRect(mnOffX, 0, mnLastOffX, maWinSize.Height());
             SetFillColor(GetBackground().GetColor());
             DrawRect(aRect);
             Invalidate(aRect);
@@ -2439,7 +2439,7 @@ void TabBar::HideDropPos()
             pItem = mpImpl->mpItemList[mnDropPos];
             nX = pItem->maRect.Left();
             // immediately call Paint, as it is not possible during drag and drop
-            Rectangle aRect( nX-1, nY1, nX+3, nY2 );
+            tools::Rectangle aRect( nX-1, nY1, nX+3, nY2 );
             vcl::Region aRegion( aRect );
             SetClipRegion( aRegion );
             Invalidate(aRect);
@@ -2450,7 +2450,7 @@ void TabBar::HideDropPos()
             pItem = mpImpl->mpItemList[mnDropPos - 1];
             nX = pItem->maRect.Right();
             // immediately call Paint, as it is not possible during drag and drop
-            Rectangle aRect(nX - 2, nY1, nX + 1, nY2);
+            tools::Rectangle aRect(nX - 2, nY1, nX + 1, nY2);
             vcl::Region aRegion(aRect);
             SetClipRegion(aRegion);
             Invalidate(aRect);
@@ -2527,9 +2527,9 @@ Size TabBar::CalcWindowSizePixel() const
     return Size(nWidth, GetSettings().GetStyleSettings().GetScrollBarSize());
 }
 
-Rectangle TabBar::GetPageArea() const
+tools::Rectangle TabBar::GetPageArea() const
 {
-    return Rectangle(Point(mnOffX, mnOffY),
+    return tools::Rectangle(Point(mnOffX, mnOffY),
                      Size(mnLastOffX - mnOffX + 1, GetSizePixel().Height() - mnOffY));
 }
 

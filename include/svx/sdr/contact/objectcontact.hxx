@@ -25,7 +25,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 class SetOfByte;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SdrPageView;
 class OutputDevice;
 

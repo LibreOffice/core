@@ -209,7 +209,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
         }
 
         // notify about the cursor position & size
-        Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
+        tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
         if (pViewShell)
         {
@@ -338,7 +338,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         for(size_type a = 0; a < size(); ++a)
         {
             const SwRect aNextRect((*this)[a]);
-            const Rectangle aPntRect(aNextRect.SVRect());
+            const tools::Rectangle aPntRect(aNextRect.SVRect());
 
             aNewRanges.push_back(basegfx::B2DRange(
                 aPntRect.Left(), aPntRect.Top(),
@@ -451,7 +451,7 @@ void SwSelPaintRects::HighlightInputField()
             SwRects* pRects = static_cast<SwRects*>(pCursorForInputTextField.get());
             for (const SwRect & rNextRect : *pRects)
             {
-                const Rectangle aPntRect(rNextRect.SVRect());
+                const tools::Rectangle aPntRect(rNextRect.SVRect());
 
                 aInputFieldRanges.push_back(basegfx::B2DRange(
                     aPntRect.Left(), aPntRect.Top(),

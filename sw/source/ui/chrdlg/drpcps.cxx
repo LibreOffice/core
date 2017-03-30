@@ -92,7 +92,7 @@ class SwDropCapsPict : public Control
     Size            maTextSize;
     Reference< css::i18n::XBreakIterator >   xBreak;
 
-    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &rRect) override;
+    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle &rRect) override;
     void            CheckScript();
     Size            CalcTextSize();
     inline void     InitPrinter();
@@ -343,7 +343,7 @@ void SwDropCapsPict::UpdatePaintSettings()
     Invalidate();
 }
 
-void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     if (!IsVisible())
         return;
@@ -355,8 +355,8 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
     Size aOutputSizePixel(GetOutputSizePixel());
 
-    rRenderContext.DrawRect(Rectangle(Point(0, 0), aOutputSizePixel));
-    rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(BORDER, BORDER),
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aOutputSizePixel));
+    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(Point(BORDER, BORDER),
                                                        Size(aOutputSizePixel.Width () - 2 * BORDER,
                                                             aOutputSizePixel.Height() - 2 * BORDER))));
 
@@ -367,7 +367,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
     for (int i = 0; i < LINES; ++i)
     {
-        rRenderContext.DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH),
+        rRenderContext.DrawRect(tools::Rectangle(Point(BORDER, nY0 + i * mnTotLineH),
                                 Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
     }
 
@@ -377,7 +377,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
     if (mpPage && mpPage->m_pDropCapsBox->IsChecked())
     {
         const Size aTextSize(maTextSize.Width() + nDistW, maTextSize.Height());
-        rRenderContext.DrawRect(Rectangle(Point(BORDER, nY0), aTextSize));
+        rRenderContext.DrawRect(tools::Rectangle(Point(BORDER, nY0), aTextSize));
 
         // draw Text
         DrawPrev(rRenderContext, Point(BORDER, nY0));

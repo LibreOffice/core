@@ -53,7 +53,7 @@ public:
     ContentWindow(vcl::Window& rParent, SlideSorter& rSlideSorter);
 
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
     virtual void KeyInput (const KeyEvent& rEvent) override;
     virtual void MouseMove (const MouseEvent& rEvent) override;
     virtual void MouseButtonUp (const MouseEvent& rEvent) override;
@@ -235,7 +235,7 @@ Reference<frame::XController> SlideSorter::GetXController() const
     return xController;
 }
 
-void SlideSorter::Paint (const Rectangle& rRepaintArea)
+void SlideSorter::Paint (const ::tools::Rectangle& rRepaintArea)
 {
     GetController().Paint(
         rRepaintArea,
@@ -356,7 +356,7 @@ void SlideSorter::ArrangeGUIElements (
         view::SlideSorterView::DrawLock aLock (*this);
         GetContentWindow()->EnablePaint (false);
 
-        mpSlideSorterController->Resize (Rectangle(aOrigin, rSize));
+        mpSlideSorterController->Resize (::tools::Rectangle(aOrigin, rSize));
 
         GetContentWindow()->EnablePaint (true);
 
@@ -444,7 +444,7 @@ void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction
     mpCurrentFunction = rpFunction;
 }
 
-void ContentWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void ContentWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     mrSlideSorter.Paint(rRect);
 }

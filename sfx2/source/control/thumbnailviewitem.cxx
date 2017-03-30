@@ -78,7 +78,7 @@ void ThumbnailViewItem::setHighlight (bool state)
     mbHover = state;
 }
 
-Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
+::tools::Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
 {
     bool bNeedsPaint = false;
 
@@ -98,7 +98,7 @@ Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
     if (bNeedsPaint)
         return getDrawArea();
 
-    return Rectangle();
+    return ::tools::Rectangle();
 }
 
 void ThumbnailViewItem::setTitle (const OUString& rTitle)
@@ -115,7 +115,7 @@ uno::Reference< accessibility::XAccessible > const & ThumbnailViewItem::GetAcces
     return mxAcc;
 }
 
-void ThumbnailViewItem::setDrawArea (const Rectangle &area)
+void ThumbnailViewItem::setDrawArea (const ::tools::Rectangle &area)
 {
     maDrawArea = area;
 }

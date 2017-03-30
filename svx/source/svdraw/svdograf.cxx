@@ -350,7 +350,7 @@ SdrGrafObj::SdrGrafObj()
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
+SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect)
 :   SdrRectObj      ( rRect ),
     pGraphicLink    ( nullptr ),
     bMirrored       ( false )
@@ -878,7 +878,7 @@ basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
 
         // take grown rectangle
         const sal_Int32 nHalfLineWidth(ImpGetLineWdt() / 2);
-        const Rectangle aGrownRect(
+        const tools::Rectangle aGrownRect(
             maRect.Left() - nHalfLineWidth,
             maRect.Top() - nHalfLineWidth,
             maRect.Right() + nHalfLineWidth,
@@ -1027,7 +1027,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
     if(isEmbeddedSvg() && GetModel())
     {
         ScopedVclPtrInstance< VirtualDevice > pOut;
-        const Rectangle aBoundRect(GetCurrentBoundRect());
+        const tools::Rectangle aBoundRect(GetCurrentBoundRect());
         const MapMode aMap(GetModel()->GetScaleUnit(), Point(), GetModel()->GetScaleFraction(), GetModel()->GetScaleFraction());
 
         pOut->EnableOutput(false);
@@ -1221,7 +1221,7 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
     SetRectsDirty();
 }
 
-void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
+void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly )
 {
     Size aSize;
     Size aMaxSize( rMaxRect.GetSize() );
@@ -1267,7 +1267,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
 
         aPos.X() -= aSize.Width() / 2;
         aPos.Y() -= aSize.Height() / 2;
-        SetLogicRect( Rectangle( aPos, aSize ) );
+        SetLogicRect( tools::Rectangle( aPos, aSize ) );
     }
 }
 

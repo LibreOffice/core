@@ -15,9 +15,9 @@ namespace test {
 
 namespace
 {
-    void drawRectOffset(OutputDevice& rDevice, Rectangle& rRect, int nOffset)
+    void drawRectOffset(OutputDevice& rDevice, tools::Rectangle& rRect, int nOffset)
     {
-        rDevice.DrawRect(Rectangle(rRect.Left()  + nOffset, rRect.Top()    + nOffset,
+        rDevice.DrawRect(tools::Rectangle(rRect.Left()  + nOffset, rRect.Top()    + nOffset,
                                    rRect.Right() - nOffset, rRect.Bottom() - nOffset));
 
     }

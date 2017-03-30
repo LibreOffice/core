@@ -225,7 +225,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 
             if (aRectSize.Height() <= 0)
                 aRectSize.Height() = 5000;
-            Rectangle aInsRect( aRectPos, aRectSize );
+            tools::Rectangle aInsRect( aRectPos, aRectSize );
 
             sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
             MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));

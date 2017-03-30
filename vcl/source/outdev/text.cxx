@@ -132,7 +132,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
             nX += nBaseX;
             nY += nBaseY;
             // inflate because polygons are drawn smaller
-            Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
+            tools::Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
             ImplDrawPolygon( aPoly );
@@ -166,7 +166,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
                       mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
 
-Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
+tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 {
     Point aPoint = rSalLayout.GetDrawPosition();
     long nX = aPoint.X();
@@ -194,14 +194,14 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
         else
         {
             // inflate by +1+1 because polygons are drawn smaller
-            Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
+            tools::Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
             return aPoly.GetBoundRect();
         }
     }
 
-    return Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+    return tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 }
 
 bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
@@ -209,7 +209,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     long nX = rSalLayout.DrawBase().X();
     long nY = rSalLayout.DrawBase().Y();
 
-    Rectangle aBoundRect;
+    tools::Rectangle aBoundRect;
     rSalLayout.DrawBase() = Point( 0, 0 );
     rSalLayout.DrawOffset() = Point( 0, 0 );
     if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
@@ -218,7 +218,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
         long nRight = rSalLayout.GetTextWidth();
         long nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
         long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
-        aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
+        aBoundRect = tools::Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
 
     // cache virtual device for rotation
@@ -829,7 +829,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     {
         vcl::Region aClip( GetClipRegion() );
         if( meOutDevType == OUTDEV_WINDOW )
-            aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
+            aClip.Intersect( tools::Rectangle( Point(), GetOutputSize() ) );
         if (mpOutDevData->mpRecordLayout)
         {
             mpOutDevData->mpRecordLayout->m_aLineIndices.push_back( mpOutDevData->mpRecordLayout->m_aDisplayText.getLength() );
@@ -1465,7 +1465,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     return nRetVal;
 }
 
-void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
+void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
                                  vcl::ITextLayout& _rLayout )
@@ -1730,7 +1730,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     }
 }
 
-void OutputDevice::AddTextRectActions( const Rectangle& rRect,
+void OutputDevice::AddTextRectActions( const tools::Rectangle& rRect,
                                        const OUString&  rOrigStr,
                                        DrawTextFlags    nStyle,
                                        GDIMetaFile&     rMtf )
@@ -1763,7 +1763,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle,
+void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle,
                              MetricVector* pVector, OUString* pDisplayText,
                              vcl::ITextLayout* _pTextLayout )
 {
@@ -1808,13 +1808,13 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, D
         mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
 }
 
-Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
+tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
                                      const OUString& rStr, DrawTextFlags nStyle,
                                      TextRectInfo* pInfo,
                                      const vcl::ITextLayout* _pTextLayout ) const
 {
 
-    Rectangle           aRect = rRect;
+    tools::Rectangle           aRect = rRect;
     sal_Int32           nLines;
     long                nWidth = rRect.GetWidth();
     long                nMaxWidth;
@@ -2332,7 +2332,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     return aSysLayoutData;
 }
 
-bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
+bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, const long* pDXAry ) const
@@ -2361,7 +2361,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     }
 
     pSalLayout = ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
-    Rectangle aPixelRect;
+    tools::Rectangle aPixelRect;
     if( pSalLayout )
     {
         bRet = pSalLayout->GetBoundRect( *mpGraphics, aPixelRect );

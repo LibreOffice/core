@@ -74,7 +74,7 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrPathObj* Clone() const override;
     SdrPathObj& operator=(const SdrPathObj& rObj);
 
@@ -82,7 +82,7 @@ public:
     virtual OUString TakeObjNamePlural() const override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual void RecalcSnapRect() override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual sal_uInt32 GetHdlCount() const override;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const override;

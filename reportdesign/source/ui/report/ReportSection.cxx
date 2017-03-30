@@ -135,7 +135,7 @@ void OReportSection::dispose()
     vcl::Window::dispose();
 }
 
-void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     Window::Paint(rRenderContext, rRect);
 
@@ -231,7 +231,7 @@ void OReportSection::fill()
     m_pView->StartListening( *m_pModel  );
     m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
     const Size aPageSize = m_pPage->GetSize();
-    m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
+    m_pView->SetWorkArea( tools::Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
 }
 
 void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce)
@@ -270,7 +270,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                             pNeuObj->SetModel( m_pModel.get() );
                             m_pPage->InsertObject(pNeuObj, SAL_MAX_SIZE);
 
-                            Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
+                            tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);
                             aRet.setWidth(aRet.getWidth() + 1);
                             bool bOverlapping = true;
@@ -495,7 +495,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             {
                 m_pPage->SetSize( Size( nPaperWidth,nNewHeight) );
                 const Size aPageSize = m_pPage->GetSize();
-                m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
+                m_pView->SetWorkArea( tools::Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
             }
             impl_adjustObjectSizePosition(nPaperWidth,nLeftMargin,nRightMargin);
             m_pParent->Invalidate(InvalidateFlags::Update | InvalidateFlags::Transparent);
@@ -546,7 +546,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                 {
                     xReportComponent->setPosition(aPos);
                     correctOverlapping(pObject,*this,false);
-                    Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+                    tools::Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
                     aRet.setHeight(aRet.getHeight() + 1);
                     aRet.setWidth(aRet.getWidth() + 1);
                     if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
@@ -757,7 +757,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     {
         m_pParent->getViewsWindow()->getView()->setMarked(m_pView, true);
         m_pView->UnmarkAll();
-        const Rectangle& rRect = m_pView->GetWorkArea();
+        const tools::Rectangle& rRect = m_pView->GetWorkArea();
         if ( aDropPos.X() < rRect.Left() )
             aDropPos.X() = rRect.Left();
         else if ( aDropPos.X() > rRect.Right() )

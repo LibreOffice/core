@@ -49,7 +49,7 @@ protected:
     std::unique_ptr<XPolygon> mpXPoly;
 
 protected:
-    XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
+    XPolygon ImpCalcXPoly(const tools::Rectangle& rRect1, long nRad1) const;
     void SetXPolyDirty();
 
     /// Subclasses should override RecalcXPoly() by creating an XPolygon
@@ -66,26 +66,26 @@ public:
      * Constructor of a rectangular drawing object
      */
     SdrRectObj();
-    SdrRectObj(const Rectangle& rRect);
+    SdrRectObj(const tools::Rectangle& rRect);
 
     SdrRectObj& operator=(const SdrRectObj& rCopy);
 
     // Constructor of a text frame
     SdrRectObj(SdrObjKind eNewTextKind);
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
+    SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect);
     virtual ~SdrRectObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
     virtual SdrRectObj* Clone() const override;
     virtual void RecalcSnapRect() override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
     virtual sal_uInt32 GetHdlCount() const override;

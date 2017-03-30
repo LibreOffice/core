@@ -285,7 +285,7 @@ EBulletInfo SvxEditEngineForwarder::GetBulletInfo( sal_Int32 ) const
     return EBulletInfo();
 }
 
-Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
+tools::Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
@@ -296,7 +296,7 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nInd
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
     {
-        Rectangle aLast;
+        tools::Rectangle aLast;
 
         if( nIndex )
         {
@@ -332,7 +332,7 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nInd
     }
 }
 
-Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
+tools::Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
 {
     const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
     sal_uLong nWidth;
@@ -348,14 +348,14 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
         nHeight = rEditEngine.GetTextHeight();
         nTextWidth = rEditEngine.GetTextHeight();
 
-        return Rectangle( nTextWidth - aPnt.Y() - nWidth, 0, nTextWidth - aPnt.Y(), nHeight );
+        return tools::Rectangle( nTextWidth - aPnt.Y() - nWidth, 0, nTextWidth - aPnt.Y(), nHeight );
     }
     else
     {
         nWidth = rEditEngine.CalcTextWidth();
         nHeight = rEditEngine.GetTextHeight( nPara );
 
-        return Rectangle( 0, aPnt.Y(), nWidth, aPnt.Y() + nHeight );
+        return tools::Rectangle( 0, aPnt.Y(), nWidth, aPnt.Y() + nHeight );
     }
 }
 

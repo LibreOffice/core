@@ -28,7 +28,7 @@ public:
 
     bool IsDefaultTemplate() const { return mbIsDefaultTemplate; }
 
-    Rectangle getDefaultIconArea() const;
+    tools::Rectangle getDefaultIconArea() const;
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs) override;

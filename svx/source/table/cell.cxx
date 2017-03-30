@@ -653,7 +653,7 @@ SfxStyleSheet* Cell::GetStyleSheet() const
         return nullptr;
 }
 
-void Cell::TakeTextAnchorRect(Rectangle& rAnchorRect) const
+void Cell::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
     rAnchorRect.Left() = maCellRect.Left() + GetTextLeftDistance();
     rAnchorRect.Right() = maCellRect.Right() - GetTextRightDistance();
@@ -692,7 +692,7 @@ sal_Int32 Cell::getMinimumHeight()
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     sal_Int32 nMinimumHeight = 0;
 
-    Rectangle aTextRect;
+    tools::Rectangle aTextRect;
     TakeTextAnchorRect( aTextRect );
     Size aSize( aTextRect.GetSize() );
     aSize.Height()=0x0FFFFFFF;

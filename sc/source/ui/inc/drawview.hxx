@@ -65,7 +65,7 @@ public:
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj) override;
 
-    virtual void    MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) override;
+    virtual void    MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin ) override;
 
     virtual void    DeleteMarked() override;
 

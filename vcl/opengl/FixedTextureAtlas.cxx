@@ -119,7 +119,7 @@ OpenGLTexture FixedTextureAtlasManager::Reserve(int nWidth, int nHeight)
     int nX = (nSlot % mWidthFactor) * mSubTextureSize;
     int nY = (nSlot / mWidthFactor) * mSubTextureSize;
 
-    Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
+    tools::Rectangle aRectangle(Point(nX, nY), Size(nWidth, nHeight));
 
     return OpenGLTexture(pFixedTexture->mpTexture, aRectangle, nSlot);
 }

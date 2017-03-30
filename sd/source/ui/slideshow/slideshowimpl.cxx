@@ -696,7 +696,7 @@ void SAL_CALL SlideshowImpl::disposing()
             if (pActWin)
             {
                 Size aVisSizePixel = pActWin->GetOutputSizePixel();
-                Rectangle aVisAreaWin = pActWin->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+                ::tools::Rectangle aVisAreaWin = pActWin->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
                 mpViewShell->VisAreaChanged(aVisAreaWin);
                 if (mpView)
                     mpView->VisAreaChanged(pActWin);
@@ -794,7 +794,7 @@ bool SlideshowImpl::startPreview(
         }
         else if( mpViewShell )
         {
-            Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
+            ::tools::Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
             if (AllSettings::GetLayoutRTL())
             {
                 aContentRect.Left() = aContentRect.Right();
@@ -958,7 +958,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             maPresSize = mpParentWindow->GetSizePixel();
             if (!maPresSettings.mbFullScreen)
             {
-                const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
+                const ::tools::Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
                 maPresSize = aClientRect.GetSize();
                 mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
                 resize( maPresSize );
@@ -1144,7 +1144,7 @@ void SlideshowImpl::onFirstPaint()
     maUpdateTimer.Start();
 }
 
-void SlideshowImpl::paint( const Rectangle& /* rRect */ )
+void SlideshowImpl::paint( const ::tools::Rectangle& /* rRect */ )
 {
     if( mxView.is() ) try
     {

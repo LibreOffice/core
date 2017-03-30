@@ -100,7 +100,7 @@ namespace svx
         SvxShowCharSet&             mrParent;
         sal_uInt16                  mnId;
         OUString                    maText;
-        Rectangle                   maRect;
+        tools::Rectangle                   maRect;
         rtl::Reference<SvxShowCharSetItemAcc>  m_xItem;
         SvxShowCharSetAcc*          m_pParent;
 

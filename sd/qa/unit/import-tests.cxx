@@ -1527,7 +1527,7 @@ void SdImportTest::testTdf103473()
     const SdrPage *pPage = GetPage(1, xDocShRef);
     SdrTextObj *const pObj = dynamic_cast<SdrTextObj *const>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pObj);
-    Rectangle aRect = pObj->GetGeoRect();
+    ::tools::Rectangle aRect = pObj->GetGeoRect();
     CPPUNIT_ASSERT_EQUAL(3629L, aRect.Left());
     CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
     CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());

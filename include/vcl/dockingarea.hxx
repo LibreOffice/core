@@ -44,7 +44,7 @@ public:
     bool            IsHorizontal() const;
 
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    StateChanged( StateChangedType nType ) override;

@@ -347,7 +347,7 @@ void DrawViewShell::WriteFrameViewData()
     mpFrameView->SetDesignMode( mpDrawView->IsDesignMode() );
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisArea = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     mpFrameView->SetVisArea(aVisArea);
 
     if( mePageKind == PageKind::Handout )
@@ -406,7 +406,7 @@ void DrawViewShell::PrePaint()
  *
  * Remark: pWin==NULL, if Paint() is called from ShowWindow!
  */
-void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
+void DrawViewShell::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
 {
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
@@ -501,7 +501,7 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
     if( !mbZoomOnPage )
     {
-        const Rectangle aVisArea( mpFrameView->GetVisArea() );
+        const ::tools::Rectangle aVisArea( mpFrameView->GetVisArea() );
 
         if ( GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
@@ -523,7 +523,7 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
     ResetActualLayer();
 }
 
-void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
+void DrawViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 

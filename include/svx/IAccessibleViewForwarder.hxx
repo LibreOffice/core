@@ -61,7 +61,7 @@ public:
             are, contrary to the base class, in internal coordinates of
             100th of mm.
      */
-    virtual Rectangle GetVisibleArea() const = 0;
+    virtual tools::Rectangle GetVisibleArea() const = 0;
 
     /** Transform the specified point from internal coordinates in 100th of
         mm to an absolute screen position.

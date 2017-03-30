@@ -197,7 +197,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
     // get PageObject's geometry
     basegfx::B2DHomMatrix aPageObjectTransform;
     {
-        const Rectangle aPageObjectModelData(rPageObject.GetLastBoundRect());
+        const tools::Rectangle aPageObjectModelData(rPageObject.GetLastBoundRect());
         const basegfx::B2DRange aPageObjectBound(
             aPageObjectModelData.Left(), aPageObjectModelData.Top(),
             aPageObjectModelData.Right(), aPageObjectModelData.Bottom());

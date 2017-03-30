@@ -265,7 +265,7 @@ void OSectionWindow::Resize()
         aReportPos.Y() += aSectionSize.Height();
         m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
         aSectionSize.Height() = (long)(1000 * (double)GetMapMode().GetScaleY());
-        m_aSplitter->SetDragRectPixel( Rectangle(Point(aStartWidth,0),aSectionSize));
+        m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(aStartWidth,0),aSectionSize));
 
         // set end marker
         aReportPos.X() += aSectionSize.Width();

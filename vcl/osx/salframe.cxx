@@ -364,7 +364,7 @@ void AquaSalFrame::initShow()
     mbInitShow = false;
     if( ! mbPositioned && ! mbFullScreen )
     {
-        Rectangle aScreenRect;
+        tools::Rectangle aScreenRect;
         GetWorkArea( aScreenRect );
         if( mpParent ) // center relative to parent
         {
@@ -396,7 +396,7 @@ void AquaSalFrame::initShow()
     [AquaA11yFactory registerView: mpNSView];
 }
 
-void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
+void AquaSalFrame::SendPaintEvent( const tools::Rectangle* pRect )
 {
     SalPaintEvent aPaintEvt( 0, 0, maGeometry.nWidth, maGeometry.nHeight, true );
     if( pRect )
@@ -905,7 +905,7 @@ void AquaSalFrame::Flush()
     }
 }
 
-void AquaSalFrame::Flush( const Rectangle& rRect )
+void AquaSalFrame::Flush( const tools::Rectangle& rRect )
 {
     if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
         return;
@@ -1336,7 +1336,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
     }
 }
 
-void AquaSalFrame::GetWorkArea( Rectangle& rRect )
+void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
     if ( !mpNSWindow )
         return;

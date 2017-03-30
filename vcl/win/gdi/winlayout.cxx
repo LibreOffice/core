@@ -80,7 +80,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     std::vector<WORD> aGlyphIndices(1);
     aGlyphIndices[0] = nGlyphIndex;
     // Fetch the ink boxes and calculate the size of the atlas.
-    Rectangle bounds(0, 0, 0, 0);
+    tools::Rectangle bounds(0, 0, 0, 0);
     auto aInkBoxes = pTxt->GetGlyphInkBoxes(aGlyphIndices.data(), aGlyphIndices.data() + 1);
     for (auto &box : aInkBoxes)
         bounds.Union(box + Point(bounds.Right(), 0));
@@ -142,7 +142,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
 
-    pTxt->BindDC(aDC.getCompatibleHDC(), Rectangle(0, 0, nBitmapWidth, nBitmapHeight));
+    pTxt->BindDC(aDC.getCompatibleHDC(), tools::Rectangle(0, 0, nBitmapWidth, nBitmapHeight));
     auto pRT = pTxt->GetRenderTarget();
 
     ID2D1SolidColorBrush* pBrush = nullptr;
@@ -353,7 +353,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
         return ExTextOutRenderer()(rLayout, rGraphics, hDC);
     }
 
-    Rectangle bounds;
+    tools::Rectangle bounds;
     bool succeeded = rLayout.GetBoundRect(rGraphics, bounds);
     succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
 
@@ -435,19 +435,19 @@ bool D2DWriteTextOutRenderer::ReleaseFont()
 // The inkboxes returned have their origin on the baseline, to a -ve value
 // of Top() means the glyph extends abs(Top()) many pixels above the
 // baseline, and +ve means the ink starts that many pixels below.
-std::vector<Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const
+std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const
 {
     ptrdiff_t nGlyphs = pGidEnd - pGid;
-    if (nGlyphs < 0) return std::vector<Rectangle>();
+    if (nGlyphs < 0) return std::vector<tools::Rectangle>();
 
     DWRITE_FONT_METRICS aFontMetrics;
     mpFontFace->GetMetrics(&aFontMetrics);
 
     std::vector<DWRITE_GLYPH_METRICS> metrics(nGlyphs);
     if (!SUCCEEDED(mpFontFace->GetDesignGlyphMetrics(pGid, nGlyphs, metrics.data())))
-        return std::vector<Rectangle>();
+        return std::vector<tools::Rectangle>();
 
-    std::vector<Rectangle> aOut(nGlyphs);
+    std::vector<tools::Rectangle> aOut(nGlyphs);
     auto pOut = aOut.begin();
     for (auto &m : metrics)
     {
@@ -566,7 +566,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
 {
     HDC hDC = getHDC();
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     rLayout.GetBoundRect(*this, aRect);
 
     COLORREF color = GetTextColor(hDC);
@@ -657,7 +657,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
         // TODO: check the performance of this 2nd approach at some stage and
         // switch to that if it performs well.
 
-        Rectangle aRect;
+        tools::Rectangle aRect;
         rLayout.GetBoundRect(*this, aRect);
 
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());

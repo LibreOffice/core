@@ -32,7 +32,7 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
     rPoly.Move(S.Width(),S.Height());
 }
 
-void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact)
+void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact)
 {
     Fraction aXFact(rxFact);
     Fraction aYFact(ryFact);
@@ -268,7 +268,7 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
 
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
-                          const Rectangle& rRefRect)
+                          const tools::Rectangle& rRefRect)
 {
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
@@ -331,7 +331,7 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
     }
 }
 
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect)
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect)
 {
     double nSin,nCos;
     sal_uInt16 nPointAnz=rPoly.GetPointCount();
@@ -371,7 +371,7 @@ void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad
     }
 }
 
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect)
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect)
 {
     sal_uInt16 nPolyCount=rPoly.Count();
     for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyCount; nPolyNum++) {
@@ -467,7 +467,7 @@ void GeoStat::RecalcTan()
 }
 
 
-tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
+tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
 {
     tools::Polygon aPol(5);
     aPol[0]=rRect.TopLeft();
@@ -480,7 +480,7 @@ tools::Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
     return aPol;
 }
 
-void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
+void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo)
 {
     rGeo.nRotationAngle=GetAngle(rPol[1]-rPol[0]);
     rGeo.nRotationAngle=NormAngle360(rGeo.nRotationAngle);
@@ -518,7 +518,7 @@ void Poly2Rect(const tools::Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     Point aRU(aPt0);
     aRU.X()+=nWdt;
     aRU.Y()+=nHgt;
-    rRect=Rectangle(aPt0,aRU);
+    rRect=tools::Rectangle(aPt0,aRU);
 }
 
 

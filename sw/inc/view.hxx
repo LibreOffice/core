@@ -176,7 +176,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 
     Size                m_aDocSz;         // current document size
-    Rectangle           m_aVisArea;       // visible region
+    tools::Rectangle           m_aVisArea;       // visible region
 
     VclPtr<SwEditWin>    m_pEditWin;
     SwWrtShell          *m_pWrtShell;
@@ -272,7 +272,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     inline long                  GetXScroll() const;
     inline long                  GetYScroll() const;
     SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;
-    SAL_DLLPRIVATE void          CalcPt( Point* pPt,const Rectangle& rRect,
+    SAL_DLLPRIVATE void          CalcPt( Point* pPt,const tools::Rectangle& rRect,
                                     sal_uInt16 nRangeX,
                                     sal_uInt16 nRangeY);
 
@@ -413,10 +413,10 @@ public:
     // hand the handler for text blocks to the shell; create if applicable
     SwGlossaryHdl*          GetGlosHdl();
 
-    const Rectangle& GetVisArea() const { return m_aVisArea; }
+    const tools::Rectangle& GetVisArea() const { return m_aVisArea; }
 
-    bool            IsScroll(const Rectangle& rRect) const;
-    void            Scroll( const Rectangle& rRect,
+    bool            IsScroll(const tools::Rectangle& rRect) const;
+    void            Scroll( const tools::Rectangle& rRect,
                             sal_uInt16 nRangeX = USHRT_MAX,
                             sal_uInt16 nRangeY = USHRT_MAX);
 
@@ -442,7 +442,7 @@ public:
 
     void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return m_aDocSz; }
-    void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void    SetVisArea( const tools::Rectangle&, bool bUpdateScrollbar = true);
             void    SetVisArea( const Point&, bool bUpdateScrollbar = true);
             void    CheckVisArea();
 

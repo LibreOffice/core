@@ -416,12 +416,12 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     ToolBox::MouseButtonDown(rEvt);
 }
 
-void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
+void SwNavigationPI::CreateNavigationTool(const tools::Rectangle& rRect, bool bSetFocus, vcl::Window *pParent)
 {
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     VclPtrInstance<SwScrollNaviPopup> pPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
 
-    Rectangle aRect(rRect);
+    tools::Rectangle aRect(rRect);
     Point aT1 = aRect.TopLeft();
     aT1 = pPopup->GetParent()->OutputToScreenPixel(pPopup->GetParent()->AbsoluteScreenToOutputPixel(m_aContentToolBox->OutputToAbsoluteScreenPixel(aT1)));
     aRect.SetPos(aT1);
@@ -636,8 +636,8 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 
     // Double separators are not allowed, so you have to
     // determine the suitable size differently.
-    Rectangle aFirstRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("anchor"));
-    Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
+    tools::Rectangle aFirstRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("anchor"));
+    tools::Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
     Size aOptimalSize(m_xEdit->get_preferred_size());

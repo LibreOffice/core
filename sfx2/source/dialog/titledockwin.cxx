@@ -143,7 +143,7 @@ namespace sfx2
         rRenderContext.SetTextFillColor();
     }
 
-    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea)
+    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rArea)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -173,15 +173,15 @@ namespace sfx2
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
         // Paint title bar background.
-        Rectangle aTitleBarBox(Rectangle(nOuterLeft, 0, nOuterRight, nInnerTop - 1));
+        tools::Rectangle aTitleBarBox(tools::Rectangle(nOuterLeft, 0, nOuterRight, nInnerTop - 1));
         rRenderContext.DrawRect(aTitleBarBox);
 
         if (nInnerLeft > nOuterLeft)
-            rRenderContext.DrawRect(Rectangle(nOuterLeft, nInnerTop, nInnerLeft, nInnerBottom));
+            rRenderContext.DrawRect(tools::Rectangle(nOuterLeft, nInnerTop, nInnerLeft, nInnerBottom));
         if (nOuterRight > nInnerRight)
-            rRenderContext.DrawRect(Rectangle(nInnerRight, nInnerTop, nOuterRight, nInnerBottom));
+            rRenderContext.DrawRect(tools::Rectangle(nInnerRight, nInnerTop, nOuterRight, nInnerBottom));
         if (nInnerBottom < nOuterBottom)
-            rRenderContext.DrawRect(Rectangle(nOuterLeft, nInnerBottom, nOuterRight, nOuterBottom));
+            rRenderContext.DrawRect(tools::Rectangle(nOuterLeft, nInnerBottom, nOuterRight, nOuterBottom));
 
         // Paint bevel border.
         rRenderContext.SetFillColor();
@@ -251,7 +251,7 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, bool i_bFloatMode )
+    void TitledDockingWindow::EndDocking( const tools::Rectangle& i_rRect, bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
 

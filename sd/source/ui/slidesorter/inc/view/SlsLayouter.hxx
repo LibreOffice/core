@@ -116,14 +116,14 @@ public:
     /** Return the bounding box in window coordinates of the nIndex-th page
         object.
     */
-    Rectangle GetPageObjectBox (
+    ::tools::Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
         const bool bIncludeBorderAndGap) const;
 
     /** Return the bounding box in model coordinates of the page that
         contains the given amount of page objects.
     */
-    Rectangle GetTotalBoundingBox() const;
+    ::tools::Rectangle GetTotalBoundingBox() const;
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
@@ -131,7 +131,7 @@ public:
             The second index may be larger than the number of existing
             page objects.
     */
-    Range GetRangeOfVisiblePageObjects (const Rectangle& rVisibleArea) const;
+    Range GetRangeOfVisiblePageObjects (const ::tools::Rectangle& rVisibleArea) const;
 
     /** Return the index of the page object that is rendered at the given
         point.

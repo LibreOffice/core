@@ -181,7 +181,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
 {
-   return Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+   return tools::Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 awt::Rectangle SAL_CALL AccessibleGridControlBase::getBounds()
@@ -308,11 +308,11 @@ void AccessibleGridControlBase::ensureIsAlive() const
         throw lang::DisposedException();
 }
 
-Rectangle AccessibleGridControlBase::getBoundingBox()
+tools::Rectangle AccessibleGridControlBase::getBoundingBox()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
-    Rectangle aRect = implGetBoundingBox();
+    tools::Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );
@@ -320,11 +320,11 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
     return aRect;
 }
 
-Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
+tools::Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
-    Rectangle aRect = implGetBoundingBoxOnScreen();
+    tools::Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );

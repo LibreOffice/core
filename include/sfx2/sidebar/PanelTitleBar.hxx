@@ -44,8 +44,8 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
 
 protected:
-    virtual Rectangle GetTitleArea(const Rectangle& rTitleBarBox) override;
-    virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) override;
+    virtual tools::Rectangle GetTitleArea(const tools::Rectangle& rTitleBarBox) override;
+    virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBarBox) override;
     virtual sidebar::Paint GetBackgroundPaint() override;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) override;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;

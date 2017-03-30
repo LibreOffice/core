@@ -97,12 +97,12 @@ VclPtr<DeckTitleBar> Deck::GetTitleBar() const
     return mpTitleBar;
 }
 
-Rectangle Deck::GetContentArea() const
+tools::Rectangle Deck::GetContentArea() const
 {
     const Size aWindowSize (GetSizePixel());
     const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
 
-    return Rectangle(
+    return tools::Rectangle(
         Theme::GetInteger(Theme::Int_DeckLeftPadding) + nBorderSize,
         Theme::GetInteger(Theme::Int_DeckTopPadding) + nBorderSize,
         aWindowSize.Width() - 1 - Theme::GetInteger(Theme::Int_DeckRightPadding) - nBorderSize,
@@ -114,7 +114,7 @@ void Deck::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(Wallpaper());
 }
 
-void Deck::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
+void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
 {
     const Size aWindowSize (GetSizePixel());
     const SvBorder aPadding(Theme::GetInteger(Theme::Int_DeckLeftPadding),
@@ -123,7 +123,7 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateA
                             Theme::GetInteger(Theme::Int_DeckBottomPadding));
 
     // Paint deck background outside the border.
-    Rectangle aBox(0, 0, aWindowSize.Width() - 1, aWindowSize.Height() - 1);
+    tools::Rectangle aBox(0, 0, aWindowSize.Width() - 1, aWindowSize.Height() - 1);
     DrawHelper::DrawBorder(rRenderContext, aBox, aPadding,
                            Theme::GetPaint(Theme::Paint_DeckBackground),
                            Theme::GetPaint(Theme::Paint_DeckBackground));
@@ -314,7 +314,7 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #endif
 }
 
-void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
+void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
 {
     // Paint the separators.
     const sal_Int32 nSeparatorHeight(Theme::GetInteger(Theme::Int_DeckSeparatorHeight));

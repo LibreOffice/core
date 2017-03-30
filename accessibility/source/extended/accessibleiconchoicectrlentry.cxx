@@ -106,9 +106,9 @@ namespace accessibility
         }
     }
 
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
+    tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
         if ( pEntry )
             aRect = m_pIconCtrl->GetBoundingBox( pEntry );
@@ -116,16 +116,16 @@ namespace accessibility
         return aRect;
     }
 
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen_Impl() const
+    tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen_Impl() const
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
         if ( pEntry )
         {
             aRect = m_pIconCtrl->GetBoundingBox( pEntry );
             Point aTopLeft = aRect.TopLeft();
             aTopLeft += m_pIconCtrl->GetWindowExtentsRelative( nullptr ).TopLeft();
-            aRect = Rectangle( aTopLeft, aRect.GetSize() );
+            aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 
         return aRect;
@@ -151,7 +151,7 @@ namespace accessibility
         return bShowing;
     }
 
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox()
+    tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -160,7 +160,7 @@ namespace accessibility
         return GetBoundingBox_Impl();
     }
 
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen()
+    tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -347,7 +347,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::containsPoint( const awt::Point& rPoint )
     {
-        return Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleAtPoint( const awt::Point& )
@@ -428,8 +428,8 @@ namespace accessibility
         awt::Rectangle aBounds( 0, 0, 0, 0 );
         if ( m_pIconCtrl )
         {
-            Rectangle aItemRect = GetBoundingBox_Impl();
-            Rectangle aCharRect = m_pIconCtrl->GetEntryCharacterBounds( m_nIndex, _nIndex );
+            tools::Rectangle aItemRect = GetBoundingBox_Impl();
+            tools::Rectangle aCharRect = m_pIconCtrl->GetEntryCharacterBounds( m_nIndex, _nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
             aBounds = AWTRectangle( aCharRect );
         }
@@ -446,7 +446,7 @@ namespace accessibility
         if ( m_pIconCtrl )
         {
             vcl::ControlLayoutData aLayoutData;
-            Rectangle aItemRect = GetBoundingBox_Impl();
+            tools::Rectangle aItemRect = GetBoundingBox_Impl();
             m_pIconCtrl->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt( VCLPoint( aPoint ) );
             aPnt += aItemRect.TopLeft();
@@ -455,7 +455,7 @@ namespace accessibility
             long nLen = aLayoutData.m_aUnicodeBoundRects.size();
             for ( long i = 0; i < nLen; ++i )
             {
-                Rectangle aRect = aLayoutData.GetCharacterBounds(i);
+                tools::Rectangle aRect = aLayoutData.GetCharacterBounds(i);
                 bool bInside = aRect.IsInside( aPnt );
 
                 if ( bInside )

@@ -858,7 +858,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
             if (bScaleObjects)
             {
-                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                 pRefPage->ScaleObjects(aSize, aBorderRect, true);
             }
             pRefPage->SetSize(aSize);
@@ -877,7 +877,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
             if (bScaleObjects)
             {
-                Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
+                ::tools::Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
                 pRefPage->ScaleObjects(aNSize, aBorderRect, true);
             }
 
@@ -900,7 +900,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             {
                 if (bScaleObjects)
                 {
-                    Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                    ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                     pRefPage->ScaleObjects(aSize, aBorderRect, true);
                 }
                 pRefPage->SetSize(aSize);
@@ -911,7 +911,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             {
                 if (bScaleObjects)
                 {
-                    Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
+                    ::tools::Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
                     pRefPage->ScaleObjects(aNSize, aBorderRect, true);
                 }
                 pRefPage->SetSize(aNSize);
@@ -1088,7 +1088,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
         }
         else
         {
-            aObjPos = Rectangle(Point(), pPage->GetSize()).Center();
+            aObjPos = ::tools::Rectangle(Point(), pPage->GetSize()).Center();
         }
 
         size_t nCountBefore = 0;
@@ -1761,7 +1761,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             Size aSize(rOldMaster.GetSize());
-            Rectangle aBorderRect(rOldMaster.GetLftBorder(),
+            ::tools::Rectangle aBorderRect(rOldMaster.GetLftBorder(),
                                   rOldMaster.GetUppBorder(),
                                   rOldMaster.GetRgtBorder(),
                                   rOldMaster.GetLwrBorder());
@@ -1775,7 +1775,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pMaster->SetAutoLayout(pMaster->GetAutoLayout());
 
             aSize = rOldNotesMaster.GetSize();
-            Rectangle aNotesBorderRect(rOldNotesMaster.GetLftBorder(),
+            ::tools::Rectangle aNotesBorderRect(rOldNotesMaster.GetLftBorder(),
                                        rOldNotesMaster.GetUppBorder(),
                                        rOldNotesMaster.GetRgtBorder(),
                                        rOldNotesMaster.GetLwrBorder());

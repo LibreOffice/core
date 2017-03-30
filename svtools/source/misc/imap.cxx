@@ -135,7 +135,7 @@ bool IMapObject::IsEqual( const IMapObject& rEqObj )
              ( bActive == rEqObj.bActive ) );
 }
 
-IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
+IMapRectangleObject::IMapRectangleObject( const tools::Rectangle& rRect,
                                           const OUString& rURL,
                                           const OUString& rAltText,
                                           const OUString& rDesc,
@@ -148,7 +148,7 @@ IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
     ImpConstruct( rRect, bPixelCoords );
 }
 
-void IMapRectangleObject::ImpConstruct( const Rectangle& rRect, bool bPixel )
+void IMapRectangleObject::ImpConstruct( const tools::Rectangle& rRect, bool bPixel )
 {
     if ( bPixel )
         aRect = Application::GetDefaultDevice()->PixelToLogic( rRect, MapMode( MapUnit::Map100thMM ) );
@@ -204,9 +204,9 @@ bool IMapRectangleObject::IsHit( const Point& rPoint ) const
     return aRect.IsInside( rPoint );
 }
 
-Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
+tools::Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
 {
-    Rectangle   aNewRect;
+    tools::Rectangle   aNewRect;
 
     if ( bPixelCoords )
         aNewRect = Application::GetDefaultDevice()->LogicToPixel( aRect, MapMode( MapUnit::Map100thMM ) );
@@ -227,7 +227,7 @@ void IMapRectangleObject::Scale( const Fraction& rFracX, const Fraction& rFracY 
         SCALEPOINT( aBR, rFracX, rFracY );
     }
 
-    aRect = Rectangle( aTL, aBR );
+    aRect = tools::Rectangle( aTL, aBR );
 }
 
 bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
@@ -469,7 +469,7 @@ tools::Polygon IMapPolygonObject::GetPolygon( bool bPixelCoords ) const
     return aNewPoly;
 }
 
-void IMapPolygonObject::SetExtraEllipse( const Rectangle& rEllipse )
+void IMapPolygonObject::SetExtraEllipse( const tools::Rectangle& rEllipse )
 {
     if ( aPoly.GetSize() )
     {
@@ -505,7 +505,7 @@ void IMapPolygonObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
             SCALEPOINT( aBR, rFracX, rFracY );
         }
 
-        aEllipse = Rectangle( aTL, aBR );
+        aEllipse = tools::Rectangle( aTL, aBR );
     }
 }
 

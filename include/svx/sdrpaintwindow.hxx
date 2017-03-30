@@ -41,7 +41,7 @@ namespace sdr
 /// paint the transparent children of rWin that overlap rPixelRect
 /// (for example, transparent form controls like check boxes)
 void SVX_DLLPUBLIC
-PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
+PaintTransparentChildren(vcl::Window & rWindow, tools::Rectangle const& rPixelRect);
 
 class SdrPreRenderDevice
 {
@@ -105,7 +105,7 @@ public:
     void DrawOverlay(const vcl::Region& rRegion);
 
     // calculate visible area and return
-    Rectangle GetVisibleArea() const;
+    tools::Rectangle GetVisibleArea() const;
 
     // Is OutDev a printer?
     bool OutputToPrinter() const { return (OUTDEV_PRINTER == mpOutputDevice->GetOutDevType()); }

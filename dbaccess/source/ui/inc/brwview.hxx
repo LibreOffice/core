@@ -84,7 +84,7 @@ namespace dbaui
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void GetFocus() override;
-        virtual void resizeDocumentView(Rectangle& rRect) override;
+        virtual void resizeDocumentView(tools::Rectangle& rRect) override;
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     private:

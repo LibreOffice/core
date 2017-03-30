@@ -50,7 +50,7 @@ namespace dbaui
 
     protected:
         virtual void Resize() override;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
     public:
         explicit OTableFieldDescWin( vcl::Window* pParent);

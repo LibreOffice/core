@@ -79,9 +79,9 @@ public:
                  { mbNoAttribs = bNoAttr; }
     bool IsNoAttribs() const { return mbNoAttribs; }
 
-    void SetVisArea(const Rectangle& rVisArea)
+    void SetVisArea(const ::tools::Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
-    const Rectangle& GetVisArea() { return maVisArea; }
+    const ::tools::Rectangle& GetVisArea() { return maVisArea; }
 
     void SetPageKind(PageKind eKind) { mePageKind = eKind; }
     PageKind GetPageKind() const { return mePageKind; }
@@ -179,7 +179,7 @@ private:
     SdrHelpLineList     maHandoutHelpLines;
     bool                mbNoColors;        ///< structuring mode
     bool                mbNoAttribs;       ///< structuring mode
-    Rectangle           maVisArea;         ///< visible area
+    ::tools::Rectangle           maVisArea;         ///< visible area
     PageKind            mePageKind;        ///< kind of page (standard, notes, handout)
     sal_uInt16          mnSelectedPage;
     PageKind            mePageKindOnLoad;

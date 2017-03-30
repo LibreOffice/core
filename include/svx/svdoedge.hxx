@@ -174,11 +174,11 @@ public:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    static XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter);
+    static XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const tools::Rectangle& rRect, const Point& rCenter);
     void ImpRecalcEdgeTrack();   // recalculation of the connection track
     XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
-    XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
-        const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
+    XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
+        const Point& rPt2, long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr);
     static SdrEscapeDirection ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2);
@@ -196,8 +196,8 @@ public:
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual const Rectangle& GetCurrentBoundRect() const override;
-    virtual const Rectangle& GetSnapRect() const override;
+    virtual const tools::Rectangle& GetCurrentBoundRect() const override;
+    virtual const tools::Rectangle& GetSnapRect() const override;
     virtual bool IsNode() const override;
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;
@@ -215,7 +215,7 @@ public:
     bool CheckNodeConnection(bool bTail1) const;
 
     virtual void RecalcSnapRect() override;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const override;
+    virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrEdgeObj* Clone() const override;
     SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
     virtual OUString TakeObjNameSingul() const override;
@@ -237,7 +237,7 @@ public:
     // FullDrag support
     virtual SdrObject* getFullDragClone() const override;
 
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcMove(const Size& aSize) override;
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
 

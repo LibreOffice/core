@@ -138,7 +138,7 @@ const char *ToVertAlign( SdrTextVertAdjust eAdjust )
     }
 }
 
-void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr const & rComments, Rectangle &aRect )
+void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr const & rComments, tools::Rectangle &aRect )
 {
     rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
     rComments->writeEscaped( OUString::number( aRect.Left() ) );
@@ -154,7 +154,7 @@ void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr const & rComments, Recta
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
 
-void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
+void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_Int32 nTab, tools::Rectangle &aFrom, tools::Rectangle &aTo )
 {
     sal_Int32 nCol = 0, nRow = 0;
     sal_Int32 nColOff = 0, nRowOff= 0;
@@ -164,7 +164,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
     {
         while(true)
         {
-            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Left() <= aRect.Left() )
             {
                 nCol++;
@@ -177,7 +177,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
             }
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
-                aFrom = Rectangle( nCol-1, lcl_hmm2px( nColOff ),
+                aFrom = tools::Rectangle( nCol-1, lcl_hmm2px( nColOff ),
                                    nRow-1, lcl_hmm2px( nRowOff ) );
                 break;
             }
@@ -187,7 +187,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
     {
         while(true)
         {
-            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Left() >= aRect.Left() )
             {
                 nCol++;
@@ -200,7 +200,7 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
             }
             if( r.Left() < aRect.Left() && r.Top() > aRect.Top() )
             {
-                aFrom = Rectangle( nCol-1, lcl_hmm2px( nColOff ),
+                aFrom = tools::Rectangle( nCol-1, lcl_hmm2px( nColOff ),
                                    nRow-1, lcl_hmm2px( nRowOff ) );
                 break;
             }
@@ -210,14 +210,14 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
     {
         while(true)
         {
-            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Right() < aRect.Right() )
                 nCol++;
             if( r.Bottom() < aRect.Bottom() )
                 nRow++;
             if( r.Right() >= aRect.Right() && r.Bottom() >= aRect.Bottom() )
             {
-                aTo = Rectangle( nCol, lcl_hmm2px( aRect.Right() - r.Left() ),
+                aTo = tools::Rectangle( nCol, lcl_hmm2px( aRect.Right() - r.Left() ),
                                  nRow, lcl_hmm2px( aRect.Bottom() - r.Top() ));
                 break;
             }
@@ -227,14 +227,14 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 n
     {
         while(true)
         {
-            Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
+            tools::Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
             if( r.Right() >= aRect.Right() )
                 nCol++;
             if( r.Bottom() < aRect.Bottom() )
                 nRow++;
             if( r.Right() < aRect.Right() && r.Bottom() >= aRect.Bottom() )
             {
-                aTo = Rectangle( nCol, lcl_hmm2px( r.Left() - aRect.Right() ),
+                aTo = tools::Rectangle( nCol, lcl_hmm2px( r.Left() - aRect.Right() ),
                                  nRow, lcl_hmm2px( aRect.Bottom() - r.Top() ));
                 break;
             }
@@ -270,7 +270,7 @@ void XclExpDffAnchorBase::WriteDffData( EscherEx& rEscherEx ) const
     WriteXclObjAnchor( rEscherEx.GetStream(), maAnchor );
 }
 
-void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const Rectangle& rRect )
+void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const tools::Rectangle& rRect )
 {
     // the passed rectangle is in twips
     ImplCalcAnchorRect( rRect, MapUnit::MapTwip );
@@ -282,7 +282,7 @@ void XclExpDffAnchorBase::ImplSetFlags( const SdrObject& )
     OSL_FAIL( "XclExpDffAnchorBase::ImplSetFlags - not implemented" );
 }
 
-void XclExpDffAnchorBase::ImplCalcAnchorRect( const Rectangle&, MapUnit )
+void XclExpDffAnchorBase::ImplCalcAnchorRect( const tools::Rectangle&, MapUnit )
 {
     OSL_FAIL( "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
 }
@@ -302,7 +302,7 @@ void XclExpDffSheetAnchor::ImplSetFlags( const SdrObject& rSdrObj )
         mnFlags = EXC_ESC_ANCHOR_LOCKED;
 }
 
-void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
+void XclExpDffSheetAnchor::ImplCalcAnchorRect( const tools::Rectangle& rRect, MapUnit eMapUnit )
 {
     maAnchor.SetRect( GetRoot(), mnScTab, rRect, eMapUnit );
 }
@@ -321,12 +321,12 @@ void XclExpDffEmbeddedAnchor::ImplSetFlags( const SdrObject& /*rSdrObj*/ )
     // TODO (unsupported feature): fixed size
 }
 
-void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
+void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const tools::Rectangle& rRect, MapUnit eMapUnit )
 {
     maAnchor.SetRect( maPageSize, mnScaleX, mnScaleY, rRect, eMapUnit );
 }
 
-XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
+XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const tools::Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
     maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MapUnit::Map100thMM );
@@ -534,7 +534,7 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
 //#if EXC_EXP_OCX_CTRL
 
 XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape,
-        const Rectangle* pChildAnchor, const OUString& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+        const tools::Rectangle* pChildAnchor, const OUString& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE, true ),
     XclExpControlHelper( rObjMgr.GetRoot() ),
     maClassName( rClassName ),
@@ -552,7 +552,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE );
-    Rectangle aDummyRect;
+    tools::Rectangle aDummyRect;
     EscherPropertyContainer aPropOpt( mrEscherEx.GetGraphicProvider(), mrEscherEx.QueryPictureStream(), aDummyRect );
     aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,    0x00080008 );   // bool field
     aPropOpt.AddOpt( ESCHER_Prop_lineColor,         0x08000040 );
@@ -638,7 +638,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 
 //#else
 
-XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > const & xShape , const Rectangle* pChildAnchor ) :
+XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > const & xShape , const tools::Rectangle* pChildAnchor ) :
     XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
     XclMacroHelper( rRoot ),
     meEventType( EXC_TBX_EVENT_ACTION ),
@@ -1067,7 +1067,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 //#endif
 
-XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape, const Rectangle* pChildAnchor ) :
+XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape, const tools::Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
     XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
 {
@@ -1106,7 +1106,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     mxChartDoc.set( xModel,UNO_QUERY );
     css::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, "BoundRect" );
-    Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
+    tools::Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
     mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
 }
 

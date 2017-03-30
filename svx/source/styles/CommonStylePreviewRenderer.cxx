@@ -151,7 +151,7 @@ bool CommonStylePreviewRenderer::recalculate()
         vcl::Font aOldFont(mrOutputDev.GetFont());
 
         mrOutputDev.SetFont(*pFont);
-        Rectangle aTextRect;
+        tools::Rectangle aTextRect;
         mrOutputDev.GetTextBoundRect(aTextRect, mpStyle->GetName());
         if (aTextRect.Bottom() > mnMaxHeight)
         {
@@ -180,7 +180,7 @@ Size CommonStylePreviewRenderer::getRenderSize()
     return maPixelSize;
 }
 
-bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle, RenderAlign eRenderAlign)
+bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign)
 {
     const OUString& rText = msRenderText.isEmpty() ? maStyleName : msRenderText;
 

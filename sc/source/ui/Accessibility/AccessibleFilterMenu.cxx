@@ -236,46 +236,46 @@ Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
 {
     if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
-        return Rectangle();
+        return tools::Rectangle();
 
     // Menu object's bounding box is the bounding box of the menu item that
     // launches the menu, which belongs to the parent window.
     ScMenuFloatingWindow* pParentWin = mpWindow->getParentMenuWindow();
     if (!pParentWin)
-        return Rectangle();
+        return tools::Rectangle();
 
     if (!pParentWin->IsVisible())
-        return Rectangle();
+        return tools::Rectangle();
 
     Point aPos = pParentWin->OutputToAbsoluteScreenPixel(Point(0,0));
     Point aMenuPos;
     Size aMenuSize;
     pParentWin->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
-    Rectangle aRect(aPos + aMenuPos, aMenuSize);
+    tools::Rectangle aRect(aPos + aMenuPos, aMenuSize);
     return aRect;
 }
 
-Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
+tools::Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
 {
     if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
-        return Rectangle();
+        return tools::Rectangle();
 
     // Menu object's bounding box is the bounding box of the menu item that
     // launches the menu, which belongs to the parent window.
     ScMenuFloatingWindow* pParentWin = mpWindow->getParentMenuWindow();
     if (!pParentWin)
-        return Rectangle();
+        return tools::Rectangle();
 
     if (!pParentWin->IsVisible())
-        return Rectangle();
+        return tools::Rectangle();
 
     Point aMenuPos;
     Size aMenuSize;
     pParentWin->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
-    Rectangle aRect(aMenuPos, aMenuSize);
+    tools::Rectangle aRect(aMenuPos, aMenuSize);
     return aRect;
 }
 

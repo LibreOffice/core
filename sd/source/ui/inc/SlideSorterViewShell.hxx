@@ -100,12 +100,12 @@ public:
             factor.
         */
     virtual void SetZoom (long int nZoom) override;
-    virtual void SetZoomRect (const Rectangle& rZoomRect) override;
+    virtual void SetZoomRect (const ::tools::Rectangle& rZoomRect) override;
 
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
     */
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) override;
+    virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
     /** Place and size the controls and windows.  You may want to call this
         method when something has changed that for instance affects the

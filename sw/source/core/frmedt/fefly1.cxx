@@ -1748,7 +1748,7 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltNam
         if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) == nullptr )
         {
             // then let's do it:
-            const Rectangle &rBound = pObj->GetSnapRect();
+            const tools::Rectangle &rBound = pObj->GetSnapRect();
             Point aRelPos( pObj->GetRelativePos() );
 
             const long nWidth = rBound.Right()  - rBound.Left();

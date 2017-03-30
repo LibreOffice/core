@@ -109,10 +109,10 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
                 if( nRot10 )
                 {
-                    tools::Polygon aPoly( Rectangle( aPt, aSz ) );
+                    tools::Polygon aPoly( tools::Rectangle( aPt, aSz ) );
 
                     aPoly.Rotate( aPt, nRot10 );
-                    const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+                    const tools::Rectangle aRotBoundRect( aPoly.GetBoundRect() );
                     aPt = aRotBoundRect.TopLeft();
                     aSz = aRotBoundRect.GetSize();
                 }
@@ -429,9 +429,9 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
     bool                bRet = false;
 
-    tools::Polygon aPoly( Rectangle( Point(), rUnrotatedSzPix ) );
+    tools::Polygon aPoly( tools::Rectangle( Point(), rUnrotatedSzPix ) );
     aPoly.Rotate( Point(), nRot10 );
-    Rectangle           aNewBound( aPoly.GetBoundRect() );
+    tools::Rectangle           aNewBound( aPoly.GetBoundRect() );
 
     // create horizontal mapping table
     long x;
@@ -885,9 +885,9 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
     if( nRot10 )
     {
-        tools::Polygon aPoly( Rectangle( rPoint, rSize ) );
+        tools::Polygon aPoly( tools::Rectangle( rPoint, rSize ) );
         aPoly.Rotate( rPoint, nRot10 );
-        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+        const tools::Rectangle aRotBoundRect( aPoly.GetBoundRect() );
         aOutputPointPix = pOutputDevice->LogicToPixel( aRotBoundRect.TopLeft() );
         aOutputSizePix  = pOutputDevice->LogicToPixel( aRotBoundRect.GetSize() );
     }
@@ -913,8 +913,8 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
         if( !pBmpEx )
         {
             Point       aPt;
-            Rectangle   aOutRect( aPt, pOutputDevice->GetOutputSizePixel() );
-            Rectangle   aBmpRect( aOutputPointPix, aOutputSizePix );
+            tools::Rectangle   aOutRect( aPt, pOutputDevice->GetOutputSizePixel() );
+            tools::Rectangle   aBmpRect( aOutputPointPix, aOutputSizePix );
 
             if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
             {
@@ -1078,7 +1078,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
     {
         // crop bitmap to given source rectangle (no
         // need to copy and convert the whole bitmap)
-        const Rectangle aCropRect( rSrcPoint,
+        const tools::Rectangle aCropRect( rSrcPoint,
                                    rSrcSize );
         aBmpEx.Crop( aCropRect );
     }
@@ -1612,16 +1612,16 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
 
     if( nRot10 )
     {
-        tools::Polygon aPoly( Rectangle( aOutPt, aOutSz ) );
+        tools::Polygon aPoly( tools::Rectangle( aOutPt, aOutSz ) );
 
         aPoly.Rotate( aOutPt, nRot10 );
-        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+        const tools::Rectangle aRotBoundRect( aPoly.GetBoundRect() );
         aOutPt = aRotBoundRect.TopLeft();
         aOutSz = aRotBoundRect.GetSize();
     }
 
     pOut->Push( PushFlags::CLIPREGION );
-    pOut->IntersectClipRegion( Rectangle( aOutPt, aOutSz ) );
+    pOut->IntersectClipRegion( tools::Rectangle( aOutPt, aOutSz ) );
 
     const_cast<GDIMetaFile&>(rMtf).WindStart();
     const_cast<GDIMetaFile&>(rMtf).Play( pOut, aOutPt, aOutSz );
@@ -1874,7 +1874,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     return true;
 }
 
-bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
+bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSizePixel,
                                    const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
     const MapMode   aOutMapMode( pOut->GetMapMode() );
@@ -1937,7 +1937,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
     else
     {
         const Size      aOutOffset( pOut->LogicToPixel( rOffset, aOutMapMode ) );
-        const Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
+        const tools::Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
 
         // number of invisible (because out-of-area) tiles
         int nInvisibleTilesX;
@@ -2031,7 +2031,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                                          const GraphicAttr& rAttr,
                                          const Size&        rCropLeftTop,
                                          const Size&        rCropRightBottom,
-                                         const Rectangle&   rCropRect,
+                                         const tools::Rectangle&   rCropRect,
                                          const Size&        rDstSize,
                                          bool               bEnlarge ) const
 {
@@ -2079,7 +2079,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
             aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
             aBmpEx2.Erase( Color(0xFF,0,0,0) );
-            aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
+            aBmpEx2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
             rBmpEx = aBmpEx2;
         }
     }

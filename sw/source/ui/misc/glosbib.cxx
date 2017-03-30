@@ -425,7 +425,7 @@ void SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
             if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
-            Rectangle aItemRect( aPos, aSize );
+            tools::Rectangle aItemRect( aPos, aSize );
             GlosBibUserData* pData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
             const OUString sMsg = pData->sPath + "/"
                                 + pData->sGroupName.getToken(0, GLOS_DELIM)

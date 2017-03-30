@@ -190,7 +190,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
             // get the text bounds and set at text object
-            Rectangle aTextBounds = pCustoObj->GetSnapRect();
+            tools::Rectangle aTextBounds = pCustoObj->GetSnapRect();
             SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
             if ( pSdrObjCustomShape )
             {
@@ -293,7 +293,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 SdrObject::Free( pRenderedShape );
                 pRenderedShape = pRenderedShape3d;
             }
-            Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
+            tools::Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
 
             const GeoStat& rGeoStat = static_cast<SdrObjCustomShape*>(pSdrObjCustomShape)->GetGeoStat();
             if ( rGeoStat.nShearAngle )
@@ -358,7 +358,7 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
         if ( pSdrObjCustomShape )
         {
             EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
-            Rectangle aRect( aCustomShape2d.GetTextRect() );
+            tools::Rectangle aRect( aCustomShape2d.GetTextRect() );
             aTextRect.X = aRect.Left();
             aTextRect.Y = aRect.Top();
             aTextRect.Width = aRect.GetWidth();
@@ -378,7 +378,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
         SdrObject* pObj = aCustomShape2d.CreateLineGeometry();
         if ( pObj )
         {
-            Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
+            tools::Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
             bool bFlipV = aCustomShape2d.IsFlipVert();
             bool bFlipH = aCustomShape2d.IsFlipHorz();
 

@@ -295,7 +295,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     {
         if ( !pTabMark || pTabMark->GetTableSelect(nTab) )
         {
-            Rectangle aMMRect = GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(),
+            tools::Rectangle aMMRect = GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(),
                                             rRange.aEnd.Col(), rRange.aEnd.Row(), nTab );
 
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -336,7 +336,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
         {
             if ( pGrafObj->IsAnimated() )
             {
-                const Rectangle& rRect = pGrafObj->GetCurrentBoundRect();
+                const tools::Rectangle& rRect = pGrafObj->GetCurrentBoundRect();
                 pGrafObj->StartAnimation( pWin, rRect.TopLeft(), rRect.GetSize() );
             }
         }
@@ -344,7 +344,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
     }
 }
 
-bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
+bool ScDocument::HasBackgroundDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const
 {
     //  Are there objects in the background layer who are (partly) affected by rMMRect
     //  (for Drawing optimization, no deletion in front of the background
@@ -369,7 +369,7 @@ bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
     return bFound;
 }
 
-bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const
+bool ScDocument::HasAnyDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const
 {
     //  Are there any objects at all who are (partly) affected by rMMRect?
     //  (To detect blank pages when printing)
@@ -438,7 +438,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 
 bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, bool bLeftIsEmpty,
-                                ScRange* pLastRange, Rectangle* pLastMM ) const
+                                ScRange* pLastRange, tools::Rectangle* pLastMM ) const
 {
     if (!IsBlockEmpty( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
         return false;
@@ -447,7 +447,7 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         // We want to print sheets with borders even if there is no cell content.
         return false;
 
-    Rectangle aMMRect;
+    tools::Rectangle aMMRect;
     if ( pLastRange && pLastMM && nTab == pLastRange->aStart.Tab() &&
             nStartRow == pLastRange->aStart.Row() && nEndRow == pLastRange->aEnd.Row() )
     {

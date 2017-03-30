@@ -882,7 +882,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
-             Rectangle aItemRect( aPos, aSize );
+             tools::Rectangle aItemRect( aPos, aSize );
             OUString sMsg;
             if(!GetParent(pEntry))
             {

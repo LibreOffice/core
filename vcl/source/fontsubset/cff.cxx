@@ -2103,7 +2103,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         fXFactor = 1000.0F * maFontMatrix[0];
         fYFactor = 1000.0F * maFontMatrix[3];
     }
-    rFSInfo.m_aFontBBox = Rectangle( Point( static_cast<sal_Int32>(maFontBBox[0] * fXFactor),
+    rFSInfo.m_aFontBBox = tools::Rectangle( Point( static_cast<sal_Int32>(maFontBBox[0] * fXFactor),
                                         static_cast<sal_Int32>(maFontBBox[1] * fYFactor) ),
                                     Point( static_cast<sal_Int32>(maFontBBox[2] * fXFactor),
                                         static_cast<sal_Int32>(maFontBBox[3] * fYFactor) ) );

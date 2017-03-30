@@ -1273,7 +1273,7 @@ bool SwCursorShell::GoPrevCursor()
     return true;
 }
 
-void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
+void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     SET_CURR_SHELL( this );

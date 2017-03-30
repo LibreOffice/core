@@ -104,7 +104,7 @@ protected:
         See SetOwnEscher() for details. */
     explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
 
-    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
+    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const tools::Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm ) override;
@@ -159,18 +159,18 @@ class XclObjComment : public XclObj
     std::unique_ptr< SdrCaptionObj >
                                 mpCaption;
     bool                        mbVisible;
-    Rectangle                   maFrom;
-    Rectangle                   maTo;
+    tools::Rectangle                   maFrom;
+    tools::Rectangle                   maTo;
 
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &To );
+                                    const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, tools::Rectangle &rFrom, tools::Rectangle &To );
     virtual                     ~XclObjComment() override;
 
     /** c'tor process for formatted text objects above .
        @descr used to construct the MSODRAWING Escher object properties. */
     void                        ProcessEscherObj( const XclExpRoot& rRoot,
-                                    const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
+                                    const tools::Rectangle& rRect, SdrObject* pCaption, bool bVisible );
 
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;

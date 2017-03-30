@@ -41,7 +41,7 @@ public:
 
     void setRenderer(IRenderer* pRenderer);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;

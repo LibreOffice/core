@@ -506,7 +506,7 @@ void MediaWindowImpl::onURLChanged()
     }
 }
 
-void MediaWindowImpl::setPosSize(const Rectangle& rRect)
+void MediaWindowImpl::setPosSize(const tools::Rectangle& rRect)
 {
     SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
 }
@@ -595,7 +595,7 @@ void MediaWindowImpl::StateChanged(StateChangedType eType)
     }
 }
 
-void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (mxPlayerWindow.is())
         mxPlayerWindow->update();
@@ -621,7 +621,7 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&
         return;
 
     const Point aBasePos(mpChildWindow->GetPosPixel());
-    const Rectangle aVideoRect(aBasePos, mpChildWindow->GetSizePixel());
+    const tools::Rectangle aVideoRect(aBasePos, mpChildWindow->GetSizePixel());
 
     if (pLogo && !pLogo->IsEmpty() && (aVideoRect.GetWidth() > 0) && (aVideoRect.GetHeight() > 0))
     {

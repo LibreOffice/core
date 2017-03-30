@@ -62,7 +62,7 @@ public:
 
     virtual void Shutdown() override;
 
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) override;
+    virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
@@ -100,7 +100,7 @@ public:
     void FuSupport(SfxRequest &rReq);
 
     virtual void SetZoom(long nZoom) override;
-    virtual void SetZoomRect(const Rectangle& rZoomRect) override;
+    virtual void SetZoomRect(const ::tools::Rectangle& rZoomRect) override;
 
     void Execute(SfxRequest& rReq);
 
@@ -117,7 +117,7 @@ public:
     virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
     /** this method is called when the visible area of the view from this viewshell is changed */
-    virtual void VisAreaChanged(const Rectangle& rRect) override;
+    virtual void VisAreaChanged(const ::tools::Rectangle& rRect) override;
 
     /** Create an accessible object representing the specified window.
         @param pWindow

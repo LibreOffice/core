@@ -343,8 +343,8 @@ public:
 
     void DrawLine(const Point& rStart, const Point& rEnd);
 
-    void FillRect(const Rectangle& rRect);
-    void DrawRect(const Rectangle& rRect);
+    void FillRect(const tools::Rectangle& rRect);
+    void DrawRect(const tools::Rectangle& rRect);
 
 private:
 

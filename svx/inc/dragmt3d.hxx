@@ -58,7 +58,7 @@ protected:
     ::std::vector< E3dDragMethodUnit >  maGrp;
     E3dDragConstraint                   meConstraint;
     Point                               maLastPos;
-    Rectangle                           maFullBound;
+    tools::Rectangle                           maFullBound;
     bool                                mbMoveFull;
     bool                                mbMovedAtAll;
 

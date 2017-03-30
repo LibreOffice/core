@@ -108,9 +108,9 @@ namespace accessibility
     }
 
 
-    Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
+    tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
@@ -121,23 +121,23 @@ namespace accessibility
                 // position relative to parent entry
                 Point aTopLeft = aRect.TopLeft();
                 aTopLeft -= getListBox()->GetBoundingRect( pParent ).TopLeft();
-                aRect = Rectangle( aTopLeft, aRect.GetSize() );
+                aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
             }
         }
 
         return aRect;
     }
 
-    Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen_Impl() const
+    tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen_Impl() const
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
         {
             aRect = getListBox()->GetBoundingRect( pEntry );
             Point aTopLeft = aRect.TopLeft();
             aTopLeft += getListBox()->GetWindowExtentsRelative( nullptr ).TopLeft();
-            aRect = Rectangle( aTopLeft, aRect.GetSize() );
+            aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 
         return aRect;
@@ -165,7 +165,7 @@ namespace accessibility
         return bShowing;
     }
 
-    Rectangle AccessibleListBoxEntry::GetBoundingBox()
+    tools::Rectangle AccessibleListBoxEntry::GetBoundingBox()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -174,7 +174,7 @@ namespace accessibility
         return GetBoundingBox_Impl();
     }
 
-    Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
+    tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -550,7 +550,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::containsPoint( const awt::Point& rPoint )
     {
-        return Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
@@ -565,7 +565,7 @@ namespace accessibility
 
         Reference< XAccessible > xAcc;
         AccessibleListBoxEntry* pAccEntry = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-        Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
+        tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
         if ( aRect.IsInside( VCLPoint( _aPoint ) ) )
             xAcc = pAccEntry;
         return xAcc;
@@ -648,9 +648,9 @@ namespace accessibility
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
-            Rectangle aItemRect = GetBoundingBox();
+            tools::Rectangle aItemRect = GetBoundingBox();
             getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
-            Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
+            tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
             aBounds = AWTRectangle( aCharRect );
         }
@@ -670,7 +670,7 @@ namespace accessibility
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
-            Rectangle aItemRect = GetBoundingBox();
+            tools::Rectangle aItemRect = GetBoundingBox();
             getListBox()->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt( VCLPoint( aPoint ) );
             aPnt += aItemRect.TopLeft();

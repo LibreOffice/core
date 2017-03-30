@@ -33,7 +33,7 @@ public:
 
     // get info about the display
     virtual unsigned int GetDisplayScreenCount() override;
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
+    virtual tools::Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
 
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage) override;

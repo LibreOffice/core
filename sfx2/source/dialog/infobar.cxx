@@ -105,19 +105,19 @@ public:
         GetInfoBarColors(InfoBarType::Warning,m_aBackgroundColor,m_aForegroundColor,m_aMessageColor);
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void setBackgroundColor(const basegfx::BColor& rColor);
     void setForegroundColor(const basegfx::BColor& rColor);
 };
 
-void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
                 createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
+    const ::tools::Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
@@ -230,13 +230,13 @@ void SfxInfoBarWindow::dispose()
     vcl::Window::dispose();
 }
 
-void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect)
+void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rPaintRect)
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
                 createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
+    const ::tools::Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 

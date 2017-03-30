@@ -2585,7 +2585,7 @@ void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecond
 void VclVPaned::setAllocation(const Size& rAllocation)
 {
     //supporting "shrink" could be done by adjusting the allowed drag rectangle
-    m_pSplitter->SetDragRectPixel(Rectangle(Point(0, 0), rAllocation));
+    m_pSplitter->SetDragRectPixel(tools::Rectangle(Point(0, 0), rAllocation));
     Size aSplitterSize(rAllocation.Width(), getLayoutRequisition(*m_pSplitter).Height());
     const long nHeight = rAllocation.Height() - aSplitterSize.Height();
 
@@ -2646,7 +2646,7 @@ Size VclVPaned::calculateRequisition() const
 
 Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)
 {
-    Rectangle aBounds;
+    tools::Rectangle aBounds;
 
     for (const vcl::Window* pChild = rWindow.GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
@@ -2654,7 +2654,7 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow)
         if (!pChild->IsVisible())
             continue;
 
-        Rectangle aChildBounds(pChild->GetPosPixel(), pChild->GetSizePixel());
+        tools::Rectangle aChildBounds(pChild->GetPosPixel(), pChild->GetSizePixel());
         aBounds.Union(aChildBounds);
     }
 

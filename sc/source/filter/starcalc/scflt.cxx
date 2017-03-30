@@ -2379,7 +2379,7 @@ void Sc10Import::LoadObjects()
 
                             lcl_ReadChartTypeData(rStream, *pTypeData);
 
-                            Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
+                            tools::Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
                             Sc10InsertObject::InsertChart( pDoc, static_cast<SCTAB>(GraphHeader.CarretZ), aRect,
                                     static_cast<SCTAB>(GraphHeader.CarretZ),
                                     ChartSheetData.DataX1, ChartSheetData.DataY1,

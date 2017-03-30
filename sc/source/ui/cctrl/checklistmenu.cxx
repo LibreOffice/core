@@ -238,7 +238,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         Window::KeyInput(rKEvt);
 }
 
-void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
 
@@ -247,7 +247,7 @@ void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
     Color aBackColor = rStyle.GetMenuColor();
     Color aBorderColor = rStyle.GetShadowColor();
 
-    Rectangle aCtrlRect(Point(0, 0), GetOutputSizePixel());
+    tools::Rectangle aCtrlRect(Point(0, 0), GetOutputSizePixel());
 
     // Window background
     bool bNativeDrawn = true;
@@ -373,7 +373,7 @@ void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size
         aMarkerPos.Y() += aSize.Height() / 2 - nFontHeight / 4 + 1;
         aMarkerPos.X() += aSize.Width() - nFontHeight + nFontHeight / 4;
         Size aMarkerSize(nFontHeight / 2, nFontHeight / 2);
-        aDecoView.DrawSymbol(Rectangle(aMarkerPos, aMarkerSize), SymbolType::SPIN_RIGHT, GetTextColor());
+        aDecoView.DrawSymbol(tools::Rectangle(aMarkerPos, aMarkerSize), SymbolType::SPIN_RIGHT, GetTextColor());
     }
 }
 
@@ -382,13 +382,13 @@ void ScMenuFloatingWindow::drawSeparator(vcl::RenderContext& rRenderContext, siz
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
-    Rectangle aRegion(aPos,aSize);
+    tools::Rectangle aRegion(aPos,aSize);
 
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.Push(PushFlags::CLIPREGION);
         rRenderContext.IntersectClipRegion(aRegion);
-        Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
+        tools::Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire, aCtrlRect,
                                          ControlState::ENABLED, ImplControlValue(), OUString());
 
@@ -565,7 +565,7 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
     SetPopupModeFlags(nOldFlags | FloatWinPopupFlags::NoAppFocusClose);
     pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
     pSubMenu->StartPopupMode(
-        Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
+        tools::Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
     pSubMenu->AddPopupModeWindow(this);
     if (bSetMenuPos)
         pSubMenu->setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
@@ -675,13 +675,13 @@ void ScMenuFloatingWindow::highlightMenuItem(vcl::RenderContext& rRenderContext,
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
-    Rectangle aRegion(aPos,aSize);
+    tools::Rectangle aRegion(aPos,aSize);
 
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.Push(PushFlags::CLIPREGION);
-        rRenderContext.IntersectClipRegion(Rectangle(aPos, aSize));
-        Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
+        rRenderContext.IntersectClipRegion(tools::Rectangle(aPos, aSize));
+        tools::Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire, aCtrlRect, ControlState::ENABLED,
                                          ImplControlValue(), OUString());
         rRenderContext.Pop();
@@ -707,7 +707,7 @@ void ScMenuFloatingWindow::highlightMenuItem(vcl::RenderContext& rRenderContext,
             rRenderContext.SetFillColor(aBackColor);
             rRenderContext.SetLineColor(aBackColor);
         }
-        rRenderContext.DrawRect(Rectangle(aPos,aSize));
+        rRenderContext.DrawRect(tools::Rectangle(aPos,aSize));
     }
 
     Color aTextColor = bSelected ? rStyle.GetMenuHighlightTextColor() : rStyle.GetMenuTextColor();
@@ -744,7 +744,7 @@ size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
         Point aPos;
         Size aSize;
         getMenuItemPosSize(i, aPos, aSize);
-        Rectangle aRect(aPos, aSize);
+        tools::Rectangle aRect(aPos, aSize);
         if (aRect.IsInside(rPos))
             return maMenuItems[i].mbSeparator ? MENU_NOT_SELECTED : i;
     }
@@ -815,7 +815,7 @@ void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
         SetPopupModeFlags(nOldFlags | FloatWinPopupFlags::NoAppFocusClose);
         pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
         pSubMenu->StartPopupMode(
-            Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
+            tools::Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
         pSubMenu->AddPopupModeWindow(this);
         SetPopupModeFlags(nOldFlags);
     }
@@ -1337,7 +1337,7 @@ bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
     return ScMenuFloatingWindow::EventNotify(rNEvt);
 }
 
-void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ScMenuFloatingWindow::Paint(rRenderContext, rRect);
 
@@ -1352,12 +1352,12 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     // Member list box background
     rRenderContext.SetFillColor(aMemberBackColor);
     rRenderContext.SetLineColor(aBorderColor);
-    rRenderContext.DrawRect(Rectangle(aPos,aSize));
+    rRenderContext.DrawRect(tools::Rectangle(aPos,aSize));
 
     // Single-action button box
     getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
     rRenderContext.SetFillColor(rStyle.GetMenuColor());
-    rRenderContext.DrawRect(Rectangle(aPos,aSize));
+    rRenderContext.DrawRect(tools::Rectangle(aPos,aSize));
 }
 
 void ScCheckListMenuWindow::updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx )
@@ -1930,14 +1930,14 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     rResult.swap(aResult);
 }
 
-void ScCheckListMenuWindow::launch(const Rectangle& rRect)
+void ScCheckListMenuWindow::launch(const tools::Rectangle& rRect)
 {
     packWindow();
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
         maBtnOk->Enable(maChecks->GetCheckedEntryCount() != 0);
 
-    Rectangle aRect(rRect);
+    tools::Rectangle aRect(rRect);
     if (maConfig.mbRTL)
     {
         // In RTL mode, the logical "left" is visual "right".

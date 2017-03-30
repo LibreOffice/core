@@ -284,12 +284,12 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
         virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
         virtual void RecalcSnapRect() override;
-        virtual const Rectangle& GetSnapRect() const override;
-        virtual void SetSnapRect(const Rectangle& rRect) override;
-        virtual void NbcSetSnapRect(const Rectangle& rRect) override;
-        virtual const Rectangle& GetLogicRect() const override;
-        virtual void SetLogicRect(const Rectangle& rRect) override;
-        virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+        virtual const tools::Rectangle& GetSnapRect() const override;
+        virtual void SetSnapRect(const tools::Rectangle& rRect) override;
+        virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
+        virtual const tools::Rectangle& GetLogicRect() const override;
+        virtual void SetLogicRect(const tools::Rectangle& rRect) override;
+        virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
         virtual Point GetSnapPoint(sal_uInt32 i) const override;
         virtual Point GetPoint(sal_uInt32 i) const override;
         virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
@@ -301,8 +301,8 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void SetLayer(SdrLayerID nLayer) override;
 
         virtual void SetBoundRectDirty() override;
-        virtual const Rectangle& GetCurrentBoundRect() const override;
-        virtual const Rectangle& GetLastBoundRect() const override;
+        virtual const tools::Rectangle& GetCurrentBoundRect() const override;
+        virtual const tools::Rectangle& GetLastBoundRect() const override;
 };
 
 bool CheckControlLayer( const SdrObject *pObj );
@@ -399,18 +399,18 @@ class SwDrawContact final : public SwContact
         SdrObject* GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFrame );
 
         /// Virtual methods of SdrObjUserCall.
-        virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;
+        virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect) override;
 
         /** Used by Changed() and by UndoDraw.
          Notifies paragraphs that have to get out of the way. */
-        void Changed_(const SdrObject& rObj, SdrUserCallType eType, const Rectangle* pOldBoundRect);
+        void Changed_(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle* pOldBoundRect);
 
         /// Moves all SW-connections to new Master)
         void ChangeMasterObject( SdrObject *pNewMaster );
 
         SwDrawVirtObj* AddVirtObj();
 
-        void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
+        void NotifyBackgrdOfAllVirtObjs( const tools::Rectangle* pOldBoundRect );
 
         /** get data collection of anchored objects, handled by with contact
         */

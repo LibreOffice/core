@@ -157,7 +157,7 @@ public:
     void            NotifyChange( const Bitmap* pBitmap );
 
 protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    Resize() override;
 
@@ -169,7 +169,7 @@ private:
     Bitmap*         pBitmap;
     Point           aDrawPos;
     Size            aDrawSize;
-    Rectangle       aDrawRect;
+    ::tools::Rectangle       aDrawRect;
     sal_uInt8            nTransparency;
 };
 
@@ -282,11 +282,11 @@ void BackgroundPreviewImpl::recalcDrawPos()
 void BackgroundPreviewImpl::Resize()
 {
     Window::Resize();
-    aDrawRect = Rectangle(Point(0,0), GetOutputSizePixel());
+    aDrawRect = ::tools::Rectangle(Point(0,0), GetOutputSizePixel());
     recalcDrawPos();
 }
 
-void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));

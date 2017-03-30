@@ -474,7 +474,7 @@ public:
     SCCOL           GetEditEndCol() const           { return nEditEndCol; }
     SCROW           GetEditEndRow() const           { return nEditEndRow; }
 
-    Rectangle       GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY, vcl::Window* pWin,
+    tools::Rectangle       GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY, vcl::Window* pWin,
                                     const ScPatternAttr* pPattern, bool bForceToTop );
 
     void            SetTabNo( SCTAB nNewTab );
@@ -495,7 +495,7 @@ public:
 
     bool            IsOle();
     void            SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void            SetScreen( const Rectangle& rVisArea );
+    void            SetScreen( const tools::Rectangle& rVisArea );
     void            SetScreenPos( const Point& rVisAreaStart );
 
     void            UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY );

@@ -68,7 +68,7 @@ SdrRectObj::SdrRectObj()
     bClosedObj=true;
 }
 
-SdrRectObj::SdrRectObj(const Rectangle& rRect)
+SdrRectObj::SdrRectObj(const tools::Rectangle& rRect)
 :   SdrTextObj(rRect),
     mpXPoly(nullptr)
 {
@@ -85,7 +85,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
     bClosedObj=true;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
+SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect)
 :   SdrTextObj(eNewTextKind,rRect),
     mpXPoly(nullptr)
 {
@@ -119,7 +119,7 @@ void SdrRectObj::SetXPolyDirty()
     mpXPoly.reset();
 }
 
-XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
+XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, long nRad1) const
 {
     XPolygon aXPoly(rRect1,nRad1,nRad1);
     const sal_uInt16 nPointAnz(aXPoly.GetPointCount());
@@ -194,7 +194,7 @@ sal_uInt16 SdrRectObj::GetObjIdentifier() const
     else return sal_uInt16(OBJ_RECT);
 }
 
-void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
     if (aGeo.nShearAngle!=0)
@@ -293,13 +293,13 @@ void SdrRectObj::RecalcSnapRect()
     }
 }
 
-void SdrRectObj::NbcSetSnapRect(const Rectangle& rRect)
+void SdrRectObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     SdrTextObj::NbcSetSnapRect(rRect);
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcSetLogicRect(const Rectangle& rRect)
+void SdrRectObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrTextObj::NbcSetLogicRect(rRect);
     SetXPolyDirty();
@@ -467,7 +467,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    Rectangle aRect1;
+    tools::Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
     aRect1.Justify();
 

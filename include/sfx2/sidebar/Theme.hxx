@@ -185,7 +185,7 @@ private:
     std::vector<Paint> maPaints;
     std::vector<sal_Int32> maIntegers;
     std::vector<bool> maBooleans;
-    std::vector<Rectangle> maRectangles;
+    std::vector<tools::Rectangle> maRectangles;
     bool mbIsHighContrastMode;
     bool mbIsHighContrastModeSetManually;
 

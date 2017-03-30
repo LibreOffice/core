@@ -33,7 +33,7 @@ private:
     long                mnLastSplitPos;
     long                mnStartSplitPos;
     Point               maDragPos;
-    Rectangle           maDragRect;
+    tools::Rectangle           maDragRect;
     bool                mbHorzSplit;
     bool                mbDragFull;
     bool                mbKbdSplitting;
@@ -74,14 +74,14 @@ public:
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect ) override;
     virtual Size        GetOptimalSize() const override;
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void                StartDrag();
 
-    void                SetDragRectPixel( const Rectangle& rDragRect,
+    void                SetDragRectPixel( const tools::Rectangle& rDragRect,
                                           vcl::Window* pRefWin = nullptr );
 
     void                SetSplitPosPixel( long nPos );

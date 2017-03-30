@@ -210,7 +210,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
-void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
+void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     if ( !_rPlayground.IsEmpty() )
     {

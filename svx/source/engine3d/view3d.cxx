@@ -365,7 +365,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     }
 
     SdrModel* pNewModel = nullptr;
-    Rectangle aSelectedSnapRect;
+    tools::Rectangle aSelectedSnapRect;
 
     // set 3d selection flags at all directly selected objects
     // and collect SnapRect of selected objects
@@ -470,7 +470,7 @@ bool E3dView::Paste(
             const size_t nObjCount(pSrcPg->GetObjCount());
 
             // calculate offset for paste
-            Rectangle aR = pSrcPg->GetAllObjBoundRect();
+            tools::Rectangle aR = pSrcPg->GetAllObjBoundRect();
             Point aDist(aPos - aR.Center());
 
             // Insert sub-objects for scenes
@@ -842,7 +842,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         E3dScene* pScene = new E3dPolyScene(Get3DDefaultAttributes());
 
         // Determine rectangle and possibly correct it
-        Rectangle aRect = GetAllMarkedRect();
+        tools::Rectangle aRect = GetAllMarkedRect();
         if(aRect.GetWidth() <= 1)
             aRect.SetSize(Size(500, aRect.GetHeight()));
         if(aRect.GetHeight() <= 1)
@@ -898,7 +898,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             {
                 SdrMark* pMark = GetSdrMarkByIndex(a);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
-                Rectangle aTurnRect = pObj->GetSnapRect();
+                tools::Rectangle aTurnRect = pObj->GetSnapRect();
                 basegfx::B2DPoint aRot;
                 Point aRotPnt;
 
@@ -907,28 +907,28 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
                 aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
                 aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(Rectangle(aRotPnt, aRotPnt));
+                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
                 aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
                 aRot *= aLatheMat;
                 aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
                 aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(Rectangle(aRotPnt, aRotPnt));
+                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
                 aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
                 aRot *= aLatheMat;
                 aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
                 aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(Rectangle(aRotPnt, aRotPnt));
+                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
                 aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
                 aRot *= aLatheMat;
                 aRot.setX(-aRot.getX());
                 aRot *= aInvLatheMat;
                 aRotPnt = Point((long)(aRot.getX() + 0.5), (long)(-aRot.getY() - 0.5));
-                aRect.Union(Rectangle(aRotPnt, aRotPnt));
+                aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
             }
         }
 
@@ -1301,7 +1301,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
 
-    Rectangle aRect(0,0, (long) fW, (long) fH);
+    tools::Rectangle aRect(0,0, (long) fW, (long) fH);
 
     pScene = new E3dPolyScene(Get3DDefaultAttributes());
 
@@ -1472,7 +1472,7 @@ void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
     {
         if(bUseDefaultValuesForMirrorAxes)
         {
-            Rectangle aRect = GetAllMarkedRect();
+            tools::Rectangle aRect = GetAllMarkedRect();
             if(aRect.GetWidth() <= 1)
                 aRect.SetSize(Size(500, aRect.GetHeight()));
             if(aRect.GetHeight() <= 1)

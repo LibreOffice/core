@@ -218,7 +218,7 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry* pEntry )
     }
 }
 
-void SvImpLBox::CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect )
+void SvImpLBox::CalcCellFocusRect( SvTreeListEntry* pEntry, tools::Rectangle& rRect )
 {
     if ( pEntry && bIsCellFocusEnabled )
     {
@@ -359,7 +359,7 @@ void SvImpLBox::CursorDown()
         ShowCursor( false );
         pView->Update();
         pStartEntry = pNextFirstToDraw;
-        Rectangle aArea( GetVisibleArea() );
+        tools::Rectangle aArea( GetVisibleArea() );
         pView->Scroll( 0, -(pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
         pView->Update();
         ShowCursor( true );
@@ -380,7 +380,7 @@ void SvImpLBox::CursorUp()
         ShowCursor( false );
         pView->Update();
         pStartEntry = pPrevFirstToDraw;
-        Rectangle aArea( GetVisibleArea() );
+        tools::Rectangle aArea( GetVisibleArea() );
         aArea.Bottom() -= nEntryHeight;
         pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
         pView->Update();
@@ -416,7 +416,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     }
     else
     {
-        Rectangle aArea( GetVisibleArea() );
+        tools::Rectangle aArea( GetVisibleArea() );
         long nScroll = pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
         pView->Update();
@@ -454,7 +454,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     else
     {
         long nEntryHeight = pView->GetEntryHeight();
-        Rectangle aArea( GetVisibleArea() );
+        tools::Rectangle aArea( GetVisibleArea() );
         pView->Update();
         pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
         pView->Update();
@@ -535,7 +535,7 @@ void SvImpLBox::InvalidateEntriesFrom( long nY ) const
 {
     if( !(nFlags & LBoxFlags::InPaint ))
     {
-        Rectangle aRect( GetVisibleArea() );
+        tools::Rectangle aRect( GetVisibleArea() );
         aRect.Top() = nY;
         pView->Invalidate( aRect );
     }
@@ -545,7 +545,7 @@ void SvImpLBox::InvalidateEntry( long nY ) const
 {
     if( !(nFlags & LBoxFlags::InPaint ))
     {
-        Rectangle aRect( GetVisibleArea() );
+        tools::Rectangle aRect( GetVisibleArea() );
         long nMaxBottom = aRect.Bottom();
         aRect.Top() = nY;
         aRect.Bottom() = nY; aRect.Bottom() += pView->GetEntryHeight();
@@ -587,7 +587,7 @@ void SvImpLBox::RecalcFocusRect()
     {
         pView->HideFocus();
         long nY = GetEntryLine( pCursor );
-        Rectangle aRect = pView->GetFocusRect( pCursor, nY );
+        tools::Rectangle aRect = pView->GetFocusRect( pCursor, nY );
         CalcCellFocusRect( pCursor, aRect );
         vcl::Region aOldClip( pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
@@ -683,7 +683,7 @@ void SvImpLBox::ShowCursor( bool bShow )
     else
     {
         long nY = GetEntryLine( pCursor );
-        Rectangle aRect = pView->GetFocusRect( pCursor, nY );
+        tools::Rectangle aRect = pView->GetFocusRect( pCursor, nY );
         CalcCellFocusRect( pCursor, aRect );
         vcl::Region aOldClip( pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
@@ -743,7 +743,7 @@ void SvImpLBox::KeyLeftRight( long nDelta )
 
     if( !(nFlags & LBoxFlags::InResize) )
     {
-        Rectangle aRect( GetVisibleArea() );
+        tools::Rectangle aRect( GetVisibleArea() );
         pView->Scroll( -nDelta, 0, aRect, ScrollFlags::NoChildren );
     }
     else
@@ -785,7 +785,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
     if( pEntry->ItemCount() >= 3 )
         return true;
 
-    Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
+    tools::Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
     aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
 
     SvLBoxContextBmp* pBmp = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
@@ -861,17 +861,17 @@ SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint)
     return pEntry;
 }
 
-Rectangle SvImpLBox::GetClipRegionRect() const
+tools::Rectangle SvImpLBox::GetClipRegionRect() const
 {
     Point aOrigin( pView->GetMapMode().GetOrigin() );
     aOrigin.X() *= -1; // conversion document coordinates
-    Rectangle aClipRect( aOrigin, aOutputSize );
+    tools::Rectangle aClipRect( aOrigin, aOutputSize );
     aClipRect.Bottom()++;
     return aClipRect;
 }
 
 
-void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!pView->GetVisibleCount())
         return;
@@ -1031,7 +1031,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
         ImplControlValue aControlValue;
         ControlState nState = ControlState::ENABLED;
         if (rRenderContext.DrawNativeControl(ControlType::ListNet, ControlPart::Entire,
-                                             Rectangle(), nState, aControlValue, OUString()))
+                                             tools::Rectangle(), nState, aControlValue, OUString()))
         {
             return;
         }
@@ -1230,7 +1230,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
     // adapt Range, VisibleRange etc.
 
     // refresh output size, in case we have to scroll
-    Rectangle aRect;
+    tools::Rectangle aRect;
     aRect.SetSize( aOSize );
     aSelEng.SetVisibleArea( aRect );
 
@@ -3059,11 +3059,11 @@ void SvImpLBox::EndScroll()
 }
 
 
-Rectangle SvImpLBox::GetVisibleArea() const
+tools::Rectangle SvImpLBox::GetVisibleArea() const
 {
     Point aPos( pView->GetMapMode().GetOrigin() );
     aPos.X() *= -1;
-    Rectangle aRect( aPos, aOutputSize );
+    tools::Rectangle aRect( aPos, aOutputSize );
     return aRect;
 }
 
@@ -3139,9 +3139,9 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
                 aSize.Width() = pNextTab->GetPos() - pTab->GetPos();
                 bItemClipped = true;
             }
-            Rectangle aItemRect( aPos, aSize );
+            tools::Rectangle aItemRect( aPos, aSize );
 
-            Rectangle aViewRect( GetVisibleArea() );
+            tools::Rectangle aViewRect( GetVisibleArea() );
 
             if( bItemClipped || !aViewRect.IsInside( aItemRect ) )
             {
@@ -3322,7 +3322,7 @@ void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
     if( pEntry )
     {
         long nY = GetEntryLine( const_cast<SvTreeListEntry*>(pEntry) );
-        Rectangle aRect = pView->GetFocusRect( const_cast<SvTreeListEntry*>(pEntry), nY );
+        tools::Rectangle aRect = pView->GetFocusRect( const_cast<SvTreeListEntry*>(pEntry), nY );
         vcl::Region aOldClip( pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );

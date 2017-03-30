@@ -254,7 +254,7 @@ VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const Sfx
     return VclPtr<SmPrintOptionsTabPage>::Create(pWindow, rSet).get();
 }
 
-void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
@@ -1106,7 +1106,7 @@ Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
     return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
 }
 
-void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Color aBackgroundColor;
     Color aTextColor;
@@ -1153,7 +1153,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
         Point aPoint(((nSelectSymbol - v) % nColumns) * nLen,
                                  ((nSelectSymbol - v) / nColumns) * nLen);
 
-        Invert(Rectangle(OffsetPoint(aPoint), Size(nLen, nLen)));
+        Invert(tools::Rectangle(OffsetPoint(aPoint), Size(nLen, nLen)));
 
     }
 
@@ -1172,7 +1172,7 @@ void SmShowSymbolSetWindow::MouseButtonDown(const MouseEvent& rMEvt)
     aPoint.X() -= nXOffset;
     aPoint.Y() -= nYOffset;
 
-    if (rMEvt.IsLeft() && Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
+    if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
     {
         long nPos = (aPoint.Y() / nLen) * nColumns + (aPoint.X() / nLen) +
                       m_pVScrollBar->GetThumbPos() * nColumns;
@@ -1313,7 +1313,7 @@ void SmShowSymbolSetWindow::SelectSymbol(sal_uInt16 nSymbol)
     int v = static_cast<int>(m_pVScrollBar->GetThumbPos() * nColumns);
 
     if (nSelectSymbol != SYMBOL_NONE)
-        Invalidate(Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
+        Invalidate(tools::Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
                                    ((nSelectSymbol - v) / nColumns) * nLen)),
                              Size(nLen, nLen)));
 
@@ -1324,7 +1324,7 @@ void SmShowSymbolSetWindow::SelectSymbol(sal_uInt16 nSymbol)
         nSelectSymbol = SYMBOL_NONE;
 
     if (nSelectSymbol != SYMBOL_NONE)
-        Invalidate(Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
+        Invalidate(tools::Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
                                    ((nSelectSymbol - v) / nColumns) * nLen)),
                              Size(nLen, nLen)));
 
@@ -1359,7 +1359,7 @@ void SmShowSymbol::setFontSize(vcl::Font &rFont) const
     rFont.SetFontSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 }
 
-void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
+void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     Control::Paint(rRenderContext, rRect);
 
@@ -1621,7 +1621,7 @@ const SmSym* SmSymbolDialog::GetSymbol() const
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowChar, 0)
 
-void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
+void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     Control::Paint(rRenderContext, rRect);
 

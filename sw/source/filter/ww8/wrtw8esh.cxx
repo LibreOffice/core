@@ -722,7 +722,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             const SwFrameFormat &rFormat = rFrameFormat.GetFrameFormat();
             const SdrObject* pObj = rFormat.FindRealSdrObject();
 
-            Rectangle aRect;
+            tools::Rectangle aRect;
             SwFormatVertOrient rVOr = rFormat.GetVertOrient();
             SwFormatHoriOrient rHOr = rFormat.GetHoriOrient();
             // #i30669# - convert the positioning attributes.
@@ -1629,7 +1629,7 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
             aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
         }
         Point aEmptyPoint;
-        Rectangle aRect( aEmptyPoint, aSize );
+        tools::Rectangle aRect( aEmptyPoint, aSize );
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRect );
         if (nBlibId)
             aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
@@ -1717,7 +1717,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
             }
 
             Point aEmptyPoint;
-            Rectangle aRect( aEmptyPoint, aSize );
+            tools::Rectangle aRect( aEmptyPoint, aSize );
 
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
                 aUniqueId, aRect );
@@ -1943,7 +1943,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
             }
 
             Point aEmptyPoint;
-            Rectangle aRect(aEmptyPoint, aSize);
+            tools::Rectangle aRect(aEmptyPoint, aSize);
 
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
                 aUniqueId, aRect);
@@ -3012,7 +3012,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     OString aId = aGraphicObject.GetUniqueID();
     if (!aId.isEmpty())
     {
-        Rectangle aRect = rObj.GetLogicRect();
+        tools::Rectangle aRect = rObj.GetLogicRect();
         aRect.SetPos(Point(0,0));
         aRect.Right() = DrawModelToEmu(aRect.Right());
         aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
@@ -3144,7 +3144,7 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     //I think I painted myself into a little bit of a
     //corner by trying to use the uno interface for
     //controls export
-    Rectangle aRect = rFormObj.GetLogicRect();
+    tools::Rectangle aRect = rFormObj.GetLogicRect();
     aRect.SetPos(Point(0,0));
     awt::Size aSize;
     aSize.Width = TWIPS_TO_MM(aRect.Right());

@@ -95,7 +95,7 @@ public:
         return *m_xPopupMenu.get();
     }
 
-    void Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
+    void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
 
 };

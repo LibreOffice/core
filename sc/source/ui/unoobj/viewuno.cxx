@@ -392,7 +392,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
             ScAddress aCell(pViewShell->GetViewData().GetPosX(eWhichH),
                 pViewShell->GetViewData().GetPosY(eWhichV),
                 pViewShell->GetViewData().GetTabNo());
-            Rectangle aCellRect( pDoc->GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
+            tools::Rectangle aCellRect( pDoc->GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
             Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( true ) ) );
             Point aVisPos( aCellRect.TopLeft() );
             if ( pDoc->IsLayoutRTL( aCell.Tab() ) )
@@ -400,7 +400,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
                 aVisPos = aCellRect.TopRight();
                 aVisPos.X() -= aVisSize.Width();
             }
-            Rectangle aVisRect( aVisPos, aVisSize );
+            tools::Rectangle aVisRect( aVisPos, aVisSize );
             aVisArea = AWTRectangle(aVisRect);
         }
     }
@@ -1918,7 +1918,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
             vcl::Window* pActiveWin = rViewData.GetActiveWin();
             if ( pActiveWin )
             {
-                Rectangle aRect = pActiveWin->GetWindowExtentsRelative( nullptr );
+                tools::Rectangle aRect = pActiveWin->GetWindowExtentsRelative( nullptr );
                 aRet <<= AWTRectangle( aRect );
             }
         }

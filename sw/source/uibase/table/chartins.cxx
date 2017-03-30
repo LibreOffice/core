@@ -56,7 +56,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
+Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const tools::Rectangle& rLogicChart )
 {
     // positioning code according to spec; similar to Calc fuins2.cxx
     Point aRet;
@@ -64,11 +64,11 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
     OSL_ENSURE( pParentWin, "Window not found" );
     if (pParentWin)
     {
-        Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
-        Rectangle aObjAbs( pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
+        tools::Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
+        tools::Rectangle aObjAbs( pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
                            pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
-        Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
+        tools::Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
         Size aSpace = pParentWin->LogicToPixel( Size( 8, 12 ), MapUnit::MapAppFont );
 
         bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
@@ -208,7 +208,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
                                 SwRect aSwRect;
                                 if (pFlyFrameFormat)
                                     aSwRect = pFlyFrameFormat->GetAnchoredObj()->GetObjRectWithSpaces();
-                                Rectangle aRect( aSwRect.SVRect() );
+                                tools::Rectangle aRect( aSwRect.SVRect() );
                                 Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
                                 xDialogProps->setPropertyValue("Position",
                                     uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );

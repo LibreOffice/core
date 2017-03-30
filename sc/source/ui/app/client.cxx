@@ -77,7 +77,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
+void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSfxViewSh  );
@@ -87,7 +87,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
         return;
     }
 
-    Rectangle aOldRect = GetObjArea();
+    tools::Rectangle aOldRect = GetObjArea();
     SdrOle2Obj*  pDrawObj = GetDrawObj();
     if ( pDrawObj )
     {
@@ -109,7 +109,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             aPos.X() = aSize.Width() + 1;       // negative
             aSize.Width() = -aSize.Width();     // positive
         }
-        Rectangle aPageRect( aPos, aSize );
+        tools::Rectangle aPageRect( aPos, aSize );
 
         if (aLogicRect.Right() > aPageRect.Right())
         {
@@ -153,7 +153,7 @@ void ScClient::ObjectAreaChanged()
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        Rectangle aNewRectangle(GetScaledObjArea());
+        tools::Rectangle aNewRectangle(GetScaledObjArea());
 
         // #i118524# if sheared/rotated, center to non-rotated LogicRect
         pDrawObj->setSuppressSetVisAreaSize(true);
@@ -162,7 +162,7 @@ void ScClient::ObjectAreaChanged()
         {
             pDrawObj->SetLogicRect( aNewRectangle );
 
-            const Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
+            const tools::Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
             const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
 
             aNewRectangle.Move(aDelta.X(), aDelta.Y());
@@ -212,7 +212,7 @@ void ScClient::ViewChanged()
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        Rectangle aLogicRect = pDrawObj->GetLogicRect();
+        tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
         Fraction aFractX = GetScaleWidth();
         Fraction aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();

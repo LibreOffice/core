@@ -332,7 +332,7 @@ void SdrPaintView::BrkAction()
 {
 }
 
-void SdrPaintView::TakeActionRect(Rectangle&) const
+void SdrPaintView::TakeActionRect(tools::Rectangle&) const
 {
 }
 
@@ -917,7 +917,7 @@ void SdrPaintView::InvalidateAllWin()
     }
 }
 
-void SdrPaintView::InvalidateAllWin(const Rectangle& rRect)
+void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
@@ -928,11 +928,11 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect)
         if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-            Rectangle aRect(rRect);
+            tools::Rectangle aRect(rRect);
 
             Point aOrg(rOutDev.GetMapMode().GetOrigin());
             aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
-            Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
+            tools::Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
 
             // In case of tiled rendering we want to get all invalidations, so visual area is not interesting.
             if (aRect.IsOver(aOutRect) || comphelper::LibreOfficeKit::isActive())
@@ -949,7 +949,7 @@ void SdrPaintView::InvalidateOneWin(vcl::Window& rWin)
     rWin.Invalidate(InvalidateFlags::NoErase);
 }
 
-void SdrPaintView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
+void SdrPaintView::InvalidateOneWin(vcl::Window& rWin, const tools::Rectangle& rRect)
 {
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(rRect, InvalidateFlags::NoErase);
@@ -1117,7 +1117,7 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
 }
 #endif
 
-void SdrPaintView::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
+void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
 {
     MapMode aMap(rWin.GetMapMode());
     Size aActualSize(rWin.GetOutputSize());

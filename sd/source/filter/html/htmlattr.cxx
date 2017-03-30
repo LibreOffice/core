@@ -33,11 +33,11 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
 
-void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     DecorationView aDecoView(&rRenderContext);
 
-    Rectangle aTextRect;
+    ::tools::Rectangle aTextRect;
     aTextRect.SetSize(GetOutputSize());
 
     rRenderContext.SetLineColor(m_aBackColor);

@@ -172,7 +172,7 @@ class SVX_DLLPUBLIC SdrObjUserCall
 {
 public:
     virtual ~SdrObjUserCall();
-    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
+    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect);
 };
 
 class SVX_DLLPUBLIC SdrObjMacroHitRec
@@ -221,7 +221,7 @@ public:
 class SVX_DLLPUBLIC SdrObjGeoData
 {
 public:
-    Rectangle                   aBoundRect;
+    tools::Rectangle                   aBoundRect;
     Point                       aAnchor;
     std::unique_ptr<SdrGluePointList>
                                 pGPL;
@@ -343,7 +343,7 @@ public:
     // renaming GetLayerSet -> getMergedHierarchyLayerSet to make clear what happens here. rSet needs to be empty.
     void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
 
-    void SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const;
+    void SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& rBoundRect) const;
 
     // #i68101#
     // An object may have a user-set Name (Get/SetName()), e.g SdrGrafObj, SdrObjGroup
@@ -390,13 +390,13 @@ public:
     // expensive and sometimes problematic (inside a bigger object change You will get
     // non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
     // GetCurrentBoundRect().
-    virtual const Rectangle& GetCurrentBoundRect() const;
+    virtual const tools::Rectangle& GetCurrentBoundRect() const;
 
     // To have a possibility to get the last calculated BoundRect e.g for producing
     // the first rectangle for repaints (old and new need to be used) without forcing
     // a RecalcBoundRect (which may be problematical and expensive sometimes) i add here
     // a new method for accessing the last BoundRect.
-    virtual const Rectangle& GetLastBoundRect() const;
+    virtual const tools::Rectangle& GetLastBoundRect() const;
 
     virtual void RecalcBoundRect();
 
@@ -534,21 +534,21 @@ public:
     /// SetSnapRect() tries to size the Object so that it fits into the
     /// passed Rect (without stroke width, ...)
     virtual void RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect() const;
-    virtual void SetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
+    virtual const tools::Rectangle& GetSnapRect() const;
+    virtual void SetSnapRect(const tools::Rectangle& rRect);
+    virtual void NbcSetSnapRect(const tools::Rectangle& rRect);
 
     // Logic Rect: for the Rect for instance without regard to rotation angle, shear, ...
-    virtual const Rectangle& GetLogicRect() const;
-    virtual void SetLogicRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual const tools::Rectangle& GetLogicRect() const;
+    virtual void SetLogicRect(const tools::Rectangle& rRect);
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect);
 
     // the default is to set the logic rect to the given rectangle rMaxRect. If the shape
     // has an intrinsic aspect ratio it may set the logic rect so the aspect
     // ratio is kept but still inside the rectangle rMaxRect.
     // If bShrinkOnly is set to true, the size of the current logic rect will not
     // be changed if it is smaller than the given rectangle rMaxRect.
-    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+    virtual void AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false );
 
     // rotation and shear angle
     virtual long GetRotateAngle() const;
@@ -614,7 +614,7 @@ public:
     virtual bool HasMacro() const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
-    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
+    virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;
@@ -784,8 +784,8 @@ public:
     // the following methods are used to control it;
     // usually this data makes no sense after the import is finished, since the object
     // might be resized
-    const Rectangle& GetBLIPSizeRectangle() const { return maBLIPSizeRectangle;}
-    void SetBLIPSizeRectangle( const Rectangle& aRect );
+    const tools::Rectangle& GetBLIPSizeRectangle() const { return maBLIPSizeRectangle;}
+    void SetBLIPSizeRectangle( const tools::Rectangle& aRect );
 
     // #i121917#
     virtual bool HasText() const;
@@ -834,7 +834,7 @@ public:
     const css::uno::WeakReference< css::uno::XInterface >& getWeakUnoShape() const { return maWeakUnoShape; }
 
 protected:
-    Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
+    tools::Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
     Point                       aAnchor;      // anchor position (Writer)
     SdrPage*                    pPage;
     SdrModel*                   pModel;
@@ -871,7 +871,7 @@ protected:
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-    Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
+    tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const;
@@ -928,7 +928,7 @@ private:
     bool                              bMarkProt : 1;  // marking forbidden, persistent
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // in this case the following member is initialized as nonempty rectangle
-    Rectangle                         maBLIPSizeRectangle;
+    tools::Rectangle                         maBLIPSizeRectangle;
     sdr::properties::BaseProperties*  mpProperties;
     sdr::contact::ViewContact*        mpViewContact;
     bool                              mbDelayBroadcastObjectChange : 1;
@@ -989,7 +989,7 @@ class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
     static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, SdrPage* pPage, SdrModel* pModel=nullptr);
-    static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, const Rectangle& rSnapRect, SdrPage* pPage);
+    static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, const tools::Rectangle& rSnapRect, SdrPage* pPage);
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void InsertMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink);

@@ -370,7 +370,7 @@ sal_uInt16 SdrEdgeObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_EDGE);
 }
 
-const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
+const tools::Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
 {
     if(bEdgeTrackDirty)
     {
@@ -380,7 +380,7 @@ const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
     return SdrTextObj::GetCurrentBoundRect();
 }
 
-const Rectangle& SdrEdgeObj::GetSnapRect() const
+const tools::Rectangle& SdrEdgeObj::GetSnapRect() const
 {
     if(bEdgeTrackDirty)
     {
@@ -395,7 +395,7 @@ void SdrEdgeObj::RecalcSnapRect()
     maSnapRect=pEdgeTrack->GetBoundRect();
 }
 
-void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrEdgeObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect=GetSnapRect();
 }
@@ -574,7 +574,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
             mbSuppressed = false;
         }
 
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
         SetRectsDirty();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
@@ -592,7 +592,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
 SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt)
 {
     if (pObj==nullptr) return SdrEscapeDirection::ALL;
-    Rectangle aR(pObj->GetSnapRect());
+    tools::Rectangle aR(pObj->GetSnapRect());
     long dxl=rPt.X()-aR.Left();
     long dyo=rPt.Y()-aR.Top();
     long dxr=aR.Right()-rPt.X();
@@ -627,7 +627,7 @@ SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt
     }
 }
 
-XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rMeeting)
+XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const tools::Rectangle& rRect, const Point& rMeeting)
 {
     XPolygon aXP;
     aXP.Insert(XPOLY_APPEND,rStPt,PolyFlags::Normal);
@@ -691,10 +691,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     Point aPt1,aPt2;
     SdrGluePoint aGP1,aGP2;
     SdrEscapeDirection nEsc1=SdrEscapeDirection::ALL,nEsc2=SdrEscapeDirection::ALL;
-    Rectangle aBoundRect1;
-    Rectangle aBoundRect2;
-    Rectangle aBewareRect1;
-    Rectangle aBewareRect2;
+    tools::Rectangle aBoundRect1;
+    tools::Rectangle aBoundRect2;
+    tools::Rectangle aBewareRect1;
+    tools::Rectangle aBewareRect2;
     // first, get the old corner points
     if (rTrack0.GetPointCount()!=0) {
         aPt1=rTrack0[0];
@@ -735,7 +735,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBewareRect1.Top()-=nV;
         aBewareRect1.Bottom()+=nV;
     } else {
-        aBoundRect1=Rectangle(aPt1,aPt1);
+        aBoundRect1=tools::Rectangle(aPt1,aPt1);
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
     }
@@ -758,7 +758,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBewareRect2.Top()-=nV;
         aBewareRect2.Bottom()+=nV;
     } else {
-        aBoundRect2=Rectangle(aPt2,aPt2);
+        aBoundRect2=tools::Rectangle(aPt2,aPt2);
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
     }
@@ -814,8 +814,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     return aBestXP;
 }
 
-XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
-    const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
+XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
+    const Point& rPt2, long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
     sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
     SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
@@ -842,10 +842,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     }
     Point aPt1(rPt1);
     Point aPt2(rPt2);
-    Rectangle aBoundRect1 (rBoundRect1 );
-    Rectangle aBoundRect2 (rBoundRect2 );
-    Rectangle aBewareRect1(rBewareRect1);
-    Rectangle aBewareRect2(rBewareRect2);
+    tools::Rectangle aBoundRect1 (rBoundRect1 );
+    tools::Rectangle aBoundRect2 (rBoundRect2 );
+    tools::Rectangle aBewareRect1(rBewareRect1);
+    tools::Rectangle aBewareRect2(rBewareRect2);
     Point aMeeting((aPt1.X()+aPt2.X()+1)/2,(aPt1.Y()+aPt2.Y()+1)/2);
     if (eKind==SdrEdgeKind::OneLine) {
         XPolygon aXP(2);
@@ -998,10 +998,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 
                 // normalization; be aR1 the one exiting to the right,
                 // be aR2 the one exiting to the left
-                Rectangle aBewR1(bRts1 ? aBewareRect1 : aBewareRect2);
-                Rectangle aBewR2(bRts1 ? aBewareRect2 : aBewareRect1);
-                Rectangle aBndR1(bRts1 ? aBoundRect1 : aBoundRect2);
-                Rectangle aBndR2(bRts1 ? aBoundRect2 : aBoundRect1);
+                tools::Rectangle aBewR1(bRts1 ? aBewareRect1 : aBewareRect2);
+                tools::Rectangle aBewR2(bRts1 ? aBewareRect2 : aBewareRect1);
+                tools::Rectangle aBndR1(bRts1 ? aBoundRect1 : aBoundRect2);
+                tools::Rectangle aBndR2(bRts1 ? aBoundRect2 : aBoundRect1);
                 if (aBewR1.Bottom()>aBewR2.Top() && aBewR1.Top()<aBewR2.Bottom()) {
                     // overlap on y axis; cases 2.1, 2.8, 2.9
                     if (aBewR1.Right()>aBewR2.Left()) {
@@ -1060,10 +1060,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     }
                 }
             } else if (bVer1) { // both horizontal
-                Rectangle aBewR1(bUnt1 ? aBewareRect1 : aBewareRect2);
-                Rectangle aBewR2(bUnt1 ? aBewareRect2 : aBewareRect1);
-                Rectangle aBndR1(bUnt1 ? aBoundRect1 : aBoundRect2);
-                Rectangle aBndR2(bUnt1 ? aBoundRect2 : aBoundRect1);
+                tools::Rectangle aBewR1(bUnt1 ? aBewareRect1 : aBewareRect2);
+                tools::Rectangle aBewR2(bUnt1 ? aBewareRect2 : aBewareRect1);
+                tools::Rectangle aBndR1(bUnt1 ? aBoundRect1 : aBoundRect2);
+                tools::Rectangle aBndR2(bUnt1 ? aBoundRect2 : aBoundRect1);
                 if (aBewR1.Right()>aBewR2.Left() && aBewR1.Left()<aBewR2.Right()) {
                     // overlap on y axis; cases 2.1, 2.8, 2.9
                     if (aBewR1.Bottom()>aBewR2.Top()) {
@@ -1171,8 +1171,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             */
 
             // case 3.2
-            Rectangle aTmpR1(aBewareRect1);
-            Rectangle aTmpR2(aBewareRect2);
+            tools::Rectangle aTmpR1(aBewareRect1);
+            tools::Rectangle aTmpR2(aBewareRect2);
             if (bBewareOverlap) {
                 // overlapping BewareRects: use BoundRects for checking for case 3.2
                 aTmpR1=aBoundRect1;
@@ -1590,7 +1590,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             (pSdrHint && pSdrHint->GetKind()==SdrHintKind::ObjectRemoved))
         {
             // broadcasting only, if on the same page
-            Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+            tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
             ImpDirtyEdgeTrack();
 
             // only redraw here, object hasn't actually changed
@@ -1691,7 +1691,7 @@ void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
         bEdgeTrackUserDefined = true;
 
         // #i110629# also set aRect and maSnapeRect depending on pEdgeTrack
-        const Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
+        const tools::Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
         maRect = aPolygonBounds;
         maSnapRect = aPolygonBounds;
     }
@@ -2100,7 +2100,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
     aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
-    Rectangle aMouseRect(rPt,rPt);
+    tools::Rectangle aMouseRect(rPt,rPt);
     aMouseRect.Left()  -=aHalfConSiz.Width();
     aMouseRect.Top()   -=aHalfConSiz.Height();
     aMouseRect.Right() +=aHalfConSiz.Width();
@@ -2119,7 +2119,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
             (pThis==nullptr || pObj!=static_cast<SdrObject const *>(pThis)) && // don't connect it to itself
             pObj->IsNode())
         {
-            Rectangle aObjBound(pObj->GetCurrentBoundRect());
+            tools::Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
                 bool bEdge=dynamic_cast<const SdrEdgeObj *>(pObj) != nullptr; // no BestCon for Edge
@@ -2194,7 +2194,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     }
                 }
                 if (bFnd) {
-                    Rectangle aMouseRect2(rPt,rPt);
+                    tools::Rectangle aMouseRect2(rPt,rPt);
                     aMouseRect.Left()  -=nBoundHitTol;
                     aMouseRect.Top()   -=nBoundHitTol;
                     aMouseRect.Right() +=nBoundHitTol;
@@ -2209,9 +2209,9 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     return bFnd;
 }
 
-void SdrEdgeObj::NbcSetSnapRect(const Rectangle& rRect)
+void SdrEdgeObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    const Rectangle aOld(GetSnapRect());
+    const tools::Rectangle aOld(GetSnapRect());
 
     if(aOld != rRect)
     {
@@ -2499,7 +2499,7 @@ void SdrEdgeObj::SetTailPoint( bool bTail, const Point& rPt )
 */
 void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
 
     SdrObjConnection& rConn1 = GetConnection( bTail );
 

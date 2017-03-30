@@ -60,7 +60,7 @@ OutlinerView::~OutlinerView()
 {
 }
 
-void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
+void OutlinerView::Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
     // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
@@ -253,8 +253,8 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
         reTarget = MouseTarget::Text;
 
         Point aPaperPos( aMousePosWin );
-        Rectangle aOutArea = pEditView->GetOutputArea();
-        Rectangle aVisArea = pEditView->GetVisArea();
+        tools::Rectangle aOutArea = pEditView->GetOutputArea();
+        tools::Rectangle aVisArea = pEditView->GetVisArea();
         aPaperPos.X() -= aOutArea.Left();
         aPaperPos.X() += aVisArea.Left();
         aPaperPos.Y() -= aOutArea.Top();
@@ -572,7 +572,7 @@ void OutlinerView::AdjustHeight( long nDY )
     pEditView->MoveParagraphs( nDY );
 }
 
-Rectangle OutlinerView::GetVisArea() const
+tools::Rectangle OutlinerView::GetVisArea() const
 {
     return pEditView->GetVisArea();
 }
@@ -1193,7 +1193,7 @@ void OutlinerView::InsertText( const OUString& rNew, bool bSelect )
     pEditView->InsertText( rNew, bSelect );
 }
 
-void OutlinerView::SetVisArea( const Rectangle& rRect )
+void OutlinerView::SetVisArea( const tools::Rectangle& rRect )
 {
     pEditView->SetVisArea( rRect );
 }
@@ -1204,7 +1204,7 @@ void OutlinerView::SetSelection( const ESelection& rSel )
     pEditView->SetSelection( rSel );
 }
 
-void OutlinerView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
+void OutlinerView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const
 {
     pEditView->GetSelectionRectangles(rLogicRects);
 }
@@ -1244,12 +1244,12 @@ vcl::Window* OutlinerView::GetWindow() const
     return pEditView->GetWindow();
 }
 
-void OutlinerView::SetOutputArea( const Rectangle& rRect )
+void OutlinerView::SetOutputArea( const tools::Rectangle& rRect )
 {
     pEditView->SetOutputArea( rRect );
 }
 
-Rectangle OutlinerView::GetOutputArea() const
+tools::Rectangle OutlinerView::GetOutputArea() const
 {
     return pEditView->GetOutputArea();
 }

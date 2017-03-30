@@ -49,13 +49,13 @@ void MenuButton::ExecuteMenu()
     if (mpMenu)
     {
         Point aPos(0, 1);
-        Rectangle aRect(aPos, aSize );
+        tools::Rectangle aRect(aPos, aSize );
         mnCurItemId = mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
     }
     else
     {
         Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
-        Rectangle aRect(aPos, aSize );
+        tools::Rectangle aRect(aPos, aSize );
         mpFloatingWindow->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
     }
     SetPressed(false);

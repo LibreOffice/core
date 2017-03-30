@@ -623,7 +623,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
     return nullptr;
 }
 
-void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut )
+void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, const OUString &rText, OutputDevice *pOut )
 {
     MapMode aMM( MapUnit::MapAppFont );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
@@ -705,7 +705,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
     pOut->Pop();
 }
 
-void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut )
+void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice *pOut )
 {
     GDIMetaFile * pMtf = pOut->GetConnectMetaFile();
     if( pMtf && pMtf->IsRecord() )

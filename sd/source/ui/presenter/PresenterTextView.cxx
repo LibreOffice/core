@@ -455,7 +455,7 @@ Reference<rendering::XBitmap> const & PresenterTextView::Implementation::GetBitm
         MapMode aMapMode (mpOutputDevice->GetMapMode());
         aMapMode.SetOrigin(Point(0,0));
         mpOutputDevice->SetMapMode(aMapMode);
-        const Rectangle aWindowBox (Point(0,0), maSize);
+        const ::tools::Rectangle aWindowBox (Point(0,0), maSize);
         mpOutputDevice->DrawRect(aWindowBox);
 
         mpEditEngine->Clear();

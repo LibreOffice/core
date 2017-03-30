@@ -544,10 +544,10 @@ namespace accessibility
         return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
     }
 
-    Rectangle AccessibleEditableTextPara::LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
+    tools::Rectangle AccessibleEditableTextPara::LogicToPixel( const tools::Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
     {
         // convert to screen coordinates
-        return Rectangle( rForwarder.LogicToPixel( rRect.TopLeft(), rMapMode ),
+        return tools::Rectangle( rForwarder.LogicToPixel( rRect.TopLeft(), rMapMode ),
                           rForwarder.LogicToPixel( rRect.BottomRight(), rMapMode ) );
     }
 
@@ -1001,7 +1001,7 @@ namespace accessibility
                    "AccessibleEditableTextPara::contains: index value overflow");
 
         awt::Rectangle aTmpRect = getBounds();
-        Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
+        tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
         Point aPoint( aTmpPoint.X, aTmpPoint.Y );
 
         return aRect.IsInside( aPoint );
@@ -1029,7 +1029,7 @@ namespace accessibility
                 aBulletInfo.bVisible &&
                 aBulletInfo.nType == SVX_NUM_BITMAP )
             {
-                Rectangle aRect = aBulletInfo.aBounds;
+                tools::Rectangle aRect = aBulletInfo.aBounds;
 
                 if( aRect.IsInside( aLogPoint ) )
                     return getAccessibleChild(0);
@@ -1048,10 +1048,10 @@ namespace accessibility
                    "AccessibleEditableTextPara::getBounds: index value overflow");
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
-        Rectangle aRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
+        tools::Rectangle aRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
 
         // convert to screen coordinates
-        Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
+        tools::Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
                                                                           rCacheTF.GetMapMode(),
                                                                           GetViewForwarder() );
 
@@ -1311,10 +1311,10 @@ namespace accessibility
         CheckPosition( nIndex );
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
-        Rectangle aRect = rCacheTF.GetCharBounds(GetParagraphIndex(), nIndex);
+        tools::Rectangle aRect = rCacheTF.GetCharBounds(GetParagraphIndex(), nIndex);
 
         // convert to screen
-        Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
+        tools::Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
                                                                           rCacheTF.GetMapMode(),
                                                                           GetViewForwarder() );
         // #109864# offset from parent (paragraph), but in screen
@@ -1358,7 +1358,7 @@ namespace accessibility
         Point aLogPoint( GetViewForwarder().PixelToLogic( aPoint, rCacheTF.GetMapMode() ) );
 
         // re-offset to parent (paragraph)
-        Rectangle aParaRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
+        tools::Rectangle aParaRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
         aLogPoint.Move( aParaRect.Left(), aParaRect.Top() );
 
         if( rCacheTF.GetIndexAtPoint( aLogPoint, nPara, nIndex ) &&
@@ -1368,7 +1368,7 @@ namespace accessibility
             try
             {
                 awt::Rectangle aRect1( getCharacterBounds(nIndex) );
-                Rectangle aRect2( aRect1.X, aRect1.Y,
+                tools::Rectangle aRect2( aRect1.X, aRect1.Y,
                                   aRect1.Width + aRect1.X, aRect1.Height + aRect1.Y );
                 if( aRect2.IsInside( Point( rPoint.X, rPoint.Y ) ) )
                     return nIndex;

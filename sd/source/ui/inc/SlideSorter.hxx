@@ -160,7 +160,7 @@ public:
     */
     ViewShellBase* GetViewShellBase() const { return mpViewShellBase;}
 
-    void Paint (const Rectangle& rRepaintArea);
+    void Paint (const ::tools::Rectangle& rRepaintArea);
 
     /** Place and size the controls and windows.  You may want to call this
         method when something has changed that for instance affects the

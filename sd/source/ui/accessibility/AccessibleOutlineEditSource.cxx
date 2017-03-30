@@ -120,12 +120,12 @@ namespace accessibility
         return false;
     }
 
-    Rectangle AccessibleOutlineEditSource::GetVisArea() const
+    ::tools::Rectangle AccessibleOutlineEditSource::GetVisArea() const
     {
         if( IsValid() )
         {
             SdrPaintWindow* pPaintWindow = mrView.FindPaintWindow(mrWindow);
-            Rectangle aVisArea;
+            ::tools::Rectangle aVisArea;
 
             if(pPaintWindow)
             {
@@ -137,7 +137,7 @@ namespace accessibility
             return mrWindow.LogicToPixel( aVisArea, aMapMode );
         }
 
-        return Rectangle();
+        return ::tools::Rectangle();
     }
 
     Point AccessibleOutlineEditSource::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const

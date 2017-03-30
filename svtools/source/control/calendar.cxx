@@ -605,7 +605,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 namespace
 {
 
-void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bPrev)
+void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bPrev)
 {
     long i;
     long n;
@@ -620,7 +620,7 @@ void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangle& rRec
         n--;
     nLines = n/2;
 
-    Rectangle aRect(Point( rRect.Left() + (nWidth / 2) - (nLines / 2),
+    tools::Rectangle aRect(Point( rRect.Left() + (nWidth / 2) - (nLines / 2),
                             rRect.Top() + (nHeight / 2) ),
                      Size(1, 1));
     if (!bPrev)
@@ -654,7 +654,7 @@ void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
 {
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
-    Rectangle aOutRect = maPrevRect;
+    tools::Rectangle aOutRect = maPrevRect;
     aOutRect.Left()   += 3;
     aOutRect.Top()    += 3;
     aOutRect.Right()  -= 3;
@@ -676,7 +676,7 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
 {
     Color* pTextColor = nullptr;
     const OUString& rDay = maDayTexts[nDay - 1];
-    Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
+    tools::Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
 
     bool bSel = false;
     bool bFocus = false;
@@ -784,7 +784,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
         // display title bar
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
-        Rectangle aTitleRect(0, nY, aOutSize.Width() - 1, nY + mnDayHeight - DAY_OFFY + TITLE_BORDERY * 2);
+        tools::Rectangle aTitleRect(0, nY, aOutSize.Width() - 1, nY + mnDayHeight - DAY_OFFY + TITLE_BORDERY * 2);
         rRenderContext.DrawRect(aTitleRect);
         Point aTopLeft1(aTitleRect.Left(), aTitleRect.Top());
         Point aTopLeft2(aTitleRect.Left(), aTitleRect.Top() + 1);
@@ -970,7 +970,7 @@ void Calendar::ImplUpdateDate( const Date& rDate )
 {
     if (IsReallyVisible() && IsUpdateMode())
     {
-        Rectangle aDateRect(GetDateRect(rDate));
+        tools::Rectangle aDateRect(GetDateRect(rDate));
         if (!aDateRect.IsEmpty())
         {
             Invalidate(aDateRect);
@@ -1128,7 +1128,7 @@ void Calendar::ImplUpdate( bool bCalcNew )
 
 void Calendar::ImplInvertDropPos()
 {
-    Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to heigh
+    tools::Rectangle aRect = GetDateRect( maDropDate );//this is one Pixel to width and one to heigh
     aRect.Bottom() = aRect.Top()+mnDayHeight-1;
     aRect.Right() = aRect.Left()+mnDayWidth-1;
     Invert( aRect );
@@ -1496,7 +1496,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void Calendar::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void Calendar::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(rRenderContext);
 }
@@ -1526,7 +1526,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
         Date aDate = maCurDate;
         if ( GetDate( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ), aDate ) )
         {
-            Rectangle aDateRect = GetDateRect( aDate );
+            tools::Rectangle aDateRect = GetDateRect( aDate );
             Point aPt = OutputToScreenPixel( aDateRect.TopLeft() );
             aDateRect.Left()   = aPt.X();
             aDateRect.Top()    = aPt.Y();
@@ -1789,9 +1789,9 @@ bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
         return false;
 }
 
-Rectangle Calendar::GetDateRect( const Date& rDate ) const
+tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     if ( mbFormat || (rDate < maFirstDate) || (rDate > (maFirstDate+mnDayCount)) )
         return aRect;
@@ -2237,7 +2237,7 @@ bool CalendarField::ShowDropDown( bool bShow )
         }
         pCalendar->SetCurDate( aDate );
         Point       aPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
-        Rectangle   aRect( aPos, GetSizePixel() );
+        tools::Rectangle   aRect( aPos, GetSizePixel() );
         aRect.Bottom() -= 1;
         mpCalendar->SetOutputSizePixel( mpCalendar->CalcWindowSizePixel() );
         mpFloatWin->SetOutputSizePixel( mpCalendar->GetSizePixel() );

@@ -181,7 +181,7 @@ private:
     long                nTabPages;
     long                nTotalPages;
 
-    Rectangle           aPageRect;          // Document Twips
+    tools::Rectangle           aPageRect;          // Document Twips
 
     MapMode             aLogicMode;         // Set in DoPrint
     MapMode             aOffsetMode;
@@ -237,7 +237,7 @@ public:
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
-                                const Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
+                                const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
 
     void            SetDrawView( FmFormView* pNew );
 

@@ -103,7 +103,7 @@ void SvxContourDlg::SetSuperClass( SvxSuperContourDlg& rSuperClass )
 }
 
 tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
-                                                     const Rectangle* pRect,
+                                                     const tools::Rectangle* pRect,
                                                      const sal_uIntPtr nFlags )
 {
     Bitmap  aBmp;
@@ -589,7 +589,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl, Timer *, void)
 {
     aCreateIdle.Stop();
 
-    const Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MapUnit::Map100thMM ) );
+    const tools::Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MapUnit::Map100thMM ) );
     const Graphic&  rGraphic = m_pContourWnd->GetGraphic();
     const bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 
@@ -658,7 +658,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
     const Color& rOldLineColor = m_pStbStatus->GetLineColor();
     const Color& rOldFillColor = m_pStbStatus->GetFillColor();
 
-    Rectangle       aRect( m_pStbStatus->GetItemRect( 4 ) );
+    tools::Rectangle       aRect( m_pStbStatus->GetItemRect( 4 ) );
     const Color&    rColor = rWnd.GetPipetteColor();
 
     m_pStbStatus->SetLineColor( rColor );

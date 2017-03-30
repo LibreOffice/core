@@ -43,7 +43,7 @@ public:
     inline SwRect( long X, long Y, long Width, long Height );
 
     //SV-SS e.g. SwRect( pWin->GetClipRect() );
-    SwRect( const Rectangle &rRect );
+    SwRect( const tools::Rectangle &rRect );
 
     //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
@@ -99,7 +99,7 @@ public:
     inline SwRect &operator-=( const Point &rPt );
 
     //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
-    inline Rectangle  SVRect() const;
+    inline tools::Rectangle  SVRect() const;
 
     // Output operator for debugging.
     friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
@@ -278,10 +278,10 @@ inline SwRect &SwRect::operator-=( const Point &rPt )
 }
 
 // other
-inline Rectangle SwRect::SVRect() const
+inline tools::Rectangle SwRect::SVRect() const
 {
     SAL_WARN_IF( IsEmpty(), "sw", "SVRect() without Width or Height" );
-    return Rectangle( m_Point.getX(), m_Point.getY(),
+    return tools::Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
 }

@@ -1172,7 +1172,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
 
     // #i121183# Use real PageSize in 100th mm
-    Rectangle aRect(Point(0, 0), Size(maPageSize.Width, maPageSize.Height));
+    ::tools::Rectangle aRect(Point(0, 0), Size(maPageSize.Width, maPageSize.Height));
 
     EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );

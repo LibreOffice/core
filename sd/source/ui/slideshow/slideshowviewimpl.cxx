@@ -361,7 +361,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     mTranslationOffset.Height = aOutputOffset.Y();
     mTranslationOffset.Width = aOutputOffset.X();
 
-    maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
+    maPresentationArea = ::tools::Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );
 
     // scale presentation into available window rect (minus 10%); center in the window

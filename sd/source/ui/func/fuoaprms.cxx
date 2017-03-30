@@ -660,7 +660,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             // push the running object to the end of the curve
             if (pRunningObj)
             {
-                Rectangle aCurRect(pRunningObj->GetLogicRect());
+                ::tools::Rectangle aCurRect(pRunningObj->GetLogicRect());
                 Point     aCurCenter(aCurRect.Center());
                 const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
                 sal_uInt32 nNoOfPolygons(rPolyPolygon.count());

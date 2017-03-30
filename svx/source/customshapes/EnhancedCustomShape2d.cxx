@@ -716,7 +716,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
     aP.X() -= aS.Width() / 2;
     aP.Y() -= aS.Height() / 2;
-    aLogicRect = Rectangle( aP, aS );
+    aLogicRect = tools::Rectangle( aP, aS );
 
     OUString sShapeType;
     const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
@@ -1086,7 +1086,7 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
     }
 }
 
-Rectangle EnhancedCustomShape2d::GetTextRect() const
+tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
 {
     sal_Int32 nIndex, nSize = seqTextFrames.getLength();
     if ( !nSize )
@@ -1106,7 +1106,7 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
         aTopLeft.Y() = aLogicRect.GetHeight() - aTopLeft.Y();
         aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
     }
-    Rectangle aRect( aTopLeft, aBottomRight );
+    tools::Rectangle aRect( aTopLeft, aBottomRight );
     SAL_INFO("svx", aRect.GetWidth() << " x " << aRect.GetHeight());
     if( aRect.GetWidth() <= 1 || aRect.GetHeight() <= 1 )
         return aLogicRect;
@@ -1396,9 +1396,9 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const bool bClockwise, bool bFullCircle = false )
+static basegfx::B2DPolygon CreateArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, const bool bClockwise, bool bFullCircle = false )
 {
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
     Point aStart( rStart );
     Point aEnd( rEnd );
 
@@ -1641,7 +1641,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                         fHeight*= fYScale;
                         Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
                         Size  aS( (sal_Int32)( fWidth * 2.0 ), (sal_Int32)( fHeight * 2.0 ) );
-                        Rectangle aRect( aP, aS );
+                        tools::Rectangle aRect( aP, aS );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             double fStartAngle, fEndAngle;
@@ -1779,7 +1779,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                     sal_uInt32 nXor = bClockwise ? 3 : 2;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
-                        Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
+                        tools::Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             Point aCenter( aRect.Center() );
@@ -1831,7 +1831,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                             fWR *= fXScale;
                             fHR *= fYScale;
 
-                            Rectangle aRect ( Point ( aStartPoint.getX() - fWR*cos(fT) - fWR, aStartPoint.getY() - fHR*sin(fT) - fHR ),
+                            tools::Rectangle aRect ( Point ( aStartPoint.getX() - fWR*cos(fT) - fWR, aStartPoint.getY() - fHR*sin(fT) - fHR ),
                                               Point ( aStartPoint.getX() - fWR*cos(fT) + fWR, aStartPoint.getY() - fHR*sin(fT) + fHR) );
 
                             Point aEndPoint ( aStartPoint.getX() - fWR*(cos(fT) - cos(fTE)), aStartPoint.getY() - fHR*(sin(fT) - sin(fTE)) );
@@ -2334,7 +2334,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         if(pRet)
         {
             // move to target position
-            Rectangle aCurRect(pRet->GetSnapRect());
+            tools::Rectangle aCurRect(pRet->GetSnapRect());
             aCurRect.Move(aLogicRect.Left(), aLogicRect.Top());
             pRet->NbcSetSnapRect(aCurRect);
         }

@@ -76,14 +76,14 @@ void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(maBackgroundPaint.GetWallpaper());
 }
 
-void TitleBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
+void TitleBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rUpdateArea*/)
 {
     // Paint title bar background.
     Size aWindowSize (GetSizePixel());
-    Rectangle aTitleBarBox(0,0, aWindowSize.Width(), aWindowSize.Height());
+    tools::Rectangle aTitleBarBox(0,0, aWindowSize.Width(), aWindowSize.Height());
 
     PaintDecoration(rRenderContext, aTitleBarBox);
-    const Rectangle aTitleBox(GetTitleArea(aTitleBarBox));
+    const tools::Rectangle aTitleBox(GetTitleArea(aTitleBarBox));
     PaintTitle(rRenderContext, aTitleBox);
     PaintFocus(rRenderContext, aTitleBox);
 }
@@ -115,11 +115,11 @@ css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible(
     return AccessibleTitleBar::Create(*this);
 }
 
-void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBox)
+void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rTitleBox)
 {
     rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
-    Rectangle aTitleBox(rTitleBox);
+    tools::Rectangle aTitleBox(rTitleBox);
 
     // When there is an icon then paint it at the left of the given
     // box.
@@ -141,7 +141,7 @@ void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& r
     rRenderContext.Pop();
 }
 
-void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& rFocusBox)
+void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Rectangle& rFocusBox)
 {
     rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
@@ -149,9 +149,9 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& r
     aFont.SetWeight(WEIGHT_BOLD);
     rRenderContext.SetFont(aFont);
 
-    const Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter));
+    const tools::Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter));
 
-    const Rectangle aLargerTextBox(aTextBox.Left() - 2,
+    const tools::Rectangle aLargerTextBox(aTextBox.Left() - 2,
                                    aTextBox.Top() - 2,
                                    aTextBox.Right() + 2,
                                    aTextBox.Bottom() + 2);

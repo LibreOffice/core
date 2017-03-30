@@ -162,13 +162,13 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
         mpContentWindow->SetVisibleXY(fX, -1);
 
-        Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+        ::tools::Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
         Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
         aVisArea.SetPos(aVisAreaPos);
         GetDocSh()->SetVisArea(aVisArea);
 
         Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
 
         if (pView)
@@ -221,13 +221,13 @@ void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
         mpContentWindow->SetVisibleXY(-1, fY);
 
-        Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+        ::tools::Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
         Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
         aVisArea.SetPos(aVisAreaPos);
         GetDocSh()->SetVisArea(aVisArea);
 
         Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
 
         if (pView)
@@ -299,13 +299,13 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
 
     GetActiveWindow()->SetVisibleXY(fX, fY);
 
-    Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+    ::tools::Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
     Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
     aVisArea.SetPos(aVisAreaPos);
     GetDocSh()->SetVisArea(aVisArea);
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
@@ -347,7 +347,7 @@ void ViewShell::SetZoom(long nZoom)
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
@@ -373,7 +373,7 @@ long ViewShell::GetZoom() const
  * Set zoom rectangle for active window. Sets all split windows to the same zoom
  * factor.
  */
-void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
+void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
 {
     long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
     Fraction aUIScale(nZoom, 100);
@@ -403,7 +403,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
@@ -435,7 +435,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
@@ -457,7 +457,7 @@ void ViewShell::InvalidateWindows()
 /**
  * Draw a selection rectangle with the ?provided pen on all split windows.
  */
-void ViewShell::DrawMarkRect(const Rectangle& rRect) const
+void ViewShell::DrawMarkRect(const ::tools::Rectangle& rRect) const
 {
     if (mpContentWindow.get() != nullptr)
     {
@@ -507,7 +507,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         if (rNewSize.Width() > 0 ||
             nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
         {
-            Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
+            ::tools::Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
             pPage->ScaleObjects(rNewSize, aNewBorderRect, bScaleAll);
 
             if (rNewSize.Width() > 0)
@@ -555,7 +555,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         if (rNewSize.Width() > 0 ||
             nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
         {
-            Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
+            ::tools::Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
             pPage->ScaleObjects(rNewSize, aNewBorderRect, bScaleAll);
 
             if (rNewSize.Width() > 0)
@@ -606,7 +606,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
+        pView->SetWorkArea(::tools::Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
     }
 
     UpdateScrollBars();
@@ -794,7 +794,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
                 pObj->SetObjRef(xObj);
             }
 
-            Rectangle aRect = pObj->GetLogicRect();
+            ::tools::Rectangle aRect = pObj->GetLogicRect();
 
             if ( pObj->GetAspect() != embed::Aspects::MSOLE_ICON )
             {
@@ -832,12 +832,12 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             pSdClient = new Client(pObj, this, GetActiveWindow());
         }
 
-        Rectangle aRect = pObj->GetLogicRect();
+        ::tools::Rectangle aRect = pObj->GetLogicRect();
 
         {
             // #i118485# center on BoundRect for activation,
             // OLE may be sheared/rotated now
-            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+            const ::tools::Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
             const Point aDelta(rBoundRect.Center() - aRect.Center());
             aRect.Move(aDelta.X(), aDelta.Y());
         }
@@ -883,7 +883,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 /**
  * @returns enclosing rectangle of all (split-) windows.
  */
-const Rectangle& ViewShell::GetAllWindowRect()
+const ::tools::Rectangle& ViewShell::GetAllWindowRect()
 {
     maAllWindowRectangle.SetPos(
         mpContentWindow->OutputToScreenPixel(Point(0,0)));
@@ -984,7 +984,7 @@ void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     mpFrameView->ReadUserDataSequence( rSequence, bBrowse );
 }
 
-void ViewShell::VisAreaChanged(const Rectangle& rRect)
+void ViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
 {
     OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShell()->VisAreaChanged(rRect);
@@ -1009,7 +1009,7 @@ void ViewShell::SetWinViewPos(const Point& rWinPos)
     UpdateScrollBars();
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();

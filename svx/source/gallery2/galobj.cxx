@@ -478,7 +478,7 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
         if(pPage)
         {
-            const Rectangle aObjRect(pPage->GetAllObjBoundRect());
+            const tools::Rectangle aObjRect(pPage->GetAllObjBoundRect());
 
             if(aObjRect.GetWidth() && aObjRect.GetHeight())
             {

@@ -1088,7 +1088,7 @@ void ViewShell::ArrangeGUIElements()
     }
 
     // Windows in the center and rulers at the left and top side.
-    maAllWindowRectangle = Rectangle(
+    maAllWindowRectangle = ::tools::Rectangle(
         maViewPos,
         Size(maViewSize.Width()-maScrBarWH.Width(),
             maViewSize.Height()-maScrBarWH.Height()));
@@ -1525,7 +1525,7 @@ void ViewShell::PrePaint()
 {
 }
 
-void ViewShell::Paint (const Rectangle&, ::sd::Window* )
+void ViewShell::Paint (const ::tools::Rectangle&, ::sd::Window* )
 {
 }
 

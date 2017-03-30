@@ -386,7 +386,7 @@ bool OTableGrantControl::SeekRow( long nRow )
     return (nRow <= m_aTableNames.getLength());
 }
 
-void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+void OTableGrantControl::PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
 
     if(nColumnId != COL_TABLE_NAME)

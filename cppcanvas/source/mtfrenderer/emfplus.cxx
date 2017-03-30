@@ -1060,7 +1060,7 @@ namespace cppcanvas
                                 sal_Int32 aCount;
 
                                 ReadRectangle (rMF, sx, sy, sw, sh);
-                                Rectangle aSource(Point(sx, sy), Size(sw, sh));
+                                ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
 
                                 SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
 

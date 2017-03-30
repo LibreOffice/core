@@ -41,7 +41,7 @@ public:
 
     virtual bool recalculate() override;
     virtual Size getRenderSize() override;
-    virtual bool render(const Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) override;
+    virtual bool render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) override;
 };
 
 } // end namespace svx

@@ -189,8 +189,8 @@ private:
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
                                     SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray& rDashArray );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
-    void                ImplRect( const Rectangle & rRectangle );
-    void                ImplRectFill ( const Rectangle & rRectangle );
+    void                ImplRect( const tools::Rectangle & rRectangle );
+    void                ImplRectFill ( const tools::Rectangle & rRectangle );
     void                ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
     void                ImplIntersect( const tools::PolyPolygon& rPolyPoly );
     void                ImplPolyPoly( const tools::PolyPolygon & rPolyPolygon, bool bTextOutline = false );
@@ -664,7 +664,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::ELLIPSE :
             {
-                Rectangle   aRect = static_cast<const MetaEllipseAction*>(pMA)->GetRect();
+                tools::Rectangle   aRect = static_cast<const MetaEllipseAction*>(pMA)->GetRect();
                 Point       aCenter = aRect.Center();
                 tools::Polygon aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
                 tools::PolyPolygon aPolyPoly( aPoly );
@@ -816,7 +816,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::BMPSCALEPART :
             {
                 Bitmap  aBitmap( static_cast<const MetaBmpScalePartAction*>(pMA)->GetBitmap() );
-                aBitmap.Crop( Rectangle( static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcPoint(),
+                aBitmap.Crop( tools::Rectangle( static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcPoint(),
                     static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcSize() ) );
                 if ( mbGrayScale )
                     aBitmap.Convert( BmpConversion::N8BitGreys );
@@ -855,7 +855,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::BMPEXSCALEPART :
             {
                 BitmapEx    aBitmapEx( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx() );
-                aBitmapEx.Crop( Rectangle( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcPoint(),
+                aBitmapEx.Crop( tools::Rectangle( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcPoint(),
                     static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcSize() ) );
                 Bitmap      aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
@@ -905,7 +905,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::WALLPAPER :
             {
                 const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pMA);
-                Rectangle   aRect = pA->GetRect();
+                tools::Rectangle   aRect = pA->GetRect();
                 Wallpaper   aWallpaper = pA->GetWallpaper();
 
                 if ( aWallpaper.IsBitmap() )
@@ -1450,7 +1450,7 @@ void PSWriter::ImplScale( const double& fX, const double& fY )
     ImplExecMode( PS_RET );
 }
 
-void PSWriter::ImplRect( const Rectangle & rRect )
+void PSWriter::ImplRect( const tools::Rectangle & rRect )
 {
     if ( bFillColor )
         ImplRectFill( rRect );
@@ -1473,7 +1473,7 @@ void PSWriter::ImplRect( const Rectangle & rRect )
     mnCursorPos = 0;
 }
 
-void PSWriter::ImplRectFill( const Rectangle & rRect )
+void PSWriter::ImplRectFill( const tools::Rectangle & rRect )
 {
     double nWidth = rRect.GetWidth();
     double nHeight = rRect.GetHeight();
@@ -1672,7 +1672,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
 
         bool    bDoTrans = false;
 
-        Rectangle   aRect;
+        tools::Rectangle   aRect;
         vcl::Region      aRegion;
 
         if ( pMaskBitmap )
@@ -1685,7 +1685,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     if ( nHeight > 10 )
                         nHeight = 8;
                 }
-                aRect = Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( (long)nWidth, (long)nHeight ) );
+                aRect = tools::Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( (long)nWidth, (long)nHeight ) );
                 aRegion = vcl::Region( pMaskBitmap->CreateRegion( COL_BLACK, aRect ) );
 
                 if( mnLevel == 1 )
@@ -1707,7 +1707,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if ( nHeight != nHeightOrg )
         {
             nYHeight = nYHeightOrg * nHeight / nHeightOrg;
-            aTileBitmap.Crop( Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( nWidth, nHeight ) ) );
+            aTileBitmap.Crop( tools::Rectangle( Point( 0, nHeightOrg - nHeightLeft ), Size( nWidth, nHeight ) ) );
         }
         if ( bDoTrans )
         {

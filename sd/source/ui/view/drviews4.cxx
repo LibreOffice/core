@@ -304,7 +304,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         if ( mpDrawView->IsAction() )
         {
-            Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
+            ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
             if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
             {
@@ -312,7 +312,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
                 if (mpContentWindow.get() != nullptr)
                 {
-                    aOutputArea = Rectangle(Point(0,0),
+                    aOutputArea = ::tools::Rectangle(Point(0,0),
                         mpContentWindow->GetOutputSizePixel());
 
                     Point aPos = mpContentWindow->GetPointerPosPixel();
@@ -350,7 +350,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         if( !mbMousePosFreezed )
             maMousePos = rMEvt.GetPosPixel();
 
-        Rectangle aRect;
+        ::tools::Rectangle aRect;
 
         if ( mbIsRulerDrag )
         {
@@ -365,7 +365,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         }
         else
         {
-            aRect = Rectangle(maMousePos, maMousePos);
+            aRect = ::tools::Rectangle(maMousePos, maMousePos);
         }
 
         ShowMousePosInfo(aRect, pWin);
@@ -415,7 +415,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         if (mbIsRulerDrag)
         {
-            Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
+            ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
             if (aOutputArea.IsInside(rMEvt.GetPosPixel()))
             {
@@ -752,7 +752,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     //middle of the bounding rect if something is marked
                     if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
                     {
-                        Rectangle aMarkRect;
+                        ::tools::Rectangle aMarkRect;
                         mpDrawView->GetMarkedObjectList().TakeBoundRect(nullptr,aMarkRect);
                         aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
 
@@ -780,7 +780,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     }
 }
 
-void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
+void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
     ::sd::Window* pWin)
 {
     if (mbHasRulers && pWin )
@@ -896,7 +896,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
 
     const sal_uInt16 nResult = pMenu->Execute(
         GetActiveWindow(),
-        Rectangle(rMouseLocation, Size(10,10)),
+        ::tools::Rectangle(rMouseLocation, Size(10,10)),
         PopupMenuFlags::ExecuteDown);
     switch (nResult)
     {

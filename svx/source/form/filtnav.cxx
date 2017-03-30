@@ -988,7 +988,7 @@ void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Ren
         rRenderContext.Push(PushFlags::LINECOLOR);
         rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
-        Rectangle aRect(rPos, GetSize(&rDev, &rEntry));
+        tools::Rectangle aRect(rPos, GetSize(&rDev, &rEntry));
         Point aFirst(rPos.X(), aRect.Bottom() - 6);
         Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
 

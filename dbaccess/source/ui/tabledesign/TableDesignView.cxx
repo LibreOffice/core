@@ -90,7 +90,7 @@ void OTableBorderWindow::Resize()
     // Verschiebebereich Splitter mittleres Drittel des Outputs
     long nDragPosY = nOutputHeight/3;
     long nDragSizeHeight = nOutputHeight/3;
-    m_aHorzSplitter->SetDragRectPixel( Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
+    m_aHorzSplitter->SetDragRectPixel( tools::Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
     if( (nSplitPos < nDragPosY) || (nSplitPos > (nDragPosY+nDragSizeHeight)) )
         nSplitPos = nDragPosY+nDragSizeHeight-5;
 
@@ -203,7 +203,7 @@ void OTableDesignView::initialize()
     GetEditorCtrl()->DisplayData(0);
 }
 
-void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
+void OTableDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     m_pWin->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 

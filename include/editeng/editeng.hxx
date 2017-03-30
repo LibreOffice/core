@@ -83,7 +83,7 @@ class KeyEvent;
 namespace tools { class PolyPolygon; }
 class Size;
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class SvStream;
 class OutputDevice;
 namespace vcl { class Window; }
@@ -293,7 +293,7 @@ public:
     ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
     sal_Int32       FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
-    Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
+    tools::Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
 
     OUString        GetWord(sal_Int32 nPara, sal_Int32 nIndex);
 
@@ -365,9 +365,9 @@ public:
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
 
     // StartDocPos corresponds to VisArea.TopLeft().
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
+    void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect );
+    void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos );
+    void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
     //  sal_uInt32: Error code of the stream.
@@ -510,7 +510,7 @@ public:
     // override this if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
 
-    virtual Rectangle GetBulletArea( sal_Int32 nPara );
+    virtual tools::Rectangle GetBulletArea( sal_Int32 nPara );
 
     static SfxItemPool* CreatePool( bool bLoadRefCounts = true );
     static SfxItemPool& GetGlobalItemPool();

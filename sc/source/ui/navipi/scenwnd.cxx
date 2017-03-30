@@ -237,7 +237,7 @@ void ScScenarioWindow::dispose()
     vcl::Window::dispose();
 }
 
-void ScScenarioWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScScenarioWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetFaceColor();

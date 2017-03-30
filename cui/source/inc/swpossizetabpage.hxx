@@ -76,8 +76,8 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     //'string provider'
     SvxSwFramePosString m_aFramePosString;
 
-    Rectangle           m_aRect; //size of all selected objects
-    Rectangle           m_aWorkArea;
+    ::tools::Rectangle           m_aRect; //size of all selected objects
+    ::tools::Rectangle           m_aWorkArea;
     Point               m_aAnchorPos;
 
     FrmMap* m_pVMap;

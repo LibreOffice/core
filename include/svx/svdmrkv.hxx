@@ -109,10 +109,10 @@ protected:
     SdrHdlList                  maHdlList;
     sdr::ViewSelection*         mpSdrViewSelection;
 
-    Rectangle                   maMarkedObjRect;
-    Rectangle                   maMarkedObjRectNoOffset;
-    Rectangle                   maMarkedPointsRect;
-    Rectangle                   maMarkedGluePointsRect;
+    tools::Rectangle                   maMarkedObjRect;
+    tools::Rectangle                   maMarkedObjRectNoOffset;
+    tools::Rectangle                   maMarkedPointsRect;
+    tools::Rectangle                   maMarkedGluePointsRect;
 
     sal_uInt16                  mnFrameHandlesLimit;
     sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
@@ -162,8 +162,8 @@ protected:
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
     bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
-    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark);
-    bool MarkGluePoints(const Rectangle* pRect, bool bUnmark);
+    virtual bool MarkPoints(const tools::Rectangle* pRect, bool bUnmark);
+    bool MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark);
 
     void SetMoveOutside(bool bOn);
 
@@ -178,7 +178,7 @@ public:
     virtual void EndAction() override;
     virtual void BckAction() override;
     virtual void BrkAction() override;
-    virtual void TakeActionRect(Rectangle& rRect) const override;
+    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     virtual void ClearPageView() override;
     virtual void HideSdrPage() override;
@@ -291,7 +291,7 @@ public:
 
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely
-    void MarkObj(const Rectangle& rRect, bool bUnmark);
+    void MarkObj(const tools::Rectangle& rRect, bool bUnmark);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
@@ -403,12 +403,12 @@ public:
     // The purpose is to avoid unnecessary flickering. -> This does not yet work, that's why sal_True!
     void AdjustMarkHdl(SfxViewShell* pOtherShell = nullptr); //HMHBOOL bRestraintPaint=sal_True);
 
-    const Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
-    Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...
-    const Rectangle& GetMarkedPointsRect() const;     // Enclosing rectangle of all marked points
-    const Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
-    const Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
-    Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
+    const tools::Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
+    tools::Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...
+    const tools::Rectangle& GetMarkedPointsRect() const;     // Enclosing rectangle of all marked points
+    const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
+    const tools::Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
+    tools::Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
     Point GetGridOffset() const;
 
     // Will be always called, if the list of marked objects might be changed.

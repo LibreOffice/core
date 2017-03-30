@@ -152,7 +152,7 @@ namespace dbaui
         if(m_pTable && !m_pTable->IsDisposed())
         {
             Point aPoint(_aPoint.X,_aPoint.Y);
-            Rectangle aRect(m_pTable->GetDesktopRectPixel());
+            tools::Rectangle aRect(m_pTable->GetDesktopRectPixel());
             if( aRect.IsInside(aPoint) )
                 aRet = this;
             else if( m_pTable->GetListBox()->GetDesktopRectPixel().IsInside(aPoint))

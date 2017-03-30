@@ -28,7 +28,10 @@ class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
+namespace tools
+{
 class Rectangle;
+}
 class ZSortFly;
 class SwNode;
 
@@ -74,7 +77,7 @@ public:
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat* getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
-    static Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
+    static tools::Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 
     /**
      * Is the frame format a text box?

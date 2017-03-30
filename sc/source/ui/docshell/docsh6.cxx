@@ -53,14 +53,14 @@ struct ScStylePair
 
 //  Ole
 
-void ScDocShell::SetVisArea( const Rectangle & rVisArea )
+void ScDocShell::SetVisArea( const tools::Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
     SetVisAreaOrSize( rVisArea );
 }
 
-static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
+static void lcl_SetTopRight( tools::Rectangle& rRect, const Point& rPos )
 {
     Size aSize = rRect.GetSize();
     rRect.Right() = rPos.X();
@@ -69,11 +69,11 @@ static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
     rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
 }
 
-void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
+void ScDocShell::SetVisAreaOrSize( const tools::Rectangle& rVisArea )
 {
     bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
 
-    Rectangle aArea = rVisArea;
+    tools::Rectangle aArea = rVisArea;
     // when loading, don't check for negative values, because the sheet orientation
     // might be set later
     if ( !aDocument.IsImportingXML() )
@@ -158,8 +158,8 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
 
     OSL_ENSURE(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
 
-    Rectangle aOldArea = SfxObjectShell::GetVisArea();
-    Rectangle aNewArea = aOldArea;
+    tools::Rectangle aOldArea = SfxObjectShell::GetVisArea();
+    tools::Rectangle aNewArea = aOldArea;
 
     bool bEmbedded = aDocument.IsEmbedded();
     if (bEmbedded)
@@ -173,7 +173,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         bool bNegativePage = aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
         SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
-        Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );
+        tools::Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );
         if (bNegativePage)
             lcl_SetTopRight( aNewArea, aMMRect.TopRight() );
         else

@@ -314,7 +314,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 
         if(pFlyFrame)
         {
-            const Rectangle aOuterRectangle(pFlyFrame->Frame().Pos(), pFlyFrame->Frame().SSize());
+            const tools::Rectangle aOuterRectangle(pFlyFrame->Frame().Pos(), pFlyFrame->Frame().SSize());
 
             if(!aOuterRectangle.IsEmpty())
             {
@@ -338,7 +338,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
 
         if(pFlyFrame)
         {
-            const Rectangle aInnerRectangle(pFlyFrame->Frame().Pos() + pFlyFrame->Prt().Pos(), pFlyFrame->Prt().SSize());
+            const tools::Rectangle aInnerRectangle(pFlyFrame->Frame().Pos() + pFlyFrame->Prt().Pos(), pFlyFrame->Prt().SSize());
 
             if(!aInnerRectangle.IsEmpty())
             {
@@ -488,16 +488,16 @@ void SwVirtFlyDrawObj::SetRect() const
     if ( GetFlyFrame()->Frame().HasArea() )
         const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = GetFlyFrame()->Frame().SVRect();
     else
-        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = Rectangle();
+        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = tools::Rectangle();
 }
 
-const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
+const tools::Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
 }
 
-const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
+const tools::Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
 {
     return GetCurrentBoundRect();
 }
@@ -512,15 +512,15 @@ void SwVirtFlyDrawObj::RecalcSnapRect()
     SetRect();
 }
 
-const Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
+const tools::Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
     return aOutRect;
 }
 
-void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetSnapRect(const tools::Rectangle& )
 {
-    Rectangle aTmp( GetLastBoundRect() );
+    tools::Rectangle aTmp( GetLastBoundRect() );
     SetRect();
     SetChanged();
     BroadcastObjectChange();
@@ -528,20 +528,20 @@ void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
         pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
-void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetSnapRect(const tools::Rectangle& )
 {
     SetRect();
 }
 
-const Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
+const tools::Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
     return aOutRect;
 }
 
-void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetLogicRect(const tools::Rectangle& )
 {
-    Rectangle aTmp( GetLastBoundRect() );
+    tools::Rectangle aTmp( GetLastBoundRect() );
     SetRect();
     SetChanged();
     BroadcastObjectChange();
@@ -549,14 +549,14 @@ void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
         pUserCall->Changed(*this, SdrUserCallType::Resize, aTmp);
 }
 
-void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 {
     SetRect();
 }
 
 ::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
-    const Rectangle aSourceRectangle(GetFlyFrame()->Frame().SVRect());
+    const tools::Rectangle aSourceRectangle(GetFlyFrame()->Frame().SVRect());
     const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
     ::basegfx::B2DPolyPolygon aRetval;
 
@@ -722,7 +722,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 
     // Compute old and new rect. This will give us the deformation to apply to
     // the object to crop
-    Rectangle aOldRect( aOutRect );
+    tools::Rectangle aOldRect( aOutRect );
 
     const long nOldWidth = aOldRect.GetWidth();
     const long nOldHeight = aOldRect.GetHeight();
@@ -730,7 +730,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     if (!nOldWidth || !nOldHeight)
         return;
 
-    Rectangle aNewRect( aOutRect );
+    tools::Rectangle aNewRect( aOutRect );
     ResizeRect( aNewRect, rRef, xFact, yFact );
 
     // Get graphic object size in 100th of mm
@@ -751,7 +751,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     pSh->GetCurAttr( aSet );
     SwCropGrf aCrop( static_cast<const SwCropGrf&>(aSet.Get(RES_GRFATR_CROPGRF)) );
 
-    Rectangle aCropRectangle(
+    tools::Rectangle aCropRectangle(
         convertTwipToMm100(aCrop.GetLeft()),
         convertTwipToMm100(aCrop.GetTop()),
         convertTwipToMm100(aCrop.GetRight()),
@@ -922,7 +922,7 @@ void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Frac
 
 void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 {
-    Rectangle aRect(GetSnapRect());
+    tools::Rectangle aRect(GetSnapRect());
 
     if(!aRect.IsEmpty())
     {

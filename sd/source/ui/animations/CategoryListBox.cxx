@@ -47,7 +47,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
     if( ListBox::GetEntryFlags(nItem) & ListBoxEntryFlags::DisableSelection )
     {
-        Rectangle aOutRect( rUDEvt.GetRect() );
+        ::tools::Rectangle aOutRect( rUDEvt.GetRect() );
         vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
 
         // fill the background

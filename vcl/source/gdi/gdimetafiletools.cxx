@@ -313,7 +313,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case MetaActionType::ISECTRECTCLIPREGION :
             {
                 const MetaISectRectClipRegionAction* pA = static_cast< const MetaISectRectClipRegionAction* >(pAction);
-                const Rectangle& rRect = pA->GetRect();
+                const tools::Rectangle& rRect = pA->GetRect();
 
                 if(!rRect.IsEmpty() && aClips.size() && aClips.back().count())
                 {
@@ -501,7 +501,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::RECT :
                 {
                     const MetaRectAction* pA = static_cast< const MetaRectAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -526,7 +526,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::ROUNDRECT :
                 {
                     const MetaRoundRectAction* pA = static_cast< const MetaRoundRectAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -565,7 +565,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::ELLIPSE :
                 {
                     const MetaEllipseAction* pA = static_cast< const MetaEllipseAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -591,7 +591,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::ARC :
                 {
                     const MetaArcAction* pA = static_cast< const MetaArcAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -617,7 +617,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::PIE :
                 {
                     const MetaPieAction* pA = static_cast< const MetaPieAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -643,7 +643,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::CHORD :
                 {
                     const MetaChordAction* pA = static_cast< const MetaChordAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {
@@ -799,7 +799,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else
                     {
                         BitmapEx aCroppedBitmapEx(rBitmapEx);
-                        const Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
+                        const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(aCropRectangle.IsEmpty())
                         {
@@ -833,7 +833,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     else
                     {
                         Bitmap aCroppedBitmap(rBitmap);
-                        const Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
+                        const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(aCropRectangle.IsEmpty())
                         {
@@ -964,7 +964,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::GRADIENT :
                 {
                     const MetaGradientAction* pA = static_cast< const MetaGradientAction* >(pAction);
-                    const Rectangle& rRect = pA->GetRect();
+                    const tools::Rectangle& rRect = pA->GetRect();
 
                     if(rRect.IsEmpty())
                     {

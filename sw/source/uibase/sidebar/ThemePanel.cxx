@@ -405,10 +405,10 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
         pVirtualDev->SetFillColor(rColorSet.getColor(i));
-        pVirtualDev->DrawRect(Rectangle(x, y1, x + SIZE, y1 + SIZE));
+        pVirtualDev->DrawRect(tools::Rectangle(x, y1, x + SIZE, y1 + SIZE));
 
         pVirtualDev->SetFillColor(rColorSet.getColor(i + 1));
-        pVirtualDev->DrawRect(Rectangle(x, y2, x + SIZE, y2 + SIZE));
+        pVirtualDev->DrawRect(tools::Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;
     }

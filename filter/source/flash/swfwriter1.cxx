@@ -318,7 +318,7 @@ void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gr
 
         if( (rGradient.GetStyle() == GradientStyle::Linear && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle::Radial)  )
         {
-            const Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
+            const tools::Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
 
             FillStyle aFillStyle( aBoundRect, rGradient );
 
@@ -576,7 +576,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 
         // CL: This is still a hack until we figure out how to calculate a correct bound rect
         //     for rotated text
-        Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
+        tools::Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
         double scale = 1.0;
 
         // scale width if we have a stretched text
@@ -852,17 +852,17 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 }
 
 
-void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& /* rSrcPt */, const Size& /* rSrcSz */, const Rectangle& rClipRect, bool bNeedToMapClipRect )
+void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& /* rSrcPt */, const Size& /* rSrcSz */, const tools::Rectangle& rClipRect, bool bNeedToMapClipRect )
 {
     if( !!rBmpEx )
     {
         BitmapEx bmpSource( rBmpEx );
 
-        Rectangle originalPixelRect = Rectangle(Point(), bmpSource.GetSizePixel());
+        tools::Rectangle originalPixelRect = tools::Rectangle(Point(), bmpSource.GetSizePixel());
 
         Point srcPt( map(rPt) );
         Size srcSize( map(rSz) );
-        Rectangle destRect( srcPt, srcSize );
+        tools::Rectangle destRect( srcPt, srcSize );
 
         // AS: Christian, my scaling factors are different than yours, and work better for me.
         //  However, I can't explain why exactly.  I got some of this by trial and error.
@@ -879,15 +879,15 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
             //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
             //  of mapping which eventually do cause the clipping rect to be mapped.
             Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
-            Rectangle clipRect = Rectangle(Point(), clipSize);
+            tools::Rectangle clipRect = tools::Rectangle(Point(), clipSize);
             destRect.Intersection( clipRect );
 
-            Rectangle cropRect(destRect);
+            tools::Rectangle cropRect(destRect);
 
             // AS: The bmp origin is always 0,0 so we have to adjust before we crop.
             cropRect.Move(-srcPt.X(), -srcPt.Y());
             // AS: Rectangle has no scale function (?!) so I do it manually...
-            Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
+            tools::Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
                                     static_cast<long>(cropRect.Top()*YScale),
                                     static_cast<long>(cropRect.Right()*XScale),
                                     static_cast<long>(cropRect.Bottom()*YScale));
@@ -1114,7 +1114,7 @@ void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* 
 }
 
 
-void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
+void Writer::Impl_writeRect( const tools::Rectangle& rRect, long nRadX, long nRadY )
 {
     if( (rRect.Top() == rRect.Bottom()) || (rRect.Left() == rRect.Right()) )
     {
@@ -1187,11 +1187,11 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
     tools::PolyPolygon aPolyPolygon;
     rFilling.getPath( aPolyPolygon );
 
-    Rectangle aOldRect( aPolyPolygon.GetBoundRect() );
+    tools::Rectangle aOldRect( aPolyPolygon.GetBoundRect() );
 
     map( aPolyPolygon );
 
-    Rectangle aNewRect( aPolyPolygon.GetBoundRect() );
+    tools::Rectangle aNewRect( aPolyPolygon.GetBoundRect() );
 
     switch( rFilling.getFillType() )
     {
@@ -1344,7 +1344,7 @@ void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegf
 
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
-    Rectangle clipRect;
+    tools::Rectangle clipRect;
     int bMap = 0;
     for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
     {
@@ -1405,7 +1405,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case MetaActionType::ELLIPSE:
             {
                 const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pAction);
-                const Rectangle&            rRect = pA->GetRect();
+                const tools::Rectangle&            rRect = pA->GetRect();
 
                 Impl_writeEllipse( rRect.Center(), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1 );
             }

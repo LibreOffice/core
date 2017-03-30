@@ -1121,7 +1121,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::updateClipping( const ::Rectangle&             rClipRect,
+        void ImplRenderer::updateClipping( const ::tools::Rectangle&             rClipRect,
                                            const ActionFactoryParameters& rParms,
                                            bool                           bIntersect )
         {
@@ -1297,7 +1297,7 @@ namespace cppcanvas
                                                "region encountered, falling back to bounding box!" );
 
                                 // #121806# explicitly kept integer
-                                Rectangle aClipRect(
+                                ::tools::Rectangle aClipRect(
                                     rVDev.LogicToPixel(
                                         pClipAction->GetRegion().GetBoundRect() ) );
 
@@ -1331,7 +1331,7 @@ namespace cppcanvas
                         MetaISectRectClipRegionAction* pClipAction = static_cast<MetaISectRectClipRegionAction*>(pCurrAct);
 
                         // #121806# explicitly kept integer
-                        Rectangle aClipRect(
+                        ::tools::Rectangle aClipRect(
                             rVDev.LogicToPixel( pClipAction->GetRect() ) );
 
                         // intersect current clip with given rect
@@ -1353,7 +1353,7 @@ namespace cppcanvas
                                            "region encountered, falling back to bounding box!" );
 
                             // #121806# explicitly kept integer
-                            Rectangle aClipRect(
+                            ::tools::Rectangle aClipRect(
                                 rVDev.LogicToPixel( pClipAction->GetRegion().GetBoundRect() ) );
 
                             // intersect current clip with given rect
@@ -1931,7 +1931,7 @@ namespace cppcanvas
 
                     case MetaActionType::RECT:
                     {
-                        const Rectangle& rRect(
+                        const ::tools::Rectangle& rRect(
                             static_cast<MetaRectAction*>(pCurrAct)->GetRect() );
 
                         if( rRect.IsEmpty() )
@@ -1956,7 +1956,7 @@ namespace cppcanvas
 
                     case MetaActionType::ROUNDRECT:
                     {
-                        const Rectangle& rRect(
+                        const ::tools::Rectangle& rRect(
                             static_cast<MetaRoundRectAction*>(pCurrAct)->GetRect());
 
                         if( rRect.IsEmpty() )
@@ -1979,7 +1979,7 @@ namespace cppcanvas
 
                     case MetaActionType::ELLIPSE:
                     {
-                        const Rectangle& rRect(
+                        const ::tools::Rectangle& rRect(
                             static_cast<MetaEllipseAction*>(pCurrAct)->GetRect() );
 
                         if( rRect.IsEmpty() )
@@ -2184,7 +2184,7 @@ namespace cppcanvas
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
                         ::Bitmap aBmp( pAct->GetBitmap() );
-                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                        const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
                                                     pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 
@@ -2267,7 +2267,7 @@ namespace cppcanvas
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
                         BitmapEx aBmp( pAct->GetBitmapEx() );
-                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                        const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
                                                    pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 
@@ -2367,7 +2367,7 @@ namespace cppcanvas
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
-                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                        const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
                                                    pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 

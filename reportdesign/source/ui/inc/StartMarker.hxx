@@ -58,7 +58,7 @@ namespace rptui
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) override;
         // Window overrides
-        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
         virtual void Resize() override;
         virtual void RequestHelp(const HelpEvent& rHEvt) override;

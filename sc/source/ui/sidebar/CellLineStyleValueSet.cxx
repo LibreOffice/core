@@ -73,7 +73,7 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
 
 void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    Rectangle aRect = rUDEvt.GetRect();
+    tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
@@ -93,7 +93,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     if( nSelItem ==  nItemId )
     {
         Color aBackColor(50,107,197);
-        Rectangle aBackRect = aRect;
+        tools::Rectangle aBackRect = aRect;
         aBackRect.Top() += 3;
         aBackRect.Bottom() -= 2;
         pDev->SetFillColor(aBackColor);
@@ -136,27 +136,27 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         case 2:
         case 3:
         case 4:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + nItemId * 2 - 1 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + nItemId * 2 - 1 ));
             break;
         case 5:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 4 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 4 ));
             break;
         case 6:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
             break;
         case 7:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
-            pDev->DrawRect(Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 6 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 1 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 3 , nTRX, nTRY + 6 ));
             break;
         case 8:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
-            pDev->DrawRect(Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 6 ));
             break;
         case 9:
-            pDev->DrawRect(Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
-            pDev->DrawRect(Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 8 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY , nTRX, nTRY + 3 ));
+            pDev->DrawRect(tools::Rectangle(nTLX, nTLY + 5 , nTRX, nTRY + 8 ));
             break;
     }
 

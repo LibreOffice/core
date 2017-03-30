@@ -251,14 +251,14 @@ private:
     SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
-    SVT_DLLPRIVATE Rectangle            ImplGetItemRect( sal_uInt16 nPos ) const;
+    SVT_DLLPRIVATE tools::Rectangle            ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
-                                                 const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags nFlags);
+                                                 const tools::Rectangle& rItemRect, const tools::Rectangle* pRect, DrawFlags nFlags);
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
-                                                 const Rectangle* pRect);
+                                                 const tools::Rectangle* pRect);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false );
     SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
@@ -275,7 +275,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void        Resize() override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
@@ -301,7 +301,7 @@ public:
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
     sal_uInt16          GetItemId( const Point& rPos ) const;
-    Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
+    tools::Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     long                GetDragPos() const { return mnDragPos; }
     bool                IsItemMode() const { return mbItemMode; }

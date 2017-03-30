@@ -147,7 +147,7 @@ void DrawViewWrapper::ReInit()
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
-    Rectangle aRect(Point(0,0), aOutputSize);
+    tools::Rectangle aRect(Point(0,0), aOutputSize);
     this->SetWorkArea(aRect);
 
     this->ShowSdrPage(this->GetModel()->GetPage(0));
@@ -306,7 +306,7 @@ bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt )
 {
     if(pObj)
     {
-        Rectangle aRect(pObj->GetCurrentBoundRect());
+        tools::Rectangle aRect(pObj->GetCurrentBoundRect());
         return aRect.IsInside(rPnt);
     }
     return false;

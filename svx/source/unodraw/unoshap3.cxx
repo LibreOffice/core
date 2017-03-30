@@ -283,7 +283,7 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
 struct ImpRememberTransAndRect
 {
     basegfx::B3DHomMatrix                   maMat;
-    Rectangle                   maRect;
+    tools::Rectangle                   maRect;
 };
 
 bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue )
@@ -355,7 +355,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             aCam.SetPosAndLookAt(aCamPos, aLookAt);
             aCam.SetFocalLength(fCamFocal / 100.0);
             aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fCamPosZ), aLookAt, fCamFocal / 100.0);
-            aCam.SetDeviceWindow(Rectangle(0, 0, (long)fW, (long)fH));
+            aCam.SetDeviceWindow(tools::Rectangle(0, 0, (long)fW, (long)fH));
 
             // set at scene
             pScene->SetCamera(aCam);

@@ -39,7 +39,7 @@ using namespace com::sun::star;
 #include "drwlayer.hxx"
 #include "chartarr.hxx"
 
-void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
+void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const tools::Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
 {
     //  if Chart is not installed, SCH_MOD cannot be used!

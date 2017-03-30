@@ -81,16 +81,16 @@ public:
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const override;
 
     // we treat the size calculation completely on ourself here
-    virtual const Rectangle& GetCurrentBoundRect() const override;
-    virtual const Rectangle& GetLastBoundRect() const override;
+    virtual const tools::Rectangle& GetCurrentBoundRect() const override;
+    virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual       void       RecalcBoundRect() override;
     virtual       void       RecalcSnapRect() override;
-    virtual const Rectangle& GetSnapRect()  const override;
-    virtual       void       SetSnapRect(const Rectangle& rRect) override;
-    virtual       void       NbcSetSnapRect(const Rectangle& rRect) override;
-    virtual const Rectangle& GetLogicRect() const override;
-    virtual       void       SetLogicRect(const Rectangle& rRect) override;
-    virtual       void       NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetSnapRect()  const override;
+    virtual       void       SetSnapRect(const tools::Rectangle& rRect) override;
+    virtual       void       NbcSetSnapRect(const tools::Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
+    virtual       void       SetLogicRect(const tools::Rectangle& rRect) override;
+    virtual       void       NbcSetLogicRect(const tools::Rectangle& rRect) override;
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual       void       NbcMove  (const Size& rSiz) override;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,

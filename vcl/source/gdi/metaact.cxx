@@ -113,7 +113,7 @@ inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
     rPt.Y() = FRound( fScaleY * rPt.Y() );
 }
 
-inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
+inline void ImplScaleRect( tools::Rectangle& rRect, double fScaleX, double fScaleY )
 {
     Point aTL( rRect.TopLeft() );
     Point aBR( rRect.BottomRight() );
@@ -121,7 +121,7 @@ inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
     ImplScalePoint( aTL, fScaleX, fScaleY );
     ImplScalePoint( aBR, fScaleX, fScaleY );
 
-    rRect = Rectangle( aTL, aBR );
+    rRect = tools::Rectangle( aTL, aBR );
     rRect.Justify();
 }
 
@@ -446,7 +446,7 @@ MetaRectAction::MetaRectAction() :
 MetaRectAction::~MetaRectAction()
 {}
 
-MetaRectAction::MetaRectAction( const Rectangle& rRect ) :
+MetaRectAction::MetaRectAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::RECT ),
     maRect      ( rRect )
 {}
@@ -495,7 +495,7 @@ MetaRoundRectAction::MetaRoundRectAction() :
 MetaRoundRectAction::~MetaRoundRectAction()
 {}
 
-MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
+MetaRoundRectAction::MetaRoundRectAction( const tools::Rectangle& rRect,
                                           sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
     MetaAction  ( MetaActionType::ROUNDRECT ),
     maRect      ( rRect ),
@@ -548,7 +548,7 @@ MetaEllipseAction::MetaEllipseAction() :
 MetaEllipseAction::~MetaEllipseAction()
 {}
 
-MetaEllipseAction::MetaEllipseAction( const Rectangle& rRect ) :
+MetaEllipseAction::MetaEllipseAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::ELLIPSE ),
     maRect      ( rRect )
 {}
@@ -595,7 +595,7 @@ MetaArcAction::MetaArcAction() :
 MetaArcAction::~MetaArcAction()
 {}
 
-MetaArcAction::MetaArcAction( const Rectangle& rRect,
+MetaArcAction::MetaArcAction( const tools::Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
     MetaAction  ( MetaActionType::ARC ),
     maRect      ( rRect ),
@@ -653,7 +653,7 @@ MetaPieAction::MetaPieAction() :
 MetaPieAction::~MetaPieAction()
 {}
 
-MetaPieAction::MetaPieAction( const Rectangle& rRect,
+MetaPieAction::MetaPieAction( const tools::Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
     MetaAction  ( MetaActionType::PIE ),
     maRect      ( rRect ),
@@ -711,7 +711,7 @@ MetaChordAction::MetaChordAction() :
 MetaChordAction::~MetaChordAction()
 {}
 
-MetaChordAction::MetaChordAction( const Rectangle& rRect,
+MetaChordAction::MetaChordAction( const tools::Rectangle& rRect,
                                   const Point& rStart, const Point& rEnd ) :
     MetaAction  ( MetaActionType::CHORD ),
     maRect      ( rRect ),
@@ -1313,7 +1313,7 @@ MetaTextRectAction::MetaTextRectAction() :
 MetaTextRectAction::~MetaTextRectAction()
 {}
 
-MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
+MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
                                         const OUString& rStr, DrawTextFlags nStyle ) :
     MetaAction  ( MetaActionType::TEXTRECT ),
     maRect      ( rRect ),
@@ -1538,7 +1538,7 @@ void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maPt, maSz);
+    tools::Rectangle aRectangle(maPt, maSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
@@ -1601,7 +1601,7 @@ void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maDstPt, maDstSz);
+    tools::Rectangle aRectangle(maDstPt, maDstSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maDstPt = aRectangle.TopLeft();
     maDstSz = aRectangle.GetSize();
@@ -1718,7 +1718,7 @@ void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maPt, maSz);
+    tools::Rectangle aRectangle(maPt, maSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
@@ -1781,7 +1781,7 @@ void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maDstPt, maDstSz);
+    tools::Rectangle aRectangle(maDstPt, maDstSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maDstPt = aRectangle.TopLeft();
     maDstSz = aRectangle.GetSize();
@@ -1903,7 +1903,7 @@ void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
 
 void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maPt, maSz);
+    tools::Rectangle aRectangle(maPt, maSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
@@ -1968,7 +1968,7 @@ void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
 
 void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maDstPt, maDstSz);
+    tools::Rectangle aRectangle(maDstPt, maDstSz);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maDstPt = aRectangle.TopLeft();
     maDstSz = aRectangle.GetSize();
@@ -2007,7 +2007,7 @@ MetaGradientAction::MetaGradientAction() :
 MetaGradientAction::~MetaGradientAction()
 {}
 
-MetaGradientAction::MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient ) :
+MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, const Gradient& rGradient ) :
     MetaAction  ( MetaActionType::GRADIENT ),
     maRect      ( rRect ),
     maGradient  ( rGradient )
@@ -2173,7 +2173,7 @@ MetaWallpaperAction::MetaWallpaperAction() :
 MetaWallpaperAction::~MetaWallpaperAction()
 {}
 
-MetaWallpaperAction::MetaWallpaperAction( const Rectangle& rRect,
+MetaWallpaperAction::MetaWallpaperAction( const tools::Rectangle& rRect,
                                           const Wallpaper& rPaper ) :
     MetaAction  ( MetaActionType::WALLPAPER ),
     maRect      ( rRect ),
@@ -2278,7 +2278,7 @@ MetaISectRectClipRegionAction::MetaISectRectClipRegionAction() :
 MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction()
 {}
 
-MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const Rectangle& rRect ) :
+MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::ISECTRECTCLIPREGION ),
     maRect      ( rRect )
 {}
@@ -3029,7 +3029,7 @@ void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 
 void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maPoint, maSize);
+    tools::Rectangle aRectangle(maPoint, maSize);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();
@@ -3090,7 +3090,7 @@ void MetaEPSAction::Move( long nHorzMove, long nVertMove )
 
 void MetaEPSAction::Scale( double fScaleX, double fScaleY )
 {
-    Rectangle aRectangle(maPoint, maSize);
+    tools::Rectangle aRectangle(maPoint, maSize);
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();

@@ -81,8 +81,8 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     else if( rBitmapEx.IsTransparent() )
         aMask = Bitmap( aSize, rBitmapEx.aMask.GetBitCount() );
 
-    Rectangle aDestRect( Point( 0, 0 ), aSize );
-    Rectangle aSrcRect( aSrc, aSize );
+    tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
+    tools::Rectangle aSrcRect( aSrc, aSize );
     CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
 }
 
@@ -447,7 +447,7 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
     return bRet;
 }
 
-bool BitmapEx::Crop( const Rectangle& rRectPixel )
+bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
 {
     bool bRet = false;
 
@@ -500,7 +500,7 @@ bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
     return bRet;
 }
 
-bool BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectangle& rRectSrc,
                           const BitmapEx* pBmpExSrc )
 {
     bool bRet = false;
@@ -693,7 +693,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     }
 
     Size aStdSize( aStandardSize, aStandardSize );
-    Rectangle aRect(aEmptyPoint, aStdSize );
+    tools::Rectangle aRect(aEmptyPoint, aStdSize );
 
     ScopedVclPtrInstance< VirtualDevice > aVirDevice(*Application::GetDefaultDevice(),
                                                      DeviceFormat::DEFAULT, DeviceFormat::BITMASK);

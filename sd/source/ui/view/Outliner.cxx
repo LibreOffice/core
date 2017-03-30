@@ -800,11 +800,11 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
     {
-        std::vector<Rectangle> aLogicRects;
+        std::vector<::tools::Rectangle> aLogicRects;
         pOutlinerView->GetSelectionRectangles(aLogicRects);
 
         std::vector<OString> aLogicRectStrings;
-        std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const Rectangle& rRectangle) { return rRectangle.toString(); });
+        std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const ::tools::Rectangle& rRectangle) { return rRectangle.toString(); });
         OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);
 
         if (!pSelections)
@@ -869,7 +869,7 @@ void SdOutliner::DetectChange()
         SetUpdateMode(false);
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != nullptr)
-            pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+            pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
             SetPaperSize( Size(1, 1) );
         SetText(OUString(), GetParagraph(0));
@@ -1061,7 +1061,7 @@ void SdOutliner::ProvideNextTextObject()
     SetUpdateMode(false);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != nullptr)
-        pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+        pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
         SetPaperSize( Size(1, 1) );
     SetText(OUString(), GetParagraph(0));
@@ -1408,7 +1408,7 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView && mpTextObj)
     {
-        pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
+        pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
         SdrPageView* pPV = mpView->GetSdrPageView();
 
@@ -1785,7 +1785,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
                     rOutliner.InsertView( mpOutlineView );
 
                 rOutliner.SetUpdateMode(false);
-                mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
+                mpOutlineView->SetOutputArea (::tools::Rectangle (Point(), Size(1, 1)));
                 rOutliner.SetPaperSize( Size(1, 1) );
                 rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));
 

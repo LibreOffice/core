@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-void drawRect(vcl::RenderContext& rRenderContext, const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
+void drawRect(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
 {
     rRenderContext.SetFillColor(rFillColor);
     rRenderContext.SetLineColor(rLineColor);
@@ -1588,7 +1588,7 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
         InitColors();
 }
 
-void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rRect*/)
+void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &/*rRect*/)
 {
     const Size aSz(GetOutputSizePixel());
 
@@ -1604,7 +1604,7 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/
     const long nTBorder = 4;
     const long nBBorder = 4;
 
-    aLeftPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
+    aLeftPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
     const long nWidth = aLeftPagePrtArea.GetWidth();
     const long nKorr = (nWidth & 1) != 0 ? 0 : 1;
     aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nKorr, aLeftPagePrtArea.GetHeight()));
@@ -1613,7 +1613,7 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/
     aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
 
     // draw shadow
-    Rectangle aShadow(aPage);
+    tools::Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
     drawRect(rRenderContext, aShadow, m_aShadowCol, m_aTransCol);
 
@@ -1621,7 +1621,7 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/
     drawRect(rRenderContext, aPage, m_aBgCol, m_aLineCol);
 
     // draw separator
-    Rectangle aPageSeparator(aPage);
+    tools::Rectangle aPageSeparator(aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
     aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
     drawRect(rRenderContext, aPageSeparator, m_aLineCol, m_aTransCol);
@@ -1629,8 +1629,8 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/
     PaintPage(rRenderContext, aLeftPagePrtArea);
     PaintPage(rRenderContext, aRightPagePrtArea);
 
-    Rectangle aLeftMark(Point(aPage.Left() + 2, aLeftPagePrtArea.Top() + 4), Size(aLeftPagePrtArea.Left() - 4, 2));
-    Rectangle aRightMark(Point(aRightPagePrtArea.Right() + 2, aRightPagePrtArea.Bottom() - 6), Size(aLeftPagePrtArea.Left() - 4, 2));
+    tools::Rectangle aLeftMark(Point(aPage.Left() + 2, aLeftPagePrtArea.Top() + 4), Size(aLeftPagePrtArea.Left() - 4, 2));
+    tools::Rectangle aRightMark(Point(aRightPagePrtArea.Right() + 2, aRightPagePrtArea.Bottom() - 6), Size(aLeftPagePrtArea.Left() - 4, 2));
 
     switch (nMarkPos)
     {
@@ -1658,7 +1658,7 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/
     drawRect(rRenderContext, aRightMark, m_aMarkCol, m_aTransCol);
 }
 
-void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
+void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
 {
     // draw PrintArea
     drawRect(rRenderContext, rRect, m_aTransCol, m_aPrintAreaCol);
@@ -1668,7 +1668,7 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const Rectangl
     sal_uLong nRTextBorder = 4;
     sal_uLong nTTextBorder = 4;
 
-    Rectangle aTextLine = rRect;
+    tools::Rectangle aTextLine = rRect;
     aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
     aTextLine.Left()    += nLTextBorder;
     aTextLine.Right()   -= nRTextBorder;

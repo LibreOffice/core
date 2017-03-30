@@ -42,7 +42,7 @@ protected:
 
 public:
     SdrPageObj(SdrPage* pNewPage = nullptr);
-    SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = nullptr);
+    SdrPageObj(const tools::Rectangle& rRect, SdrPage* pNewPage = nullptr);
     virtual ~SdrPageObj() override;
 
     SdrPage* GetReferencedPage() const { return mpShownPage;}

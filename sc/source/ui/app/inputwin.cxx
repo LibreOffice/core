@@ -411,7 +411,7 @@ void ScInputWindow::Select()
     }
 }
 
-void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ToolBox::Paint(rRenderContext, rRect);
 
@@ -979,7 +979,7 @@ void ScInputBarGroup::TextGrabFocus()
     maTextWnd->TextGrabFocus();
 }
 
-void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     EditView* pView = GetEditView();
     if (pView)
@@ -1033,7 +1033,7 @@ void ScTextWnd::Resize()
     if (mpEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
-        Rectangle aOutputArea = PixelToLogic( Rectangle( Point(), aOutputSize ));
+        tools::Rectangle aOutputArea = PixelToLogic( tools::Rectangle( Point(), aOutputSize ));
         mpEditView->SetOutputArea( aOutputArea );
 
         // Don't leave an empty area at the bottom if we can move the text down.
@@ -1150,7 +1150,7 @@ static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
 
 static void lcl_ModifyRTLVisArea( EditView* pEditView )
 {
-    Rectangle aVisArea = pEditView->GetVisArea();
+    tools::Rectangle aVisArea = pEditView->GetVisArea();
     Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
     long nDiff = aPaper.Width() - aVisArea.Right();
     aVisArea.Left()  += nDiff;
@@ -1634,7 +1634,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 if ( nDifPos == aString.getLength() ) // only new characters appended
                     nFlags = InvalidateFlags::NoErase;      // then background is already clear
 
-                Invalidate( Rectangle( nInvPos, 0, nStartPos+nTextSize, GetOutputSize().Height()-1 ), nFlags );
+                Invalidate( tools::Rectangle( nInvPos, 0, nStartPos+nTextSize, GetOutputSize().Height()-1 ), nFlags );
             }
         }
         else
@@ -2048,7 +2048,7 @@ void ScPosWnd::Modify()
             if (pCur)
                 aPos = pWin->LogicToPixel( pCur->GetPos() );
             aPos = pWin->OutputToScreenPixel( aPos );
-            Rectangle aRect( aPos, aPos );
+            tools::Rectangle aRect( aPos, aPos );
 
             OUString aText = ScGlobal::GetRscString( nStrId );
             QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;

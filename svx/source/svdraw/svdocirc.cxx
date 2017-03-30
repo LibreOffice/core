@@ -52,7 +52,7 @@
 
 using namespace com::sun::star;
 
-Point GetAnglePnt(const Rectangle& rR, long nAngle)
+Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
 {
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
@@ -113,7 +113,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
+SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect):
     SdrRectObj(rRect)
 {
     nStartAngle=0;
@@ -122,7 +122,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink):
+SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect, long nNewStartWink, long nNewEndWink):
     SdrRectObj(rRect)
 {
     long nAngleDif=nNewEndWink-nNewStartWink;
@@ -201,7 +201,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     return bNeed;
 }
 
-basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, const Rectangle& rRect1, long nStart, long nEnd) const
+basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
 {
     const basegfx::B2DRange aRange(rRect1.Left(), rRect1.Top(), rRect1.Right(), rRect1.Bottom());
     basegfx::B2DPolygon aCircPolygon;
@@ -351,7 +351,7 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
 
 struct ImpCircUser : public SdrDragStatUserData
 {
-    Rectangle                   aR;
+    tools::Rectangle                   aR;
     Point                       aCenter;
     Point                       aP1;
     Point                       aP2;
@@ -676,7 +676,7 @@ void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat)
 bool SdrCircObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
-    Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
+    tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     maRect = aRect1;
@@ -945,7 +945,7 @@ void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
     ImpSetCircInfoToAttr();
 }
 
-void Union(Rectangle& rR, const Point& rP)
+void Union(tools::Rectangle& rR, const Point& rP)
 {
     if (rP.X()<rR.Left  ()) rR.Left  ()=rP.X();
     if (rP.X()>rR.Right ()) rR.Right ()=rP.X();
@@ -953,7 +953,7 @@ void Union(Rectangle& rR, const Point& rP)
     if (rP.Y()>rR.Bottom()) rR.Bottom()=rP.Y();
 }
 
-void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
     if (meCircleKind!=OBJ_CIRC) {
@@ -1015,10 +1015,10 @@ void SdrCircObj::RecalcSnapRect()
     }
 }
 
-void SdrCircObj::NbcSetSnapRect(const Rectangle& rRect)
+void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind!=OBJ_CIRC) {
-        Rectangle aSR0(GetSnapRect());
+        tools::Rectangle aSR0(GetSnapRect());
         long nWdt0=aSR0.Right()-aSR0.Left();
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();

@@ -278,7 +278,7 @@ void VCLXGraphics::clear(
 
     if( mpOutputDevice )
     {
-        const ::Rectangle aVCLRect = VCLUnoHelper::ConvertToVCLRect( aRect );
+        const ::tools::Rectangle aVCLRect = VCLUnoHelper::ConvertToVCLRect( aRect );
         mpOutputDevice->Erase( aVCLRect );
     }
 }
@@ -326,7 +326,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
         }
 
         if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
-            mpOutputDevice->IntersectClipRegion(vcl::Region(Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
+            mpOutputDevice->IntersectClipRegion(vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
 
         mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
     }
@@ -361,7 +361,7 @@ void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int3
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawRect( Rectangle( Point( x, y ), Size( width, height ) ) );
+        mpOutputDevice->DrawRect( tools::Rectangle( Point( x, y ), Size( width, height ) ) );
     }
 }
 
@@ -372,7 +372,7 @@ void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, s
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawRect( Rectangle( Point( x, y ), Size( width, height ) ), nHorzRound, nVertRound );
+        mpOutputDevice->DrawRect( tools::Rectangle( Point( x, y ), Size( width, height ) ), nHorzRound, nVertRound );
     }
 }
 
@@ -421,7 +421,7 @@ void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_I
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawEllipse( Rectangle( Point( x, y ), Size( width, height ) ) );
+        mpOutputDevice->DrawEllipse( tools::Rectangle( Point( x, y ), Size( width, height ) ) );
     }
 }
 
@@ -432,7 +432,7 @@ void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawArc( Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
+        mpOutputDevice->DrawArc( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
 
@@ -443,7 +443,7 @@ void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawPie( Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
+        mpOutputDevice->DrawPie( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
 
@@ -454,7 +454,7 @@ void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-        mpOutputDevice->DrawChord( Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
+        mpOutputDevice->DrawChord( tools::Rectangle( Point( x, y ), Size( width, height ) ), Point( x1, y1 ), Point( x2, y2 ) );
     }
 }
 
@@ -473,7 +473,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
         aGradient.SetStartIntensity(rGradient.StartIntensity);
         aGradient.SetEndIntensity(rGradient.EndIntensity);
         aGradient.SetSteps(rGradient.StepCount);
-        mpOutputDevice->DrawGradient( Rectangle( Point( x, y ), Size( width, height ) ), aGradient );
+        mpOutputDevice->DrawGradient( tools::Rectangle( Point( x, y ), Size( width, height ) ), aGradient );
     }
 }
 

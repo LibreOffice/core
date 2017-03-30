@@ -376,7 +376,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     }
                 }
             }
-            Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QuickHelpFlags::Top|QuickHelpFlags::Left);
+            Help::ShowQuickHelp( this, tools::Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QuickHelpFlags::Top|QuickHelpFlags::Left);
             bDone = true;
         }
     }
@@ -902,7 +902,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     pEditView->GetWindow()->GrabFocus();
 }
 
-void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!pEditEngine)     // We need it now at latest
         CreateEditEngine();
@@ -1295,7 +1295,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 
         long nLineHeight = GetTextHeight();
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
-        Rectangle aInvRect( Point( 0, 0 ), aSz );
+        tools::Rectangle aInvRect( Point( 0, 0 ), aSz );
         long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
         aInvRect.Top() = nY;
         rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
@@ -1341,7 +1341,7 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
 }
 
-void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (SyncYOffset())
         return;
@@ -1640,7 +1640,7 @@ void WatchWindow::dispose()
     DockingWindow::dispose();
 }
 
-void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.DrawText(Point(DWBORDER, 7), aWatchStr);
     lcl_DrawIDEWindowFrame(this, rRenderContext);
@@ -1861,7 +1861,7 @@ void StackWindow::dispose()
     DockingWindow::dispose();
 }
 
-void StackWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void StackWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.DrawText(Point(DWBORDER, 7), aStackStr);
     lcl_DrawIDEWindowFrame(this, rRenderContext);
@@ -2814,7 +2814,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
     if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
         // calculate basic position: under the current line
-        Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
+        tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
@@ -2838,7 +2838,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         pListBox->SetSizePixel( aSize );
 
         //calculate position
-        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
+        const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
         const Point& aBottomPoint = aVisArea.BottomRight();
 
         if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )

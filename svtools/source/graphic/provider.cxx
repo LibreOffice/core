@@ -485,7 +485,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     return xRet;
 }
 
-void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraphicCropLogic, Rectangle& rGraphicCropPixel )
+void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraphicCropLogic, tools::Rectangle& rGraphicCropPixel )
 {
     if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
     {
@@ -604,7 +604,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
         }
         else
         {
-            Rectangle aCropPixel( Point( 0, 0 ), rGraphic.GetSizePixel() );
+            tools::Rectangle aCropPixel( Point( 0, 0 ), rGraphic.GetSizePixel() );
             ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
             if ( bRemoveCropArea )
             {

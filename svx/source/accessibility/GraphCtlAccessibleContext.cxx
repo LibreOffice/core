@@ -203,7 +203,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds()
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle           aCoreBounds( GetBoundingBox() );
+    tools::Rectangle           aCoreBounds( GetBoundingBox() );
     awt::Rectangle      aBounds;
     aBounds.X = aCoreBounds.getX();
     aBounds.Y = aCoreBounds.getY();
@@ -216,7 +216,7 @@ awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds()
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation()
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle   aRect( GetBoundingBox() );
+    tools::Rectangle   aRect( GetBoundingBox() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
@@ -224,7 +224,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation()
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen()
 {
     // no guard -> done in GetBoundingBoxOnScreen()
-    Rectangle   aRect( GetBoundingBoxOnScreen() );
+    tools::Rectangle   aRect( GetBoundingBoxOnScreen() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
@@ -232,7 +232,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen()
 awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize()
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle   aRect( GetBoundingBox() );
+    tools::Rectangle   aRect( GetBoundingBox() );
     return awt::Size( aRect.getWidth(), aRect.getHeight() );
 }
 
@@ -660,14 +660,14 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 }
 
 
-Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen()
+tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen()
 {
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpControl )
         throw DisposedException();
 
-    return Rectangle(
+    return tools::Rectangle(
         mpControl->GetAccessibleParentWindow()->OutputToAbsoluteScreenPixel(
             mpControl->GetPosPixel() ),
         mpControl->GetSizePixel() );
@@ -678,11 +678,11 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen()
     between the absolute coordinates of the bounding boxes of this control
     and its parent in the accessibility tree.
 */
-Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
+tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
 {
     ::SolarMutexGuard aGuard;
 
-    Rectangle aBounds ( 0, 0, 0, 0 );
+    tools::Rectangle aBounds ( 0, 0, 0, 0 );
 
     vcl::Window* pWindow = mpControl;
     if (pWindow != nullptr)
@@ -691,7 +691,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if (pParent != nullptr)
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative (nullptr);
+            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative (nullptr);
             aBounds -= aParentRect.TopLeft();
         }
     }
@@ -748,9 +748,9 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
 }
 
 // IAccessibleViewforwarder
-Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea() const
+tools::Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea() const
 {
-    Rectangle aVisArea;
+    tools::Rectangle aVisArea;
 
     if( mpView && mpView->PaintWindowCount())
     {
@@ -766,7 +766,7 @@ Point SvxGraphCtrlAccessibleContext::LogicToPixel (const Point& rPoint) const
 {
     if( mpControl )
     {
-        Rectangle aBBox(mpControl->GetWindowExtentsRelative(nullptr));
+        tools::Rectangle aBBox(mpControl->GetWindowExtentsRelative(nullptr));
         return mpControl->LogicToPixel (rPoint) + aBBox.TopLeft();
     }
     else

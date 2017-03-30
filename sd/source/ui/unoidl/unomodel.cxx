@@ -1254,7 +1254,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
                 if( !(aValue >>= aVisArea) || (aVisArea.Width < 0) || (aVisArea.Height < 0) )
                     throw lang::IllegalArgumentException();
 
-                pEmbeddedObj->SetVisArea( Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height ) );
+                pEmbeddedObj->SetVisArea( ::tools::Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height ) );
             }
             break;
         case WID_MODEL_CONTFOCUS:
@@ -1319,7 +1319,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 if( !pEmbeddedObj )
                     break;
 
-                const Rectangle& aRect = pEmbeddedObj->GetVisArea();
+                const ::tools::Rectangle& aRect = pEmbeddedObj->GetVisArea();
                 awt::Rectangle aVisArea( aRect.Left(), aRect.Top(), aRect.getWidth(), aRect.getHeight() );
                 aAny <<= aVisArea;
             }
@@ -1508,7 +1508,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         }
         else
         {
-            const Rectangle aVisArea( mpDocShell->GetVisArea( embed::Aspects::MSOLE_DOCPRINT ) );
+            const ::tools::Rectangle aVisArea( mpDocShell->GetVisArea( embed::Aspects::MSOLE_DOCPRINT ) );
             aPageSize = awt::Size( aVisArea.GetWidth(), aVisArea.GetHeight() );
         }
         aRenderer.realloc( 1 );
@@ -1600,7 +1600,7 @@ void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& xPage, v
             sTitle += aStr;
             aNote.Title = sTitle;
             aNote.Contents = xText->getString();
-            rPDFExtOutDevData.CreateNote( Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
+            rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
                 static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
         }
     }
@@ -1632,11 +1632,11 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
         {
             Size        aPageSize( rDoc.GetSdPage( 0, PageKind::Standard )->GetSize() );
             Point aPoint( 0, 0 );
-            Rectangle   aPageRect( aPoint, aPageSize );
+            ::tools::Rectangle   aPageRect( aPoint, aPageSize );
 
             awt::Point  aShapePos( xShape->getPosition() );
             awt::Size   aShapeSize( xShape->getSize() );
-            Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
+            ::tools::Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
             // Handle linked videos.
             if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
@@ -1906,7 +1906,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
                 {
                     std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
-                    Rectangle                         aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
+                    ::tools::Rectangle                         aVisArea = ::tools::Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
                     vcl::Region                       aRegion( aVisArea );
 
                     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
@@ -2123,7 +2123,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                                 Size        aPageSize( mpDoc->GetSdPage( 0, PageKind::Standard )->GetSize() );
                                 Point aPoint( 0, 0 );
-                                Rectangle   aPageRect( aPoint, aPageSize );
+                                ::tools::Rectangle   aPageRect( aPoint, aPageSize );
 
                                 // resolving links found in this page by the method ImpEditEngine::Paint
                                 std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
@@ -2274,7 +2274,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     Point aPoint(nTilePosX, nTilePosY);
     Size aSize(nTileWidth, nTileHeight);
-    Rectangle aRect(aPoint, aSize);
+    ::tools::Rectangle aRect(aPoint, aSize);
 
     pViewSh->GetView()->CompleteRedraw(&rDevice, vcl::Region(aRect));
 }

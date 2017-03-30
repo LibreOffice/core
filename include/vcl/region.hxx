@@ -37,7 +37,7 @@ namespace vcl { class Window; }
 class OutputDevice;
 class Bitmap;
 
-typedef std::vector< Rectangle > RectangleVector;
+typedef std::vector< tools::Rectangle > RectangleVector;
 
 namespace vcl {
 
@@ -68,7 +68,7 @@ private:
 public:
 
     explicit Region(bool bIsNull = false); // default creates empty region, with true a null region is created
-    explicit Region(const Rectangle& rRect);
+    explicit Region(const tools::Rectangle& rRect);
     explicit Region(const tools::Polygon& rPolygon);
     explicit Region(const tools::PolyPolygon& rPolyPoly);
     explicit Region(const basegfx::B2DPolyPolygon&);
@@ -90,10 +90,10 @@ public:
     // manipulators
     void Move( long nHorzMove, long nVertMove );
     void Scale( double fScaleX, double fScaleY );
-    bool Union( const Rectangle& rRegion );
-    bool Intersect( const Rectangle& rRegion );
-    bool Exclude( const Rectangle& rRegion );
-    bool XOr( const Rectangle& rRegion );
+    bool Union( const tools::Rectangle& rRegion );
+    bool Intersect( const tools::Rectangle& rRegion );
+    bool Exclude( const tools::Rectangle& rRegion );
+    bool XOr( const tools::Rectangle& rRegion );
     bool Union( const vcl::Region& rRegion );
     bool Intersect( const vcl::Region& rRegion );
     bool Exclude( const vcl::Region& rRegion );
@@ -107,16 +107,16 @@ public:
 
     bool IsRectangle() const;
 
-    Rectangle GetBoundRect() const;
+    tools::Rectangle GetBoundRect() const;
     bool HasPolyPolygonOrB2DPolyPolygon() const { return (getB2DPolyPolygon() || getPolyPolygon()); }
     void GetRegionRectangles(RectangleVector& rTarget) const;
 
     bool IsInside( const Point& rPoint ) const;
-    bool IsOver( const Rectangle& rRect ) const;
+    bool IsOver( const tools::Rectangle& rRect ) const;
 
     vcl::Region& operator=( const vcl::Region& rRegion );
     vcl::Region& operator=( vcl::Region&& rRegion );
-    vcl::Region& operator=( const Rectangle& rRect );
+    vcl::Region& operator=( const tools::Rectangle& rRect );
 
     bool operator==( const vcl::Region& rRegion ) const;
     bool operator!=( const vcl::Region& rRegion ) const { return !(Region::operator==( rRegion )); }

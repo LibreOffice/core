@@ -1613,7 +1613,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ((rHint.GetId() == SfxHintId::ScAccVisAreaChanged) || (rHint.GetId() == SfxHintId::ScAccWindowResized))
         {
-            Rectangle aOldVisArea(maVisArea);
+            tools::Rectangle aOldVisArea(maVisArea);
             maVisArea = GetVisibleArea_Impl();
 
             if (maVisArea != aOldVisArea)
@@ -1718,7 +1718,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
                 uno::Reference< XAccessibleComponent > xComp(xCont, uno::UNO_QUERY);
                 if (xComp.is())
                 {
-                    Rectangle aBound(VCLRectangle(xComp->getBounds()));
+                    tools::Rectangle aBound(VCLRectangle(xComp->getBounds()));
                     if (aBound.IsInside(VCLPoint(rPoint)))
                         xAccessible = mxTempAcc;
                 }
@@ -2063,9 +2063,9 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
+tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 {
-    Rectangle aVisRect(GetBoundingBox());
+    tools::Rectangle aVisRect(GetBoundingBox());
 
     if (mpViewShell)
     {
@@ -2082,7 +2082,7 @@ Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
     return aVisRect;
 }
 
-Rectangle ScAccessibleDocument::GetVisibleArea() const
+tools::Rectangle ScAccessibleDocument::GetVisibleArea() const
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -2142,9 +2142,9 @@ OUString SAL_CALL
     return sName;
 }
 
-Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
@@ -2154,9 +2154,9 @@ Rectangle ScAccessibleDocument::GetBoundingBoxOnScreen() const
     return aRect;
 }
 
-Rectangle ScAccessibleDocument::GetBoundingBox() const
+tools::Rectangle ScAccessibleDocument::GetBoundingBox() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);

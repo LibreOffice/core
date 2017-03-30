@@ -199,7 +199,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
                 aPos.Y() += ( aParentSize.Height() - aDlgSize.Height() ) / 2;
 
                 Point aPoint;
-                Rectangle aRect = GetDesktopRectPixel();
+                tools::Rectangle aRect = GetDesktopRectPixel();
                 aPoint.X() = aRect.Right() - aDlgSize.Width();
                 aPoint.Y() = aRect.Bottom() - aDlgSize.Height();
 

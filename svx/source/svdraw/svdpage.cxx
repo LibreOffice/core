@@ -294,7 +294,7 @@ void SdrObjList::RecalcObjOrdNums()
 
 void SdrObjList::RecalcRects()
 {
-    aOutRect=Rectangle();
+    aOutRect=tools::Rectangle();
     aSnapRect=aOutRect;
     const size_t nCount = GetObjCount();
     for (size_t i=0; i<nCount; ++i) {
@@ -592,7 +592,7 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     return pObj;
 }
 
-const Rectangle& SdrObjList::GetAllObjSnapRect() const
+const tools::Rectangle& SdrObjList::GetAllObjSnapRect() const
 {
     if (bRectsDirty) {
         const_cast<SdrObjList*>(this)->RecalcRects();
@@ -601,7 +601,7 @@ const Rectangle& SdrObjList::GetAllObjSnapRect() const
     return aSnapRect;
 }
 
-const Rectangle& SdrObjList::GetAllObjBoundRect() const
+const tools::Rectangle& SdrObjList::GetAllObjBoundRect() const
 {
     // #i106183# for deep group hierarchies like in chart2, the invalidates
     // through the hierarchy are not correct; use a 2nd hint for the needed
@@ -1615,7 +1615,7 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
     }
 }
 
-const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const Rectangle* /*pRect*/) const
+const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const tools::Rectangle* /*pRect*/) const
 {
     return nullptr;
 }

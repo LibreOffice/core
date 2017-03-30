@@ -165,7 +165,7 @@ void FrameBorder::MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const
     lclPolyPolyUnion( rPPoly, maFocusArea );
 }
 
-void FrameBorder::AddClickRect( const Rectangle& rRect )
+void FrameBorder::AddClickRect( const tools::Rectangle& rRect )
 {
     lclPolyPolyUnion( maClickArea, tools::Polygon( rRect ) );
 }
@@ -175,7 +175,7 @@ bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
     return vcl::Region( maClickArea ).IsInside( rPos );
 }
 
-Rectangle FrameBorder::GetClickBoundRect() const
+tools::Rectangle FrameBorder::GetClickBoundRect() const
 {
     return maClickArea.GetBoundRect();
 }
@@ -400,18 +400,18 @@ void FrameSelectorImpl::InitBorderGeometry()
     maHor.ClearFocusArea();
     maBottom.ClearFocusArea();
 
-    maLeft.AddFocusPolygon(   Rectangle( mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine1 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
-    maVer.AddFocusPolygon(    Rectangle( mnLine2 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine2 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
-    maRight.AddFocusPolygon(  Rectangle( mnLine3 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
-    maTop.AddFocusPolygon(    Rectangle( mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine1 + mnFocusOffs ) );
-    maHor.AddFocusPolygon(    Rectangle( mnLine1 - mnFocusOffs, mnLine2 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine2 + mnFocusOffs ) );
-    maBottom.AddFocusPolygon( Rectangle( mnLine1 - mnFocusOffs, mnLine3 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
+    maLeft.AddFocusPolygon(   tools::Rectangle( mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine1 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
+    maVer.AddFocusPolygon(    tools::Rectangle( mnLine2 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine2 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
+    maRight.AddFocusPolygon(  tools::Rectangle( mnLine3 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
+    maTop.AddFocusPolygon(    tools::Rectangle( mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine1 + mnFocusOffs ) );
+    maHor.AddFocusPolygon(    tools::Rectangle( mnLine1 - mnFocusOffs, mnLine2 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine2 + mnFocusOffs ) );
+    maBottom.AddFocusPolygon( tools::Rectangle( mnLine1 - mnFocusOffs, mnLine3 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
     for( nCol = 0, nCols = maArray.GetColCount(); nCol < nCols; ++nCol )
     {
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
         {
-            Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
+            tools::Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
             long nDiagFocusOffsX = frame::GetTLDiagOffset( -mnFocusOffs, mnFocusOffs, maArray.GetHorDiagAngle( nCol, nRow ) );
             long nDiagFocusOffsY = frame::GetTLDiagOffset( -mnFocusOffs, mnFocusOffs, maArray.GetVerDiagAngle( nCol, nRow ) );
 
@@ -450,12 +450,12 @@ void FrameSelectorImpl::InitBorderGeometry()
     long nClH = mbHor ? nClI : nClO;            // additional space dependent of horizontal inner border
     long nClV = mbVer ? nClI : nClO;            // additional space dependent of vertical inner border
 
-    maLeft.AddClickRect(   Rectangle( mnLine1 - nClO, mnLine1 - nClO, mnLine1 + nClV, mnLine3 + nClO ) );
-    maVer.AddClickRect(    Rectangle( mnLine2 - nClI, mnLine1 - nClO, mnLine2 + nClI, mnLine3 + nClO ) );
-    maRight.AddClickRect(  Rectangle( mnLine3 - nClV, mnLine1 - nClO, mnLine3 + nClO, mnLine3 + nClO ) );
-    maTop.AddClickRect(    Rectangle( mnLine1 - nClO, mnLine1 - nClO, mnLine3 + nClO, mnLine1 + nClH ) );
-    maHor.AddClickRect(    Rectangle( mnLine1 - nClO, mnLine2 - nClI, mnLine3 + nClO, mnLine2 + nClI ) );
-    maBottom.AddClickRect( Rectangle( mnLine1 - nClO, mnLine3 - nClH, mnLine3 + nClO, mnLine3 + nClO ) );
+    maLeft.AddClickRect(   tools::Rectangle( mnLine1 - nClO, mnLine1 - nClO, mnLine1 + nClV, mnLine3 + nClO ) );
+    maVer.AddClickRect(    tools::Rectangle( mnLine2 - nClI, mnLine1 - nClO, mnLine2 + nClI, mnLine3 + nClO ) );
+    maRight.AddClickRect(  tools::Rectangle( mnLine3 - nClV, mnLine1 - nClO, mnLine3 + nClO, mnLine3 + nClO ) );
+    maTop.AddClickRect(    tools::Rectangle( mnLine1 - nClO, mnLine1 - nClO, mnLine3 + nClO, mnLine1 + nClH ) );
+    maHor.AddClickRect(    tools::Rectangle( mnLine1 - nClO, mnLine2 - nClI, mnLine3 + nClO, mnLine2 + nClI ) );
+    maBottom.AddClickRect( tools::Rectangle( mnLine1 - nClO, mnLine3 - nClH, mnLine3 + nClO, mnLine3 + nClO ) );
 
     /*  Diagonal frame borders use the remaining space between outer and inner frame borders. */
     if( mbTLBR || mbBLTR )
@@ -465,7 +465,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
             {
                 // the usable area between horizonal/vertical frame borders of current quadrant
-                Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
+                tools::Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
                 aRect.Left() += nClV + 1;
                 aRect.Right() -= nClV + 1;
                 aRect.Top() += nClH + 1;
@@ -476,12 +476,12 @@ void FrameSelectorImpl::InitBorderGeometry()
                 {
                     // single areas
                     Point aMid( aRect.Center() );
-                    maTLBR.AddClickRect( Rectangle( aRect.TopLeft(), aMid ) );
-                    maTLBR.AddClickRect( Rectangle( aMid + Point( 1, 1 ), aRect.BottomRight() ) );
-                    maBLTR.AddClickRect( Rectangle( aRect.Left(), aMid.Y() + 1, aMid.X(), aRect.Bottom() ) );
-                    maBLTR.AddClickRect( Rectangle( aMid.X() + 1, aRect.Top(), aRect.Right(), aMid.Y() ) );
+                    maTLBR.AddClickRect( tools::Rectangle( aRect.TopLeft(), aMid ) );
+                    maTLBR.AddClickRect( tools::Rectangle( aMid + Point( 1, 1 ), aRect.BottomRight() ) );
+                    maBLTR.AddClickRect( tools::Rectangle( aRect.Left(), aMid.Y() + 1, aMid.X(), aRect.Bottom() ) );
+                    maBLTR.AddClickRect( tools::Rectangle( aMid.X() + 1, aRect.Top(), aRect.Right(), aMid.Y() ) );
                     // centered rectangle for both frame borders
-                    Rectangle aMidRect( aRect.TopLeft(), Size( aRect.GetWidth() / 3, aRect.GetHeight() / 3 ) );
+                    tools::Rectangle aMidRect( aRect.TopLeft(), Size( aRect.GetWidth() / 3, aRect.GetHeight() / 3 ) );
                     aMidRect.Move( (aRect.GetWidth() - aMidRect.GetWidth()) / 2, (aRect.GetHeight() - aMidRect.GetHeight()) / 2 );
                     maTLBR.AddClickRect( aMidRect );
                     maBLTR.AddClickRect( aMidRect );
@@ -537,12 +537,12 @@ void FrameSelectorImpl::DrawBackground()
     // clear the area
     mpVirDev->SetLineColor();
     mpVirDev->SetFillColor( maBackCol );
-    mpVirDev->DrawRect( Rectangle( Point( 0, 0 ), mpVirDev->GetOutputSizePixel() ) );
+    mpVirDev->DrawRect( tools::Rectangle( Point( 0, 0 ), mpVirDev->GetOutputSizePixel() ) );
 
     // draw the inner gray (or whatever color) rectangle
     mpVirDev->SetLineColor();
     mpVirDev->SetFillColor( maMarkCol );
-    mpVirDev->DrawRect( Rectangle(
+    mpVirDev->DrawRect( tools::Rectangle(
         mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
     // draw the white space for enabled frame borders
@@ -700,7 +700,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
     }
     else
         // no frame border selected -> draw tracking rectangle around entire control
-        aPPoly.Insert( tools::Polygon(Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
+        aPPoly.Insert( tools::Polygon(tools::Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
@@ -1046,9 +1046,9 @@ bool FrameSelector::ContainsClickPoint( const Point& rPos ) const
     return bContains;
 }
 
-Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
+tools::Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     const FrameBorder& rBorder = mxImpl->GetBorder( eBorder );
     if( rBorder.IsEnabled() )
         aRect = rBorder.GetClickBoundRect();
@@ -1056,7 +1056,7 @@ Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
 }
 
 // virtual functions from base class
-void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     mxImpl->CopyVirDevToControl(rRenderContext);
     if (HasFocus())

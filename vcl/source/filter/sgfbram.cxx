@@ -435,7 +435,7 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
                             aOutDev->DrawLine(aP0,aP1);            break; // line
                     case 2:                                       break; // circle
                     case 3:                                       break; // text
-                    case 5: aOutDev->DrawRect(Rectangle(aP0,aP1)); break; // rectangle (solid)
+                    case 5: aOutDev->DrawRect(tools::Rectangle(aP0,aP1)); break; // rectangle (solid)
                 }
             }
             aP0=aP1;

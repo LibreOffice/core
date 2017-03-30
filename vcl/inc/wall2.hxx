@@ -28,7 +28,7 @@ private:
     Color                       maColor;
     std::unique_ptr<BitmapEx>   mpBitmap;
     std::unique_ptr<Gradient>   mpGradient;
-    std::unique_ptr<Rectangle>  mpRect;
+    std::unique_ptr<tools::Rectangle>  mpRect;
     WallpaperStyle  meStyle;
     std::unique_ptr<BitmapEx>   mpCache;
 

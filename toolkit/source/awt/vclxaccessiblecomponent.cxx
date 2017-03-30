@@ -679,7 +679,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
             uno::Reference< accessibility::XAccessibleComponent > xComp( xAcc->getAccessibleContext(), uno::UNO_QUERY );
             if ( xComp.is() )
             {
-                Rectangle aRect = VCLRectangle( xComp->getBounds() );
+                tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                 Point aPos = VCLPoint( rPoint );
                 if ( aRect.IsInside( aPos ) )
                 {
@@ -701,12 +701,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds()
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
-        Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = pWindow->GetWindowExtentsRelative( nullptr );
         aBounds = AWTRectangle( aRect );
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
+            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative( nullptr );
             awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
@@ -753,7 +753,7 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  )
     awt::Point aPos;
     if ( GetWindow() )
     {
-        Rectangle aRect = GetWindow()->GetWindowExtentsRelative( nullptr );
+        tools::Rectangle aRect = GetWindow()->GetWindowExtentsRelative( nullptr );
         aPos.X = aRect.Left();
         aPos.Y = aRect.Top();
     }

@@ -89,7 +89,7 @@ namespace {
     public:
         explicit Painter (SlideSorterView& rView) : mrView(rView) {}
 
-        virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
+        virtual void Paint (OutputDevice& rDevice, const ::tools::Rectangle& rRepaintArea) override
         {
             mrView.Paint(rDevice,rRepaintArea);
         }
@@ -109,7 +109,7 @@ public:
     BackgroundPainter(const BackgroundPainter&) = delete;
     BackgroundPainter& operator=(const BackgroundPainter&) = delete;
 
-    virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) override
+    virtual void Paint (OutputDevice& rDevice, const ::tools::Rectangle& rRepaintArea) override
     {
         rDevice.SetFillColor(maBackgroundColor);
         rDevice.SetLineColor();
@@ -404,7 +404,7 @@ void SlideSorterView::Layout ()
     {
         // Set the model area, i.e. the smallest rectangle that includes all
         // page objects.
-        const Rectangle aViewBox (mpLayouter->GetTotalBoundingBox());
+        const ::tools::Rectangle aViewBox (mpLayouter->GetTotalBoundingBox());
         pWindow->SetViewOrigin (aViewBox.TopLeft());
         pWindow->SetViewSize (aViewBox.GetSize());
 
@@ -448,7 +448,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
         // visibility calculation can correctly invalidate it again.
         mbPageObjectVisibilitiesValid = true;
 
-        Rectangle aViewArea (pWindow->PixelToLogic(Rectangle(Point(0,0),pWindow->GetSizePixel())));
+        ::tools::Rectangle aViewArea (pWindow->PixelToLogic(::tools::Rectangle(Point(0,0),pWindow->GetSizePixel())));
         const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(aViewArea));
         const Range aUnion(
             ::std::min(maVisiblePageRange.Min(), aRange.Min()),
@@ -540,7 +540,7 @@ void SlideSorterView::RequestRepaint()
     if (pWindow)
     {
         mpLayeredDevice->InvalidateAllLayers(
-            Rectangle(
+            ::tools::Rectangle(
                 pWindow->PixelToLogic(Point(0,0)),
                 pWindow->PixelToLogic(pWindow->GetSizePixel())));
         pWindow->Invalidate();
@@ -553,7 +553,7 @@ void SlideSorterView::RequestRepaint (const model::SharedPageDescriptor& rpDescr
         RequestRepaint(rpDescriptor->GetBoundingBox());
 }
 
-void SlideSorterView::RequestRepaint (const Rectangle& rRepaintBox)
+void SlideSorterView::RequestRepaint (const ::tools::Rectangle& rRepaintBox)
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
@@ -573,7 +573,7 @@ void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
     }
 }
 
-Rectangle SlideSorterView::GetModelArea()
+::tools::Rectangle SlideSorterView::GetModelArea()
 {
     return mpLayouter->GetTotalBoundingBox();
 }
@@ -645,7 +645,7 @@ void SlideSorterView::CompleteRedraw (
 
 void SlideSorterView::Paint (
     OutputDevice& rDevice,
-    const Rectangle& rRepaintArea)
+    const ::tools::Rectangle& rRepaintArea)
 {
     if ( ! mpPageObjectPainter)
         if ( ! GetPageObjectPainter())
@@ -759,7 +759,7 @@ void SlideSorterView::UpdatePageUnderMouse ()
     if (pWindow && pWindow->IsVisible() && ! pWindow->IsMouseCaptured())
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());
-        const Rectangle aWindowBox (pWindow->GetPosPixel(), pWindow->GetSizePixel());
+        const ::tools::Rectangle aWindowBox (pWindow->GetPosPixel(), pWindow->GetSizePixel());
         if (aWindowBox.IsInside(aPointerState.maPos))
         {
             UpdatePageUnderMouse(aPointerState.maPos);

@@ -187,18 +187,18 @@ private:
 
     /* bitmap drawing implementation */
 
-    void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
-    void    writePS2ImageHeader   (const Rectangle& rArea, psp::ImageType nType);
+    void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const tools::Rectangle& rArea);
+    void    writePS2ImageHeader   (const tools::Rectangle& rArea, psp::ImageType nType);
     void    writePS2Colorspace    (const PrinterBmp& rBitmap, psp::ImageType nType);
-    void    DrawPS2GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
-    void    DrawPS2PaletteImage   (const PrinterBmp& rBitmap, const Rectangle& rArea);
-    void    DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& rArea);
-    void    DrawPS2MonoImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
+    void    DrawPS2GrayImage      (const PrinterBmp& rBitmap, const tools::Rectangle& rArea);
+    void    DrawPS2PaletteImage   (const PrinterBmp& rBitmap, const tools::Rectangle& rArea);
+    void    DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const tools::Rectangle& rArea);
+    void    DrawPS2MonoImage      (const PrinterBmp& rBitmap, const tools::Rectangle& rArea);
 
     /* clip region */
 
-    std::list< Rectangle > maClipRegion;
-    bool JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
+    std::list< tools::Rectangle > maClipRegion;
+    bool JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator& it,
                                          Point& aOldPoint, sal_Int32& nColumn );
 
     /* color settings */
@@ -285,7 +285,7 @@ public:
     void            DrawPixel (const Point& rPoint)
     { DrawPixel (rPoint, maLineColor); }
     void            DrawLine  (const Point& rFrom, const Point& rTo);
-    void            DrawRect  (const Rectangle& rRectangle);
+    void            DrawRect  (const tools::Rectangle& rRectangle);
     void            DrawPolyLine (sal_uInt32 nPoints, const Point* pPath );
     void            DrawPolygon  (sal_uInt32 nPoints, const Point* pPath);
     void            DrawPolyPolygon (sal_uInt32 nPoly,
@@ -303,10 +303,10 @@ public:
                                      const PolyFlags* const* pFlgAry);
 
     // eps
-    bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);
+    bool        DrawEPS ( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);
 
     // image drawing
-    void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
+    void            DrawBitmap (const tools::Rectangle& rDest, const tools::Rectangle& rSrc,
                                 const PrinterBmp& rBitmap);
 
     // font and text handling

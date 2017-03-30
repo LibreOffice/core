@@ -347,7 +347,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         Point aInsPos = rPos;
         if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
             aInsPos.X() -= aSize.Width();
-        Rectangle aRect( aInsPos, aSize );
+        tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
@@ -428,7 +428,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
         aPos.X() -= aSize.Width();
 
     GetViewData().GetViewShell()->SetDrawShell( true );
-    Rectangle aRect(aPos, aSize);
+    tools::Rectangle aRect(aPos, aSize);
     SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
 
     // path was the name of the graphic in history

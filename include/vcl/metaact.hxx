@@ -173,7 +173,7 @@ class VCL_DLLPUBLIC MetaRectAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
 
 public:
                         MetaRectAction();
@@ -185,19 +185,19 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-    explicit            MetaRectAction( const Rectangle& );
+    explicit            MetaRectAction( const tools::Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
 class VCL_DLLPUBLIC MetaRoundRectAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     sal_uInt32          mnHorzRound;
     sal_uInt32          mnVertRound;
 
@@ -211,13 +211,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaRoundRectAction( const Rectangle& rRect,
+                        MetaRoundRectAction( const tools::Rectangle& rRect,
                                              sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
     sal_uInt32          GetVertRound() const { return mnVertRound; }
 };
@@ -226,7 +226,7 @@ class VCL_DLLPUBLIC MetaEllipseAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
 
 public:
                         MetaEllipseAction();
@@ -238,19 +238,19 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-    explicit            MetaEllipseAction( const Rectangle& );
+    explicit            MetaEllipseAction( const tools::Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
 class VCL_DLLPUBLIC MetaArcAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     Point               maStartPt;
     Point               maEndPt;
 
@@ -264,13 +264,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaArcAction( const Rectangle& rRect,
+                        MetaArcAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
 };
@@ -279,7 +279,7 @@ class VCL_DLLPUBLIC MetaPieAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     Point               maStartPt;
     Point               maEndPt;
 
@@ -293,13 +293,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaPieAction( const Rectangle& rRect,
+                        MetaPieAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
 };
@@ -308,7 +308,7 @@ class VCL_DLLPUBLIC MetaChordAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     Point               maStartPt;
     Point               maEndPt;
 
@@ -322,13 +322,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaChordAction( const Rectangle& rRect,
+                        MetaChordAction( const tools::Rectangle& rRect,
                                          const Point& rStart, const Point& rEnd );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
 };
@@ -515,7 +515,7 @@ class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     OUString            maStr;
     DrawTextFlags       mnStyle;
 
@@ -529,13 +529,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-    MetaTextRectAction( const Rectangle& rRect,
+    MetaTextRectAction( const tools::Rectangle& rRect,
                         const OUString& rStr, DrawTextFlags nStyle );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const OUString&     GetText() const { return maStr; }
     DrawTextFlags       GetStyle() const { return mnStyle; }
 };
@@ -855,7 +855,7 @@ class VCL_DLLPUBLIC MetaGradientAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     Gradient            maGradient;
 
 public:
@@ -868,12 +868,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient );
+                        MetaGradientAction( const tools::Rectangle& rRect, const Gradient& rGradient );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
@@ -933,7 +933,7 @@ class VCL_DLLPUBLIC MetaWallpaperAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
     Wallpaper           maWallpaper;
 
 public:
@@ -946,13 +946,13 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaWallpaperAction( const Rectangle& rRect,
+                        MetaWallpaperAction( const tools::Rectangle& rRect,
                                              const Wallpaper& rPaper );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
 };
 
@@ -986,7 +986,7 @@ class VCL_DLLPUBLIC MetaISectRectClipRegionAction : public MetaAction
 {
 private:
 
-    Rectangle           maRect;
+    tools::Rectangle           maRect;
 
 public:
                         MetaISectRectClipRegionAction();
@@ -998,12 +998,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-    explicit            MetaISectRectClipRegionAction( const Rectangle& );
+    explicit            MetaISectRectClipRegionAction( const tools::Rectangle& );
 
     virtual void        Move( long nHorzMove, long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const Rectangle&    GetRect() const { return maRect; }
+    const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
 class VCL_DLLPUBLIC MetaISectRegionClipRegionAction : public MetaAction

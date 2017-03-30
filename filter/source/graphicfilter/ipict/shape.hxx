@@ -33,23 +33,23 @@ namespace PictReaderShape {
   void drawLine(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize);
 
   /** draws a rectangle knowing penSize */
-  void drawRectangle(VirtualDevice *dev, bool drawFrame, Rectangle const &rect, Size const &pSize);
+  void drawRectangle(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &rect, Size const &pSize);
 
   /** draws a polygon knowing penSize */
 void drawPolygon(VirtualDevice *dev, bool drawFrame, tools::Polygon const &rect, Size const &pSize);
 
   /** draws an ellipse knowing penSize */
-  void drawEllipse(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &pSize);
+  void drawEllipse(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &orig, Size const &pSize);
 
   /** draws a rounded rectangle knowing penSize
       \note ovalSize is two time the size of the corner
   */
-  void drawRoundRectangle(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &ovalS, Size const &pSize);
+  void drawRoundRectangle(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &orig, Size const &ovalS, Size const &pSize);
 
   /** draws an arc in a b2dpolygon knowing penSize
       \note  - it supposes that angl1 < angl2
   */
-  void drawArc(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, const double& angle1, const double& angle2, Size const &pSize);
+  void drawArc(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &orig, const double& angle1, const double& angle2, Size const &pSize);
 }
 
 #endif // INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX

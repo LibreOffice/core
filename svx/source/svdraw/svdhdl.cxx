@@ -87,7 +87,7 @@ class SdrHdlBitmapSet
     ::std::vector< BitmapEx >   maRealMarkers;
 
     // helpers
-    BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
+    BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle);
 
 public:
     explicit SdrHdlBitmapSet();
@@ -107,7 +107,7 @@ SdrHdlBitmapSet::SdrHdlBitmapSet()
 {
 }
 
-BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle)
+BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle)
 {
     BitmapEx& rTargetBitmap = maRealMarkers[nIndex];
 
@@ -135,17 +135,17 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         }
         case BitmapMarkerKind::Rect_9x9:
         {
-            return impGetOrCreateTargetBitmap((1 * INDEX_COUNT) + nInd, Rectangle(Point(7, nYPos), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((1 * INDEX_COUNT) + nInd, tools::Rectangle(Point(7, nYPos), Size(9, 9)));
         }
 
         case BitmapMarkerKind::Rect_7x7:
         {
-            return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, Rectangle(Point(0, nYPos), Size(7, 7)));
+            return impGetOrCreateTargetBitmap((0 * INDEX_COUNT) + nInd, tools::Rectangle(Point(0, nYPos), Size(7, 7)));
         }
 
         case BitmapMarkerKind::Rect_11x11:
         {
-            return impGetOrCreateTargetBitmap((2 * INDEX_COUNT) + nInd, Rectangle(Point(16, nYPos), Size(11, 11)));
+            return impGetOrCreateTargetBitmap((2 * INDEX_COUNT) + nInd, tools::Rectangle(Point(16, nYPos), Size(11, 11)));
         }
 
         case BitmapMarkerKind::Rect_13x13:
@@ -156,27 +156,27 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
             {
                 case 0:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 66), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(72, 66), Size(13, 13)));
                 }
                 case 1:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 66), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(85, 66), Size(13, 13)));
                 }
                 case 2:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 79), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(72, 79), Size(13, 13)));
                 }
                 case 3:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 79), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(85, 79), Size(13, 13)));
                 }
                 case 4:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 79), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(98, 79), Size(13, 13)));
                 }
                 default: // case 5:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 66), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, tools::Rectangle(Point(98, 66), Size(13, 13)));
                 }
             }
         }
@@ -184,82 +184,82 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         case BitmapMarkerKind::Circ_7x7:
         case BitmapMarkerKind::Customshape_7x7:
         {
-            return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
+            return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, tools::Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
         case BitmapMarkerKind::Circ_9x9:
         case BitmapMarkerKind::Customshape_9x9:
         {
-            return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, tools::Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
         case BitmapMarkerKind::Circ_11x11:
         case BitmapMarkerKind::Customshape_11x11:
         {
-            return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
+            return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, tools::Rectangle(Point(43, nYPos), Size(11, 11)));
         }
 
         case BitmapMarkerKind::Elli_7x9:
         {
-            return impGetOrCreateTargetBitmap((7 * INDEX_COUNT) + nInd, Rectangle(Point(54, nYPos), Size(7, 9)));
+            return impGetOrCreateTargetBitmap((7 * INDEX_COUNT) + nInd, tools::Rectangle(Point(54, nYPos), Size(7, 9)));
         }
 
         case BitmapMarkerKind::Elli_9x11:
         {
-            return impGetOrCreateTargetBitmap((8 * INDEX_COUNT) + nInd, Rectangle(Point(61, nYPos), Size(9, 11)));
+            return impGetOrCreateTargetBitmap((8 * INDEX_COUNT) + nInd, tools::Rectangle(Point(61, nYPos), Size(9, 11)));
         }
 
         case BitmapMarkerKind::Elli_9x7:
         {
-            return impGetOrCreateTargetBitmap((9 * INDEX_COUNT) + nInd, Rectangle(Point(70, nYPos), Size(9, 7)));
+            return impGetOrCreateTargetBitmap((9 * INDEX_COUNT) + nInd, tools::Rectangle(Point(70, nYPos), Size(9, 7)));
         }
 
         case BitmapMarkerKind::Elli_11x9:
         {
-            return impGetOrCreateTargetBitmap((10 * INDEX_COUNT) + nInd, Rectangle(Point(79, nYPos), Size(11, 9)));
+            return impGetOrCreateTargetBitmap((10 * INDEX_COUNT) + nInd, tools::Rectangle(Point(79, nYPos), Size(11, 9)));
         }
 
         case BitmapMarkerKind::RectPlus_7x7:
         {
-            return impGetOrCreateTargetBitmap((11 * INDEX_COUNT) + nInd, Rectangle(Point(90, nYPos), Size(7, 7)));
+            return impGetOrCreateTargetBitmap((11 * INDEX_COUNT) + nInd, tools::Rectangle(Point(90, nYPos), Size(7, 7)));
         }
 
         case BitmapMarkerKind::RectPlus_9x9:
         {
-            return impGetOrCreateTargetBitmap((12 * INDEX_COUNT) + nInd, Rectangle(Point(97, nYPos), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((12 * INDEX_COUNT) + nInd, tools::Rectangle(Point(97, nYPos), Size(9, 9)));
         }
 
         case BitmapMarkerKind::RectPlus_11x11:
         {
-            return impGetOrCreateTargetBitmap((13 * INDEX_COUNT) + nInd, Rectangle(Point(106, nYPos), Size(11, 11)));
+            return impGetOrCreateTargetBitmap((13 * INDEX_COUNT) + nInd, tools::Rectangle(Point(106, nYPos), Size(11, 11)));
         }
 
         case BitmapMarkerKind::Crosshair:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 0, Rectangle(Point(0, 68), Size(15, 15)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 0, tools::Rectangle(Point(0, 68), Size(15, 15)));
         }
 
         case BitmapMarkerKind::Glue:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 76), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, tools::Rectangle(Point(15, 76), Size(9, 9)));
         }
 
         case BitmapMarkerKind::Glue_Deselected:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(15, 67), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, tools::Rectangle(Point(15, 67), Size(9, 9)));
         }
 
         case BitmapMarkerKind::Anchor: // AnchorTR for SW
         case BitmapMarkerKind::AnchorTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(24, 67), Size(24, 24)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, tools::Rectangle(Point(24, 67), Size(24, 24)));
         }
 
         // add AnchorPressed to be able to animate anchor control
         case BitmapMarkerKind::AnchorPressed:
         case BitmapMarkerKind::AnchorPressedTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 4, Rectangle(Point(48, 67), Size(24, 24)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 4, tools::Rectangle(Point(48, 67), Size(24, 24)));
         }
     }
 }
@@ -1760,7 +1760,7 @@ Pointer ImpMeasureHdl::GetPointer() const
 }
 
 
-ImpTextframeHdl::ImpTextframeHdl(const Rectangle& rRect) :
+ImpTextframeHdl::ImpTextframeHdl(const tools::Rectangle& rRect) :
     SdrHdl(rRect.TopLeft(),SdrHdlKind::Move),
     maRect(rRect)
 {
@@ -2349,7 +2349,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
         default: break;
     }
 
-    Rectangle aSourceRect( Point( nX * (nPixelSize) + nOffset,  nY * (nPixelSize)), Size(nPixelSize, nPixelSize) );
+    tools::Rectangle aSourceRect( Point( nX * (nPixelSize) + nOffset,  nY * (nPixelSize)), Size(nPixelSize, nPixelSize) );
 
     BitmapEx aRetval(rBitmap);
     aRetval.Crop(aSourceRect);

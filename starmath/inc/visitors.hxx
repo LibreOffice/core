@@ -392,9 +392,9 @@ private:
     /** True if  aSelectionArea have been initialized */
     bool mbHasSelectionArea;
     /** The current area that is selected */
-    Rectangle maSelectionArea;
+    tools::Rectangle maSelectionArea;
     /** Extend the area that must be selected  */
-    void ExtendSelectionArea(const Rectangle& rArea);
+    void ExtendSelectionArea(const tools::Rectangle& rArea);
     /** Default visiting method */
     void DefaultVisit( SmNode* pNode ) override;
     /** Visit the children of a given pNode */

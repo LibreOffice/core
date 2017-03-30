@@ -73,9 +73,9 @@ namespace accessibility
         ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
 
     protected:
-        virtual Rectangle implGetBoundingBox() override;
+        virtual tools::Rectangle implGetBoundingBox() override;
 
-        virtual Rectangle implGetBoundingBoxOnScreen() override;
+        virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
     };
 }
 

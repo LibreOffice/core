@@ -449,7 +449,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 css::awt::PaintEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                aEvent.UpdateRect = AWTRectangle( *static_cast<Rectangle*>(rVclWindowEvent.GetData()) );
+                aEvent.UpdateRect = AWTRectangle( *static_cast<tools::Rectangle*>(rVclWindowEvent.GetData()) );
                 aEvent.Count = 0;
                 mpImpl->getPaintListeners().windowPaint( aEvent );
             }
@@ -984,7 +984,7 @@ css::awt::Rectangle VCLXWindow::getPosSize(  )
         if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
             aBounds = AWTRectangle( vcl::Window::GetDockingManager()->GetPosSizePixel( GetWindow() ) );
         else
-            aBounds = AWTRectangle( Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
+            aBounds = AWTRectangle( tools::Rectangle( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() ) );
     }
 
     return aBounds;

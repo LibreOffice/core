@@ -238,7 +238,7 @@ public:
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
 
     /** Paint tile.
 
@@ -255,7 +255,7 @@ public:
     // The passed rect is situated on pixel borders
     // in order to avoid pixel errors when scrolling.
     virtual void VisPortChgd( const SwRect & );
-    bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
+    bool SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle* );//Browser
     void EnableSmooth( bool b ) { mbEnableSmooth = b; }
 
     const SwRect& VisArea() const;
@@ -365,7 +365,7 @@ public:
 
     // Printing for OLE 2.0.
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                         vcl::RenderContext& rRenderContext, const Rectangle& rRect );
+                         vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect );
 
     // Fill temporary doc with selected text for Print or PDF export.
     void FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );

@@ -141,7 +141,7 @@ public:
     virtual ~SvHeaderTabListBox() override;
     virtual void dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
@@ -204,9 +204,9 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const override;
 
-    virtual Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
-    virtual Rectangle               calcTableRect( bool _bOnScreen = true ) override;
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true ) override;
+    virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
+    virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) override;
+    virtual tools::Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
@@ -232,7 +232,7 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
 
     // Window
-    virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
+    virtual tools::Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     virtual vcl::Window*                 GetAccessibleParentWindow() const override;
@@ -240,7 +240,7 @@ public:
     /** Creates and returns the accessible object of the whole BrowseBox. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
+    virtual tools::Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 };
 

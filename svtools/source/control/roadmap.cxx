@@ -546,7 +546,7 @@ bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
     return false;
 }
 
-void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect)
+void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
 {
     if (!m_pImpl->m_bPaintInitialized)
         implInit(rRenderContext);
@@ -575,7 +575,7 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
     Size aOutputSize(GetOutputSizePixel());
 
     // draw it
-    rRenderContext.DrawText(Rectangle(aTextPos, aOutputSize), GetText(),
+    rRenderContext.DrawText(tools::Rectangle(aTextPos, aOutputSize), GetText(),
                             DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
     rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();

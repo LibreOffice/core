@@ -61,13 +61,13 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     Color       aOldLine   = pOut->GetLineColor();
     bool        bOldEnable = pOut->IsMapModeEnabled();
 
-    Rectangle   aBtnRect( rAt, rSize );
+    tools::Rectangle   aBtnRect( rAt, rSize );
 
     pOut->EnableMapMode( false );
 
     DecorationView aDecoView( pOut);
 
-    Rectangle aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
+    tools::Rectangle aInnerRect=aDecoView.DrawButton( aBtnRect, DrawButtonFlags::Default );
 
     aInnerRect.Left()   += 1;
     aInnerRect.Top()    += 1;
@@ -94,11 +94,11 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         pOut->SetFillColor();
 }
 
-void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect )
+void ScDDComboBoxButton::ImpDrawArrow( const tools::Rectangle& rRect )
 {
     // no need to save old line and fill color here (is restored after the call)
 
-    Rectangle   aPixRect = rRect;
+    tools::Rectangle   aPixRect = rRect;
     Point       aCenter  = aPixRect.Center();
     Size        aSize    = aPixRect.GetSize();
 
@@ -110,7 +110,7 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect )
     aSize4.Width() = aSize.Width() >> 2;
     aSize4.Height() = aSize.Height() >> 2;
 
-    Rectangle aTempRect = aPixRect;
+    tools::Rectangle aTempRect = aPixRect;
 
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
     Color aColor( rSett.GetButtonTextColor().GetColor() );

@@ -36,7 +36,7 @@
 class GDIMetaFile;
 class VirtualDevice;
 class Gradient;
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Font; }
 namespace tools { class PolyPolygon; }
 class Point;
@@ -215,7 +215,7 @@ static float GetSwapFloat( SvStream& rSt )
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            static void updateClipping( const ::Rectangle&                 rClipRect,
+            static void updateClipping( const ::tools::Rectangle&                 rClipRect,
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 

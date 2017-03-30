@@ -350,8 +350,8 @@ private:
                                          // While doing this a recording in the GDIMetaFile
                                          // will take place.
     sal_uLong       nOrigPos;            // initial position  in pOS2MET
-    Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
-    Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
+    tools::Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
+    tools::Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
     MapMode         aGlobMapMode;        // resolution of the picture
     bool        bCoord32;
 
@@ -853,7 +853,7 @@ Point OS2METReader::ReadPoint( const bool bAdjustBoundRect )
     y=aBoundingRect.Bottom()-y;
 
     if ( bAdjustBoundRect )
-        aCalcBndRect.Union(Rectangle(x,y,x+1,y+1));
+        aCalcBndRect.Union(tools::Rectangle(x,y,x+1,y+1));
 
     return Point(x,y);
 }
@@ -908,7 +908,7 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
         sal_Int8 nsignedbyte;
         pOS2MET->ReadSChar( nsignedbyte ); aP0.X()+=(long)nsignedbyte;
         pOS2MET->ReadSChar( nsignedbyte ); aP0.Y()-=(long)nsignedbyte;
-        aCalcBndRect.Union(Rectangle(aP0,Size(1,1)));
+        aCalcBndRect.Union(tools::Rectangle(aP0,Size(1,1)));
         aPolygon.SetPoint(aP0,i);
     }
     aAttr.aCurPos=aPolygon.GetPoint(nPolySize-1);
@@ -940,7 +940,7 @@ void OS2METReader::ReadBox(bool bGivenPos)
     nHRound=ReadCoord(bCoord32);
     nVRound=ReadCoord(bCoord32);
 
-    Rectangle aBoxRect( P0, aAttr.aCurPos );
+    tools::Rectangle aBoxRect( P0, aAttr.aCurPos );
 
     if ( pAreaStack )
         AddPointsToArea( tools::Polygon( aBoxRect ) );
@@ -1057,7 +1057,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     aSize = Size( pVirDev->GetTextWidth(aStr), pVirDev->GetTextHeight() );
     if ( aAttr.nChrAng == 0 )
     {
-        aCalcBndRect.Union(Rectangle( Point(aP0.X(),aP0.Y()-aSize.Height()),
+        aCalcBndRect.Union(tools::Rectangle( Point(aP0.X(),aP0.Y()-aSize.Height()),
                                       Size(aSize.Width(),aSize.Height()*2)));
         if (bMove)
             aAttr.aCurPos = Point( aP0.X() + aSize.Width(), aP0.Y());
@@ -1073,8 +1073,8 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
         aDummyPoly.Rotate( aP0, (short)aAttr.nChrAng );
         if ( bMove )
             aAttr.aCurPos = aDummyPoly.GetPoint( 0 );
-        aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 0 ), aDummyPoly.GetPoint( 3 ) ) );
-        aCalcBndRect.Union( Rectangle( aDummyPoly.GetPoint( 1 ), aDummyPoly.GetPoint( 2 ) ) );
+        aCalcBndRect.Union( tools::Rectangle( aDummyPoly.GetPoint( 0 ), aDummyPoly.GetPoint( 3 ) ) );
+        aCalcBndRect.Union( tools::Rectangle( aDummyPoly.GetPoint( 1 ), aDummyPoly.GetPoint( 2 ) ) );
     }
 }
 
@@ -1113,11 +1113,11 @@ void OS2METReader::ReadArc(bool bGivenPos)
     w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
     w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
     if (w3<w1) {
-        pVirDev->DrawArc(Rectangle((long)(cx-rx),(long)(cy-ry),
+        pVirDev->DrawArc(tools::Rectangle((long)(cx-rx),(long)(cy-ry),
                                    (long)(cx+rx),(long)(cy+ry)),aP1,aP3);
     }
     else {
-        pVirDev->DrawArc(Rectangle((long)(cx-rx),(long)(cy-ry),
+        pVirDev->DrawArc(tools::Rectangle((long)(cx-rx),(long)(cy-ry),
                                    (long)(cx+rx),(long)(cy+ry)),aP3,aP1);
     }
 }
@@ -1126,7 +1126,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aCenter;
     long nP,nQ;
-    Rectangle aRect;
+    tools::Rectangle aRect;
     sal_uInt32 nMul; sal_uInt16 nMulS;
 
     if (bGivenPos) {
@@ -1145,7 +1145,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
         nQ=(nQ*nMul)>>16;
     }
 
-    aRect=Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
+    aRect=tools::Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
                     aCenter.X()+nP,aCenter.Y()+nQ);
     aCalcBndRect.Union(aRect);
 
@@ -1170,7 +1170,7 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aP0, aCenter,aPStart,aPEnd;
     sal_Int32 nP,nQ,nStart, nSweep;
-    Rectangle aRect;
+    tools::Rectangle aRect;
     sal_uInt32 nMul; sal_uInt16 nMulS;
     double fStart, fEnd;
 
@@ -1199,7 +1199,7 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     aPEnd=  Point(aCenter.X()+(sal_Int32)( cos(fEnd)*nP),
                   aCenter.Y()+(sal_Int32)(-sin(fEnd)*nQ));
 
-    aRect=Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
+    aRect=tools::Rectangle(aCenter.X()-nP,aCenter.Y()-nQ,
                     aCenter.X()+nP,aCenter.Y()+nQ);
     aCalcBndRect.Union(aRect);
 
@@ -1387,7 +1387,7 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
         if (i!=0 || bGivenPos) aAttr.aCurPos=ReadPoint();
         const long x = aAttr.aCurPos.X();
         const long y=aAttr.aCurPos.Y();
-        aCalcBndRect.Union(Rectangle(x-5,y-5,x+5,y+5));
+        aCalcBndRect.Union(tools::Rectangle(x-5,y-5,x+5,y+5));
         switch (aAttr.nMrkSymbol) {
             case  2:   // PLUS
                 pVirDev->DrawLine(Point(x-4,y),Point(x+4,y));
@@ -1452,10 +1452,10 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             }
             case  9:   // DOT
-                pVirDev->DrawEllipse(Rectangle(x-1,y-1,x+1,y+1));
+                pVirDev->DrawEllipse(tools::Rectangle(x-1,y-1,x+1,y+1));
                 break;
             case 10:   // SMALLCIRCLE
-                pVirDev->DrawEllipse(Rectangle(x-2,y-2,x+2,y+2));
+                pVirDev->DrawEllipse(tools::Rectangle(x-2,y-2,x+2,y+2));
                 break;
             case 64:   // BLANK
                 break;
@@ -2233,7 +2233,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
             aBoundingRect.Bottom() = y2;
 
             // no output beside this bounding rect
-            pVirDev->IntersectClipRegion( Rectangle( Point(), aBoundingRect.GetSize() ) );
+            pVirDev->IntersectClipRegion( tools::Rectangle( Point(), aBoundingRect.GetSize() ) );
 
             break;
         }

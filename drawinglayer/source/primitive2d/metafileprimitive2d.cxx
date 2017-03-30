@@ -1751,7 +1751,7 @@ namespace
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
-                        const Rectangle& rRectangle = pA->GetRect();
+                        const tools::Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
                         {
@@ -1778,7 +1778,7 @@ namespace
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
-                        const Rectangle& rRectangle = pA->GetRect();
+                        const tools::Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
                         {
@@ -1817,7 +1817,7 @@ namespace
                     if(rPropertyHolders.Current().getLineOrFillActive())
                     {
                         const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
-                        const Rectangle& rRectangle = pA->GetRect();
+                        const tools::Rectangle& rRectangle = pA->GetRect();
 
                         if(!rRectangle.IsEmpty())
                         {
@@ -2073,7 +2073,7 @@ namespace
                     /** CHECKED, WORKS WELL */
                     // OSL_FAIL("MetaActionType::TEXTRECT requested (!)");
                     const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
-                    const Rectangle& rRectangle = pA->GetRect();
+                    const tools::Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
 
                     if(!rRectangle.IsEmpty() && 0 != nStringLength)
@@ -2157,7 +2157,7 @@ namespace
                     if(!rBitmap.IsEmpty())
                     {
                         Bitmap aCroppedBitmap(rBitmap);
-                        const Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
+                        const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(!aCropRectangle.IsEmpty())
                         {
@@ -2199,7 +2199,7 @@ namespace
                     if(!rBitmapEx.IsEmpty())
                     {
                         BitmapEx aCroppedBitmapEx(rBitmapEx);
-                        const Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
+                        const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(!aCropRectangle.IsEmpty())
                         {
@@ -2241,7 +2241,7 @@ namespace
                     if(!rBitmap.IsEmpty())
                     {
                         Bitmap aCroppedBitmap(rBitmap);
-                        const Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
+                        const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(!aCropRectangle.IsEmpty())
                         {
@@ -2258,7 +2258,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaGradientAction* pA = static_cast<const MetaGradientAction*>(pAction);
-                    const Rectangle& rRectangle = pA->GetRect();
+                    const tools::Rectangle& rRectangle = pA->GetRect();
 
                     if(!rRectangle.IsEmpty())
                     {
@@ -2348,7 +2348,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pAction);
-                    Rectangle aWallpaperRectangle(pA->GetRect());
+                    tools::Rectangle aWallpaperRectangle(pA->GetRect());
 
                     if(!aWallpaperRectangle.IsEmpty())
                     {
@@ -2421,7 +2421,7 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
-                    const Rectangle& rRectangle = pA->GetRect();
+                    const tools::Rectangle& rRectangle = pA->GetRect();
 
                     if(rRectangle.IsEmpty())
                     {
@@ -2868,7 +2868,7 @@ namespace
                     // this EPS on screen, the renderer visualizing this has to support
                     // that primitive and visualize the Eps file (e.g. printing)
                     const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pAction);
-                    const Rectangle aRectangle(pA->GetPoint(), pA->GetSize());
+                    const tools::Rectangle aRectangle(pA->GetPoint(), pA->GetSize());
 
                     if(!aRectangle.IsEmpty())
                     {
@@ -3187,7 +3187,7 @@ namespace drawinglayer
             if(!xRetval.empty())
             {
                 // get target size
-                const Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
+                const tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
 
                 // create transformation
                 basegfx::B2DHomMatrix aAdaptedTransform;

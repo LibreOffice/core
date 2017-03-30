@@ -74,7 +74,7 @@ SdrPageObj::SdrPageObj(SdrPage* pNewPage)
     }
 }
 
-SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
+SdrPageObj::SdrPageObj(const tools::Rectangle& rRect, SdrPage* pNewPage)
 :   mpShownPage(pNewPage)
 {
     if(mpShownPage)

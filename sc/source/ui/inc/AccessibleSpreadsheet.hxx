@@ -211,16 +211,16 @@ private:
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 private:
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;
     ScAccessibleDocument* mpAccDoc;
     rtl::Reference<ScAccessibleCell> mpAccCell;
-    Rectangle       maVisCells;
+    tools::Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     SCTAB           mnTab;
@@ -239,8 +239,8 @@ private:
     void SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect);
 
     static ScDocument* GetDocument(ScTabViewShell* pViewShell);
-    static Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
-    Rectangle   GetVisCells(const Rectangle& rVisArea);
+    static tools::Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
+    tools::Rectangle   GetVisCells(const tools::Rectangle& rVisArea);
     typedef std::vector<ScMyAddress> VEC_MYADDR;
 
     typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >

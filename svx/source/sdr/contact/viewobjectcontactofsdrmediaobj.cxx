@@ -103,7 +103,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
             basegfx::B2DRange aViewRange(getObjectRange());
             aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
 
-            const Rectangle aViewRectangle(
+            const tools::Rectangle aViewRectangle(
                 (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
                 (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
 

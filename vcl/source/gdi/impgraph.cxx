@@ -489,8 +489,8 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
             if(GraphicType::GdiMetafile == ImplGetType())
             {
                 // get hairline and full bound rect
-                Rectangle aHairlineRect;
-                const Rectangle aRect(maMetaFile.GetBoundRect(*aVDev.get(), &aHairlineRect));
+                tools::Rectangle aHairlineRect;
+                const tools::Rectangle aRect(maMetaFile.GetBoundRect(*aVDev.get(), &aHairlineRect));
 
                 if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
                 {

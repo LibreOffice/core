@@ -1014,7 +1014,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 {
     const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::MapPoint ) );
     Point           aOrigin;
-    Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
+    tools::Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
     bool        bRet = true;
 
     rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
@@ -1096,12 +1096,12 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.SetFont( aFont );
     rWriter.SetTextColor( COL_LIGHTGREEN );
     Point aTextPoint;
-    Rectangle aTextRect;
+    tools::Rectangle aTextRect;
     if( rPageSize.Width() > rPageSize.Height() )
     {
         aTextPoint = Point( (rPageSize.Width()-w)/2,
                             rPageSize.Height()-(rPageSize.Height()-nTextHeight)/2 );
-        aTextRect = Rectangle( Point( (rPageSize.Width()-w)/2,
+        aTextRect = tools::Rectangle( Point( (rPageSize.Width()-w)/2,
                                       (rPageSize.Height()-nTextHeight)/2 ),
                                Size( w, nTextHeight ) );
     }
@@ -1109,7 +1109,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     {
         aTextPoint = Point( (rPageSize.Width()-nTextHeight)/2,
                             (rPageSize.Height()-w)/2 );
-        aTextRect = Rectangle( aTextPoint, Size( nTextHeight, w ) );
+        aTextRect = tools::Rectangle( aTextPoint, Size( nTextHeight, w ) );
     }
     rWriter.SetClipRegion();
     rWriter.BeginTransparencyGroup();

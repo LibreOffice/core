@@ -30,21 +30,21 @@
 struct DockingData
 {
     Point       maMousePos;     // in
-    Rectangle   maTrackRect;    // in/out
+    tools::Rectangle   maTrackRect;    // in/out
     bool        mbFloating;     // out
 
-    DockingData( const Point& rPt, const Rectangle& rRect, bool b) :
+    DockingData( const Point& rPt, const tools::Rectangle& rRect, bool b) :
         maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b )
         {};
 };
 
 struct EndDockingData
 {
-    Rectangle   maWindowRect;    // in
+    tools::Rectangle   maWindowRect;    // in
     bool        mbFloating;      // in
     bool        mbCancelled;     // in
 
-    EndDockingData( const Rectangle& rRect, bool b, bool bCancelled ) :
+    EndDockingData( const tools::Rectangle& rRect, bool b, bool bCancelled ) :
         maWindowRect( rRect ), mbFloating( b ), mbCancelled( bCancelled )
         {};
 };
@@ -88,7 +88,7 @@ private:
     Size            maRollUpOutSize;
     Size            maMinOutSize;
     Size            maMaxOutSize;
-    Rectangle       maDragArea;
+    tools::Rectangle       maDragArea;
     long            mnTrackX;
     long            mnTrackY;
     long            mnTrackWidth;
@@ -120,14 +120,14 @@ public:
     bool            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
-    void            StartDocking( const Point& rPos, Rectangle& rRect );
-    bool            Docking( const Point& rPos, Rectangle& rRect );
-    void            EndDocking( const Rectangle& rRect, bool bFloatMode );
+    void            StartDocking( const Point& rPos, tools::Rectangle& rRect );
+    bool            Docking( const Point& rPos, tools::Rectangle& rRect );
+    void            EndDocking( const tools::Rectangle& rRect, bool bFloatMode );
     bool            PrepareToggleFloatingMode();
     void            ToggleFloatingMode();
 
-    void            SetDragArea( const Rectangle& rRect );
-    const Rectangle& GetDragArea() const { return maDragArea;}
+    void            SetDragArea( const tools::Rectangle& rRect );
+    const tools::Rectangle& GetDragArea() const { return maDragArea;}
 
     void            Lock();
     void            Unlock();
@@ -195,7 +195,7 @@ public:
     void        SetPosSizePixel( vcl::Window *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
                                 PosSizeFlags nFlags );
-    Rectangle   GetPosSizePixel( const vcl::Window *pWin );
+    tools::Rectangle   GetPosSizePixel( const vcl::Window *pWin );
 };
 
 
@@ -277,8 +277,8 @@ public:
     virtual void dispose() override;
 
     virtual void    StartDocking();
-    virtual bool    Docking( const Point& rPos, Rectangle& rRect );
-    virtual void    EndDocking( const Rectangle& rRect, bool bFloatMode );
+    virtual bool    Docking( const Point& rPos, tools::Rectangle& rRect );
+    virtual void    EndDocking( const tools::Rectangle& rRect, bool bFloatMode );
     virtual bool    PrepareToggleFloatingMode();
     virtual void    ToggleFloatingMode();
 

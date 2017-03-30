@@ -88,7 +88,7 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
         if( !aHelpText.isEmpty())
         {
             // show help
-            Rectangle aItemRect(Point(0,0),GetSizePixel());
+            tools::Rectangle aItemRect(Point(0,0),GetSizePixel());
             aItemRect = LogicToPixel( aItemRect );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
             aItemRect.Left()   = aPt.X();

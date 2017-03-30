@@ -69,7 +69,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createView
     // create graphical visualisation data. Since this is the view-independent version which should not be used,
     // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
     // which is aOutRect for SdrPageObj.
-    const Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
+    const tools::Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
     const basegfx::B2DRange aModelRange(aModelRectangle.Left(), aModelRectangle.Top(), aModelRectangle.Right(), aModelRectangle.Bottom());
     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aModelRange));
     const basegfx::BColor aYellow(1.0, 1.0, 0.0);

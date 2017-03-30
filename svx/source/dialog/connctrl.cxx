@@ -81,7 +81,7 @@ void SvxXConnectionPreview::AdaptSize()
         SetMapMode( MapUnit::Map100thMM );
 
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
-        Rectangle aRect = pObjList->GetAllObjBoundRect();
+        tools::Rectangle aRect = pObjList->GetAllObjBoundRect();
 
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -200,7 +200,7 @@ void SvxXConnectionPreview::Construct()
     AdaptSize();
 }
 
-void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (pObjList)
     {

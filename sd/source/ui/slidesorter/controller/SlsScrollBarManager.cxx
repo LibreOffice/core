@@ -105,12 +105,12 @@ void ScrollBarManager::Disconnect()
     window changes and a second call to the layouter becomes necessary.
     That call is made anyway after this method returns.
 */
-Rectangle ScrollBarManager::PlaceScrollBars (
-    const Rectangle& rAvailableArea,
+::tools::Rectangle ScrollBarManager::PlaceScrollBars (
+    const ::tools::Rectangle& rAvailableArea,
     const bool bIsHorizontalScrollBarAllowed,
     const bool bIsVerticalScrollBarAllowed)
 {
-    Rectangle aRemainingSpace (DetermineScrollBarVisibilities(
+    ::tools::Rectangle aRemainingSpace (DetermineScrollBarVisibilities(
         rAvailableArea,
         bIsHorizontalScrollBarAllowed,
         bIsVerticalScrollBarAllowed));
@@ -127,7 +127,7 @@ Rectangle ScrollBarManager::PlaceScrollBars (
     return aRemainingSpace;
 }
 
-void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea)
+void ScrollBarManager::PlaceHorizontalScrollBar (const ::tools::Rectangle& aAvailableArea)
 {
     // Save the current relative position.
     mnHorizontalPosition = double(mpHorizontalScrollBar->GetThumbPos())
@@ -146,7 +146,7 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea
         (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
 }
 
-void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
+void ScrollBarManager::PlaceVerticalScrollBar (const ::tools::Rectangle& aArea)
 {
     const sal_Int32 nThumbPosition (mpVerticalScrollBar->GetThumbPos());
 
@@ -161,7 +161,7 @@ void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
     mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
 }
 
-void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
+void ScrollBarManager::PlaceFiller (const ::tools::Rectangle& aArea)
 {
     mpScrollBarFiller->SetPosSizePixel(
         Point(
@@ -174,7 +174,7 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 
 void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
 {
-    Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
+    ::tools::Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
@@ -297,8 +297,8 @@ void ScrollBarManager::SetWindowOrigin (
     b) when not showing a scroll bar the area used by the page objects fits
     into the available area in the scroll bars orientation.
 */
-Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
-    const Rectangle& rAvailableArea,
+::tools::Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
+    const ::tools::Rectangle& rAvailableArea,
     const bool bIsHorizontalScrollBarAllowed,
     const bool bIsVerticalScrollBarAllowed)
 {
@@ -335,7 +335,7 @@ Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
     mpScrollBarFiller->Show(bShowVertical && bShowHorizontal);
 
     // Adapt the remaining space accordingly.
-    Rectangle aRemainingSpace (rAvailableArea);
+    ::tools::Rectangle aRemainingSpace (rAvailableArea);
     if (bShowVertical)
         aRemainingSpace.Right() -= mpVerticalScrollBar->GetSizePixel().Width();
     if (bShowHorizontal)
@@ -347,7 +347,7 @@ Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
 bool ScrollBarManager::TestScrollBarVisibilities (
     bool bHorizontalScrollBarVisible,
     bool bVerticalScrollBarVisible,
-    const Rectangle& rAvailableArea)
+    const ::tools::Rectangle& rAvailableArea)
 {
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
 
@@ -437,8 +437,8 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
     int nDy = 0;
 
     Size aWindowSize = pWindow->GetOutputSizePixel();
-    Rectangle aWindowArea (pWindow->GetPosPixel(), aWindowSize);
-    Rectangle aViewPixelArea (
+    ::tools::Rectangle aWindowArea (pWindow->GetPosPixel(), aWindowSize);
+    ::tools::Rectangle aViewPixelArea (
         pWindow->LogicToPixel(mrSlideSorter.GetView().GetModelArea()));
 
     if (aWindowSize.Width() > maScrollBorder.Width() * 3

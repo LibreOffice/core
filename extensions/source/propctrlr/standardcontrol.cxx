@@ -1120,7 +1120,7 @@ namespace pcr
             ::Point aMePos= GetPosPixel();
             aMePos = GetParent()->OutputToScreenPixel( aMePos );
             ::Size aSize=GetSizePixel();
-            ::Rectangle aRect(aMePos,aSize);
+            ::tools::Rectangle aRect(aMePos,aSize);
             aSize.Height() = STD_HEIGHT;
             m_pFloatingEdit->SetOutputSizePixel(aSize);
             m_pFloatingEdit->StartPopupMode( aRect, FloatWinPopupFlags::Down );

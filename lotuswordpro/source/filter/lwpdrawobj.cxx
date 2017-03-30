@@ -780,7 +780,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
         double fStartX, fStartY, fWidth, fHeight;
         double fRotAngle = 0.0;
         SdwRectangle aSdwRect;
-        Rectangle aOriginalRect;
+        tools::Rectangle aOriginalRect;
         Point aPt0, aPt1, aPt2, aPt3;
 
         aPt0.setX(m_aVector[0].x); aPt0.setY(m_aVector[0].y);
@@ -796,7 +796,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
         }
         else
         {
-            aOriginalRect = Rectangle(aPt0, aPt2);
+            aOriginalRect = tools::Rectangle(aPt0, aPt2);
         }
 
         fStartX = aOriginalRect.TopLeft().X();

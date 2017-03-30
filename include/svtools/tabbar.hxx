@@ -373,7 +373,7 @@ public:
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
@@ -410,9 +410,9 @@ public:
     sal_uInt16      GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16      GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16      GetPageId( const Point& rPos ) const;
-    Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
+    tools::Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
-    Rectangle       GetPageArea() const;
+    tools::Rectangle       GetPageArea() const;
 
     void            SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16      GetCurPageId() const { return mnCurPageId; }

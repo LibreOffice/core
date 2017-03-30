@@ -103,7 +103,7 @@ SdrTextObj::SdrTextObj()
     mbInDownScale = false;
 }
 
-SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
+SdrTextObj::SdrTextObj(const tools::Rectangle& rNewRect)
 :   SdrAttrObj(),
     maRect(rNewRect),
     mpText(nullptr),
@@ -149,7 +149,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect)
 :   SdrAttrObj(),
     maRect(rNewRect),
     mpText(nullptr),
@@ -204,7 +204,7 @@ void SdrTextObj::FitFrameToTextSize()
         aNewSize.Width()++; // because of possible rounding errors
         aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
         aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
-        Rectangle aNewRect(maRect);
+        tools::Rectangle aNewRect(maRect);
         aNewRect.SetSize(aNewSize);
         ImpJustifyRect(aNewRect);
         if (aNewRect!=maRect) {
@@ -229,7 +229,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
 
 void SdrTextObj::SetText(const OUString& rStr)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetText(rStr);
     SetChanged();
     BroadcastObjectChange();
@@ -252,7 +252,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 
 void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
 {
-    Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetText(rInput,rBaseURL,eFormat);
     SetChanged();
     BroadcastObjectChange();
@@ -397,7 +397,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
     return eRet;
 } // defaults: TOP for text frame, CENTER for captions of drawing objects
 
-void SdrTextObj::ImpJustifyRect(Rectangle& rRect)
+void SdrTextObj::ImpJustifyRect(tools::Rectangle& rRect)
 {
     if (!rRect.IsEmpty()) {
         rRect.Justify();
@@ -581,7 +581,7 @@ void SdrTextObj::AdaptTextMinSize()
     SetObjectItemSet(aSet);
 }
 
-void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const
+void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle& rAnchorRect, bool bLineWidth ) const
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = nullptr;
@@ -639,18 +639,18 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
     delete pContourPolyPolygon;
 }
 
-void SdrTextObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect=maRect;
 }
 
-void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
+void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
     long nLeftDist=GetTextLeftDistance();
     long nRightDist=GetTextRightDistance();
     long nUpperDist=GetTextUpperDistance();
     long nLowerDist=GetTextLowerDistance();
-    Rectangle aAnkRect(maRect); // the rectangle in which we anchor
+    tools::Rectangle aAnkRect(maRect); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
@@ -679,10 +679,10 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     rAnchorRect=aAnkRect;
 }
 
-void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-                               Rectangle* pAnchorRect, bool bLineWidth ) const
+void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+                               tools::Rectangle* pAnchorRect, bool bLineWidth ) const
 {
-    Rectangle aAnkRect; // the rectangle in which we anchor
+    tools::Rectangle aAnkRect; // the rectangle in which we anchor
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -846,7 +846,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
         *pAnchorRect=aAnkRect;
 
     // rTextRect might not be correct in some cases at ContourFrame
-    rTextRect=Rectangle(aTextPos,aTextSiz);
+    rTextRect=tools::Rectangle(aTextPos,aTextSiz);
     if (bContourFrame)
         rTextRect=aAnkRect;
 }
@@ -1126,8 +1126,8 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         // in every case
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
 
-        Rectangle aAnchor2;
-        Rectangle aR;
+        tools::Rectangle aAnchor2;
+        tools::Rectangle aR;
         TakeTextRect(rOutliner,aR,false,&aAnchor2);
         rOutliner.Clear();
         bool bFitToSize(IsFitToSize());
@@ -1233,9 +1233,9 @@ SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
 // Extracted from Paint()
 void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                SdrOutliner&     rOutliner,
-                                               Rectangle&       rTextRect,
-                                               Rectangle&       rAnchorRect,
-                                               Rectangle&       rPaintRect,
+                                               tools::Rectangle&       rTextRect,
+                                               tools::Rectangle&       rAnchorRect,
+                                               tools::Rectangle&       rPaintRect,
                                                Fraction&        rFitXKorreg ) const
 {
     if (!bContourFrame)
@@ -1337,16 +1337,16 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
                                       std::min(sal_uInt16(100),nMinStretchY));
 }
 
-void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
+void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const
 {
     ImpInitDrawOutliner( rOutl );
     UpdateOutlinerFormatting( rOutl, rPaintRect );
 }
 
-void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const
+void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle& rPaintRect ) const
 {
-    Rectangle aTextRect;
-    Rectangle aAnchorRect;
+    tools::Rectangle aTextRect;
+    tools::Rectangle aAnchorRect;
     Fraction aFitXKorreg(1,1);
 
     bool bContourFrame=IsContourTextFrame();
@@ -1441,7 +1441,7 @@ void SdrTextObj::ReformatText()
 {
     if(GetOutlinerParaObject())
     {
-        Rectangle aBoundRect0;
+        tools::Rectangle aBoundRect0;
         if (pUserCall!=nullptr)
             aBoundRect0=GetLastBoundRect();
 
@@ -1484,7 +1484,7 @@ SdrFitToSizeType SdrTextObj::GetFitToSize() const
     return eType;
 }
 
-const Rectangle& SdrTextObj::GetGeoRect() const
+const tools::Rectangle& SdrTextObj::GetGeoRect() const
 {
     return maRect;
 }
@@ -1549,7 +1549,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         SdrTextVertAdjust eVert = static_cast<const SdrTextVertAdjustItem&>(rSet.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
         // rescue object size
-        Rectangle aObjectRect = GetSnapRect();
+        tools::Rectangle aObjectRect = GetSnapRect();
 
         // prepare ItemSet to set exchanged width and height items
         SfxItemSet aNewSet(*rSet.GetPool(),
@@ -1609,7 +1609,7 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
-    Rectangle aRectangle(maRect);
+    tools::Rectangle aRectangle(maRect);
 
     // fill other values
     basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
@@ -1726,7 +1726,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // build and set BaseRect (use scale)
     Point aPoint = Point();
     Size aSize(FRound(aScale.getX()), FRound(aScale.getY()));
-    Rectangle aBaseRect(aPoint, aSize);
+    tools::Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
     // flip?
@@ -1851,13 +1851,13 @@ SdrTextAniDirection SdrTextObj::GetTextAniDirection() const
 // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
 // painting rectangle. Rotation is excluded from the returned values.
 GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
-    Rectangle& rScrollRectangle, Rectangle& rPaintRectangle)
+    tools::Rectangle& rScrollRectangle, tools::Rectangle& rPaintRectangle)
 {
     GDIMetaFile* pRetval = nullptr;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    Rectangle aTextRect;
-    Rectangle aAnchorRect;
-    Rectangle aPaintRect;
+    tools::Rectangle aTextRect;
+    tools::Rectangle aAnchorRect;
+    tools::Rectangle aPaintRect;
     Fraction aFitXKorreg(1,1);
     bool bContourFrame(IsContourTextFrame());
 
@@ -1868,7 +1868,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
     aGeo.nRotationAngle = nAngle;
 
-    Rectangle aScrollFrameRect(aPaintRect);
+    tools::Rectangle aScrollFrameRect(aPaintRect);
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextAniDirection eDirection = static_cast<const SdrTextAniDirectionItem&>(rSet.Get(SDRATTR_TEXT_ANIDIRECTION)).GetValue();
 

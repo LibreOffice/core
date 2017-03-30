@@ -49,12 +49,12 @@ CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj
     m_dResolution     ( 96.0 )
 {
     const SdrGrafCropItem& rCrop = static_cast<const SdrGrafCropItem&>( m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP) );
-    m_aCropRectangle = Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
+    m_aCropRectangle = tools::Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
     Initialize();
 }
 
-CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
+CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, tools::Rectangle& rCropRectangle, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
     m_pGraphicObj     ( nullptr ),
     m_aGraphic        ( rGraphic ),
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, Button*, void )
     }
 }
 
-Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
+tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
 {
     if ( m_pReduceResolutionCB->IsChecked() )
     {
@@ -401,7 +401,7 @@ Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
         double aScaleX = nPixelX / (double) aSize.Width();
         double aScaleY = nPixelY / (double) aSize.Height();
 
-        return Rectangle(
+        return tools::Rectangle(
             m_aCropRectangle.Left()  * aScaleX,
             m_aCropRectangle.Top()   * aScaleY,
             m_aCropRectangle.Right() * aScaleX,
@@ -438,7 +438,7 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
 
         if ( m_pReduceResolutionCB->IsChecked() )
         {
-            Rectangle aScaledCropedRectangle = GetScaledCropRectangle();
+            tools::Rectangle aScaledCropedRectangle = GetScaledCropRectangle();
             SdrGrafCropItem aNewCrop(
                 aScaledCropedRectangle.Left(),
                 aScaledCropedRectangle.Top(),

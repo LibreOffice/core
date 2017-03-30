@@ -147,10 +147,10 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
 
     ::DrawProgress(this, rRenderContext, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
                    nOldPerc * 100, nNewPerc * 100, mnPercentCount,
-                   Rectangle(Point(), GetSizePixel()));
+                   tools::Rectangle(Point(), GetSizePixel()));
 }
 
-void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDrawProgress(rRenderContext, mnPreviousPercent, mnPercent);
 }

@@ -41,13 +41,13 @@
 #define EMFP_DEBUG(x)
 #endif
 
-void WinMtfClipPath::intersectClipRect( const Rectangle& rRect )
+void WinMtfClipPath::intersectClipRect( const tools::Rectangle& rRect )
 {
     maClip.intersectRange(
         vcl::unotools::b2DRectangleFromRectangle(rRect));
 }
 
-void WinMtfClipPath::excludeClipRect( const Rectangle& rRect )
+void WinMtfClipPath::excludeClipRect( const tools::Rectangle& rRect )
 {
     maClip.subtractRange(
         vcl::unotools::b2DRectangleFromRectangle(rRect));
@@ -488,9 +488,9 @@ Size WinMtfOutput::ImplMap(const Size& rSz, bool bDoWorldTransform)
         return Size();
 }
 
-Rectangle WinMtfOutput::ImplMap( const Rectangle& rRect )
+tools::Rectangle WinMtfOutput::ImplMap( const tools::Rectangle& rRect )
 {
-    return Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
+    return tools::Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
 }
 
 void WinMtfOutput::ImplMap( vcl::Font& rFont )
@@ -769,7 +769,7 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
     }
 }
 
-void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
+void WinMtfOutput::IntersectClipRect( const tools::Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
     if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
@@ -779,7 +779,7 @@ void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
     aClipPath.intersectClipRect( ImplMap( rRect ) );
 }
 
-void WinMtfOutput::ExcludeClipRect( const Rectangle& rRect )
+void WinMtfOutput::ExcludeClipRect( const tools::Rectangle& rRect )
 {
     mbClipNeedsUpdate=true;
     aClipPath.excludeClipRect( ImplMap( rRect ) );
@@ -1069,7 +1069,7 @@ void WinMtfOutput::LineTo( const Point& rPoint, bool bRecordPath )
     maActPos = aDest;
 }
 
-void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
+void WinMtfOutput::DrawRect( const tools::Rectangle& rRect, bool bEdge )
 {
     UpdateClipRegion();
     UpdateFillStyle();
@@ -1107,7 +1107,7 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, bool bEdge )
     }
 }
 
-void WinMtfOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
+void WinMtfOutput::DrawRoundRect( const tools::Rectangle& rRect, const Size& rSize )
 {
     UpdateClipRegion();
     UpdateLineStyle();
@@ -1115,7 +1115,7 @@ void WinMtfOutput::DrawRoundRect( const Rectangle& rRect, const Size& rSize )
     mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), labs( ImplMap( rSize ).Width() ), labs( ImplMap( rSize ).Height() ) ) );
 }
 
-void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
+void WinMtfOutput::DrawEllipse( const tools::Rectangle& rRect )
 {
     UpdateClipRegion();
     UpdateFillStyle();
@@ -1137,13 +1137,13 @@ void WinMtfOutput::DrawEllipse( const Rectangle& rRect )
     }
 }
 
-void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
+void WinMtfOutput::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
 {
     UpdateClipRegion();
     UpdateLineStyle();
     UpdateFillStyle();
 
-    Rectangle   aRect( ImplMap( rRect ) );
+    tools::Rectangle   aRect( ImplMap( rRect ) );
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
@@ -1166,12 +1166,12 @@ void WinMtfOutput::DrawArc( const Rectangle& rRect, const Point& rStart, const P
         maActPos = aEnd;
 }
 
-void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+void WinMtfOutput::DrawPie( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     UpdateClipRegion();
     UpdateFillStyle();
 
-    Rectangle   aRect( ImplMap( rRect ) );
+    tools::Rectangle   aRect( ImplMap( rRect ) );
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
@@ -1189,12 +1189,12 @@ void WinMtfOutput::DrawPie( const Rectangle& rRect, const Point& rStart, const P
     }
 }
 
-void WinMtfOutput::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+void WinMtfOutput::DrawChord( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     UpdateClipRegion();
     UpdateFillStyle();
 
-    Rectangle   aRect( ImplMap( rRect ) );
+    tools::Rectangle   aRect( ImplMap( rRect ) );
     Point       aStart( ImplMap( rStart ) );
     Point       aEnd( ImplMap( rEnd ) );
 
@@ -1670,7 +1670,7 @@ void WinMtfOutput::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct
         size_t          nObjectStartIndex = nObjects - nObjectsLeft;
 
         BSaveStruct*    pSave = rSaveList[nObjectStartIndex].get();
-        Rectangle       aRect( pSave->aOutRect );
+        tools::Rectangle       aRect( pSave->aOutRect );
 
         for ( i = nObjectStartIndex; i < nObjects; )
         {
@@ -1992,12 +1992,12 @@ void WinMtfOutput::ScaleWinExt( double fX, double fY )
     mnWinExtY = FRound( mnWinExtY * fY );
 }
 
-void WinMtfOutput::SetrclBounds( const Rectangle& rRect )
+void WinMtfOutput::SetrclBounds( const tools::Rectangle& rRect )
 {
     mrclBounds = rRect;
 }
 
-void WinMtfOutput::SetrclFrame( const Rectangle& rRect )
+void WinMtfOutput::SetrclFrame( const tools::Rectangle& rRect )
 {
     mrclFrame = rRect;
 }

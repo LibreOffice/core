@@ -384,7 +384,7 @@ void E3dObject::NbcMove(const Size& rSize)
     if(pScene)
     {
         //Dimensions of the scene in 3D and 2D for comparison
-        Rectangle aRect = pScene->GetSnapRect();
+        tools::Rectangle aRect = pScene->GetSnapRect();
 
         basegfx::B3DHomMatrix aInvDispTransform;
         if(GetParentObj())
@@ -435,7 +435,7 @@ SdrObjList* E3dObject::GetSubList() const
 
 void E3dObject::RecalcSnapRect()
 {
-    maSnapRect = Rectangle();
+    maSnapRect = tools::Rectangle();
 
     for(size_t a = 0; a < maSubList.GetObjCount(); ++a)
     {
@@ -652,7 +652,7 @@ void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
         NbcSetTransform(rMatrix);
         SetChanged();
         BroadcastObjectChange();
-        if (pUserCall != nullptr) pUserCall->Changed(*this, SdrUserCallType::Resize, Rectangle());
+        if (pUserCall != nullptr) pUserCall->Changed(*this, SdrUserCallType::Resize, tools::Rectangle());
     }
 }
 
@@ -890,7 +890,7 @@ void E3dCompoundObject::RecalcSnapRect()
     const uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
-    maSnapRect = Rectangle();
+    maSnapRect = tools::Rectangle();
 
     if(pRootScene)
     {
@@ -920,7 +920,7 @@ void E3dCompoundObject::RecalcSnapRect()
                 aSnapRange.transform(rVCScene.getObjectTransformation());
 
                 // snap to integer
-                maSnapRect = Rectangle(
+                maSnapRect = tools::Rectangle(
                     sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
                     sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
             }

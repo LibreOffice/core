@@ -50,32 +50,32 @@ public:
         return m_aComboListBox.GetEntry( nPos );
     }
 
-    virtual Rectangle       GetDropDownPosSizePixel() const override
+    virtual tools::Rectangle       GetDropDownPosSizePixel() const override
     {
-        Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(nullptr);
-        Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
+        tools::Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(nullptr);
+        tools::Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
         aRet.Move(aTemp.TopLeft().X(),aTemp.TopLeft().Y());
         return aRet;
     }
 
-    virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const override
+    virtual tools::Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const override
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         if ( m_aComboListBox.IsInDropDown() && IsEntryVisible( nItem ) )
         {
-            Rectangle aTemp = m_aComboListBox.GetDropDownPosSizePixel();
+            tools::Rectangle aTemp = m_aComboListBox.GetDropDownPosSizePixel();
             Size aSize = aTemp.GetSize();
             aSize.Height() /= m_aComboListBox.GetDisplayLineCount();
             Point aTopLeft = aTemp.TopLeft();
             aTopLeft.Y() += aSize.Height() * ( nItem - m_aComboListBox.GetTopEntry() );
-            aRect = Rectangle( aTopLeft, aSize );
+            aRect = tools::Rectangle( aTopLeft, aSize );
         }
         else
             aRect = m_aComboListBox.GetBoundingRectangle( nItem );
         return aRect;
     }
 
-    virtual Rectangle       GetWindowExtentsRelative() override
+    virtual tools::Rectangle       GetWindowExtentsRelative() override
     {
         return m_aComboListBox.GetWindowExtentsRelative( nullptr );
     }
@@ -157,9 +157,9 @@ public:
         return m_aComboListBox.IsInDropDown();
     }
 
-    virtual Rectangle GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const override
+    virtual tools::Rectangle GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const override
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
 
         Pair aEntryCharacterRange = m_aComboListBox.GetLineStartEnd( _nEntryPos );
         if ( aEntryCharacterRange.A() + _nCharacterIndex <= aEntryCharacterRange.B() )

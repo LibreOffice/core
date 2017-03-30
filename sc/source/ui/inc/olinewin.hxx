@@ -49,7 +49,7 @@ private:
     bool                        mbMTActive;         /// Mouse tracking active?
     bool                        mbMTPressed;        /// Mouse tracking: Button currently drawed pressed?
 
-    Rectangle                   maFocusRect;        /// Focus rectangle on screen.
+    tools::Rectangle                   maFocusRect;        /// Focus rectangle on screen.
     size_t                      mnFocusLevel;       /// Level of focused button.
     size_t                      mnFocusEntry;       /// Entry index of focused button.
     bool                        mbDontDrawFocus;    /// Do not redraw focus in next Paint().
@@ -98,7 +98,7 @@ private:
     /** Returns the point in the window of the specified position. */
     Point                       GetPoint( long nLevelPos, long nEntryPos ) const;
     /** Returns the rectangle in the window of the specified position. */
-    Rectangle                   GetRectangle(
+    tools::Rectangle                   GetRectangle(
                                     long nLevelStart, long nEntryStart,
                                     long nLevelEnd, long nEntryEnd ) const;
 
@@ -206,7 +206,7 @@ private:
     void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
 
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual void                Resize() override;
     virtual void                GetFocus() override;

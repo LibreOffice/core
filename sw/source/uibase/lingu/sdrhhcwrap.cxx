@@ -80,7 +80,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
 
     InsertView( pOutlView );
     Point aPoint( 0, 0 );
-     Rectangle aRect( aPoint, aSize );
+     tools::Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
 //  SetText( NULL );
     ClearModifyFlag();
@@ -94,7 +94,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
         SetUpdateMode(false);
-        pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+        pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
     }
     RemoveView( pOutlView );
     delete pOutlView;
@@ -115,7 +115,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
         SetUpdateMode(false);
-        pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+        pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
         Clear();
         pTextObj = nullptr;
@@ -151,7 +151,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = true;
-                    pOutlView->SetOutputArea( Rectangle( Point(), Size(1,1)));
+                    pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1,1)));
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(true);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());

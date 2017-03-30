@@ -110,7 +110,7 @@ void Slider::ImplInitSettings()
 
 void Slider::ImplUpdateRects( bool bUpdate )
 {
-    Rectangle aOldThumbRect = maThumbRect;
+    tools::Rectangle aOldThumbRect = maThumbRect;
     bool bInvalidateAll = false;
 
     if ( mnThumbPixRange )
@@ -138,8 +138,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
             else
                 maChannel2Rect.SetEmpty();
 
-            const Rectangle aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
-            Rectangle aThumbBounds, aThumbContent;
+            const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
+            tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbHorz,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
@@ -172,8 +172,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
             else
                 maChannel2Rect.SetEmpty();
 
-            const Rectangle aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
-            Rectangle aThumbBounds, aThumbContent;
+            const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
+            tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbVert,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
@@ -341,7 +341,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
             sldValue.mnThumbState |= ControlState::ROLLOVER;
     }
 
-    const Rectangle aCtrlRegion(Point(0,0), GetOutputSizePixel());
+    const tools::Rectangle aCtrlRegion(Point(0,0), GetOutputSizePixel());
     bool bNativeOK = rRenderContext.DrawNativeControl(ControlType::Slider, nPart, aCtrlRegion, nState, sldValue, OUString());
     if (bNativeOK)
         return;
@@ -349,7 +349,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     if (!maChannel1Rect.IsEmpty())
     {
         long        nRectSize;
-        Rectangle   aRect = maChannel1Rect;
+        tools::Rectangle   aRect = maChannel1Rect;
         rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
         if (GetStyle() & WB_HORZ)
         {
@@ -393,7 +393,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     if (!maChannel2Rect.IsEmpty())
     {
         long nRectSize;
-        Rectangle aRect = maChannel2Rect;
+        tools::Rectangle aRect = maChannel2Rect;
         rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         if (GetStyle() & WB_HORZ)
         {
@@ -452,7 +452,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 bool Slider::ImplIsPageUp( const Point& rPos )
 {
     Size aSize = GetOutputSizePixel();
-    Rectangle aRect = maChannel1Rect;
+    tools::Rectangle aRect = maChannel1Rect;
     if ( GetStyle() & WB_HORZ )
     {
         aRect.Top()     = 0;
@@ -469,7 +469,7 @@ bool Slider::ImplIsPageUp( const Point& rPos )
 bool Slider::ImplIsPageDown( const Point& rPos )
 {
     Size aSize = GetOutputSizePixel();
-    Rectangle aRect = maChannel2Rect;
+    tools::Rectangle aRect = maChannel2Rect;
     if ( GetStyle() & WB_HORZ )
     {
         aRect.Top()     = 0;
@@ -809,7 +809,7 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void Slider::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void Slider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDraw(rRenderContext);
 }

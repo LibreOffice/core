@@ -369,7 +369,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         dynamic_cast<const SwFlyFrameFormat*>( pFormat) )
             {
                 //turn on highlight for frame
-                Rectangle aTmp( pRect->SVRect() );
+                tools::Rectangle aTmp( pRect->SVRect() );
 
                 if ( !m_pUserMarker )
                 {
@@ -401,7 +401,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 ? PointerStyle::ChainNotAllowed : PointerStyle::Chain;
         if ( nChainable == SwChainRet::OK )
         {
-            Rectangle aTmp( aRect.SVRect() );
+            tools::Rectangle aTmp( aRect.SVRect() );
 
             if ( !m_pUserMarker )
             {
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
         if ( m_bInsDraw )
         {
             const int nMaxScroll = 40;
-            m_rView.Scroll( Rectangle(aModPt,Size(1,1)), nMaxScroll, nMaxScroll);
+            m_rView.Scroll( tools::Rectangle(aModPt,Size(1,1)), nMaxScroll, nMaxScroll);
             bDone = true;
         }
         else if ( g_bFrameDrag )
@@ -667,7 +667,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
 
 void SwEditWin::JustifyAreaTimer()
 {
-    const Rectangle &rVisArea = GetView().GetVisArea();
+    const tools::Rectangle &rVisArea = GetView().GetVisArea();
 #ifdef UNX
     const long coMinLen = 100;
 #else
@@ -3825,7 +3825,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     {
         Point aDD( SwEditWin::m_nDDStartPosX, SwEditWin::m_nDDStartPosY );
         aDD = LogicToPixel( aDD );
-        Rectangle aRect( aDD.X()-3, aDD.Y()-3, aDD.X()+3, aDD.Y()+3 );
+        tools::Rectangle aRect( aDD.X()-3, aDD.Y()-3, aDD.X()+3, aDD.Y()+3 );
         if ( !aRect.IsInside( aPixPt ) )
             StopDDTimer( &rSh, aDocPt );
     }
@@ -4456,7 +4456,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( rMEvt.IsMod1() ) // copy and don't move.
                 {
                     // abort drag, use internal Copy instead
-                    Rectangle aRect;
+                    tools::Rectangle aRect;
                     rSh.GetDrawView()->TakeActionRect( aRect );
                     if (!aRect.IsEmpty())
                     {
@@ -5595,19 +5595,19 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 {
                     // When the composition does not exist, use Caret rect instead.
                     SwRect aCaretRect ( rSh.GetCharRect() );
-                    Rectangle aRect( aCaretRect.Left(), aCaretRect.Top(), aCaretRect.Right(), aCaretRect.Bottom() );
+                    tools::Rectangle aRect( aCaretRect.Left(), aCaretRect.Top(), aCaretRect.Right(), aCaretRect.Bottom() );
                     rWin.SetCompositionCharRect( &aRect, 1, bVertical );
                 }
                 else
                 {
-                    std::unique_ptr<Rectangle[]> aRects(new Rectangle[ nSize ]);
+                    std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ nSize ]);
                     int nRectIndex = 0;
                     for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
                     {
                         const SwPosition aPos( rStart.nNode, nIndex );
                         SwRect aRect ( rSh.GetCharRect() );
                         rSh.GetCharRectAt( aRect, &aPos );
-                        aRects[ nRectIndex ] = Rectangle( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
+                        aRects[ nRectIndex ] = tools::Rectangle( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
                         ++nRectIndex;
                     }
                     rWin.SetCompositionCharRect( aRects.get(), nSize, bVertical );
@@ -5662,7 +5662,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 bool bVertical = pOutliner->IsVertical();
                 const EditEngine& rEditEng = pOutliner->GetEditEngine();
                 Point aEEPos(aDocPos);
-                const Rectangle& rOutputArea = pOLV->GetOutputArea();
+                const tools::Rectangle& rOutputArea = pOLV->GetOutputArea();
                 // regard vertical mode
                 if(bVertical)
                 {
@@ -5955,7 +5955,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         Point aPt( rWin.OutputToScreenPixel( rWin.LogicToPixel(
                     rSh.GetCharRect().Pos() )));
         aPt.Y() -= 3;
-        nTipId = Help::ShowPopover(&rWin, Rectangle( aPt, Size( 1, 1 )),
+        nTipId = Help::ShowPopover(&rWin, tools::Rectangle( aPt, Size( 1, 1 )),
                         m_aHelpStrings[ nCurArrPos ],
                         QuickHelpFlags::Left | QuickHelpFlags::Bottom);
     }
@@ -6344,7 +6344,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
-void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
+void SwEditWin::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     OString sRectangle;
     if (!pRectangle)

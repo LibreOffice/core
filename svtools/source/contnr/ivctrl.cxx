@@ -112,7 +112,7 @@ OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
     return pEntry->GetText();
 }
 
-void SvtIconChoiceCtrl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SvtIconChoiceCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     _pImpl->Paint(rRenderContext, rRect);
 }
@@ -139,7 +139,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
     if ( GetStyle() & WB_ALIGN_TOP )
     {
         Size aFullSize;
-        Rectangle aEntryRect;
+        tools::Rectangle aEntryRect;
 
         for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
@@ -154,7 +154,7 @@ void SvtIconChoiceCtrl::ArrangeIcons()
     else if ( GetStyle() & WB_ALIGN_LEFT )
     {
         Size aFullSize;
-        Rectangle aEntryRect;
+        tools::Rectangle aEntryRect;
 
         for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
@@ -363,13 +363,13 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             }
             if( aBackground.IsScrollable() )
             {
-                Rectangle aRect;
+                tools::Rectangle aRect;
                 aRect.SetSize( Size(32765, 32765) );
                 aBackground.SetRect( aRect );
             }
             else
             {
-                Rectangle aRect( _pImpl->GetOutputRect() );
+                tools::Rectangle aRect( _pImpl->GetOutputRect() );
                 aBackground.SetRect( aRect );
             }
             Control::SetBackground( aBackground );
@@ -396,7 +396,7 @@ void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
     _pImpl->SetSelectionMode( eMode );
 }
 
-Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
+tools::Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImpl->GetEntryBoundRect( pEntry );
 }
@@ -407,9 +407,9 @@ void SvtIconChoiceCtrl::FillLayoutData() const
     const_cast<SvtIconChoiceCtrl*>(this)->Invalidate();
 }
 
-Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const
+tools::Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     Pair aEntryCharacterRange = GetLineStartEnd( _nEntryPos );
     if ( aEntryCharacterRange.A() + _nCharacterIndex < aEntryCharacterRange.B() )

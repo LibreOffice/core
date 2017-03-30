@@ -132,7 +132,7 @@ struct ImplOutDevData
 {
     VclPtr<VirtualDevice>       mpRotateDev;
     vcl::ControlLayoutData*     mpRecordLayout;
-    Rectangle                   maRecordRect;
+    tools::Rectangle                   maRecordRect;
 
     // #i75163#
     basegfx::B2DHomMatrix*      mpViewTransform;

@@ -423,11 +423,11 @@ Size SwCaptionPreview::GetOptimalSize() const
     return LogicToPixel(Size(106 , 20), MapMode(MapUnit::MapAppFont));
 }
 
-void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
-    rRenderContext.DrawRect(Rectangle(Point(0, 0), GetSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetSizePixel()));
     rRenderContext.DrawText(Point(4, 6), maText);
 }
 

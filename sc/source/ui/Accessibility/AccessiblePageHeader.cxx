@@ -307,15 +307,15 @@ OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName()
     return sName.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 
-Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
 {
-    Rectangle aCellRect(GetBoundingBox());
+    tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -323,9 +323,9 @@ Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-Rectangle ScAccessiblePageHeader::GetBoundingBox() const
+tools::Rectangle ScAccessiblePageHeader::GetBoundingBox() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mpViewShell)
     {
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
@@ -335,7 +335,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const
             rData.GetFooterPosition( aRect );
 
         // the Rectangle could contain negative coordinates so it should be clipped
-        Rectangle aClipRect(Point(0, 0), aRect.GetSize());
+        tools::Rectangle aClipRect(Point(0, 0), aRect.GetSize());
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
             aClipRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());

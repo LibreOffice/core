@@ -265,7 +265,7 @@ std::shared_ptr<InsertionIndicatorHandler> const &
 }
 
 void SlideSorterController::Paint (
-    const Rectangle& rBBox,
+    const ::tools::Rectangle& rBBox,
     vcl::Window* pWindow)
 {
     if (mnPaintEntranceCount == 0)
@@ -371,7 +371,7 @@ bool SlideSorterController::Command (
                     GetFocusManager().GetFocusedPageDescriptor());
                 if (pDescriptor.get() != nullptr)
                 {
-                    Rectangle aBBox (
+                    ::tools::Rectangle aBBox (
                         mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
                             pDescriptor,
                             PageObjectLayouter::Part::PageObject,
@@ -663,7 +663,7 @@ void SlideSorterController::UpdateAllPages()
     mrSlideSorter.GetContentWindow()->Invalidate();
 }
 
-void SlideSorterController::Resize (const Rectangle& rAvailableSpace)
+void SlideSorterController::Resize (const ::tools::Rectangle& rAvailableSpace)
 {
     if (maTotalWindowArea != rAvailableSpace)
     {
@@ -692,7 +692,7 @@ void  SlideSorterController::Rearrange (bool bForce)
             mrView.UpdateOrientation();
 
         // Place the scroll bars.
-        Rectangle aNewContentArea = GetScrollBarManager().PlaceScrollBars(
+        ::tools::Rectangle aNewContentArea = GetScrollBarManager().PlaceScrollBars(
             maTotalWindowArea,
             mrView.GetOrientation() != view::Layouter::VERTICAL,
             mrView.GetOrientation() != view::Layouter::HORIZONTAL);
@@ -702,7 +702,7 @@ void  SlideSorterController::Rearrange (bool bForce)
         // order to determine whether the window and the view have to be resized.
         if ( ! bForce)
         {
-            Rectangle aCurrentContentArea (pWindow->GetPosPixel(), pWindow->GetOutputSizePixel());
+            ::tools::Rectangle aCurrentContentArea (pWindow->GetPosPixel(), pWindow->GetOutputSizePixel());
             bSizeHasChanged = (aNewContentArea != aCurrentContentArea);
         }
         if (bForce || bSizeHasChanged)

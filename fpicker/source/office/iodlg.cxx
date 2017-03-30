@@ -394,7 +394,7 @@ public:
         _pSplitter->SetSizePixel( splitterNewSize );
         sal_Int32 nMinX = pImpl->_pPlaces->GetPosPixel( ).X( );
         sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
-        _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
+        _pSplitter->SetDragRectPixel( tools::Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
 
         // Resize the places list box to fit the height of the FileView
         Size placesNewSize(pImpl->_pPlaces->GetSizePixel());

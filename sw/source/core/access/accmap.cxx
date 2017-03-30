@@ -638,7 +638,7 @@ public:
 // helper class that stores preview data
 class SwAccPreviewData
 {
-    typedef std::vector<Rectangle> Rectangles;
+    typedef std::vector<tools::Rectangle> Rectangles;
     Rectangles maPreviewRects;
     Rectangles maLogicRects;
 
@@ -720,12 +720,12 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
         aPage = (*aPageIter)->pPage;
 
         // add preview page rectangle to <maPreviewRects>
-        Rectangle aPreviewPgRect( (*aPageIter)->aPreviewWinPos, (*aPageIter)->aPageSize );
+        tools::Rectangle aPreviewPgRect( (*aPageIter)->aPreviewWinPos, (*aPageIter)->aPageSize );
         maPreviewRects.push_back( aPreviewPgRect );
 
         // add logic page rectangle to <maLogicRects>
         SwRect aLogicPgSwRect( aPage.GetBox( rAccMap ) );
-        Rectangle aLogicPgRect( aLogicPgSwRect.SVRect() );
+        tools::Rectangle aLogicPgRect( aLogicPgSwRect.SVRect() );
         maLogicRects.push_back( aLogicPgRect );
         // union visible area with visible part of logic page rectangle
         if ( (*aPageIter)->bVisible )
@@ -754,7 +754,7 @@ struct ContainsPredicate
 {
     const Point& mrPoint;
     explicit ContainsPredicate( const Point& rPoint ) : mrPoint(rPoint) {}
-    bool operator() ( const Rectangle& rRect ) const
+    bool operator() ( const tools::Rectangle& rRect ) const
     {
         return rRect.IsInside( mrPoint );
     }
@@ -3067,7 +3067,7 @@ void SwAccessibleMap::FireEvents()
 
 }
 
-Rectangle SwAccessibleMap::GetVisibleArea() const
+tools::Rectangle SwAccessibleMap::GetVisibleArea() const
 {
     MapMode aSrc( MapUnit::MapTwip );
     MapMode aDest( MapUnit::Map100thMM );
@@ -3249,9 +3249,9 @@ static inline long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
     return aResult;
 }
 
-static inline void lcl_CorrectRectangle(Rectangle & rRect,
-                                        const Rectangle & rSource,
-                                        const Rectangle & rInGrid)
+static inline void lcl_CorrectRectangle(tools::Rectangle & rRect,
+                                        const tools::Rectangle & rSource,
+                                        const tools::Rectangle & rInGrid)
 {
     rRect.Left() = lcl_CorrectCoarseValue(rRect.Left(), rSource.Left(),
                                           rInGrid.Left(), false);
@@ -3263,16 +3263,16 @@ static inline void lcl_CorrectRectangle(Rectangle & rRect,
                                             rInGrid.Bottom(), true);
 }
 
-Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
+tools::Rectangle SwAccessibleMap::CoreToPixel( const tools::Rectangle& rRect ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( GetShell()->GetWin() )
     {
         MapMode aMapMode;
         GetMapMode( rRect.TopLeft(), aMapMode );
         aRect = GetShell()->GetWin()->LogicToPixel( rRect, aMapMode );
 
-        Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect, aMapMode );
+        tools::Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect, aMapMode );
         lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 

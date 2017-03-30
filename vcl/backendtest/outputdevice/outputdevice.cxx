@@ -32,10 +32,10 @@ Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    Rectangle aDrawRectangle(maVDRectangle);
+    tools::Rectangle aDrawRectangle(maVDRectangle);
     aDrawRectangle.shrink(2);
 
-    Rectangle aScissorRectangle(maVDRectangle);
+    tools::Rectangle aScissorRectangle(maVDRectangle);
     aScissorRectangle.shrink(4);
 
     mpVirtualDevice->SetRasterOp(RasterOp::Xor);

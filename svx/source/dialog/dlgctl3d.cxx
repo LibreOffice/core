@@ -159,11 +159,11 @@ void Svx3DPreviewControl::Resize()
     Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
     Point aObjPoint( (aSize.Width() - aObjSize.Width()) / 2,
         (aSize.Height() - aObjSize.Height()) / 2);
-    Rectangle aRect( aObjPoint, aObjSize);
+    tools::Rectangle aRect( aObjPoint, aObjSize);
     mpScene->SetSnapRect( aRect );
 }
 
-void Svx3DPreviewControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void Svx3DPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     mp3DView->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
 }
@@ -524,7 +524,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
     }
 }
 
-void Svx3DLightControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void Svx3DLightControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Svx3DPreviewControl::Paint(rRenderContext, rRect);
 }
@@ -704,7 +704,7 @@ void Svx3DLightControl::Resize()
     mpFmPage->SetSize(aSize);
 
     // set position and size of scene
-    mpScene->SetSnapRect(Rectangle(Point(0, 0), aSize));
+    mpScene->SetSnapRect(tools::Rectangle(Point(0, 0), aSize));
 }
 
 void Svx3DLightControl::SetObjectType(SvxPreviewObjectType nType)
@@ -1208,7 +1208,7 @@ void SvxLightCtl3D::GetFocus()
         aFocusSize.Width() -= 4;
         aFocusSize.Height() -= 4;
 
-        Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
+        tools::Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
 
         aFocusRect = maLightControl->PixelToLogic( aFocusRect );
 

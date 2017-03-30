@@ -556,7 +556,7 @@ Polygon::Polygon( const tools::Polygon& rPoly )
         mpImplPolygon->mnRefCount++;
 }
 
-Polygon::Polygon( const Rectangle& rRect )
+Polygon::Polygon( const tools::Rectangle& rRect )
 {
 
     if ( rRect.IsEmpty() )
@@ -572,13 +572,13 @@ Polygon::Polygon( const Rectangle& rRect )
     }
 }
 
-Polygon::Polygon( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
+Polygon::Polygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
 {
     if ( rRect.IsEmpty() )
         mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
     else
     {
-        Rectangle aRect( rRect );
+        tools::Rectangle aRect( rRect );
         aRect.Justify();            // SJ: i9140
 
         nHorzRound = std::min( nHorzRound, static_cast<sal_uInt32>(labs( aRect.GetWidth() >> 1 )) );
@@ -670,7 +670,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY )
         mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
-Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEnd,
+Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
                   PolyStyle eStyle, bool bFullCircle )
 {
     const long  nWidth = rBound.GetWidth();
@@ -922,7 +922,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
     {
         if( nOptimizeFlags & PolyOptimizeFlags::EDGES )
         {
-            const Rectangle aBound( GetBoundRect() );
+            const tools::Rectangle aBound( GetBoundRect() );
             const double    fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
             const sal_uInt16 nPercent = 50;
 
@@ -1320,10 +1320,10 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
     }
 }
 
-void Polygon::Clip( const Rectangle& rRect )
+void Polygon::Clip( const tools::Rectangle& rRect )
 {
     // #105251# Justify rect before edge filtering
-    Rectangle               aJustifiedRect( rRect );
+    tools::Rectangle               aJustifiedRect( rRect );
     aJustifiedRect.Justify();
 
     sal_uInt16                  nSourceSize = mpImplPolygon->mnPoints;
@@ -1351,7 +1351,7 @@ void Polygon::Clip( const Rectangle& rRect )
     mpImplPolygon = aPolygon.release();
 }
 
-Rectangle Polygon::GetBoundRect() const
+tools::Rectangle Polygon::GetBoundRect() const
 {
     // Removing the assert. Bezier curves have the attribute that each single
     // curve segment defined by four points can not exit the four-point polygon
@@ -1366,7 +1366,7 @@ Rectangle Polygon::GetBoundRect() const
 
     sal_uInt16  nCount = mpImplPolygon->mnPoints;
     if( ! nCount )
-        return Rectangle();
+        return tools::Rectangle();
 
     long    nXMin, nXMax, nYMin, nYMax;
 
@@ -1388,14 +1388,14 @@ Rectangle Polygon::GetBoundRect() const
             nYMax = pPt->Y();
     }
 
-    return Rectangle( nXMin, nYMin, nXMax, nYMax );
+    return tools::Rectangle( nXMin, nYMin, nXMax, nYMax );
 }
 
 bool Polygon::IsInside( const Point& rPoint ) const
 {
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "IsInside could fail with beziers!" );
 
-    const Rectangle aBound( GetBoundRect() );
+    const tools::Rectangle aBound( GetBoundRect() );
     const Line      aLine( rPoint, Point( aBound.Right() + 100L, rPoint.Y() ) );
     sal_uInt16          nCount = mpImplPolygon->mnPoints;
     sal_uInt16          nPCounter = 0;

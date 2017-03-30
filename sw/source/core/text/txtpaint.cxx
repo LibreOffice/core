@@ -69,7 +69,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         pOut->SetClipRegion();
     else
     {
-        Rectangle aRect( rRect.SVRect() );
+        tools::Rectangle aRect( rRect.SVRect() );
 
         // Having underscores in our line, we enlarged the repaint area
         // (see frmform.cxx) because for some fonts it could be too small.

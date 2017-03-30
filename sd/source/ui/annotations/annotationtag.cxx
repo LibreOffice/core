@@ -116,7 +116,7 @@ bool AnnotationDragMove::BeginSdrDrag()
     DragStat().SetShown(!DragStat().IsShown());
 
     maOrigin = GetDragHdl()->GetPos();
-    DragStat().SetActionRect(Rectangle(maOrigin,maOrigin));
+    DragStat().SetActionRect(::tools::Rectangle(maOrigin,maOrigin));
 
     return true;
 }
@@ -133,7 +133,7 @@ void AnnotationDragMove::MoveSdrDrag(const Point& rNoSnapPnt)
             DragStat().NextMove(aPnt);
             GetDragHdl()->SetPos( maOrigin + Point( DragStat().GetDX(), DragStat().GetDY() ) );
             Show();
-            DragStat().SetActionRect(Rectangle(aPnt,aPnt));
+            DragStat().SetActionRect(::tools::Rectangle(aPnt,aPnt));
         }
     }
 }
@@ -351,7 +351,7 @@ bool AnnotationTag::Command( const CommandEvent& rCEvt )
         vcl::Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
         if( pWindow )
         {
-            Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
+            ::tools::Rectangle aContextRect(rCEvt.GetMousePosPixel(),Size(1,1));
                mrManager.ExecuteAnnotationContextMenu( mxAnnotation, pWindow, aContextRect );
             return true;
         }
@@ -436,7 +436,7 @@ bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
     return bRet;
 }
 
-bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, bool /*bUnmark*/ )
+bool AnnotationTag::MarkPoints(const ::tools::Rectangle* /*pRect*/, bool /*bUnmark*/ )
 {
     bool bChgd=false;
     return bChgd;
@@ -495,7 +495,7 @@ void AnnotationTag::select()
         RealPoint2D aPosition( mxAnnotation->getPosition() );
         Point aPos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
 
-        Rectangle aVisRect( aPos, pWindow->PixelToLogic(maSize) );
+        ::tools::Rectangle aVisRect( aPos, pWindow->PixelToLogic(maSize) );
         mrView.MakeVisible(aVisRect, *pWindow);
     }
 }
@@ -546,7 +546,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     }
 
     Point aPos;
-    Rectangle aBorderRect( aPos, maSize );
+    ::tools::Rectangle aBorderRect( aPos, maSize );
     pVDev->SetLineColor(aBorderColor);
     pVDev->SetFillColor(maColor);
     pVDev->DrawRect( aBorderRect );
@@ -573,7 +573,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
             aPos.X() += 4; // magic!
             aPos.Y() += 1;
 
-            Rectangle aRect( aPos, maSize );
+            ::tools::Rectangle aRect( aPos, maSize );
 
             mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrManager, mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
             mpAnnotationWindow->InitControls();

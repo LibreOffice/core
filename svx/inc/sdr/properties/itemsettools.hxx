@@ -24,7 +24,7 @@
 
 class SdrObject;
 class SfxItemSet;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Fraction;
 
 // class to remember broadcast start positions
@@ -42,7 +42,7 @@ namespace sdr
             ~ItemChangeBroadcaster();
 
             sal_uInt32 GetRectangleCount() const {  return mnCount; }
-            const Rectangle& GetRectangle(sal_uInt32 nIndex) const;
+            const tools::Rectangle& GetRectangle(sal_uInt32 nIndex) const;
         };
     } // end of namespace properties
 } // end of namespace sdr

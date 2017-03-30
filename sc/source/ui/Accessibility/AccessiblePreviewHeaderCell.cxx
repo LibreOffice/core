@@ -308,9 +308,9 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
 {
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
 
     FillTableInfo();
 
@@ -319,7 +319,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
         const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[maCellPos.Col()];
         const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[maCellPos.Row()];
 
-        aCellRect = Rectangle( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
+        aCellRect = tools::Rectangle( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
     }
 
     if (mpViewShell)
@@ -327,7 +327,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -335,7 +335,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
+tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
 {
     FillTableInfo();
 
@@ -344,7 +344,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
         const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[maCellPos.Col()];
         const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[maCellPos.Row()];
 
-        Rectangle aCellRect( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
+        tools::Rectangle aCellRect( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
         uno::Reference<XAccessible> xAccParent = const_cast<ScAccessiblePreviewHeaderCell*>(this)->getAccessibleParent();
         if (xAccParent.is())
         {
@@ -352,14 +352,14 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
             uno::Reference<XAccessibleComponent> xAccParentComp (xAccParentContext, uno::UNO_QUERY);
             if (xAccParentComp.is())
             {
-                Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
+                tools::Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
                 aCellRect.setX(aCellRect.getX() - aParentRect.getX());
                 aCellRect.setY(aCellRect.getY() - aParentRect.getY());
             }
         }
         return aCellRect;
     }
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription()
@@ -423,7 +423,7 @@ void ScAccessiblePreviewHeaderCell::FillTableInfo() const
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
         Point aPoint;
-        Rectangle aVisRect( aPoint, aOutputSize );
+        tools::Rectangle aVisRect( aPoint, aOutputSize );
 
         mpTableInfo = new ScPreviewTableInfo;
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );

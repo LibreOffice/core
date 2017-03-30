@@ -128,7 +128,7 @@ public:
         VclHBox::Resize();
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
         if (!m_bInitialized && SfxViewFrame::Current())
         {

@@ -48,7 +48,7 @@ class SdDrawDocument;
 class KeyEvent;
 class OutputDevice;
 class Size;
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
@@ -163,7 +163,7 @@ public:
     void resize( const Size &rSize );
     void activate(ViewShellBase& rBase);
     void deactivate(ViewShellBase& rBase);
-    void paint( const Rectangle& rRect );
+    void paint( const ::tools::Rectangle& rRect );
 
     bool keyInput(const KeyEvent& rKEvt);
 

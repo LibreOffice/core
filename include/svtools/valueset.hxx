@@ -201,8 +201,8 @@ private:
     ValueItemList   mItemList;
     std::unique_ptr<ValueSetItem> mpNoneItem;
     VclPtr<ScrollBar> mxScrollBar;
-    Rectangle       maNoneItemRect;
-    Rectangle       maItemListRect;
+    tools::Rectangle       maNoneItemRect;
+    tools::Rectangle       maItemListRect;
     long            mnItemWidth;
     long            mnItemHeight;
     long            mnTextOffset;
@@ -247,7 +247,7 @@ private:
 
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
@@ -261,7 +261,7 @@ private:
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE void         ImplInsertItem( ValueSetItem *const pItem, const size_t nPos );
-    SVT_DLLPRIVATE Rectangle    ImplGetItemRect( size_t nPos ) const;
+    SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
@@ -288,7 +288,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
@@ -320,7 +320,7 @@ public:
     size_t          GetItemPos( sal_uInt16 nItemId ) const;
     sal_uInt16      GetItemId( size_t nPos ) const;
     sal_uInt16      GetItemId( const Point& rPos ) const;
-    Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
+    tools::Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
     void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );

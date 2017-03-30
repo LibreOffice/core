@@ -28,9 +28,9 @@
 class VCL_DLLPUBLIC Slider : public Control
 {
 private:
-    Rectangle       maChannel1Rect;
-    Rectangle       maChannel2Rect;
-    Rectangle       maThumbRect;
+    tools::Rectangle       maChannel1Rect;
+    tools::Rectangle       maChannel2Rect;
+    tools::Rectangle       maThumbRect;
     long            mnStartPos;
     long            mnMouseOff;
     long            mnThumbPixOffset;
@@ -86,7 +86,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

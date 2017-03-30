@@ -51,7 +51,7 @@ private:
     ImplSplitSet*       mpBaseSet;
     ImplSplitSet*       mpSplitSet;
     long*               mpLastSizes;
-    Rectangle           maDragRect;
+    tools::Rectangle           maDragRect;
     long                mnDX;
     long                mnDY;
     long                mnLeftBorder;
@@ -89,13 +89,13 @@ private:
     SAL_DLLPRIVATE void ImplUpdate();
     SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
-    SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const;
-    SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, bool bTest = false ) const;
-    SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, bool bTest = false ) const;
+    SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, long nEx, bool bTest ) const;
+    SAL_DLLPRIVATE void ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest = false ) const;
+    SAL_DLLPRIVATE void ImplGetFadeOutRect( tools::Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
-    SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorz, bool bLeft);
+    SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bHorz, bool bLeft);
     SAL_DLLPRIVATE void ImplStartSplit( const MouseEvent& rMEvt );
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
@@ -103,7 +103,7 @@ private:
     static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
                                              bool bRows, bool bDown = true );
     SAL_DLLPRIVATE void ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet );
-    SAL_DLLPRIVATE static void ImplDrawBack(vcl::RenderContext& rRenderContext, const Rectangle& rRect,
+    SAL_DLLPRIVATE static void ImplDrawBack(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect,
                                              const Wallpaper* pWall, const Bitmap* pBitmap );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
@@ -128,7 +128,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;

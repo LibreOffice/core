@@ -72,7 +72,7 @@ public:
     long    Left()   const { return nLeft; }
 };
 
-TOOLS_DLLPUBLIC Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder );
+TOOLS_DLLPUBLIC tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBorder );
 
 #endif
 

@@ -36,7 +36,7 @@
 #include <svx/svdpage.hxx>
 #include "svx/sdrpaintwindow.hxx"
 
-void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& /*rOldBoundRect*/ )
+void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& /*rOldBoundRect*/ )
 {
     switch( eType )
     {
@@ -149,7 +149,7 @@ void GraphCtrl::InitSdrModel()
 
     // Creating a View
     pView = new GraphCtrlView( pModel, this );
-    pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
+    pView->SetWorkArea( tools::Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
     pView->SetFrameDragSingles();
@@ -244,7 +244,7 @@ void GraphCtrl::Resize()
     Invalidate();
 }
 
-void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     // #i72889# used splitted repaint to be able to paint an own background
     // even to the buffered view
@@ -457,11 +457,11 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 if(nullptr == pHdl)
                 {
                     // restrict movement to WorkArea
-                    const Rectangle& rWorkArea = pView->GetWorkArea();
+                    const tools::Rectangle& rWorkArea = pView->GetWorkArea();
 
                     if(!rWorkArea.IsEmpty())
                     {
-                        Rectangle aMarkRect(pView->GetMarkedObjRect());
+                        tools::Rectangle aMarkRect(pView->GetMarkedObjRect());
                         aMarkRect.Move(nX, nY);
 
                         if(!aMarkRect.IsInside(rWorkArea))
@@ -613,7 +613,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        if ( !Rectangle( Point(), aGraphSize ).IsInside( aLogPt ) && !pView->IsEditMode() )
+        if ( !tools::Rectangle( Point(), aGraphSize ).IsInside( aLogPt ) && !pView->IsEditMode() )
             Control::MouseButtonDown( rMEvt );
         else
         {
@@ -670,7 +670,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 
     if ( aMousePosLink.IsSet() )
     {
-        if ( Rectangle( Point(), aGraphSize ).IsInside( aLogPos ) )
+        if ( tools::Rectangle( Point(), aGraphSize ).IsInside( aLogPos ) )
             aMousePos = aLogPos;
         else
             aMousePos = Point();

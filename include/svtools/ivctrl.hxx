@@ -74,8 +74,8 @@ class SvxIconChoiceCtrlEntry
     friend class EntryList_Impl;
     friend class IcnGridMap_Impl;
 
-    Rectangle               aRect;              // Bounding-Rectangle of the entry
-    Rectangle               aGridRect;          // Only valid in Grid-mode
+    tools::Rectangle               aRect;              // Bounding-Rectangle of the entry
+    tools::Rectangle               aGridRect;          // Only valid in Grid-mode
     sal_Int32               nPos;
 
     /*
@@ -195,7 +195,7 @@ protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
@@ -278,8 +278,8 @@ public:
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
 
-    Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
-    Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
+    tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
+    tools::Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
 
     void                SetNoSelection();
 

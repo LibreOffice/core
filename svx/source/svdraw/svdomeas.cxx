@@ -634,7 +634,7 @@ void SdrMeasureObj::UndirtyText() const
     }
 }
 
-void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     if (bTextDirty) UndirtyText();
     ImpMeasureRec aRec;
@@ -719,7 +719,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
     aTextSize2.Width()++; aTextSize2.Height()++; // because of the Rect-Ctor's odd behavior
-    rRect=Rectangle(aTextPos,aTextSize2);
+    rRect=tools::Rectangle(aTextPos,aTextSize2);
     rRect.Justify();
     const_cast<SdrMeasureObj*>(this)->maRect=rRect;
 
@@ -1294,20 +1294,20 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
         SetTextDirty(); // recalculate text
 }
 
-void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-    Rectangle* pAnchorRect, bool bLineWidth ) const
+void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
+    tools::Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextRect( rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
 }
 
-void SdrMeasureObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
+void SdrMeasureObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextAnchorRect(rAnchorRect);
 }
 
-void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
+void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextEditArea(pPaperMin,pPaperMax,pViewInit,pViewMin);
@@ -1469,7 +1469,7 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     if(aNewPt1 != aPt1 || aNewPt2 != aPt2)
     {
         // set model values and broadcast
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
 
         aPt1 = aNewPt1;
         aPt2 = aNewPt2;

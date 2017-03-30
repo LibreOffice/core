@@ -174,7 +174,7 @@ m_aDocSz = rSz;
     }
 
     //If text has been deleted, it may be that the VisArea points behind the visible range.
-    Rectangle aNewVisArea( m_aVisArea );
+    tools::Rectangle aNewVisArea( m_aVisArea );
     bool bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = m_aDocSz.Width() + lGreenOffset;
@@ -207,7 +207,7 @@ m_aDocSz = rSz;
 
 // Set VisArea newly
 
-void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
+void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
 {
     Size aOldSz( m_aVisArea.GetSize() );
     if (comphelper::LibreOfficeKit::isActive() && m_pWrtShell)
@@ -220,7 +220,7 @@ void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
     const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
 
     // No negative position, no negative size
-    Rectangle aLR = rRect;
+    tools::Rectangle aLR = rRect;
     if( aLR.Top() < lMin )
     {
         aLR.Bottom() += lMin - aLR.Top();
@@ -269,7 +269,7 @@ void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
     {
         // If the size of VisArea is unchanged, we extend the size of the VisArea
         // InternalObject on. By that the transport of errors shall be avoided.
-        Rectangle aVis( m_aVisArea );
+        tools::Rectangle aVis( m_aVisArea );
         if ( aVis.GetSize() == aOldSz )
             aVis.SetSize( GetDocShell()->SfxObjectShell::GetVisArea(ASPECT_CONTENT).GetSize() );
                     // TODO/LATER: why casting?!
@@ -318,7 +318,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 
     const long lXDiff = m_aVisArea.Left() - aPt.X();
     const long lYDiff = m_aVisArea.Top()  - aPt.Y();
-    SetVisArea( Rectangle( aPt,
+    SetVisArea( tools::Rectangle( aPt,
             Point( m_aVisArea.Right() - lXDiff, m_aVisArea.Bottom() - lYDiff ) ),
             bUpdateScrollbar);
 }
@@ -332,7 +332,7 @@ void SwView::CheckVisArea()
         if ( m_aVisArea.Left() != DOCUMENTBORDER ||
              m_aVisArea.Top()  != DOCUMENTBORDER )
         {
-            Rectangle aNewVisArea( m_aVisArea );
+            tools::Rectangle aNewVisArea( m_aVisArea );
             aNewVisArea.Move( DOCUMENTBORDER - m_aVisArea.Left(),
                               DOCUMENTBORDER - m_aVisArea.Top() );
             SetVisArea( aNewVisArea );
@@ -349,7 +349,7 @@ void SwView::CheckVisArea()
 //  sal_uInt16 nRange           optional accurate indication of the
 //                              range by which to scroll if necessary.
 
-void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
+void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
                      sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
 
@@ -395,23 +395,23 @@ void SwView::CalcPt( Point *pPt, const Rectangle &rRect,
 
 // Scrolling
 
-bool SwView::IsScroll( const Rectangle &rRect ) const
+bool SwView::IsScroll( const tools::Rectangle &rRect ) const
 {
     return m_bCenterCursor || m_bTopCursor || !m_aVisArea.IsInside(rRect);
 }
 
-void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY )
+void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY )
 {
     if ( m_aVisArea.IsEmpty() )
         return;
 
-    Rectangle aOldVisArea( m_aVisArea );
+    tools::Rectangle aOldVisArea( m_aVisArea );
     long nDiffY = 0;
 
     vcl::Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
     if ( pCareWn )
     {
-        Rectangle aDlgRect( GetEditWin().PixelToLogic(
+        tools::Rectangle aDlgRect( GetEditWin().PixelToLogic(
                 pCareWn->GetWindowExtentsRelative( &GetEditWin() ) ) );
         // Only if the dialogue is not the VisArea right or left:
         if ( aDlgRect.Left() < m_aVisArea.Right() &&
@@ -463,7 +463,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
         aSize.Width() = std::min( aSize.Width(), aVisSize.Width() );
         aSize.Height()= std::min( aSize.Height(),aVisSize.Height());
 
-        CalcPt( &aPt, Rectangle( rRect.TopLeft(), aSize ),
+        CalcPt( &aPt, tools::Rectangle( rRect.TopLeft(), aSize ),
                 static_cast< sal_uInt16 >((aVisSize.Width() - aSize.Width()) / 2),
                 static_cast< sal_uInt16 >((aVisSize.Height()- aSize.Height())/ 2) );
 
@@ -712,7 +712,7 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                 //QuickHelp:
                 if( m_pWrtShell->GetPageCnt() > 1 )
                 {
-                    Rectangle aRect;
+                    tools::Rectangle aRect;
                     aRect.Left() = pScrollbar->GetParent()->OutputToScreenPixel(
                                         pScrollbar->GetPosPixel() ).X() -8;
                     aRect.Top() = pScrollbar->OutputToScreenPixel(
@@ -754,7 +754,7 @@ IMPL_LINK( SwView, EndScrollHdl, ScrollBar *, p, void )
         if(nPgNum)
         {
             nPgNum = 0;
-            Help::ShowQuickHelp(pScrollbar, Rectangle(), OUString());
+            Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
         }
         Point aPos( m_aVisArea.TopLeft() );
         bool bBorder = IsDocumentBorder();
@@ -774,7 +774,7 @@ IMPL_LINK( SwView, EndScrollHdl, ScrollBar *, p, void )
 void SwView::CalcVisArea( const Size &rOutPixel )
 {
     Point aTopLeft;
-    Rectangle aRect( aTopLeft, rOutPixel );
+    tools::Rectangle aRect( aTopLeft, rOutPixel );
     aTopLeft = GetEditWin().PixelToLogic( aTopLeft );
     Point aBottomRight( GetEditWin().PixelToLogic( aRect.BottomRight() ) );
 
@@ -1164,7 +1164,7 @@ bool SwView::UpdateScrollbars()
     if ( !m_aVisArea.IsEmpty() )
     {
         const bool bBorder = IsDocumentBorder();
-        Rectangle aTmpRect( m_aVisArea );
+        tools::Rectangle aTmpRect( m_aVisArea );
         if ( bBorder )
         {
             Point aPt( DOCUMENTBORDER, DOCUMENTBORDER );

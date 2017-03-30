@@ -145,9 +145,9 @@ void Gradient::SetSteps( sal_uInt16 nSteps )
     mpImplGradient->mnStepCount = nSteps;
 }
 
-void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Point& rCenter ) const
+void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
 {
-    Rectangle aRect( rRect );
+    tools::Rectangle aRect( rRect );
     sal_uInt16 nAngle = GetAngle() % 3600;
 
     if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )

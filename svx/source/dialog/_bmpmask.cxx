@@ -75,7 +75,7 @@ public:
         Invalidate();
     }
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 
     virtual Size GetOptimalSize() const override
     {
@@ -312,12 +312,12 @@ IMPL_LINK_NOARG(MaskData, ExecHdl, Button*, void)
             { &aBItem });
 }
 
-void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*Rect*/)
+void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
-    rRenderContext.DrawRect(Rectangle(Point(), GetSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(), GetSizePixel()));
     rRenderContext.Pop();
 }
 
@@ -965,7 +965,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
 
     // retrieve one action at the time; first
     // set the whole area to the replacement color.
-    pVDev->DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
+    pVDev->DrawRect( tools::Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
     for ( size_t i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );

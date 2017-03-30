@@ -185,7 +185,7 @@ class HtmlExport final
     static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
                                   sal_uLong nCenterY, const OUString& rHRef );
     static OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef );
-    static OUString CreateHTMLRectArea( const Rectangle& rRect,
+    static OUString CreateHTMLRectArea( const ::tools::Rectangle& rRect,
                                 const OUString& rHRef );
 
     OUString CreatePageURL( sal_uInt16 nPgNum );

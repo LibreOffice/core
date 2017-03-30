@@ -120,7 +120,7 @@ void SdrDragView::BrkAction()
     BrkDragObj();
 }
 
-void SdrDragView::TakeActionRect(Rectangle& rRect) const
+void SdrDragView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if (mpCurrentSdrDragMethod)
     {
@@ -139,7 +139,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
                 }
                 else
                 {
-                    rRect = Rectangle(
+                    rRect = tools::Rectangle(
                         basegfx::fround(aBoundRange.getMinX()), basegfx::fround(aBoundRange.getMinY()),
                         basegfx::fround(aBoundRange.getMaxX()), basegfx::fround(aBoundRange.getMaxY()));
                 }
@@ -147,7 +147,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
         }
         if (rRect.IsEmpty())
         {
-            rRect=Rectangle(maDragStat.GetNow(),maDragStat.GetNow());
+            rRect=tools::Rectangle(maDragStat.GetNow(),maDragStat.GetNow());
         }
     }
     else
@@ -158,7 +158,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
 
 bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
 {
-    Rectangle aR;
+    tools::Rectangle aR;
     TakeActionRect(aR);
     rPos = bTR ? aR.TopRight() : aR.TopLeft();
     if (GetMarkedObjectCount()==1 && IsDragObj() && // only on single selection
@@ -192,7 +192,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
 }
 
 
-bool SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, Rectangle& /*rRect*/) const
+bool SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, tools::Rectangle& /*rRect*/) const
 {
     return false;
 }

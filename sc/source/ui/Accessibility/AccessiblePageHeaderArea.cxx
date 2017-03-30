@@ -243,9 +243,9 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
     return sName;
 }
 
-Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
@@ -253,15 +253,15 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
         if (xComp.is())
         {
             // has the same size and position on screen like the parent
-            aRect = Rectangle(VCLPoint(xComp->getLocationOnScreen()), VCLRectangle(xComp->getBounds()).GetSize());
+            aRect = tools::Rectangle(VCLPoint(xComp->getLocationOnScreen()), VCLRectangle(xComp->getBounds()).GetSize());
         }
     }
     return aRect;
 }
 
-Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
+tools::Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xContext = mxParent->getAccessibleContext();
@@ -269,7 +269,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
         if (xComp.is())
         {
             // has the same size and position on screen like the parent and so the pos is (0, 0)
-            Rectangle aNewRect(Point(0, 0), VCLRectangle(xComp->getBounds()).GetSize());
+            tools::Rectangle aNewRect(Point(0, 0), VCLRectangle(xComp->getBounds()).GetSize());
             aRect = aNewRect;
         }
     }

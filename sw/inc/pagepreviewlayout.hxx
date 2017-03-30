@@ -75,7 +75,7 @@ private:
     bool        mbBookPreviewModeToggled;
 
     Size        maMaxPageSize;
-    Rectangle   maPreviewDocRect;
+    tools::Rectangle   maPreviewDocRect;
     SwTwips     mnColWidth;
     SwTwips     mnRowHeight;
     SwTwips     mnPreviewLayoutWidth;
@@ -90,7 +90,7 @@ private:
     Point       maPaintStartPageOffset;
     Point       maPaintPreviewDocOffset;
     Point       maAdditionalPaintOffset;
-    Rectangle   maPaintedPreviewDocRect;
+    tools::Rectangle   maPaintedPreviewDocRect;
     sal_uInt16  mnSelectedPageNum;
 
     std::vector<PreviewPage*> maPreviewPages;
@@ -325,7 +325,7 @@ public:
                   const Point&      rProposedStartPos,
                   const Size&      _rPxWinSize,
                   sal_uInt16&      _onStartPageNum,
-                  Rectangle&       _orDocPreviewPaintRect,
+                  tools::Rectangle&       _orDocPreviewPaintRect,
                   const bool       _bStartWithPageAtFirstCol = true
                 );
 
@@ -356,7 +356,7 @@ public:
 
         @return boolean, indicating, if paint of preview was performed
     */
-    bool Paint(vcl::RenderContext& rRenderContext, const Rectangle& rOutRect) const;
+    bool Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rOutRect) const;
 
     /** repaint pages on page preview
 
@@ -365,7 +365,7 @@ public:
 
         @author OD
     */
-    void Repaint(const Rectangle& rInvalidCoreRect) const;
+    void Repaint(const tools::Rectangle& rInvalidCoreRect) const;
 
     /** paint to mark new selected page
 
@@ -550,7 +550,7 @@ public:
     */
     bool SetBookPreviewMode( const bool  _bEnableBookPreview,
                              sal_uInt16& _onStartPageNum,
-                             Rectangle&  _orDocPreviewPaintRect );
+                             tools::Rectangle&  _orDocPreviewPaintRect );
 
     /** Convert relative to absolute page numbers (see PrintEmptyPages)
 

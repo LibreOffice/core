@@ -150,15 +150,15 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
     }
 }
 
-Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
 {
-    Rectangle aCellRect(GetBoundingBox());
+    tools::Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -166,9 +166,9 @@ Rectangle ScAccessibleCell::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-Rectangle ScAccessibleCell::GetBoundingBox() const
+tools::Rectangle ScAccessibleCell::GetBoundingBox() const
 {
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     if (mpViewShell)
     {
         long nSizeX, nSizeY;
@@ -180,7 +180,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
         vcl::Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
-            Rectangle aRect(pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow()));
+            tools::Rectangle aRect(pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow()));
             aRect.Move(-aRect.Left(), -aRect.Top());
             aCellRect = aRect.Intersection(aCellRect);
         }
@@ -196,7 +196,7 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
                 mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_ROTATE_VALUE ) );
             if( pItem && (pItem->GetValue() != 0) )
             {
-                Rectangle aParaRect = GetParagraphBoundingBox();
+                tools::Rectangle aParaRect = GetParagraphBoundingBox();
                 if( !aParaRect.IsEmpty() && (aCellRect.GetWidth() < aParaRect.GetWidth()) )
                     aCellRect.SetSize( Size( aParaRect.GetWidth(), aCellRect.GetHeight() ) );
             }

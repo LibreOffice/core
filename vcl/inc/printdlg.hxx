@@ -59,7 +59,7 @@ namespace vcl
             virtual ~PrintPreviewWindow() override;
             virtual void dispose() override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual void Command( const CommandEvent& ) override;
             virtual void Resize() override;
             virtual void DataChanged( const DataChangedEvent& ) override;
@@ -82,7 +82,7 @@ namespace vcl
 
             virtual Size GetOptimalSize() const override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
+            virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
             void setValues( NupOrderType i_nOrderMode, int i_nColumns, int i_nRows )
             {

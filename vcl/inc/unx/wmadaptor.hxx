@@ -132,7 +132,7 @@ protected:
     Atom                    m_aWMAtoms[ NetAtomMax];
     int                     m_nDesktops;
     bool                    m_bEqualWorkAreas;
-    ::std::vector< Rectangle >
+    ::std::vector< tools::Rectangle >
                             m_aWMWorkAreas;
     bool                    m_bEnableAlwaysOnTopWorks;
     bool                    m_bLegacyPartialFullscreen;
@@ -179,7 +179,7 @@ public:
     /*
      *  gets the specified workarea
      */
-    const Rectangle& getWorkArea( int n ) const
+    const tools::Rectangle& getWorkArea( int n ) const
     { return m_aWMWorkAreas[n]; }
 
     /*

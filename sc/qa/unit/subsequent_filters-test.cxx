@@ -3757,7 +3757,7 @@ void ScFiltersTest::testBnc762542()
         SdrObject* pObj = pPage->GetObj(i);
         CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
 
-        Rectangle aRect(pObj->GetCurrentBoundRect());
+        tools::Rectangle aRect(pObj->GetCurrentBoundRect());
         CPPUNIT_ASSERT_MESSAGE("Drawing object shouldn't be rotated.", aRect.GetWidth() > aRect.GetHeight());
     }
 

@@ -182,7 +182,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
     if( bFillLayout )
         (mpControlData->mpLayoutData->m_aDisplayText).clear();
 
-    const Rectangle aRect(aPos, rSize);
+    const tools::Rectangle aRect(aPos, rSize);
     DrawControlText(*pDev, aRect, aText, nTextStyle,
         bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
         bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
@@ -213,7 +213,7 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedText::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void FixedText::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
@@ -240,7 +240,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
     if ( bBorder || bBackground )
     {
-        Rectangle aRect( aPos, aSize );
+        tools::Rectangle aRect( aPos, aSize );
         if ( bBorder )
         {
             ImplDrawFrame( pDev, aRect );
@@ -321,7 +321,7 @@ Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt,
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
         nStyle |= DrawTextFlags::Mnemonic;
 
-    return pControl->GetTextRect(Rectangle( Point(), Size(nMaxWidth, 0x7fffffff)),
+    return pControl->GetTextRect(tools::Rectangle( Point(), Size(nMaxWidth, 0x7fffffff)),
                                        rTxt, nStyle).GetSize();
 }
 
@@ -545,7 +545,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
     else
     {
         DrawTextFlags nStyle = DrawTextFlags::Mnemonic | DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::EndEllipsis;
-        Rectangle aRect(0, 0, aOutSize.Width(), aOutSize.Height());
+        tools::Rectangle aRect(0, 0, aOutSize.Width(), aOutSize.Height());
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         if (nWinStyle & WB_CENTER)
             nStyle |= DrawTextFlags::Center;
@@ -604,7 +604,7 @@ void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void FixedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(rRenderContext);
 }
@@ -736,7 +736,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
@@ -746,7 +746,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    tools::Rectangle   aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -881,7 +881,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
 }
 
 
-void FixedImage::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void FixedImage::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
@@ -896,7 +896,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    tools::Rectangle   aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();

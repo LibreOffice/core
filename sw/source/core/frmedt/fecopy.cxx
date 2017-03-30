@@ -920,7 +920,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             // Therefore we calculate the absolute position here
                             // and after the insert the anchor of the object
                             // is set to the anchor of the group object.
-                            Rectangle aSnapRect = pNew->GetSnapRect();
+                            tools::Rectangle aSnapRect = pNew->GetSnapRect();
                             if( pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y() )
                             {
                                 const Point aPoint( 0, 0 );
@@ -1371,9 +1371,9 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 }
 
                 SdrObject* pNewObj = pClpObj->Clone();
-                Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
+                tools::Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
                 Size aOldObjSize( aOldObjRect.GetSize() );
-                Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
+                tools::Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
                 Size aNewSize( aNewRect.GetSize() );
 
                 Fraction aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
@@ -1520,7 +1520,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
             }
             else
                 pObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetHeavenId() );
-            const Rectangle &rSnap = pObj->GetSnapRect();
+            const tools::Rectangle &rSnap = pObj->GetSnapRect();
             const Size aDiff( rSnap.GetWidth()/2, rSnap.GetHeight()/2 );
             pView->MoveMarkedObj( aDiff );
             ImpEndCreate();

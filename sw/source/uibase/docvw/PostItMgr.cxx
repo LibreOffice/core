@@ -153,7 +153,7 @@ namespace {
 
             const SwPostItField* pField = pWin->GetPostItField();
             const SwRect& aRect = pWin->GetAnchorRect();
-            const Rectangle aSVRect(aRect.Pos().getX(),
+            const tools::Rectangle aSVRect(aRect.Pos().getX(),
                                     aRect.Pos().getY(),
                                     aRect.Pos().getX() + aRect.SSize().Width(),
                                     aRect.Pos().getY() + aRect.SSize().Height());
@@ -971,7 +971,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     }
 }
 
-void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRect*/)
+void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     for (SwSidebarItem* pItem : mvPostItFields)
     {
@@ -987,7 +987,7 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
         aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
         rRenderContext.SetMapMode(aMapMode);
         Size aSize(rRenderContext.PixelToLogic(pPostIt->GetSizePixel()));
-        Rectangle aRectangle(Point(0, 0), aSize);
+        tools::Rectangle aRectangle(Point(0, 0), aSize);
 
         pPostIt->PaintTile(rRenderContext, aRectangle);
 
@@ -1089,7 +1089,7 @@ void SwPostItMgr::MakeVisible(const SwSidebarWin* pPostIt )
     }
     if (aPage!=-1)
         AutoScroll(pPostIt,aPage);
-    Rectangle aNoteRect (Point(pPostIt->GetPosPixel().X(),pPostIt->GetPosPixel().Y()-5),pPostIt->GetSizePixel());
+    tools::Rectangle aNoteRect (Point(pPostIt->GetPosPixel().X(),pPostIt->GetPosPixel().Y()-5),pPostIt->GetSizePixel());
     if (!aNoteRect.IsEmpty())
         mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
 }
@@ -1125,7 +1125,7 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
     }
 }
 
-bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList, const Rectangle& rBorder, long lNeededHeight)
+bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList, const tools::Rectangle& rBorder, long lNeededHeight)
 {
     /*** General layout idea:***/
     //  - if we have space left, we always move the current one up,
@@ -1134,7 +1134,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList, con
     //  - then the real layout starts
 
     //rBorder is the page rect
-    const Rectangle aBorder         = mpEditWin->LogicToPixel(rBorder);
+    const tools::Rectangle aBorder         = mpEditWin->LogicToPixel(rBorder);
     long            lTopBorder      = aBorder.Top() + 5;
     long            lBottomBorder   = aBorder.Bottom() - 5;
     const long      lVisibleHeight  = lBottomBorder - lTopBorder; //aBorder.GetHeight() ;
@@ -1847,11 +1847,11 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
         const unsigned long nPageNum = SwPostItHelper::getPageInfo( aPageFrame, pLayout, aPoint );
         if( nPageNum )
         {
-            Rectangle aRect;
+            tools::Rectangle aRect;
             OSL_ENSURE(mPages.size()>nPageNum-1,"SwPostitMgr:: page container size wrong");
             aRect = mPages[nPageNum-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                    ? Rectangle(Point(aPageFrame.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrame.Top()),Size(GetSidebarWidth(),aPageFrame.Height()))
-                    : Rectangle( Point(aPageFrame.Right()+GetSidebarBorderWidth(),aPageFrame.Top()) , Size(GetSidebarWidth(),aPageFrame.Height()));
+                    ? tools::Rectangle(Point(aPageFrame.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrame.Top()),Size(GetSidebarWidth(),aPageFrame.Height()))
+                    : tools::Rectangle( Point(aPageFrame.Right()+GetSidebarBorderWidth(),aPageFrame.Top()) , Size(GetSidebarWidth(),aPageFrame.Height()));
             if (aRect.IsInside(aPoint))
             {
                 // we hit the note's sidebar
@@ -1896,24 +1896,24 @@ vcl::Window* SwPostItMgr::IsHitSidebarWindow(const Point& rPointLogic)
     return pRet;
 }
 
-Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) const
+tools::Rectangle SwPostItMgr::GetBottomScrollRect(const unsigned long aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointBottom = mPages[aPage-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
                          ? Point(aPageRect.Left() - GetSidebarWidth() - GetSidebarBorderWidth() + mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- mpEditWin->PixelToLogic(Size(0,2+GetSidebarScrollerHeight())).Height())
                          : Point(aPageRect.Right() + GetSidebarBorderWidth() + mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Bottom()- mpEditWin->PixelToLogic(Size(0,2+GetSidebarScrollerHeight())).Height());
     Size aSize(GetSidebarWidth() - mpEditWin->PixelToLogic(Size(4,0)).Width(), mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height()) ;
-    return Rectangle(aPointBottom,aSize);
+    return tools::Rectangle(aPointBottom,aSize);
 }
 
-Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
+tools::Rectangle SwPostItMgr::GetTopScrollRect(const unsigned long aPage) const
 {
     SwRect aPageRect = mPages[aPage-1]->mPageRect;
     Point aPointTop = mPages[aPage-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
                       ? Point(aPageRect.Left() - GetSidebarWidth() -GetSidebarBorderWidth()+ mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + mpEditWin->PixelToLogic(Size(0,2)).Height())
                       : Point(aPageRect.Right() + GetSidebarBorderWidth() + mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + mpEditWin->PixelToLogic(Size(0,2)).Height());
     Size aSize(GetSidebarWidth() - mpEditWin->PixelToLogic(Size(4,0)).Width(), mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height()) ;
-    return Rectangle(aPointTop,aSize);
+    return tools::Rectangle(aPointTop,aSize);
 }
 
 //IMPORTANT: if you change the rects here, also change SwPageFrame::PaintNotesSidebar()
@@ -1928,8 +1928,8 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
                       ? Point(aPageRect.Left() - GetSidebarWidth()-GetSidebarBorderWidth()+ mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + mpEditWin->PixelToLogic(Size(0,2)).Height())
                       : Point(aPageRect.Right()+GetSidebarBorderWidth()+ mpEditWin->PixelToLogic(Size(2,0)).Width(),aPageRect.Top() + mpEditWin->PixelToLogic(Size(0,2)).Height());
 
-    Rectangle aRectBottom(GetBottomScrollRect(aPage));
-    Rectangle aRectTop(GetTopScrollRect(aPage));
+    tools::Rectangle aRectBottom(GetBottomScrollRect(aPage));
+    tools::Rectangle aRectTop(GetTopScrollRect(aPage));
 
     if (aRectBottom.IsInside(aPoint))
     {

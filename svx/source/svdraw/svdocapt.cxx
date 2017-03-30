@@ -91,10 +91,10 @@ public:
         nLineLen   =0;
         bFitLineLen=true;
     }
-    void CalcEscPos(const Point& rTail, const Rectangle& rRect, Point& rPt, EscDir& rDir) const;
+    void CalcEscPos(const Point& rTail, const tools::Rectangle& rRect, Point& rPt, EscDir& rDir) const;
 };
 
-void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Point& rPt, EscDir& rDir) const
+void ImpCaptParams::CalcEscPos(const Point& rTailPt, const tools::Rectangle& rRect, Point& rPt, EscDir& rDir) const
 {
     Point aTl(rTailPt); // copy locally for performance reasons
     long nX,nY;
@@ -199,7 +199,7 @@ SdrCaptionObj::SdrCaptionObj():
 {
 }
 
-SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
+SdrCaptionObj::SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
@@ -449,7 +449,7 @@ void SdrCaptionObj::ImpRecalcTail()
 // tail end pos for SdrCaptionType::Type1. This sure was the simplest method
 // to achieve this, at the cost of making a whole group of const methods
 // of this object implicitly change the object's position.
-void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
 {
     tools::Polygon aPol(2);
     Point aTl(rPoly[0]);
@@ -475,7 +475,7 @@ void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly = aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
 { // Gap/EscDir/EscPos/Angle
     tools::Polygon aPol(2);
     Point aTl(rPoly[0]);
@@ -492,7 +492,7 @@ void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly=aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
 { // Gap/EscDir/EscPos/Angle/LineLen
     tools::Polygon aPol(3);
     Point aTl(rPoly[0]);
@@ -525,7 +525,7 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly=aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
 {
     switch (rPara.eType) {
         case SdrCaptionType::Type1: ImpCalcTail1(rPara,rPoly,rRect); break;
@@ -622,12 +622,12 @@ Point SdrCaptionObj::GetRelativePos() const
     return aTailPoly.GetPoint(0)-aAnchor;
 }
 
-const Rectangle& SdrCaptionObj::GetLogicRect() const
+const tools::Rectangle& SdrCaptionObj::GetLogicRect() const
 {
     return maRect;
 }
 
-void SdrCaptionObj::NbcSetLogicRect(const Rectangle& rRect)
+void SdrCaptionObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
     ImpRecalcTail();
@@ -641,7 +641,7 @@ const Point& SdrCaptionObj::GetTailPos() const
 void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
     if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetTailPos(rPos);
         SetChanged();
         BroadcastObjectChange();
@@ -786,7 +786,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 
     // build BaseRect
     Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
-    Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
+    tools::Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
 
     // set BaseRect, but rescue TailPos over this call
     const Point aTailPoint = GetTailPos();

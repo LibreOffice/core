@@ -240,7 +240,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     // #110958# Restore disabled alpha VDev
     mpAlphaVDev = pOldAlphaVDev;
 
-    Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
+    tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MapUnit::MapInch ) );
     const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
     long            nMove;
@@ -270,14 +270,14 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     if(nMove)
     {
-        Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
+        tools::Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
         while( aRect.Top() <= aPolyRect.Bottom() )
         {
             DrawRect( aRect );
             aRect.Move( 0, nMove );
         }
 
-        aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
+        aRect = tools::Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
         while( aRect.Left() <= aPolyRect.Right() )
         {
             DrawRect( aRect );
@@ -739,7 +739,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     Point       aPt;
     Point       aDestPt( LogicToPixel( rDestPt ) );
     Size        aDestSz( LogicToPixel( rDestSize ) );
-    Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
+    tools::Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
 
     aSrcRect.Justify();
 
@@ -768,7 +768,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         }
 
         // source cropped?
-        if( aSrcRect != Rectangle( aPt, aMask.GetSizePixel() ) )
+        if( aSrcRect != tools::Rectangle( aPt, aMask.GetSizePixel() ) )
             aMask.Crop( aSrcRect );
 
         // destination mirrored
@@ -799,7 +799,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask
-        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
         RectangleVector aRectangles;
         aWorkRgn.GetRegionRectangles(aRectangles);
 
@@ -810,7 +810,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                 pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
                 pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
 
-            DrawRect(Rectangle(aMapPt, aMapSz));
+            DrawRect(tools::Rectangle(aMapPt, aMapSz));
         }
 
         Pop();
@@ -1749,7 +1749,7 @@ bool Printer::UsePolyPolygonForComplexGradient()
 
 void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly )
 {
-    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+    const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
     Push( PushFlags::CLIPREGION );
     IntersectClipRegion(vcl::Region(rPolyPoly));

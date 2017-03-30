@@ -88,7 +88,7 @@ void SvxXMeasurePreview::dispose()
     Control::dispose();
 }
 
-void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     pMeasureObj->SingleObjectPainter(rRenderContext);
 }

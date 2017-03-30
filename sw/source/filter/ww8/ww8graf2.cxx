@@ -548,8 +548,8 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 m_pDataStream->SeekRel( nNameLen );
             }
 
-            Rectangle aChildRect;
-            Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
+            tools::Rectangle aChildRect;
+            tools::Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
             SvxMSDffImportData aData( aClientRect );
             pObject = m_pMSDffManager->ImportObj(*m_pDataStream, &aData, aClientRect, aChildRect );
             if (pObject)
@@ -583,7 +583,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                         // object itself, no idea why it's this call (or even
                         // what the call actually does), but that's what
                         // ImportGraf() (called by ImportObj()) uses.
-                        pObject->SetSnapRect( Rectangle( 0, 0, aPD.nWidth, aPD.nHeight ));
+                        pObject->SetSnapRect( tools::Rectangle( 0, 0, aPD.nWidth, aPD.nHeight ));
                     }
 
                     // A graphic of this type in this location is always
@@ -608,7 +608,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
                     // Modified for i120716,for graf importing from MS Word 2003
                     // binary format, there is no border distance.
-                    Rectangle aInnerDist(0,0,0,0);
+                    tools::Rectangle aInnerDist(0,0,0,0);
                     MatchSdrItemsIntoFlySet( pObject, aAttrSet,
                         pRecord->eLineStyle, pRecord->eLineDashing,
                         pRecord->eShapeType, aInnerDist );

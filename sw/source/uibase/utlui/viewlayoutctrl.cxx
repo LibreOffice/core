@@ -87,9 +87,9 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
-    Rectangle aRect(rUsrEvt.GetRect());
+    tools::Rectangle aRect(rUsrEvt.GetRect());
 
-    const Rectangle aControlRect = getControlRect();
+    const tools::Rectangle aControlRect = getControlRect();
 
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;
@@ -119,7 +119,7 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 
 bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 {
-    const Rectangle aRect = getControlRect();
+    const tools::Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const long nXDiff = aPoint.X() - aRect.Left();
 
@@ -167,7 +167,7 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
 bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
 {
-    const Rectangle aRect = getControlRect();
+    const tools::Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const long nXDiff = aPoint.X() - aRect.Left();
 

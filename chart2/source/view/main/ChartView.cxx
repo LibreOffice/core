@@ -1963,7 +1963,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
                 SdrObject* pSdrObject = pShape->GetSdrObject();
                 if( pSdrObject )
                 {
-                    Rectangle aSnapRect( pSdrObject->GetSnapRect() );
+                    tools::Rectangle aSnapRect( pSdrObject->GetSnapRect() );
                     aRet = awt::Rectangle(aSnapRect.Left(),aSnapRect.Top(),aSnapRect.GetWidth(),aSnapRect.GetHeight());
                 }
             }

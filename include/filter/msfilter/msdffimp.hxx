@@ -271,10 +271,10 @@ typedef std::set<std::unique_ptr<SvxMSDffImportRec>,
 struct SvxMSDffImportData
 {
     MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
-    Rectangle           aParentRect;///< Rectangle of the surrounding groups,
+    tools::Rectangle           aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
 
-    explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
+    explicit SvxMSDffImportData( const tools::Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
     bool empty() const { return m_Records.empty(); }
     size_t size() const { return m_Records.size(); }
     MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
@@ -285,8 +285,8 @@ struct DffObjData
 {
     const DffRecordHeader&  rSpHd;
 
-    Rectangle   aBoundRect;
-    Rectangle   aChildAnchor;
+    tools::Rectangle   aBoundRect;
+    tools::Rectangle   aChildAnchor;
 
     sal_uInt32  nShapeId;
     sal_uInt32  nSpFlags;
@@ -303,7 +303,7 @@ struct DffObjData
     int         nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
-                const Rectangle& rBoundRect,
+                const tools::Rectangle& rBoundRect,
                 int   nClByGroup ) :
         rSpHd( rObjHd ),
         aBoundRect( rBoundRect ),
@@ -474,15 +474,15 @@ protected:
     // inside groups. Instead a graphic object is created.
     virtual SdrObject* ImportOLE( sal_uInt32 nOLEId,
                                   const Graphic& rGraf,
-                                  const Rectangle& rBoundRect,
-                                  const Rectangle& rVisArea,
+                                  const tools::Rectangle& rBoundRect,
+                                  const tools::Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
     static css::uno::Reference < css::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const css::uno::Reference < css::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
-                const Rectangle& rVisArea,
+                const tools::Rectangle& rVisArea,
                 OUString const& rBaseURL);
 
 // the following methods need to be overridden for Excel imports
@@ -500,7 +500,7 @@ protected:
     virtual SdrObject* ProcessObj( SvStream& rSt,
                                    DffObjData& rData,
                                    void* pData,
-                                   Rectangle& rTextRect,
+                                   tools::Rectangle& rTextRect,
                                    SdrObject* pObj);
 
     /** Object finalization, used by the Excel filter to correctly
@@ -634,7 +634,7 @@ public:
 
         @return true if successful, false otherwise
     */
-    bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = nullptr );
+    bool GetBLIP( sal_uLong nIdx, Graphic& rData, tools::Rectangle* pVisArea = nullptr );
 
 // TODO: provide proper documentation here
     /** read a BLIP out of a already positioned stream
@@ -646,40 +646,40 @@ public:
 
         @return true if successful, false otherwise
     */
-    static bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = nullptr );
+    static bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, tools::Rectangle* pVisArea = nullptr );
 
     bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
     SdrObject* ImportObj( SvStream& rSt,
                           void* pData,
-                          Rectangle& rClientRect,
-                          const Rectangle& rGlobalChildRect,
+                          tools::Rectangle& rClientRect,
+                          const tools::Rectangle& rGlobalChildRect,
                           int nCalledByGroup = 0,
                           sal_Int32* pShapeId = nullptr);
     SdrObject* ImportGroup( const DffRecordHeader& rHd,
                             SvStream& rSt,
                             void* pData,
-                            Rectangle& rClientRect,
-                            const Rectangle& rGlobalChildRect,
+                            tools::Rectangle& rClientRect,
+                            const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
                             sal_Int32* pShapeId = nullptr );
     SdrObject* ImportShape( const DffRecordHeader& rHd,
                             SvStream& rSt,
                             void* pData,
-                            Rectangle& rClientRect,
-                            const Rectangle& rGlobalChildRect,
+                            tools::Rectangle& rClientRect,
+                            const tools::Rectangle& rGlobalChildRect,
                             int nCalledByGroup,
                             sal_Int32* pShapeId = nullptr);
 
-    Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd,
+    tools::Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd,
                                     SvStream& rSt,
-                                    Rectangle& aClientRect );
+                                    tools::Rectangle& aClientRect );
     void GetGroupAnchors( const DffRecordHeader& rHd,
                           SvStream& rSt,
-                          Rectangle& rGroupClientAnchor,
-                          Rectangle& rGroupChildAnchor,
-                          const Rectangle& rClientRect,
-                          const Rectangle& rGlobalChildRect );
+                          tools::Rectangle& rGroupClientAnchor,
+                          tools::Rectangle& rGroupChildAnchor,
+                          const tools::Rectangle& rClientRect,
+                          const tools::Rectangle& rGlobalChildRect );
 
     const SvxMSDffShapeInfos_ById* GetShapeInfos() const
         { return m_xShapeInfosById.get(); }
@@ -703,8 +703,8 @@ public:
                                                 tools::SvRef<SotStorage>& rSrcStorage,
                                                 const css::uno::Reference < css::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
-                                                const Rectangle& rBoundRect,
-                                                const Rectangle& rVisArea,
+                                                const tools::Rectangle& rBoundRect,
+                                                const tools::Rectangle& rVisArea,
                                                 SvStream* pDataStrrm,
                                                 ErrCode& rError,
                                                 sal_uInt32 nConvertFlags,

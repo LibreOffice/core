@@ -77,7 +77,7 @@ protected:
     virtual void            NotifyScrolled() override;
 
     virtual void            SetTabs() override;
-    virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void            Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual void            HBarClick();
     void                    HBarDrag();

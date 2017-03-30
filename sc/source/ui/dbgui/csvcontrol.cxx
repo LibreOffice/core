@@ -256,7 +256,7 @@ sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
 
 // static helpers -------------------------------------------------------------
 
-void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
+void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const tools::Rectangle& rRect )
 {
     rOutDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::RASTEROP );
     rOutDev.SetLineColor( Color( COL_BLACK ) );

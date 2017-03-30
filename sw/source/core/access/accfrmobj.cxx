@@ -277,7 +277,7 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         if (pWin)
         {
             aBox = SwRect( pWin->PixelToLogic(
-                                            Rectangle( mpWindow->GetPosPixel(),
+                                            tools::Rectangle( mpWindow->GetPosPixel(),
                                                        mpWindow->GetSizePixel() ) ) );
         }
     }

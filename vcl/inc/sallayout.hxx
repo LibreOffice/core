@@ -178,7 +178,7 @@ public:
     virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
                                   const PhysicalFontFace** pFallbackFonts = nullptr) const = 0;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
+    virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 
     // reference counting
     void            Release() const;

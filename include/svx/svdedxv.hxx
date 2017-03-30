@@ -75,8 +75,8 @@ protected:
     SdrPageView*                pMacroPV;
     VclPtr<vcl::Window>         pMacroWin;
 
-    Rectangle                   aTextEditArea;
-    Rectangle                   aMinTextEditArea;
+    tools::Rectangle                   aTextEditArea;
+    tools::Rectangle                   aMinTextEditArea;
     Link<EditFieldInfo*,void>   aOldCalcFieldValueLink; // for call the old handler
     Point                       aMacroDownPos;
 
@@ -112,7 +112,7 @@ protected:
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
     OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView, SfxViewShell* pViewShell = nullptr) const;
-    void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
+    void ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
     // Chaining
@@ -155,7 +155,7 @@ public:
     virtual void EndAction() override;
     virtual void BrkAction() override;
     virtual void BckAction() override;
-    virtual void TakeActionRect(Rectangle& rRect) const override;
+    virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
     SdrPageView* ShowSdrPage(SdrPage* pPage) override;
     void HideSdrPage() override;

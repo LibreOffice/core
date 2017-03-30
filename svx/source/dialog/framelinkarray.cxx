@@ -708,9 +708,9 @@ void Array::SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, s
     mxImpl->mnLastClipRow = nLastRow;
 }
 
-Rectangle Array::GetClipRangeRectangle() const
+tools::Rectangle Array::GetClipRangeRectangle() const
 {
-    return Rectangle(
+    return tools::Rectangle(
         mxImpl->GetColPosition( mxImpl->mnFirstClipCol ),
         mxImpl->GetRowPosition( mxImpl->mnFirstClipRow ),
         mxImpl->GetColPosition( mxImpl->mnLastClipCol + 1 ),
@@ -808,9 +808,9 @@ Size Array::GetCellSize( size_t nCol, size_t nRow ) const
     return Size( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
 }
 
-Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
+tools::Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
 {
-    Rectangle aRect( GetCellPosition( nCol, nRow ), GetCellSize( nCol, nRow ) );
+    tools::Rectangle aRect( GetCellPosition( nCol, nRow ), GetCellSize( nCol, nRow ) );
 
     // adjust rectangle for partly visible merged cells
     const Cell& rCell = CELL( nCol, nRow );
@@ -900,7 +900,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             if( (!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) ||
                 (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow) )
             {
-                Rectangle aRect( GetCellRect( nCol, nRow ) );
+                tools::Rectangle aRect( GetCellRect( nCol, nRow ) );
                 if( (aRect.GetWidth() > 1) && (aRect.GetHeight() > 1) )
                 {
                     size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
@@ -1105,7 +1105,7 @@ void Array::DrawRange( OutputDevice& rDev,
             if( (!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) ||
                 (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow) )
             {
-                Rectangle aRect( GetCellRect( nCol, nRow ) );
+                tools::Rectangle aRect( GetCellRect( nCol, nRow ) );
                 if( (aRect.GetWidth() > 1) && (aRect.GetHeight() > 1) )
                 {
                     size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );

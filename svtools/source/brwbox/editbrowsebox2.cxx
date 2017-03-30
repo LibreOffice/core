@@ -164,9 +164,9 @@ void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
     }
 }
 
-Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
+tools::Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( SeekRow(_nRow) )
     {
         CellController* pController = GetController(

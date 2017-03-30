@@ -231,7 +231,7 @@ public:
 
     ViewShell* getViewShell() const { return mpViewShell; }
 
-    void paint( const Rectangle& rRect );
+    void paint( const ::tools::Rectangle& rRect );
     bool keyInput(const KeyEvent& rKEvt);
     void mouseButtonUp(const MouseEvent& rMEvt);
 

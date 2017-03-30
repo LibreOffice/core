@@ -292,9 +292,9 @@ void StatusBar::ImplFormat()
     mbFormat = false;
 }
 
-Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
+tools::Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 {
-    Rectangle       aRect;
+    tools::Rectangle       aRect;
     ImplStatusItem* pItem;
     pItem = ( nPos < mpItemList.size() ) ? mpItemList[ nPos ] : nullptr;
     if ( pItem )
@@ -329,7 +329,7 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
 void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
 {
     // prevent item box from being overwritten
-    Rectangle aTextRect;
+    tools::Rectangle aTextRect;
     aTextRect.Left() = STATUSBAR_OFFSET_X + 1;
     aTextRect.Top() = mnTextY;
     if (mbVisibleItems && (GetStyle() & WB_RIGHT))
@@ -352,7 +352,7 @@ void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
 
 void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen, sal_uInt16 nPos)
 {
-    Rectangle aRect = ImplGetItemRectPos(nPos);
+    tools::Rectangle aRect = ImplGetItemRectPos(nPos);
 
     if (aRect.IsEmpty())
         return;
@@ -360,7 +360,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     // compute output region
     ImplStatusItem* pItem = mpItemList[nPos];
     long nW = mpImplData->mnItemBorderWidth + 1;
-    Rectangle aTextRect(aRect.Left() + nW, aRect.Top() + nW,
+    tools::Rectangle aTextRect(aRect.Left() + nW, aRect.Top() + nW,
                         aRect.Right() - nW, aRect.Bottom() - nW);
 
     Size aTextRectSize(aTextRect.GetSize());
@@ -396,7 +396,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         {
             mbInUserDraw = true;
             mpImplData->mpVirDev->EnableRTL( IsRTLEnabled() );
-            UserDrawEvent aODEvt(this, mpImplData->mpVirDev, Rectangle(Point(), aTextRectSize), pItem->mnId);
+            UserDrawEvent aODEvt(this, mpImplData->mpVirDev, tools::Rectangle(Point(), aTextRectSize), pItem->mnId);
             UserDraw(aODEvt);
             mpImplData->mpVirDev->EnableRTL(false);
             mbInUserDraw = false;
@@ -450,7 +450,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
                   long nOffset, long nPrgsWidth, long nPrgsHeight,
                   sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
-                  const Rectangle& rFramePosSize)
+                  const tools::Rectangle& rFramePosSize)
 {
     if (rRenderContext.IsNativeControlSupported(ControlType::Progress, ControlPart::Entire))
     {
@@ -459,8 +459,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
         long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
         ImplControlValue aValue(nFullWidth * long(nPerc) / 10000);
-        Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
-        Rectangle aControlRegion(aDrawRect);
+        tools::Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
+        tools::Rectangle aControlRegion(aDrawRect);
 
         if(bNeedErase)
         {
@@ -480,7 +480,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                 // restore transparent background
                 Point aTL(pWindow->OutputToAbsoluteScreenPixel(rFramePosSize.TopLeft()));
                 aTL = pEraseWindow->AbsoluteScreenToOutputPixel(aTL);
-                Rectangle aRect(aTL, rFramePosSize.GetSize());
+                tools::Rectangle aRect(aTL, rFramePosSize.GetSize());
                 pEraseWindow->Invalidate(aRect, InvalidateFlags::NoChildren     |
                                                 InvalidateFlags::NoClipChildren |
                                                 InvalidateFlags::Transparent);
@@ -509,7 +509,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         // compute rectangle
         long nDX = nPrgsWidth + nOffset;
         long nLeft = rPos.X() + ((nPerc1 - 1) * nDX);
-        Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
+        tools::Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
         {
@@ -534,7 +534,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         // compute rectangle
         long nDX = nPrgsWidth + nOffset;
         long nLeft = rPos.X() + (nPerc1 * nDX);
-        Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
+        tools::Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
         {
@@ -614,8 +614,8 @@ void StatusBar::ImplCalcProgressRect()
     if( IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
     {
         ImplControlValue aValue;
-        Rectangle aControlRegion( Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
-        Rectangle aNativeControlRegion, aNativeContentRegion;
+        tools::Rectangle aControlRegion( tools::Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
+        tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( ControlType::Progress, ControlPart::Entire, aControlRegion,
                                                  ControlState::ENABLED, aValue, OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) )
@@ -671,7 +671,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mbFormat)
         ImplFormat();
@@ -757,7 +757,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
 
     if ( nItemId )
     {
-        Rectangle aItemRect = GetItemRect( nItemId );
+        tools::Rectangle aItemRect = GetItemRect( nItemId );
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
         aItemRect.Top()    = aPt.Y();
@@ -1040,7 +1040,7 @@ sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
         for ( nPos = 0; nPos < nItemCount; nPos++ )
         {
             // get rectangle
-            Rectangle aRect = ImplGetItemRectPos( nPos );
+            tools::Rectangle aRect = ImplGetItemRectPos( nPos );
             if ( aRect.IsInside( rPos ) )
                 return mpItemList[ nPos ]->mnId;
         }
@@ -1049,9 +1049,9 @@ sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
+tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     if ( AreItemsVisible() && !mbFormat )
     {
@@ -1081,9 +1081,9 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
         {
             // get rectangle
             ImplStatusItem* pItem = mpItemList[ nPos ];
-            Rectangle aRect = ImplGetItemRectPos( nPos );
+            tools::Rectangle aRect = ImplGetItemRectPos( nPos );
             long nW = mpImplData->mnItemBorderWidth + 1;
-            Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+            tools::Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                            aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
                                              Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
@@ -1156,7 +1156,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             // re-draw item if StatusBar is visible and UpdateMode active
             if ( pItem->mbVisible && !mbFormat && ImplIsItemUpdate() )
             {
-                Rectangle aRect = ImplGetItemRectPos(nPos);
+                tools::Rectangle aRect = ImplGetItemRectPos(nPos);
                 Invalidate(aRect);
                 Update();
             }
@@ -1209,7 +1209,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         if ( (pItem->mnBits & StatusBarItemBits::UserDraw) && pItem->mbVisible &&
              !mbFormat && ImplIsItemUpdate() )
         {
-            Rectangle aRect = ImplGetItemRectPos(nPos);
+            tools::Rectangle aRect = ImplGetItemRectPos(nPos);
             Invalidate(aRect, InvalidateFlags::NoErase);
             Update();
         }
@@ -1239,7 +1239,7 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
     if (pItem && (pItem->mnBits & StatusBarItemBits::UserDraw) &&
         pItem->mbVisible && ImplIsItemUpdate())
     {
-        Rectangle aRect = ImplGetItemRectPos(nPos);
+        tools::Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
         Update();
     }
@@ -1421,8 +1421,8 @@ Size StatusBar::CalcWindowSizePixel() const
     if( IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
     {
         ImplControlValue aValue;
-        Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
-        Rectangle aNativeControlRegion, aNativeContentRegion;
+        tools::Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
+        tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( ControlType::Progress, ControlPart::Entire,
                     aControlRegion, ControlState::ENABLED, aValue, OUString(),
                     aNativeControlRegion, aNativeContentRegion ) )
@@ -1435,8 +1435,8 @@ Size StatusBar::CalcWindowSizePixel() const
         IsNativeControlSupported( ControlType::Frame, ControlPart::Border ) )
     {
         ImplControlValue aControlValue( static_cast<long>(DrawFrameFlags::NoDraw) );
-        Rectangle aBound, aContent;
-        Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
+        tools::Rectangle aBound, aContent;
+        tools::Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
         if( GetNativeControlRegion(ControlType::Frame, ControlPart::Border,
                     aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {

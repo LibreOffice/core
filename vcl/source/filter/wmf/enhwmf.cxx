@@ -386,7 +386,7 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
             rStream.ReadInt32(nx2);
             rStream.ReadInt32(ny2);
 
-            Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
+            tools::Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
 
             tools::Polygon aPolygon(aRectangle);
             tools::PolyPolygon aPolyPolyOr1(aPolygon);
@@ -1141,7 +1141,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                     pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
-                    const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
+                    const tools::Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
 
                     // #i73608# OutputDevice deviates from WMF
                     // semantics. start==end means full ellipse here.
@@ -1249,7 +1249,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
                     sal_uInt32  dwRop = SRCAND|SRCINVERT;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+                    tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
                         bStatus = false;
@@ -1345,7 +1345,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                         ( xSrc + cxSrc < aBitmapEx.GetSizePixel().Width() ) &&
                                             ( ySrc + cySrc < aBitmapEx.GetSizePixel().Height() ) )
                                 {
-                                    const Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                    const tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
 
                                     aBitmapEx.Crop( aCropRect );
                                 }
@@ -1388,7 +1388,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         cxSrc = cySrc = 0;
 
                     Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+                    tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
                         bStatus = false;
@@ -1419,7 +1419,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                     ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
                                         ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
                             {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                 aBitmap.Crop( aCropRect );
                             }
                             aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
@@ -1451,7 +1451,7 @@ bool EnhWMFReader::ReadEnhWMF()
                          .ReadInt32( cyDest );
 
                     Bitmap      aBitmap;
-                    Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+                    tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
                     if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
                        || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
@@ -1486,7 +1486,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                     ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
                                         ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
                             {
-                                Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                 aBitmap.Crop( aCropRect );
                             }
                             aBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
@@ -1836,10 +1836,10 @@ bool EnhWMFReader::ReadHeader()
     // Start reading the EMR_HEADER Header object
 
     // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
-    Rectangle rclBounds = ReadRectangle(); // rectangle in logical units
+    tools::Rectangle rclBounds = ReadRectangle(); // rectangle in logical units
 
     // picture frame size (RectL object)
-    Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
+    tools::Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
 
     pWMF->ReadUInt32( nSignature );
 
@@ -1924,21 +1924,21 @@ bool EnhWMFReader::ReadHeader()
     return true;
 }
 
-Rectangle EnhWMFReader::ReadRectangle()
+tools::Rectangle EnhWMFReader::ReadRectangle()
 {
     sal_Int32 nLeft, nTop, nRight, nBottom;
     pWMF->ReadInt32(nLeft);
     pWMF->ReadInt32(nTop);
     pWMF->ReadInt32(nRight);
     pWMF->ReadInt32(nBottom);
-    return Rectangle(nLeft, nTop, nRight, nBottom);
+    return tools::Rectangle(nLeft, nTop, nRight, nBottom);
 }
 
-Rectangle EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
+tools::Rectangle EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     Point aTL ( Point( x1, y1 ) );
     Point aBR( Point( --x2, --y2 ) );
-    return Rectangle( aTL, aBR );
+    return tools::Rectangle( aTL, aBR );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

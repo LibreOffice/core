@@ -1585,7 +1585,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
         if(lTabPosition != -1)
         {
             pEditWin->InvertTracking(
-                Rectangle( Point(lTabPosition, -aZero.Y()),
+                tools::Rectangle( Point(lTabPosition, -aZero.Y()),
                            Point(lTabPosition, -aZero.Y() + nHeight)),
                 ShowTrackFlags::Split | ShowTrackFlags::Clip );
         }
@@ -1597,7 +1597,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             if(mxPagePosItem.get())
                 lTabPosition += mxPagePosItem->GetPos().X();
             pEditWin->InvertTracking(
-                Rectangle( Point(lTabPosition, -aZero.Y()),
+                tools::Rectangle( Point(lTabPosition, -aZero.Y()),
                            Point(lTabPosition, -aZero.Y() + nHeight) ),
                 ShowTrackFlags::Clip | ShowTrackFlags::Split );
         }
@@ -1609,7 +1609,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
         if(lTabPosition != -1)
         {
             pEditWin->InvertTracking(
-                Rectangle( Point(-aZero.X(),          lTabPosition),
+                tools::Rectangle( Point(-aZero.X(),          lTabPosition),
                            Point(-aZero.X() + nWidth, lTabPosition)),
                 ShowTrackFlags::Split | ShowTrackFlags::Clip );
         }
@@ -1622,7 +1622,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             if(mxPagePosItem.get())
                 lTabPosition += mxPagePosItem->GetPos().Y();
             pEditWin->InvertTracking(
-                Rectangle( Point(-aZero.X(),        lTabPosition),
+                tools::Rectangle( Point(-aZero.X(),        lTabPosition),
                            Point(-aZero.X()+nWidth, lTabPosition)),
                 ShowTrackFlags::Clip | ShowTrackFlags::Split );
         }

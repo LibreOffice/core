@@ -95,7 +95,7 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
 void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
 {
     sal_Int32 nAngle = rObj.GetAngle();
-    Rectangle aRect( rObj.GetRect() );
+    tools::Rectangle aRect( rObj.GetRect() );
 
     // for position calculations, we normalize the angle between 0 and 90 degrees
     if ( nAngle < 0 )
@@ -232,7 +232,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         const css::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
         const css::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
-        Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+        tools::Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
@@ -271,10 +271,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
                     if ( pObj )
                     {
-                        Rectangle aBound = pObj->GetCurrentBoundRect();
+                        tools::Rectangle aBound = pObj->GetCurrentBoundRect();
                         Point aPosition( ImplMapPoint( aBound.TopLeft() ) );
                         Size aSize( ImplMapSize( aBound.GetSize() ) );
-                        rObj.SetRect( Rectangle( aPosition, aSize ) );
+                        rObj.SetRect( tools::Rectangle( aPosition, aSize ) );
                         rObj.SetAngle( 0 );
                         bDontWriteText = true;
                     }
@@ -378,7 +378,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                                 F_PI18000 ) ) * 100.0 ) );
                 aEnd.Y() = - (sal_Int32)( ( sin( (double)( nEndAngle *
                                                 F_PI18000 ) ) * 100.0 ) );
-                const Rectangle& rRect = aRect100thmm;
+                const tools::Rectangle& rRect = aRect100thmm;
                 aCenter.X() = rRect.Left() + ( rRect.GetWidth() / 2 );
                 aCenter.Y() = rRect.Top() + ( rRect.GetHeight() / 2 );
                 aStart.X() += aCenter.X();
@@ -411,7 +411,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     }
                     break;
                 }
-                rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                rObj.SetRect( tools::Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
                                             ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             }
             if ( rObj.ImplGetText() )
@@ -431,7 +431,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( ! aPropOpt.CreateConnectorProperties( rObj.GetShapeRef(),
                             rSolverContainer, aNewRect, nSpType, nSpFlags ) )
                 break;
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+            rObj.SetRect( tools::Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
                                         ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -656,7 +656,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
 
         {
-            Rectangle aRect( rObj.GetRect() );
+            tools::Rectangle aRect( rObj.GetRect() );
             aRect.Justify();
             rObj.SetRect( aRect );
         }
@@ -708,7 +708,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
         const css::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
         const css::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
-        Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+        tools::Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
@@ -719,7 +719,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 //2do: this does not work right
             double fDist = hypot( rObj.GetRect().GetWidth(),
                                     rObj.GetRect().GetHeight() );
-            rObj.SetRect( Rectangle( rTextRefPoint,
+            rObj.SetRect( tools::Rectangle( rTextRefPoint,
                             Point( (sal_Int32)( rTextRefPoint.X() + fDist ), rTextRefPoint.Y() - 1 ) ) );
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -797,7 +797,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
 
 sal_uInt32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >& rShape,
-            const Rectangle* pBoundRect )
+            const tools::Rectangle* pBoundRect )
 {
     mpHostAppData = mpEscherEx->EnterAdditionalTextGroup();
     sal_uInt32 nGrpId = mpEscherEx->EnterGroup( pBoundRect );
@@ -953,7 +953,7 @@ void EscherEx::EndSdrObjectPage()
     mpImplEESdrWriter->ImplExitPage();
 }
 
-EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
+EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const tools::Rectangle* /*pChildAnchor*/ )
 {
     return nullptr;
 }
@@ -1195,7 +1195,7 @@ bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
 
 void ImplEESdrObject::SetRect( const Point& rPos, const Size& rSz )
 {
-    maRect = Rectangle( rPos, rSz );
+    maRect = tools::Rectangle( rPos, rSz );
 }
 
 const SdrObject* ImplEESdrObject::GetSdrObject() const

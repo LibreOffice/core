@@ -496,7 +496,7 @@ typedef std::vector< MergeableCellVector > MergeVector;
 typedef std::vector< sal_Int32 > Int32Vector;
 
 
-void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
+void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
@@ -648,7 +648,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
 }
 
 
-void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
+void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
@@ -807,7 +807,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
 
 /** try to fit the table into the given rectangle.
     If the rectangle is to small, it will be grown to fit the table. */
-void TableLayouter::LayoutTable( Rectangle& rRectangle, bool bFitWidth, bool bFitHeight )
+void TableLayouter::LayoutTable( tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight )
 {
     if( !mxTable.is() )
         return;
@@ -837,7 +837,7 @@ void TableLayouter::LayoutTable( Rectangle& rRectangle, bool bFitWidth, bool bFi
 }
 
 
-void TableLayouter::updateCells( Rectangle& rRectangle )
+void TableLayouter::updateCells( tools::Rectangle& rRectangle )
 {
     const sal_Int32 nColCount = getColumnCount();
     const sal_Int32 nRowCount = getRowCount();
@@ -853,7 +853,7 @@ void TableLayouter::updateCells( Rectangle& rRectangle )
                 basegfx::B2IRectangle aCellArea;
                 if( getCellArea( xCell, aPos, aCellArea ) )
                 {
-                    Rectangle aCellRect;
+                    tools::Rectangle aCellRect;
                     aCellRect.Left() = aCellArea.getMinX();
                     aCellRect.Right() = aCellArea.getMaxX();
                     aCellRect.Top() = aCellArea.getMinY();
@@ -1034,7 +1034,7 @@ void TableLayouter::UpdateBorderLayout()
 }
 
 
-void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
+void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
 {
     if( mxTable.is() ) try
     {
@@ -1072,7 +1072,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
 }
 
 
-void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
+void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
 {
     if( mxTable.is() ) try
     {

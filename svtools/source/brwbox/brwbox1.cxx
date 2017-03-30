@@ -382,7 +382,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         if ( pDataWin->pHeaderBar )
             aDataWinSize.Height() += pDataWin->pHeaderBar->GetSizePixel().Height();
 
-        Rectangle aFromRect( GetFieldRect( nColumnId) );
+        tools::Rectangle aFromRect( GetFieldRect( nColumnId) );
         aFromRect.Right() += 2*MIN_COLUMNWIDTH;
 
         sal_uInt16 nNextPos = nOldPos + 1;
@@ -390,7 +390,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
             nNextPos = nOldPos - 1;
 
         BrowserColumn *pNextCol = pCols[ nNextPos ];
-        Rectangle aNextRect(GetFieldRect( pNextCol->GetId() ));
+        tools::Rectangle aNextRect(GetFieldRect( pNextCol->GetId() ));
 
         // move column internally
         {
@@ -404,25 +404,25 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         }
 
         // determine new column area
-        Rectangle aToRect( GetFieldRect( nColumnId ) );
+        tools::Rectangle aToRect( GetFieldRect( nColumnId ) );
         aToRect.Right() += 2*MIN_COLUMNWIDTH;
 
         // do scroll, let redraw
         if( pDataWin->GetBackground().IsScrollable() )
         {
             long nScroll = -aFromRect.GetWidth();
-            Rectangle aScrollArea;
+            tools::Rectangle aScrollArea;
             if ( nOldPos > nPos )
             {
                 long nFrozenWidth = GetFrozenWidth();
                 if ( aToRect.Left() < nFrozenWidth )
                     aToRect.Left() = nFrozenWidth;
-                aScrollArea = Rectangle(Point(aToRect.Left(),0),
+                aScrollArea = tools::Rectangle(Point(aToRect.Left(),0),
                                         Point(aNextRect.Right(),aDataWinSize.Height()));
                 nScroll *= -1; // reverse direction
             }
             else
-                aScrollArea = Rectangle(Point(aNextRect.Left(),0),
+                aScrollArea = tools::Rectangle(Point(aNextRect.Left(),0),
                                         Point(aToRect.Right(),aDataWinSize.Height()));
 
             pDataWin->Scroll( nScroll, 0, aScrollArea );
@@ -505,7 +505,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
         {
             // redraw visible columns
             if ( GetUpdateMode() && ( pCol->IsFrozen() || nItemPos > nFirstCol ) )
-                Invalidate( Rectangle( Point(0,0),
+                Invalidate( tools::Rectangle( Point(0,0),
                     Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
         }
 
@@ -589,13 +589,13 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             if( GetBackground().IsScrollable() )
             {
 
-                Rectangle aScrRect( nX + std::min( (sal_uLong)nOldWidth, nWidth ), 0,
+                tools::Rectangle aScrRect( nX + std::min( (sal_uLong)nOldWidth, nWidth ), 0,
                                     GetSizePixel().Width() , // the header is longer than the datawin
                                     pDataWin->GetPosPixel().Y() - 1 );
                 Control::Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
                 pDataWin->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
-                Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uLong)nOldWidth ), USHRT_MAX );
+                tools::Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (sal_uLong)nOldWidth ), USHRT_MAX );
                 Control::Invalidate( aInvRect, InvalidateFlags::NoChildren );
                 pDataWin->Invalidate( aInvRect );
             }
@@ -869,7 +869,7 @@ long BrowseBox::ScrollColumns( long nCols )
             long nDelta = pCols[ nFirstCol-1 ]->Width();
             long nFrozenWidth = GetFrozenWidth();
 
-            Rectangle aScrollRect(  Point( nFrozenWidth + nDelta, 0 ),
+            tools::Rectangle aScrollRect(  Point( nFrozenWidth + nDelta, 0 ),
                                     Size ( GetOutputSizePixel().Width() - nFrozenWidth - nDelta,
                                            GetTitleHeight() - 1
                                          ) );
@@ -881,7 +881,7 @@ long BrowseBox::ScrollColumns( long nCols )
                 Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
 
                 // invalidate the area of the column which was scrolled out to the left hand side
-                Rectangle aInvalidateRect( aScrollRect );
+                tools::Rectangle aInvalidateRect( aScrollRect );
                 aInvalidateRect.Left() = nFrozenWidth;
                 aInvalidateRect.Right() = nFrozenWidth + nDelta - 1;
                 Invalidate( aInvalidateRect );
@@ -915,7 +915,7 @@ long BrowseBox::ScrollColumns( long nCols )
             long nDelta = pCols[ nFirstCol ]->Width();
             long nFrozenWidth = GetFrozenWidth();
 
-            Rectangle aScrollRect(  Point(  nFrozenWidth, 0 ),
+            tools::Rectangle aScrollRect(  Point(  nFrozenWidth, 0 ),
                                     Size (  GetOutputSizePixel().Width() - nFrozenWidth,
                                             GetTitleHeight() - 1
                                          ) );
@@ -935,10 +935,10 @@ long BrowseBox::ScrollColumns( long nCols )
     {
         if ( GetUpdateMode() )
         {
-            Invalidate( Rectangle(
+            Invalidate( tools::Rectangle(
                 Point( GetFrozenWidth(), 0 ),
                 Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
-            pDataWin->Invalidate( Rectangle(
+            pDataWin->Invalidate( tools::Rectangle(
                 Point( GetFrozenWidth(), 0 ),
                 pDataWin->GetSizePixel() ) );
         }
@@ -1044,10 +1044,10 @@ void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
     if ( !GetUpdateMode() )
         return;
 
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( nColId == BROWSER_INVALIDID )
         // invalidate the whole row
-        aRect = Rectangle( Point( 0, (nRow-nTopRow) * GetDataRowHeight() ),
+        aRect = tools::Rectangle( Point( 0, (nRow-nTopRow) * GetDataRowHeight() ),
                     Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
     else
     {
@@ -1153,7 +1153,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
             if( pDataWin->GetBackground().IsScrollable() )
             {
                 pDataWin->Scroll( 0, GetDataRowHeight() * nNumRows,
-                                Rectangle( Point( 0, nY ),
+                                tools::Rectangle( Point( 0, nY ),
                                         Size( aSz.Width(), aSz.Height() - nY ) ),
                                 SCROLL_FLAGS );
             }
@@ -1162,7 +1162,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeep
         }
         else
             // scroll would cause a repaint, so we must explicitly invalidate
-            pDataWin->Invalidate( Rectangle( Point( 0, nY ),
+            pDataWin->Invalidate( tools::Rectangle( Point( 0, nY ),
                          Size( aSz.Width(), nNumRows * GetDataRowHeight() ) ) );
     }
 
@@ -1296,7 +1296,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
                 if( pDataWin->GetBackground().IsScrollable() )
                 {
                     pDataWin->Scroll( 0, - (short) GetDataRowHeight() * nNumRows,
-                        Rectangle( Point( 0, nY ), Size( aSz.Width(),
+                        tools::Rectangle( Point( 0, nY ), Size( aSz.Width(),
                             aSz.Height() - nY + nNumRows*GetDataRowHeight() ) ),
                             SCROLL_FLAGS );
                 }
@@ -1306,7 +1306,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
             else
             {
                 // Repaint the Rect of the deleted row
-                Rectangle aRect(
+                tools::Rectangle aRect(
                         Point( 0, (nRow-nTopRow)*GetDataRowHeight() ),
                         Size( pDataWin->GetSizePixel().Width(),
                               nNumRows * GetDataRowHeight() ) );
@@ -1644,13 +1644,13 @@ void BrowseBox::SelectAll()
     // highlight the row selection
     if ( !bHideSelect )
     {
-        Rectangle aHighlightRect;
+        tools::Rectangle aHighlightRect;
         sal_uInt16 nVisibleRows =
             (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
         for ( long nRow = std::max( nTopRow, uRow.pSel->FirstSelected() );
               nRow != BROWSER_ENDOFSELECTION && nRow < nTopRow + nVisibleRows;
               nRow = uRow.pSel->NextSelected() )
-            aHighlightRect.Union( Rectangle(
+            aHighlightRect.Union( tools::Rectangle(
                 Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
                 Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) ) );
         pDataWin->Invalidate( aHighlightRect );
@@ -1729,7 +1729,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
         // highlight only newly selected part
-        Rectangle aRect(
+        tools::Rectangle aRect(
             Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
             Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
         pDataWin->Invalidate( aRect );
@@ -1800,8 +1800,8 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMak
 
         // only highlight painted areas
         pDataWin->Update();
-        Rectangle aFieldRectPix( GetFieldRectPixel( nCurRow, nCurColId, false ) );
-        Rectangle aRect(
+        tools::Rectangle aFieldRectPix( GetFieldRectPixel( nCurRow, nCurColId, false ) );
+        tools::Rectangle aRect(
             Point( aFieldRectPix.Left() - MIN_COLUMNWIDTH, 0 ),
             Size( pCols[ nNewColPos ]->Width(),
                   pDataWin->GetOutputSizePixel().Height() ) );
@@ -1910,8 +1910,8 @@ void BrowseBox::MakeFieldVisible
 
     // calculate column position, field rectangle and painting area
     sal_uInt16 nColPos = GetColumnPos( nColId );
-    Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, false );
-    Rectangle aDataRect = Rectangle( Point(0, 0), pDataWin->GetSizePixel() );
+    tools::Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, false );
+    tools::Rectangle aDataRect = tools::Rectangle( Point(0, 0), pDataWin->GetSizePixel() );
 
     // positioned outside on the left?
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )
@@ -1956,12 +1956,12 @@ bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )
         return false;
 
-    Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
+    tools::Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
     if ( aRect.IsEmpty() )
         return false;
 
     // get the visible area
-    Rectangle aOutRect( Point(0, 0), pDataWin->GetOutputSizePixel() );
+    tools::Rectangle aOutRect( Point(0, 0), pDataWin->GetOutputSizePixel() );
 
     if ( bCompletely )
         // test if the field is completely visible
@@ -1972,12 +1972,12 @@ bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
 }
 
 
-Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
+tools::Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
                                         bool bRelToBrowser) const
 {
 
     // get the rectangle relative to DataWin
-    Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
+    tools::Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
     if ( aRect.IsEmpty() )
         return aRect;
 
@@ -1989,19 +1989,19 @@ Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
         aTopLeft = ScreenToOutputPixel( aTopLeft );
     }
 
-    return Rectangle( aTopLeft, aRect.GetSize() );
+    return tools::Rectangle( aTopLeft, aRect.GetSize() );
 }
 
 
-Rectangle BrowseBox::GetRowRectPixel( long nRow  ) const
+tools::Rectangle BrowseBox::GetRowRectPixel( long nRow  ) const
 {
 
     // get the rectangle relative to DataWin
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( nTopRow > nRow )
         // row is above visible area
         return aRect;
-    aRect = Rectangle(
+    aRect = tools::Rectangle(
         Point( 0, GetDataRowHeight() * (nRow-nTopRow) ),
         Size( pDataWin->GetOutputSizePixel().Width(), GetDataRowHeight() ) );
     if ( aRect.TopLeft().Y() > pDataWin->GetOutputSizePixel().Height() )
@@ -2013,11 +2013,11 @@ Rectangle BrowseBox::GetRowRectPixel( long nRow  ) const
     aTopLeft = pDataWin->OutputToScreenPixel( aTopLeft );
     aTopLeft = ScreenToOutputPixel( aTopLeft );
 
-    return Rectangle( aTopLeft, aRect.GetSize() );
+    return tools::Rectangle( aTopLeft, aRect.GetSize() );
 }
 
 
-Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
+tools::Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 {
 
     // compute the X-coordinate relative to DataWin by accumulation
@@ -2031,7 +2031,7 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
             nColX += pCols[ nCol ]->Width();
 
     if ( nCol >= pCols.size() || ( nCol >= nFrozenCols && nCol < nFirstCol ) )
-        return Rectangle();
+        return tools::Rectangle();
 
     // compute the Y-coordinate relative to DataWin
     long nRowY = GetDataRowHeight();
@@ -2039,7 +2039,7 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
         nRowY = ( nRow - nTopRow ) * GetDataRowHeight();
 
     // assemble the Rectangle relative to DataWin
-    return Rectangle(
+    return tools::Rectangle(
         Point( nColX + MIN_COLUMNWIDTH, nRowY ),
         Size( pCols[ nCol ]->Width() - 2*MIN_COLUMNWIDTH,
               GetDataRowHeight() - 1 ) );
@@ -2065,7 +2065,7 @@ long BrowseBox::GetRowAtYPosPixel( long nY, bool bRelToBrowser ) const
 }
 
 
-Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
+tools::Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 {
 
     return GetFieldRectPixel( nCurRow, nColumnId );
@@ -2102,10 +2102,10 @@ bool BrowseBox::ReserveControlArea(sal_uInt16 nWidth)
     return false;
 }
 
-Rectangle BrowseBox::GetControlArea() const
+tools::Rectangle BrowseBox::GetControlArea() const
 {
 
-    return Rectangle(
+    return tools::Rectangle(
         Point( 0, GetOutputSizePixel().Height() - aHScroll->GetSizePixel().Height() ),
         Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
              aHScroll->GetSizePixel().Height() ) );

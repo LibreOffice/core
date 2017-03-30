@@ -131,11 +131,11 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         // bGraphicNeeded set to true is right / fixes #i51670#.
         bGraphicNeeded = true;
         Point aTmpPoint;
-        Rectangle aRect( aTmpPoint, Size( nX, nY ) );
+        tools::Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
 
         ErrCode nErr = ERRCODE_NONE;
-        Rectangle aVisArea;
+        tools::Rectangle aVisArea;
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();

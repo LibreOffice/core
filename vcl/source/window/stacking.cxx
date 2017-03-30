@@ -219,7 +219,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
         {
             // calculate region, where the window overlaps with other windows
             Point aPoint( mnOutOffX, mnOutOffY );
-            vcl::Region  aRegion( Rectangle( aPoint,
+            vcl::Region  aRegion( tools::Rectangle( aPoint,
                                         Size( mnOutWidth, mnOutHeight ) ) );
             vcl::Region  aInvalidateRegion;
             ImplCalcOverlapRegionOverlaps( aRegion, aInvalidateRegion );
@@ -559,7 +559,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
             {
                 // Invalidate all windows which are next to each other
                 // Is INCOMPLETE !!!
-                Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+                tools::Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 vcl::Window*     pWindow = nullptr;
                 if ( ImplIsOverlapWindow() )
                 {
@@ -573,7 +573,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
                 {
                     if ( pWindow == this )
                         break;
-                    Rectangle aCompRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
+                    tools::Rectangle aCompRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
                                          Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
                     if ( aWinRect.IsOver( aCompRect ) )
                         pWindow->Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
@@ -586,7 +586,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
                 {
                     if ( pWindow != this )
                     {
-                        Rectangle aCompRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
+                        tools::Rectangle aCompRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
                                              Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
                         if ( aWinRect.IsOver( aCompRect ) )
                         {

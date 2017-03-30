@@ -41,7 +41,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>
 
-class Rectangle;
+namespace tools { class Rectangle; }
 
 /** @descr
         This base class provides an implementation of the
@@ -237,12 +237,12 @@ protected:
     /// Return the object's current bounding box relative to the desktop.
     ///
     /// @throws css::uno::RuntimeException
-    virtual Rectangle GetBoundingBoxOnScreen() const;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const;
 
     /// Return the object's current bounding box relative to the parent object.
     ///
     /// @throws css::uno::RuntimeException
-    virtual Rectangle GetBoundingBox() const;
+    virtual tools::Rectangle GetBoundingBox() const;
 
 public:
     /// Calls all Listener to tell they the change.

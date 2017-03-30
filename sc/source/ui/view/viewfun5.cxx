@@ -424,7 +424,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             if (pObj)
             {
                 Point aInsPos = aPos;
-                Rectangle aRect(pObj->GetLogicRect());
+                tools::Rectangle aRect(pObj->GetLogicRect());
                 aInsPos.X() -= aRect.GetSize().Width()  / 2;
                 aInsPos.Y() -= aRect.GetSize().Height() / 2;
                 if ( aInsPos.X() < 0 ) aInsPos.X() = 0;

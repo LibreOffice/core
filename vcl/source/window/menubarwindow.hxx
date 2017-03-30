@@ -92,7 +92,7 @@ private:
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( bool bPreSelectFirst );
     bool    HandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true);
-    Rectangle       ImplGetItemRect( sal_uInt16 nPos );
+    tools::Rectangle       ImplGetItemRect( sal_uInt16 nPos );
 
     void            ImplInitStyleSettings();
 
@@ -118,7 +118,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvent ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
@@ -136,7 +136,7 @@ public:
     /// Add an arbitrary button to the menubar that will appear next to the close button.
     sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);
     void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&);
-    Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
+    tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
     void SetMBWHideAccel(bool val) { mbHideAccel = val; }

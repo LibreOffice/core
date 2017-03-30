@@ -26,7 +26,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 
 
@@ -81,19 +81,19 @@ public:
     static bool         IsBalloonHelpEnabled();
     static bool         ShowBalloon( vcl::Window* pParent,
                                      const Point& rScreenPos,
-                                     const Rectangle&,
+                                     const tools::Rectangle&,
                                      const OUString& rHelpText );
 
     static void         EnableQuickHelp();
     static void         DisableQuickHelp();
     static bool         IsQuickHelpEnabled();
     static bool         ShowQuickHelp( vcl::Window* pParent,
-                                       const Rectangle& rScreenRect,
+                                       const tools::Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        const OUString& rLongHelpText,
                                        QuickHelpFlags nStyle );
     static bool         ShowQuickHelp( vcl::Window* pParent,
-                                       const Rectangle& rScreenRect,
+                                       const tools::Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        QuickHelpFlags nStyle = QuickHelpFlags::NONE )
                             { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, OUString(), nStyle ); }
@@ -101,12 +101,12 @@ public:
     static void         HideBalloonAndQuickHelp();
 
     static sal_uLong    ShowPopover(vcl::Window* pParent,
-                                    const Rectangle& rScreenRect,
+                                    const tools::Rectangle& rScreenRect,
                                     const OUString& rText,
                                     QuickHelpFlags nStyle);
     static void         UpdatePopover(sal_uLong nId,
                                       vcl::Window* pParent,
-                                      const Rectangle& rScreenRect,
+                                      const tools::Rectangle& rScreenRect,
                                       const OUString& rText);
     static void         HidePopover(vcl::Window* pParent, sal_uLong nId);
 };

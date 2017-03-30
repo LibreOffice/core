@@ -204,7 +204,7 @@ void SdrMarkView::ModelHasChanged()
     if (comphelper::LibreOfficeKit::isActive() && GetMarkedObjectCount() > 0)
     {
         //TODO: Is MarkedObjRect valid at this point?
-        Rectangle aSelection(GetMarkedObjRect());
+        tools::Rectangle aSelection(GetMarkedObjRect());
         OString sSelection;
         if (aSelection.IsEmpty())
             sSelection = "EMPTY";
@@ -286,11 +286,11 @@ void SdrMarkView::BrkAction()
     BrkMarkGluePoints();
 }
 
-void SdrMarkView::TakeActionRect(Rectangle& rRect) const
+void SdrMarkView::TakeActionRect(tools::Rectangle& rRect) const
 {
     if(IsMarkObj() || IsMarkPoints() || IsMarkGluePoints())
     {
-        rRect = Rectangle(maDragStat.GetStart(), maDragStat.GetNow());
+        rRect = tools::Rectangle(maDragStat.GetStart(), maDragStat.GetNow());
     }
     else
     {
@@ -363,7 +363,7 @@ bool SdrMarkView::EndMarkObj()
     {
         if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
+            tools::Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
             aRect.Justify();
             MarkObj(aRect, mpMarkObjOverlay->IsUnmarking());
             bRetval = true;
@@ -427,7 +427,7 @@ bool SdrMarkView::EndMarkPoints()
     {
         if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
+            tools::Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
             aRect.Justify();
             MarkPoints(&aRect, mpMarkPointsOverlay->IsUnmarking());
 
@@ -490,7 +490,7 @@ void SdrMarkView::EndMarkGluePoints()
     {
         if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(maDragStat.GetStart(),maDragStat.GetNow());
+            tools::Rectangle aRect(maDragStat.GetStart(),maDragStat.GetNow());
             aRect.Justify();
             MarkGluePoints(&aRect, mpMarkGluePointsOverlay->IsUnmarking());
         }
@@ -734,11 +734,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             }
         }
 
-        Rectangle aRect(GetMarkedObjRect());
+        tools::Rectangle aRect(GetMarkedObjRect());
 
         if (bTiledRendering)
         {
-            Rectangle aSelection(aRect);
+            tools::Rectangle aSelection(aRect);
             OString sSelection;
             if (aSelection.IsEmpty())
                 sSelection = "EMPTY";
@@ -1152,7 +1152,7 @@ void SdrMarkView::ForceRefToMarked()
     {
         case SdrDragMode::Rotate:
         {
-            Rectangle aR(GetMarkedObjRect());
+            tools::Rectangle aR(GetMarkedObjRect());
             maRef1 = aR.Center();
 
             break;
@@ -1192,7 +1192,7 @@ void SdrMarkView::ForceRefToMarked()
                 if (nTemp>nMinLen) nMinLen=nTemp;
             }
 
-            Rectangle aR(GetMarkedObjBoundRect());
+            tools::Rectangle aR(GetMarkedObjBoundRect());
             Point aCenter(aR.Center());
             long nMarkHgt=aR.GetHeight()-1;
             long nHgt=nMarkHgt+nObjDst*2;       // 20 pixels overlapping above and below
@@ -1226,7 +1226,7 @@ void SdrMarkView::ForceRefToMarked()
         case SdrDragMode::Gradient:
         case SdrDragMode::Crop:
         {
-            Rectangle aRect(GetMarkedObjBoundRect());
+            tools::Rectangle aRect(GetMarkedObjBoundRect());
             maRef1 = aRect.TopLeft();
             maRef2 = aRect.BottomRight();
             break;
@@ -1540,10 +1540,10 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     return pFndObj!=nullptr;
 }
 
-void SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
+void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
 {
     bool bFnd=false;
-    Rectangle aR(rRect);
+    tools::Rectangle aR(rRect);
     SdrObjList* pObjList;
     BrkAction();
     SdrPageView* pPV = GetSdrPageView();
@@ -1551,11 +1551,11 @@ void SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
     if(pPV)
     {
         pObjList=pPV->GetObjList();
-        Rectangle aFrm1(aR);
+        tools::Rectangle aFrm1(aR);
         const size_t nObjCount = pObjList->GetObjCount();
         for (size_t nO=0; nO<nObjCount; ++nO) {
             SdrObject* pObj=pObjList->GetObj(nO);
-            Rectangle aRect(pObj->GetCurrentBoundRect());
+            tools::Rectangle aRect(pObj->GetCurrentBoundRect());
             if (aFrm1.IsInside(aRect)) {
                 if (!bUnmark) {
                     if (IsObjMarkable(pObj,pPV))
@@ -1635,7 +1635,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     const bool bOLE(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
     const bool bTXT(dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsTextFrame());
     SdrObject* pRet=nullptr;
-    Rectangle aRect(pObj->GetCurrentBoundRect());
+    tools::Rectangle aRect(pObj->GetCurrentBoundRect());
     // hack for calc grid sync
     aRect += pObj->GetGridOffset();
     sal_uInt16 nTol2(nTol);
@@ -1889,7 +1889,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrPageView* pPV=pM->GetPageView();
             SdrObject* pObj=pM->GetMarkedSdrObj();
-            Rectangle aRect(pObj->GetCurrentBoundRect());
+            tools::Rectangle aRect(pObj->GetCurrentBoundRect());
             aRect.Left  ()-=nTol;
             aRect.Top   ()-=nTol;
             aRect.Right ()+=nTol;
@@ -1974,13 +1974,13 @@ void SdrMarkView::AdjustMarkHdl(SfxViewShell* pOtherShell)
     SetMarkHandles(pOtherShell);
 }
 
-Rectangle SdrMarkView::GetMarkedObjBoundRect() const
+tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
-        Rectangle aR1(pO->GetCurrentBoundRect());
+        tools::Rectangle aR1(pO->GetCurrentBoundRect());
         // Ensure marked area includes the calc offset
         // ( if applicable ) to sync to grid
         aR1 += pO->GetGridOffset();
@@ -1996,23 +1996,23 @@ Point SdrMarkView::GetGridOffset() const
     // calculate the area occupied by the union of each marked object
     // ( synced to grid ) and compare to the same unsynced area to calculate
     // the offset. Hopefully that's the sensible thing to do
-    const Rectangle& aGroupSyncedRect = GetMarkedObjRect();
+    const tools::Rectangle& aGroupSyncedRect = GetMarkedObjRect();
     aOffset =   aGroupSyncedRect.TopLeft() - maMarkedObjRectNoOffset.TopLeft();
     return aOffset;
 }
 
-const Rectangle& SdrMarkView::GetMarkedObjRect() const
+const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 {
     if (mbMarkedObjRectDirty) {
         const_cast<SdrMarkView*>(this)->mbMarkedObjRectDirty=false;
-        Rectangle aRect;
-        Rectangle aRect2;
+        tools::Rectangle aRect;
+        tools::Rectangle aRect2;
         for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
             if (!pO)
                 continue;
-            Rectangle aR1(pO->GetSnapRect());
+            tools::Rectangle aR1(pO->GetSnapRect());
             // apply calc offset to marked object rect
             // ( necessary for handles to be displayed in
             // correct position )

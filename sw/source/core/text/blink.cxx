@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker, Timer *, void)
                         nHeight = pTmp->GetPortion()->SvLSize().Height();
                 }
 
-                Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
+                tools::Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
                 aRefresh.Right() += ( aRefresh.Bottom()- aRefresh.Top() ) / 8;
                 pTmp->GetRootFrame()
                     ->GetCurrShell()->InvalidateWindows( aRefresh );

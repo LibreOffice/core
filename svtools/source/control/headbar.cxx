@@ -158,9 +158,9 @@ long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
     return nX;
 }
 
-Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
+tools::Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
-    Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
+    tools::Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
     aRect.Right() = aRect.Left() + (*mpItemList)[ nPos ]->mnSize - 1;
     // check for overflow on various systems
     if ( aRect.Right() > 16000 )
@@ -233,11 +233,11 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
 
 void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 {
-    Rectangle aRect1 = ImplGetItemRect( nStartPos );
-    Rectangle aRect2 = ImplGetItemRect( nEndPos );
+    tools::Rectangle aRect1 = ImplGetItemRect( nStartPos );
+    tools::Rectangle aRect2 = ImplGetItemRect( nEndPos );
     Point     aStartPos = aRect1.Center();
     Point     aEndPos = aStartPos;
-    Rectangle aStartRect( aStartPos.X()-2, aStartPos.Y()-2,
+    tools::Rectangle aStartRect( aStartPos.X()-2, aStartPos.Y()-2,
                           aStartPos.X()+2, aStartPos.Y()+2 );
 
     if ( nEndPos > nStartPos )
@@ -278,13 +278,13 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
-                             const Rectangle& rItemRect, const Rectangle* pRect, DrawFlags )
+                             const tools::Rectangle& rItemRect, const tools::Rectangle* pRect, DrawFlags )
 {
     ImplControlValue aControlValue(0);
-    Rectangle aCtrlRegion;
+    tools::Rectangle aCtrlRegion;
     ControlState nState(ControlState::NONE);
 
-    Rectangle aRect = rItemRect;
+    tools::Rectangle aRect = rItemRect;
 
     // do not display if there is no space
     if (aRect.GetWidth() <= 1)
@@ -555,7 +555,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         {
             if (rRenderContext.IsNativeControlSupported(ControlType::ListHeader, ControlPart::Arrow))
             {
-                aCtrlRegion = Rectangle(Point(nArrowX, aRect.Top()), Size(nArrowWidth, aRect.GetHeight()));
+                aCtrlRegion = tools::Rectangle(Point(nArrowX, aRect.Top()), Size(nArrowWidth, aRect.GetHeight()));
                 // control value passes 1 if arrow points down, 0 otherwise
                 aControlValue.setNumericVal((nBits & HeaderBarItemBits::DOWNARROW) ? 1 : 0);
                 nState |= ControlState::ENABLED;
@@ -609,9 +609,9 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos,
-                             bool bHigh, const Rectangle* pRect )
+                             bool bHigh, const tools::Rectangle* pRect )
 {
-    Rectangle aRect = ImplGetItemRect(nPos);
+    tools::Rectangle aRect = ImplGetItemRect(nPos);
     ImplDrawItem(rRenderContext, nPos, bHigh, aRect, pRect, DrawFlags::NONE );
 }
 
@@ -619,7 +619,7 @@ void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
 {
     if (IsVisible() && IsUpdateMode())
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         size_t nItemCount = mpItemList->size();
         if (nPos < nItemCount)
             aRect = ImplGetItemRect(nPos);
@@ -689,7 +689,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
                 Invalidate();
             else
             {
-                Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
+                tools::Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
                 ShowTracking( aSizeRect, ShowTrackFlags::Split );
             }
         }
@@ -707,7 +707,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
     {
         bool bNewOutDrag;
 
-        Rectangle aItemRect = ImplGetItemRect( nPos );
+        tools::Rectangle aItemRect = ImplGetItemRect( nPos );
         if ( aItemRect.IsInside( rMousePos ) )
             bNewOutDrag = false;
         else
@@ -789,14 +789,14 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
     }
     else
     {
-        Rectangle aItemRect = ImplGetItemRect( nPos );
+        tools::Rectangle aItemRect = ImplGetItemRect( nPos );
         if ( mnDragPos < aItemRect.Left() )
             mnDragPos = aItemRect.Left();
         if ( (mnDragPos < 0) || (mnDragPos > mnDX-1) )
             HideTracking();
         else
         {
-            Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
+            tools::Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
             ShowTracking( aSizeRect, ShowTrackFlags::Split );
         }
     }
@@ -912,7 +912,7 @@ void HeaderBar::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( aMousePos );
 }
 
-void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mnBorderOff1 || mnBorderOff2)
     {
@@ -944,7 +944,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
@@ -975,7 +975,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         }
     }
 
-    Rectangle aItemRect( aRect );
+    tools::Rectangle aItemRect( aRect );
     size_t nItemCount = mpItemList->size();
     for ( size_t i = 0; i < nItemCount; i++ )
     {
@@ -1020,7 +1020,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
-            Rectangle aItemRect = GetItemRect( nItemId );
+            tools::Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
             aItemRect.Left()   = aPt.X();
             aItemRect.Top()    = aPt.Y();
@@ -1193,7 +1193,7 @@ void HeaderBar::Clear()
 void HeaderBar::SetOffset( long nNewOffset )
 {
     // move area
-    Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
+    tools::Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
     long nDelta = mnOffset-nNewOffset;
     mnOffset = nNewOffset;
     Scroll( nDelta, 0, aRect );
@@ -1233,9 +1233,9 @@ sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
+tools::Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
         aRect = ImplGetItemRect( nPos );

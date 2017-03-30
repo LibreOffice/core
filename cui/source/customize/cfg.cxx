@@ -1573,7 +1573,7 @@ public:
         long n = 0;
         while (n <= nHalfSize)
         {
-            rRenderContext.DrawRect(Rectangle(nX + n, nY + n, nX + n, nY + nSize - n));
+            rRenderContext.DrawRect(::tools::Rectangle(nX + n, nY + n, nX + n, nY + nSize - n));
             ++n;
         }
 
@@ -4849,7 +4849,7 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     Point   aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
     rVDev.SetFillColor( aFillColor );
     rVDev.SetLineColor( aFillColor );
-    rVDev.DrawRect( Rectangle( Point(), aNewSize ));
+    rVDev.DrawRect( ::tools::Rectangle( Point(), aNewSize ));
     rVDev.DrawImage( aPos, aImage );
 
     // Draw separator line 2 pixels left from the right border

@@ -693,7 +693,7 @@ bool SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
     return mpTextForwarder->GetUpdateModeForAcc();
 }
 
-Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
+tools::Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
@@ -702,7 +702,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
 
     // preset if anything goes wrong below
     // n-th char in GetParagraphIndex's paragraph
-    Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+    tools::Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
     if( aIndex.InBullet() )
     {
@@ -740,7 +740,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
                                                   aFont,
                                                   mpTextForwarder->GetText( aSel ) );
 
-                Rectangle aStartRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+                tools::Rectangle aStartRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
                 aStringWrap.GetCharacterBounds( aIndex.GetFieldOffset(), aRect );
                 aRect.Move( aStartRect.Left(), aStartRect.Top() );
@@ -751,7 +751,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
     return aRect;
 }
 
-Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
+tools::Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
@@ -762,7 +762,7 @@ Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
         // include bullet in para bounding box
-        Rectangle aRect( mpTextForwarder->GetParaBounds( nPara ) );
+        tools::Rectangle aRect( mpTextForwarder->GetParaBounds( nPara ) );
 
         aRect.Union( aBulletInfo.aBounds );
 
@@ -846,7 +846,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
                                           aFont,
                                           mpTextForwarder->GetText( aSelection ) );
 
-        Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
+        tools::Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
         Point aPoint = rPoint;
         aPoint.Move( -aRect.Left(), -aRect.Top() );
 
@@ -1140,7 +1140,7 @@ bool SvxAccessibleTextEditViewAdapter::IsValid() const
         return false;
 }
 
-Rectangle SvxAccessibleTextEditViewAdapter::GetVisArea() const
+tools::Rectangle SvxAccessibleTextEditViewAdapter::GetVisArea() const
 {
     DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
 

@@ -73,7 +73,7 @@ private:
     void                ImplWriteExtent( long nExtent );
     void                ImplWritePoint( const Point& rPoint );
     void                ImplWriteSize( const Size& rSize);
-    void                ImplWriteRect( const Rectangle& rRect );
+    void                ImplWriteRect( const tools::Rectangle& rRect );
     void                ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClose );
     void                ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose );
     void                ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly );

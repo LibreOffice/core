@@ -257,7 +257,7 @@ Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
     return ScfTools::GetMixedColor( aColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
 }
 
-void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, const Rectangle& rChartRect ) const
+void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, const tools::Rectangle& rChartRect ) const
 {
     // create formatting object tables
     mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
@@ -3908,7 +3908,7 @@ bool XclImpChChart::IsManualPlotArea() const
 }
 
 void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
-        XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
+        XclImpDffConverter& rDffConv, const OUString& rObjName, const tools::Rectangle& rChartRect ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
     InitConversion( xChartDoc, rChartRect );
@@ -4171,7 +4171,7 @@ XclImpChartDrawing::XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab ) 
 }
 
 void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
-        const Reference< XModel >& rxModel, const Rectangle& rChartRect )
+        const Reference< XModel >& rxModel, const tools::Rectangle& rChartRect )
 {
     maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
 
@@ -4202,12 +4202,12 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
         ImplConvertObjects( rDffConv, *pSdrModel, *pSdrPage );
 }
 
-Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
+tools::Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
 {
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5
         objects, the position is stored in the offset components of the anchor. */
-    Rectangle aRect(
+    tools::Rectangle aRect(
         static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
         static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
         static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
@@ -4327,7 +4327,7 @@ std::size_t XclImpChart::GetProgressSize() const
         (mxChartDrawing ? mxChartDrawing->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > const & xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
+void XclImpChart::Convert( Reference< XModel > const & xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const tools::Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     if( xChartDoc.is() )

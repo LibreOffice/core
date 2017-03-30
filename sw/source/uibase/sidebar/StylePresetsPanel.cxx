@@ -43,7 +43,7 @@ namespace sw { namespace sidebar {
 namespace {
 
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
-                   OUString const & sName, sal_Int32 nHeight, Rectangle& aRect)
+                   OUString const & sName, sal_Int32 nHeight, tools::Rectangle& aRect)
 {
     SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SfxStyleFamily::Para);
 
@@ -88,7 +88,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
     long y = 0;
     {
         pVirtualDev->SetFillColor(COL_LIGHTGRAY);
-        Rectangle aNameRect(0, y, nPreviewWidth, nNameHeight);
+        tools::Rectangle aNameRect(0, y, nPreviewWidth, nNameHeight);
         pVirtualDev->DrawRect(aNameRect);
 
         vcl::Font aFont;
@@ -107,18 +107,18 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
     }
 
     {
-        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
         renderPreview(pStyleManager, *pVirtualDev.get(), "Title", nTitleHeight, aRenderRect);
         y += nTitleHeight;
     }
 
     {
-        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
         renderPreview(pStyleManager, *pVirtualDev.get(), "Heading 1", nHeadingHeight, aRenderRect);
         y += nHeadingHeight;
     }
     {
-        Rectangle aRenderRect(Point(nMargin, y), aSize);
+        tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
         renderPreview(pStyleManager, *pVirtualDev.get(), "Text Body", nTextBodyHeight, aRenderRect);
     }
 

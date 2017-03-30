@@ -192,8 +192,8 @@ class SfxWorkWindow final
     std::vector<sal_uInt16> aSortedList;
     SfxStatBar_Impl         aStatBar;
     std::vector< SfxObjectBar_Impl > aObjBarList;
-    Rectangle               aClientArea;
-    Rectangle               aUpperClientArea;
+    tools::Rectangle               aClientArea;
+    tools::Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
     VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
     std::vector<SfxChild_Impl*>
@@ -227,7 +227,7 @@ class SfxWorkWindow final
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
     bool                    RequestTopToolSpacePixel_Impl( SvBorder aBorder );
-    Rectangle               GetTopRect_Impl();
+    tools::Rectangle               GetTopRect_Impl();
     SvBorder                Arrange_Impl();
     void                    SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
     static bool             IsPluginMode( SfxObjectShell* pObjShell );
@@ -239,7 +239,7 @@ public:
                             { return *pBindings; }
     vcl::Window*                 GetWindow() const
                             { return pWorkWin; }
-    Rectangle               GetFreeArea( bool bAutoHide ) const;
+    tools::Rectangle               GetFreeArea( bool bAutoHide ) const;
     void                    SetDockingAllowed(bool bSet)
                             { bDockingAllowed = bSet; }
     void                    SetInternalDockingAllowed(bool bSet)

@@ -82,7 +82,7 @@ public:
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
                             const Fraction& rX, const Fraction& rY );
 
-    Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
+    tools::Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
 };
 
 class ScEditAttrTester

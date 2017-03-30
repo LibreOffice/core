@@ -85,7 +85,7 @@ class FileViewContainer : public vcl::Window
         m_pSplitter->SetSizePixel( splitterNewSize );
         sal_Int32 nMinX = m_pTreeView->GetPosPixel().X();
         sal_Int32 nMaxX = m_pFileView->GetPosPixel().X() + m_pFileView->GetSizePixel().Width() - nMinX;
-        m_pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
+        m_pSplitter->SetDragRectPixel( tools::Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
 
         // Resize the tree list box to fit the height of the FileView
         Size placesNewSize( m_pTreeView->GetSizePixel() );

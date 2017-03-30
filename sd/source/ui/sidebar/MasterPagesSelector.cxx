@@ -216,7 +216,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 Point aPosition (rEvent.GetMousePosPixel());
                 if ( ! rEvent.IsMouseEvent())
                 {
-                    Rectangle aBBox (PreviewValueSet::GetItemRect(nIndex));
+                    ::tools::Rectangle aBBox (PreviewValueSet::GetItemRect(nIndex));
                     aPosition = aBBox.Center();
                 }
 
@@ -231,7 +231,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 ProcessPopupMenu(*pMenu);
 
                 // Show the menu.
-                pMenu->Execute(this, Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+                pMenu->Execute(this, ::tools::Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
             }
         }
         break;

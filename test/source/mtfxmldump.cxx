@@ -374,7 +374,7 @@ void writeSize(XmlWriter& rWriter, Size const& rSize)
     rWriter.attribute("height", rSize.Height());
 }
 
-void writeRectangle(XmlWriter& rWriter, Rectangle const& rRectangle)
+void writeRectangle(XmlWriter& rWriter, tools::Rectangle const& rRectangle)
 {
     rWriter.attribute("left", rRectangle.Left());
     rWriter.attribute("top", rRectangle.Top());
@@ -764,7 +764,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 // FIXME for now we dump only the bounding box; this is
                 // enough for the tests we have, but may need extending to
                 // dumping the real polypolygon in the future
-                Rectangle aRectangle = pA->GetRegion().GetBoundRect();
+                tools::Rectangle aRectangle = pA->GetRegion().GetBoundRect();
                 writeRectangle(rWriter, aRectangle);
                 rWriter.endElement();
             }
@@ -775,7 +775,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaISectRectClipRegionAction* pMetaISectRectClipRegionAction = static_cast<MetaISectRectClipRegionAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                Rectangle aRectangle = pMetaISectRectClipRegionAction->GetRect();
+                tools::Rectangle aRectangle = pMetaISectRectClipRegionAction->GetRect();
                 writeRectangle(rWriter, aRectangle);
                 rWriter.endElement();
             }
@@ -789,7 +789,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 // FIXME for now we dump only the bounding box; this is
                 // enough for the tests we have, but may need extending to
                 // dumping the real polypolygon in the future
-                Rectangle aRectangle = pMetaISectRegionClipRegionAction->GetRegion().GetBoundRect();
+                tools::Rectangle aRectangle = pMetaISectRegionClipRegionAction->GetRegion().GetBoundRect();
                 writeRectangle(rWriter, aRectangle);
                 rWriter.endElement();
             }

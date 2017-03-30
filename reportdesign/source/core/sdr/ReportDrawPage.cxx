@@ -116,7 +116,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 rOle2Obj.SetPersistName(sName);
                 rOle2Obj.SetName(sName);
                 rOle2Obj.SetAspect(nAspect);
-                Rectangle aRect = rOle2Obj.GetLogicRect();
+                tools::Rectangle aRect = rOle2Obj.GetLogicRect();
 
                 Size aTmp = aRect.GetSize();
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );

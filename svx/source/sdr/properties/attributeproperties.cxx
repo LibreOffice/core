@@ -577,7 +577,7 @@ namespace sdr
 
                 // Get old BoundRect. Do this after the style change is handled
                 // in the ItemSet parts because GetBoundRect() may calculate a new
-                Rectangle aBoundRect = rObj.GetLastBoundRect();
+                tools::Rectangle aBoundRect = rObj.GetLastBoundRect();
 
                 rObj.SetRectsDirty(true);
 

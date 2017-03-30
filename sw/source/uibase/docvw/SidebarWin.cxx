@@ -135,7 +135,7 @@ vcl::Window* lcl_getHitWindow(sw::sidebarwindows::SwSidebarWin& rParent, const M
         Point aPosition(rParent.GetPosPixel());
         aPosition.Move(pChild->GetPosPixel().getX(), pChild->GetPosPixel().getY());
         Size aSize(rParent.GetSizePixel());
-        Rectangle aRectangleLogic(rParent.EditWin().PixelToLogic(aPosition), rParent.EditWin().PixelToLogic(aSize));
+        tools::Rectangle aRectangleLogic(rParent.EditWin().PixelToLogic(aPosition), rParent.EditWin().PixelToLogic(aSize));
         if (aRectangleLogic.IsInside(rMouseEvent.GetPosPixel()))
         {
             pRet = pChild;
@@ -276,7 +276,7 @@ void SwSidebarWin::dispose()
     vcl::Window::dispose();
 }
 
-void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
@@ -293,7 +293,7 @@ void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
         }
 
         rRenderContext.SetLineColor();
-        Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
+        tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
                                    mpMetadataAuthor->GetPosPixel().Y()),
                              Size(GetMetaButtonAreaWidth(),
                                   mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height()));
@@ -306,7 +306,7 @@ void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
     }
 }
 
-void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Paint(rRenderContext, rRect);
 
@@ -367,7 +367,7 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
 
 bool SwSidebarWin::IsHitWindow(const Point& rPointLogic)
 {
-    Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
+    tools::Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
     return aRectangleLogic.IsInside(rPointLogic);
 }
 
@@ -390,7 +390,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
     {
         pDev->SetFillColor(mColorDark);
         pDev->SetLineColor();
-        pDev->DrawRect( Rectangle( rPt, rSz ) );
+        pDev->DrawRect( tools::Rectangle( rPt, rSz ) );
     }
 
     if (mpMetadataAuthor->IsVisible())
@@ -510,7 +510,7 @@ void SwSidebarWin::MouseButtonUp(const MouseEvent& rMouseEvent)
 void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
                                        const SwRect& aAnchorRect, const long aPageBorder)
 {
-    mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
+    mPosSize = tools::Rectangle(Point(nX,nY),Size(nWidth,nHeight));
     if (!mAnchorRect.IsEmpty() && mAnchorRect != aAnchorRect)
         mbAnchorRectChanged = true;
     mAnchorRect = aAnchorRect;
@@ -524,7 +524,7 @@ void SwSidebarWin::SetSize( const Size& rNewSize )
 
 void SwSidebarWin::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
 {
-    mPosSize = Rectangle(aPoint,aSize);
+    mPosSize = tools::Rectangle(aPoint,aSize);
 }
 
 void SwSidebarWin::TranslateTopPosition(const long aAmount)
@@ -613,7 +613,7 @@ void SwSidebarWin::InitControls()
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTextControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
-    mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
+    mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
 
@@ -927,7 +927,7 @@ void SwSidebarWin::SetPosAndSize()
             SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
             for(SwRect & rNextRect : *pRects)
             {
-                const Rectangle aPntRect(rNextRect.SVRect());
+                const tools::Rectangle aPntRect(rNextRect.SVRect());
                 maAnnotationTextRanges.push_back(basegfx::B2DRange(
                     aPntRect.Left(), aPntRect.Top(),
                     aPntRect.Right() + 1, aPntRect.Bottom() + 1));
@@ -1004,9 +1004,9 @@ void SwSidebarWin::DoResize()
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     if (!mpVScrollbar->IsVisible())
     {   // if we do not have a scrollbar anymore, we want to see the complete text
-        mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
+        mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
     }
-    mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
+    mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
 
     if (!AllSettings::GetLayoutRTL())
     {
@@ -1032,11 +1032,11 @@ void SwSidebarWin::DoResize()
     const Fraction& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
-    Rectangle aRectMetaButton;
+    tools::Rectangle aRectMetaButton;
     if (IsPreview())
     {
         aRectMetaButton = PixelToLogic(
-            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH*4+10)*fx.GetNumerator()/fx.GetDenominator(),
+            tools::Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH*4+10)*fx.GetNumerator()/fx.GetDenominator(),
                               aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
                        Size( METABUTTON_WIDTH*4*fx.GetNumerator()/fx.GetDenominator(),
                              METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
@@ -1044,14 +1044,14 @@ void SwSidebarWin::DoResize()
     else
     {
         aRectMetaButton = PixelToLogic(
-            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.GetNumerator()/fx.GetDenominator(),
+            tools::Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.GetNumerator()/fx.GetDenominator(),
                               aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
                        Size( METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(),
                              METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
     }
 
     {
-        const Rectangle aRectMetaButtonPixel( LogicToPixel( aRectMetaButton ) );
+        const tools::Rectangle aRectMetaButtonPixel( LogicToPixel( aRectMetaButton ) );
         mpMenuButton->setPosSizePixel( aRectMetaButtonPixel.Left(),
                                        aRectMetaButtonPixel.Top(),
                                        aRectMetaButtonPixel.GetWidth(),

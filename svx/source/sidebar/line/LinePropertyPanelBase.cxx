@@ -75,8 +75,8 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
             Bitmap aCopyEnd(aBitmap);
 
             const Size aBmpSize(aCopyStart.GetSizePixel());
-            const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
-            const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+            const tools::Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+            const tools::Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
 
             aCopyStart.Crop(aCropRectStart);
             rListBoxStart.InsertEntry(
@@ -104,7 +104,7 @@ void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLin
         // take solid line bitmap and crop it to the size of
         // line cap entries
         Bitmap aCopyZero( rBitmapZero );
-        const Rectangle aCropZero( Point(), aImgSize );
+        const tools::Rectangle aCropZero( Point(), aImgSize );
         aCopyZero.Crop( aCropZero );
 
         // make it 1st item in list

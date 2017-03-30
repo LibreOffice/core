@@ -51,7 +51,7 @@ protected:
     Point     aRef2;     // axis of reflection, ...)
     Point     aPos0;     // Position at the last Event
     Point     aRealNow;  // Current dragging position without Snap, Ortho and Limit
-    Rectangle aActionRect;
+    tools::Rectangle aActionRect;
 
     bool      bEndDragChangesAttributes;
     bool      bEndDragChangesGeoAndAttributes;
@@ -156,11 +156,11 @@ public:
     SdrDragMethod* GetDragMethod() const               { return pDragMethod; }
     void           SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }
 
-    const Rectangle& GetActionRect() const             { return aActionRect; }
-    void             SetActionRect(const Rectangle& rR) { aActionRect=rR; }
+    const tools::Rectangle& GetActionRect() const             { return aActionRect; }
+    void             SetActionRect(const tools::Rectangle& rR) { aActionRect=rR; }
 
     // Also considering 1stPointAsCenter
-    void TakeCreateRect(Rectangle& rRect) const;
+    void TakeCreateRect(tools::Rectangle& rRect) const;
 };
 
 #endif // INCLUDED_SVX_SVDDRAG_HXX

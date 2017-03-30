@@ -92,7 +92,7 @@ Size SvxHlmarkTreeLBox::GetOptimalSize() const
     return LogicToPixel(Size(103, 162), MapUnit::MapAppFont);
 }
 
-void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     if (!mpParentWnd || mpParentWnd->mnError == LERR_NOERROR)
     {
@@ -102,7 +102,7 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     {
         Erase(rRenderContext);
 
-        Rectangle aDrawRect(Point( 0, 0 ), GetSizePixel());
+        ::tools::Rectangle aDrawRect(Point( 0, 0 ), GetSizePixel());
 
         OUString aStrMessage;
 

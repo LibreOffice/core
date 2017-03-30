@@ -142,7 +142,7 @@ public:
 
     bool                    IsValid() const;
 
-    Rectangle               GetVisArea();
+    tools::Rectangle               GetVisArea();
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
     Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
@@ -504,10 +504,10 @@ void SvxTextEditSourceImpl::SetupOutliner()
     if( mpObject && mpOutliner )
     {
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-        Rectangle aPaintRect;
+        tools::Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+            tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // calc text offset from shape anchor
@@ -525,10 +525,10 @@ void SvxTextEditSourceImpl::UpdateOutliner()
     if( mpObject && mpOutliner )
     {
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-        Rectangle aPaintRect;
+        tools::Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+            tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // calc text offset from shape anchor
@@ -734,7 +734,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+            tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             OutlinerView& rOutlView = *mpView->GetTextEditOutlinerView();
 
             return new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() );
@@ -888,12 +888,12 @@ bool SvxTextEditSourceImpl::IsValid() const
     return mpView && mpWindow;
 }
 
-Rectangle SvxTextEditSourceImpl::GetVisArea()
+tools::Rectangle SvxTextEditSourceImpl::GetVisArea()
 {
     if( IsValid() )
     {
         SdrPaintWindow* pPaintWindow = mpView->FindPaintWindow(*mpWindow);
-        Rectangle aVisArea;
+        tools::Rectangle aVisArea;
 
         if(pPaintWindow)
         {
@@ -904,7 +904,7 @@ Rectangle SvxTextEditSourceImpl::GetVisArea()
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj )
         {
-            Rectangle aAnchorRect;
+            tools::Rectangle aAnchorRect;
             pTextObj->TakeTextAnchorRect( aAnchorRect );
             aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
 
@@ -914,7 +914,7 @@ Rectangle SvxTextEditSourceImpl::GetVisArea()
         }
     }
 
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode )
@@ -1065,7 +1065,7 @@ bool SvxTextEditSource::IsValid() const
     return mpImpl->IsValid();
 }
 
-Rectangle SvxTextEditSource::GetVisArea() const
+tools::Rectangle SvxTextEditSource::GetVisArea() const
 {
     return mpImpl->GetVisArea();
 }

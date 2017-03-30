@@ -102,8 +102,8 @@ public:
             Returns the space that remains after the scroll bars are
             placed.
     */
-    Rectangle PlaceScrollBars (
-        const Rectangle& rAvailableArea,
+    ::tools::Rectangle PlaceScrollBars (
+        const ::tools::Rectangle& rAvailableArea,
         const bool bIsHorizontalScrollBarAllowed,
         const bool bIsVerticalScrollBarAllowed);
 
@@ -217,8 +217,8 @@ private:
             The area that is enclosed by the scroll bars is returned.  It
             will be filled with the SlideSorterView.
     */
-    Rectangle DetermineScrollBarVisibilities(
-        const Rectangle& rAvailableArea,
+    ::tools::Rectangle DetermineScrollBarVisibilities(
+        const ::tools::Rectangle& rAvailableArea,
         const bool bIsHorizontalScrollBarAllowed,
         const bool bIsVerticalScrollBarAllowed);
 
@@ -233,7 +233,7 @@ private:
     bool TestScrollBarVisibilities (
         bool bHorizontalScrollBarVisible,
         bool bVerticalScrollBarVisible,
-        const Rectangle& rAvailableArea);
+        const ::tools::Rectangle& rAvailableArea);
 
     void CalcAutoScrollOffset (const Point& rMouseWindowPosition);
     bool RepeatAutoScroll();
@@ -242,9 +242,9 @@ private:
     DECL_LINK(VerticalScrollBarHandler, ScrollBar*, void);
     DECL_LINK(AutoScrollTimeoutHandler, Timer *, void);
 
-    void PlaceHorizontalScrollBar (const Rectangle& aArea);
-    void PlaceVerticalScrollBar (const Rectangle& aArea);
-    void PlaceFiller (const Rectangle& aArea);
+    void PlaceHorizontalScrollBar (const ::tools::Rectangle& aArea);
+    void PlaceVerticalScrollBar (const ::tools::Rectangle& aArea);
+    void PlaceFiller (const ::tools::Rectangle& aArea);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

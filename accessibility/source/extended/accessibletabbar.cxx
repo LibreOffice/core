@@ -150,7 +150,7 @@ namespace accessibility
     {
         awt::Rectangle aBounds;
         if ( m_pTabBar )
-            aBounds = AWTRectangle( Rectangle( m_pTabBar->GetPosPixel(), m_pTabBar->GetSizePixel() ) );
+            aBounds = AWTRectangle( tools::Rectangle( m_pTabBar->GetPosPixel(), m_pTabBar->GetSizePixel() ) );
 
         return aBounds;
     }
@@ -391,7 +391,7 @@ namespace accessibility
                 Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
                 if ( xComp.is() )
                 {
-                    Rectangle aRect = VCLRectangle( xComp->getBounds() );
+                    tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                     Point aPos = VCLPoint( rPoint );
                     if ( aRect.IsInside( aPos ) )
                     {

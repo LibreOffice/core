@@ -100,7 +100,7 @@ public:
     virtual void Shutdown() override;
 
     void PrePaint() override;
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) override;
+    virtual void Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
@@ -119,12 +119,12 @@ public:
 
     virtual void    Resize() override;
 
-    void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
+    void            ShowMousePosInfo(const ::tools::Rectangle& rRect, ::sd::Window* pWin);
 
     virtual void    ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
     virtual void    SetZoom( long nZoom ) override;
-    virtual void    SetZoomRect( const Rectangle& rZoomRect ) override;
+    virtual void    SetZoomRect( const ::tools::Rectangle& rZoomRect ) override;
 
     void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget);
     void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
@@ -250,7 +250,7 @@ public:
     //false.
     void            FreshNavigatrEntry();
     void            FreshNavigatrTree();
-    void            MakeVisible(const Rectangle& rRect, vcl::Window& rWin);
+    void            MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView) override;
     virtual void    WriteFrameViewData() override;
@@ -289,7 +289,7 @@ public:
     virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
     virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
-    virtual void    VisAreaChanged(const Rectangle& rRect) override;
+    virtual void    VisAreaChanged(const ::tools::Rectangle& rRect) override;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -370,7 +370,7 @@ public:
 protected:
     DrawView*           mpDrawView;
     SdPage*             mpActualPage;
-    Rectangle           maMarkRect;
+    ::tools::Rectangle           maMarkRect;
     Point               maMousePos;
     bool                mbMousePosFreezed;
     VclPtr<TabControl>  maTabControl;

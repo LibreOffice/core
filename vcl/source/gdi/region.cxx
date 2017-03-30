@@ -183,7 +183,7 @@ namespace
     /** Convert a general polygon (one for which ImplIsPolygonRectilinear()
         returns <FALSE/>) to bands.
     */
-    std::unique_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const Rectangle& rPolygonBoundingBox)
+    std::unique_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rPolygonBoundingBox)
     {
         long nLineID = 0;
 
@@ -246,7 +246,7 @@ std::unique_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::Pol
 
         if(aPolyPolygon.Count())
         {
-            const Rectangle aRect(aPolyPolygon.GetBoundRect());
+            const tools::Rectangle aRect(aPolyPolygon.GetBoundRect());
 
             if(!aRect.IsEmpty())
             {
@@ -316,7 +316,7 @@ Region::Region(bool bIsNull)
 {
 }
 
-Region::Region(const Rectangle& rRect)
+Region::Region(const tools::Rectangle& rRect)
 :   mpB2DPolyPolygon(),
     mpPolyPolygon(),
     mpRegionBand(),
@@ -392,7 +392,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly 
     if(nPolyCount)
     {
         // polypolygon empty? -> empty region
-        const Rectangle aRect(rPolyPoly.GetBoundRect());
+        const tools::Rectangle aRect(rPolyPoly.GetBoundRect());
 
         if(!aRect.IsEmpty())
         {
@@ -514,7 +514,7 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
     }
 }
 
-bool vcl::Region::Union( const Rectangle& rRect )
+bool vcl::Region::Union( const tools::Rectangle& rRect )
 {
     if(rRect.IsEmpty())
     {
@@ -595,7 +595,7 @@ bool vcl::Region::Union( const Rectangle& rRect )
     return true;
 }
 
-bool vcl::Region::Intersect( const Rectangle& rRect )
+bool vcl::Region::Intersect( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -687,7 +687,7 @@ bool vcl::Region::Intersect( const Rectangle& rRect )
     return true;
 }
 
-bool vcl::Region::Exclude( const Rectangle& rRect )
+bool vcl::Region::Exclude( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -767,7 +767,7 @@ bool vcl::Region::Exclude( const Rectangle& rRect )
     return true;
 }
 
-bool vcl::Region::XOr( const Rectangle& rRect )
+bool vcl::Region::XOr( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )
     {
@@ -1232,19 +1232,19 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
     return true;
 }
 
-Rectangle vcl::Region::GetBoundRect() const
+tools::Rectangle vcl::Region::GetBoundRect() const
 {
     if(IsEmpty())
     {
         // no internal data? -> region is empty!
-        return Rectangle();
+        return tools::Rectangle();
     }
 
     if(IsNull())
     {
         // error; null region has no BoundRect
         // OSL_ENSURE(false, "Region::GetBoundRect error: null region has unlimited bound rect, not representable (!)");
-        return Rectangle();
+        return tools::Rectangle();
     }
 
     // prefer double precision source
@@ -1255,12 +1255,12 @@ Rectangle vcl::Region::GetBoundRect() const
         if(aRange.isEmpty())
         {
             // emulate PolyPolygon::GetBoundRect() when empty polygon
-            return Rectangle();
+            return tools::Rectangle();
         }
         else
         {
             // #i122149# corrected rounding, no need for ceil() and floor() here
-            return Rectangle(
+            return tools::Rectangle(
                 basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()),
                 basegfx::fround(aRange.getMaxX()), basegfx::fround(aRange.getMaxY()));
         }
@@ -1276,7 +1276,7 @@ Rectangle vcl::Region::GetBoundRect() const
         return getRegionBand()->GetBoundRect();
     }
 
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
@@ -1385,7 +1385,7 @@ bool vcl::Region::IsInside( const Point& rPoint ) const
     return false;
 }
 
-bool vcl::Region::IsOver( const Rectangle& rRect ) const
+bool vcl::Region::IsOver( const tools::Rectangle& rRect ) const
 {
     if(IsEmpty())
     {
@@ -1466,7 +1466,7 @@ Region& vcl::Region::operator=( vcl::Region&& rRegion )
     return *this;
 }
 
-Region& vcl::Region::operator=( const Rectangle& rRect )
+Region& vcl::Region::operator=( const tools::Rectangle& rRect )
 {
     mpB2DPolyPolygon.reset();
     mpPolyPolygon.reset();
@@ -1695,7 +1695,7 @@ void vcl::Region::GetRegionRectangles(RectangleVector& rTarget) const
     }
 }
 
-static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, Rectangle* pRectOut = nullptr )
+static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rectangle* pRectOut = nullptr )
 {
     bool bIsRect = false;
     const Point* pPoints = rPoly.GetConstPointAry();
@@ -1779,7 +1779,7 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
     }
 
     vcl::Region aResult;
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     for( int i = 0; i < nPolygons; i++ )
     {

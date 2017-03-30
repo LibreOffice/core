@@ -372,7 +372,7 @@ SdPage* DocumentHelper::AddMasterPage (
             // Adapt the size of the new master page to that of the pages in
             // the document.
             Size aNewSize (rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind())->GetSize());
-            Rectangle aBorders (
+            ::tools::Rectangle aBorders (
                 pClonedMasterPage->GetLftBorder(),
                 pClonedMasterPage->GetUppBorder(),
                 pClonedMasterPage->GetRgtBorder(),

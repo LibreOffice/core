@@ -188,12 +188,12 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 
 // internal virtual methods ---------------------------------------------------
 
-Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
+tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
     return mpBrowseBox->calcTableRect(false);
 }
 
-Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
+tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
 {
     return mpBrowseBox->calcTableRect();
 }

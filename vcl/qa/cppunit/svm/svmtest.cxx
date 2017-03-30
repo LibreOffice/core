@@ -343,7 +343,7 @@ void SvmTest::testRect()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawRect(Rectangle(Point(1, 2), Size(4, 4)));
+    pVirtualDev->DrawRect(tools::Rectangle(Point(1, 2), Size(4, 4)));
 
     checkRect(writeAndRead(aGDIMetaFile, "rect.svm"));
 }
@@ -371,7 +371,7 @@ void SvmTest::testRoundRect()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawRect(Rectangle(Point(1, 2), Size(4, 4)), 1, 2);
+    pVirtualDev->DrawRect(tools::Rectangle(Point(1, 2), Size(4, 4)), 1, 2);
 
     checkRoundRect(writeAndRead(aGDIMetaFile, "roundrect.svm"));
 }
@@ -398,7 +398,7 @@ void SvmTest::testEllipse()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawEllipse(Rectangle(Point(1, 2), Size(4, 4)));
+    pVirtualDev->DrawEllipse(tools::Rectangle(Point(1, 2), Size(4, 4)));
 
     checkEllipse(writeAndRead(aGDIMetaFile, "ellipse.svm"));
 }
@@ -428,7 +428,7 @@ void SvmTest::testArc()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawArc(Rectangle(Point(1, 2), Size(4, 4)), Point(10, 11), Point(12, 13));
+    pVirtualDev->DrawArc(tools::Rectangle(Point(1, 2), Size(4, 4)), Point(10, 11), Point(12, 13));
 
     checkArc(writeAndRead(aGDIMetaFile, "arc.svm"));
 }
@@ -458,7 +458,7 @@ void SvmTest::testPie()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawPie(Rectangle(Point(11, 12), Size(4, 4)), Point(20, 21), Point(22, 23));
+    pVirtualDev->DrawPie(tools::Rectangle(Point(11, 12), Size(4, 4)), Point(20, 21), Point(22, 23));
 
     checkPie(writeAndRead(aGDIMetaFile, "pie.svm"));
 }
@@ -488,7 +488,7 @@ void SvmTest::testChord()
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
 
-    pVirtualDev->DrawChord(Rectangle(Point(21, 22), Size(4, 4)), Point(30, 31), Point(32, 33));
+    pVirtualDev->DrawChord(tools::Rectangle(Point(21, 22), Size(4, 4)), Point(30, 31), Point(32, 33));
 
     checkChord(writeAndRead(aGDIMetaFile, "chord.svm"));
 }
@@ -729,7 +729,7 @@ void SvmTest::testTextRect()
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
-    pVirtualDev->DrawText(Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
+    pVirtualDev->DrawText(tools::Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
 
     checkTextRect(writeAndRead(aGDIMetaFile, "textrectangle.svm"));
 }

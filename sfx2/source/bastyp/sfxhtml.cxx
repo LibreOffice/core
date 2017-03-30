@@ -183,7 +183,7 @@ IMAPOBJ_SETEVENT:
     case IMAP_OBJ_RECTANGLE:
         if( aCoords.size() >=4 )
         {
-            Rectangle aRect( aCoords[0], aCoords[1],
+            tools::Rectangle aRect( aCoords[0], aCoords[1],
                              aCoords[2], aCoords[3] );
             IMapRectangleObject aMapRObj( aRect, aHRef, aAlt, OUString(), aTarget, aName,
                                           !bNoHRef );

@@ -118,7 +118,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     MenuButton::MouseButtonDown(rMEvt);
 }
 
-void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     bool bHighContrast = rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -127,7 +127,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
     else
         rRenderContext.SetFillColor(mrSidebarWin.ColorDark());
     rRenderContext.SetLineColor();
-    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    const tools::Rectangle aRect(tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
     rRenderContext.DrawRect(aRect);
 
     if (bHighContrast)
@@ -170,7 +170,7 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Recta
     }
     else
     {
-        Rectangle aSymbolRect(aRect);
+        tools::Rectangle aSymbolRect(aRect);
         // 25% distance to the left and right button border
         const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
         aSymbolRect.Left() += nBorderDistanceLeftAndRight;

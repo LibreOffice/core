@@ -126,7 +126,7 @@ void VMLExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* pRect )
+sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Rectangle* pRect )
 {
     sal_uInt32 nShapeId = GenerateShapeId();
 
@@ -355,7 +355,7 @@ void  VMLExport::AddSdrObjectVMLObject( const SdrObject& rObj)
 {
    m_pSdrObject = &rObj;
 }
-void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect )
 {
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return;
@@ -891,7 +891,7 @@ void VMLExport::AddFlipXY( )
     }
 }
 
-void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
+void VMLExport::AddLineDimensions( const tools::Rectangle& rRectangle )
 {
     // style
     if (!m_ShapeStyle.isEmpty())
@@ -931,7 +931,7 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
             .makeStringAndClear() );
 }
 
-void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, bool rbAbsolutePos)
+void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const tools::Rectangle& rRectangle, bool rbAbsolutePos)
 {
     if ( !rBuffer.isEmpty() )
         rBuffer.append( ";" );

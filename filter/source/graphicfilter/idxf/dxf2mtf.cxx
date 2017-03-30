@@ -264,7 +264,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         pVirDev->DrawEllipse(
-            Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
+            tools::Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
                       (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)));
     }
     else {
@@ -324,7 +324,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
             rTransform.Transform(aVE,aPS);
         }
         pVirDev->DrawArc(
-            Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
+            tools::Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
                       (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)),
             aPS,aPE
         );

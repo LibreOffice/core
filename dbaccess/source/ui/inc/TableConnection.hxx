@@ -26,7 +26,7 @@
 #include "TableConnectionData.hxx"
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 
 namespace dbaui
 {
@@ -86,12 +86,12 @@ namespace dbaui
             return (_pTable == GetSourceWin() || _pTable == GetDestWin());
         }
 
-        Rectangle   GetBoundingRect() const;
+        tools::Rectangle   GetBoundingRect() const;
 
         const TTableConnectionData::value_type& GetData() const { return m_pData; }
         const std::vector<OConnectionLine*>&  GetConnLineList() const { return m_vConnLine; }
         OJoinTableView*                  GetParent() const { return m_pParent; }
-        virtual void Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+        virtual void Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         using Window::Draw;
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
     };

@@ -558,8 +558,8 @@ sal_uInt32 SwMSDffManager::GetFilterFlags()
 // #i32596# - consider new parameter <_nCalledByGroup>
 SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                       const Graphic& rGrf,
-                                      const Rectangle& rBoundRect,
-                                      const Rectangle& rVisArea,
+                                      const tools::Rectangle& rBoundRect,
+                                      const tools::Rectangle& rVisArea,
                                       const int _nCalledByGroup,
                                       sal_Int64 nAspect ) const
 {
@@ -639,7 +639,7 @@ void SwWW8ImplReader::SetToggleBiDiAttrFlags(sal_uInt16 nFlags)
 SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
                                        void* pData,
-                                       Rectangle& rTextRect,
+                                       tools::Rectangle& rTextRect,
                                        SdrObject* pObj
                                        )
 {
@@ -833,7 +833,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             // The vertical paragraph justification are contained within the
             // BoundRect so calculate it here
-            Rectangle aNewRect(rTextRect);
+            tools::Rectangle aNewRect(rTextRect);
             aNewRect.Bottom() -= nTextTop + nTextBottom;
             aNewRect.Right() -= nTextLeft + nTextRight;
 
@@ -4309,7 +4309,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     if (mrReader.m_pWDop->fUseBackGroundInAllmodes && mrReader.m_pMSDffManager)
     {
-        Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
+        tools::Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
         SvxMSDffImportData aData(aRect);
         SdrObject* pObject = nullptr;
         if (mrReader.m_pMSDffManager->GetShape(0x401, pObject, aData))

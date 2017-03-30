@@ -766,7 +766,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         sal_Int32 nMonitors = Application::GetScreenCount();
         if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < nMonitors) )
         {
-            Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
+            tools::Rectangle aRect = Application::GetScreenPosSizePixel( pFrame->mnDisplay );
             nScreenX = aRect.Left();
             nScreenY = aRect.Top();
             nScreenDX = aRect.getWidth()+1;  // difference between java/awt convention and vcl
@@ -774,7 +774,7 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         }
         else
         {
-            Rectangle aCombined = Application::GetScreenPosSizePixel( 0 );
+            tools::Rectangle aCombined = Application::GetScreenPosSizePixel( 0 );
             for( sal_Int32 i = 1 ; i < nMonitors ; i++ )
             {
                 aCombined.Union( Application::GetScreenPosSizePixel( i ) );
@@ -1606,7 +1606,7 @@ bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
     return true;
 }
 
-void WinSalFrame::GetWorkArea( Rectangle &rRect )
+void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
 {
     RECT aRect;
     ImplSalGetWorkArea( mhWnd, &aRect, nullptr );

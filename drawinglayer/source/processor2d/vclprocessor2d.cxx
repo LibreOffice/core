@@ -530,7 +530,7 @@ namespace drawinglayer
 
                                     // prepare OutDev
                                     const Point aEmptyPoint(0, 0);
-                                    const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+                                    const tools::Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
                                     const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
                                     mpOutputDevice->EnableMapMode(false);
 
@@ -545,7 +545,7 @@ namespace drawinglayer
                                             for(sal_Int32 nXPos((nPosY % 2) ? nBLeft - nBWidth + nOffsetX : nBLeft);
                                                 nXPos < nOLeft + nOWidth; nXPos += nBWidth)
                                             {
-                                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                                const tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
@@ -572,7 +572,7 @@ namespace drawinglayer
                                             for(sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY : nBTop);
                                                 nYPos < nOTop + nOHeight; nYPos += nBHeight)
                                             {
-                                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                                const tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
@@ -741,7 +741,7 @@ namespace drawinglayer
             // the inner pixel bounds accordingly (ceil resp. floor). This will also be done for logic
             // units e.g. when creating a new MetaFile, but since much huger value ranges are used
             // there typically will be okay for this compromise.
-            Rectangle aDestRectView(
+            tools::Rectangle aDestRectView(
                 // !!CAUTION!! Here, ceil and floor are exchanged BY PURPOSE, do NOT copy when
                 // looking for a standard conversion to rectangle (!)
                 (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
@@ -1269,7 +1269,7 @@ namespace drawinglayer
 
             if(!aRange.isEmpty())
             {
-                const Rectangle aRectangle(
+                const tools::Rectangle aRectangle(
                     (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
                     (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
 

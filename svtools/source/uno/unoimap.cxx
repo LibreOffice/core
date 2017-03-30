@@ -207,7 +207,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     {
     case IMAP_OBJ_RECTANGLE:
         {
-            const Rectangle aRect( static_cast<const IMapRectangleObject*>(&rMapObject)->GetRectangle(false) );
+            const tools::Rectangle aRect( static_cast<const IMapRectangleObject*>(&rMapObject)->GetRectangle(false) );
             maBoundary.X = aRect.Left();
             maBoundary.Y = aRect.Top();
             maBoundary.Width = aRect.GetWidth();
@@ -260,7 +260,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     {
     case IMAP_OBJ_RECTANGLE:
         {
-            const Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
+            const tools::Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
             pNewIMapObject = new IMapRectangleObject( aRect, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false );
         }
         break;

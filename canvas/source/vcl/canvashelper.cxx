@@ -168,7 +168,7 @@ namespace vclcanvas
             rOutDev.SetLineColor( COL_WHITE );
             rOutDev.SetFillColor( COL_WHITE );
             rOutDev.SetClipRegion();
-            rOutDev.DrawRect( Rectangle( Point(),
+            rOutDev.DrawRect( ::tools::Rectangle( Point(),
                                          rOutDev.GetOutputSizePixel()) );
 
             if( mp2ndOutDev )
@@ -181,7 +181,7 @@ namespace vclcanvas
                 rOutDev2.SetLineColor( COL_WHITE );
                 rOutDev2.SetFillColor( COL_WHITE );
                 rOutDev2.SetClipRegion();
-                rOutDev2.DrawRect( Rectangle( Point(),
+                rOutDev2.DrawRect( ::tools::Rectangle( Point(),
                                               rOutDev2.GetOutputSizePixel()) );
                 rOutDev2.SetDrawMode( DrawModeFlags::BlackLine | DrawModeFlags::BlackFill | DrawModeFlags::BlackText |
                                       DrawModeFlags::BlackGradient | DrawModeFlags::BlackBitmap );
@@ -946,7 +946,7 @@ namespace vclcanvas
         rLayout = getMemoryLayout();
 
         // TODO(F2): Support alpha canvas here
-        const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+        const ::tools::Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
@@ -1007,7 +1007,7 @@ namespace vclcanvas
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
 
-        const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+        const ::tools::Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
         const sal_uInt16 nBitCount( std::min( (sal_uInt16)24, rOutDev.GetBitCount() ) );
         const BitmapPalette* pPalette = nullptr;
 

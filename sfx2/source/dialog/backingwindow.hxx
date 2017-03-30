@@ -86,7 +86,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     std::vector< VclPtr<vcl::Window> > maDndWindows;
 
     Color maButtonsTextColor;
-    Rectangle maStartCentButtons;
+    tools::Rectangle maStartCentButtons;
 
     bool mbInitControls;
     sal_Int32 mnHideExternalLinks;
@@ -118,7 +118,7 @@ public:
     virtual ~BackingWindow() override;
     virtual void dispose() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual bool PreNotify(NotifyEvent& rNEvt) override;
     virtual void GetFocus() override;

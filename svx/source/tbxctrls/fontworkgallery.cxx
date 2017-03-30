@@ -203,12 +203,12 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 OutputDevice* pOutDev = mpSdrView->GetFirstOutputDevice();
                 if( pOutDev )
                 {
-                    Rectangle aObjRect( pNewObject->GetLogicRect() );
-                    Rectangle aVisArea = pOutDev->PixelToLogic(Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
+                    tools::Rectangle aObjRect( pNewObject->GetLogicRect() );
+                    tools::Rectangle aVisArea = pOutDev->PixelToLogic(tools::Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
                     Point aPagePos = aVisArea.Center();
                     aPagePos.X() -= aObjRect.GetWidth() / 2;
                     aPagePos.Y() -= aObjRect.GetHeight() / 2;
-                    Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
+                    tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     SdrPageView* pPV = mpSdrView->GetSdrPageView();
 
                     pNewObject->SetLogicRect(aNewObjectRectangle);

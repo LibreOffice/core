@@ -313,7 +313,7 @@ sal_Bool SAL_CALL ToolbarMenuAcc::containsPoint( const awt::Point& aPoint )
     const Point aSize( aRect.Width, aRect.Height );
     const Point aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 
@@ -756,7 +756,7 @@ sal_Bool SAL_CALL ToolbarMenuEntryAcc::containsPoint( const awt::Point& aPoint )
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
 
@@ -774,9 +774,9 @@ awt::Rectangle SAL_CALL ToolbarMenuEntryAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->maRect );
+        tools::Rectangle   aRect( mpParent->maRect );
         Point       aOrigin;
-        Rectangle   aParentRect( aOrigin, mpParent->mrMenu.GetOutputSizePixel() );
+        tools::Rectangle   aParentRect( aOrigin, mpParent->mrMenu.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 

@@ -693,12 +693,12 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     return (bAllOk && bOneOk);
 }
 
-bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) const
+bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, tools::Rectangle& rRect ) const
 {
     bool bRet = false;
     rRect.SetEmpty();
 
-    Rectangle aRectangle;
+    tools::Rectangle aRectangle;
 
     Point aPos;
     const GlyphItem* pGlyph;

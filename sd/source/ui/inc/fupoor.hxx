@@ -87,7 +87,7 @@ public:
 
     void StartDelayToScrollTimer ();
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle);
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -121,7 +121,7 @@ protected:
 
     DECL_LINK( DelayHdl, Timer *, void );
 
-    static void ImpForceQuadratic(Rectangle& rRect);
+    static void ImpForceQuadratic(::tools::Rectangle& rRect);
 
     /** Switch to another layer.  The layer to switch to is specified by an
         offset relative to the active layer.  With respect to the layer bar

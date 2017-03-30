@@ -142,8 +142,8 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
         SetPolyPolygon( tools::PolyPolygon() );
-        aWorkRect = Rectangle( aLogPt, aLogPt );
-        Invalidate(Rectangle(Point(), GetGraphicSize()));
+        aWorkRect = tools::Rectangle( aLogPt, aLogPt );
+        Invalidate(tools::Rectangle(Point(), GetGraphicSize()));
         SetEditMode( true );
     }
 
@@ -162,7 +162,7 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
         aPipetteColor = GetPixel( aLogPt );
         Control::MouseMove( rMEvt );
 
-        if ( aPipetteLink.IsSet() && Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
+        if ( aPipetteLink.IsSet() && tools::Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
         {
             SetPointer( PointerStyle::RefHand );
             aPipetteLink.Call( *this );
@@ -175,7 +175,7 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     Point aTmpPoint;
-    const Rectangle aGraphRect( aTmpPoint, GetGraphicSize() );
+    const tools::Rectangle aGraphRect( aTmpPoint, GetGraphicSize() );
     const Point     aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bClickValid = aGraphRect.IsInside( aLogPt );
@@ -215,7 +215,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         GraphCtrl::MouseButtonUp( rMEvt );
 }
 
-void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     // #i75482#
     // encapsulate the redraw using Begin/End and use the returned
@@ -227,7 +227,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
     rTarget.Push(PushFlags::LINECOLOR |PushFlags::FILLCOLOR);
     rTarget.SetLineColor(Color(COL_BLACK));
     rTarget.SetFillColor(Color(COL_WHITE));
-    rTarget.DrawRect( Rectangle( Point(), GetGraphicSize() ) );
+    rTarget.DrawRect( tools::Rectangle( Point(), GetGraphicSize() ) );
     rTarget.Pop();
 
     if (rGraphic.GetType() != GraphicType::NONE)
@@ -237,7 +237,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
     {
         tools::PolyPolygon _aPolyPoly(2, 2);
         rTarget.Push(PushFlags::FILLCOLOR);
-        _aPolyPoly.Insert(Rectangle(Point(), GetGraphicSize()));
+        _aPolyPoly.Insert(tools::Rectangle(Point(), GetGraphicSize()));
         _aPolyPoly.Insert(aWorkRect);
         rTarget.SetFillColor(COL_LIGHTRED);
         rTarget.DrawTransparent(_aPolyPoly, 50);

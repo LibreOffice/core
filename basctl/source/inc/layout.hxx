@@ -85,7 +85,7 @@ private:
         void Remove (DockingWindow*);
         bool IsEmpty () const;
         long GetSize () const;
-        void ArrangeIn (Rectangle const&);
+        void ArrangeIn (tools::Rectangle const&);
         void dispose();
 
     private:
@@ -96,7 +96,7 @@ private:
         // lower (top or left) or higher (bottom or right) strip?
         bool bLower;
         // rectangle to move in
-        Rectangle aRect;
+        tools::Rectangle aRect;
         // size (width or height)
         long nSize;
         // the main splitting line

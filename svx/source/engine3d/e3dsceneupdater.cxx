@@ -99,7 +99,7 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
             aSnapRange.transform(rVCScene.getObjectTransformation());
 
             // snap to (old) integer
-            const Rectangle aNewSnapRect(
+            const tools::Rectangle aNewSnapRect(
                 sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),
                 sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
 

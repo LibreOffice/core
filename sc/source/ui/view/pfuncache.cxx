@@ -116,7 +116,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
             aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, &aLocData );
 
             ScRange aCellRange;
-            Rectangle aPixRect;
+            tools::Rectangle aPixRect;
             if ( aLocData.GetMainCellRange( aCellRange, aPixRect ) )
                 aLocations.push_back( ScPrintPageLocation( nRenderer, aCellRange, aPixRect ) );
 

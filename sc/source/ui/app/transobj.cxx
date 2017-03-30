@@ -102,7 +102,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
         return;
 
     Point aPoint;
-    Rectangle aBound( aPoint, pDev->GetOutputSize() );      //! use size from clip area?
+    tools::Rectangle aBound( aPoint, pDev->GetOutputSize() );      //! use size from clip area?
 
     ScViewData aViewData(nullptr,nullptr);
     aViewData.InitData( pDoc );
@@ -174,7 +174,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     aBlock = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     nVisibleTab = nTab1;    // valid table as default
 
-    Rectangle aMMRect = pDoc->GetMMRect( nCol1,nRow1, nCol2,nRow2, nTab1 );
+    tools::Rectangle aMMRect = pDoc->GetMMRect( nCol1,nRow1, nCol2,nRow2, nTab1 );
     aObjDesc.maSize = aMMRect.GetSize();
     PrepareOLE( aObjDesc );
 }
@@ -348,7 +348,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         }
         else if ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG )
         {
-            Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
+            tools::Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
                                                  aBlock.aStart.Tab() );
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
@@ -374,7 +374,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             GDIMetaFile     aMtf;
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
-            Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
+            tools::Rectangle       aVisArea( pEmbObj->GetVisArea( ASPECT_CONTENT ) );
 
             pVDev->EnableOutput( false );
             pVDev->SetMapMode( aMapMode );
@@ -742,7 +742,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
 //      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
 
-        Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
+        tools::Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
         //TODO/LATER: why twice?!
         //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
         pDocSh->SetVisArea( aNewArea );

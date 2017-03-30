@@ -594,7 +594,7 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
 
 void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin )
 {
-    Rectangle aScreenRect;
+    tools::Rectangle aScreenRect;
     if( !Application::IsUnifiedDisplay() )
         aScreenRect = Application::GetScreenPosSizePixel( GetScreenNumber() );
     else
@@ -698,7 +698,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if( !((rData.GetMask() & WindowStateMask::State) && (nState & WindowStateState::Maximized)) )
             if( rData.GetMask() & (WindowStateMask::Pos|WindowStateMask::Width|WindowStateMask::Height) )
             {
-                Rectangle aDesktop = GetDesktopRectPixel();
+                tools::Rectangle aDesktop = GetDesktopRectPixel();
                 ImplSVData *pSVData = ImplGetSVData();
                 vcl::Window *pWin = pSVData->maWinData.mpFirstFrame;
                 bool bWrapped = false;

@@ -165,12 +165,12 @@ void ScAnchorTest::testTdf76183()
     SdrPage *pPage = pDrawLayer->GetPage(0);
 
     // Add a circle somewhere below first row.
-    const Rectangle aOrigRect = Rectangle(1000, 1000, 1200, 1200);
+    const tools::Rectangle aOrigRect = tools::Rectangle(1000, 1000, 1200, 1200);
     SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
     pPage->InsertObject(pObj);
     // Anchor to cell
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0);
-    const Rectangle& rNewRect = pObj->GetLogicRect();
+    const tools::Rectangle& rNewRect = pObj->GetLogicRect();
 
     // Set word wrap to true
     rDoc.ApplyAttr(0, 0, 0, SfxBoolItem(ATTR_LINEBREAK, true));

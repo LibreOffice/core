@@ -138,7 +138,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
     bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
-    Rectangle aTextRect(0,0,500,500);
+    tools::Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
@@ -175,7 +175,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
     bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
-    Rectangle aTextRect(0,0,500,500);
+    tools::Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
@@ -281,7 +281,7 @@ bool SdrExchangeView::Paste(
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
 
         // Use SnapRect, not BoundRect here
-        Rectangle aR=pSrcPg->GetAllObjSnapRect();
+        tools::Rectangle aR=pSrcPg->GetAllObjSnapRect();
 
         if (bResize)
             ResizeRect(aR,aPt0,aXResize,aYResize);
@@ -417,7 +417,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     long xs=nSizX;
     long ys=nSizY;
     Point aPos(rCenter.X()-xs/2,rCenter.Y()-ys/2);
-    Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
+    tools::Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
     rLst.InsertObject(pObj, SAL_MAX_SIZE);
 
@@ -525,7 +525,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
     if( AreObjectsMarked() )
     {
-        Rectangle   aBound( GetMarkedObjBoundRect() );
+        tools::Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
         MapMode     aMap( mpModel->GetScaleUnit(), Point(), mpModel->GetScaleFraction(), mpModel->GetScaleFraction() );
 
@@ -632,7 +632,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         {
             ScopedVclPtrInstance< VirtualDevice > pOut;
             GDIMetaFile     aMtf;
-            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+            const tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const MapMode   aMap( pModel->GetScaleUnit(),
                                   Point(),
                                   pModel->GetScaleFraction(),

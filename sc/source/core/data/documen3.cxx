@@ -1653,9 +1653,9 @@ void ScDocument::GetEmbedded( ScRange& rRange ) const
     rRange = aEmbedRange;
 }
 
-Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
+tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     ScTable* pTable = nullptr;
     if ( aEmbedRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) )
         pTable = maTabs[aEmbedRange.aStart.Tab()];
@@ -1745,7 +1745,7 @@ static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SC
     return bAdded;
 }
 
-ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero ) const
+ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool bHiddenAsZero ) const
 {
     ScTable* pTable = nullptr;
     if (nTab < static_cast<SCTAB>(maTabs.size()))
@@ -1758,7 +1758,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
         return ScRange();
     }
 
-    Rectangle aPosRect = rMMRect;
+    tools::Rectangle aPosRect = rMMRect;
     if ( IsNegativePage( nTab ) )
         ScDrawLayer::MirrorRectRTL( aPosRect ); // Always with positive (LTR) values
 
@@ -1818,7 +1818,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
 
-void ScDocument::SetEmbedded( SCTAB nTab, const Rectangle& rRect ) // From VisArea (1/100 mm)
+void ScDocument::SetEmbedded( SCTAB nTab, const tools::Rectangle& rRect ) // From VisArea (1/100 mm)
 {
     bIsEmbedded = true;
     aEmbedRange = GetRange( nTab, rRect );
@@ -1930,16 +1930,16 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     UpdateDrawLanguages(); // Set edit engine defaults in drawing layer pool
 }
 
-Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
     {
         OSL_FAIL("GetMMRect: wrong table");
-        return Rectangle(0,0,0,0);
+        return tools::Rectangle(0,0,0,0);
     }
 
     SCCOL i;
-    Rectangle aRect;
+    tools::Rectangle aRect;
 
     for (i=0; i<nStartCol; i++)
         aRect.Left() += GetColWidth(i,nTab, bHiddenAsZero );

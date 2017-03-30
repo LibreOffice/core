@@ -236,7 +236,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
             throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
         }
 
-        Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
+        tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
         awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
                              aPixBounds.GetWidth(), aPixBounds.GetHeight() );
 
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
         throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
     }
 
-    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( nullptr ) );
+    tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( nullptr ) );
     aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
 
     Point aPixPoint( aPoint.X, aPoint.Y );

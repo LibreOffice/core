@@ -284,7 +284,7 @@ void DockingWindow::dispose()
 // when the window is floating. Called by Layout.
 void DockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
 {
-    Rectangle const rRect(rPos, rSize);
+    tools::Rectangle const rRect(rPos, rSize);
     if (rRect != aDockingRect)
     {
         // saving the position and the size
@@ -332,7 +332,7 @@ void DockingWindow::Hide ()
     Show(false);
 }
 
-bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+bool DockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
 {
     if (aDockingRect.IsInside(rPos))
     {
@@ -347,7 +347,7 @@ bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     }
 }
 
-void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
+void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 {
     if ( bFloatMode )
         ::DockingWindow::EndDocking( rRect, bFloatMode );
@@ -376,7 +376,7 @@ bool DockingWindow::PrepareToggleFloatingMode()
     if (IsFloatingMode())
     {
         // memorize position and size on the desktop...
-        aFloatingRect = Rectangle(
+        aFloatingRect = tools::Rectangle(
             GetParent()->OutputToScreenPixel(GetPosPixel()),
             GetSizePixel()
         );
@@ -388,7 +388,7 @@ void DockingWindow::StartDocking()
 {
     if (IsFloatingMode())
     {
-        aFloatingRect = Rectangle(
+        aFloatingRect = tools::Rectangle(
             GetParent()->OutputToScreenPixel(GetPosPixel()),
             GetSizePixel()
         );

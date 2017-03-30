@@ -178,7 +178,7 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 
 }
 
-EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& /*rBoundRect*/, const double *pM )
+EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const tools::Rectangle& /*rBoundRect*/, const double *pM )
     : aCenter( pCustomShape->GetSnapRect().Center() )
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
     , fSkewAngle(0.0)
@@ -280,7 +280,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     {
         bool bIsMirroredX = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredX();
         bool bIsMirroredY = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredY();
-        Rectangle aSnapRect( pCustomShape->GetLogicRect() );
+        tools::Rectangle aSnapRect( pCustomShape->GetLogicRect() );
         long nObjectRotation = pCustomShape->GetRotateAngle();
         if ( nObjectRotation )
         {
@@ -367,7 +367,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             }
         }
 
-        Rectangle aBoundRect2d;
+        tools::Rectangle aBoundRect2d;
         SdrObjListIter aIter( *pShape2d, SdrIterMode::DeepNoGroups );
         const bool bMultipleSubObjects(aIter.Count() > 1);
 
@@ -476,7 +476,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 }
 
                 const basegfx::B2DRange aTempRange(basegfx::tools::getRange(aPolyPoly));
-                const Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
+                const tools::Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
                 // #i122777# depth 0 is okay for planes when using double-sided
@@ -524,7 +524,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                                 (sal_Int32)( (double)( aBoundRect.Top() - aSnapRect.Top() ) * (double)aBmpSize.Height() / (double)aSnapRect.GetHeight() ) );
                             Size aSize( (sal_Int32)( aBmpSize.Width() * fXScale ),
                                                     (sal_Int32)( aBmpSize.Height() * fYScale ) );
-                            Rectangle aCropRect( aPt, aSize );
+                            tools::Rectangle aCropRect( aPt, aSize );
                             aFillBmp.Crop( aCropRect );
                             p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
                         }
@@ -736,7 +736,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     return pRet;
 }
 
-Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rSnapRect, const Rectangle& rBoundRect, const double* pMap )
+tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap )
 {
     const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Point aCenter( rSnapRect.Center() );

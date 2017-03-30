@@ -164,7 +164,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 
 protected:
     virtual bool                    SeekRow( long nRow ) override;
-    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const override;
+    virtual void                    PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
     virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
     virtual bool                    SaveModified() override;
@@ -1782,7 +1782,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                         aSize.Width() = GetSizePixel().Width() - aPos.X();
 
                     aPos = OutputToScreenPixel(aPos);
-                     Rectangle aItemRect( aPos, aSize );
+                     tools::Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, sEntry,
                             QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                 }
@@ -3420,7 +3420,7 @@ bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         }
 
         Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
-        Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
+        tools::Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
         if ( rToken.eTokenType != TOKEN_TAB_STOP )
         {
             if (!rToken.sCharStyleName.isEmpty())
@@ -3959,7 +3959,7 @@ OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 }
 
 void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
-                                const Rectangle& rRect, sal_uInt16 nColumnId) const
+                                const tools::Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     const DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
     rDev.DrawText( rRect, GetCellText( m_nCurrentRow, nColumnId ), nStyle );

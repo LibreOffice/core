@@ -292,7 +292,7 @@ void TextView::DeleteSelected()
     ShowCursor();
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection)
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection)
 {
     if (!mpImpl->mbPaintSelection)
     {
@@ -317,12 +317,12 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
     mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, pSelection);
 }
 
-void TextView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void TextView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ImpPaint(rRenderContext, rRect);
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if ( !mpImpl->mpTextEngine->GetUpdateMode() || mpImpl->mpTextEngine->IsInUndo() )
         return;
@@ -347,7 +347,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 
         SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
 
-        Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
+        tools::Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
         long nY = 0;
         const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
         const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
@@ -379,7 +379,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                     if ( nEndIndex < nStartIndex )
                         nEndIndex = nStartIndex;
 
-                    Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
+                    tools::Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), false ) );
                     aTmpRect.Top() += nY;
                     aTmpRect.Bottom() += nY;
                     Point aTopLeft( aTmpRect.TopLeft() );
@@ -396,7 +396,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                         Point aPnt1( GetWindowPos( aTopLeft ) );
                         Point aPnt2( GetWindowPos( aBottomRight ) );
 
-                        Rectangle aRect( aPnt1, aPnt2 );
+                        tools::Rectangle aRect( aPnt1, aPnt2 );
                         mpImpl->mpWindow->Invert( aRect );
                     }
                 }
@@ -941,7 +941,7 @@ void TextView::Command( const CommandEvent& rCEvt )
         if ( mpImpl->mpTextEngine->mpIMEInfos && mpImpl->mpTextEngine->mpIMEInfos->nLen )
         {
             TextPaM aPaM( GetSelection().GetEnd() );
-            Rectangle aR1 = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM );
+            tools::Rectangle aR1 = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM );
 
             sal_Int32 nInputEnd = mpImpl->mpTextEngine->mpIMEInfos->aPos.GetIndex() + mpImpl->mpTextEngine->mpIMEInfos->nLen;
 
@@ -953,7 +953,7 @@ void TextView::Command( const CommandEvent& rCEvt )
             TextLine& rLine = pParaPortion->GetLines()[ nLine ];
             if ( nInputEnd > rLine.GetEnd() )
                 nInputEnd = rLine.GetEnd();
-            Rectangle aR2 = mpImpl->mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
+            tools::Rectangle aR2 = mpImpl->mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
 
             long nWidth = aR2.Left()-aR1.Right();
             aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
@@ -1568,7 +1568,7 @@ TextPaM TextView::CursorEndOfDoc()
 
 TextPaM TextView::PageUp( const TextPaM& rPaM )
 {
-    Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
+    tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
     aTopLeft.Y() -= mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
     aTopLeft.X() += 1;
@@ -1581,7 +1581,7 @@ TextPaM TextView::PageUp( const TextPaM& rPaM )
 
 TextPaM TextView::PageDown( const TextPaM& rPaM )
 {
-    Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
+    tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
     aBottomRight.Y() += mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
     aBottomRight.X() += 1;
@@ -1607,7 +1607,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
         mpImpl->mpTextEngine->FormatAndUpdate( this );
 
     TextPaM aPaM( mpImpl->maSelection.GetEnd() );
-    Rectangle aEditCursor = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM, bSpecial );
+    tools::Rectangle aEditCursor = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM, bSpecial );
 
     // Remember that we placed the cursor behind the last character of a line
     mpImpl->mbCursorAtEndOfLine = false;
@@ -1814,7 +1814,7 @@ void TextView::ImpShowDDCursor()
 {
     if ( !mpImpl->mpDDInfo->mbVisCursor )
     {
-        Rectangle aCursor = mpImpl->mpTextEngine->PaMtoEditCursor( mpImpl->mpDDInfo->maDropPos, true );
+        tools::Rectangle aCursor = mpImpl->mpTextEngine->PaMtoEditCursor( mpImpl->mpDDInfo->maDropPos, true );
         aCursor.Right()++;
         aCursor.SetPos( GetWindowPos( aCursor.TopLeft() ) );
 

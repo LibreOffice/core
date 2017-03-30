@@ -143,7 +143,7 @@ EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 
 EscherPropertyContainer::EscherPropertyContainer(
     EscherGraphicProvider * pGraphProv, SvStream * pPiOutStrm,
-    Rectangle * pBoundRect):
+    tools::Rectangle * pBoundRect):
     pGraphicProvider(pGraphProv),
     pPicOutStrm(pPiOutStrm),
     pShapeBoundRect(pBoundRect),
@@ -162,7 +162,7 @@ EscherPropertyContainer::EscherPropertyContainer()
 EscherPropertyContainer::EscherPropertyContainer(
     EscherGraphicProvider& rGraphProv,
             SvStream* pPiOutStrm,
-                Rectangle& rBoundRect ) :
+                tools::Rectangle& rBoundRect ) :
     EscherPropertyContainer(&rGraphProv, pPiOutStrm, &rBoundRect)
 {}
 
@@ -1292,7 +1292,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const css::uno::Reference
                 pVisArea.reset(new css::awt::Rectangle);
                 aAny >>= (*pVisArea);
             }
-            Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+            tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
             sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea.get() );
             if ( nBlibId )
             {
@@ -1327,7 +1327,7 @@ bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const OString& rUniqueId )
     {
         EscherGraphicProvider aProvider;
         SvMemoryStream aMemStrm;
-        Rectangle aRect;
+        tools::Rectangle aRect;
         if ( aProvider.GetBlibID( aMemStrm, rUniqueId, aRect ) )
         {
             // grab BLIP from stream and insert directly as complex property
@@ -1367,7 +1367,7 @@ void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
 
 namespace {
 
-GraphicObject* lclDrawHatch( const css::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground, const Rectangle& rRect )
+GraphicObject* lclDrawHatch( const css::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground, const tools::Rectangle& rRect )
 {
     // #i121183# For hatch, do no longer create a bitmap with the fixed size of 28x28 pixels. Also
     // do not create a bitmap in page size, that would explode file sizes (and have no good quality).
@@ -1397,7 +1397,7 @@ GraphicObject* lclDrawHatch( const css::drawing::Hatch& rHatch, const Color& rBa
 
 void EscherPropertyContainer::CreateEmbeddedHatchProperties( const css::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
 {
-    const Rectangle aRect(pShapeBoundRect ? *pShapeBoundRect : Rectangle(Point(0,0), Size(28000, 21000)));
+    const tools::Rectangle aRect(pShapeBoundRect ? *pShapeBoundRect : tools::Rectangle(Point(0,0), Size(28000, 21000)));
     std::unique_ptr<GraphicObject> xGraphicObject(lclDrawHatch(rHatch, rBackColor, bFillBackground, aRect));
     OString aUniqueId = xGraphicObject->GetUniqueID();
     bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
@@ -1497,7 +1497,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     aAny >>= bFillBackground;
                 }
 
-                const Rectangle aRect(Point(0, 0), pShapeBoundRect ? pShapeBoundRect->GetSize() : Size(28000, 21000));
+                const tools::Rectangle aRect(Point(0, 0), pShapeBoundRect ? pShapeBoundRect->GetSize() : Size(28000, 21000));
                 xGraphicObject.reset(lclDrawHatch(aHatch, aBackColor, bFillBackground, aRect));
                 aUniqueId = xGraphicObject->GetUniqueID();
                 eBitmapMode = css::drawing::BitmapMode_REPEAT;
@@ -1696,7 +1696,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 // write out embedded graphic
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
-                    Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+                    tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
                     const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get()));
 
                     if(nBlibId)
@@ -1718,7 +1718,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     EscherGraphicProvider aProvider;
                     SvMemoryStream aMemStrm;
-                    Rectangle aRect;
+                    tools::Rectangle aRect;
 
                     if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
                     {
@@ -1940,7 +1940,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
 
             sal_uInt16 nPolyCount = aPolyPolygon.Count();
             sal_uInt32 nTotalPoints(0), nTotalBezPoints(0);
-            Rectangle aRect( aPolyPolygon.GetBoundRect() );
+            tools::Rectangle aRect( aPolyPolygon.GetBoundRect() );
             rGeoRect = css::awt::Rectangle( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
 
             for (sal_uInt16 i = 0; i < nPolyCount; ++i)
@@ -3811,7 +3811,7 @@ bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const css::uno
         {
             if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
             {
-                Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+                tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
 
                 sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect );
                 if ( nBlibId )
@@ -4190,7 +4190,7 @@ bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPrefSi
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OString& rId,
-                                            const Rectangle& /* rBoundRect */, const css::awt::Rectangle* pVisArea,
+                                            const tools::Rectangle& /* rBoundRect */, const css::awt::Rectangle* pVisArea,
                                             const GraphicAttr* pGraphicAttr, const bool bOOxmlExport )
 {
     sal_uInt32          nBlibId = 0;
@@ -4688,7 +4688,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             css::awt::Point aPoint( aXShape->getPosition() );
             css::awt::Size  aSize( aXShape->getSize() );
 
-            Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
+            tools::Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
             Point aCenter( aRect.Center() );
             tools::Polygon aPoly( 4 );
 
@@ -5216,7 +5216,7 @@ void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersi
     mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
 }
 
-void EscherEx::AddChildAnchor( const Rectangle& rRect )
+void EscherEx::AddChildAnchor( const tools::Rectangle& rRect )
 {
     AddAtom( 16, ESCHER_ChildAnchor );
     mpOutStrm ->WriteInt32( rRect.Left() )
@@ -5225,7 +5225,7 @@ void EscherEx::AddChildAnchor( const Rectangle& rRect )
                .WriteInt32( rRect.Bottom() );
 }
 
-void EscherEx::AddClientAnchor( const Rectangle& rRect )
+void EscherEx::AddClientAnchor( const tools::Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
     mpOutStrm->WriteInt16( rRect.Top() )
@@ -5239,9 +5239,9 @@ EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
     return nullptr;
 }
 
-sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect )
+sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const tools::Rectangle* pBoundRect )
 {
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if( pBoundRect )
         aRect = *pBoundRect;
 
@@ -5287,12 +5287,12 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
     return nShapeId;
 }
 
-sal_uInt32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
+sal_uInt32 EscherEx::EnterGroup( const tools::Rectangle* pBoundRect )
 {
     return EnterGroup( OUString(), pBoundRect );
 }
 
-void EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect )
+void EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const tools::Rectangle& rRect )
 {
     if ( nGroupLevel )
     {
@@ -5308,7 +5308,7 @@ void EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect 
     }
 }
 
-void EscherEx::SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect )
+void EscherEx::SetGroupLogicRect( sal_uInt32 nGroupLevel, const tools::Rectangle& rRect )
 {
     if ( nGroupLevel )
     {
@@ -5344,7 +5344,7 @@ void EscherEx::AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlags, sal_uInt32 
     mpOutStrm->WriteUInt32( nShapeID ).WriteUInt32( nFlags );
 }
 
-void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )
+void EscherEx::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& )
 {
     rProps.Commit( GetStream() );
 }

@@ -56,7 +56,7 @@ const short PADDING_LENGTH_FOR_STYLE_FAMILY = 5;
 const sal_Char PADDING_CHARACTER_FOR_STYLE_FAMILY = ' ';
 }
 
-bool SdrTextObj::AdjustTextFrameWidthAndHeight( Rectangle& rR, bool bHgt, bool bWdt ) const
+bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt, bool bWdt ) const
 {
     if (!bTextFrame)
         // Not a text frame.  Bail out.
@@ -87,7 +87,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( Rectangle& rR, bool bHgt, bool b
     bool bHScroll = bScroll && (eAniDir == SdrTextAniDirection::Left || eAniDir == SdrTextAniDirection::Right);
     bool bVScroll = bScroll && (eAniDir == SdrTextAniDirection::Up || eAniDir == SdrTextAniDirection::Down);
 
-    Rectangle aOldRect = rR;
+    tools::Rectangle aOldRect = rR;
     long nHgt = 0, nMinHgt = 0, nMaxHgt = 0;
     long nWdt = 0, nMinWdt = 0, nMaxWdt = 0;
 
@@ -275,10 +275,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 
 bool SdrTextObj::AdjustTextFrameWidthAndHeight()
 {
-    Rectangle aNeuRect(maRect);
+    tools::Rectangle aNeuRect(maRect);
     bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect);
     if (bRet) {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNeuRect;
         SetRectsDirty();
         if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack

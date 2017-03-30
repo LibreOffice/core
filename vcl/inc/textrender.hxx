@@ -59,7 +59,7 @@ public:
                                         std::vector< sal_Int32 >& rWidths,
                                         Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual bool                    GetGlyphBoundRect(const GlyphItem&, Rectangle&) = 0;
+    virtual bool                    GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) = 0;
     virtual bool                    GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) = 0;
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void                    DrawTextLayout(const CommonSalLayout&) = 0;

@@ -423,7 +423,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
             aDiscreteRange.grow(1.0);
         }
 
-        const Rectangle aVCLDiscreteRectangle(
+        const tools::Rectangle aVCLDiscreteRectangle(
             static_cast<long>(floor(aDiscreteRange.getMinX())),
             static_cast<long>(floor(aDiscreteRange.getMinY())),
             static_cast<long>(ceil(aDiscreteRange.getMaxX())),

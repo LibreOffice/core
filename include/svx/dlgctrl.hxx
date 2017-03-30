@@ -113,7 +113,7 @@ public:
     virtual ~SvxRectCtl() override;
     virtual void dispose() override;
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
@@ -129,8 +129,8 @@ public:
 
     static const sal_uInt8 NO_CHILDREN = 9;   // returns number of usable radio buttons
 
-    Rectangle           CalculateFocusRectangle() const;
-    Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
+    tools::Rectangle           CalculateFocusRectangle() const;
+    tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
@@ -161,7 +161,7 @@ protected:
     Point       aFocusPosition;
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
 
-    Rectangle   implCalFocusRect( const Point& aPosition );
+    tools::Rectangle   implCalFocusRect( const Point& aPosition );
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
@@ -170,7 +170,7 @@ public:
     virtual ~SvxPixelCtl() override;
     virtual void dispose() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
@@ -357,7 +357,7 @@ public:
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
 };
@@ -380,7 +380,7 @@ public:
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 };
 
@@ -408,7 +408,7 @@ public:
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX

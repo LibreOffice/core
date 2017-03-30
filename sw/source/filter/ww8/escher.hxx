@@ -168,7 +168,7 @@ public:
 
     virtual void WriteFrameExtraData(const SwFrameFormat& rFormat) override;
 
-    EscherExHostAppData* StartShape(const css::uno::Reference< css::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
+    EscherExHostAppData* StartShape(const css::uno::Reference< css::drawing::XShape > &, const tools::Rectangle*) override {return &aHostData;}
 private:
     SwEscherEx(const SwEscherEx&) = delete;
     SwEscherEx &operator=(const SwEscherEx&) = delete;

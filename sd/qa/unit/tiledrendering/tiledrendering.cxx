@@ -143,8 +143,8 @@ private:
     xmlDocPtr parseXmlDump();
 
     uno::Reference<lang::XComponent> mxComponent;
-    Rectangle m_aInvalidation;
-    std::vector<Rectangle> m_aSelection;
+    ::tools::Rectangle m_aInvalidation;
+    std::vector<::tools::Rectangle> m_aSelection;
     bool m_bFound;
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
@@ -217,7 +217,7 @@ static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_U
     return aRet;
 }
 
-static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
+static void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
@@ -244,7 +244,7 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         m_aSelection.clear();
         for (const OUString& rString : lcl_convertSeparated(aPayload, static_cast<sal_Unicode>(';')))
         {
-            Rectangle aRectangle;
+            ::tools::Rectangle aRectangle;
             lcl_convertRectangle(rString, aRectangle);
             m_aSelection.push_back(aRectangle);
         }
@@ -324,7 +324,7 @@ void SdTiledRenderingTest::testRegisterCallback()
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
-    Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
+    ::tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
 }
 
@@ -452,7 +452,7 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Take the bottom center one.
     SdrHdl* pHdl = pObject->GetHdl(6);
     CPPUNIT_ASSERT_EQUAL((int)SdrHdlKind::Lower, (int)pHdl->GetKind());
-    Rectangle aShapeBefore = pObject->GetSnapRect();
+    ::tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
     pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
     pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY() + 1000));
@@ -468,7 +468,7 @@ void SdTiledRenderingTest::testSetGraphicSelection()
         // The second item was -1 here, view shell ID wasn't known.
         CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pListAction->aUndoActions.GetUndoAction(i)->GetViewShellId());
 
-    Rectangle aShapeAfter = pObject->GetSnapRect();
+    ::tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
@@ -1312,7 +1312,7 @@ void SdTiledRenderingTest::testTdf102223()
     SdrView* pView = pViewShell->GetView();
 
     // select contents of cell
-    Rectangle aRect = pTableObject->GetCurrentBoundRect();
+    ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
                                       1, MOUSE_LEFT, 0);
@@ -1405,7 +1405,7 @@ void SdTiledRenderingTest::testTdf103083()
     SdrView* pView = pViewShell->GetView();
 
     // select contents of bullet item
-    Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
                                       1, MOUSE_LEFT, 0);
@@ -1490,7 +1490,7 @@ void SdTiledRenderingTest::testTdf104405()
     pView->SdrBeginTextEdit(pTableObject);
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
-    Rectangle aRect = pTableObject->GetCurrentBoundRect();
+    ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       convertMm100ToTwip(aRect.getX()), convertMm100ToTwip(aRect.getY()),
                                       1, MOUSE_LEFT, 0);

@@ -346,7 +346,7 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     aP1.X() += (sal_Int16)SVBT16ToShort( pHd->dxa );
     aP1.Y() += (sal_Int16)SVBT16ToShort( pHd->dya );
 
-    SdrObject* pObj = new SdrRectObj( Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrRectObj( tools::Rectangle( aP0, aP1 ) );
 
     SetStdAttr( rSet, aRect.aLnt, aRect.aShd );
     SetFill( rSet, aRect.aFill );
@@ -367,7 +367,7 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     aP1.X() += (sal_Int16)SVBT16ToShort( pHd->dxa );
     aP1.Y() += (sal_Int16)SVBT16ToShort( pHd->dya );
 
-    SdrObject* pObj = new SdrCircObj( OBJ_CIRC, Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrCircObj( OBJ_CIRC, tools::Rectangle( aP0, aP1 ) );
 
     SetStdAttr( rSet, aElipse.aLnt, aElipse.aShd );
     SetFill( rSet, aElipse.aFill );
@@ -399,7 +399,7 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
         aP1.X() -= (sal_Int16)SVBT16ToShort( pHd->dxa );
     }
 
-    SdrObject* pObj = new SdrCircObj( OBJ_SECT, Rectangle( aP0, aP1 ),
+    SdrObject* pObj = new SdrCircObj( OBJ_SECT, tools::Rectangle( aP0, aP1 ),
                                nW * 9000, ( ( nW + 1 ) & 3 ) * 9000 );
 
     SetStdAttr( rSet, aArc.aLnt, aArc.aShd );
@@ -1127,7 +1127,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         SfxItemSet aFlySet( m_rDoc.GetAttrPool(),
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
-                        Rectangle aInnerDist(   pRecord->nDxTextLeft,
+                        tools::Rectangle aInnerDist(   pRecord->nDxTextLeft,
                                                 pRecord->nDyTextTop,
                                                 pRecord->nDxTextRight,
                                                 pRecord->nDyTextBottom  );
@@ -1212,9 +1212,9 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     aP1.X() += (sal_Int16)SVBT16ToShort( pHd->dxa );
     aP1.Y() += (sal_Int16)SVBT16ToShort( pHd->dya );
 
-    SdrObject* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrRectObj( OBJ_TEXT, tools::Rectangle( aP0, aP1 ) );
     pObj->SetModel( m_pDrawModel );
-    pObj->NbcSetSnapRect(Rectangle(aP0, aP1));
+    pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( (sal_Int16)SVBT16ToShort( pHd->dxa ) ,
         (sal_Int16)SVBT16ToShort( pHd->dya ) );
 
@@ -1274,9 +1274,9 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
                + m_nDrawYOfs2 + (sal_Int16)SVBT16ToShort( xP[1] ) );
     xP.reset();
 
-    SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
+    SdrCaptionObj* pObj = new SdrCaptionObj( tools::Rectangle( aP0, aP1 ), aP2 );
     pObj->SetModel( m_pDrawModel );
-    pObj->NbcSetSnapRect(Rectangle(aP0, aP1));
+    pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( (sal_Int16)SVBT16ToShort( aCallB.dpheadTxbx.dxa ),
                            (sal_Int16)SVBT16ToShort(  aCallB.dpheadTxbx.dya ) );
     bool bEraseThisObject;
@@ -1423,7 +1423,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         {
             m_pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
 
-            Rectangle aRect(pObject->GetSnapRect());
+            tools::Rectangle aRect(pObject->GetSnapRect());
 
             const sal_uInt32 nCntRelTo = 3;
 
@@ -1611,7 +1611,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
-    Rectangle& rInnerDist )
+    tools::Rectangle& rInnerDist )
 {
 /*
     am Rahmen zu setzende Frame-Attribute
@@ -1701,7 +1701,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // Size: SwFormatFrameSize
     if( SfxItemState::SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
     {
-        const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
+        const tools::Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
         // recorded interior is to remain equally large despite thick edges.
         rFlySet.Put( SwFormatFrameSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
@@ -2484,7 +2484,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (!m_pMSDffManager->GetModel())
          m_pMSDffManager->SetModel(m_pDrawModel, 1440);
 
-    Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
+    tools::Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
     SvxMSDffImportData aData( aRect );
 
     /*
@@ -2873,7 +2873,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         // More attributes can be used in a frame compared to the
         // Edit-Engine, and it can contain field, OLEs or graphics...
-        Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
+        tools::Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
         SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
@@ -3000,7 +3000,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     {
         // Note that the escher inner distance only seems to be honoured in
         // word for textboxes, not for graphics and ole objects.
-        Rectangle aInnerDist(0, 0, 0, 0);
+        tools::Rectangle aInnerDist(0, 0, 0, 0);
 
         MatchSdrItemsIntoFlySet(rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eLineDashing, pRecord->eShapeType, aInnerDist);

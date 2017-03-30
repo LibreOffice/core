@@ -58,7 +58,7 @@ public:
     virtual ~SplashScreenWindow() override { disposeOnce(); }
     virtual void dispose() override;
     // workwindow
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     void Redraw();
 
 };
@@ -142,7 +142,7 @@ void SplashScreenWindow::Redraw()
     Invalidate();
     // Trigger direct painting too - otherwise the splash screen won't be
     // shown in some cases (when the idle timer won't be hit).
-    Paint(*this, Rectangle());
+    Paint(*this, tools::Rectangle());
     Flush();
 }
 
@@ -473,7 +473,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     if ( nCount > 0 )
     {
         // retrieve size from first screen
-        Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
+        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
     }
@@ -516,7 +516,7 @@ void SplashScreen::determineProgressRatioValues(
     if ( nCount > 0 )
     {
         // retrieve size from first screen
-        Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
+        tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
         nScreenRatio  = nHeight ? sal_Int32( rtl::math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;
@@ -574,7 +574,7 @@ void SplashScreen::determineProgressRatioValues(
     }
 }
 
-void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     if (!pSpl || !pSpl->_bVisible)
         return;
@@ -586,8 +586,8 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
         rRenderContext.DrawBitmapEx(Point(), pSpl->_aIntroBmp);
 
         ImplControlValue aValue( pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax);
-        Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight));
-        Rectangle aNativeControlRegion, aNativeContentRegion;
+        tools::Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight));
+        tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if (rRenderContext.GetNativeControlRegion(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
                                                   ControlState::ENABLED, aValue, OUString(),
@@ -617,10 +617,10 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
         // border
         _vdev->SetFillColor();
         _vdev->SetLineColor( pSpl->_cProgressFrameColor );
-        _vdev->DrawRect(Rectangle(pSpl->_tlx, pSpl->_tly, pSpl->_tlx+pSpl->_barwidth, pSpl->_tly+pSpl->_barheight));
+        _vdev->DrawRect(tools::Rectangle(pSpl->_tlx, pSpl->_tly, pSpl->_tlx+pSpl->_barwidth, pSpl->_tly+pSpl->_barheight));
         _vdev->SetFillColor( pSpl->_cProgressBarColor );
         _vdev->SetLineColor();
-        _vdev->DrawRect(Rectangle(pSpl->_tlx+pSpl->_barspace, pSpl->_tly+pSpl->_barspace, pSpl->_tlx+pSpl->_barspace+length, pSpl->_tly+pSpl->_barheight-pSpl->_barspace));
+        _vdev->DrawRect(tools::Rectangle(pSpl->_tlx+pSpl->_barspace, pSpl->_tly+pSpl->_barspace, pSpl->_tlx+pSpl->_barspace+length, pSpl->_tly+pSpl->_barheight-pSpl->_barspace));
         vcl::Font aFont;
         aFont.SetFontSize(Size(0, 12));
         aFont.SetAlignment(ALIGN_BASELINE);

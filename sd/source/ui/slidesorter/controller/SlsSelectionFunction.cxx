@@ -786,7 +786,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // we can call IsLeaveWindow at the event.  Otherwise we have to make an
     // explicit test.
     mbIsLeaving = rEvent.IsLeaveWindow()
-        || ! Rectangle(Point(0,0),
+        || ! ::tools::Rectangle(Point(0,0),
              rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
 }
 
@@ -817,7 +817,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // we can call IsLeaveWindow at the event.  Otherwise we have to make an
     // explicit test.
     mbIsLeaving = rEvent.mbLeaving
-        || ! Rectangle(Point(0,0),
+        || ! ::tools::Rectangle(Point(0,0),
              rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
 }
 

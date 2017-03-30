@@ -1346,7 +1346,7 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
-bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect)
+bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
     HDC hDC = getHDC();
 
@@ -1365,7 +1365,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect
     if( nSize == GDI_ERROR )
         return false;
 
-    rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
+    rRect = tools::Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     rRect.Right()  += 1;
     rRect.Bottom() += 1;
@@ -1683,7 +1683,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
     rInfo.m_nAscent     = aTTInfo.winAscent;
     rInfo.m_nDescent    = aTTInfo.winDescent;
-    rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+    rInfo.m_aFontBBox   = tools::Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
 

@@ -893,10 +893,10 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
         bool bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
 
-        Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
+        tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
         sal_uInt16 nStretchX, nStretchY;
         GetGlobalCharStretching(nStretchX, nStretchY);
-        aBulletArea = Rectangle( Point(aBulletArea.Left()*nStretchX/100,
+        aBulletArea = tools::Rectangle( Point(aBulletArea.Left()*nStretchX/100,
                                        aBulletArea.Top()),
                                  Size(aBulletArea.GetWidth()*nStretchX/100,
                                       aBulletArea.GetHeight()) );
@@ -1066,7 +1066,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
     for (OutlinerView* pView : aViewList)
     {
         Point aPos( pView->pEditView->GetWindowPosTopLeft(nPara ) );
-        Rectangle aRect( pView->GetOutputArea() );
+        tools::Rectangle aRect( pView->GetOutputArea() );
         aRect.Right() = aPos.X();
         aRect.Top() = aPos.Y();
         aRect.Bottom() = aPos.Y();
@@ -1508,10 +1508,10 @@ void Outliner::StyleSheetChanged( SfxStyleSheet* pStyle )
     }
 }
 
-Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos )
+tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos )
 {
     // Bullet area within the paragraph ...
-    Rectangle aBulletArea;
+    tools::Rectangle aBulletArea;
 
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     if ( pFmt )
@@ -1581,7 +1581,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         if ( aTopLeft.X() < 0 )     // then push
             aTopLeft.X() = 0;
 
-        aBulletArea = Rectangle( aTopLeft, aBulletSize );
+        aBulletArea = tools::Rectangle( aTopLeft, aBulletSize );
     }
     if ( bReturnPaperPos )
     {
@@ -1605,7 +1605,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
             aBulletPos.X() = GetPaperSize().Width() - aBulletDocPos.X() - aBulletSize.Width();
         }
 
-        aBulletArea = Rectangle( aBulletPos, aBulletSize );
+        aBulletArea = tools::Rectangle( aBulletPos, aBulletSize );
     }
     return aBulletArea;
 }

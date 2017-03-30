@@ -53,7 +53,7 @@ private:
     VclPtr<AnnotationWindow>   mpAnnotationWindow;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -87,7 +87,7 @@ class AnnotationWindow : public FloatingWindow
         bool                    mbMouseOverButton;
         VclPtr<AnnotationTextWindow>   mpTextWindow;
         VclPtr<MultiLineEdit>   mpMeta;
-        Rectangle               maRectMetaButton;
+        ::tools::Rectangle               maRectMetaButton;
         basegfx::B2DPolygon     maPopupTriangle;
 
     protected:
@@ -127,7 +127,7 @@ class AnnotationWindow : public FloatingWindow
         void            ToggleInsMode();
 
         virtual void    Deactivate() override;
-        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
+        virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
         virtual void    MouseMove( const MouseEvent& rMEvt ) override;
         virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
         virtual void    Command( const CommandEvent& rCEvt ) override;

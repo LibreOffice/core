@@ -50,7 +50,7 @@ class DataBrowser : public ::svt::EditBrowseBox
 {
 protected:
     // EditBrowseBox overridables
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const override;
+    virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
     virtual bool SeekRow( long nRow ) override;
     virtual bool IsTabAllowed( bool bForward ) const override;
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;

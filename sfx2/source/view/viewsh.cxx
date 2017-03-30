@@ -1583,12 +1583,12 @@ void SfxViewShell::DisconnectAllClients()
 }
 
 
-void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
+void SfxViewShell::QueryObjAreaPixel( tools::Rectangle& ) const
 {
 }
 
 
-void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
+void SfxViewShell::VisAreaChanged(const tools::Rectangle& /*rVisArea*/)
 {
     SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
     if ( !pClients )
@@ -1604,7 +1604,7 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 
 
 void SfxViewShell::CheckIPClient_Impl(
-        SfxInPlaceClient *const pIPClient, const Rectangle& rVisArea)
+        SfxInPlaceClient *const pIPClient, const tools::Rectangle& rVisArea)
 {
     if ( GetObjectShell()->IsInClose() )
         return;

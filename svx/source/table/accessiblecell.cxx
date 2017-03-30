@@ -310,7 +310,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
     if( mxCell.is() )
     {
         // Get the cell's bounding box in internal coordinates (in 100th of mm)
-        const ::Rectangle aCellRect( mxCell->getCellRect() );
+        const ::tools::Rectangle aCellRect( mxCell->getCellRect() );
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
@@ -329,9 +329,9 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
             // Clip with parent (with coordinates relative to itself).
-            ::Rectangle aBBox ( x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
+            ::tools::Rectangle aBBox ( x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
             awt::Size aParentSize (xParentComponent->getSize());
-            ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
+            ::tools::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
             aBBox = aBBox.GetIntersection (aParentBBox);
             aBoundingBox = awt::Rectangle ( aBBox.getX(), aBBox.getY(), aBBox.getWidth(), aBBox.getHeight());
         }

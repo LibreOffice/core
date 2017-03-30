@@ -75,8 +75,8 @@ protected:
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
     bool                IsInSelection( const TextPaM& rPaM );
 
-    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection);
-    void                ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection);
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );
     void                ImpSetSelection( const TextSelection& rSelection );
@@ -129,7 +129,7 @@ public:
     void                InsertText( const OUString& rNew );
 
     bool                KeyInput( const KeyEvent& rKeyEvent );
-    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void                Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
     void                MouseMove( const MouseEvent& rMouseEvent );

@@ -137,7 +137,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds()
     if ( m_pDlgEdObj )
     {
         // get the bounding box of the shape in logic units
-        Rectangle aRect = m_pDlgEdObj->GetSnapRect();
+        tools::Rectangle aRect = m_pDlgEdObj->GetSnapRect();
 
         if ( m_pDialogWindow )
         {
@@ -150,7 +150,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds()
             aRect = m_pDialogWindow->LogicToPixel( aRect, MapMode(MapUnit::Map100thMM) );
 
             // clip the shape's bounding box with the bounding box of its parent
-            Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
+            tools::Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
             aRect = aRect.GetIntersection( aParentRect );
             aBounds = AWTRectangle( aRect );
         }

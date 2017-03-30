@@ -174,7 +174,7 @@ class SwPostItMgr: public SfxListener
         void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
-                                      const Rectangle& rBorder,
+                                      const tools::Rectangle& rBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
         bool            ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
@@ -233,8 +233,8 @@ class SwPostItMgr: public SfxListener
 
         void Rescale();
 
-        Rectangle GetBottomScrollRect(const unsigned long aPage) const;
-        Rectangle GetTopScrollRect(const unsigned long aPage) const;
+        tools::Rectangle GetBottomScrollRect(const unsigned long aPage) const;
+        tools::Rectangle GetTopScrollRect(const unsigned long aPage) const;
 
         bool IsHit(const Point &aPointPixel);
         /// Get the matching window that is responsible for handling mouse events of rPointLogic, if any.
@@ -293,7 +293,7 @@ class SwPostItMgr: public SfxListener
                                      std::vector< vcl::Window* >* pChildren );
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
-        void PaintTile(OutputDevice& rRenderContext, const Rectangle& rRect);
+        void PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
 };
 
 #endif

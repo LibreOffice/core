@@ -671,12 +671,12 @@ css::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint */ const& _a
     return aAWTPoint;
 }
 
-::Rectangle VCLUnoHelper::ConvertToVCLRect( css::awt::Rectangle const & _rRect )
+::tools::Rectangle VCLUnoHelper::ConvertToVCLRect( css::awt::Rectangle const & _rRect )
 {
-    return ::Rectangle( _rRect.X, _rRect.Y, _rRect.X + _rRect.Width - 1, _rRect.Y + _rRect.Height - 1 );
+    return ::tools::Rectangle( _rRect.X, _rRect.Y, _rRect.X + _rRect.Width - 1, _rRect.Y + _rRect.Height - 1 );
 }
 
-css::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::Rectangle const & _rRect )
+css::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::tools::Rectangle const & _rRect )
 {
     return css::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
 }

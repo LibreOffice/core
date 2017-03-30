@@ -83,9 +83,9 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     Point aPos = pScrollWindow->getThumbPos();
     aPos.X() *= 0.5;
     aPos.Y() *= 0.5;
-    Rectangle aOutRect( aPos, aOut );
+    tools::Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
-    Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
+    tools::Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
     aWorkArea.Right() -= (long)aStartWidth;
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
@@ -326,7 +326,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     if ( pHdl )
                     {
                         Point aHdlPosition( pHdl->GetPos() );
-                        Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
+                        tools::Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
                         m_rView.MakeVisible( aVisRect, *m_pParent);
                     }
 
@@ -582,7 +582,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                 if ( m_rView.IsObjMarked(pObjIter)
                      && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr) )
                 {
-                    Rectangle aNewRect = pObjIter->GetLastBoundRect();
+                    tools::Rectangle aNewRect = pObjIter->GetLastBoundRect();
                     long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
                     long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
                     if ( (nDx + aNewRect.Left()) < 0 )

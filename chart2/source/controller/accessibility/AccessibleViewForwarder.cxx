@@ -40,9 +40,9 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 
 // ________ IAccessibleViewforwarder ________
 
-Rectangle AccessibleViewForwarder::GetVisibleArea() const
+tools::Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {
-    Rectangle aVisibleArea;
+    tools::Rectangle aVisibleArea;
     if ( m_pWindow )
     {
         aVisibleArea.SetPos( Point( 0, 0 ) );

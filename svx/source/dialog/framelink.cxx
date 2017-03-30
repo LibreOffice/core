@@ -179,7 +179,7 @@ struct LinePoints
 
     explicit            LinePoints( const Point& rBeg, const Point& rEnd ) :
                             maBeg( rBeg ), maEnd( rEnd ) {}
-    explicit            LinePoints( const Rectangle& rRect, bool bTLBR ) :
+    explicit            LinePoints( const tools::Rectangle& rRect, bool bTLBR ) :
                             maBeg( bTLBR ? rRect.TopLeft() : rRect.TopRight() ),
                             maEnd( bTLBR ? rRect.BottomRight() : rRect.BottomLeft() ) {}
 };
@@ -900,7 +900,7 @@ void lclDrawVerFrameBorder(
     @return
         A struct containg start and end position of the diagonal line.
  */
-LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOffs )
+LinePoints lclGetDiagLineEnds( const tools::Rectangle& rRect, bool bTLBR, long nDiagOffs )
 {
     LinePoints aPoints( rRect, bTLBR );
     bool bVert = rRect.GetWidth() < rRect.GetHeight();
@@ -938,10 +938,10 @@ LinePoints lclGetDiagLineEnds( const Rectangle& rRect, bool bTLBR, long nDiagOff
         The result struct containing modifies for each border of the reference
         rectangle.
  */
-void lclPushDiagClipRect( OutputDevice& rDev, const Rectangle& rRect, const DiagLineResult& rResult )
+void lclPushDiagClipRect( OutputDevice& rDev, const tools::Rectangle& rRect, const DiagLineResult& rResult )
 {
     // PixelToLogic() regards internal offset of the output device
-    Rectangle aClipRect( rRect );
+    tools::Rectangle aClipRect( rRect );
     aClipRect.Left()   += lclToMapUnit( rResult.mnLClip );
     aClipRect.Top()    += lclToMapUnit( rResult.mnTClip );
     aClipRect.Right()  += lclToMapUnit( rResult.mnRClip );
@@ -975,7 +975,7 @@ void lclPushDiagClipRect( OutputDevice& rDev, const Rectangle& rRect, const Diag
     @param bCrossStyle
         The style of the crossing frame border. Must be a double frame style.
  */
-void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool bTLBR, const Style& rCrossStyle )
+void lclPushCrossingClipRegion( OutputDevice& rDev, const tools::Rectangle& rRect, bool bTLBR, const Style& rCrossStyle )
 {
     DBG_ASSERT( rCrossStyle.Secn(), "lclGetCrossingClipRegion - use only for double styles" );
     LinePoints aLPoints( lclGetDiagLineEnds( rRect, !bTLBR, lclGetPrimEnd( rCrossStyle ) ) );
@@ -1010,7 +1010,7 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
     passed DiagLineResult struct. A one pixel wide line can be drawn dotted.
  */
 void lclDrawDiagLine(
-        OutputDevice& rDev, const Rectangle& rRect, bool bTLBR,
+        OutputDevice& rDev, const tools::Rectangle& rRect, bool bTLBR,
         const DiagLineResult& rResult, long nDiagOffs1, long nDiagOffs2, SvxBorderLineStyle nDashing )
 {
     lclPushDiagClipRect( rDev, rRect, rResult );
@@ -1044,7 +1044,7 @@ void lclDrawDiagLine(
         Style of the crossing diagonal frame border.
  */
 void lclDrawDiagFrameBorder(
-        OutputDevice& rDev, const Rectangle& rRect, bool bTLBR,
+        OutputDevice& rDev, const tools::Rectangle& rRect, bool bTLBR,
         const Style& rBorder, const DiagBorderResult& rResult, const Style& rCrossStyle,
         const Color* pForceColor, bool bDiagDblClip )
 {
@@ -1090,7 +1090,7 @@ void lclDrawDiagFrameBorder(
         Offsets (sub units) to modify the clipping region of the output device.
  */
 void lclDrawDiagFrameBorders(
-        OutputDevice& rDev, const Rectangle& rRect,
+        OutputDevice& rDev, const tools::Rectangle& rRect,
         const Style& rTLBR, const Style& rBLTR, const DiagBordersResult& rResult,
         const Color* pForceColor, bool bDiagDblClip )
 {
@@ -1396,7 +1396,7 @@ basegfx::B2DPoint lcl_PointToB2DPoint( const Point& rPoint )
 
 drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (
         const Point& rStart, const Point& rEnd, const Style& rBorder,
-        const Rectangle& rClipRect )
+        const tools::Rectangle& rClipRect )
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
     basegfx::B2DPolygon aPolygon;
@@ -1496,7 +1496,7 @@ void DrawVerFrameBorder( OutputDevice& rDev,
 
 
 void DrawDiagFrameBorders(
-        OutputDevice& rDev, const Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
+        OutputDevice& rDev, const tools::Rectangle& rRect, const Style& rTLBR, const Style& rBLTR,
         const Style& rTLFromB, const Style& rTLFromR, const Style& rBRFromT, const Style& rBRFromL,
         const Style& rBLFromT, const Style& rBLFromR, const Style& rTRFromB, const Style& rTRFromL,
         const Color* pForceColor, bool bDiagDblClip )

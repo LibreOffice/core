@@ -467,8 +467,8 @@ awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::getCharacterBounds( sal_Int32
     awt::Rectangle aBounds( 0, 0, 0, 0 );
     if ( m_pToolBox && m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) // symbol buttons have no character bounds
     {
-        Rectangle aCharRect = m_pToolBox->GetCharacterBounds( m_nItemId, nIndex );
-        Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
+        tools::Rectangle aCharRect = m_pToolBox->GetCharacterBounds( m_nItemId, nIndex );
+        tools::Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
         aBounds = AWTRectangle( aCharRect );
     }
@@ -484,7 +484,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getIndexAtPoint( const awt::Point&
     if ( m_pToolBox && m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) // symbol buttons have no character bounds
     {
         sal_uInt16 nItemId = 0;
-        Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
+        tools::Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aItemRect.TopLeft();
         sal_Int32 nIdx = m_pToolBox->GetIndexForPoint( aPnt, nItemId );

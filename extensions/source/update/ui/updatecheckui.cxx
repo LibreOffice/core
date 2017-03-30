@@ -93,8 +93,8 @@ class BubbleWindow : public FloatingWindow
     OUString        maBubbleText;
     Image           maBubbleImage;
     Size            maMaxTextSize;
-    Rectangle       maTitleRect;
-    Rectangle       maTextRect;
+    tools::Rectangle       maTitleRect;
+    tools::Rectangle       maTextRect;
     long            mnTipOffset;
 
 private:
@@ -105,7 +105,7 @@ public:
                                   const OUString& rText, const Image& rImage );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     void            Resize() override;
     void            Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NoActivate );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
@@ -487,7 +487,7 @@ VclPtr<BubbleWindow> UpdateCheckUI::GetBubbleWindow()
     if ( !mpIconSysWin )
         return nullptr;
 
-    Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+    tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
     if( aIconRect.IsEmpty() )
         return nullptr;
 
@@ -668,7 +668,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
         if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
              mpBubbleWin && ( mpIconMBar != nullptr ) )
         {
-            Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+            tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
             Point aWinPos = aIconRect.BottomCenter();
             mpBubbleWin->SetTipPosPixel( aWinPos );
             if ( mpBubbleWin->IsVisible() )
@@ -738,7 +738,7 @@ void BubbleWindow::Resize()
     if ( ( aSize.Height() < 20 ) || ( aSize.Width() < 60 ) )
         return;
 
-    Rectangle aRect( 0, TIP_HEIGHT, aSize.Width(), aSize.Height() - TIP_HEIGHT );
+    tools::Rectangle aRect( 0, TIP_HEIGHT, aSize.Width(), aSize.Height() - TIP_HEIGHT );
     maRectPoly = tools::Polygon( aRect, 6, 6 );
     vcl::Region aRegion( maRectPoly );
     long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
@@ -770,7 +770,7 @@ void BubbleWindow::SetTitleAndText( const OUString& rTitle,
 }
 
 
-void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
+void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /*rRect*/)
 {
     SolarMutexGuard aGuard;
 
@@ -799,12 +799,12 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
     SetFont( aBoldFont );
-    Rectangle aTitleRect = maTitleRect;
+    tools::Rectangle aTitleRect = maTitleRect;
     aTitleRect.Move( aImgSize.Width(), 0 );
     DrawText( aTitleRect, maBubbleTitle, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
     SetFont( aOldFont );
-    Rectangle aTextRect = maTextRect;
+    tools::Rectangle aTextRect = maTextRect;
     aTextRect.Move( aImgSize.Width(), 0 );
     DrawText( aTextRect, maBubbleText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 }
@@ -878,12 +878,12 @@ void BubbleWindow::RecalcTextRects()
     {
         SetFont( aBoldFont );
 
-        maTitleRect = GetTextRect( Rectangle( Point( 0, 0 ), maMaxTextSize ),
+        maTitleRect = GetTextRect( tools::Rectangle( Point( 0, 0 ), maMaxTextSize ),
                                    maBubbleTitle,
                                    DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
         SetFont( aOldFont );
-        maTextRect = GetTextRect( Rectangle( Point( 0, 0 ), maMaxTextSize ),
+        maTextRect = GetTextRect( tools::Rectangle( Point( 0, 0 ), maMaxTextSize ),
                                   maBubbleText,
                                   DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 

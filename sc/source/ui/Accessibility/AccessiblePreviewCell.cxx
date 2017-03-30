@@ -201,16 +201,16 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
+tools::Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
 {
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     if (mpViewShell)
     {
         mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
-            Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
+            tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
             aCellRect.setX(aCellRect.getX() + aRect.getX());
             aCellRect.setY(aCellRect.getY() + aRect.getY());
         }
@@ -218,9 +218,9 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
+tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
 {
-    Rectangle aCellRect;
+    tools::Rectangle aCellRect;
     if (mpViewShell)
     {
         mpViewShell->GetLocationData().GetCellPosition( maCellAddress, aCellRect );
@@ -231,7 +231,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
             uno::Reference<XAccessibleComponent> xAccParentComp (xAccParentContext, uno::UNO_QUERY);
             if (xAccParentComp.is())
             {
-                Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
+                tools::Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
                 aCellRect.setX(aCellRect.getX() - aParentRect.getX());
                 aCellRect.setY(aCellRect.getY() - aParentRect.getY());
             }

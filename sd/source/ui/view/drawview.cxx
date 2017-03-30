@@ -489,7 +489,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
  * Make passed region visible (scrolling if necessary)
  */
 
-void DrawView::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
+void DrawView::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin)
 {
     if (!rRect.IsEmpty() && mpDrawViewShell)
     {
@@ -558,7 +558,7 @@ void DrawView::DeleteMarked()
                     }
                     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                     bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
-                    Rectangle aRect( pObj->GetLogicRect() );
+                    ::tools::Rectangle aRect( pObj->GetLogicRect() );
                     SdrObject* pNewObj = pPage->InsertAutoLayoutShape( nullptr, ePresObjKind, bVertical, aRect, true );
 
                     // pUndoManager should not be NULL (see assert above)

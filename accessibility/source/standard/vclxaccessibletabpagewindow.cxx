@@ -72,10 +72,10 @@ awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds()
 
     if ( m_pTabControl )
     {
-        Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
+        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
         if ( m_pTabPage )
         {
-            Rectangle aRect = Rectangle( m_pTabPage->GetPosPixel(), m_pTabPage->GetSizePixel() );
+            tools::Rectangle aRect = tools::Rectangle( m_pTabPage->GetPosPixel(), m_pTabPage->GetSizePixel() );
             aRect.Move( -aPageRect.Left(), -aPageRect.Top() );
             aBounds = AWTRectangle( aRect );
         }

@@ -52,7 +52,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 
 // Will be called after a change of the visible view section.
 
-void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
+void SwScrollbar::ViewPortChgd( const tools::Rectangle &rRect )
 {
     long nThumb, nVisible;
     if( bHori )

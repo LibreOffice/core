@@ -67,7 +67,7 @@ private:
     bool            bAdd;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 public:
@@ -170,7 +170,7 @@ private:
     ScExtraEditViewManager aExtraEditViewManager;
 
     sal_uLong               nTipVisible;
-    Rectangle               aTipRectangle;
+    tools::Rectangle               aTipRectangle;
     QuickHelpFlags          nTipAlign;
     OUString                sTipString;
     VclPtr<vcl::Window>     sTopParent;
@@ -388,7 +388,7 @@ public:
     Point           GetInsertPos();
 
     Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
-    Point           GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart );
+    Point           GetChartDialogPos( const Size& rDialogSize, const tools::Rectangle& rLogicChart );
 
     void            UpdateAutoFillMark();
 
@@ -451,7 +451,7 @@ public:
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
     void            ScrollToObject( SdrObject* pDrawObj );
-    void            MakeVisible( const Rectangle& rHMMRect );
+    void            MakeVisible( const tools::Rectangle& rHMMRect );
 
                                     // Zeichnen
 
@@ -589,7 +589,7 @@ public:
     void ResetAutoSpell();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
-    OUString getRowColumnHeaders(const Rectangle& rRectangle);
+    OUString getRowColumnHeaders(const tools::Rectangle& rRectangle);
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 };
 

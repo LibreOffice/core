@@ -28,12 +28,12 @@ class SvStream;
 
 class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
 {
-    Rectangle                aVal;
+    tools::Rectangle                aVal;
 
 public:
                              static SfxPoolItem* CreateDefault();
                              SfxRectangleItem();
-                             SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
+                             SfxRectangleItem( sal_uInt16 nWhich, const tools::Rectangle& rVal );
                              SfxRectangleItem( const SfxRectangleItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -47,7 +47,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
-    const Rectangle&         GetValue() const { return aVal; }
+    const tools::Rectangle&         GetValue() const { return aVal; }
     virtual bool             QueryValue( css::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal,

@@ -116,10 +116,10 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
             // Clip with parent (with coordinates relative to itself).
-            ::Rectangle aBBox (
+            ::tools::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
             awt::Size aParentSize (xParentComponent->getSize());
-            ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
+            ::tools::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
             aBBox = aBBox.GetIntersection (aParentBBox);
             aBoundingBox = awt::Rectangle (
                 aBBox.getX(),

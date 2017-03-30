@@ -547,7 +547,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_PAGEDOWN:
         case FN_PAGEDOWN_SEL:
         {
-            Rectangle aVis( GetVisArea() );
+            tools::Rectangle aVis( GetVisArea() );
             SwEditWin& rTmpWin = GetEditWin();
             if ( FN_PAGEUP == nSlot || FN_PAGEUP_SEL == nSlot )
                 PageUpCursor(FN_PAGEUP_SEL == nSlot);

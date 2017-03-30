@@ -65,7 +65,7 @@ struct PDFExtOutDevDataSync
 
 struct PDFLinkDestination
 {
-    Rectangle               mRect;
+    tools::Rectangle               mRect;
     MapMode                 mMapMode;
     sal_Int32               mPageNr;
     PDFWriter::DestAreaType mAreaType;
@@ -75,7 +75,7 @@ struct GlobalSyncData
 {
     std::deque< PDFExtOutDevDataSync::Action >  mActions;
     std::deque< MapMode >                       mParaMapModes;
-    std::deque< Rectangle >                     mParaRects;
+    std::deque< tools::Rectangle >                     mParaRects;
     std::deque< sal_Int32 >                     mParaInts;
     std::deque< sal_uInt32 >                    mParauInts;
     std::deque< OUString >                 mParaOUStrings;
@@ -281,7 +281,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
 struct PageSyncData
 {
     std::deque< PDFExtOutDevDataSync >              mActions;
-    std::deque< Rectangle >                         mParaRects;
+    std::deque< tools::Rectangle >                         mParaRects;
     std::deque< sal_Int32 >                         mParaInts;
     std::deque< OUString >                     mParaOUStrings;
     std::deque< PDFWriter::StructElement >          mParaStructElements;
@@ -424,7 +424,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
             {
-                Rectangle aOutputRect, aVisibleOutputRect;
+                tools::Rectangle aOutputRect, aVisibleOutputRect;
                 Graphic   aGraphic( mGraphics.front() );
 
                 mGraphics.pop_front();
@@ -609,7 +609,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
    all actions will be played after the last page was recorded
 */
 //--->i56629
-sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const tools::Rectangle& rRect, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
     mpGlobalSyncData->mParaOUStrings.push_back( sDestName );
@@ -629,7 +629,7 @@ sal_Int32 PDFExtOutDevData::RegisterDest()
 
     return nLinkDestID;
 }
-void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     OSL_PRECOND( nDestId != -1, "PDFExtOutDevData::DescribeRegisteredDest: invalid destination Id!" );
     PDFLinkDestination aLinkDestination;
@@ -639,7 +639,7 @@ void PDFExtOutDevData::DescribeRegisteredDest( sal_Int32 nDestId, const Rectangl
     aLinkDestination.mAreaType = eType;
     mpGlobalSyncData->mFutureDestinations[ nDestId ] = aLinkDestination;
 }
-sal_Int32 PDFExtOutDevData::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFExtOutDevData::CreateDest( const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateDest );
     mpGlobalSyncData->mParaRects.push_back( rRect );
@@ -648,7 +648,7 @@ sal_Int32 PDFExtOutDevData::CreateDest( const Rectangle& rRect, sal_Int32 nPageN
     mpGlobalSyncData->mParaDestAreaTypes.push_back( eType );
     return mpGlobalSyncData->mCurId++;
 }
-sal_Int32 PDFExtOutDevData::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
+sal_Int32 PDFExtOutDevData::CreateLink( const tools::Rectangle& rRect, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateLink );
     mpGlobalSyncData->mParaRects.push_back( rRect );
@@ -657,7 +657,7 @@ sal_Int32 PDFExtOutDevData::CreateLink( const Rectangle& rRect, sal_Int32 nPageN
     return mpGlobalSyncData->mCurId++;
 }
 
-sal_Int32 PDFExtOutDevData::CreateScreen(const Rectangle& rRect, sal_Int32 nPageNr)
+sal_Int32 PDFExtOutDevData::CreateScreen(const tools::Rectangle& rRect, sal_Int32 nPageNr)
 {
     mpGlobalSyncData->mActions.push_back(PDFExtOutDevDataSync::CreateScreen);
     mpGlobalSyncData->mParaRects.push_back(rRect);
@@ -703,7 +703,7 @@ sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString
     mpGlobalSyncData->mParaInts.push_back( nDestID );
     return mpGlobalSyncData->mCurId++;
 }
-void PDFExtOutDevData::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+void PDFExtOutDevData::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNote );
     mpGlobalSyncData->mParaRects.push_back( rRect );
@@ -767,7 +767,7 @@ bool PDFExtOutDevData::SetStructureAttributeNumerical( PDFWriter::StructAttribut
     mpPageSyncData->mParaInts.push_back( nValue );
     return true;
 }
-void PDFExtOutDevData::SetStructureBoundingBox( const Rectangle& rRect )
+void PDFExtOutDevData::SetStructureBoundingBox( const tools::Rectangle& rRect )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureBoundingBox );
     mpPageSyncData->mParaRects.push_back( rRect );
@@ -798,8 +798,8 @@ void PDFExtOutDevData::BeginGroup()
 
 void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
                                  sal_uInt8          nTransparency,
-                                 const Rectangle&   rOutputRect,
-                                 const Rectangle&   rVisibleOutputRect )
+                                 const tools::Rectangle&   rOutputRect,
+                                 const tools::Rectangle&   rVisibleOutputRect )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroupGfxLink );
     mpPageSyncData->mGraphics.push_back( rGraphic );
@@ -810,8 +810,8 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 
 // Avoids expensive de-compression and re-compression of large images.
 bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
-                                               const Rectangle & /* rOutputRect */,
-                                               const Rectangle & /* rVisibleOutputRect */ ) const
+                                               const tools::Rectangle & /* rOutputRect */,
+                                               const tools::Rectangle & /* rVisibleOutputRect */ ) const
 {
     bool bReduceResolution = false;
 

@@ -66,15 +66,15 @@ private:
 
 private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
-    SVX_DLLPRIVATE static void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect);
-    SVX_DLLPRIVATE static void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect);
-    SVX_DLLPRIVATE static void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect);
-    SVX_DLLPRIVATE static void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect);
+    SVX_DLLPRIVATE static void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect);
+    SVX_DLLPRIVATE static void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect);
+    SVX_DLLPRIVATE static void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect);
+    SVX_DLLPRIVATE static void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect);
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:
     SdrCaptionObj();
-    SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
+    SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail);
     virtual ~SdrCaptionObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
@@ -118,8 +118,8 @@ public:
     virtual void NbcSetRelativePos(const Point& rPnt) override;
     virtual Point GetRelativePos() const override;
 
-    virtual const Rectangle& GetLogicRect() const override;
-    virtual void NbcSetLogicRect(const Rectangle& rRect) override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual sal_uInt32 GetSnapPointCount() const override;
     virtual Point GetSnapPoint(sal_uInt32 i) const override;

@@ -153,7 +153,7 @@ class ColorPreviewControl : public Control
 public:
     ColorPreviewControl( vcl::Window* pParent, WinBits nStyle );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void SetColor(const Color& rColor);
 
@@ -177,7 +177,7 @@ void ColorPreviewControl::SetColor( const Color& rCol )
     }
 }
 
-void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     rRenderContext.SetFillColor(maColor);
     rRenderContext.SetLineColor(maColor);
@@ -199,7 +199,7 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void Resize() override;
 
     virtual Size GetOptimalSize() const override;
@@ -434,8 +434,8 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     Point aPos = maPosition;
     maPosition.X() = nX - 5;
     maPosition.Y() = nY - 5;
-    Invalidate(Rectangle(aPos, Size(11, 11)));
-    Invalidate(Rectangle(maPosition, Size(11, 11)));
+    Invalidate(::tools::Rectangle(aPos, Size(11, 11)));
+    Invalidate(::tools::Rectangle(maPosition, Size(11, 11)));
 
     if (bUpdate)
     {
@@ -525,7 +525,7 @@ void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput(rKEvt);
 }
 
-void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     if (!mpBitmap)
         UpdateBitmap();
@@ -548,7 +548,7 @@ void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
     rRenderContext.SetFillColor();
 
-    rRenderContext.DrawEllipse(Rectangle(maPosition, Size(11, 11)));
+    rRenderContext.DrawEllipse(::tools::Rectangle(maPosition, Size(11, 11)));
 }
 
 void ColorFieldControl::Resize()
@@ -598,7 +598,7 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 
     void UpdateBitmap();
@@ -794,7 +794,7 @@ void ColorSliderControl::KeyInput(const KeyEvent& rKEvt)
     Control::KeyInput( rKEvt );
 }
 
-void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     if (!mpBitmap)
         UpdateBitmap();

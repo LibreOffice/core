@@ -684,8 +684,8 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
 
     if(!pOut)
         return;
-    Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
-    Rectangle aNewPxRect( aPxRect );
+    tools::Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
+    tools::Rectangle aNewPxRect( aPxRect );
     while( aNewPxRect.Left() < aPxRect.Left() )
     {
         rAlignedGrfArea.Left( rAlignedGrfArea.Left()+1 );
@@ -1038,11 +1038,11 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
                 if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
                 {
-                    ::svt::EmbeddedObjectRef::DrawShading( Rectangle( aPosition, aSize ), pOut );
+                    ::svt::EmbeddedObjectRef::DrawShading( tools::Rectangle( aPosition, aSize ), pOut );
                 }
             }
             else
-                ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
+                ::svt::EmbeddedObjectRef::DrawPaintReplacement( tools::Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
             if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr && (

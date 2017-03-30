@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace embed {
     class XEmbeddedObject;
 }}}}
 
-class Rectangle;
+namespace tools { class Rectangle; }
 class OutputDevice;
 
 namespace svt {
@@ -54,8 +54,8 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
     EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& ) = delete;
 
 public:
-    static void DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
-    static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
+    static void DrawPaintReplacement( const tools::Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
+    static void DrawShading( const tools::Rectangle &rRect, OutputDevice *pOut );
     static bool TryRunningState( const css::uno::Reference < css::embed::XEmbeddedObject >& );
     static void SetGraphicToContainer( const Graphic& rGraphic,
                                         comphelper::EmbeddedObjectContainer& aContainer,

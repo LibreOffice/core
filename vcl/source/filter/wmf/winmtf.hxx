@@ -249,8 +249,8 @@ public:
     WinMtfClipPath(): maClip() {};
 
     void        setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
-    void        intersectClipRect( const Rectangle& rRect );
-    void        excludeClipRect( const Rectangle& rRect );
+    void        intersectClipRect( const tools::Rectangle& rRect );
+    void        excludeClipRect( const tools::Rectangle& rRect );
     void        moveClipRegion( const Size& rSize );
     void        setDefaultClipPath();
 
@@ -416,16 +416,16 @@ struct SaveStruct
 struct BSaveStruct
 {
     BitmapEx        aBmpEx;
-    Rectangle       aOutRect;
+    tools::Rectangle       aOutRect;
     sal_uInt32      nWinRop;
 
-    BSaveStruct(const Bitmap& rBmp, const Rectangle& rOutRect, sal_uInt32 nRop)
+    BSaveStruct(const Bitmap& rBmp, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
     :   aBmpEx(rBmp)
     ,   aOutRect(rOutRect)
     ,   nWinRop(nRop)
     {}
 
-    BSaveStruct(const BitmapEx& rBmpEx, const Rectangle& rOutRect, sal_uInt32 nRop)
+    BSaveStruct(const BitmapEx& rBmpEx, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
     :   aBmpEx(rBmpEx)
     ,   aOutRect(rOutRect)
     ,   nWinRop(nRop)
@@ -484,8 +484,8 @@ class WinMtfOutput final
 
     sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
     sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
-    Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
-    Rectangle           mrclBounds;
+    tools::Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
+    tools::Rectangle           mrclBounds;
 
     GDIMetaFile*        mpGDIMetaFile;
 
@@ -495,7 +495,7 @@ class WinMtfOutput final
     Point               ImplMap( const Point& rPt );
     Point               ImplScale( const Point& rPt );
     Size                ImplMap( const Size& rSize, bool bDoWorldTransform = true);
-    Rectangle           ImplMap( const Rectangle& rRectangle );
+    tools::Rectangle           ImplMap( const tools::Rectangle& rRectangle );
     void                ImplMap( vcl::Font& rFont );
     tools::Polygon&     ImplMap( tools::Polygon& rPolygon );
     tools::PolyPolygon& ImplMap( tools::PolyPolygon& rPolyPolygon );
@@ -519,8 +519,8 @@ public:
     void                SetWinExt( const Size& rSize , bool bIsEMF = false);
     void                ScaleWinExt( double fX, double fY );
 
-    void                SetrclBounds( const Rectangle& rRect );
-    void                SetrclFrame( const Rectangle& rRect );
+    void                SetrclBounds( const tools::Rectangle& rRect );
+    void                SetrclFrame( const tools::Rectangle& rRect );
     void                SetRefPix( const Size& rSize );
     void                SetRefMill( const Size& rSize );
 
@@ -562,22 +562,22 @@ public:
     void                MoveTo( const Point& rPoint, bool bRecordPath = false );
     void                LineTo( const Point& rPoint, bool bRecordPath = false );
     void                DrawPixel( const Point& rSource, const Color& rColor );
-    void                DrawRect( const Rectangle& rRect, bool bEdge = true );
-    void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
-    void                DrawEllipse( const Rectangle& rRect );
+    void                DrawRect( const tools::Rectangle& rRect, bool bEdge = true );
+    void                DrawRoundRect( const tools::Rectangle& rRect, const Size& rSize );
+    void                DrawEllipse( const tools::Rectangle& rRect );
     void                DrawArc(
-                            const Rectangle& rRect,
+                            const tools::Rectangle& rRect,
                             const Point& rStartAngle,
                             const Point& rEndAngle,
                             bool bDrawTo = false
                         );
     void                DrawPie(
-                            const Rectangle& rRect,
+                            const tools::Rectangle& rRect,
                             const Point& rStartAngle,
                             const Point& rEndAngle
                         );
     void                DrawChord(
-                            const Rectangle& rRect,
+                            const tools::Rectangle& rRect,
                             const Point& rStartAngle,
                             const Point& rEndAngle
                         );
@@ -605,8 +605,8 @@ public:
 
     void                ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList );
 
-    void                IntersectClipRect( const Rectangle& rRect );
-    void                ExcludeClipRect( const Rectangle& rRect );
+    void                IntersectClipRect( const tools::Rectangle& rRect );
+    void                ExcludeClipRect( const tools::Rectangle& rRect );
     void                MoveClipRegion( const Size& rSize );
     void                SetClipPath(
                             const tools::PolyPolygon& rPolyPoly,
@@ -659,7 +659,7 @@ class EnhWMFReader : public WinMtf
 
     bool        ReadHeader();
                     // reads and converts the rectangle
-    static Rectangle ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
+    static tools::Rectangle ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
 public:
     EnhWMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = nullptr);
@@ -672,7 +672,7 @@ private:
     template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
     template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
 
-    Rectangle ReadRectangle();
+    tools::Rectangle ReadRectangle();
     void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
 };
 
@@ -708,9 +708,9 @@ private:
 
     Point           ReadPoint();                // reads and converts a point (first X then Y)
     Point           ReadYX();                   // reads and converts a point (first Y then X)
-    Rectangle       ReadRectangle();            // reads and converts a rectangle
+    tools::Rectangle       ReadRectangle();            // reads and converts a rectangle
     Size            ReadYXExt();
-    void            GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
+    void            GetPlaceableBound( tools::Rectangle& rSize, SvStream* pStrm );
 
 public:
 

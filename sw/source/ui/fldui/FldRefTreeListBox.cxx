@@ -53,7 +53,7 @@ void SwFieldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                     aSize.Width() = GetSizePixel().Width() - aPos.X();
 
                 aPos = OutputToScreenPixel(aPos);
-                Rectangle aItemRect( aPos, aSize );
+                tools::Rectangle aItemRect( aPos, aSize );
                 Help::ShowQuickHelp( this, aItemRect, sEntry,
                     QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                 bCallBase = false;

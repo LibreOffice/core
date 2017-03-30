@@ -33,7 +33,7 @@ public:
     /** Paint a border around the given box by using a set of bitmaps for
         the corners and sides.
     */
-    void PaintFrame (OutputDevice&rDevice, const Rectangle& rBox) const;
+    void PaintFrame (OutputDevice&rDevice, const ::tools::Rectangle& rBox) const;
 
     /** Special functionality that takes the color from the center
         bitmap and replaces that color in all bitmaps by the given new
@@ -91,7 +91,7 @@ private:
         */
         void PaintCenter (
             OutputDevice& rDevice,
-            const Rectangle& rBox) const;
+            const ::tools::Rectangle& rBox) const;
     };
     OffsetBitmap maTopLeft;
     OffsetBitmap maTop;

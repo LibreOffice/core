@@ -50,7 +50,7 @@ friend class SfxInPlaceClient_Impl;
     SAL_DLLPRIVATE virtual void ObjectAreaChanged();
 
     // an active object was resized by the user and now asks for the new space
-    SAL_DLLPRIVATE virtual void RequestNewObjectArea( Rectangle& );
+    SAL_DLLPRIVATE virtual void RequestNewObjectArea( tools::Rectangle& );
 
     // notify the client that an active object has changed its VisualAreaSize
     SAL_DLLPRIVATE virtual void ViewChanged();
@@ -70,11 +70,11 @@ public:
     bool                IsObjectUIActive() const;
     bool                IsObjectInPlaceActive() const;
     void                DeactivateObject();
-    bool                SetObjArea( const Rectangle & );
-    const Rectangle&    GetObjArea() const;
-    Rectangle           GetScaledObjArea() const;
+    bool                SetObjArea( const tools::Rectangle & );
+    const tools::Rectangle&    GetObjArea() const;
+    tools::Rectangle           GetScaledObjArea() const;
     void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
-    void                SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
+    void                SetObjAreaAndScale( const tools::Rectangle&, const Fraction&, const Fraction& );
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();

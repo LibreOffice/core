@@ -1192,8 +1192,8 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         }
         if (!aHelpText.isEmpty())
         {
-            Rectangle aLogicPix = mpWindow->LogicToPixel(mxTextObj->GetLogicRect());
-            Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
+            ::tools::Rectangle aLogicPix = mpWindow->LogicToPixel(mxTextObj->GetLogicRect());
+            ::tools::Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                                   mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
 
             if (Help::IsBalloonHelpEnabled())
@@ -1291,7 +1291,7 @@ void FuText::DoubleClick(const MouseEvent& )
 /** Removed the insertion of default text and putting a new text
     object directly into edit mode.
 */
-SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(

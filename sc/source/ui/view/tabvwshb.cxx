@@ -79,7 +79,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     if ( !pClient )
     {
         pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
-        Rectangle aRect = pObj->GetLogicRect();
+        tools::Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
         Size aOleSize = pObj->GetOrigObjSize();
@@ -113,7 +113,7 @@ public:
     // XCallback
     virtual void SAL_CALL notify(const css::uno::Any& /*aData*/) override
     {
-        Rectangle aRect = m_pObject->GetLogicRect();
+        tools::Rectangle aRect = m_pObject->GetLogicRect();
         m_pViewShell->DoDPFieldPopup(aRect.TopLeft(), aRect.GetSize());
     }
 };
@@ -135,12 +135,12 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
         if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
         {
-            Rectangle aRect = pObj->GetLogicRect();
+            tools::Rectangle aRect = pObj->GetLogicRect();
 
             {
                 // #i118485# center on BoundRect for activation,
                 // OLE may be sheared/rotated now
-                const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+                const tools::Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
                 const Point aDelta(rBoundRect.Center() - aRect.Center());
                 aRect.Move(aDelta.X(), aDelta.Y());
             }
@@ -353,7 +353,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 {
                     const SfxRectangleItem& rRect =
                         static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
-                    Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
+                    tools::Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
 
                     if ( pView->AreObjectsMarked() )
                     {
@@ -411,12 +411,12 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                         if(pNewDBField)
                         {
-                            Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+                            tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
                             Point aObjPos(aVisArea.Center());
                             Size aObjSize(pNewDBField->GetLogicRect().GetSize());
                             aObjPos.X() -= aObjSize.Width() / 2;
                             aObjPos.Y() -= aObjSize.Height() / 2;
-                            Rectangle aNewObjectRectangle(aObjPos, aObjSize);
+                            tools::Rectangle aNewObjectRectangle(aObjPos, aObjSize);
 
                             pNewDBField->SetLogicRect(aNewObjectRectangle);
 

@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
 } } }
 
-class Rectangle;
+namespace tools { class Rectangle; }
 
 // Constants and Enumerations =================================================
 
@@ -294,13 +294,13 @@ struct XclObjAnchor : public XclRange
     explicit            XclObjAnchor();
 
     /** Calculates a rectangle from the contained coordinates. */
-    Rectangle           GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
+    tools::Rectangle           GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
     /** Initializes the anchor coordinates for a sheet. */
-    void                SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
+    void                SetRect( const XclRoot& rRoot, SCTAB nScTab, const tools::Rectangle& rRect, MapUnit eMapUnit );
 
     /** Initializes the anchor coordinates for an embedded draw page. */
     void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-                            const Rectangle& rRect, MapUnit eMapUnit );
+                            const tools::Rectangle& rRect, MapUnit eMapUnit );
 };
 
 inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )

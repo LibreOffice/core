@@ -30,7 +30,7 @@ public:
 void Test::test_rectangle()
 {
     {
-        Rectangle aRect(1,1,1,1);
+        tools::Rectangle aRect(1,1,1,1);
 
         CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
@@ -40,7 +40,7 @@ void Test::test_rectangle()
     }
 
     {
-        Rectangle aRect(Point(), Size(1,1));
+        tools::Rectangle aRect(Point(), Size(1,1));
 
         CPPUNIT_ASSERT_EQUAL(long(0), aRect.Left());
         CPPUNIT_ASSERT_EQUAL(long(0), aRect.Top());

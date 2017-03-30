@@ -57,7 +57,7 @@ namespace sdr
             }
             else
             {
-                mpData = new Rectangle(rObj.GetLastBoundRect());
+                mpData = new tools::Rectangle(rObj.GetLastBoundRect());
                 mnCount = 1L;
             }
         }
@@ -70,12 +70,12 @@ namespace sdr
             }
             else
             {
-                delete static_cast<Rectangle*>(mpData);
+                delete static_cast<tools::Rectangle*>(mpData);
             }
         }
 
 
-        const Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
+        const tools::Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
         {
             if(mnCount > 1)
             {
@@ -83,7 +83,7 @@ namespace sdr
             }
             else
             {
-                return *static_cast<Rectangle*>(mpData);
+                return *static_cast<tools::Rectangle*>(mpData);
             }
         }
     } // end of namespace properties

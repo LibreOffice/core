@@ -274,7 +274,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
     if( nOldZoom == mpImpl->mnCurrentZoom )
         return ;
 
-    Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
+    tools::Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
     Invalidate(aRect);
     mpImpl->mbOmitPaint = true;
@@ -308,7 +308,7 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
         {
             mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
 
-            Rectangle aRect(Point(0, 0), aSliderWindowSize);
+            tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
             Invalidate(aRect);
 
             mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
@@ -374,45 +374,45 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
     }
 
     Size aSliderWindowSize = GetOutputSizePixel();
-    Rectangle aRect(Point(0, 0), aSliderWindowSize);
+    tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     if ( !mpImpl->mbOmitPaint )
        Invalidate(aRect);
 }
 
-void ScZoomSliderWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScZoomSliderWnd::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     DoPaint(rRenderContext, rRect);
 }
 
-void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     if (mpImpl->mbOmitPaint)
         return;
 
     Size aSliderWindowSize(GetOutputSizePixel());
-    Rectangle aRect(Point(0, 0), aSliderWindowSize);
+    tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
     pVDev->SetOutputSizePixel(aSliderWindowSize);
 
-    Rectangle aSlider = aRect;
+    tools::Rectangle aSlider = aRect;
 
     aSlider.Top() += (aSliderWindowSize.Height() - nSliderHeight) / 2 - 1;
     aSlider.Bottom() = aSlider.Top() + nSliderHeight;
     aSlider.Left() += nSliderXOffset;
     aSlider.Right() -= nSliderXOffset;
 
-    Rectangle aFirstLine(aSlider);
+    tools::Rectangle aFirstLine(aSlider);
     aFirstLine.Bottom() = aFirstLine.Top();
 
-    Rectangle aSecondLine(aSlider);
+    tools::Rectangle aSecondLine(aSlider);
     aSecondLine.Top() = aSecondLine.Bottom();
 
-    Rectangle aLeft(aSlider);
+    tools::Rectangle aLeft(aSlider);
     aLeft.Right() = aLeft.Left();
 
-    Rectangle aRight(aSlider);
+    tools::Rectangle aRight(aSlider);
     aRight.Left() = aRight.Right();
 
     // draw VirtualDevice's background color
@@ -446,7 +446,7 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const Rectangl
         ++aSnappingPointIter)
     {
         pVDev->SetLineColor(Color(COL_GRAY));
-        Rectangle aSnapping(aRect);
+        tools::Rectangle aSnapping(aRect);
         aSnapping.Bottom()   = aSlider.Top();
         aSnapping.Top() = aSnapping.Bottom() - nSnappingHeight;
         aSnapping.Left() += *aSnappingPointIter;

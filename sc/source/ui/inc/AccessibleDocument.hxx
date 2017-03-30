@@ -178,7 +178,7 @@ public:
             The rectangle of the visible part of the document. The values
             are, contrary to the base class, in internal coordinates.
      */
-    virtual Rectangle GetVisibleArea() const override;
+    virtual tools::Rectangle GetVisibleArea() const override;
 
     /** Transform the specified point from internal coordinates to an
         absolute screen position.
@@ -220,10 +220,10 @@ protected:
         createAccessibleName() override;
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
 private:
     ScTabViewShell* mpViewShell;
@@ -232,7 +232,7 @@ private:
     ScChildrenShapes* mpChildrenShapes;
     ScAccessibleEditObject* mpTempAccEdit;
     css::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
-    Rectangle maVisArea;
+    tools::Rectangle maVisArea;
     bool mbCompleteSheetSelected;
 
 public:
@@ -252,7 +252,7 @@ private:
     OUString GetCurrentCellName() const;
     static OUString GetCurrentCellDescription();
 
-    Rectangle GetVisibleArea_Impl() const;
+    tools::Rectangle GetVisibleArea_Impl() const;
     css::uno::Sequence< css::uno::Any > GetScAccFlowToSequence();
 public:
     ScDocument *GetDocument() const ;

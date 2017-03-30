@@ -253,7 +253,7 @@ OpenGLTexture::OpenGLTexture() :
 {
 }
 
-OpenGLTexture::OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& rpImpl, Rectangle aRectangle, int nSlotNumber)
+OpenGLTexture::OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& rpImpl, tools::Rectangle aRectangle, int nSlotNumber)
     : maRect(aRectangle)
     , mpImpl(rpImpl)
     , mnSlotNumber(nSlotNumber)
@@ -297,7 +297,7 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
                               int nX, int nY, int nWidth, int nHeight )
 {
-    maRect = Rectangle( Point( rTexture.maRect.Left() + nX, rTexture.maRect.Top() + nY ),
+    maRect = tools::Rectangle( Point( rTexture.maRect.Left() + nX, rTexture.maRect.Top() + nY ),
                         Size( nWidth, nHeight ) );
     mpImpl = rTexture.mpImpl;
     mnSlotNumber = rTexture.mnSlotNumber;

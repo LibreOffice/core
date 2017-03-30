@@ -272,7 +272,7 @@ css::awt::Rectangle AccFrameSelector::getBounds(  )
             aPos = mpFrameSel->GetPosPixel();
         break;
         default:
-            const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
+            const tools::Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aPos = aSpot.TopLeft();
             aSz = aSpot.GetSize();
     }
@@ -296,7 +296,7 @@ css::awt::Point AccFrameSelector::getLocation(  )
             aPos = mpFrameSel->GetPosPixel();
         break;
         default:
-            const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
+            const tools::Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aPos = aSpot.TopLeft();
     }
     css::awt::Point aRet(aPos.X(), aPos.Y());
@@ -315,7 +315,7 @@ css::awt::Point AccFrameSelector::getLocationOnScreen(  )
             aPos = mpFrameSel->GetPosPixel();
         break;
         default:
-            const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
+            const tools::Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aPos = aSpot.TopLeft();
     }
     aPos = mpFrameSel->OutputToAbsoluteScreenPixel( aPos );
@@ -335,7 +335,7 @@ css::awt::Size AccFrameSelector::getSize(  )
             aSz = mpFrameSel->GetSizePixel();
         break;
         default:
-            const Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
+            const tools::Rectangle aSpot = mpFrameSel->GetClickBoundRect( meBorder );
             aSz = aSpot.GetSize();
     }
     css::awt::Size aRet(aSz.Width(), aSz.Height());

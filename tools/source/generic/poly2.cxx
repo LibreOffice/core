@@ -251,7 +251,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
             if( bEdges )
             {
-                const Rectangle aBound( GetBoundRect() );
+                const tools::Rectangle aBound( GetBoundRect() );
 
                 fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
                 nPercent = 50;
@@ -424,7 +424,7 @@ void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
         mpImplPolyPolygon->mpPolyAry[ i ]->Rotate( rCenter, fSin, fCos );
 }
 
-void PolyPolygon::Clip( const Rectangle& rRect )
+void PolyPolygon::Clip( const tools::Rectangle& rRect )
 {
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
     sal_uInt16 i;
@@ -449,7 +449,7 @@ void PolyPolygon::Clip( const Rectangle& rRect )
     }
 }
 
-Rectangle PolyPolygon::GetBoundRect() const
+tools::Rectangle PolyPolygon::GetBoundRect() const
 {
     long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
     bool    bFirst = true;
@@ -486,9 +486,9 @@ Rectangle PolyPolygon::GetBoundRect() const
     }
 
     if ( !bFirst )
-        return Rectangle( nXMin, nYMin, nXMax, nYMax );
+        return tools::Rectangle( nXMin, nYMin, nXMax, nYMax );
     else
-        return Rectangle();
+        return tools::Rectangle();
 }
 
 Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )

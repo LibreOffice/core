@@ -40,7 +40,7 @@ SwOleClient::SwOleClient(SwView *pView, SwEditWin *pWin, const svt::EmbeddedObje
     SetObject( xObj.GetObject() );
 }
 
-void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
+void SwOleClient::RequestNewObjectArea( tools::Rectangle& aLogRect )
 {
     // The server wants to change the client size.
     // We put the desired size in the core. The attributes of the frame

@@ -30,7 +30,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class OutputDevice;
 
 namespace svx {
@@ -218,7 +218,7 @@ SVX_DLLPUBLIC double GetHorDiagAngle( long nWidth, long nHeight );
     The returned values represents the inner angle between the diagonals and
     horizontal borders, and is therefore in the range [0,PI/2] (inclusive).
  */
-inline double GetHorDiagAngle( const Rectangle& rRect )
+inline double GetHorDiagAngle( const tools::Rectangle& rRect )
 { return GetHorDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
 
 
@@ -236,7 +236,7 @@ inline double GetVerDiagAngle( long nWidth, long nHeight )
     The returned values represents the inner angle between the diagonals and
     vertical borders, and is therefore in the range [0,PI/2] (inclusive).
  */
-inline double GetVerDiagAngle( const Rectangle& rRect )
+inline double GetVerDiagAngle( const tools::Rectangle& rRect )
 { return GetVerDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
 
 
@@ -471,7 +471,7 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimit
 
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (
         const Point& rStart, const Point& rEnd, const Style& rBorder,
-        const Rectangle& rClipRect );
+        const tools::Rectangle& rClipRect );
 
 /** Draws a horizontal frame border, regards all connected frame styles.
 
@@ -610,7 +610,7 @@ SVX_DLLPUBLIC void DrawVerFrameBorder(
 SVX_DLLPUBLIC void DrawDiagFrameBorders(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
 
-    const Rectangle&    rRect,          /// Rectangle for both diagonal frame borders.
+    const tools::Rectangle&    rRect,          /// Rectangle for both diagonal frame borders.
     const Style&        rTLBR,          /// Style of the processed top-left to bottom-right diagonal frame border.
     const Style&        rBLTR,          /// Style of the processed bottom-left to top-right diagonal frame border.
 

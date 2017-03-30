@@ -982,7 +982,7 @@ public:
 
      @see GetScreenCount
     */
-    static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
+    static tools::Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
 
     /** Determines if the screens that make up a display are separate or
      form one large display area.
@@ -1006,7 +1006,7 @@ public:
 
      @see IsUnifiedDisplay, GetDisplayBuiltInScreen
     */
-    SAL_DLLPRIVATE static unsigned int GetBestScreen( const Rectangle& );
+    SAL_DLLPRIVATE static unsigned int GetBestScreen( const tools::Rectangle& );
 
     /** Get the built-in screen.
 

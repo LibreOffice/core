@@ -53,7 +53,7 @@ class SwPagePreviewWin : public vcl::Window
     Fraction maScale;
     SwPagePreview& mrView;
     bool mbCalcScaleForPreviewLayout;
-    Rectangle maPaintedPreviewDocRect;
+    tools::Rectangle maPaintedPreviewDocRect;
     SwPagePreviewLayout* mpPgPreviewLayout;
 
     void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
@@ -65,7 +65,7 @@ public:
     virtual ~SwPagePreviewWin() override;
 
     // calls SwViewShell::Paint
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void KeyInput( const KeyEvent & ) override;
     virtual void Command( const CommandEvent& rCEvt ) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -136,7 +136,7 @@ public:
     void AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
                                  const SvxZoomType _eZoomType );
 
-    const Rectangle& GetPaintedPreviewDocRect() const
+    const tools::Rectangle& GetPaintedPreviewDocRect() const
     {
         return maPaintedPreviewDocRect;
     }
@@ -172,7 +172,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     // visible range
     OUString m_sPageStr;
     Size m_aDocSize;
-    Rectangle               m_aVisArea;
+    tools::Rectangle               m_aVisArea;
 
     // MDI control elements
     VclPtr<SwScrollbar> m_pHScrollbar;
@@ -239,7 +239,7 @@ public:
 
     void DocSzChgd(const Size& rNewSize);
 
-    void SetVisArea( const Rectangle& );
+    void SetVisArea( const tools::Rectangle& );
 
     void ScrollViewSzChg();
     void ScrollDocSzChg();

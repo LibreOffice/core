@@ -304,7 +304,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
                 if( aMask.IsEmpty() )
                 {
-                    const Rectangle aRect(aEmptyPoint,
+                    const tools::Rectangle aRect(aEmptyPoint,
                                           pVDevMask->GetOutputSizePixel());
                     const Wallpaper aWallpaper(COL_BLACK);
                     pVDevMask->DrawWallpaper(aRect,
@@ -331,7 +331,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
                 if(aMask.IsEmpty())
                 {
-                    const Rectangle aRect(rAnimBmp.aPosPix, aContent.GetSizePixel());
+                    const tools::Rectangle aRect(rAnimBmp.aPosPix, aContent.GetSizePixel());
                     pVDevMask->SetFillColor(COL_BLACK);
                     pVDevMask->SetLineColor();
                     pVDevMask->DrawRect(aRect);
@@ -415,7 +415,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                 if (pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_SCROLLRECT"))
                 {
                     o_rScrollRect = vcl::unotools::b2DRectangleFromRectangle(
-                        *reinterpret_cast<Rectangle const *>(
+                        *reinterpret_cast<tools::Rectangle const *>(
                             pAct->GetData() ) );
 
                     bScrollRectSet = true;
@@ -423,7 +423,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                 else if (pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTRECT") )
                 {
                     o_rPaintRect = vcl::unotools::b2DRectangleFromRectangle(
-                        *reinterpret_cast<Rectangle const *>(
+                        *reinterpret_cast<tools::Rectangle const *>(
                             pAct->GetData() ) );
 
                     bPaintRectSet = true;

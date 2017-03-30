@@ -1262,7 +1262,7 @@ OPreviewWindow::OPreviewWindow(vcl::Window* _pParent)
     ImplInitSettings();
 }
 
-bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const
 {
     const Size aWinSize( GetOutputSizePixel() );
     Size       aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
@@ -1288,14 +1288,14 @@ bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
         const Point aNewPos( ( aWinSize.Width()  - aNewSize.Width() ) >> 1,
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
-        rResultRect = Rectangle( aNewPos, aNewSize );
+        rResultRect = tools::Rectangle( aNewPos, aNewSize );
         bRet = true;
     }
 
     return bRet;
 }
 
-void OPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void OPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 

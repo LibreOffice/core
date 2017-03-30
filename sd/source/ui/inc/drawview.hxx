@@ -51,7 +51,7 @@ public:
 
     bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) override;
 
-    virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) override;
+    virtual void MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin) override;
     virtual void HideSdrPage() override; // SdrPageView* pPV);
 
     virtual void DeleteMarked() override; // from SdrView

@@ -54,9 +54,9 @@ bool SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevic
     return false;
 }
 
-Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
+tools::Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
 {
-    Rectangle aRet(aPos,aPos);
+    tools::Rectangle aRet(aPos,aPos);
     Point aOfs(rOut.GetMapMode().GetOrigin());
     Size aSiz(rOut.GetOutputSize());
     switch (eKind) {

@@ -35,7 +35,7 @@ public:
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Select( ) override;
 

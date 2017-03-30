@@ -119,7 +119,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 {
     Point       aDestPt( LogicToPixel( rDestPt ) );
     Size        aDestSz( LogicToPixel( rDestSize ) );
-    Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
+    tools::Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
 
     aSrcRect.Justify();
 
@@ -148,7 +148,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // source cropped?
-        if( aSrcRect != Rectangle( Point(), aPaint.GetSizePixel() ) )
+        if( aSrcRect != tools::Rectangle( Point(), aPaint.GetSizePixel() ) )
         {
             aPaint.Crop( aSrcRect );
             aMask.Crop( aSrcRect );
@@ -185,7 +185,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask
-        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
         RectangleVector aRectangles;
         aWorkRgn.GetRegionRectangles(aRectangles);
 
@@ -389,9 +389,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     mpMetaFile = nullptr;
 
     tools::PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
-    Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
+    tools::Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
     Point aPoint;
-    Rectangle aDstRect( aPoint, GetOutputSizePixel() );
+    tools::Rectangle aDstRect( aPoint, GetOutputSizePixel() );
 
     aDstRect.Intersection( aPolyRect );
 
@@ -421,8 +421,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
             if ( mbInitFillColor )
                 InitFillColor();
 
-            Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
-            Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
+            tools::Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
+            tools::Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
 
             if( !mbOutputClipped )
             {
@@ -686,9 +686,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     else
     {
         GDIMetaFile* pOldMetaFile = mpMetaFile;
-        Rectangle aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
+        tools::Rectangle aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
         Point aPoint;
-        Rectangle aDstRect( aPoint, GetOutputSizePixel() );
+        tools::Rectangle aDstRect( aPoint, GetOutputSizePixel() );
 
         mpMetaFile = nullptr;
         aDstRect.Intersection( aOutRect );
@@ -746,7 +746,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
                     xVDev->SetDrawMode(DrawModeFlags::GrayGradient);
-                    xVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
+                    xVDev->DrawGradient(tools::Rectangle(rPos, rSize), rTransparenceGradient);
                     xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
 
@@ -781,7 +781,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // create mask bitmap
                     xVDev->SetLineColor( COL_BLACK );
                     xVDev->SetFillColor( COL_BLACK );
-                    xVDev->DrawRect( Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
+                    xVDev->DrawRect( tools::Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
                     xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
                                         DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
@@ -793,7 +793,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create alpha mask from gradient
                     xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
-                    xVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
+                    xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rTransparenceGradient );
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
                     xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );

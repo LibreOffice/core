@@ -202,7 +202,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 {
     if (maShapeTreeInfo.GetViewForwarder() == nullptr)
         return;
-    Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+    tools::Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
     // 1. Create a local list of visible shapes.
     ChildDescriptorListType aChildList;
@@ -281,7 +281,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 
     OSL_ASSERT (maShapeTreeInfo.GetViewForwarder() != nullptr);
 
-    Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+    tools::Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
     // Add the visible shapes for which the accessible objects already exist.
     AccessibleShapeList::const_iterator aEnd = maAccessibleShapes.end();
@@ -311,7 +311,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         raDescriptorList.reserve( nShapeCount );
         awt::Point aPos;
         awt::Size aSize;
-        Rectangle aBoundingBox;
+        tools::Rectangle aBoundingBox;
         uno::Reference<drawing::XShape> xShape;
         for (sal_Int32 i=0; i<nShapeCount; ++i)
         {
@@ -436,11 +436,11 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
         SolarMutexClearableGuard aGuard;
 
         // Test visibility of the shape.
-        Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+        tools::Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
         awt::Point aPos = rxShape->getPosition();
         awt::Size aSize = rxShape->getSize();
 
-        Rectangle aBoundingBox (
+        tools::Rectangle aBoundingBox (
             aPos.X,
             aPos.Y,
             aPos.X + aSize.Width,

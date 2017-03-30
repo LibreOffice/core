@@ -69,8 +69,8 @@ friend class SdrEditView;
     SdrModel*   pModel;    /// model to which the list belongs (Layer,ItemPool,Storage)
     SdrPage*    pPage;     /// Page containing the list, may be "this".
     SdrObject*  pOwnerObj; /// OwnerObject, if it's list of a Group object.
-    Rectangle   aOutRect;
-    Rectangle   aSnapRect;
+    tools::Rectangle   aOutRect;
+    tools::Rectangle   aSnapRect;
     SdrObjListKind eListKind;
     bool        bObjOrdNumsDirty;
     bool        bRectsDirty;
@@ -120,8 +120,8 @@ public:
 
     void SetRectsDirty();
 
-    const Rectangle& GetAllObjSnapRect() const;
-    const Rectangle& GetAllObjBoundRect() const;
+    const tools::Rectangle& GetAllObjSnapRect() const;
+    const tools::Rectangle& GetAllObjBoundRect() const;
 
     /// reformat all text objects, e.g. when changing printer
     void NbcReformatAllTextObjects();
@@ -278,12 +278,12 @@ private:
 /// for the snap-to-grid in Writer
 class SdrPageGridFrame
 {
-    Rectangle aPaper;
-    Rectangle aUserArea;
+    tools::Rectangle aPaper;
+    tools::Rectangle aUserArea;
 public:
-    SdrPageGridFrame(const Rectangle& rPaper, const Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
-    const Rectangle& GetPaperRect() const                  { return aPaper; }
-    const Rectangle& GetUserArea() const                   { return aUserArea; }
+    SdrPageGridFrame(const tools::Rectangle& rPaper, const tools::Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
+    const tools::Rectangle& GetPaperRect() const                  { return aPaper; }
+    const tools::Rectangle& GetUserArea() const                   { return aUserArea; }
 };
 
 class SVX_DLLPUBLIC SdrPageGridFrameList {
@@ -485,7 +485,7 @@ public:
     /// for snap-to-grid in Writer, also for AlignObjects if 1 object is marked
     /// if pRect != null, then the pages that are intersected by this Rect,
     /// otherwise the visible pages
-    virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
+    virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const tools::Rectangle* pRect) const;
 
     css::uno::Reference< css::uno::XInterface > const & getUnoPage();
 

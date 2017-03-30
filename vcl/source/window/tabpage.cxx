@@ -128,7 +128,7 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void TabPage::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
     if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WindowType::TABCONTROL) )
@@ -143,7 +143,7 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
             nState |= ControlState::FOCUSED;
         // pass the whole window region to NWF as the tab body might be a gradient or bitmap
         // that has to be scaled properly, clipping makes sure that we do not paint too much
-        Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
+        tools::Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
         rRenderContext.DrawNativeControl( ControlType::TabBody, part, aCtrlRegion, nState,
                 aControlValue, OUString() );
     }
@@ -170,7 +170,7 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
             pDev->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
         else
             pDev->SetFillColor( aWallpaper.GetColor() );
-        pDev->DrawRect( Rectangle( aPos, aSize ) );
+        pDev->DrawRect( tools::Rectangle( aPos, aSize ) );
     }
 
     pDev->Pop();

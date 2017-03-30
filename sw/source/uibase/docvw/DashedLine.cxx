@@ -29,14 +29,14 @@ SwDashedLine::~SwDashedLine( )
 {
 }
 
-void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     // Compute the start and end points
-    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    const tools::Rectangle aRect(tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
     double nHalfWidth = double(aRect.Top() + aRect.Bottom()) / 2.0;
 
     basegfx::B2DPoint aStart(double(aRect.Left()), nHalfWidth);

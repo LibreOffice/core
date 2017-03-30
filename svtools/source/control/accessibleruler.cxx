@@ -78,7 +78,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 {
     // no guard -> done in getBounds()
 //  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
-    return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+    return tools::Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
@@ -340,23 +340,23 @@ void SAL_CALL SvtRulerAccessible::disposing()
     }
 }
 
-Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()
+tools::Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()
 {
     SolarMutexGuard     aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
-    return Rectangle( mpRepr->GetParent()->OutputToAbsoluteScreenPixel( mpRepr->GetPosPixel() ), mpRepr->GetSizePixel() );
+    return tools::Rectangle( mpRepr->GetParent()->OutputToAbsoluteScreenPixel( mpRepr->GetPosPixel() ), mpRepr->GetSizePixel() );
 }
 
-Rectangle SvtRulerAccessible::GetBoundingBox()
+tools::Rectangle SvtRulerAccessible::GetBoundingBox()
 {
     SolarMutexGuard     aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
 
-    return Rectangle( mpRepr->GetPosPixel(), mpRepr->GetSizePixel() );
+    return tools::Rectangle( mpRepr->GetPosPixel(), mpRepr->GetSizePixel() );
 }
 
 void SvtRulerAccessible::ThrowExceptionIfNotAlive()

@@ -262,7 +262,7 @@ void SAL_CALL ChartController::setPosSize(
         //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
         if(m_pDrawViewWrapper)
         {
-            Rectangle aRect(Point(0,0), pChartWindow->GetOutputSize());
+            tools::Rectangle aRect(Point(0,0), pChartWindow->GetOutputSize());
             m_pDrawViewWrapper->SetWorkArea( aRect );
         }
         pChartWindow->Invalidate();
@@ -440,7 +440,7 @@ void ChartController::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     try
     {
@@ -792,9 +792,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
                     if( pObj )
                     {
-                        Rectangle aObjectRect = pObj->GetSnapRect();
+                        tools::Rectangle aObjectRect = pObj->GetSnapRect();
                         awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
-                        Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
+                        tools::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                         const E3dObject* pE3dObject = dynamic_cast< const E3dObject*>( pObj );
                         if( pE3dObject )

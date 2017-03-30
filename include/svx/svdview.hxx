@@ -144,7 +144,7 @@ class SVX_DLLPUBLIC SdrDropMarkerOverlay
 
 public:
     SdrDropMarkerOverlay(const SdrView& rView, const SdrObject& rObject);
-    SdrDropMarkerOverlay(const SdrView& rView, const Rectangle& rRectangle);
+    SdrDropMarkerOverlay(const SdrView& rView, const tools::Rectangle& rRectangle);
     SdrDropMarkerOverlay(const SdrView& rView, const Point& rStart, const Point& rEnd);
     ~SdrDropMarkerOverlay();
 };
@@ -227,7 +227,7 @@ public:
     void MarkAll();
     void UnmarkAll();
 
-    const Rectangle& GetMarkedRect() const;
+    const tools::Rectangle& GetMarkedRect() const;
 
     virtual void DeleteMarked();
 

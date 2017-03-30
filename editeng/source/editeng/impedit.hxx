@@ -116,8 +116,8 @@ namespace o3tl {
 
 struct DragAndDropInfo
 {
-    Rectangle           aCurCursor;
-    Rectangle           aCurSavedCursor;
+    tools::Rectangle           aCurCursor;
+    tools::Rectangle           aCurSavedCursor;
     sal_uInt16          nSensibleRange;
     sal_uInt16          nCursorWidth;
     ESelection          aBeginDragSel;
@@ -253,7 +253,7 @@ private:
     bool                bActiveDragAndDropListener;
 
     Point               aAnchorPoint;
-    Rectangle           aOutArea;
+    tools::Rectangle           aOutArea;
     Point               aVisDocStartPos;
     EESelectionMode     eSelectionMode;
     EditSelection       aEditSelection;
@@ -269,7 +269,7 @@ protected:
     void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
     void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) override;
 
-    void ShowDDCursor( const Rectangle& rRect );
+    void ShowDDCursor( const tools::Rectangle& rRect );
     void HideDDCursor();
 
     void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly );
@@ -288,11 +288,11 @@ public:
 
     Point           GetDocPos( const Point& rWindowPos ) const;
     Point           GetWindowPos( const Point& rDocPos ) const;
-    Rectangle       GetWindowPos( const Rectangle& rDocPos ) const;
+    tools::Rectangle       GetWindowPos( const tools::Rectangle& rDocPos ) const;
 
-    void                SetOutputArea( const Rectangle& rRect );
-    void                ResetOutputArea( const Rectangle& rRect );
-    const Rectangle&    GetOutputArea() const   { return aOutArea; }
+    void                SetOutputArea( const tools::Rectangle& rRect );
+    void                ResetOutputArea( const tools::Rectangle& rRect );
+    const tools::Rectangle&    GetOutputArea() const   { return aOutArea; }
 
     bool            IsVertical() const;
 
@@ -313,7 +313,7 @@ public:
     long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
     long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
     long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
-    Rectangle       GetVisDocArea() const;
+    tools::Rectangle       GetVisDocArea() const;
 
     EditSelection&  GetEditSelection()          { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection );
@@ -321,7 +321,7 @@ public:
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, vcl::Region* pRegion = nullptr, OutputDevice* pTargetDevice = nullptr );
-    void GetSelectionRectangles(std::vector<Rectangle>& rLogicRects);
+    void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects);
 
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
@@ -470,7 +470,7 @@ private:
 
     // For Formatting / Update ....
     std::vector<std::unique_ptr<DeletedNodeInfo> > aDeletedNodes;
-    Rectangle           aInvalidRect;
+    tools::Rectangle           aInvalidRect;
     sal_uInt32          nCurTextHeight;
     sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16          nOnePixelInRef;
@@ -751,8 +751,8 @@ public:
     void                    FormatDoc();
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = nullptr );
-    void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice );
-    void                    Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, short nOrientation = 0 );
+    void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
+    void                    Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, short nOrientation = 0 );
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
@@ -834,8 +834,8 @@ public:
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
 
-    Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
-    Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags = GetCursorFlags::NONE );
+    tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
+    tools::Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags = GetCursorFlags::NONE );
 
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }

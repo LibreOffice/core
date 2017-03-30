@@ -150,7 +150,7 @@ public:
 
         @return the possibly transformed rect
      */
-    static Rectangle EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical );
+    static tools::Rectangle EEToUserSpace( const tools::Rectangle& rRect, const Size& rEESize, bool bIsVertical );
 
 };
 

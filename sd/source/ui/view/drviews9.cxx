@@ -126,7 +126,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                     (aPageSize.Height() - aSize.Height()) / 2);
         aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
-        Rectangle aRect (aPnt, aSize);
+        ::tools::Rectangle aRect (aPnt, aSize);
 
         SdrGrafObj* pGrafObj = nullptr;
 

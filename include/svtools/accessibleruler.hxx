@@ -46,7 +46,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     class XFocusListener;
 } } } }
 
-class Rectangle;
+namespace tools { class Rectangle; }
 class Ruler;
 namespace vcl { class Window; }
 
@@ -165,12 +165,12 @@ protected:
     /// @Return the object's current bounding box relative to the desktop.
     ///
     /// @throws css::uno::RuntimeException
-    Rectangle GetBoundingBoxOnScreen();
+    tools::Rectangle GetBoundingBoxOnScreen();
 
     /// @Return the object's current bounding box relative to the parent object.
     ///
     /// @throws css::uno::RuntimeException
-    Rectangle GetBoundingBox();
+    tools::Rectangle GetBoundingBox();
 
 
     virtual void SAL_CALL disposing() override;

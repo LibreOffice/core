@@ -91,7 +91,7 @@ void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
-bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const
 {
     const Size  aWinSize( GetOutputSizePixel() );
     Size        aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
@@ -117,14 +117,14 @@ bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
         const Point aNewPos( ( aWinSize.Width()  - aNewSize.Width() ) >> 1,
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
-        rResultRect = Rectangle( aNewPos, aNewSize );
+        rResultRect = tools::Rectangle( aNewPos, aNewSize );
         bRet = true;
     }
 
     return bRet;
 }
 
-void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
@@ -297,7 +297,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 
     if (nId && mpTheme)
     {
-        const Rectangle& rRect = rUDEvt.GetRect();
+        const tools::Rectangle& rRect = rUDEvt.GetRect();
         const Size aSize(rRect.GetWidth(), rRect.GetHeight());
         BitmapEx aBitmapEx;
         Size aPreparedSize;
@@ -451,10 +451,10 @@ OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 /*nColumnId*/) cons
     return sRet;
 }
 
-Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
+tools::Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
 {
     DBG_ASSERT(_nColumnPos >= 0 && _nColumnPos <= USHRT_MAX, "GalleryListView::GetFieldCharacterBounds: _nColumnId overflow");
-    Rectangle aRect;
+    tools::Rectangle aRect;
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
@@ -481,7 +481,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
     return nRet;
 }
 
-void GalleryListView::PaintField(vcl::RenderContext& rDev, const Rectangle& rRect, sal_uInt16 /*nColumnId*/) const
+void GalleryListView::PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 /*nColumnId*/) const
 {
     rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( rRect );

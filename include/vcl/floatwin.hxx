@@ -87,7 +87,7 @@ private:
     VclPtr<vcl::Window>     mpFirstPopupModeWin;
     VclPtr<vcl::Window>     mxPrevFocusWin;
     ImplData*       mpImplData;
-    Rectangle       maFloatRect;
+    tools::Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
     FloatWinPopupFlags   mnPopupModeFlags;
     FloatWinTitleType    mnTitle;
@@ -121,12 +121,12 @@ public:
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
     SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
                    static Point     ImplCalcPos( vcl::Window* pWindow,
-                                                 const Rectangle& rRect, FloatWinPopupFlags nFlags,
+                                                 const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
                                                  sal_uInt16& rArrangeIndex );
                    static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
-                   static Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect);
+                   static tools::Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
-    SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
+    SAL_DLLPRIVATE tools::Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) override;
 
@@ -146,7 +146,7 @@ public:
     void            SetTitleType( FloatWinTitleType nTitle );
     FloatWinTitleType GetTitleType() const { return mnTitle; }
 
-    void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags );
+    void            StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags );
     void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );
     void            EndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE );
     void            AddPopupModeWindow( vcl::Window* pWindow );
@@ -161,7 +161,7 @@ public:
 
     bool            GrabsFocus() const { return mbGrabFocus; }
 
-    static Point    CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, FloatWinPopupFlags nFlags, sal_uInt16& rArrangeIndex );
+    static Point    CalcFloatingPosition( vcl::Window* pWindow, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags, sal_uInt16& rArrangeIndex );
 };
 
 #endif // INCLUDED_VCL_FLOATWIN_HXX

@@ -49,7 +49,7 @@ public:
     Point               maStartOffset;
     Point               maEndOffset;
     Type                meType;
-    Rectangle           maLastRect;
+    tools::Rectangle           maLastRect;
 
     explicit            ScDrawObjData();
 

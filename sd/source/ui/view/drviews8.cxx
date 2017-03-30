@@ -97,7 +97,7 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
                     aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                    Rectangle   aRect( aPnt, aBmpSize );
+                    ::tools::Rectangle   aRect( aPnt, aBmpSize );
                     SdrGrafObj* pGrafObj = nullptr;
                     bool        bInsertNewObject = true;
 

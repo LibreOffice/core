@@ -2198,7 +2198,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         if (pDrawLayer && bIncludeObjects)
         {
             //  also copy drawing objects
-            Rectangle aObjRect = GetMMRect(
+            tools::Rectangle aObjRect = GetMMRect(
                 aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i);
             pDrawLayer->CopyToClip(pClipDoc, i, aObjRect);
         }
@@ -2340,9 +2340,9 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     //  are drawing objects to copy)
 
                     pTransClip->InitDrawLayer();
-                    Rectangle aSourceRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
+                    tools::Rectangle aSourceRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(),
                                                         aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i );
-                    Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
+                    tools::Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
                             static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row()),
                             static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col()), i );
                     pTransClip->pDrawLayer->CopyFromClip( pDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
@@ -2590,9 +2590,9 @@ void ScDocument::CopyBlockFromClip(
                     //  (copied in an extra step before pasting, or updated after pasting cells, but
                     //  before pasting objects).
 
-                    Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
+                    tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
                                     nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
-                    Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
+                    tools::Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
                     pDrawLayer->CopyFromClip(rCxt.getClipDoc()->pDrawLayer, nClipTab, aSourceRect,
                                                 ScAddress( nCol1, nRow1, i ), aDestRect );
                 }

@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     class XFocusListener;
 } } } }
 
-class Rectangle;
+namespace tools { class Rectangle; }
 class GraphCtrl;
 class SdrObject;
 class SdrModel;
@@ -151,7 +151,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
 
     // IAccessibleViewforwarder
-    virtual Rectangle GetVisibleArea() const override;
+    virtual tools::Rectangle GetVisibleArea() const override;
     virtual Point LogicToPixel (const Point& rPoint) const override;
     virtual Size LogicToPixel (const Size& rSize) const override;
 
@@ -177,12 +177,12 @@ protected:
             When the object is already disposed then a
             <type>DisposedException</type> is thrown.
     */
-     Rectangle GetBoundingBoxOnScreen();
+     tools::Rectangle GetBoundingBoxOnScreen();
 
     /// Return the object's current bounding box relative to the parent object.
     ///
     /// @throws css::uno::RuntimeException
-    Rectangle GetBoundingBox();
+    tools::Rectangle GetBoundingBox();
 
     virtual void SAL_CALL disposing() final override;
 

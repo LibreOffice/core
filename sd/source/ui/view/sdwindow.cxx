@@ -214,7 +214,7 @@ void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
         mpViewShell->PrePaint();
 }
 
-void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     if ( mpViewShell )
         mpViewShell->Paint(rRect, this);
@@ -386,7 +386,7 @@ void Window::SetZoomIntegral(long nZoom)
     SetZoomFactor(nZoom);
 }
 
-long Window::GetZoomForRect( const Rectangle& rZoomRect )
+long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
 {
     long nRetZoom = 100;
 
@@ -445,7 +445,7 @@ long Window::GetZoomForRect( const Rectangle& rZoomRect )
     is displayed centered and as large as possible while still being fully
     visible in the window.
 */
-long Window::SetZoomRect (const Rectangle& rZoomRect)
+long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 {
     long nNewZoom = 100;
 
@@ -996,7 +996,7 @@ Selection Window::GetSurroundingTextSelection() const
     }
 }
 
-void Window::LogicInvalidate(const Rectangle* pRectangle)
+void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
 {
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
     if (pDrawViewShell && pDrawViewShell->IsInSwitchPage())
@@ -1007,7 +1007,7 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
         sRectangle = "EMPTY";
     else
     {
-        Rectangle aRectangle(*pRectangle);
+        ::tools::Rectangle aRectangle(*pRectangle);
         if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
         sRectangle = aRectangle.toString();

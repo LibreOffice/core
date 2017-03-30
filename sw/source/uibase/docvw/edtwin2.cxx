@@ -365,7 +365,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if (!sText.isEmpty())
             {
-                Rectangle aRect( aFieldRect.SVRect() );
+                tools::Rectangle aRect( aFieldRect.SVRect() );
                 Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                 aRect.Left()   = aPt.X();
                 aRect.Top()    = aPt.Y();
@@ -420,7 +420,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
                 sText = SW_RESSTR(nTabRes);
                 Size aTextSize( GetTextWidth(sText), GetTextHeight());
-                Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
+                tools::Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
                 OUString sDisplayText(ClipLongToolTip(sText));
                 Help::ShowQuickHelp(this, aRect, sDisplayText);
             }
@@ -442,7 +442,7 @@ void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
@@ -450,7 +450,7 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     bool bPaintShadowCursor = false;
     if( m_pShadCursor )
     {
-        Rectangle aRect( m_pShadCursor->GetRect());
+        tools::Rectangle aRect( m_pShadCursor->GetRect());
         // fully resides inside?
         if( rRect.IsInside( aRect ) )
         {

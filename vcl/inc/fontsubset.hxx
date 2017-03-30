@@ -65,7 +65,7 @@ public: // TODO: make subsetter results private and provide accessor methods ins
     int                     m_nAscent;          ///< all metrics in PS font units
     int                     m_nDescent;
     int                     m_nCapHeight;
-    Rectangle               m_aFontBBox;
+    tools::Rectangle               m_aFontBBox;
     FontType                m_nFontType;        ///< font-type of subset result
 
 private:

@@ -611,7 +611,7 @@ void SvxFontPrevWindow::UseResourceText()
     pImpl->mbUseResText = true;
 }
 
-void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ApplySettings(rRenderContext);
 
@@ -625,7 +625,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const Size aLogSize(rRenderContext.GetOutputSize());
 
-        Rectangle aRect(Point(0, 0), aLogSize);
+        tools::Rectangle aRect(Point(0, 0), aLogSize);
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetWindowColor());
         rRenderContext.DrawRect(aRect);
@@ -718,7 +718,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
         if (pImpl->mpBackColor)
         {
-            Rectangle aRect(Point(0, 0), aLogSize);
+            tools::Rectangle aRect(Point(0, 0), aLogSize);
             Color aLineCol = rRenderContext.GetLineColor();
             Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();
@@ -729,7 +729,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         }
         if (pImpl->mpColor)
         {
-            Rectangle aRect(Point(nX, nY), aTxtSize);
+            tools::Rectangle aRect(Point(nX, nY), aTxtSize);
             Color aLineCol = rRenderContext.GetLineColor();
             Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();

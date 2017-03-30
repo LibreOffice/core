@@ -39,7 +39,7 @@ class FontAttributes;
 class PhysicalFontFace;
 class SalLayout;
 class ImplLayoutArgs;
-class Rectangle;
+namespace tools { class Rectangle; }
 class FontSubsetInfo;
 class OpenGLContext;
 class OutputDevice;
@@ -189,7 +189,7 @@ public:
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual bool                GetGlyphBoundRect(const GlyphItem&, Rectangle&) = 0;
+    virtual bool                GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) = 0;
     virtual bool                GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) = 0;
 
     virtual SalLayout*          GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
@@ -204,7 +204,7 @@ public:
     void                        mirror( long& nX, const OutputDevice *pOutDev ) const;
     void                        mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
-    void                        mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
+    void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
     void                        mirror( ImplControlValue&, const OutputDevice* ) const;
     basegfx::B2DPoint           mirror( const basegfx::B2DPoint& i_rPoint, const OutputDevice *pOutDev ) const;
@@ -353,7 +353,7 @@ public:
      */
     bool                        HitTestNativeScrollbar(
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     const Point& aPos,
                                     bool& rIsInside,
                                     const OutputDevice *pOutDev );
@@ -366,7 +366,7 @@ public:
     bool                        DrawNativeControl(
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
@@ -380,12 +380,12 @@ public:
     bool                        GetNativeControlRegion(
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const Rectangle& rControlRegion,
+                                    const tools::Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
-                                    Rectangle &rNativeBoundingRegion,
-                                    Rectangle &rNativeContentRegion,
+                                    tools::Rectangle &rNativeBoundingRegion,
+                                    tools::Rectangle &rNativeContentRegion,
                                     const OutputDevice *pOutDev );
 
     bool                        BlendBitmap(
@@ -540,7 +540,7 @@ protected:
      */
     virtual bool                hitTestNativeControl(
                                     ControlType eType, ControlPart ePart,
-                                    const Rectangle& rBoundingControlRegion,
+                                    const tools::Rectangle& rBoundingControlRegion,
                                     const Point& aPos, bool& rIsInside );
 
     /**
@@ -557,7 +557,7 @@ protected:
      */
     virtual bool                drawNativeControl(
                                     ControlType eType, ControlPart ePart,
-                                    const Rectangle& rBoundingControlRegion,
+                                    const tools::Rectangle& rBoundingControlRegion,
                                     ControlState eState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption );
@@ -583,12 +583,12 @@ protected:
      */
     virtual bool                getNativeControlRegion(
                                     ControlType eType, ControlPart ePart,
-                                    const Rectangle& rBoundingControlRegion,
+                                    const tools::Rectangle& rBoundingControlRegion,
                                     ControlState eState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
-                                    Rectangle &rNativeBoundingRegion,
-                                    Rectangle &rNativeContentRegion );
+                                    tools::Rectangle &rNativeBoundingRegion,
+                                    tools::Rectangle &rNativeContentRegion );
 
     /** Blend the bitmap with the current buffer */
     virtual bool                blendBitmap(

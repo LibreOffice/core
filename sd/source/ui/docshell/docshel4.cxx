@@ -249,7 +249,7 @@ bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& x
 {
     bool bRet = SfxObjectShell::InitNew( xStorage );
 
-    Rectangle aVisArea( Point(0, 0), Size(14100, 10000) );
+    ::tools::Rectangle aVisArea( Point(0, 0), Size(14100, 10000) );
     SetVisArea(aVisArea);
 
     if (bRet)
@@ -321,7 +321,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
             SdPage* pPage = mpDoc->GetSdPage( 0, PageKind::Standard );
 
             if( pPage )
-                SetVisArea( Rectangle( pPage->GetAllObjBoundRect() ) );
+                SetVisArea( ::tools::Rectangle( pPage->GetAllObjBoundRect() ) );
         }
 
         FinishedLoading();
@@ -533,7 +533,7 @@ bool DrawDocShell::Save()
 
     //TODO/LATER: why this?!
     if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
-        SfxObjectShell::SetVisArea( Rectangle() );
+        SfxObjectShell::SetVisArea( ::tools::Rectangle() );
 
     bool bRet = SfxObjectShell::Save();
 
@@ -583,7 +583,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 
     //TODO/LATER: why this?!
     if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
-        SfxObjectShell::SetVisArea( Rectangle() );
+        SfxObjectShell::SetVisArea( ::tools::Rectangle() );
 
     sal_uInt32  nVBWarning = ERRCODE_NONE;
     bool    bRet = SfxObjectShell::SaveAs( rMedium );

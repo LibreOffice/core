@@ -70,7 +70,7 @@ namespace svt { namespace table
         // show tracking line
         i_tableControl.hideTracking();
         i_tableControl.showTracking(
-            Rectangle(
+            tools::Rectangle(
                 Point( aPoint.X(), 0 ),
                 Size( 1, tableSize.Height() )
             ),

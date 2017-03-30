@@ -91,7 +91,7 @@ void DrawController::SetSubController (
     // Update the internal state.
     mxSubController = rxSubController;
     mpPropertyArrayHelper.reset();
-    maLastVisArea = Rectangle();
+    maLastVisArea = ::tools::Rectangle();
 
     // Inform listeners about the changed state.
     FireSelectionChangeListener();
@@ -328,7 +328,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
     return xPage;
 }
 
-void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
+void DrawController::FireVisAreaChanged (const ::tools::Rectangle& rVisArea) throw()
 {
     if( maLastVisArea != rVisArea )
     {

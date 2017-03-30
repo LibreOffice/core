@@ -52,7 +52,7 @@ public:
     Pointer         GetPointer() const;
     bool            IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
     // OutputDevice is required because capture points have a fixed pixel size
-    Rectangle       GetBoundRect(const OutputDevice& rOut) const;
+    tools::Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 };
 
 #define SDRHELPLINE_NOTFOUND 0xFFFF

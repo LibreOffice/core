@@ -250,7 +250,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         Size aStrSize;
         sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
-        Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
+        tools::Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
         Point aPos = cellRect.TopLeft();
         sal_uInt16 nRightX = 0;
         bool bJustify = pCurData->GetIncludeJustify();
@@ -478,10 +478,10 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
     CalcCellArray( bFitWidth );
     CalcLineMap();
 
-    Invalidate(Rectangle(Point(0,0), GetSizePixel()));
+    Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
-void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
@@ -489,7 +489,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectang
     vcl::Font aFont(aVD->GetFont());
     Color aBackCol(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     Point aTmpPoint;
-    Rectangle aRect(aTmpPoint, aWndSize);
+    tools::Rectangle aRect(aTmpPoint, aWndSize);
 
     aFont.SetTransparent( true );
     aVD->SetFont(aFont);
@@ -511,7 +511,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectang
     aVD->SetDrawMode(nOldDrawMode);
 }
 
-void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     DoPaint(rRenderContext, rRect);
 }

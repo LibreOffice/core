@@ -68,13 +68,13 @@ private:
     double                mfRatio;
 
     // Viewport area in logical coordinates
-    Rectangle             maViewportRectangle;
+    tools::Rectangle             maViewportRectangle;
     // Visible area within viewport
-    Rectangle             maVisibleRectangle;
+    tools::Rectangle             maVisibleRectangle;
 
     // Actual coordinates as set by CalcViewport
     // of visible viewport area (logical coordinates)
-    Rectangle             maSetBound;
+    tools::Rectangle             maSetBound;
 
     // Flags
     bool mbPerspective              : 1;
@@ -109,8 +109,8 @@ public:
 
     void SetPerspective(bool bNew);
 
-    void SetViewportRectangle(Rectangle const & rRect, Rectangle const & rVisible);
-    void SetViewportRectangle(Rectangle const & rRect) { SetViewportRectangle(rRect, rRect); }
+    void SetViewportRectangle(tools::Rectangle const & rRect, tools::Rectangle const & rVisible);
+    void SetViewportRectangle(tools::Rectangle const & rRect) { SetViewportRectangle(rRect, rRect); }
 
     void CalcViewport();
 

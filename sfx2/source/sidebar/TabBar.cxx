@@ -87,7 +87,7 @@ void TabBar::dispose()
     vcl::Window::dispose();
 }
 
-void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea)
 {
     Window::Paint(rRenderContext, rUpdateArea);
 
@@ -398,7 +398,7 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, Button*, void)
     }
 
     maPopupMenuProvider(
-        Rectangle(
+        tools::Rectangle(
             mpMenuButton->GetPosPixel(),
             mpMenuButton->GetSizePixel()),
         aMenuData);

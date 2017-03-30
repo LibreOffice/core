@@ -644,7 +644,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
 
-    Rectangle aPixelRect;
+    tools::Rectangle aPixelRect;
     aPixelRect.Left() = nBaseX+mnTextOffX;
     aPixelRect.Right() = aPixelRect.Left()+nWidth;
     aPixelRect.Bottom() = nBaseY+mpFontInstance->mxFontMetric->GetDescent();

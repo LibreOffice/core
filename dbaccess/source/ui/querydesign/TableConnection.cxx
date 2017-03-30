@@ -157,7 +157,7 @@ namespace dbaui
 
     void OTableConnection::InvalidateConnection()
     {
-        Rectangle rcBounding = GetBoundingRect();
+        tools::Rectangle rcBounding = GetBoundingRect();
         rcBounding.Bottom() += 1;
         rcBounding.Right() += 1;
         // I believe Invalidate and Draw(Rectangle) do not behave consistent: in any case it
@@ -167,11 +167,11 @@ namespace dbaui
         m_pParent->Invalidate( rcBounding, InvalidateFlags::NoChildren );
     }
 
-    Rectangle OTableConnection::GetBoundingRect() const
+    tools::Rectangle OTableConnection::GetBoundingRect() const
     {
         // determine all lines of the surrounding rectangle
-        Rectangle aBoundingRect( Point(0,0), Point(0,0) );
-        Rectangle aTempRect;
+        tools::Rectangle aBoundingRect( Point(0,0), Point(0,0) );
+        tools::Rectangle aTempRect;
         std::vector<OConnectionLine*>::const_iterator aEnd = m_vConnLine.end();
         for(std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != aEnd;++aIter)
         {
@@ -190,7 +190,7 @@ namespace dbaui
         return aBoundingRect;
     }
 
-    void OTableConnection::Draw(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+    void OTableConnection::Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
     {
         // Draw line
         for( const auto& pLine : m_vConnLine )

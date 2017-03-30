@@ -36,7 +36,7 @@
 #include <o3tl/make_unique.hxx>
 
 // Inlines
-void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
+void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
 {
     Point aTL;
     Point aBR;
@@ -44,10 +44,10 @@ void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
     ReadPair( rIStm, aTL );
     ReadPair( rIStm, aBR );
 
-    rRect = Rectangle( aTL, aBR );
+    rRect = tools::Rectangle( aTL, aBR );
 }
 
-void ImplWriteRect( SvStream& rOStm, const Rectangle& rRect )
+void ImplWriteRect( SvStream& rOStm, const tools::Rectangle& rRect )
 {
     WritePair( rOStm, rRect.TopLeft() );
     WritePair( rOStm, rRect.BottomRight() );
@@ -550,7 +550,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     bool                bFatLine = false;
 
     tools::Polygon     aActionPoly;
-    Rectangle   aRect;
+    tools::Rectangle   aRect;
     Point       aPt, aPt1;
     Size        aSz;
     Color       aActionColor;
@@ -1149,7 +1149,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     case 1:
                     {
-                        Rectangle aRegRect;
+                        tools::Rectangle aRegRect;
 
                         ImplReadRect( rIStm, aRegRect );
                         aRegion = vcl::Region( aRegRect );
@@ -2079,7 +2079,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaClipRegionAction* pAct = static_cast<const MetaClipRegionAction*>(pAction);
                 const vcl::Region&          rRegion = pAct->GetRegion();
-                Rectangle                   aClipRect;
+                tools::Rectangle                   aClipRect;
 
                 rOStm.WriteInt16( GDI_CLIPREGION_ACTION );
                 rOStm.WriteInt32( 24 );

@@ -66,13 +66,13 @@ protected:
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
-    SAL_DLLPRIVATE Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
+    SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
     virtual void                ImplActivateTabPage( bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
-                                             const Rectangle& rCurRect, bool bFirstInGroup,
+                                             const tools::Rectangle& rCurRect, bool bFirstInGroup,
                                              bool bLastInGroup, bool bIsCurrentItem);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
@@ -86,9 +86,9 @@ protected:
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
-    SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
+    SAL_DLLPRIVATE tools::Rectangle*   ImplFindPartRect( const Point& rPt );
     virtual bool                ImplPlaceTabs( long nWidth );
-    virtual void                ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void                ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 public:
                         TabControl( vcl::Window* pParent,
@@ -98,7 +98,7 @@ public:
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
+    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
@@ -165,7 +165,7 @@ public:
     // returns (control relative) bounding rectangle for the
     // character at index nIndex relative to the text of page nPageId
     using Control::GetCharacterBounds;
-    Rectangle GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) const;
 
     // returns the index relative to the text of page nPageId (also returned)
     // at position rPoint (control relative)
@@ -173,7 +173,7 @@ public:
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
 
     // returns the rectangle of the tab for page nPageId
-    Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
+    tools::Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
 
     virtual void SetPosPixel(const Point& rPos) override;
     virtual void SetSizePixel(const Size& rNewSize) override;
@@ -212,7 +212,7 @@ public:
 
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
-    virtual void ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void ImplActivateTabPage( bool bNext ) override;
 
 private:

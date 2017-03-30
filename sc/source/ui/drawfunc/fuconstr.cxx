@@ -74,7 +74,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         // that's the actual correct position for the object (when you
         // restore the zoom.
         bool bNegative = pDoc->IsNegativePage(pView->GetTab());
-        Rectangle aObjRect( rInOutPos, rInOutPos );
+        tools::Rectangle aObjRect( rInOutPos, rInOutPos );
         ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
         ScAddress aOldStt = aRange.aStart;
         Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );

@@ -55,7 +55,7 @@ public:
 private:
     E3dScene*   m_pScene;
 
-    Rectangle   m_aReferenceRect;
+    tools::Rectangle   m_aReferenceRect;
     Point       m_aStartPos;
     basegfx::B3DPolyPolygon m_aWireframePolyPolygon;
 

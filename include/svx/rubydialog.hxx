@@ -37,7 +37,7 @@ class SvxRubyDialog;
 class RubyPreview : public vcl::Window
 {
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     VclPtr<SvxRubyDialog> m_pParentDlg;
 
 public:

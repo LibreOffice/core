@@ -684,7 +684,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         aFilter.ImportGraphic( aGraphic, aFile.GetURL(), *aFile.GetStream( StreamMode::READ ) );
         BitmapEx rBitmapEx( aGraphic.GetBitmap(), Color(255,255,255) );
 
-        Rectangle clipRect;
+        tools::Rectangle clipRect;
         for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
         {
             const MetaAction*    pAction = rMtf.GetAction( i );

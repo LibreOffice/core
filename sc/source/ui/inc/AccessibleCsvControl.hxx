@@ -83,9 +83,9 @@ public:
     // helpers ----------------------------------------------------------------
 protected:
     /** Returns this object's current bounding box relative to the desktop. */
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
     /** Returns this object's current bounding box relative to the parent object. */
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
     /** Returns whether the object is alive. Must be called with locked mutex. */
     bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
@@ -527,9 +527,9 @@ public:
     // helpers ----------------------------------------------------------------
 protected:
     /** Returns this object's current bounding box relative to the desktop. */
-    virtual Rectangle GetBoundingBoxOnScreen() const override;
+    virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
     /** Returns this object's current bounding box relative to the parent object. */
-    virtual Rectangle GetBoundingBox() const override;
+    virtual tools::Rectangle GetBoundingBox() const override;
 
 private:
     /** Returns this object's name. */
@@ -546,7 +546,7 @@ private:
     /** Returns the pixel size of the cell, regardless of visibility. */
     Size implGetRealSize() const;
     /** Returns the bounding box of the cell relative in the table. */
-    Rectangle implGetBoundingBox() const;
+    tools::Rectangle implGetBoundingBox() const;
 
     /** Creates the edit source the text helper needs. */
     ::std::unique_ptr< SvxEditSource > implCreateEditSource();

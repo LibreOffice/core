@@ -105,8 +105,8 @@ void ScGridWindow::dumpGraphicInformation()
                 if (pObjData)
                     dumpScDrawObjData(*this, *pObjData, pDrawLayer->GetScaleUnit());
 
-                const Rectangle& rRect = pObj->GetSnapRect();
-                Rectangle aRect = LogicToPixel(rRect, MapMode(pDrawLayer->GetScaleUnit()));
+                const tools::Rectangle& rRect = pObj->GetSnapRect();
+                tools::Rectangle aRect = LogicToPixel(rRect, MapMode(pDrawLayer->GetScaleUnit()));
                 std::cout << "Snap Rectangle (in pixel): " << aRect << std::endl;
             }
         }

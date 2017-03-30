@@ -531,7 +531,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
         aNewPos.Y() = (nRow+1) * TABWIN_SPACING_Y;
 
         // determine rectangle for the corresponding line
-        Rectangle aRowRect( Point(0,0), aOutSize );
+        tools::Rectangle aRowRect( Point(0,0), aOutSize );
         aRowRect.Top() = nRow * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
         aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
 
@@ -541,7 +541,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
         for(;aIter != aEnd;++aIter)
         {
             OTableWindow* pOtherTabWin = aIter->second;
-            Rectangle aOtherTabWinRect( pOtherTabWin->GetPosPixel(), pOtherTabWin->GetSizePixel() );
+            tools::Rectangle aOtherTabWinRect( pOtherTabWin->GetPosPixel(), pOtherTabWin->GetSizePixel() );
 
             if(
                 ( (aOtherTabWinRect.Top()>aRowRect.Top()) && (aOtherTabWinRect.Top()<aRowRect.Bottom()) ) ||
@@ -933,7 +933,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     }
 }
 
-void OJoinTableView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void OJoinTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     DrawConnections(rRenderContext, rRect);
 }
@@ -945,7 +945,7 @@ void OJoinTableView::InvalidateConnections()
         conn->InvalidateConnection();
 }
 
-void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     // draw Joins
     for(const auto& connection : m_vTableConnection)
@@ -1068,7 +1068,7 @@ void OJoinTableView::ScrollWhileDragging()
     }
 
     // redraw DraggingRect
-    m_aDragRect = Rectangle(m_ptPrevDraggingPos - m_aDragOffset, m_pDragWin->GetSizePixel());
+    m_aDragRect = tools::Rectangle(m_ptPrevDraggingPos - m_aDragOffset, m_pDragWin->GetSizePixel());
     Update();
     ShowTracking( m_aDragRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }

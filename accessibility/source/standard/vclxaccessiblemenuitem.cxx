@@ -247,8 +247,8 @@ awt::Rectangle VCLXAccessibleMenuItem::getCharacterBounds( sal_Int32 nIndex )
     if ( m_pParent )
     {
         sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
-        Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
-        Rectangle aCharRect = m_pParent->GetCharacterBounds( nItemId, nIndex );
+        tools::Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
+        tools::Rectangle aCharRect = m_pParent->GetCharacterBounds( nItemId, nIndex );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
         aBounds = AWTRectangle( aCharRect );
     }
@@ -273,7 +273,7 @@ sal_Int32 VCLXAccessibleMenuItem::getIndexAtPoint( const awt::Point& aPoint )
     if ( m_pParent )
     {
         sal_uInt16 nItemId = 0;
-        Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
+        tools::Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aItemRect.TopLeft();
         sal_Int32 nI = m_pParent->GetIndexForPoint( aPnt, nItemId );

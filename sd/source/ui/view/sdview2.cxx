@@ -99,7 +99,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
     // fat lines correctly
-    const Rectangle                 aMarkRect( GetAllMarkedBoundRect() );
+    const ::tools::Rectangle                 aMarkRect( GetAllMarkedBoundRect() );
     TransferableObjectDescriptor    aObjDesc;
     SdrOle2Obj*                     pSdrOleObj = nullptr;
     SdrPageView*                    pPgView = GetSdrPageView();
@@ -200,7 +200,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
     css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
     TransferableObjectDescriptor    aObjDesc;
-    const Rectangle                 aMarkRect( GetAllMarkedRect() );
+    const ::tools::Rectangle                 aMarkRect( GetAllMarkedRect() );
     OUString                        aDisplayName;
 
     SD_MOD()->pTransferSelection = pTransferable;
@@ -319,7 +319,7 @@ void View::DoPaste (vcl::Window* pWindow)
         sal_Int8    nDnDAction = DND_ACTION_COPY;
 
         if( pWindow )
-            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+            aPos = pWindow->PixelToLogic( ::tools::Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
 
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
@@ -458,7 +458,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
         if( pOLV )
         {
-            Rectangle aRect( pOLV->GetOutputArea() );
+            ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
             if (GetMarkedObjectCount() == 1)
             {
@@ -636,7 +636,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
         if( pOLV )
         {
-            Rectangle aRect( pOLV->GetOutputArea() );
+            ::tools::Rectangle aRect( pOLV->GetOutputArea() );
 
             if( GetMarkedObjectCount() == 1 )
             {

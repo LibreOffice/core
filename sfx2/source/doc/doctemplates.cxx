@@ -129,7 +129,7 @@ namespace {
 
 class WaitWindow_Impl : public WorkWindow
 {
-    Rectangle     maRect;
+    tools::Rectangle     maRect;
     OUString      maText;
     const DrawTextFlags mnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
 
@@ -137,7 +137,7 @@ public:
     WaitWindow_Impl();
     virtual ~WaitWindow_Impl() override;
     virtual void dispose() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 #define X_OFFSET 15
@@ -2332,7 +2332,7 @@ void SAL_CALL SfxDocTplService::update()
 
 WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
-    Rectangle aRect = Rectangle(0, 0, 300, 30000);
+    tools::Rectangle aRect = tools::Rectangle(0, 0, 300, 30000);
     maText = SfxResId(RID_CNT_STR_WAITING).toString();
     maRect = GetTextRect(aRect, maText, mnTextStyle);
     aRect = maRect;
@@ -2359,7 +2359,7 @@ void  WaitWindow_Impl::dispose()
 }
 
 
-void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
+void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.DrawText(maRect, maText, mnTextStyle);
 }

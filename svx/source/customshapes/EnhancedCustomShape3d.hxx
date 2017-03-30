@@ -50,7 +50,7 @@ class EnhancedCustomShape3d
 
         public:
 
-                        Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
+                        Transformation2D( const SdrObject* pCustomShape, const tools::Rectangle& rBoundRect, const double* pMap );
 
             basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
             Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;
@@ -60,7 +60,7 @@ class EnhancedCustomShape3d
     friend class Transformation2D;
 
     protected:
-        static Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rSnapRect, const Rectangle& rBoundRect, const double* pMap );
+        static tools::Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap );
 
     public:
         static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );

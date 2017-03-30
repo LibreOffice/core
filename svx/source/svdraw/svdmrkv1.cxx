@@ -206,7 +206,7 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
     return bRet;
 }
 
-bool SdrMarkView::MarkPoints(const Rectangle* pRect, bool bUnmark)
+bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
 {
     ForceUndirtyMrkPnt();
     bool bChgd=false;
@@ -257,7 +257,7 @@ bool SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, bool /*bPrev*/)
     return false;
 }
 
-const Rectangle& SdrMarkView::GetMarkedPointsRect() const
+const tools::Rectangle& SdrMarkView::GetMarkedPointsRect() const
 {
     ForceUndirtyMrkPnt();
     if (mbMarkedPointsRectsDirty) ImpSetPointsRects();
@@ -280,17 +280,17 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
 
 void SdrMarkView::ImpSetPointsRects() const
 {
-    Rectangle aPnts;
-    Rectangle aGlue;
+    tools::Rectangle aPnts;
+    tools::Rectangle aGlue;
     const size_t nHdlAnz=maHdlList.GetHdlCount();
     for (size_t nHdlNum=0; nHdlNum<nHdlAnz; ++nHdlNum) {
         const SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         SdrHdlKind eKind=pHdl->GetKind();
         if ((eKind==SdrHdlKind::Poly && pHdl->IsSelected()) || eKind==SdrHdlKind::Glue) {
             Point aPt(pHdl->GetPos());
-            Rectangle& rR=eKind==SdrHdlKind::Glue ? aGlue : aPnts;
+            tools::Rectangle& rR=eKind==SdrHdlKind::Glue ? aGlue : aPnts;
             if (rR.IsEmpty()) {
-                rR=Rectangle(aPt,aPt);
+                rR=tools::Rectangle(aPt,aPt);
             } else {
                 if (aPt.X()<rR.Left  ()) rR.Left  ()=aPt.X();
                 if (aPt.X()>rR.Right ()) rR.Right ()=aPt.X();
@@ -412,7 +412,7 @@ bool SdrMarkView::HasMarkedGluePoints() const
     return bRet;
 }
 
-bool SdrMarkView::MarkGluePoints(const Rectangle* pRect, bool bUnmark)
+bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
 {
     if (!IsGluePointEditMode() && !bUnmark) return false;
     ForceUndirtyMrkPnt();
@@ -561,7 +561,7 @@ bool SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, bool /*bPrev*/)
     return false;
 }
 
-const Rectangle& SdrMarkView::GetMarkedGluePointsRect() const
+const tools::Rectangle& SdrMarkView::GetMarkedGluePointsRect() const
 {
     ForceUndirtyMrkPnt();
     if (mbMarkedPointsRectsDirty) ImpSetPointsRects();

@@ -80,7 +80,7 @@ namespace
         return basegfx::tools::hsl2rgb( aHslDark );
     }
 
-    B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
+    B2DPolygon lcl_GetPolygon( const ::tools::Rectangle& rRect, bool bHeader )
     {
         const double nRadius = 3;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
@@ -199,9 +199,9 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEn
     m_sLabel = m_sLabel.replaceAt(nPos, 2, pDesc->GetName());
 
     // Compute the text size and get the box position & size from it
-    Rectangle aTextRect;
+    ::tools::Rectangle aTextRect;
     GetTextBoundRect(aTextRect, OUString(m_sLabel));
-    Rectangle aTextPxRect = LogicToPixel(aTextRect);
+    ::tools::Rectangle aTextPxRect = LogicToPixel(aTextRect);
     FontMetric aFontMetric = GetFontMetric(GetFont());
     Size aBoxSize (aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                    aFontMetric.GetLineHeight() + TEXT_PADDING  * 2 );
@@ -243,23 +243,23 @@ void SwHeaderFooterWin::ShowAll(bool bShow)
 
 bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
 {
-    Rectangle aRect(GetPosPixel(), GetSizePixel());
+    ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
     if (aRect.IsInside(rDocPt))
         return true;
 
-    Rectangle aLineRect(m_pLine->GetPosPixel(), m_pLine->GetSizePixel());
+    ::tools::Rectangle aLineRect(m_pLine->GetPosPixel(), m_pLine->GetSizePixel());
     if (aLineRect.IsInside(rDocPt))
         return true;
 
     return false;
 }
 
-void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     // Use pixels for the rest of the drawing
     SetMapMode(MapMode(MapUnit::MapPixel));
 
-    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
     drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
 
     B2DPolygon aPolygon = lcl_GetPolygon(aRect, m_bIsHeader);

@@ -1126,7 +1126,7 @@ bool LayoutManager::implts_hideStatusBar( bool bStoreState )
 
 void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
 {
-    ::Rectangle aOffsetRect;
+    ::tools::Rectangle aOffsetRect;
     setZeroRectangle( aOffsetRect );
     aOffsetRect.setHeight( nBottomOffset );
 
@@ -2403,7 +2403,7 @@ bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSiz
 
     // calculate the maximum size we have for the container window
     sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
-    Rectangle aWorkArea = Application::GetScreenPosSizePixel( nDisplay );
+    tools::Rectangle aWorkArea = Application::GetScreenPosSizePixel( nDisplay );
 
     if (( aWorkArea.GetWidth() > 0 ) && ( aWorkArea.GetHeight() > 0 ))
     {

@@ -26,7 +26,7 @@
 #include <vector>
 
 class Point;
-class Rectangle;
+namespace tools { class Rectangle; }
 class Size;
 class Fraction;
 class IMapObject;

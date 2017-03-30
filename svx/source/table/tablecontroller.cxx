@@ -2082,7 +2082,7 @@ void SvxTableController::updateSelectionOverlay()
         {
             sdr::overlay::OverlayObjectCell::RangeVector aRanges;
 
-            Rectangle aStartRect, aEndRect;
+            tools::Rectangle aStartRect, aEndRect;
             CellPos aStart,aEnd;
             getSelectedCells( aStart, aEnd );
             pTableObj->getCellBounds( aStart, aStartRect );
@@ -2123,10 +2123,10 @@ void SvxTableController::updateSelectionOverlay()
             if (pOutDev && comphelper::LibreOfficeKit::isActive())
             {
                 // Left edge of aStartRect.
-                Rectangle aSelectionStart(aStartRect.Left(), aStartRect.Top(), aStartRect.Left(), aStartRect.Bottom());
+                tools::Rectangle aSelectionStart(aStartRect.Left(), aStartRect.Top(), aStartRect.Left(), aStartRect.Bottom());
                 // Right edge of aEndRect.
-                Rectangle aSelectionEnd(aEndRect.Right(), aEndRect.Top(), aEndRect.Right(), aEndRect.Bottom());
-                Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
+                tools::Rectangle aSelectionEnd(aEndRect.Right(), aEndRect.Top(), aEndRect.Right(), aEndRect.Bottom());
+                tools::Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
 
                 if (pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 {

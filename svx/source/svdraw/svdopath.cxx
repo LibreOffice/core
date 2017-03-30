@@ -742,7 +742,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             if (bPnt1) rDrag.Now()=aNeuPos1;
             if (bPnt2) rDrag.Now()=aNeuPos2;
         }
-        rDrag.SetActionRect(Rectangle(rDrag.GetNow(),rDrag.GetNow()));
+        rDrag.SetActionRect(tools::Rectangle(rDrag.GetNow(),rDrag.GetNow()));
 
         // specially for IBM: Eliminate points if both adjoining lines form near 180 degrees angle anyway
         if (!bControl && rDrag.GetView()!=nullptr && rDrag.GetView()->IsEliminatePolyPoints() &&
@@ -1694,11 +1694,11 @@ static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
     return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0L).count());
 }
 
-static Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
+static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
 
-    return Rectangle(
+    return tools::Rectangle(
         FRound(aRange.getMinX()), FRound(aRange.getMinY()),
         FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 }
@@ -1720,7 +1720,7 @@ void SdrPathObj::ImpForceLineAngle()
         aGeo.RecalcTan();
 
         // for SdrTextObj, keep aRect up to date
-        maRect = Rectangle(aPoint0, aPoint1);
+        maRect = tools::Rectangle(aPoint0, aPoint1);
         maRect.Justify();
     }
 }
@@ -2415,7 +2415,7 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
     SdrTextObj::NbcMirror(rRefPnt1,rRefPnt2);
 }
 
-void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
+void SdrPathObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     if(!aGeo.nRotationAngle)
     {
@@ -2441,9 +2441,9 @@ void SdrPathObj::RecalcSnapRect()
     }
 }
 
-void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
+void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    Rectangle aOld(GetSnapRect());
+    tools::Rectangle aOld(GetSnapRect());
 
     // Take RECT_EMPTY into account when calculating scale factors
     long nMulX = (RECT_EMPTY == rRect.Right()) ? 0 : rRect.Right()  - rRect.Left();
@@ -2810,7 +2810,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
 {
     if(GetPathPoly() != rPathPoly)
     {
-        Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcSetPathPoly(rPathPoly);
         SetChanged();
         BroadcastObjectChange();
@@ -2820,7 +2820,7 @@ void SdrPathObj::SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
 
 void SdrPathObj::ToggleClosed()
 {
-    Rectangle aBoundRect0;
+    tools::Rectangle aBoundRect0;
     if(pUserCall != nullptr)
         aBoundRect0 = GetLastBoundRect();
     ImpSetClosed(!IsClosed()); // set new ObjKind

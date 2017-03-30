@@ -90,7 +90,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
             pSelectedPage = mpDoc->GetSdPage(0, PageKind::Standard);
     }
 
-    Rectangle aVisArea = GetVisArea(nAspect);
+    ::tools::Rectangle aVisArea = GetVisArea(nAspect);
     pOut->IntersectClipRegion(aVisArea);
     pView->ShowSdrPage(pSelectedPage);
 
@@ -118,9 +118,9 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     }
 }
 
-Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
+::tools::Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 {
-    Rectangle aVisArea;
+    ::tools::Rectangle aVisArea;
 
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
@@ -144,7 +144,7 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 
         if (pWin)
         {
-            aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+            aVisArea = pWin->PixelToLogic(::tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
         }
     }
 
@@ -255,7 +255,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
             pView->SetActiveLayer( pFrameView->GetActiveLayer() );
     }
 
-    pView->CompleteRedraw( pVDev, vcl::Region(Rectangle(aNullPt, aSize)) );
+    pView->CompleteRedraw( pVDev, vcl::Region(::tools::Rectangle(aNullPt, aSize)) );
 
     // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;

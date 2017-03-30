@@ -140,7 +140,7 @@ void SwFieldDlg::Initialize(SfxChildWinInfo *pInfo)
     }
 
     Point aPoint;
-    Rectangle aRect = GetDesktopRectPixel();
+    tools::Rectangle aRect = GetDesktopRectPixel();
     aPoint.X() = aRect.Right() - aSize.Width();
     aPoint.Y() = aRect.Bottom() - aSize.Height();
 

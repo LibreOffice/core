@@ -59,7 +59,7 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aFramePos );
     }
-    Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+    tools::Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     if ( !aRect.IsInside( aFramePos ) )
         return WindowHitTest::NONE;
     if ( mpWindowImpl->mbWinRegion )
@@ -84,7 +84,7 @@ bool Window::ImplTestMousePointerSet()
         return true;
 
     // if the mouse is over the window, switch it
-    Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
+    tools::Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
     if ( aClientRect.IsInside( GetPointerPosPixel() ) )
         return true;
 
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl, void*, void)
     }
 }
 
-void Window::ImplInvertFocus( const Rectangle& rRect )
+void Window::ImplInvertFocus( const tools::Rectangle& rRect )
 {
     InvertTracking( rRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }

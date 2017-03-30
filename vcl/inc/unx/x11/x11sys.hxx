@@ -35,7 +35,7 @@ public:
     virtual unsigned int GetDisplayScreenCount() override;
     virtual bool         IsUnifiedDisplay() override;
     virtual unsigned int GetDisplayBuiltInScreen() override;
-    virtual Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
+    virtual tools::Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,

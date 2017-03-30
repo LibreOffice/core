@@ -72,7 +72,7 @@ class VCL_DLLPUBLIC OpenGLTexture final
 private:
     // if the rect size doesn't match the mpImpl one, this instance
     // is a sub-area from the real OpenGL texture
-    Rectangle maRect;
+    tools::Rectangle maRect;
     std::shared_ptr<ImplOpenGLTexture> mpImpl;
     int mnSlotNumber;
 
@@ -85,7 +85,7 @@ private:
 
 public:
                     OpenGLTexture();
-                    OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& pImpl, Rectangle aRectangle, int nSlotNumber);
+                    OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& pImpl, tools::Rectangle aRectangle, int nSlotNumber);
 
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );

@@ -776,7 +776,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.InsertView( pOutlView.get() );
                     Point aPt;
                     Size aSize(1,1);
-                    Rectangle aRect( aPt, aSize );
+                    tools::Rectangle aRect( aPt, aSize );
                     pOutlView->SetOutputArea( aRect );
                     aTmpOutliner.SetText( *pParaObj );
                     aTmpOutliner.ClearModifyFlag();

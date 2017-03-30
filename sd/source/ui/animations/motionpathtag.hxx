@@ -54,7 +54,7 @@ public:
     virtual sal_uLong GetMarkedPointCount() const override;
     virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark) override;
     virtual void CheckPossibilities() override;
-    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark) override;
+    virtual bool MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark) override;
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 

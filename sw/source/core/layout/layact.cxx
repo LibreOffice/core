@@ -2076,7 +2076,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
         vcl::Window *pWin = pImp->GetShell()->GetWin();
         if (pWin && !pWin->SupportsDoubleBuffering()) // FIXME make this work with double-buffering
         {
-            Rectangle aRect( 0, 0, 5, 5 );
+            tools::Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
             // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
             pWin->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );

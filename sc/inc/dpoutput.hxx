@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotTablePositionData;
 }}}}
 
-class Rectangle;
+namespace tools { class Rectangle; }
 class ScDocument;
 struct ScDPOutLevelData;
 
@@ -117,7 +117,7 @@ public:
     long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
     bool GetHeaderDrag(
         const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
-        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
+        tools::Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
     bool IsFilterButton( const ScAddress& rPos );
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);

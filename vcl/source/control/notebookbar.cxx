@@ -175,7 +175,7 @@ void NotebookBar::UpdateBackground()
     else
         SetBackground(rStyleSettings.GetMenuBarColor());
 
-    Invalidate(Rectangle(Point(0,0), GetSizePixel()));
+    Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

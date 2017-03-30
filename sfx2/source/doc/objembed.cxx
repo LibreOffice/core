@@ -92,29 +92,29 @@ void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 }
 
 
-Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
+tools::Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if( nAspect == ASPECT_CONTENT )
         return pImpl->m_aVisArea;
     else if( nAspect == ASPECT_THUMBNAIL )
     {
-        Rectangle aRect;
+        tools::Rectangle aRect;
         aRect.SetSize( OutputDevice::LogicToLogic( Size( 5000, 5000 ),
                                          MapUnit::Map100thMM, GetMapUnit() ) );
         return aRect;
     }
-    return Rectangle();
+    return tools::Rectangle();
 }
 
 
-const Rectangle& SfxObjectShell::GetVisArea() const
+const tools::Rectangle& SfxObjectShell::GetVisArea() const
 {
     pImpl->m_aVisArea = GetVisArea( ASPECT_CONTENT );
     return pImpl->m_aVisArea;
 }
 
 
-void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
+void SfxObjectShell::SetVisArea( const tools::Rectangle & rVisArea )
 {
     if( pImpl->m_aVisArea != rVisArea )
     {
@@ -132,7 +132,7 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
 
 void SfxObjectShell::SetVisAreaSize( const Size & rVisSize )
 {
-    SetVisArea( Rectangle( GetVisArea().TopLeft(), rVisSize ) );
+    SetVisArea( tools::Rectangle( GetVisArea().TopLeft(), rVisSize ) );
 }
 
 
@@ -195,7 +195,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const JobSetup & rSetup,
                                sal_uInt16 nAspect )
 {
-    Rectangle aVisArea  = GetVisArea( nAspect );
+    tools::Rectangle aVisArea  = GetVisArea( nAspect );
     // MapUnit des Ziels
     MapMode aMapMode( GetMapUnit() );
     aMapMode.SetScaleX( rScaleX );

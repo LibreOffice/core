@@ -743,7 +743,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
 css::awt::Rectangle VCLXToolkit::getWorkArea(  )
 {
     sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
-    Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
+    tools::Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
     css::awt::Rectangle aNotherRect;
     aNotherRect.X = aWorkRect.getX();
     aNotherRect.Y = aWorkRect.getY();
@@ -1282,7 +1282,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else if ( !VCLUnoHelper::IsZero( rDescriptor.Bounds ) )
         {
-            Rectangle aRect = VCLRectangle( rDescriptor.Bounds );
+            tools::Rectangle aRect = VCLRectangle( rDescriptor.Bounds );
             pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         }
 

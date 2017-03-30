@@ -759,7 +759,7 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PageKind::Standard)-1, PageKind::Standard );
 
     // try to get existing PresObj
-    const Rectangle rRect(CapPos,CapSize);
+    const ::tools::Rectangle rRect(CapPos,CapSize);
     SdrObject* pSdrObj = pSlide->GetPresObj(PRESOBJ_TITLE);
 
     if(!pSdrObj)

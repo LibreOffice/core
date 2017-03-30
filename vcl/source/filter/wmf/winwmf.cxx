@@ -112,7 +112,7 @@
 #define W_META_CREATEBITMAP         0x06FE
 #define W_META_CREATEREGION         0x06FF
 
-static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+static void GetWinExtMax( const Point& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
     Point aSource( rSource );
     if ( nMapMode == MM_HIMETRIC )
@@ -127,7 +127,7 @@ static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound, cons
         rPlaceableBound.Bottom() = aSource.Y();
 }
 
-static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
+static void GetWinExtMax( const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode )
 {
     GetWinExtMax( rSource.TopLeft(), rPlaceableBound, nMapMode );
     GetWinExtMax( rSource.BottomRight(), rPlaceableBound, nMapMode );
@@ -147,14 +147,14 @@ inline Point WMFReader::ReadYX()
     return Point( nX, nY );
 }
 
-Rectangle WMFReader::ReadRectangle()
+tools::Rectangle WMFReader::ReadRectangle()
 {
     Point aBR, aTL;
     aBR = ReadYX();
     aTL = ReadYX();
     aBR.X()--;
     aBR.Y()--;
-    return Rectangle( aTL, aBR );
+    return tools::Rectangle( aTL, aBR );
 }
 
 Size WMFReader::ReadYXExt()
@@ -306,7 +306,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             Point aEnd( ReadYX() );
             Point aStart( ReadYX() );
-            Rectangle aRect( ReadRectangle() );
+            tools::Rectangle aRect( ReadRectangle() );
             aRect.Justify();
             pOut->DrawArc( aRect, aStart, aEnd );
         }
@@ -316,7 +316,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             Point     aEnd( ReadYX() );
             Point     aStart( ReadYX() );
-            Rectangle aRect( ReadRectangle() );
+            tools::Rectangle aRect( ReadRectangle() );
             aRect.Justify();
 
             // #i73608# OutputDevice deviates from WMF
@@ -332,7 +332,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             Point aEnd( ReadYX() );
             Point aStart( ReadYX() );
-            Rectangle aRect( ReadRectangle() );
+            tools::Rectangle aRect( ReadRectangle() );
             aRect.Justify();
             pOut->DrawChord( aRect, aStart, aEnd );
         }
@@ -538,12 +538,12 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             {
                 sal_Int32 nOriginalTextLen = nLen;
                 sal_Int32 nOriginalBlockLen = ( nOriginalTextLen + 1 ) &~ 1;
-                Rectangle aRect;
+                tools::Rectangle aRect;
                 if( nOptions & ETO_CLIPPED )
                 {
                     const Point aPt1( ReadPoint() );
                     const Point aPt2( ReadPoint() );
-                    aRect = Rectangle( aPt1, aPt2 );
+                    aRect = tools::Rectangle( aPt1, aPt2 );
                 }
 
                 auto nRemainingSize = pWMF->remainingSize();
@@ -699,10 +699,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
                             ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
                     {
-                        Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                        tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
                     }
-                    Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
+                    tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
                     aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
                 }
             }
@@ -741,7 +741,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 Size aDestSize( ReadYXExt() );
                 if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                 {
-                    Rectangle aDestRect( ReadYX(), aDestSize );
+                    tools::Rectangle aDestRect( ReadYX(), aDestSize );
                     if ( nWinROP != PATCOPY )
                         ReadDIB(aBmp, *pWMF, false);
 
@@ -750,7 +750,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
                             ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
                     {
-                        Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                        tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
                     }
                     aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
@@ -978,7 +978,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt32( nROP );
             Size aSize = ReadYXExt();
             nOldROP = pOut->SetRasterOp( (WMFRasterOp)nROP );
-            pOut->DrawRect( Rectangle( ReadYX(), aSize ), false );
+            pOut->DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
             pOut->SetRasterOp( nOldROP );
         }
         break;
@@ -1192,7 +1192,7 @@ bool WMFReader::ReadHeader()
     if (!pWMF->good())
         return false;
 
-    Rectangle aPlaceableBound;
+    tools::Rectangle aPlaceableBound;
 
     bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
 
@@ -1236,7 +1236,7 @@ bool WMFReader::ReadHeader()
             && (pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC))
         {
             // #n417818#: If we have an external header then overwrite the bounds!
-            Rectangle aExtRect(0, 0,
+            tools::Rectangle aExtRect(0, 0,
                           (double) pExternalHeader->xExt * 567 * nUnitsPerInch / 1440000,
                           (double) pExternalHeader->yExt * 567 * nUnitsPerInch / 1440000);
             aPlaceableBound = aExtRect;
@@ -1259,7 +1259,7 @@ bool WMFReader::ReadHeader()
             {
                 double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
 
-                aPlaceableBound = Rectangle(
+                aPlaceableBound = tools::Rectangle(
                                     aPlaceableBound.Left()   / fRatio,
                                     aPlaceableBound.Top()    / fRatio,
                                     aPlaceableBound.Right()  / fRatio,
@@ -1398,7 +1398,7 @@ void WMFReader::ReadWMF()
                         if( bEMFAvailable )
                         {
                             pOut->AddFromGDIMetaFile( aMeta );
-                            pOut->SetrclFrame( Rectangle( Point(0, 0), aMeta.GetPrefSize()));
+                            pOut->SetrclFrame( tools::Rectangle( Point(0, 0), aMeta.GetPrefSize()));
 
                             // the stream needs to be set to the wmf end position,
                             // otherwise the GfxLink that is created will be incorrect
@@ -1435,11 +1435,11 @@ void WMFReader::ReadWMF()
         pWMF->Seek( nStartPos );
 }
 
-void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
+void WMFReader::GetPlaceableBound( tools::Rectangle& rPlaceableBound, SvStream* pStm )
 {
     bool bRet = true;
 
-    Rectangle aBound;
+    tools::Rectangle aBound;
     aBound.Left()   = RECT_MAX;
     aBound.Top()    = RECT_MAX;
     aBound.Right()  = RECT_MIN;
@@ -1738,7 +1738,7 @@ void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                         Size aDestSize( ReadYXExt() );
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
-                            Rectangle aDestRect( ReadYX(), aDestSize );
+                            tools::Rectangle aDestRect( ReadYX(), aDestSize );
                             GetWinExtMax( aDestRect, aBound, nMapMode );
                             bBoundsDetermined = true;
                         }
@@ -1751,7 +1751,7 @@ void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt32 nROP;
                     pStm->ReadUInt32( nROP );
                     Size aSize = ReadYXExt();
-                    GetWinExtMax( Rectangle( ReadYX(), aSize ), aBound, nMapMode );
+                    GetWinExtMax( tools::Rectangle( ReadYX(), aSize ), aBound, nMapMode );
                     bBoundsDetermined = true;
                 }
                 break;
@@ -1781,14 +1781,14 @@ void WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
     {
         if (aWinExt)
         {
-            rPlaceableBound = Rectangle(aWinOrg, *aWinExt);
+            rPlaceableBound = tools::Rectangle(aWinOrg, *aWinExt);
             SAL_INFO("vcl.wmf", "Window dimension "
                        " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
         else if (aViewportExt)
         {
-            rPlaceableBound = Rectangle(aViewportOrg, *aViewportExt);
+            rPlaceableBound = tools::Rectangle(aViewportOrg, *aViewportExt);
             SAL_INFO("vcl.wmf", "Viewport dimension "
                        " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());

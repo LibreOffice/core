@@ -101,8 +101,8 @@ void Layout::ArrangeWindows ()
         }
 
         // sides
-        aBottomSide.ArrangeIn(Rectangle(Point(0, 0), aSize));
-        aLeftSide.ArrangeIn(Rectangle(Point(0, 0), Size(nWidth, nHeight - aBottomSide.GetSize())));
+        aBottomSide.ArrangeIn(tools::Rectangle(Point(0, 0), aSize));
+        aLeftSide.ArrangeIn(tools::Rectangle(Point(0, 0), Size(nWidth, nHeight - aBottomSide.GetSize())));
         // child in the middle
         pChild->SetPosSizePixel(
             Point(aLeftSide.GetSize(), 0),
@@ -265,7 +265,7 @@ long Layout::SplittedSide::GetSize () const
 
 // Arrange() -- arranges the docking windows
 // rRect: the available space
-void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
+void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
 {
     // saving the rectangle
     aRect = rRect;
@@ -333,7 +333,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
                     MakeSize(nSplitThickness, nSize - nSplitThickness)
                 );
                 // the dragging rectangle
-                rSplit.SetDragRectPixel(Rectangle(
+                rSplit.SetDragRectPixel(tools::Rectangle(
                     MakePoint(nPos2, nPos1),
                     MakeSize(nLength, nSize - nSplitThickness)
                 ));

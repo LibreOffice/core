@@ -73,7 +73,7 @@ class ImplCommonButtonData
 public:
     ImplCommonButtonData();
 
-    Rectangle       maFocusRect;
+    tools::Rectangle       maFocusRect;
     long            mnSeparatorX;
     DrawButtonFlags mnButtonState;
     bool            mbSmallSymbol;
@@ -200,7 +200,7 @@ ImageAlign Button::GetImageAlign() const
     return mpButtonData->meImageAlign;
 }
 
-void Button::SetFocusRect( const Rectangle& rFocusRect )
+void Button::SetFocusRect( const tools::Rectangle& rFocusRect )
 {
     ImplSetFocusRect( rFocusRect );
 }
@@ -247,7 +247,7 @@ DrawTextFlags Button::ImplGetTextStyle(OUString& rText, WinBits nWinStyle, DrawF
 void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                                   Size& rSize,
                                   sal_uLong nImageSep, DrawFlags nDrawFlags,
-                                  DrawTextFlags nTextStyle, Rectangle *pSymbolRect,
+                                  DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect,
                                   bool bAddImageSep)
 {
     OUString aText(GetText());
@@ -260,7 +260,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         return;
 
     WinBits nWinStyle = GetStyle();
-    Rectangle aOutRect( rPos, rSize );
+    tools::Rectangle aOutRect( rPos, rSize );
     ImageAlign eImageAlign = mpButtonData->meImageAlign;
     Size aImageSize = mpButtonData->maImage.GetSizePixel();
 
@@ -300,8 +300,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     Size aMax;
     Point aImagePos = rPos;
     Point aTextPos = rPos;
-    Rectangle aUnion = Rectangle(aImagePos, aImageSize);
-    Rectangle aSymbol;
+    tools::Rectangle aUnion = tools::Rectangle(aImagePos, aImageSize);
+    tools::Rectangle aSymbol;
     long nSymbolHeight = 0;
 
     if (bDrawText || bHasSymbol)
@@ -309,7 +309,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         // Get the size of the text output area ( the symbol will be drawn in
         // this area as well, so the symbol rectangle will be calculated here, too )
 
-        Rectangle aRect = Rectangle(Point(), rSize);
+        tools::Rectangle aRect = tools::Rectangle(Point(), rSize);
         Size aTSSize;
 
         if (bHasSymbol)
@@ -320,14 +320,14 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                 if (mpButtonData->mbSmallSymbol)
                     nSymbolHeight = nSymbolHeight * 3 / 4;
 
-                aSymbol = Rectangle(Point(), Size(nSymbolHeight, nSymbolHeight));
+                aSymbol = tools::Rectangle(Point(), Size(nSymbolHeight, nSymbolHeight));
                 ImplCalcSymbolRect(aSymbol);
                 aRect.Left() += 3 * nSymbolHeight / 2;
                 aTSSize.Width() = 3 * nSymbolHeight / 2;
             }
             else
             {
-                aSymbol = Rectangle(Point(), rSize);
+                aSymbol = tools::Rectangle(Point(), rSize);
                 ImplCalcSymbolRect(aSymbol);
                 aTSSize.Width() = aSymbol.GetWidth();
             }
@@ -433,8 +433,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
             aTextPos.X()  = rPos.X() + (aMax.Width()  - aTSSize.Width()) / 2;
             aTextPos.Y()  = rPos.Y() + (aMax.Height() - aTSSize.Height()) / 2;
         }
-        aUnion = Rectangle(aImagePos, aImageSize);
-        aUnion.Union(Rectangle(aTextPos, aTSSize));
+        aUnion = tools::Rectangle(aImagePos, aImageSize);
+        aUnion.Union(tools::Rectangle(aTextPos, aTSSize));
     }
 
     // Now place the combination of text and image in the output area of the button
@@ -479,11 +479,11 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         if (mpButtonData->meSymbolAlign == SymbolAlign::RIGHT)
         {
             Point aRightPos = Point(aTextPos.X() + aTextSize.Width() + aSymbolSize.Width() / 2, aTextPos.Y());
-            *pSymbolRect = Rectangle(aRightPos, aSymbolSize);
+            *pSymbolRect = tools::Rectangle(aRightPos, aSymbolSize);
         }
         else
         {
-            *pSymbolRect = Rectangle(aTextPos, aSymbolSize);
+            *pSymbolRect = tools::Rectangle(aTextPos, aSymbolSize);
             aTextPos.X() += 3 * nSymbolHeight / 2;
         }
         if (mpButtonData->mbSmallSymbol)
@@ -508,20 +508,20 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     if (bDrawText)
     {
-        const Rectangle aTOutRect(aTextPos, aTextSize);
+        const tools::Rectangle aTOutRect(aTextPos, aTextSize);
         ImplSetFocusRect(aTOutRect);
         DrawControlText(*pDev, aTOutRect, aText, nTextStyle, nullptr, nullptr, &aDeviceTextSize);
     }
     else
     {
-        ImplSetFocusRect(Rectangle(aImagePos, aImageSize));
+        ImplSetFocusRect(tools::Rectangle(aImagePos, aImageSize));
     }
 }
 
-void Button::ImplSetFocusRect(const Rectangle &rFocusRect)
+void Button::ImplSetFocusRect(const tools::Rectangle &rFocusRect)
 {
-    Rectangle aFocusRect = rFocusRect;
-    Rectangle aOutputRect = Rectangle(Point(), GetOutputSizePixel());
+    tools::Rectangle aFocusRect = rFocusRect;
+    tools::Rectangle aOutputRect = tools::Rectangle(Point(), GetOutputSizePixel());
 
     if (!aFocusRect.IsEmpty())
     {
@@ -543,7 +543,7 @@ void Button::ImplSetFocusRect(const Rectangle &rFocusRect)
     mpButtonData->maFocusRect = aFocusRect;
 }
 
-const Rectangle& Button::ImplGetFocusRect() const
+const tools::Rectangle& Button::ImplGetFocusRect() const
 {
     return mpButtonData->maFocusRect;
 }
@@ -726,7 +726,7 @@ void PushButton::ImplInitSettings( bool bFont,
 }
 
 void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
-                                         Rectangle& rRect, DrawButtonFlags nStyle)
+                                         tools::Rectangle& rRect, DrawButtonFlags nStyle)
 {
     if (!(GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)))
     {
@@ -759,7 +759,7 @@ bool PushButton::ImplHitTestPushButton( vcl::Window* pDev,
                                         const Point& rPos )
 {
     Point       aTempPoint;
-    Rectangle   aTestRect( aTempPoint, pDev->GetOutputSizePixel() );
+    tools::Rectangle   aTestRect( aTempPoint, pDev->GetOutputSizePixel() );
 
     return aTestRect.IsInside( rPos );
 }
@@ -811,25 +811,25 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
         pDev->SetFillColor( Color( COL_BLACK ) );
     else
         pDev->SetFillColor( rColor );
-    pDev->DrawRect( Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
-    pDev->DrawRect( Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
-    pDev->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-    pDev->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+    pDev->DrawRect( tools::Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
+    pDev->DrawRect( tools::Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
+    pDev->DrawRect( tools::Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
+    pDev->DrawRect( tools::Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
     if ( bBlack )
     {
         pDev->SetFillColor( rColor );
-        pDev->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-        pDev->DrawRect( Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
+        pDev->DrawRect( tools::Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
+        pDev->DrawRect( tools::Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
     }
     pDev->SetLineColor( aOldLineColor );
     pDev->SetFillColor( aOldFillColor );
 }
 
 void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
-                                           const Rectangle& rRect, bool bMenuBtnSep)
+                                           const tools::Rectangle& rRect, bool bMenuBtnSep)
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    Rectangle               aInRect = rRect;
+    tools::Rectangle               aInRect = rRect;
     Color                   aColor;
     OUString                aText = PushButton::GetText(); // PushButton:: because of MoreButton
     DrawTextFlags           nTextStyle = ImplGetTextStyle( nDrawFlags );
@@ -869,7 +869,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
          mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
     {
         long nSeparatorX = 0;
-        Rectangle aSymbolRect = aInRect;
+        tools::Rectangle aSymbolRect = aInRect;
         if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
         {
             // calculate symbol size
@@ -903,7 +903,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     }
     else
     {
-        Rectangle aSymbolRect;
+        tools::Rectangle aSymbolRect;
         ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : nullptr, true );
 
@@ -944,8 +944,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     DrawButtonFlags nButtonStyle = ImplGetButtonState();
     Point aPoint;
     Size aOutSz(GetOutputSizePixel());
-    Rectangle aRect(aPoint, aOutSz);
-    Rectangle aInRect = aRect;
+    tools::Rectangle aRect(aPoint, aOutSz);
+    tools::Rectangle aInRect = aRect;
     bool bNativeOK = false;
 
     // adjust style if button should be rendered 'pressed'
@@ -1042,7 +1042,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
     {
         PushButtonValue aControlValue;
-        Rectangle aCtrlRegion(aInRect);
+        tools::Rectangle aCtrlRegion(aInRect);
         ControlState nState = ControlState::NONE;
 
         if (mbPressed || IsChecked() || mbIsActive)
@@ -1107,7 +1107,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         // draw PushButtonFrame, aInRect has content size afterwards
         if (GetStyle() & WB_FLATBUTTON)
         {
-            Rectangle aTempRect(aInRect);
+            tools::Rectangle aTempRect(aInRect);
             if (bRollOver)
                 ImplDrawPushButtonFrame(rRenderContext, aTempRect, nButtonStyle);
             aInRect.Left()   += 2;
@@ -1139,11 +1139,11 @@ void PushButton::ImplSetDefButton( bool bSet )
 
     if ( IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
     {
-        Rectangle aBound, aCont;
-        Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
+        tools::Rectangle aBound, aCont;
+        tools::Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
                                              // will not work if the theme has dynamic adornment sizes
         ImplControlValue aControlValue;
-        Rectangle        aCtrlRegion( aCtrlRect );
+        tools::Rectangle        aCtrlRegion( aCtrlRect );
         ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
 
         // get native size of a 'default' button
@@ -1354,7 +1354,7 @@ void PushButton::FillLayoutData() const
     const_cast<PushButton*>(this)->Invalidate();
 }
 
-void PushButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDrawPushButton(rRenderContext);
 }
@@ -1364,7 +1364,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
@@ -1527,7 +1527,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 {
                     // only paint the button part to avoid flickering of the combobox text
                     Point aPt;
-                    Rectangle aClipRect( aPt, GetOutputSizePixel() );
+                    tools::Rectangle aClipRect( aPt, GetOutputSizePixel() );
                     aClipRect.SetPos(pBorder->ScreenToOutputPixel(OutputToScreenPixel(aClipRect.TopLeft())));
                     pBorder->Invalidate( aClipRect );
                 }
@@ -1648,7 +1648,7 @@ Size PushButton::CalcMinimumSize() const
     }
     if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
     {
-        Size textSize = GetTextRect( Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
+        Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
         aSize.Width() += textSize.Width();
         aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
@@ -1684,12 +1684,12 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void PushButton::ShowFocus(const Rectangle& rRect)
+void PushButton::ShowFocus(const tools::Rectangle& rRect)
 {
     if (IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
-        Rectangle aInRect(Point(), GetOutputSizePixel());
+        tools::Rectangle aInRect(Point(), GetOutputSizePixel());
         GetOutDev()->DrawNativeControl(ControlType::Pushbutton, ControlPart::Focus, aInRect,
                                        ControlState::FOCUSED, aControlValue, OUString());
     }
@@ -1909,7 +1909,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     if (!maImage && rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire))
     {
         ImplControlValue aControlValue( mbChecked ? ButtonValue::On : ButtonValue::Off );
-        Rectangle aCtrlRect(maStateRect.TopLeft(), maStateRect.GetSize());
+        tools::Rectangle aCtrlRect(maStateRect.TopLeft(), maStateRect.GetSize());
         ControlState nState = ControlState::NONE;
 
         if (ImplGetButtonState() & DrawButtonFlags::Pressed)
@@ -1949,7 +1949,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
 
             DecorationView aDecoView(&rRenderContext);
             const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-            Rectangle aImageRect  = maStateRect;
+            tools::Rectangle aImageRect  = maStateRect;
             Size aImageSize = maImage.GetSizePixel();
             bool bEnabled = IsEnabled();
             DrawFrameStyle nButtonStyle = DrawFrameStyle::DoubleIn;
@@ -2015,14 +2015,14 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
 
 void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                             const Point& rPos, const Size& rSize,
-                            const Size& rImageSize, Rectangle& rStateRect,
-                            Rectangle& rMouseRect )
+                            const Size& rImageSize, tools::Rectangle& rStateRect,
+                            tools::Rectangle& rMouseRect )
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
     pDev->Push( PushFlags::CLIPREGION );
-    pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
+    pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     // no image radio button
     if ( !maImage )
@@ -2050,7 +2050,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
             ImplDrawAlignedImage( pDev, aPos, aSize, 1, nDrawFlags, nTextStyle );
 
-            rMouseRect          = Rectangle( aPos, aSize );
+            rMouseRect          = tools::Rectangle( aPos, aSize );
             rMouseRect.Left()   = rPos.X();
 
             rStateRect.Left()   = rPos.X();
@@ -2105,7 +2105,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     {
         bool        bTopImage   = (nWinStyle & WB_TOP) != 0;
         Size        aImageSize  = maImage.GetSizePixel();
-        Rectangle   aImageRect( rPos, rSize );
+        tools::Rectangle   aImageRect( rPos, rSize );
         long        nTextHeight = pDev->GetTextHeight();
         long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
@@ -2422,7 +2422,7 @@ void RadioButton::FillLayoutData() const
     const_cast<RadioButton*>(this)->Invalidate();
 }
 
-void RadioButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void RadioButton::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
     ImplDrawRadioButton(rRenderContext);
 }
@@ -2439,8 +2439,8 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
         Size        aBrd2Size = pDev->LogicToPixel( Size( 60, 60 ), aResMapMode );
         vcl::Font   aFont = GetDrawPixelFont( pDev );
-        Rectangle   aStateRect;
-        Rectangle   aMouseRect;
+        tools::Rectangle   aStateRect;
+        tools::Rectangle   aMouseRect;
 
         aImageSize.Width()  = CalcZoom( aImageSize.Width() );
         aImageSize.Height() = CalcZoom( aImageSize.Height() );
@@ -2722,9 +2722,9 @@ Size RadioButton::ImplGetRadioImageSize() const
     if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
+        tools::Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
-        Rectangle aBoundingRgn, aContentRgn;
+        tools::Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
         if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
@@ -2836,8 +2836,8 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
-    Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
-    Rectangle aBoundingRgn, aContentRgn;
+    tools::Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
+    tools::Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
@@ -2873,7 +2873,7 @@ Size RadioButton::CalcMinimumSize() const
     {
         bool bTopImage = (GetStyle() & WB_TOP) != 0;
 
-        Size aTextSize = GetTextRect( Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
+        Size aTextSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
 
         aSize.Width()+=2;   // for focus rect
@@ -2902,12 +2902,12 @@ Size RadioButton::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-void RadioButton::ShowFocus(const Rectangle& rRect)
+void RadioButton::ShowFocus(const tools::Rectangle& rRect)
 {
     if (IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
-        Rectangle aInRect(Point(0, 0), GetSizePixel());
+        tools::Rectangle aInRect(Point(0, 0), GetSizePixel());
 
         aInRect.Left() = rRect.Left();  // exclude the radio element itself from the focusrect
 
@@ -3001,7 +3001,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
     {
         ImplControlValue aControlValue(meState == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
-        Rectangle aCtrlRegion(maStateRect);
+        tools::Rectangle aCtrlRegion(maStateRect);
         ControlState nState = ControlState::NONE;
 
         if (HasFocus())
@@ -3044,14 +3044,14 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 
 void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize,
-                         const Size& rImageSize, Rectangle& rStateRect,
-                         Rectangle& rMouseRect )
+                         const Size& rImageSize, tools::Rectangle& rStateRect,
+                         tools::Rectangle& rMouseRect )
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
     pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
-    pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
+    pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     long nLineY = rPos.Y() + (rSize.Height()-1)/2;
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
@@ -3078,7 +3078,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         ImplDrawAlignedImage( pDev, aPos, aSize, 1, nDrawFlags, nTextStyle );
         nLineY = aPos.Y() + aSize.Height()/2;
 
-        rMouseRect          = Rectangle( aPos, aSize );
+        rMouseRect          = tools::Rectangle( aPos, aSize );
         rMouseRect.Left()   = rPos.X();
         rStateRect.Left()   = rPos.X();
         rStateRect.Top()    = rMouseRect.Top();
@@ -3292,7 +3292,7 @@ void CheckBox::FillLayoutData() const
     const_cast<CheckBox*>(this)->Invalidate();
 }
 
-void CheckBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void CheckBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ImplDrawCheckBox(rRenderContext);
 }
@@ -3308,8 +3308,8 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Size        aBrd2Size = pDev->LogicToPixel( Size( 30, 30 ), aResMapMode );
     long        nCheckWidth = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode ).Width();
     vcl::Font   aFont = GetDrawPixelFont( pDev );
-    Rectangle   aStateRect;
-    Rectangle   aMouseRect;
+    tools::Rectangle   aStateRect;
+    tools::Rectangle   aMouseRect;
 
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
@@ -3587,9 +3587,9 @@ Size CheckBox::ImplGetCheckImageSize() const
     if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
+        tools::Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
-        Rectangle aBoundingRgn, aContentRgn;
+        tools::Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
         if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
@@ -3682,8 +3682,8 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
-    Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
-    Rectangle aBoundingRgn, aContentRgn;
+    tools::Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
+    tools::Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
@@ -3714,7 +3714,7 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
         nMaxWidth-=2;
         nMaxWidth -= ImplGetImageToTextDistance();
 
-        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+        Size aTextSize = GetTextRect( tools::Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
         aSize.Width()+=2;    // for focus rect
         aSize.Width() += ImplGetImageToTextDistance();
@@ -3740,12 +3740,12 @@ Size CheckBox::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-void CheckBox::ShowFocus(const Rectangle& rRect)
+void CheckBox::ShowFocus(const tools::Rectangle& rRect)
 {
     if (IsNativeControlSupported(ControlType::Checkbox, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
-        Rectangle aInRect(Point(0, 0), GetSizePixel());
+        tools::Rectangle aInRect(Point(0, 0), GetSizePixel());
 
         aInRect.Left() = rRect.Left();  // exclude the checkbox itself from the focusrect
 
@@ -3810,10 +3810,10 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
        for ControlType::ListNode would have to be implemented and taken into account
     */
 
-    Rectangle aStateRect(GetStateRect());
+    tools::Rectangle aStateRect(GetStateRect());
 
     ImplControlValue aControlValue(GetState() == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
-    Rectangle aCtrlRegion(aStateRect);
+    tools::Rectangle aCtrlRegion(aStateRect);
     ControlState nState = ControlState::NONE;
 
     if (HasFocus())

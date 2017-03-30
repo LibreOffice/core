@@ -31,7 +31,7 @@
 
 #include "svx/svdotable.hxx"
 
-class Rectangle;
+namespace tools { class Rectangle; }
 
 
 namespace editeng {
@@ -67,7 +67,7 @@ public:
 
         if bFitWidth or bFitHeight is set, the model is changed.
     */
-    void LayoutTable( ::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight );
+    void LayoutTable( ::tools::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight );
 
     void UpdateBorderLayout();
 
@@ -89,21 +89,21 @@ public:
     /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
     editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
 
-    void updateCells( ::Rectangle& rRectangle );
+    void updateCells( ::tools::Rectangle& rRectangle );
 
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);
 
-    void DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
-    void DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
+    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
+    void DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     CellRef getCell( const CellPos& rPos ) const;
     basegfx::B2ITuple getCellSize( const CellRef& xCell, const CellPos& rPos ) const;
 
-    void LayoutTableWidth( ::Rectangle& rArea, bool bFit );
-    void LayoutTableHeight( ::Rectangle& rArea, bool bFit );
+    void LayoutTableWidth( ::tools::Rectangle& rArea, bool bFit );
+    void LayoutTableHeight( ::tools::Rectangle& rArea, bool bFit );
 
     bool isValidColumn( sal_Int32 nColumn ) const { return (nColumn >= 0) && (nColumn < static_cast<sal_Int32>( maColumns.size())); }
     bool isValidRow( sal_Int32 nRow ) const { return (nRow >= 0) && (nRow < static_cast<sal_Int32>( maRows.size())); }
