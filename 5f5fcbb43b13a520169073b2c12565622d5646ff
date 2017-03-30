@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_d79e7e55",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3022,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-03-30T13:27:47Z",
+      "side": 1,
+      "message": "It\u0027s possible that GetCommand().trim() returns an empty string. By using copy(1) you assert that the string is at least one character long. You probably should return early in that case, I guess.",
+      "revId": "5f5fcbb43b13a520169073b2c12565622d5646ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
