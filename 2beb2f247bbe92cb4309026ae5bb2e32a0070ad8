@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_f741c23a",
+        "filename": "compilerplugins/clang/earlyreturn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-30T09:33:39Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "2beb2f247bbe92cb4309026ae5bb2e32a0070ad8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5749ae5e",
+        "filename": "compilerplugins/clang/earlyreturn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-30T09:33:39Z",
+      "side": 1,
+      "message": "this misses simple\n\n  if (c)\n    return;\n  else\n\ncases, no?",
+      "revId": "2beb2f247bbe92cb4309026ae5bb2e32a0070ad8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_173f26b5",
+        "filename": "compilerplugins/clang/earlyreturn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-30T09:33:39Z",
+      "side": 1,
+      "message": "beware if ifStatement-\u003egetConditionVariable() is non-null (and that variable is used in the else branch)",
+      "revId": "2beb2f247bbe92cb4309026ae5bb2e32a0070ad8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7774f29b",
+        "filename": "compilerplugins/clang/earlyreturn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-30T09:33:39Z",
+      "side": 1,
+      "message": "it\u0027s not the \"if statement\" that \"unconditionally returns\", it\u0027s the \"then branch\" (and there\u0027s no \"else statements\", just \"else branches\")",
+      "revId": "2beb2f247bbe92cb4309026ae5bb2e32a0070ad8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b76e5ac7",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-03-30T09:33:39Z",
+      "side": 1,
+      "message": "ah, this is a killer for blindly applying this change\n\nif the \"if\" above the #if block didn\u0027t happen to also always return, removing the \"else\" would be bogus",
+      "revId": "2beb2f247bbe92cb4309026ae5bb2e32a0070ad8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
