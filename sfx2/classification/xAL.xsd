@@ -4,18 +4,17 @@
 		<xs:documentation> 
 		Specification Name: OASIS CIQ TC - extensible Address Language (xAL) 
 		Description: Defines the W3C schema for representing addresses
-		(Using XML Schema based standard code list/enumeration mechanism - OPTION 1 AND DEFAULT)
+		(Using GENERICODE based code list/enumeration mechanism - OPTION 2)
 		Produced by: OASIS Customer Information Quality Technical Committee
 		URL: http://www.oasis-open.org/committees/ciq
 		Version: 3.0  
-		Status: Public Review Draft 03 ERRATA 
-		Copyright: 2007-08, OASIS, http://www.oasis-open.org
-		Last Modified: 08 April 2008  
+		Status: Committee Specification CS02
+		Copyright: 2007-09, OASIS, http://www.oasis-open.org
+		Last Modified: 20 September 2008
 		Last Modified by: Ram Kumar, Chair, OASIS CIQ TC 
 		NOTE: Do not modify this schema as it will break specifications compatibility 
 		</xs:documentation>
 	</xs:annotation>
-	<xs:include schemaLocation="xAL-types.xsd"/>
 	<xs:import namespace="urn:oasis:names:tc:ciq:ct:3" schemaLocation="CommonTypes.xsd"/>
 	<xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink-2003-12-31.xsd"/>
 	<xs:element name="Address" type="AddressType">
@@ -41,11 +40,12 @@
 							<xs:complexType>
 								<xs:simpleContent>
 									<xs:extension base="ct:String">
-										<xs:attribute name="Type" type="AddressLineTypeList">
+										<xs:attribute name="Type" type="ct:CodeType">
 											<xs:annotation>
 												<xs:documentation>What does the address line describe? e.g. Street details, suburb details, post code details, whole address, etc</xs:documentation>
 											</xs:annotation>
 										</xs:attribute>
+										<xs:attributeGroup ref="ct:grTypeMetaData"/>
 										<xs:attributeGroup ref="ct:grDataQuality"/>
 										<xs:anyAttribute namespace="##other"/>
 									</xs:extension>
@@ -54,6 +54,7 @@
 						</xs:element>
 					</xs:sequence>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 					<xs:anyAttribute namespace="##other" processContents="lax"/>
 				</xs:complexType>
 			</xs:element>
@@ -81,16 +82,18 @@
 								<xs:simpleContent>
 									<xs:extension base="ct:String">
 										<xs:attributeGroup ref="ct:grAbbreviation"/>
-										<xs:attribute name="NameType" type="AdministrativeAreaNameTypeList">
+										<xs:attribute name="NameType" type="ct:CodeType">
 											<xs:annotation>
 												<xs:documentation>semantics of data associated with name</xs:documentation>
 											</xs:annotation>
 										</xs:attribute>
-										<xs:attribute name="NameCode" type="AdministrativeAreaNameCodeList">
+										<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
+										<xs:attribute name="NameCode" type="ct:CodeType">
 											<xs:annotation>
 												<xs:documentation>Name of administrative area represented as a code. e.g. "COL" for COLORADO</xs:documentation>
 											</xs:annotation>
 										</xs:attribute>
+										<xs:attributeGroup ref="ct:grNameCodeTypeMetaData"/>
 										<xs:attribute name="NameCodeType" type="ct:String">
 											<xs:annotation>
 												<xs:documentation>Type of code used to represent name as a code</xs:documentation>
@@ -115,16 +118,18 @@
 											<xs:simpleContent>
 												<xs:extension base="ct:String">
 													<xs:attributeGroup ref="ct:grAbbreviation"/>
-													<xs:attribute name="NameType" type="SubAdministrativeAreaNameTypeList">
+													<xs:attribute name="NameType" type="ct:CodeType">
 														<xs:annotation>
 															<xs:documentation>semantics of data associated with name</xs:documentation>
 														</xs:annotation>
 													</xs:attribute>
-													<xs:attribute name="NameCode" type="SubAdministrativeAreaNameCodeList">
+													<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
+													<xs:attribute name="NameCode" type="ct:CodeType">
 														<xs:annotation>
 															<xs:documentation>Name of administrative area represented as a code. e.g. "COL" for COLORADO</xs:documentation>
 														</xs:annotation>
 													</xs:attribute>
+													<xs:attributeGroup ref="ct:grNameCodeTypeMetaData"/>
 													<xs:attribute name="NameCodeType" type="ct:String">
 														<xs:annotation>
 															<xs:documentation>Type of code used to represent name as a code</xs:documentation>
@@ -136,22 +141,26 @@
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
-								<xs:attribute name="Type" type="SubAdministrativeAreaTypeList">
+								<xs:attribute name="Type" type="ct:CodeType">
 									<xs:annotation>
 										<xs:documentation>Type of sub administrative area</xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
+								<xs:attributeGroup ref="ct:grTypeMetaData"/>
 								<xs:attributeGroup ref="ct:grDataQuality"/>
+								<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 								<xs:anyAttribute namespace="##other" processContents="lax"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Type" type="AdministrativeAreaTypeList">
+					<xs:attribute name="Type" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>Type of administrative area. e.g. state, city, town, etc</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
+					<xs:attributeGroup ref="ct:grTypeMetaData"/>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 					<xs:anyAttribute namespace="##other" processContents="lax"/>
 				</xs:complexType>
 			</xs:element>
@@ -169,16 +178,18 @@
 								<xs:simpleContent>
 									<xs:extension base="ct:String">
 										<xs:attributeGroup ref="ct:grAbbreviation"/>
-										<xs:attribute name="NameType" type="LocalityNameTypeList">
+										<xs:attribute name="NameType" type="ct:CodeType">
 											<xs:annotation>
 												<xs:documentation>semantics of data associated with name</xs:documentation>
 											</xs:annotation>
 										</xs:attribute>
-										<xs:attribute name="NameCode" type="LocalityNameCodeList">
+										<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
+										<xs:attribute name="NameCode" type="ct:CodeType">
 											<xs:annotation>
 												<xs:documentation>name of locality represented as a code</xs:documentation>
 											</xs:annotation>
 										</xs:attribute>
+										<xs:attributeGroup ref="ct:grNameCodeTypeMetaData"/>
 										<xs:attribute name="NameCodeType" type="ct:String">
 											<xs:annotation>
 												<xs:documentation>type of code used to represent name as a code</xs:documentation>
@@ -203,16 +214,18 @@
 											<xs:simpleContent>
 												<xs:extension base="ct:String">
 													<xs:attributeGroup ref="ct:grAbbreviation"/>
-													<xs:attribute name="NameType" type="SubLocalityNameTypeList">
+													<xs:attribute name="NameType" type="ct:CodeType">
 														<xs:annotation>
 															<xs:documentation>semantics of data associated with name</xs:documentation>
 														</xs:annotation>
 													</xs:attribute>
-													<xs:attribute name="NameCode" type="SubLocalityNameCodeList">
+													<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
+													<xs:attribute name="NameCode" type="ct:CodeType">
 														<xs:annotation>
 															<xs:documentation>name of locality represented as a code</xs:documentation>
 														</xs:annotation>
 													</xs:attribute>
+													<xs:attributeGroup ref="ct:grNameCodeTypeMetaData"/>
 													<xs:attribute name="NameCodeType" type="ct:String">
 														<xs:annotation>
 															<xs:documentation>type of code used to represent name as a code</xs:documentation>
@@ -224,22 +237,26 @@
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
-								<xs:attribute name="Type" type="SubLocalityTypeList">
+								<xs:attribute name="Type" type="ct:CodeType">
 									<xs:annotation>
 										<xs:documentation>Type of sub locality</xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
+								<xs:attributeGroup ref="ct:grTypeMetaData"/>
 								<xs:attributeGroup ref="ct:grDataQuality"/>
+								<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 								<xs:anyAttribute namespace="##other" processContents="lax"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Type" type="LocalityTypeList">
+					<xs:attribute name="Type" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>Type of locality. e.g. suburb, area, zone, village, etc</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
+					<xs:attributeGroup ref="ct:grTypeMetaData"/>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 					<xs:anyAttribute namespace="##other" processContents="lax"/>
 				</xs:complexType>
 			</xs:element>
@@ -281,7 +298,8 @@
 									<xs:complexType>
 										<xs:complexContent>
 											<xs:extension base="PremisesType">
-												<xs:attribute name="Type" type="SubPremisesTypeList"/>
+												<xs:attribute name="Type" type="ct:CodeType"/>
+												<xs:attributeGroup ref="ct:grTypeMetaData"/>
 												<xs:attribute name="TypeCode" type="ct:String">
 													<xs:annotation>
 														<xs:documentation>Type of code used for sub premises type attribute</xs:documentation>
@@ -292,7 +310,8 @@
 									</xs:complexType>
 								</xs:element>
 							</xs:sequence>
-							<xs:attribute name="Type" type="PremisesTypeList"/>
+							<xs:attribute name="Type" type="ct:CodeType"/>
+							<xs:attributeGroup ref="ct:grTypeMetaData"/>
 							<xs:attribute name="TypeCode" type="ct:String">
 								<xs:annotation>
 									<xs:documentation>Type of code use for Premises Type attribute</xs:documentation>
@@ -315,7 +334,8 @@
 						</xs:element>
 					</xs:sequence>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
-					<xs:anyAttribute namespace="##other" processContents="lax"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
+					<xs:anyAttribute namespace="##other"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="RuralDelivery" minOccurs="0">
@@ -326,17 +346,19 @@
 					<xs:sequence>
 						<xs:element name="Identifier" type="IdentifierType" maxOccurs="unbounded">
 							<xs:annotation>
-								<xs:documentation>Free text or structured description of rural delivery route. e.g. RD 6, </xs:documentation>
+								<xs:documentation>Free text or structured description of rural delivery route.e.g. RD 6</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Type" type="RuralDeliveryTypeList">
+					<xs:attribute name="Type" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>Type of rural delivery. For some addresses, delivery to rural areas happens via water, air or road</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
+					<xs:attributeGroup ref="ct:grTypeMetaData"/>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
-					<xs:anyAttribute namespace="##other" processContents="lax"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
+					<xs:anyAttribute namespace="##other"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="PostalDeliveryPoint" minOccurs="0">
@@ -351,9 +373,11 @@
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Type" type="PostalDeliveryPointTypeList"/>
+					<xs:attribute name="Type" type="ct:CodeType"/>
+					<xs:attributeGroup ref="ct:grTypeMetaData"/>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
-					<xs:anyAttribute namespace="##other" processContents="lax"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
+					<xs:anyAttribute namespace="##other"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="PostOffice" minOccurs="0">
@@ -368,18 +392,20 @@
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Type" type="PostOfficeTypeList">
+					<xs:attribute name="Type" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>Indicates the type of postal delivery office from where the mail will be distributed to the final delivery point by a delivery mode.  Example: Post Office, Mail Collection Centre, Letter Carrier Depot,  Station, etc. </xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
+					<xs:attributeGroup ref="ct:grTypeMetaData"/>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
-					<xs:anyAttribute namespace="##other" processContents="lax"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
+					<xs:anyAttribute namespace="##other"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="GeoRSS" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>GeoRSS GML from Open Geospatial Consortium (OGC – www.opengeospatial.net) is a formal GML Application Profile, and supports a greater range of features than Simple, notably coordinate reference systems other than WGS84 latitude/longitude. It is designed for use with Atom 1.0, RSS 2.0 and RSS 1.0, although it can be used just as easily in non-RSS XML encodings. </xs:documentation>
+					<xs:documentation>GeoRSS GML from Open Geospatial Consortium (www.opengeospatial.net) is a formal GML Application Profile, and supports a greater range of features than Simple, notably coordinate reference systems other than WGS84 latitude/longitude. It is designed for use with Atom 1.0, RSS 2.0 and RSS 1.0, although it can be used just as easily in non-RSS XML encodings. </xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
@@ -418,9 +444,37 @@
 										<xs:documentation>Measure of the latitude in seconds</xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
-								<xs:attribute name="Direction" type="DirectionTypeList">
+								<xs:attribute name="Direction" type="ct:CodeType">
 									<xs:annotation>
 										<xs:documentation>The direction of latitude measurement offset from the equator</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeRef" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeVer" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeURI" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeVerURI" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
 								<xs:anyAttribute namespace="##other" processContents="lax"/>
@@ -446,18 +500,74 @@
 										<xs:documentation>Measure of the longitude in seconds</xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
-								<xs:attribute name="Direction" type="DirectionTypeList">
+								<xs:attribute name="Direction" type="ct:CodeType">
 									<xs:annotation>
 										<xs:documentation>The direction of  longitude measurement offset from the equator</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeRef" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeVer" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeURI" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="DirectionTypeVerURI" type="xs:normalizedString">
+									<xs:annotation>
+										<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
 								<xs:anyAttribute namespace="##other" processContents="lax"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="Meridian" type="MeridianCodeList">
+					<xs:attribute name="Meridian" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>The collection of the coordinate numeric values for latitude amd longtitude depends on the agreed position of the meridian. Declaration of the meridian is necessary as it cannot be assumed in the data</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="MeridianTypeRef" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="MeridianTypeVer" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="MeridianTypeURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="MeridianTypeVerURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="MeridianCodeType" type="ct:String">
@@ -465,9 +575,37 @@
 							<xs:documentation>Type of code used. e.g. EPSG Code</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
-					<xs:attribute name="Datum" type="DatumCodeList">
+					<xs:attribute name="Datum" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>The collection of the coordinate numeric values depends on the agreed datum within which the measurement was taken. Declaration of the datum is necessary as it cannot be assumed in the data</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="DatumTypeRef" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="DatumTypeVer" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="DatumTypeURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="DatumTypeVerURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="DatumCodeType" type="ct:String">
@@ -475,9 +613,37 @@
 							<xs:documentation>Type of code used. e.g. EPSG Code, WGS-84</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
-					<xs:attribute name="Projection" type="ProjectionCodeList">
+					<xs:attribute name="Projection" type="ct:CodeType">
 						<xs:annotation>
 							<xs:documentation>Coordinates have limited utility and application depending on the projection required for visualisation in a map. Declaration of projection is necessary as it cannot be assumed in data</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="ProjectionTypeRef" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="ProjectionTypeVer" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="ProjectionTypeURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="ProjectionTypeVerURI" type="xs:normalizedString">
+						<xs:annotation>
+							<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="ProjectionCodeType" type="ct:String">
@@ -486,23 +652,53 @@
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attributeGroup ref="ct:grDataQuality"/>
+					<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 					<xs:anyAttribute namespace="##other" processContents="lax"/>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="Type" type="AddressTypeList">
+		<xs:attribute name="Type" type="ct:CodeType">
 			<xs:annotation>
 				<xs:documentation>Defines the type of address. An address type can be" Primary Address, Secondary Address, Rural Address, Military Address, etc.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attributeGroup ref="ct:grTypeMetaData"/>
 		<xs:attribute name="AddressID" type="ct:String">
 			<xs:annotation>
 				<xs:documentation>A unique address identifier such as postal delivery idetifier assigned to the address by local postal authority, e.g. DPID in Australia.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="AddressIDType" type="AddressIDTypeList">
+		<xs:attribute name="AddressIDType" type="ct:CodeType">
 			<xs:annotation>
 				<xs:documentation>Type of address ID used. e.g. DPID, etc</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AddressIDTypeRef" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AddressIDTypeVer" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AddressIDTypeURI" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AddressIDTypeVerURI" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="ID" type="ct:String">
@@ -510,21 +706,51 @@
 				<xs:documentation>A globally unique identifier assigned to the address</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="Usage" type="AddressUsageList">
+		<xs:attribute name="Usage" type="ct:CodeType">
 			<xs:annotation>
-				<xs:documentation>The purpose the address is used for. E.g.  Postal, residential, business,  exchange, update, create, delete, etc</xs:documentation>
+				<xs:documentation>The purpose the address is used for. E.g.  Postal, residential, business, exchange, update, create, delete, etc</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="DeliveryMode" type="DeliveryModeList">
+		<xs:attributeGroup ref="ct:grUsageTypeMetaData"/>
+		<xs:attribute name="DeliveryMode" type="ct:CodeType">
 			<xs:annotation>
 				<xs:documentation>Mode of delivery of address. For example: rural route, normal delivery, post office box, etc. </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="Status" type="ct:StatusList">
+		<xs:attribute name="DeliveryModeTypeRef" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode ShortName meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DeliveryModeTypeVer" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode Version meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DeliveryModeTypeURI" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode CanonicalUri meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DeliveryModeTypeVerURI" type="xs:normalizedString">
+			<xs:annotation>
+				<xs:documentation>
+          Corresponding to genericode CanonicalVersionUri meta data.
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Status" type="ct:CodeType">
 			<xs:annotation>
 				<xs:documentation>Status of the entity. e.g. Old, Current, Inactive, Active, etc</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attributeGroup ref="ct:grStatusTypeMetaData"/>
 		<xs:attributeGroup ref="ct:grValidityDate"/>
 		<xs:attribute name="AddressKey" type="ct:String">
 			<xs:annotation>
@@ -540,6 +766,7 @@
 		<xs:attribute ref="xlink:label"/>
 		<xs:attribute ref="xlink:href"/>
 		<xs:attributeGroup ref="ct:grDataQuality"/>
+		<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 		<xs:attributeGroup ref="ct:grLanguageCode"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
@@ -556,16 +783,18 @@
 					<xs:simpleContent>
 						<xs:extension base="ct:String">
 							<xs:attributeGroup ref="ct:grAbbreviation"/>
-							<xs:attribute name="NameType" type="CountryNameTypeList">
+							<xs:attribute name="NameType" type="ct:CodeType">
 								<xs:annotation>
 									<xs:documentation>Semantics of data associated with name. </xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
-							<xs:attribute name="NameCode" type="CountryNameCodeList">
+							<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
+							<xs:attribute name="NameCode" type="ct:CodeType">
 								<xs:annotation>
 									<xs:documentation>Name of the country represented as a code</xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
+							<xs:attributeGroup ref="ct:grNameCodeTypeMetaData"/>
 							<xs:attribute name="NameCodeType" type="ct:String">
 								<xs:annotation>
 									<xs:documentation>Type of code used to represent name of country, e.g. iso-3166</xs:documentation>
@@ -577,6 +806,8 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attributeGroup ref="ct:grDataQuality"/>
+		<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 	<xs:complexType name="IdentifierType">
@@ -585,11 +816,12 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="ct:String">
-				<xs:attribute name="Type" type="IdentifierElementTypeList">
+				<xs:attribute name="Type" type="ct:CodeType">
 					<xs:annotation>
 						<xs:documentation>Indicates which part of number or identifier this element contains. Some "numbers" are as simple as 42 and some "numbers" are more like complex aplhanumberic identifiers as Postcodes in UK or Canada, e.g. M2H 2S5. It may be necessary to separate the "number" into sub-elements and indicate what type of information each of them contains.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
+				<xs:attributeGroup ref="ct:grTypeMetaData"/>
 				<xs:attributeGroup ref="ct:grAbbreviation"/>
 				<xs:anyAttribute namespace="##other" processContents="lax"/>
 			</xs:extension>
@@ -608,11 +840,12 @@
 					<xs:simpleContent>
 						<xs:extension base="ct:String">
 							<xs:attributeGroup ref="ct:grAbbreviation"/>
-							<xs:attribute name="NameType" type="PremisesElementTypeList">
+							<xs:attribute name="NameType" type="ct:CodeType">
 								<xs:annotation>
 									<xs:documentation>Describes the type / part of name this element contains.</xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
+							<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
 							<xs:anyAttribute namespace="##other"/>
 						</xs:extension>
 					</xs:simpleContent>
@@ -624,6 +857,8 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
+		<xs:attributeGroup ref="ct:grDataQuality"/>
+		<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 	<xs:complexType name="ThoroughfareType">
@@ -639,11 +874,12 @@
 					<xs:simpleContent>
 						<xs:extension base="ct:String">
 							<xs:attributeGroup ref="ct:grAbbreviation"/>
-							<xs:attribute name="NameType" type="ThoroughfareNameTypeList">
+							<xs:attribute name="NameType" type="ct:CodeType">
 								<xs:annotation>
 									<xs:documentation>Describes the type / part of name this element contains.</xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
+							<xs:attributeGroup ref="ct:grNameTypeMetaData"/>
 							<xs:anyAttribute namespace="##other"/>
 						</xs:extension>
 					</xs:simpleContent>
@@ -655,17 +891,19 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="Type" type="ThoroughfareTypeList">
+		<xs:attribute name="Type" type="ct:CodeType">
 			<xs:annotation>
 				<xs:documentation>Type of thoroughfare. eg. primary road, secondary road, road branch (e.g. Lane 14), road sub branch (e.g. Alley 21), adjourning street, cross street, closest street, etc</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attributeGroup ref="ct:grTypeMetaData"/>
 		<xs:attribute name="TypeCode" type="ct:String">
 			<xs:annotation>
 				<xs:documentation>Type of code use for thoroughfare</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attributeGroup ref="ct:grDataQuality"/>
+		<xs:attributeGroup ref="ct:grDataQualityTypeMetaData"/>
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 </xs:schema>
