@@ -916,10 +916,12 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetvAnchor() :
                     pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME )));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND), text::WrapTextMode(
-                rAppendContext.pLastParagraphProperties->GetWrap() >= 0 ?
-                rAppendContext.pLastParagraphProperties->GetWrap() :
-                pStyleProperties->GetWrap() >= 0 ? pStyleProperties->GetWrap() : 0 )));
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
+                rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE
+                ? rAppendContext.pLastParagraphProperties->GetWrap()
+                : pStyleProperties->GetWrap() >= text::WrapTextMode_NONE
+                  ? pStyleProperties->GetWrap()
+                  : text::WrapTextMode_NONE ));
 
             /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
                 Swapped the array elements 11,12 & 13,14 since 11 & 12 are
@@ -1012,7 +1014,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
                 aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
 
-            if( rAppendContext.pLastParagraphProperties->GetWrap() >= 0 )
+            if( rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE )
                 aFrameProperties.push_back(comphelper::makePropertyValue("Surround", text::WrapTextMode(rAppendContext.pLastParagraphProperties->GetWrap())));
 
             lcl_MoveBorderPropertiesToFrame(aFrameProperties,
