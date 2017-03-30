@@ -84,11 +84,11 @@ sal_Int32 ScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_In
 sal_Int16 ScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, CTLScriptType::CTL_HEBREW },    // 10
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, CTLScriptType::CTL_ARABIC },    // 11
-        { UnicodeScript_kDevanagari, UnicodeScript_kDevanagari, CTLScriptType::CTL_INDIC },     // 14
-        { UnicodeScript_kThai, UnicodeScript_kThai, CTLScriptType::CTL_THAI },      // 24
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
+        { UnicodeScript_kHebrew,      UnicodeScript_kHebrew,      CTLScriptType::CTL_HEBREW },    // 10
+        { UnicodeScript_kArabic,      UnicodeScript_kArabic,      CTLScriptType::CTL_ARABIC },    // 11
+        { UnicodeScript_kDevanagari,  UnicodeScript_kDevanagari,  CTLScriptType::CTL_INDIC },     // 14
+        { UnicodeScript_kThai,        UnicodeScript_kThai,        CTLScriptType::CTL_THAI },      // 24
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, CTLScriptType::CTL_UNKNOWN }    // 88
     };
 
     return unicode::getUnicodeScriptType(Text[nPos], typeList);
