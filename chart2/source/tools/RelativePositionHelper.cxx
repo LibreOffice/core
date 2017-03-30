@@ -70,7 +70,7 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
                 nShiftHalfWidths  -= 2;
                 nShiftHalfHeights -= 2;
                 break;
-            case drawing::Alignment_MAKE_FIXED_SIZE:
+            case drawing::Alignment::Alignment_MAKE_FIXED_SIZE:
                 break;
         }
 
@@ -107,7 +107,7 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
                 nShiftHalfWidths  += 2;
                 nShiftHalfHeights += 2;
                 break;
-            case drawing::Alignment_MAKE_FIXED_SIZE:
+            case drawing::Alignment::Alignment_MAKE_FIXED_SIZE:
                 break;
         }
 
@@ -277,7 +277,7 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_BOTTOM_RIGHT:
             aPos.Primary += fShiftAmountX;
             break;
-        case drawing::Alignment_MAKE_FIXED_SIZE:
+        case drawing::Alignment::Alignment_MAKE_FIXED_SIZE:
             break;
     }
 
@@ -299,7 +299,7 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_BOTTOM_RIGHT:
             aPos.Secondary += fShiftAmountY;
             break;
-        case drawing::Alignment_MAKE_FIXED_SIZE:
+        case drawing::Alignment::Alignment_MAKE_FIXED_SIZE:
             break;
     }
 
