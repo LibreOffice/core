@@ -541,7 +541,7 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
     SfxInterfaceId nViewId(i_rDescriptor.getOrDefault( "ViewId", sal_Int16( 0 ) ));
     try
     {
-        if ( nViewId == SfxInterfaceId(0) )
+        if ( nViewId == SFX_INTERFACE_NONE )
         do
         {
             Reference< XViewDataSupplier > xViewDataSupplier( i_rDocument.GetModel(), UNO_QUERY );
@@ -577,7 +577,7 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( nViewId == SfxInterfaceId(0) )
+    if ( nViewId == SFX_INTERFACE_NONE )
         nViewId = i_rDocument.GetFactory().GetViewFactory().GetOrdinal();
     return nViewId;
 }
