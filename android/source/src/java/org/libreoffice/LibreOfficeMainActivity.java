@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import org.libreoffice.overlay.DocumentOverlay;
@@ -210,6 +211,24 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
         mToolbarController.setupToolbars();
+
+        TabHost host = (TabHost) findViewById(R.id.toolbarTabHost);
+        host.setup();
+
+        TabHost.TabSpec spec = host.newTabSpec("Character");
+        spec.setContent(R.id.tab_character);
+        spec.setIndicator("Character");
+        host.addTab(spec);
+
+        spec = host.newTabSpec("Paragraph");
+        spec.setContent(R.id.tab_paragraph);
+        spec.setIndicator("Paragraph");
+        host.addTab(spec);
+
+        spec = host.newTabSpec("Insert");
+        spec.setContent(R.id.tab_insert);
+        spec.setIndicator("Insert");
+        host.addTab(spec);
     }
 
     private void openSelectPathIntent() {
