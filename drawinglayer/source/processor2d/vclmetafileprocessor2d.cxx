@@ -1426,7 +1426,7 @@ namespace drawinglayer
                                 rFillGraphicAttribute.getTiling(),
                                 SvtGraphicFill::hatchSingle,
                                 Color(),
-                                SvtGraphicFill::gradientLinear,
+                                SvtGraphicFill::GradientType::Linear,
                                 Color(),
                                 Color(),
                                 0,
@@ -1524,7 +1524,7 @@ namespace drawinglayer
                             false,
                             eHatch,
                             Color(rFillHatchAttribute.getColor()),
-                            SvtGraphicFill::gradientLinear,
+                            SvtGraphicFill::GradientType::Linear,
                             Color(),
                             Color(),
                             0,
@@ -1621,22 +1621,22 @@ namespace drawinglayer
 
                         if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
-                            // setup gradient stuff like in like in impgrfll
-                            SvtGraphicFill::GradientType eGrad(SvtGraphicFill::gradientLinear);
+                            // setup gradient stuff like in impgrfll
+                            SvtGraphicFill::GradientType eGrad(SvtGraphicFill::GradientType::Linear);
 
                             switch(aVCLGradient.GetStyle())
                             {
                                 default : // GradientStyle::Linear:
                                 case GradientStyle::Axial:
-                                    eGrad = SvtGraphicFill::gradientLinear;
+                                    eGrad = SvtGraphicFill::GradientType::Linear;
                                     break;
                                 case GradientStyle::Radial:
                                 case GradientStyle::Elliptical:
-                                    eGrad = SvtGraphicFill::gradientRadial;
+                                    eGrad = SvtGraphicFill::GradientType::Radial;
                                     break;
                                 case GradientStyle::Square:
                                 case GradientStyle::Rect:
-                                    eGrad = SvtGraphicFill::gradientRectangular;
+                                    eGrad = SvtGraphicFill::GradientType::Rectangular;
                                     break;
                             }
 
@@ -1698,7 +1698,7 @@ namespace drawinglayer
                             false,
                             SvtGraphicFill::hatchSingle,
                             Color(),
-                            SvtGraphicFill::gradientLinear,
+                            SvtGraphicFill::GradientType::Linear,
                             Color(),
                             Color(),
                             0,
@@ -1876,7 +1876,7 @@ namespace drawinglayer
                                         false,
                                         SvtGraphicFill::hatchSingle,
                                         Color(),
-                                        SvtGraphicFill::gradientLinear,
+                                        SvtGraphicFill::GradientType::Linear,
                                         Color(),
                                         Color(),
                                         0,
