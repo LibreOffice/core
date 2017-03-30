@@ -91,7 +91,7 @@ SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
 void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
 {
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
-    OSL_ENSURE( pFormat, "von welchem Format soll ich eine Kopie erzeugen?" );
+    assert(pFormat);
     // The FlyFrameFormat must be copied - CopyLayoutFormat
     // (DocumentLayoutManager.cxx) creates the FlyFrameFormat and copies the
     // content.
@@ -118,7 +118,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
         else
         {
             pos.nContent.Assign( nullptr, 0 );
-            OSL_ENSURE( false, "CopyFlyFormat: Was fuer ein Anker?" );
+            assert(false);
         }
         aAnchor.SetAnchor( &pos );
     }
@@ -215,7 +215,7 @@ SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame_( const SwFrame *pCurrFrame )
     }
 
     SwIterator<SwFlyFrame,SwFormat> aIter( *GetFlyCnt().pFormat );
-    OSL_ENSURE( pCurrFrame->IsTextFrame(), "SwTextFlyCnt::GetFlyFrame_ for TextFrames only." );
+    assert(pCurrFrame->IsTextFrame());
     SwFrame* pFrame = aIter.First();
     if ( pFrame )
     {
