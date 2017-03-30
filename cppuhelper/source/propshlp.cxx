@@ -1054,19 +1054,17 @@ sal_Bool OPropertyArrayHelper::fillPropertyMembersByHandle
             *pAttributes = pProperties[ nHandle ].Attributes;
         return true;
     }
-    else
+
+    // normally the array is sorted
+    for( sal_Int32 i = 0; i < nElements; i++ )
     {
-        // normally the array is sorted
-        for( sal_Int32 i = 0; i < nElements; i++ )
+        if( pProperties[i].Handle == nHandle )
         {
-            if( pProperties[i].Handle == nHandle )
-            {
-                if( pPropName )
-                    *pPropName = pProperties[ i ].Name;
-                if( pAttributes )
-                    *pAttributes = pProperties[ i ].Attributes;
-                return true;
-            }
+            if( pPropName )
+                *pPropName = pProperties[ i ].Name;
+            if( pAttributes )
+                *pAttributes = pProperties[ i ].Attributes;
+            return true;
         }
     }
     return false;

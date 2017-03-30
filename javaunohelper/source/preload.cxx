@@ -59,30 +59,27 @@ static bool inited_juhx( JNIEnv * jni_env )
             c, "error loading " SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION "!" );
         return false;
     }
-    else
-    {
-        OUString symbol =
-              "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
-        s_writeInfo = reinterpret_cast<javaunohelper::detail::Func_writeInfo *>(aModule.getFunctionSymbol(symbol));
-        symbol =
-            "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
-        s_getFactory = reinterpret_cast<javaunohelper::detail::Func_getFactory *>(aModule.getFunctionSymbol(symbol));
-        symbol =
-            "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
-        s_bootstrap =
-            reinterpret_cast<javaunohelper::detail::Func_bootstrap *>(aModule.getFunctionSymbol(symbol));
 
-        if (nullptr == s_writeInfo ||
-            nullptr == s_getFactory ||
-            nullptr == s_bootstrap)
-        {
-            jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
-            jni_env->ThrowNew(
-                c, "error resolving symbols of " SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION "!" );
-            return false;
-        }
-        aModule.release();
+    OUString symbol = "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
+    s_writeInfo = reinterpret_cast<javaunohelper::detail::Func_writeInfo *>(aModule.getFunctionSymbol(symbol));
+
+    symbol = "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
+    s_getFactory = reinterpret_cast<javaunohelper::detail::Func_getFactory *>(aModule.getFunctionSymbol(symbol));
+
+    symbol = "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
+    s_bootstrap = reinterpret_cast<javaunohelper::detail::Func_bootstrap *>(aModule.getFunctionSymbol(symbol));
+
+    if (nullptr == s_writeInfo ||
+        nullptr == s_getFactory ||
+        nullptr == s_bootstrap)
+    {
+        jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
+        jni_env->ThrowNew(
+            c, "error resolving symbols of " SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION "!" );
+        return false;
     }
+    aModule.release();
+
     s_inited = true;
     return true;
 }
