@@ -242,7 +242,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, SfxInter
         ::comphelper::NamedValueCollection aArgs( aLoadArgs );
         aArgs.put( "Model", rDoc.GetModel() );
         aArgs.put( "Hidden", bHidden );
-        if ( nViewId != SfxInterfaceId(0) )
+        if ( nViewId != SFX_INTERFACE_NONE )
             aArgs.put( "ViewId", (sal_uInt16)nViewId );
 
         aLoadArgs = aArgs.getPropertyValues();

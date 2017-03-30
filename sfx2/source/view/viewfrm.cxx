@@ -1305,7 +1305,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     m_pImpl->bResizeInToOut = true;
     m_pImpl->bObjLocked = false;
     m_pImpl->pFocusWin = nullptr;
-    m_pImpl->nCurViewId = SfxInterfaceId(0);
+    m_pImpl->nCurViewId = SFX_INTERFACE_NONE;
     m_pImpl->bReloading = false;
     m_pImpl->bIsDowning = false;
     m_pImpl->bModal = false;
@@ -1792,7 +1792,7 @@ SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, SfxInterfaceId
 
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rTargetFrame )
 {
-    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, SfxInterfaceId(0), false );
+    return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, SFX_INTERFACE_NONE, false );
 }
 
 SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, SfxInterfaceId i_nViewId )
@@ -1808,7 +1808,7 @@ SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const Sf
     return LoadViewIntoFrame_Impl_NoThrow(
         i_rDoc,
         pFrameItem ? pFrameItem->GetFrame() : nullptr,
-        SfxInterfaceId(0),
+        SFX_INTERFACE_NONE,
         pHiddenItem && pHiddenItem->GetValue()
     );
 }
