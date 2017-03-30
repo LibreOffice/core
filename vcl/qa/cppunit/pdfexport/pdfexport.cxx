@@ -47,6 +47,8 @@ public:
     void testTdf105093();
     /// Tests export of non-PDF images.
     void testTdf106206();
+    /// Tests export of PDF images without reference XObjects.
+    void testTdf106693();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -55,6 +57,7 @@ public:
     CPPUNIT_TEST(testTdf105461);
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
+    CPPUNIT_TEST(testTdf106693);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -116,6 +119,59 @@ void PdfExportTest::testTdf106059()
     // The image is a reference XObject.
     // This dictionary key was missing, so the XObject wasn't a reference one.
     CPPUNIT_ASSERT(pReferenceXObject->Lookup("Ref"));
+}
+
+void PdfExportTest::testTdf106693()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106693.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // Assert that the XObject in the page resources dictionary is a form XObject.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    // The page has one image.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    // The image is a form XObject.
+    auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject->Lookup("Subtype"));
+    CPPUNIT_ASSERT(pSubtype);
+    CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype->GetValue());
+    // This failed: UseReferenceXObject was ignored and Ref was always created.
+    CPPUNIT_ASSERT(!pXObject->Lookup("Ref"));
+
+    // Assert that the form object refers to an inner form object, not a
+    // bitmap.
+    auto pInnerResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"));
+    CPPUNIT_ASSERT(pInnerResources);
+    auto pInnerXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pInnerResources->LookupElement("XObject"));
+    CPPUNIT_ASSERT(pInnerXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pInnerXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pInnerXObject = pInnerXObjects->LookupObject(pInnerXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pInnerXObject);
+    auto pInnerSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pInnerXObject->Lookup("Subtype"));
+    CPPUNIT_ASSERT(pInnerSubtype);
+    // This failed: this was Image (bitmap), not Form (vector).
+    CPPUNIT_ASSERT_EQUAL(OString("Form"), pInnerSubtype->GetValue());
 }
 
 void PdfExportTest::testTdf105461()
