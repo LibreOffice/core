@@ -267,7 +267,7 @@ public:
     struct Result {
         ResultType        type;
         Any               result;
-        sal_Int32         ioErrorCode;
+        IOErrorCode       ioErrorCode;
     };
 
     Result getResult(const sal_uInt32 milliSec);
@@ -315,7 +315,7 @@ private:
 
     ConditionRes      m_aRes;
     ResultType        m_aResultType;
-    sal_Int32         m_nIOErrorCode;
+    IOErrorCode       m_nIOErrorCode;
     Any               m_aResult;
 
     friend class ConditionRep;
@@ -457,7 +457,7 @@ Moderator::Moderator(
 
       m_aRes(m_aMutex,*this),
       m_aResultType(ResultType::NORESULT),
-      m_nIOErrorCode(0),
+      m_nIOErrorCode(IOErrorCode_ABORT),
       m_aResult(),
 
       m_aRep(m_aMutex,*this),
@@ -606,9 +606,9 @@ void SAL_CALL Moderator::run()
 {
     osl_setThreadName("utl::Moderator");
 
-    ResultType aResultType;
-    Any        aResult;
-    sal_Int32  nIOErrorCode = 0;
+    ResultType  aResultType;
+    Any         aResult;
+    IOErrorCode nIOErrorCode = IOErrorCode_ABORT;
 
     try
     {
