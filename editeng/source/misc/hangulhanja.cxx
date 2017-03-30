@@ -599,7 +599,7 @@ namespace editeng
 
                     // determine if it's Hangul
                     CharClass aCharClassificaton( m_xContext, LanguageTag( m_aSourceLocale) );
-                    sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
+                    css::i18n::UnicodeScript nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
                     if  (   ( UnicodeScript_kHangulJamo == nScript )
                         ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
                         ||  ( UnicodeScript_kHangulSyllable == nScript )

@@ -133,7 +133,7 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-        short nScript = rCC.getScript( rTxt, nStt );
+        css::i18n::UnicodeScript nScript = rCC.getScript( rTxt, nStt );
         switch( nScript )
         {
             case css::i18n::UnicodeScript_kCJKRadicalsSupplement:
