@@ -207,6 +207,11 @@ interface TextDrawText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_HANGING_INDENT
+    [
+        StateMethod = GetState ;
+    ]
+
     SID_ATTR_PARA_LRSPACE  //for indent
     [
         ExecMethod = Execute ;

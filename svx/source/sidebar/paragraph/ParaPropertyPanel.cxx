@@ -35,16 +35,10 @@
 using namespace css;
 using namespace css::uno;
 
-const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
-const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
-const char UNO_HANGINGINDENT[]    = ".uno:HangingIndent";
-
 namespace svx {namespace sidebar {
 #define DEFAULT_VALUE          0
 
 #define MAX_DURCH             5670
-
-#define INDENT_STEP            706
 
 #define MAX_SW                  1709400
 #define MAX_SC_SD               116220200
@@ -155,10 +149,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpRightIndent->SetModifyHdl( aLink );
     mpFLineIndent->SetModifyHdl( aLink );
 
-    const sal_uInt16 nIdHanging   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
-    mpTbxIndent_IncDec->SetItemImage(nIdHanging, maIndHang);
-
-    mpTbxIndent_IncDec->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl ));
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
@@ -191,84 +181,6 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
 }
 
-IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
-{
-    const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
-
-        if (aCommand == UNO_INCREMENTINDENT)
-        {
-            switch (maContext.GetCombinedContext_DI())
-            {
-            case CombinedEnumContext(Application::WriterVariants, Context::Default):
-            case CombinedEnumContext(Application::WriterVariants, Context::Text):
-            case CombinedEnumContext(Application::WriterVariants, Context::Table):
-                {
-                    SfxBoolItem aMargin( SID_INC_INDENT, true );
-                    GetBindings()->GetDispatcher()->ExecuteList(
-                        SID_INC_INDENT, SfxCallMode::RECORD, { &aMargin });
-                }
-                break;
-            default:
-                {
-                    SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-
-                    maTxtLeft += INDENT_STEP;
-                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MapUnit::Map100thMM, m_eLRSpaceUnit );
-                    aMargin.SetTextLeft( (const long)nVal );
-                    aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-                    aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
-
-                    GetBindings()->GetDispatcher()->ExecuteList(
-                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
-                }
-            }
-        }
-        else if (aCommand == UNO_DECREMENTINDENT)
-        {
-            switch (maContext.GetCombinedContext_DI())
-            {
-            case CombinedEnumContext(Application::WriterVariants, Context::Default):
-            case CombinedEnumContext(Application::WriterVariants, Context::Text):
-            case CombinedEnumContext(Application::WriterVariants, Context::Table):
-                {
-                    SfxBoolItem aMargin( SID_DEC_INDENT, true );
-                    GetBindings()->GetDispatcher()->ExecuteList(
-                        SID_DEC_INDENT, SfxCallMode::RECORD, { &aMargin });
-                }
-                break;
-            default:
-                {
-                    if((maTxtLeft - INDENT_STEP) < 0)
-                        maTxtLeft = DEFAULT_VALUE;
-                    else
-                        maTxtLeft -= INDENT_STEP;
-
-                    SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-
-                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MapUnit::Map100thMM, m_eLRSpaceUnit );
-
-                    aMargin.SetTextLeft( (const long)nVal );
-                    aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-                    aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
-
-                    GetBindings()->GetDispatcher()->ExecuteList(
-                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
-                }
-            }
-        }
-        else if (aCommand == UNO_HANGINGINDENT)
-        {
-            SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
-            aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-            aMargin.SetTextFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
-
-            GetBindings()->GetDispatcher()->ExecuteList(
-                SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
-        }
-}
 
 // for Paragraph Spacing
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
@@ -314,11 +226,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
     case SID_ATTR_PARA_ULSPACE:
         StateChangedULImpl( nSID, eState, pState );
         break;
-
-    case SID_INC_INDENT:
-    case SID_DEC_INDENT:
-        StateChangeIncDecImpl( nSID, eState, pState );
-        break;
     }
 }
 
@@ -352,7 +259,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         break;
     }
 
-    const sal_uInt16 nIdHangingIndent   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
     if( pState && eState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
@@ -412,44 +318,18 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
         nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
         mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
-
-        mpTbxIndent_IncDec->Enable();
-
-        const sal_uInt16 nIdIncrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
-        const sal_uInt16 nIdDecrIndent  = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
-
-        mpTbxIndent_IncDec->EnableItem(nIdHangingIndent);
-        if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
-             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default)
-             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Table) )
-        {
-            mpTbxIndent_IncDec->EnableItem(nIdIncrIndent);
-            mpTbxIndent_IncDec->EnableItem(nIdDecrIndent);
-        }
     }
     else if( eState == SfxItemState::DISABLED )
     {
         mpLeftIndent-> Disable();
         mpRightIndent->Disable();
         mpFLineIndent->Disable();
-        if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)  &&
-            maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default) &&
-            maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application::WriterVariants, Context::Table) )
-            mpTbxIndent_IncDec->Disable();
-        else
-            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
     }
     else
     {
         mpLeftIndent->SetEmptyFieldValue();
         mpRightIndent->SetEmptyFieldValue();
         mpFLineIndent->SetEmptyFieldValue();
-        if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)  &&
-            maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Default) &&
-            maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application::WriterVariants, Context::Table) )
-            mpTbxIndent_IncDec->Disable();
-        else
-            mpTbxIndent_IncDec->EnableItem(nIdHangingIndent, false);
     }
 }
 
@@ -490,24 +370,6 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
     }
 }
 
-void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    if ( ( maContext.GetCombinedContext_DI() == CombinedEnumContext(Application::WriterVariants, Context::Text)
-           || maContext.GetCombinedContext_DI() == CombinedEnumContext(Application::WriterVariants, Context::Default)
-           || maContext.GetCombinedContext_DI() ==  CombinedEnumContext(Application::WriterVariants, Context::Table) )
-         && ( nSID == SID_INC_INDENT || nSID == SID_DEC_INDENT ) )
-    {
-        // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT
-        // - namely SfxItemState::UNKNOWN and SfxItemState::DISABLED
-        const sal_uInt16 nIdIncrIndent = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
-        const sal_uInt16 nIdDecrIndent = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
-
-        mpTbxIndent_IncDec->EnableItem(
-            nSID == SID_INC_INDENT ? nIdIncrIndent : nIdDecrIndent,
-            pState && eState == SfxItemState::UNKNOWN );
-    }
-}
-
 FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
     FieldUnit eUnit = FUNIT_NONE;
@@ -545,7 +407,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame),
 
-      maIndHang(BitmapEx(SVX_RES(BMP_INDENT_HANG))),
       maTxtLeft (0),
       maUpper (0),
       maLower (0),
@@ -555,8 +416,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       m_eULSpaceUnit(),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
-      maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, "DecrementIndent", rxFrame),
-      maIncIndentControl(SID_INC_INDENT, *pBindings,*this, "IncrementIndent", rxFrame),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maContext(),
       mpBindings(pBindings),
@@ -579,7 +438,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     mpRightIndent->set_width_request(mpRightIndent->get_preferred_size().Width());
     get(mpFLineIndent,  "firstlineindent");
     mpFLineIndent->set_width_request(mpFLineIndent->get_preferred_size().Width());
-    get(mpTbxIndent_IncDec, "indent");
 
     initial();
     m_aMetricCtl.RequestUpdate();
@@ -598,15 +456,12 @@ void ParaPropertyPanel::dispose()
     mpTBxOutline.clear();
     mpTopDist.clear();
     mpBottomDist.clear();
-    mpTbxIndent_IncDec.clear();
     mpLeftIndent.clear();
     mpRightIndent.clear();
     mpFLineIndent.clear();
 
     maLRSpaceControl.dispose();
     maULSpaceControl.dispose();
-    maDecIndentControl.dispose();
-    maIncIndentControl.dispose();
     m_aMetricCtl.dispose();
 
     PanelLayout::dispose();
