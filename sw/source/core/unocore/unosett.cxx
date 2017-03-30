@@ -1570,36 +1570,36 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
     // the order of the names is important!
     static const char* aNumPropertyNames[] =
     {
-        "Adjust",                               //0
-        "ParentNumbering",                      //1
-        "Prefix",                               //2
-        "Suffix",                               //3
-        "CharStyleName",                        //4
-        "StartWith",                            //5
-        UNO_NAME_LEFT_MARGIN,                   //6
-        UNO_NAME_SYMBOL_TEXT_DISTANCE,          //7
-        UNO_NAME_FIRST_LINE_OFFSET,             //8
-        UNO_NAME_POSITION_AND_SPACE_MODE, //9
-        UNO_NAME_LABEL_FOLLOWED_BY,       //10
-        UNO_NAME_LISTTAB_STOP_POSITION,   //11
-        UNO_NAME_FIRST_LINE_INDENT,       //12
-        UNO_NAME_INDENT_AT,               //13
-        "NumberingType",                        //14
-        UNO_NAME_PARAGRAPH_STYLE_NAME, //15
+        UNO_NAME_ADJUST,                        // 0
+        UNO_NAME_PARENT_NUMBERING,              // 1
+        UNO_NAME_PREFIX,                        // 2
+        UNO_NAME_SUFFIX,                        // 3
+        UNO_NAME_CHAR_STYLE_NAME,               // 4
+        UNO_NAME_START_WITH,                    // 5
+        UNO_NAME_LEFT_MARGIN,                   // 6
+        UNO_NAME_SYMBOL_TEXT_DISTANCE,          // 7
+        UNO_NAME_FIRST_LINE_OFFSET,             // 8
+        UNO_NAME_POSITION_AND_SPACE_MODE,       // 9
+        UNO_NAME_LABEL_FOLLOWED_BY,             // 10
+        UNO_NAME_LISTTAB_STOP_POSITION,         // 11
+        UNO_NAME_FIRST_LINE_INDENT,             // 12
+        UNO_NAME_INDENT_AT,                     // 13
+        UNO_NAME_NUMBERING_TYPE,                // 14
+        UNO_NAME_PARAGRAPH_STYLE_NAME,          // 15
         // these are not in chapter numbering
-        "BulletId",                             //16
-        UNO_NAME_BULLET_FONT, //17
-        "BulletFontName",                       //18
-        "BulletChar",                           //19
-        UNO_NAME_GRAPHIC_URL,    //20
-        UNO_NAME_GRAPHIC_BITMAP, //21
-        UNO_NAME_GRAPHIC_SIZE,   //22
-        UNO_NAME_VERT_ORIENT,    //23
+        UNO_NAME_BULLET_ID,                     // 16
+        UNO_NAME_BULLET_FONT,                   // 17
+        UNO_NAME_BULLET_FONT_NAME,              // 18
+        UNO_NAME_BULLET_CHAR,                   // 19
+        UNO_NAME_GRAPHIC_URL,                   // 20
+        UNO_NAME_GRAPHIC_BITMAP,                // 21
+        UNO_NAME_GRAPHIC_SIZE,                  // 22
+        UNO_NAME_VERT_ORIENT,                   // 23
         // these are only in chapter numbering
-        UNO_NAME_HEADING_STYLE_NAME, //24
+        UNO_NAME_HEADING_STYLE_NAME,            // 24
         // these two are accepted but ignored for some reason
-        "BulletRelSize",                         // 25
-        "BulletColor"                            // 26
+        UNO_NAME_BULLET_REL_SIZE,               // 25
+        UNO_NAME_BULLET_COLOR                   // 26
     };
 
     enum {
