@@ -1121,9 +1121,16 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 
 Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 {
-    Bitmap              aNewBmp( GetSizePixel(), 1 );
-    ScopedReadAccess    pReadAcc(const_cast<Bitmap&>(*this));
+    ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
 
+    if (!nTol && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
+        && pReadAcc->GetBestMatchingColor(Color(COL_WHITE)) == pReadAcc->GetBestMatchingColor(rTransColor))
+    {
+        //if we're a 1 bit pixel already, and the transcolor matches the color that would replace it already already, then just return a copy
+        return *this;
+    }
+
+    Bitmap              aNewBmp(GetSizePixel(), 1);
     ScopedWriteAccess   pWriteAcc(aNewBmp);
     bool                bRet = false;
 
