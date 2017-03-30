@@ -221,6 +221,22 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 rReq.Done();
             }
             break;
+        case SID_HANGING_INDENT:
+            {
+                SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
+                if( eState >= SfxItemState::DEFAULT )
+                {
+                    SvxLRSpaceItem aParaMargin = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    aParaMargin.SetWhich( EE_PARA_LRSPACE );
+                    short int nFirstLineOffset = aParaMargin.GetTextFirstLineOfst();
+                    aParaMargin.SetTextLeft( aParaMargin.GetTextLeft() + nFirstLineOffset );
+                    aParaMargin.SetRight( aParaMargin.GetRight() );
+                    aParaMargin.SetTextFirstLineOfst( nFirstLineOffset * (-1) );
+                    aNewAttr.Put(aParaMargin);
+                    rReq.Done();
+                }
+            }
+        break;
         case SID_ATTR_PARA_LINESPACE:
             {
                 SvxLineSpacingItem aLineSpace = static_cast<const SvxLineSpacingItem&>(pNewAttrs->Get(
