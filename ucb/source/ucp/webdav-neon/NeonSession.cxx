@@ -311,27 +311,23 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
                             thePassWord,
                             bCanUseSystemCreds);
 
-    OString aUser(
-        OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
+    OString aUser( OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
     if ( aUser.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
         SAL_WARN( "ucb.ucp.webdav", "NeonSession_NeonAuth - username too long!" );
         return -1;
     }
 
-    OString aPass(
-        OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+    OString aPass( OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
     if ( aPass.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
         SAL_WARN( "ucb.ucp.webdav", "NeonSession_NeonAuth - password too long!" );
         return -1;
     }
 
-    strcpy( inoutUserName, // #100211# - checked
-            OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    strcpy( inoutPassWord, // #100211# - checked
-            OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ).getStr() );
+    // #100211# - checked
+    strcpy( inoutUserName, aUser.getStr() );
+    strcpy( inoutPassWord, aPass.getStr() );
 
     return theRetVal;
 }
