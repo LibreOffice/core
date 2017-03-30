@@ -266,15 +266,15 @@ Const cstEqualArray = &quot; = (&quot;, cstEqual = &quot; = &quot;
 					lSearch = lPosition + Len(sName) + Len(cstEqualArray) - 1
 					sDim = Utils._RegexSearch(vString(i), &quot;\([0-9]+\)&quot;, lSearch)	&apos;	e.g. (10)
 					If sDim &lt;&gt; &quot;&quot; Then
-						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2)
+						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						iRows = 0
 						ReDim vValue(0 To iCols - 1)
 					Else
 						lSearch = lPosition + Len(sName) + Len(cstEqualArray) - 1
 						sDim = Utils._RegexSearch(vString(i), &quot;\([0-9]+,&quot;, lSearch)	&apos;	e.g. (10,
-						iRows = CInt(Mid(sDim, 2, Len(sDim) - 2)
+						iRows = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						sDim = Utils._RegexSearch(vString(i), &quot;,[0-9]+\)&quot;, lSearch)	&apos;	e.g. ,20)
-						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2)
+						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						ReDim vValue(0 To iRows - 1)
 					End If
 					iArray = 0
