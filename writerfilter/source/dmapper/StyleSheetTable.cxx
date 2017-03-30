@@ -298,6 +298,10 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );
+
+    // See SwDoc::RemoveAllFormatLanguageDependencies(), internal filters
+    // disable kerning by default, do the same here.
+    m_pDefaultCharProps->Insert(PROP_CHAR_AUTO_KERNING, uno::Any(false));
 }
 
 
