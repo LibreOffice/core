@@ -31,8 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include "dpobject.hxx"
-
 #include <memory>
 #include <vector>
 
@@ -52,7 +50,7 @@ class PivotChartDataProvider : public PivotChartDataProvider_Base, public SfxLis
 {
 public:
 
-    explicit PivotChartDataProvider(ScDocument* pDoc, OUString const& sPivotTableName);
+    explicit PivotChartDataProvider(ScDocument* pDoc);
     virtual ~PivotChartDataProvider() override;
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
@@ -91,6 +89,14 @@ public:
 
     virtual OUString SAL_CALL getPivotTableName() override;
 
+    virtual void SAL_CALL setPivotTableName(const OUString& sPivotTableName) override;
+
+    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+        createDataSequenceOfValuesByIndex(sal_Int32 nIndex);
+    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+        createDataSequenceOfLabelsByIndex(sal_Int32 nIndex);
+    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+        createDataSequenceOfCategories();
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
@@ -135,12 +141,11 @@ public:
 private:
 
     css::uno::Reference<css::chart2::data::XDataSource>
-        createPivotChartDataSource(OUString const & aRangeRepresentation);
+        createPivotChartValuesDataSource(OUString const & aRangeRepresentation);
     css::uno::Reference<css::chart2::data::XDataSource>
         createPivotChartCategoriesDataSource(OUString const & aRangeRepresentation, bool bOrientCol);
 
-    css::uno::Reference<css::chart2::data::XLabeledDataSequence>
-        createLabeledDataSequence(css::uno::Reference<css::uno::XComponentContext>& rContext);
+    css::uno::Reference<css::chart2::data::XLabeledDataSequence> newLabeledDataSequence();
 
     void setLabeledDataSequenceValues(css::uno::Reference<css::chart2::data::XLabeledDataSequence> & xResult,
                                       OUString const & sRoleValues, OUString const & sIdValues,
@@ -151,12 +156,14 @@ private:
                                 std::vector<PivotChartItem> const & rValues,
                                 OUString const & sRoleLabel,  OUString const & sIdLabel,
                                 std::vector<PivotChartItem> const & rLabel);
-    void createCategories(
-        ScDPSaveData* pSaveData, bool bOrientCol,
-        css::uno::Reference<css::uno::XComponentContext>& rContext,
-        std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& rOutLabeledSequences);
 
-    void collectPivotTableData(ScDPObject* pDPObject);
+    void assignLabelsToDataSequence(css::uno::Reference<css::chart2::data::XDataSequence> & rDataSequence,
+                                    size_t nIndex);
+
+    void assignValuesToDataSequence(css::uno::Reference<css::chart2::data::XDataSequence> & rDataSequence,
+                                    size_t nIndex);
+
+    void collectPivotTableData();
 
     ScDocument*        m_pDocument;
     OUString           m_sPivotTableName;
@@ -172,6 +179,10 @@ private:
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aRowFields;
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aPageFields;
     std::vector<css::chart2::data::PivotTableFieldEntry> m_aDataFields;
+
+    bool m_bNeedsUpdate;
+
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };

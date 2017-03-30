@@ -70,17 +70,28 @@ uno::Reference<frame::XModel> lcl_GetXModel(ScDocument * pDoc)
     return xModel;
 }
 
+OUString lcl_identifierForData(sal_Int32 index)
+{
+    return "Data@" + OUString::number(index + 1);
+}
+
+OUString lcl_identifierForLabel(sal_Int32 index)
+{
+    return "Label@" + OUString::number(index + 1);
+}
+
 } // end anonymous namespace
 
-SC_SIMPLE_SERVICE_INFO( PivotChartDataProvider, "PivotChartDataProvider", "com.sun.star.chart2.data.DataProvider")
+SC_SIMPLE_SERVICE_INFO(PivotChartDataProvider, "PivotChartDataProvider", SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER)
 
 // DataProvider ==============================================================
 
-PivotChartDataProvider::PivotChartDataProvider(ScDocument* pDoc, OUString const& sPivotTableName)
+PivotChartDataProvider::PivotChartDataProvider(ScDocument* pDoc)
     : m_pDocument(pDoc)
-    , m_sPivotTableName(sPivotTableName)
     , m_aPropSet(lcl_GetDataProviderPropertyMap())
     , m_bIncludeHiddenCells(true)
+    , m_bNeedsUpdate(true)
+    , m_xContext(comphelper::getProcessComponentContext())
 {
     if (m_pDocument)
         m_pDocument->AddUnoObject(*this);
@@ -107,6 +118,7 @@ void PivotChartDataProvider::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHin
             OUString sPivotTableName = static_cast<const ScDataPilotModifiedHint&>(rHint).GetName();
             if (sPivotTableName == m_sPivotTableName)
             {
+                m_bNeedsUpdate = true;
                 for (uno::Reference<util::XModifyListener> const & xListener : m_aValueListeners)
                 {
                     css::chart::ChartDataChangeEvent aEvent(static_cast<cppu::OWeakObject*>(this),
@@ -124,7 +136,12 @@ sal_Bool SAL_CALL PivotChartDataProvider::createDataSourcePossible(const uno::Se
     SolarMutexGuard aGuard;
     if (!m_pDocument)
         return false;
-    return true;
+
+    if (m_sPivotTableName.isEmpty())
+        return false;
+
+    ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
+    return bool(pDPCollection->GetByName(m_sPivotTableName));
 }
 
 uno::Reference<chart2::data::XDataSource> SAL_CALL
@@ -174,16 +191,18 @@ uno::Reference<chart2::data::XDataSource> SAL_CALL
     if (aRangeRepresentation == "Categories")
         xResult = createPivotChartCategoriesDataSource(aRangeRepresentation, bOrientCol);
     else
-        xResult = createPivotChartDataSource(aRangeRepresentation);
+        xResult = createPivotChartValuesDataSource(aRangeRepresentation);
 
     return xResult;
 }
 
 uno::Reference<chart2::data::XLabeledDataSequence>
-PivotChartDataProvider::createLabeledDataSequence(uno::Reference<uno::XComponentContext>& rContext)
+PivotChartDataProvider::newLabeledDataSequence()
 {
     uno::Reference<chart2::data::XLabeledDataSequence> xResult;
-    xResult.set(chart2::data::LabeledDataSequence::create(rContext), uno::UNO_QUERY_THROW);
+    if (!m_xContext.is())
+        return xResult;
+    xResult.set(chart2::data::LabeledDataSequence::create(m_xContext), uno::UNO_QUERY_THROW);
     return xResult;
 }
 
@@ -215,19 +234,17 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                                     OUString const & rRangeRepresentation,
                                                     bool bOrientCol)
 {
+    if (m_bNeedsUpdate)
+        collectPivotTableData();
+
     uno::Reference<chart2::data::XDataSource> xDataSource;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-
-    if (!xContext.is())
-        return xDataSource;
-
     std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
 
     if (bOrientCol)
     {
         for (std::vector<PivotChartItem> const & rCategories : m_aCategoriesColumnOrientation)
         {
-            uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
+            uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
             setLabeledDataSequenceValues(xResult, "categories", "Categories", rCategories);
             aLabeledSequences.push_back(xResult);
         }
@@ -236,7 +253,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
     {
         for (std::vector<PivotChartItem> const & rCategories : m_aCategoriesRowOrientation)
         {
-            uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
+            uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
             setLabeledDataSequenceValues(xResult, "categories", "Categories", rCategories);
             aLabeledSequences.push_back(xResult);
         }
@@ -246,8 +263,11 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
     return xDataSource;
 }
 
-void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
+void PivotChartDataProvider::collectPivotTableData()
 {
+    ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
+    ScDPObject* pDPObject = pDPCollection->GetByName(m_sPivotTableName);
+
     uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
     uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
 
@@ -320,9 +340,9 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
 
         uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xLevelsSupplier->getLevels());
 
-        for (long nLev = 0; nLev < xLevels->getCount(); nLev++)
+        for (long nLevel = 0; nLevel < xLevels->getCount(); nLevel++)
         {
-            uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLev));
+            uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLevel));
             uno::Reference<container::XNamed> xLevelName(xLevel, uno::UNO_QUERY);
             uno::Reference<sheet::XDataPilotMemberResults> xLevelResult(xLevel, uno::UNO_QUERY );
 
@@ -482,21 +502,65 @@ void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
             i++;
         }
     }
+
+    m_bNeedsUpdate = false;
 }
 
-uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotChartDataSource(OUString const & aRangeRepresentation)
+void PivotChartDataProvider::assignValuesToDataSequence(
+                                    uno::Reference<chart2::data::XDataSequence> & rDataSequence,
+                                    size_t nIndex)
 {
+    if (nIndex >= m_aDataRowVector.size())
+        return;
+
+    OUString sDataID = lcl_identifierForData(nIndex);
+
+    std::vector<PivotChartItem> const & rRowOfData = m_aDataRowVector[size_t(nIndex)];
+    std::unique_ptr<PivotChartDataSequence> pSequence(new PivotChartDataSequence(m_pDocument, m_sPivotTableName,
+                                                                                 sDataID, rRowOfData));
+    pSequence->setRole("values-y");
+    rDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+}
+
+void PivotChartDataProvider::assignLabelsToDataSequence(
+                                    uno::Reference<chart2::data::XDataSequence> & rDataSequence,
+                                    size_t nIndex)
+{
+    if (nIndex >= m_aLabels.size())
+        return;
+
+    OUString sLabelID = lcl_identifierForLabel(nIndex);
+
+    OUString aLabel;
+    bool bFirst = true;
+    for (PivotChartItem const & rItem : m_aLabels[size_t(nIndex)])
+    {
+        if (bFirst)
+        {
+            aLabel += rItem.m_aString;
+            bFirst = false;
+        }
+        else
+        {
+            aLabel += " - " + rItem.m_aString;
+        }
+    }
+
+    std::vector<PivotChartItem> aLabelVector { PivotChartItem(aLabel) };
+
+    std::unique_ptr<PivotChartDataSequence> pSequence(new PivotChartDataSequence(m_pDocument, m_sPivotTableName,
+                                                                                 sLabelID, aLabelVector));
+    pSequence->setRole("values-y");
+    rDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+}
+
+uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotChartValuesDataSource(OUString const & rRangeRepresentation)
+{
+    if (m_bNeedsUpdate)
+        collectPivotTableData();
+
     uno::Reference<chart2::data::XDataSource> xDataSource;
     std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
-
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    if (!xContext.is())
-        return xDataSource;
-
-    ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
-    ScDPObject* pDPObject = pDPCollection->GetByName(m_sPivotTableName);
-
-    collectPivotTableData(pDPObject);
 
     {
         std::vector<PivotChartItem> aFirstCategories;
@@ -504,7 +568,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                    m_aCategoriesColumnOrientation[0].end(),
                    std::back_inserter(aFirstCategories));
 
-        uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
+        uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
         setLabeledDataSequenceValues(xResult, "categories", "Categories", aFirstCategories);
         aLabeledSequences.push_back(xResult);
     }
@@ -513,8 +577,8 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
         int i = 0;
         for (std::vector<PivotChartItem> const & rRowOfData : m_aDataRowVector)
         {
-            OUString aValuesId = "Data " + OUString::number(i + 1);
-            OUString aLabelsId = "Label " + OUString::number(i + 1);
+            OUString aValuesId = lcl_identifierForData(i);
+            OUString aLabelsId = lcl_identifierForLabel(i);
 
             OUString aLabel;
             bool bFirst = true;
@@ -533,7 +597,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
 
             std::vector<PivotChartItem> aLabelVector { PivotChartItem(aLabel) };
 
-            uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
+            uno::Reference<chart2::data::XLabeledDataSequence> xResult = newLabeledDataSequence();
             setLabeledDataSequence(xResult, "values-y", aValuesId, rRowOfData,
                                             "values-y", aLabelsId, aLabelVector);
             aLabeledSequences.push_back(xResult);
@@ -541,7 +605,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
         }
     }
 
-    xDataSource.set(new PivotChartDataSource(aRangeRepresentation, aLabeledSequences));
+    xDataSource.set(new PivotChartDataSource(rRangeRepresentation, aLabeledSequences));
     return xDataSource;
 }
 
@@ -575,15 +639,14 @@ sal_Bool SAL_CALL PivotChartDataProvider::createDataSequenceByRangeRepresentatio
 {
     SolarMutexGuard aGuard;
     return false;
-
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL
-    PivotChartDataProvider::createDataSequenceByRangeRepresentation(const OUString& /*aRangeRepresentation*/)
+    PivotChartDataProvider::createDataSequenceByRangeRepresentation(const OUString& /*rRangeRepresentation*/)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<chart2::data::XDataSequence> xResult;
-    return xResult;
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
+    return xDataSequence;
 }
 
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
@@ -629,6 +692,63 @@ OUString PivotChartDataProvider::getPivotTableName()
     return m_sPivotTableName;
 }
 
+void PivotChartDataProvider::setPivotTableName(const OUString& sPivotTableName)
+{
+    ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
+    ScDPObject* pDPObject = pDPCollection->GetByName(sPivotTableName);
+    if (pDPObject)
+        m_sPivotTableName = sPivotTableName;
+}
+
+uno::Reference<chart2::data::XDataSequence>
+PivotChartDataProvider::createDataSequenceOfValuesByIndex(sal_Int32 nIndex)
+{
+    SolarMutexGuard aGuard;
+
+    if (m_bNeedsUpdate)
+        collectPivotTableData();
+
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
+    assignValuesToDataSequence(xDataSequence, size_t(nIndex));
+    return xDataSequence;
+}
+
+uno::Reference<css::chart2::data::XDataSequence>
+PivotChartDataProvider::createDataSequenceOfLabelsByIndex(sal_Int32 nIndex)
+{
+    SolarMutexGuard aGuard;
+
+    if (m_bNeedsUpdate)
+        collectPivotTableData();
+
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
+    assignLabelsToDataSequence(xDataSequence, size_t(nIndex));
+    return xDataSequence;
+}
+
+uno::Reference<css::chart2::data::XDataSequence>
+PivotChartDataProvider::createDataSequenceOfCategories()
+{
+    SolarMutexGuard aGuard;
+
+    if (m_bNeedsUpdate)
+        collectPivotTableData();
+
+    uno::Reference<chart2::data::XDataSequence> xDataSequence;
+
+    if (m_aCategoriesColumnOrientation.empty())
+        return xDataSequence;
+
+    std::vector<PivotChartItem> const & rCategories = m_aCategoriesColumnOrientation[0];
+
+    std::unique_ptr<PivotChartDataSequence> pSequence(new PivotChartDataSequence(m_pDocument, m_sPivotTableName,
+                                                                                 "Categories", rCategories));
+    pSequence->setRole("categories");
+    xDataSequence.set(uno::Reference<chart2::data::XDataSequence>(pSequence.release()));
+
+    return xDataSequence;
+}
+
 // XModifyBroadcaster ========================================================
 
 void SAL_CALL PivotChartDataProvider::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
@@ -643,10 +763,10 @@ void SAL_CALL PivotChartDataProvider::removeModifyListener( const uno::Reference
     SolarMutexGuard aGuard;
 
     sal_uInt16 nCount = m_aValueListeners.size();
-    for (sal_uInt16 n = nCount; n--; )
+    for (sal_uInt16 n = nCount; n--;)
     {
-        uno::Reference<util::XModifyListener>& rObj = m_aValueListeners[n];
-        if (rObj == aListener)
+        uno::Reference<util::XModifyListener>& rObject = m_aValueListeners[n];
+        if (rObject == aListener)
         {
             m_aValueListeners.erase(m_aValueListeners.begin() + n);
         }

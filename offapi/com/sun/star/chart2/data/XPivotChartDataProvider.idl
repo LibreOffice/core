@@ -46,11 +46,41 @@ interface XPivotChartDataProvider : com::sun::star::uno::XInterface
      */
     sequence<com::sun::star::chart2::data::PivotTableFieldEntry> getDataFields();
 
-    /** associated pivot table name
+    /** get the associated pivot table name
      *
      * @since LibreOffice 5.4
      */
     string getPivotTableName();
+
+    /** set the associated pivot table name
+     *
+     * @since LibreOffice 5.4
+     */
+     void setPivotTableName([in] string sPivotTableName);
+
+    /** creates a single data sequence of values for the given data series index.
+     *
+     *  @param nIndex
+     *      index of the data series
+     *
+     *  @since LibreOffice 5.4
+     */
+    XDataSequence createDataSequenceOfValuesByIndex([in] long nIndex);
+
+    /** creates a single data sequence of label(s) for the given data series index.
+     *
+     *  @param nIndex
+     *      index of the data series
+     *
+     *  @since LibreOffice 5.4
+     */
+     XDataSequence createDataSequenceOfLabelsByIndex([in] long nIndex);
+
+    /** creates a single data sequence of categories.
+     *
+     *  @since LibreOffice 5.4
+     */
+    XDataSequence createDataSequenceOfCategories();
 };
 
 };};};};};

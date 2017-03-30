@@ -78,6 +78,7 @@
 #include "drawview.hxx"
 #include "markdata.hxx"
 #include "gridwin.hxx"
+#include "dpobject.hxx"
 #include <memory>
 
 using namespace css;
@@ -134,9 +135,15 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         {
             uno::Reference<chart2::data::XDataProvider> xDataProvider;
             if (bRangeIsPivotTable)
-                xDataProvider.set(new sc::PivotChartDataProvider(&rScDoc, aRangeString));
+            {
+                std::unique_ptr<sc::PivotChartDataProvider> pPivotChartDataProvider(new sc::PivotChartDataProvider(&rScDoc));
+                pPivotChartDataProvider->setPivotTableName(aRangeString);
+                xDataProvider.set(pPivotChartDataProvider.release());
+            }
             else
+            {
                 xDataProvider.set(new ScChart2DataProvider(&rScDoc));
+            }
 
             xReceiver->attachDataProvider(xDataProvider);
 
