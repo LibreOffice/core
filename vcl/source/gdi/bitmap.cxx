@@ -1122,111 +1122,94 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 {
     Bitmap              aNewBmp( GetSizePixel(), 1 );
+    ScopedReadAccess    pReadAcc(const_cast<Bitmap&>(*this));
+
     ScopedWriteAccess   pWriteAcc(aNewBmp);
     bool                bRet = false;
 
-    if( pWriteAcc )
+    if (pWriteAcc && pReadAcc)
     {
-        ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
+        const long          nWidth = pReadAcc->Width();
+        const long          nHeight = pReadAcc->Height();
+        const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+        const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
-        if( pReadAcc )
+        if( !nTol )
         {
-            const long          nWidth = pReadAcc->Width();
-            const long          nHeight = pReadAcc->Height();
-            const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
+            long nX, nY;
 
-            if( !nTol )
+            if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ||
+                pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal )
             {
-                const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
-                long nX, nY;
+                // optimized for 4Bit-MSN/LSN source palette
+                const sal_uInt8 cTest = aTest.GetIndex();
+                const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ) ? 4 : 0 );
 
-                if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ||
-                    pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal )
+                if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
+                    aWhite.GetIndex() == 1 )
                 {
-                    // optimized for 4Bit-MSN/LSN source palette
-                    const sal_uInt8 cTest = aTest.GetIndex();
-                    const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ) ? 4 : 0 );
-
-                    if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
-                        aWhite.GetIndex() == 1 )
+                    // optimized for 1Bit-MSB destination palette
+                    for( nY = 0L; nY < nHeight; nY++ )
                     {
-                        // optimized for 1Bit-MSB destination palette
-                        for( nY = 0L; nY < nHeight; nY++ )
+                        Scanline pSrc = pReadAcc->GetScanline( nY );
+                        Scanline pDst = pWriteAcc->GetScanline( nY );
+                        long nShift = 0;
+                        for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
                         {
-                            Scanline pSrc = pReadAcc->GetScanline( nY );
-                            Scanline pDst = pWriteAcc->GetScanline( nY );
-                            long nShift = 0;
-                            for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
-                            {
-                                if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
-                                    pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
-                                else
-                                    pDst[ nX >> 3 ] &= ~( 1 << ( 7 - ( nX & 7 ) ) );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for( nY = 0L; nY < nHeight; nY++ )
-                        {
-                            Scanline pSrc = pReadAcc->GetScanline( nY );
-                            long nShift = 0;
-                            for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
-                            {
-                                if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
-                                    pWriteAcc->SetPixel( nY, nX, aWhite );
-                                else
-                                    pWriteAcc->SetPixel( nY, nX, aBlack );
-                            }
-                        }
-                    }
-                }
-                else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
-                {
-                    // optimized for 8Bit source palette
-                    const sal_uInt8 cTest = aTest.GetIndex();
-
-                    if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
-                        aWhite.GetIndex() == 1 )
-                    {
-                        // optimized for 1Bit-MSB destination palette
-                        for( nY = 0L; nY < nHeight; nY++ )
-                        {
-                            Scanline pSrc = pReadAcc->GetScanline( nY );
-                            Scanline pDst = pWriteAcc->GetScanline( nY );
-                            for( nX = 0L; nX < nWidth; nX++ )
-                            {
-                                if( cTest == pSrc[ nX ] )
-                                    pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
-                                else
-                                    pDst[ nX >> 3 ] &= ~( 1 << ( 7 - ( nX & 7 ) ) );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for( nY = 0L; nY < nHeight; nY++ )
-                        {
-                            Scanline pSrc = pReadAcc->GetScanline( nY );
-                            for( nX = 0L; nX < nWidth; nX++ )
-                            {
-                                if( cTest == pSrc[ nX ] )
-                                    pWriteAcc->SetPixel( nY, nX, aWhite );
-                                else
-                                    pWriteAcc->SetPixel( nY, nX, aBlack );
-                            }
+                            if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
+                                pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
+                            else
+                                pDst[ nX >> 3 ] &= ~( 1 << ( 7 - ( nX & 7 ) ) );
                         }
                     }
                 }
                 else
                 {
-                    // not optimized
                     for( nY = 0L; nY < nHeight; nY++ )
                     {
+                        Scanline pSrc = pReadAcc->GetScanline( nY );
+                        long nShift = 0;
+                        for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
+                        {
+                            if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
+                                pWriteAcc->SetPixel( nY, nX, aWhite );
+                            else
+                                pWriteAcc->SetPixel( nY, nX, aBlack );
+                        }
+                    }
+                }
+            }
+            else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+            {
+                // optimized for 8Bit source palette
+                const sal_uInt8 cTest = aTest.GetIndex();
+
+                if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
+                    aWhite.GetIndex() == 1 )
+                {
+                    // optimized for 1Bit-MSB destination palette
+                    for( nY = 0L; nY < nHeight; nY++ )
+                    {
+                        Scanline pSrc = pReadAcc->GetScanline( nY );
+                        Scanline pDst = pWriteAcc->GetScanline( nY );
                         for( nX = 0L; nX < nWidth; nX++ )
                         {
-                            if( aTest == pReadAcc->GetPixel( nY, nX ) )
+                            if( cTest == pSrc[ nX ] )
+                                pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
+                            else
+                                pDst[ nX >> 3 ] &= ~( 1 << ( 7 - ( nX & 7 ) ) );
+                        }
+                    }
+                }
+                else
+                {
+                    for( nY = 0L; nY < nHeight; nY++ )
+                    {
+                        Scanline pSrc = pReadAcc->GetScanline( nY );
+                        for( nX = 0L; nX < nWidth; nX++ )
+                        {
+                            if( cTest == pSrc[ nX ] )
                                 pWriteAcc->SetPixel( nY, nX, aWhite );
                             else
                                 pWriteAcc->SetPixel( nY, nX, aBlack );
@@ -1236,67 +1219,81 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
             }
             else
             {
-                BitmapColor aCol;
-                long        nR, nG, nB;
-                const long  nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
-                const long  nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
-                const long  nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
-                const long  nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
-                const long  nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
-                const long  nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
-
-                if( pReadAcc->HasPalette() )
+                // not optimized
+                for( nY = 0L; nY < nHeight; nY++ )
                 {
-                    for( long nY = 0L; nY < nHeight; nY++ )
+                    for( nX = 0L; nX < nWidth; nX++ )
                     {
-                        for( long nX = 0L; nX < nWidth; nX++ )
-                        {
-                            aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
-                            nR = aCol.GetRed();
-                            nG = aCol.GetGreen();
-                            nB = aCol.GetBlue();
-
-                            if( nMinR <= nR && nMaxR >= nR &&
-                                nMinG <= nG && nMaxG >= nG &&
-                                nMinB <= nB && nMaxB >= nB )
-                            {
-                                pWriteAcc->SetPixel( nY, nX, aWhite );
-                            }
-                            else
-                                pWriteAcc->SetPixel( nY, nX, aBlack );
-                        }
-                    }
-                }
-                else
-                {
-                    for( long nY = 0L; nY < nHeight; nY++ )
-                    {
-                        for( long nX = 0L; nX < nWidth; nX++ )
-                        {
-                            aCol = pReadAcc->GetPixel( nY, nX );
-                            nR = aCol.GetRed();
-                            nG = aCol.GetGreen();
-                            nB = aCol.GetBlue();
-
-                            if( nMinR <= nR && nMaxR >= nR &&
-                                nMinG <= nG && nMaxG >= nG &&
-                                nMinB <= nB && nMaxB >= nB )
-                            {
-                                pWriteAcc->SetPixel( nY, nX, aWhite );
-                            }
-                            else
-                                pWriteAcc->SetPixel( nY, nX, aBlack );
-                        }
+                        if( aTest == pReadAcc->GetPixel( nY, nX ) )
+                            pWriteAcc->SetPixel( nY, nX, aWhite );
+                        else
+                            pWriteAcc->SetPixel( nY, nX, aBlack );
                     }
                 }
             }
+        }
+        else
+        {
+            BitmapColor aCol;
+            long        nR, nG, nB;
+            const long  nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
+            const long  nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
+            const long  nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
+            const long  nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
+            const long  nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
+            const long  nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
 
-            pReadAcc.reset();
-            bRet = true;
+            if( pReadAcc->HasPalette() )
+            {
+                for( long nY = 0L; nY < nHeight; nY++ )
+                {
+                    for( long nX = 0L; nX < nWidth; nX++ )
+                    {
+                        aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
+                        nR = aCol.GetRed();
+                        nG = aCol.GetGreen();
+                        nB = aCol.GetBlue();
+
+                        if( nMinR <= nR && nMaxR >= nR &&
+                            nMinG <= nG && nMaxG >= nG &&
+                            nMinB <= nB && nMaxB >= nB )
+                        {
+                            pWriteAcc->SetPixel( nY, nX, aWhite );
+                        }
+                        else
+                            pWriteAcc->SetPixel( nY, nX, aBlack );
+                    }
+                }
+            }
+            else
+            {
+                for( long nY = 0L; nY < nHeight; nY++ )
+                {
+                    for( long nX = 0L; nX < nWidth; nX++ )
+                    {
+                        aCol = pReadAcc->GetPixel( nY, nX );
+                        nR = aCol.GetRed();
+                        nG = aCol.GetGreen();
+                        nB = aCol.GetBlue();
+
+                        if( nMinR <= nR && nMaxR >= nR &&
+                            nMinG <= nG && nMaxG >= nG &&
+                            nMinB <= nB && nMaxB >= nB )
+                        {
+                            pWriteAcc->SetPixel( nY, nX, aWhite );
+                        }
+                        else
+                            pWriteAcc->SetPixel( nY, nX, aBlack );
+                    }
+                }
+            }
         }
 
-        pWriteAcc.reset();
+        bRet = true;
     }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
 
     if( bRet )
     {
