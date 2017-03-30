@@ -445,6 +445,19 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
     hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
 
+    bool bVertical = false;
+
+    if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+    {
+        bVertical = true;
+#if defined(_WIN32)
+        LOGFONTW aLogFont;
+        GetObjectW(mhFont, sizeof(LOGFONTW), &aLogFont);
+        if (aLogFont.lfFaceName[0] != '@')
+            bVertical = false;
+#endif
+    }
+
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     Reserve(nGlyphCapacity);
 
@@ -512,7 +525,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
             // For vertical text, further divide the runs based on character
             // orientation.
-            if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+            if (bVertical)
             {
                 sal_Int32 nIdx = nMinRunPos;
                 while (nIdx < nEndRunPos)
