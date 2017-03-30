@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3756ead2",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-30T10:39:40Z",
+      "side": 0,
+      "message": "clearly this is still used, as the Mac build failed trying to call it\n\nhttps://ci.libreoffice.org/job/lo_gerrit/9087/Config\u003dmacosx_clang_dbgutil/console\n\n\n\n/Users/tdf/lode/jenkins/workspace/lo_gerrit/Config/macosx_clang_dbgutil/vcl/osx/salframe.cxx:1228:20: error: no member named \u0027SetHideDisabledMenuItems\u0027 in \u0027StyleSettings\u0027; did you mean \u0027GetHideDisabledMenuItems\u0027?",
+      "revId": "74007e316a3e877855f1b27576173eca41228914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_57536ee1",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-30T10:39:40Z",
+      "side": 0,
+      "message": "clearly this is still used as the WNT build failed trying to call it\n\nhttps://ci.libreoffice.org/job/lo_gerrit/9087/Config\u003dwindows_msc_dbgutil_32/console\n\nC:/cygwin/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/windows_msc_dbgutil_32/vcl/win/window/salframe.cxx(2614): error C2039: \u0027SetSpinSize\u0027: is not a member of \u0027StyleSettings\u0027",
+      "revId": "74007e316a3e877855f1b27576173eca41228914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
