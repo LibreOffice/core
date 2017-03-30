@@ -32,6 +32,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -284,6 +285,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     const OUString& rString, sal_Bool bAbsorb)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXText::insertString");
 
     if (!xTextRange.is())
     {
@@ -500,6 +502,7 @@ SwXText::insertTextContent(
         sal_Bool bAbsorb)
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXText::insertTextContent");
 
     if (!xRange.is())
     {
@@ -849,6 +852,7 @@ uno::Reference< text::XText > SAL_CALL
 SwXText::getText()
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("SwXText::getText");
 
     const uno::Reference< text::XText > xRet(this);
     return xRet;

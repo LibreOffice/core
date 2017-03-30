@@ -44,6 +44,7 @@
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/profilezone.hxx>
 
 #include "comifaces.hxx"
 #include "jscriptclasses.hxx"
@@ -785,6 +786,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                                               EXCEPINFO * pexcepinfo,
                                                unsigned int * puArgErr )
 {
+    ::comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
 
     try

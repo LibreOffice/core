@@ -84,6 +84,7 @@
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/profilezone.hxx>
 
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
@@ -143,6 +144,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                                                            const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
 {
     css::uno::Reference< css::lang::XComponent > xComponent;
+    ::comphelper::ProfileZone aZone("loadComponentFromURL");
 
     try
     {

@@ -39,6 +39,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -1070,6 +1071,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
 void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet )
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("setActiveSheet");
 
     ScTabViewShell* pViewSh = GetViewShell();
     if ( pViewSh && xActiveSheet.is() )

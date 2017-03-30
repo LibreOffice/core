@@ -32,6 +32,7 @@
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <comphelper/profilezone.hxx>
 
 #include <functional>
 

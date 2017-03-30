@@ -56,6 +56,7 @@
 #include <vcl/settings.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <comphelper/flagguard.hxx>
+#include <comphelper/profilezone.hxx>
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
 
@@ -964,6 +965,7 @@ void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEve
 void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
 {
     SolarMutexGuard aGuard;
+    ::comphelper::ProfileZone aZone("setPosSize");
 
     if ( GetWindow() )
     {

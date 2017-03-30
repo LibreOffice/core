@@ -22,6 +22,7 @@
 #include <vcl/scheduler.hxx>
 #include <saltimer.hxx>
 #include <salinst.hxx>
+#include <comphelper/profilezone.hxx>
 
 namespace {
 const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
@@ -153,6 +154,8 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
 
     if ( pMostUrgent )
     {
+        ::comphelper::ProfileZone aZone( pMostUrgent->GetDebugName() );
+
         SAL_INFO("vcl.schedule", "Invoke task " << pMostUrgent->GetDebugName());
 
         pMostUrgent->mnUpdateTime = nTime;
