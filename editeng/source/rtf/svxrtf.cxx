@@ -257,7 +257,7 @@ INSINGLECHAR:
     default:
         switch( nToken & ~(0xff | RTF_SWGDEFS) )
         {
-        case RTF_PARFMT:        // hier gibts keine Swg-Defines
+        case RTF_PARFMT:        // here are no SWGDEFS
             ReadAttr( nToken, &GetAttrSet() );
             break;
 
@@ -365,7 +365,7 @@ void SvxRTFParser::ReadStyleTable()
         default:
             switch( nToken & ~(0xff | RTF_SWGDEFS) )
             {
-            case RTF_PARFMT:        // hier gibts keine Swg-Defines
+            case RTF_PARFMT:        // here are no SWGDEFS
                 ReadAttr( nToken, &pStyle->aAttrSet );
                 break;
 

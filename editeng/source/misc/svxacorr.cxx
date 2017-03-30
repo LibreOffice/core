@@ -1344,7 +1344,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         // auto.
         sal_Int32 nCapLttrPos = nPos+1;        // on the 1st Character
         if( !nPos && !IsWordDelim( rTxt[ 0 ]))
-            --nCapLttrPos;          // Absatz Anfang und kein Blank !
+            --nCapLttrPos;          // begin of paragraph and no blank
 
         LanguageType eLang = rDoc.GetLanguage( nCapLttrPos );
         if( LANGUAGE_SYSTEM == eLang )
