@@ -118,7 +118,7 @@ void UpdateHandler::enableControls( short nCtrlState )
         return;
 
     // the help button should always be the last button in the
-    // enum list und must never be disabled
+    // enum list and must never be disabled
     for ( int i=0; i<HELP_BUTTON; i++ )
     {
         short nCurStateVal = (short)(nCtrlState >> i);

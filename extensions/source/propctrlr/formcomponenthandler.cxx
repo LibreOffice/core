@@ -2436,7 +2436,7 @@ namespace pcr
             WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
 
 
-            // Setzen der UI-Daten
+            // Set the UI data
             _out_rProperty.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_COMMAND );
 
             _out_rProperty.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_COMMAND ) );
