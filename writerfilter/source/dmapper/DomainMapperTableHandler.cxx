@@ -862,8 +862,12 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 {
     for (PropertyMapPtr & p : rCellProperties)
-        if (!p->isSet(PROP_CELL_HIDE_MARK))
+    {
+        // if anything is vertically merged, the row must not be set to fixed
+        // as Writer's layout doesn't handle that well
+        if (!p->isSet(PROP_CELL_HIDE_MARK) || p->isSet(PROP_VERTICAL_MERGE))
             return false;
+    }
     return true;
 }
 
