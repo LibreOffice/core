@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_77e9521a",
+        "filename": "editeng/source/rtf/rtfitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-30T10:14:52Z",
+      "side": 0,
+      "message": "wow, that was hilariously bad",
+      "revId": "726b34c9c788af74bea005f2717e4c1da4814183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
