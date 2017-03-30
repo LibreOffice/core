@@ -8,14 +8,14 @@
 		Produced by: OASIS Customer Information Quality Technical Committee
 		URL: http://www.oasis-open.org/committees/ciq
 		Version: 3.0  
-		Status: Committee Specification
-		Copyright: 2006-07, OASIS, http://www.oasis-open.org
-		Last Modified: 18 September 2007
+		Status: Committee Specification CS02
+		Copyright: 2007-09, OASIS, http://www.oasis-open.org
+		Last Modified: 20 September 2008
 		Last Modified by: Ram Kumar, Chair, OASIS CIQ TC 
 		
 		NOTE: This is the schema that users can customise the enumeration lists to meet their
 		exchange requirements. The enumeration values provided are ONLY SAMPLES and 
-		is not complete. It is up to the application to decide what the values should be. To achieve
+		is not complete. It is upto the application to decide what the values should be.  To achieve 
 		interoperability between applications using this specification, it is recommended that an
 		SLA/agreement is in place as to what the enumeration values will be used in this file 
 		</xs:documentation>

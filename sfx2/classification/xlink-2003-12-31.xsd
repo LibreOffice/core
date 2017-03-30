@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) XBRL International.  See www.xbrl.org/legal  
- XLink attribute specification - produced by xBRL group in December 2006
+ XLink attribute specification - produced by xBRL group with joint design agreement with OASIS CIQ TC
+in December 2006
     Thanks to xBRL for giving OASIS CIQ TC permission to use this specification
 -->
 <schema xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3.org/1999/xlink" elementFormDefault="qualified" attributeFormDefault="qualified">
