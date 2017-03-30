@@ -598,8 +598,10 @@ bool TIFFReader::ReadMap()
 
         aCCIDecom.StartDecompression( *pTIFF );
 
+        bool bDifferentToPrev;
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
+            bDifferentToPrev = ny == 0;
             for (sal_uLong np = 0; np < nPlanes; np++ )
             {
                 if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
@@ -615,13 +617,27 @@ bool TIFFReader::ReadMap()
                 }
                 if (np >= SAL_N_ELEMENTS(pMap))
                     return false;
-                if ( !aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) )
+                DecompressStatus aResult = aCCIDecom.DecompressScanline(pMap[np],nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes);
+                if (!aResult.m_bSuccess)
                     return false;
+                bDifferentToPrev |= !aResult.m_bBufferUnchanged;
                 if ( pTIFF->GetError() )
                     return false;
             }
-            if ( !ConvertScanline( ny ) )
-                return false;
+            if (!bDifferentToPrev)
+            {
+                //if the buffer for this line didn't change, then just copy the
+                //previous scanline instead of painfully decoding and setting
+                //each pixel one by one again
+                pAcc->CopyScanline(ny, pAcc->GetScanline(ny-1),
+                                       pAcc->GetScanlineFormat(),
+                                       pAcc->GetScanlineSize());
+            }
+            else
+            {
+                if (!ConvertScanline(ny))
+                    return false;
+            }
         }
     }
     else if ( nCompression == 5 )
