@@ -46,8 +46,8 @@ class CGM
         friend class CGMElements;
         friend class CGMImpressOutAct;
 
-        double              mnOutdx;                // Ausgabe Groesse in 1/100TH mm
-        double              mnOutdy;                // auf das gemappt wird
+        double              mnOutdx;                // Output size in 1/100TH mm
+        double              mnOutdy;                // on which is mapped
         double              mnVDCXadd;
         double              mnVDCYadd;
         double              mnVDCXmul;

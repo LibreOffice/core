@@ -1107,7 +1107,6 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
 
     sal_uInt32 nPropCount = aHd.nRecInstance;
 
-    // FilePos der ComplexData merken
     sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
 
     for( sal_uInt32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )

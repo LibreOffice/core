@@ -31,7 +31,7 @@ class DXFBlock : public DXFEntities {
 public:
 
     DXFBlock * pSucc;
-        // pointer to the nex block in the list DXFBlocks::pFirst
+        // pointer to the next block in the list DXFBlocks::pFirst
 
     // properties of blocks; commented with group codes:
     OString m_sName;                      //  2
@@ -45,7 +45,7 @@ public:
 
     void Read(DXFGroupReader & rDGR);
         // reads the block (including entities) from a dxf file
-        // by rGDR until a ENDBLK, ENDSEC oder EOF.
+        // by rGDR until a ENDBLK, ENDSEC or EOF.
 };
 
 
@@ -63,7 +63,7 @@ public:
     ~DXFBlocks();
 
     void Read(DXFGroupReader & rDGR);
-        // reads all block per rDGR until a ENDSEC oder EOF.
+        // reads all block per rDGR until a ENDSEC or EOF.
 
     DXFBlock * Search(OString const& rName) const;
         // looks for a block with the name, return NULL if not successful

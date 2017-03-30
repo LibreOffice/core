@@ -4482,7 +4482,7 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPol
 
 // for rectangles          for ellipses     for polygons
 //
-// nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
+// nRule =  0 ->Top         0 ->Top         nRule = index to a (Poly)Polygon point
 //          1 ->Left        2 ->Left
 //          2 ->Bottom      4 ->Bottom
 //          3 ->Right       6 ->Right
@@ -4558,7 +4558,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     o3tl::doAccess<css::drawing::PolyPolygonBezierCoords>(aAny);
                 sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
 
-                // Zeiger auf innere sequences holen
+                // get pointer of inner sequences
                 css::drawing::PointSequence const * pOuterSequence =
                     pSourcePolyPolygon->Coordinates.getConstArray();
                 css::drawing::FlagSequence const *  pOuterFlags =

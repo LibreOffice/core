@@ -420,7 +420,6 @@ void GIFWriter::WriteLocalHeader()
         // set Flag for the local color palette
         cFlags |= 0x80;
 
-        // alles rausschreiben
         m_rGIF.WriteUChar( 0x2c );
         m_rGIF.WriteUInt16( nPosX );
         m_rGIF.WriteUInt16( nPosY );

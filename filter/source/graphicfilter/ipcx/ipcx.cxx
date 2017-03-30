@@ -40,7 +40,7 @@ private:
     sal_uInt16          nPaletteInfo;
 
     sal_uLong           nWidth, nHeight;    // dimension in pixel
-    sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
+    sal_uInt16          nResX, nResY;       // resolution in pixel per inch or 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
     std::unique_ptr<sal_uInt8[]>
                         pPalette;
