@@ -78,6 +78,7 @@
 #define SID_ATTR_PARA_MODEL                             ( SID_SVX_START + 65 )
 #define SID_ATTR_PARA_KEEP                              ( SID_SVX_START + 66 )
 #define SID_ATTR_CHAR_AUTOKERN                          ( SID_SVX_START + 67 )
+#define SID_HANGING_INDENT                              ( SID_SVX_START + 68 )
 #define SID_ATTR_PARA_BULLET                            ( SID_SVX_START + 250 )
 #define SID_ATTR_PARA_OUTLLEVEL                         ( SID_SVX_START + 300 )
 #define SID_ATTR_PARA_REGISTER                          ( SID_SVX_START + 413 )

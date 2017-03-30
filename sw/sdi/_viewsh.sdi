@@ -537,6 +537,12 @@ interface BaseTextEditView
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
     ]
+    SID_HANGING_INDENT
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_ATTR_PAGE_ULSPACE
     [
         ExecMethod = ExecTabWin ;
