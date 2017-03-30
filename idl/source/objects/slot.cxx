@@ -379,7 +379,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList)
         while ( !bFound && nLow <= nHigh )
         {
             nMid = (nLow + nHigh) >> 1;
-            DBG_ASSERT( nMid < nListCount, "bsearch ist buggy" );
+            DBG_ASSERT( nMid < nListCount, "bsearch is buggy" );
             int nDiff = (int) nId - (int) rList[ nMid ]->GetSlotId().GetValue();
             if ( nDiff < 0)
             {

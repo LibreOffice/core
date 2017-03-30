@@ -106,7 +106,7 @@ class OListBoxModel :public OBoundControlModel
     ::connectivity::ORowSetValue                m_aSaveValue;
 
     // <properties>
-    css::form::ListSourceType                   m_eListSourceType;      // type der list source
+    css::form::ListSourceType                   m_eListSourceType;      // type of list source
     css::uno::Any                               m_aBoundColumn;
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;         // do not write directly; use setBoundValues()

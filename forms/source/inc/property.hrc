@@ -25,7 +25,7 @@
 namespace frm
 {
 
-// PropertyId's, welche eine Zuordnung zu einen PropertyName haben
+// PropertyId's, who have a mapping to a PropertyName
 #define PROPERTY_ID_START           0
 
 #define PROPERTY_ID_NAME                (PROPERTY_ID_START + 1)
