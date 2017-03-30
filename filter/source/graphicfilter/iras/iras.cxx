@@ -141,7 +141,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
                 return false;
 
         }
-        else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
+        else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // everything else is not standard
             return false;
 
         if (!bPalette)

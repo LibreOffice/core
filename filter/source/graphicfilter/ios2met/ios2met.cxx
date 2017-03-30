@@ -426,7 +426,7 @@ public:
     ~OS2METReader();
 
     void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
-        // Reads from the stream a OS2MET file und and fills up the GDIMetaFile
+        // Reads from the stream a OS2MET file and fills up the GDIMetaFile
 
 };
 

@@ -1305,7 +1305,6 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nNumTags = nMaxRecords;
                 }
 
-                // Schleife ueber Tags:
                 for( i = 0; i < nNumTags; i++ )
                 {
                     pTIFF->ReadUInt16( nTagType ).ReadUInt16( nDataType ).ReadUInt32( nDataLen );
