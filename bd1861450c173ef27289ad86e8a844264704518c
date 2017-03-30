@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_37e8aa10",
+        "filename": "filter/source/config/cache/querytokenizer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-03-30T10:26:00Z",
+      "side": 0,
+      "message": "i guess the original artist meant \"it\u0027s\"",
+      "revId": "bd1861450c173ef27289ad86e8a844264704518c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
